@@ -2,14 +2,17 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
+import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
+import { ClaimToProofCards } from "@/components/marketing/claim-to-proof-cards"
 import { ComparisonGrid } from "@/components/marketing/comparison-grid"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
 import { KpiPreview } from "@/components/marketing/kpi-preview"
+import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
 import { OutcomePillars } from "@/components/marketing/outcome-pillars"
+import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
 import { ProofStatStrip } from "@/components/marketing/proof-stat-strip"
 import { SectionHeader } from "@/components/marketing/section-header"
-import { PowerEnvelopeDiagram } from "@/components/diagrams/power-envelope-diagram"
 import { PowerWallChart } from "@/components/diagrams/power-wall-chart"
 import { RtaLoopDiagram } from "@/components/diagrams/rta-loop-diagram"
 import { SectionShell } from "@/components/layout/section-shell"
@@ -25,6 +28,12 @@ import {
   powerWallSection,
 } from "@/content/copy/home"
 import { ladderSteps } from "@/content/copy/proof"
+import {
+  claimToProofCards,
+  illustrativeWaterfall,
+  proofArtifactIntro,
+  proofArtifacts,
+} from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -32,7 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({
     title: "GridNinja | Virtual Capacity Control Plane for AI Data Centers",
     description:
-      "Unlock virtual capacity for AI data centers with runtime-assured control across workloads, cooling, and on-site power.",
+      "GridNinja proves safe, usable, auditable virtual capacity for AI data centers before control, dispatch, or grid commitments are trusted.",
     path: "/",
   })
 }
@@ -50,13 +59,36 @@ export default function HomePage() {
         }}
         secondaryCta={{
           label: homeHero.secondaryCtaLabel,
-          href: "/proof",
+          href: "/demo",
         }}
-        visual={<PowerEnvelopeDiagram />}
+        visual={<CapacityWaterfall steps={illustrativeWaterfall} compact />}
+        proofGrid
       />
 
       <SectionShell>
         <ProofStatStrip items={proofStats} />
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Claim to proof"
+            headline="Available capacity becomes usable only after runtime assurance"
+            body="Touch each domain to see how a nominal claim turns into allow / repair / reject / no-proof evidence."
+          />
+          <ClaimToProofCards cards={claimToProofCards} />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow={proofArtifactIntro.eyebrow}
+            headline={proofArtifactIntro.headline}
+            body={proofArtifactIntro.body}
+          />
+          <ProofArtifactStack artifacts={proofArtifacts} />
+        </div>
       </SectionShell>
 
       <SectionShell>
@@ -105,6 +137,10 @@ export default function HomePage() {
       </SectionShell>
 
       <SectionShell>
+        <LoadPassportPreview />
+      </SectionShell>
+
+      <SectionShell>
         <div className="space-y-10">
           <SectionHeader
             eyebrow={controlLoopSection.eyebrow}
@@ -144,12 +180,12 @@ export default function HomePage() {
             headline="Designed for AI cloud and colocation operators under hard infrastructure limits"
             body="Phase one stays focused on the buyers who need the business case, the assurance model, and the proof workflow immediately."
           />
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-3">
             {solutionTeasers.map((solution) => (
               <Link
                 key={solution.href}
                 href={solution.href}
-                className="rounded-[1.8rem] border border-border/70 bg-surface px-6 py-7 transition-colors hover:bg-surface-2"
+                className="gn-panel gn-panel-interactive px-6 py-7"
               >
                 <p className="text-sm tracking-[0.28em] text-primary uppercase">
                   Solution

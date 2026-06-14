@@ -5,28 +5,28 @@ export const homeHero: SectionCopy & {
   secondaryCtaLabel: string
 } = {
   eyebrow: "AI Data Center Virtual Capacity Control Plane",
-  headline: "Unlock Virtual Capacity for AI Data Centers",
-  body: "GridNinja turns constrained power, cooling, and on-site energy assets into safe, usable, auditable capacity so operators can energize faster, oversubscribe more safely, and protect SLAs.",
+  headline: "Claimed headroom is not proven capacity",
+  body: "GridNinja is a runtime-assured virtual capacity engine that proves which AI data center power, cooling, storage, and workload flexibility is safe before control, dispatch, or grid commitments are trusted.",
   primaryCtaLabel: "Request Capacity Audit",
-  secondaryCtaLabel: "See Shadow Mode",
+  secondaryCtaLabel: "Inspect Proof Demo",
 }
 
 export const powerWallSection: SectionCopy & { bullets: string[] } = {
   eyebrow: "The Problem",
   headline: "The Power Wall is now the gating factor for AI growth",
-  body: "AI data centers are colliding with a new operational reality: compute demand moves at software speed, while grid upgrades, interconnection approvals, and physical capacity expansion move at infrastructure speed. The result is stranded MW, delayed deployments, thermal bottlenecks, and rising pressure to oversubscribe safely.",
+  body: "AI data centers are colliding with a new operational reality: compute demand moves at software speed, while grid upgrades, interconnection approvals, cooling buildout, and physical capacity expansion move at infrastructure speed. The result is claimed headroom that cannot be sold until it is proven.",
   bullets: [
     "Interconnection delays can stretch for years while AI demand expects deployment now.",
-    "Static safety buffers leave capacity stranded when operators need every sellable megawatt.",
+    "Static safety buffers leave capacity stranded when operators need safe sellable MW.",
     "High-density AI racks turn thermal constraints into revenue constraints.",
-    "Behind-the-meter power is growing, but it still needs safe orchestration.",
+    "Behind-the-meter power is growing, but it still needs proof-backed dispatch envelopes.",
   ],
 }
 
 export const comparisonSection: SectionCopy = {
   eyebrow: "Why Existing Tools Stop Short",
-  headline: "Monitoring shows the constraint. It does not solve it.",
-  body: "Most products in this space stop at visibility, subsystem optimization, or grid-facing dispatch. GridNinja is the inside-the-fence execution and assurance layer that turns extra MW into a real operating resource.",
+  headline: "Visibility and simulation do not make MW operator-accepted",
+  body: "Most products in this space stop at dashboards, subsystem tuning, or grid-facing program participation. GridNinja is the inside-the-fence proof and runtime assurance layer that turns possible MW into safe, usable, auditable capacity.",
 }
 
 export const comparisonRows: ComparisonRow[] = [
@@ -36,7 +36,7 @@ export const comparisonRows: ComparisonRow[] = [
       "Reads the environment",
       "Identifies stranded capacity",
       "Alerts operators",
-      "Does not safely coordinate action bundles in real time",
+      "Does not prove which headroom is actually usable",
     ],
   },
   {
@@ -44,7 +44,7 @@ export const comparisonRows: ComparisonRow[] = [
     bullets: [
       "Improves thermal efficiency",
       "Tunes one subsystem well",
-      "Does not coordinate IT workload flexibility, power reserves, and bridge assets",
+      "Does not connect thermal margin to accepted virtual capacity",
     ],
   },
   {
@@ -52,7 +52,7 @@ export const comparisonRows: ComparisonRow[] = [
     bullets: [
       "Connects sites to grid and market programs",
       "Monetizes flexibility",
-      "Does not decide the safest internal action bundle to deliver that flexibility",
+      "Does not establish the site evidence needed before flexibility is trusted",
     ],
   },
   {
@@ -61,7 +61,7 @@ export const comparisonRows: ComparisonRow[] = [
     bullets: [
       "Coordinates workloads, cooling, on-site power, and reserve",
       "Gates every action through runtime assurance",
-      "Produces Shadow Mode evidence and proof packs before autonomy",
+      "Produces Load Passports, capacity waterfalls, and proof packs before autonomy",
       "Converts constrained infrastructure into safe, sellable capacity",
     ],
   },
@@ -70,13 +70,13 @@ export const comparisonRows: ComparisonRow[] = [
 export const engineSection: SectionCopy = {
   eyebrow: "What GridNinja Is",
   headline: "A runtime-assured virtual capacity engine",
-  body: "GridNinja coordinates workloads, cooling, and on-site power assets to unlock usable MW inside strict safety and SLA envelopes. It does not ask operators to trust a black box. It shows what it would do, why it would do it, which constraint is binding, and what margin remains before bounded autonomy is enabled.",
+  body: "GridNinja coordinates workloads, cooling, and on-site power assets to unlock virtual capacity inside strict safety and SLA envelopes. It starts in Shadow Mode, shows why a candidate action is allowed, repaired, rejected, or no-proofed, and keeps authority bounded until evidence accumulates.",
 }
 
 export const enginePillars = [
   {
     title: "Unlock Capacity",
-    body: "Turn stranded power, cooling, and reserve margins into safe, usable infrastructure.",
+    body: "Turn stranded power, cooling, and reserve margins into proof-adjusted safe, usable infrastructure.",
   },
   {
     title: "Protect Uptime",
@@ -84,7 +84,7 @@ export const enginePillars = [
   },
   {
     title: "Prove Execution",
-    body: "Generate Shadow Mode reports, capacity audits, replay evidence, and procurement-ready proof packs.",
+    body: "Generate Load Passports, capacity waterfalls, accepted-headroom ledgers, and procurement-ready proof packs.",
   },
 ]
 
@@ -92,8 +92,8 @@ export const controlLoopSection: SectionCopy & {
   steps: Array<{ title: string; body: string }>
 } = {
   eyebrow: "How It Works",
-  headline: "From telemetry to proof, in one control loop",
-  body: "GridNinja collapses observation, decisioning, assurance, and evidence into one operating surface.",
+  headline: "From telemetry to proof, inside one bounded loop",
+  body: "GridNinja keeps the path from site signal to operator evidence explicit.",
   steps: [
     {
       title: "Observe",
@@ -105,21 +105,21 @@ export const controlLoopSection: SectionCopy & {
     },
     {
       title: "Decide",
-      body: "Construct candidate action bundles across workloads, cooling modes, and on-site assets, then rank them under hard constraints.",
+      body: "Construct candidate action bundles across workloads, cooling modes, and on-site assets, then test them against hard constraints.",
     },
     {
       title: "Assure",
-      body: "Every action is evaluated through a runtime assurance layer that can allow, repair, or reject it based on margin to limit and policy.",
+      body: "Every action is evaluated through runtime assurance that can allow, repair, reject, or return no-proof based on margin, evidence, and policy.",
     },
     {
       title: "Prove",
-      body: "Produce counterfactual replay, Shadow Mode safety evidence, capacity reports, and operator-readable decision logs.",
+      body: "Produce replay, Shadow Mode evidence, accepted-headroom ledgers, Load Passports, and operator-readable decision logs.",
     },
   ],
 }
 
 export const homeFinalCta = {
-  headline: "See how much virtual capacity your site is leaving on the table",
-  body: "Start with a Capacity Audit and Shadow Mode baseline. Quantify constraints, identify recurring bottlenecks, and generate proof before autonomy.",
+  headline: "Request a Capacity Audit before promising flexible MW",
+  body: "Start with a Shadow Mode baseline. Quantify constraints, identify no-proof gaps, and generate evidence before autonomy or grid commitments are discussed.",
   label: "Request Capacity Audit",
 }

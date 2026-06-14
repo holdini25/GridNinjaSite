@@ -6,6 +6,7 @@ import { TopologyMap } from "@/components/diagrams/topology-map"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
 import { SectionShell } from "@/components/layout/section-shell"
+import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import {
   bridgePowerFinalCta,
   bridgePowerHero,
@@ -76,6 +77,25 @@ export default function BridgePowerPage() {
             body="Bridge power becomes operationally useful when the site can see the control path, binding constraint, and remaining margin at the same time."
           />
           <TopologyMap items={bridgePowerTopology} />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-[1.2rem] border border-border/70 bg-surface px-6 py-7">
+            <p className="text-sm tracking-[0.28em] text-primary uppercase">
+              Reserve-floor report
+            </p>
+            <h2 className="mt-4 text-[2rem] leading-[1.08] font-medium text-foreground">
+              Bridge assets only count when resilience remains protected
+            </h2>
+            <p className="mt-4 text-base leading-8 text-muted-foreground">
+              GridNinja treats UPS, BESS, and temporary generation as capacity
+              only after reserve floors, transition risk, cooling response, and
+              telemetry confidence are visible in the proof path.
+            </p>
+          </div>
+          <UtilityEvidencePacketPreview />
         </div>
       </SectionShell>
 

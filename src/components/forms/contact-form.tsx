@@ -62,6 +62,18 @@ export function ContactForm({ intent, source }: ContactFormProps) {
       return "We’ll use this to frame the partnership workflow, integration surface, and proof artifacts involved."
     }
 
+    if (intent === "book-demo") {
+      return "We’ll use this to frame the proof demo around the stakeholder lens, artifact set, and operating constraint you care about."
+    }
+
+    if (intent === "dcii-memo") {
+      return "We’ll use this to route the DCII memo request and follow up with the deployment boundary, evidence outputs, and source notes."
+    }
+
+    if (intent === "load-passport") {
+      return "We’ll use this to frame the Load Passport sample around your site type, proof gap, and review audience."
+    }
+
     return "We’ll use this to frame the first Capacity Audit, the recurring constraints, and the path into Shadow Mode evidence."
   }, [intent])
 
@@ -201,14 +213,24 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-base text-foreground">Buyer type</label>
+          <label
+            id="contact-buyer-type-label"
+            htmlFor="contact-buyer-type"
+            className="text-base text-foreground"
+          >
+            Buyer type
+          </label>
           <Select
             value={form.buyerType}
             onValueChange={(value) =>
               setForm((current) => ({ ...current, buyerType: value }))
             }
           >
-            <SelectTrigger aria-invalid={Boolean(errors.buyerType)}>
+            <SelectTrigger
+              id="contact-buyer-type"
+              aria-labelledby="contact-buyer-type-label contact-buyer-type"
+              aria-invalid={Boolean(errors.buyerType)}
+            >
               <SelectValue placeholder="Select buyer type" />
             </SelectTrigger>
             <SelectContent>
@@ -226,14 +248,24 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
-          <label className="text-base text-foreground">Site type</label>
+          <label
+            id="contact-site-type-label"
+            htmlFor="contact-site-type"
+            className="text-base text-foreground"
+          >
+            Site type
+          </label>
           <Select
             value={form.siteType}
             onValueChange={(value) =>
               setForm((current) => ({ ...current, siteType: value }))
             }
           >
-            <SelectTrigger aria-invalid={Boolean(errors.siteType)}>
+            <SelectTrigger
+              id="contact-site-type"
+              aria-labelledby="contact-site-type-label contact-site-type"
+              aria-invalid={Boolean(errors.siteType)}
+            >
               <SelectValue placeholder="Select site type" />
             </SelectTrigger>
             <SelectContent>
@@ -251,14 +283,24 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           ) : null}
         </div>
         <div className="flex flex-col gap-2 sm:col-span-2">
-          <label className="text-base text-foreground">Desired timeline</label>
+          <label
+            id="contact-timeline-label"
+            htmlFor="contact-timeline"
+            className="text-base text-foreground"
+          >
+            Desired timeline
+          </label>
           <Select
             value={form.timeline}
             onValueChange={(value) =>
               setForm((current) => ({ ...current, timeline: value }))
             }
           >
-            <SelectTrigger aria-invalid={Boolean(errors.timeline)}>
+            <SelectTrigger
+              id="contact-timeline"
+              aria-labelledby="contact-timeline-label contact-timeline"
+              aria-invalid={Boolean(errors.timeline)}
+            >
               <SelectValue placeholder="Select timeline" />
             </SelectTrigger>
             <SelectContent>
@@ -321,7 +363,7 @@ export function ContactForm({ intent, source }: ContactFormProps) {
         <p className="mt-4 text-base text-danger">{serverMessage}</p>
       ) : null}
 
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-base leading-8 text-muted-foreground">
           Intent and source stay attached to the submission so downstream delivery
           can be wired without changing the UI contract.

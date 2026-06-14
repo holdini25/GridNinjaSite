@@ -3,6 +3,9 @@ export type LeadIntent =
   | "shadow-mode"
   | "sellable-capacity"
   | "partnership"
+  | "book-demo"
+  | "dcii-memo"
+  | "load-passport"
 
 export interface SectionCopy {
   eyebrow?: string
@@ -28,6 +31,10 @@ export interface SolutionPageConfig {
   path: string
   hero: SectionCopy
   whyThisMatters: string
+  buyerAnxiety: string
+  artifact: string
+  caveat: string
+  stakeholderProof: string[]
   painPoints: string[]
   outcomes: string[]
   metrics: StatItem[]

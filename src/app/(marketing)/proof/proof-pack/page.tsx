@@ -3,9 +3,14 @@ import Link from "next/link"
 
 import { GridNinjaMark } from "@/components/brand/gridninja-logo"
 import { Button } from "@/components/ui/button"
+import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
 import { Hero } from "@/components/marketing/hero"
+import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
+import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
+import { ProofLoadingSteps } from "@/components/marketing/proof-loading-steps"
 import { ProofLog } from "@/components/marketing/proof-log"
 import { SectionHeader } from "@/components/marketing/section-header"
+import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import { SectionShell } from "@/components/layout/section-shell"
 import {
   proofPackChecklist,
@@ -16,6 +21,11 @@ import {
   proofPackPreview,
   proofPackSampleLog,
 } from "@/content/copy/proof-pack"
+import {
+  illustrativeWaterfall,
+  proofArtifacts,
+  proofLoadingSteps,
+} from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -23,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({
     title: "Proof Pack | GridNinja",
     description:
-      "Download a sample proof pack to see the artifacts behind Shadow Mode, capacity audits, and runtime assurance.",
+      "Download a sample proof pack to see Load Passports, capacity waterfalls, RTA traces, reserve-floor reports, and utility evidence packets.",
     path: "/proof/proof-pack",
   })
 }
@@ -71,6 +81,17 @@ export default function ProofPackPage() {
       </SectionShell>
 
       <SectionShell>
+        <ProofArtifactStack artifacts={proofArtifacts} />
+      </SectionShell>
+
+      <SectionShell>
+        <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
+          <CapacityWaterfall steps={illustrativeWaterfall} />
+          <LoadPassportPreview />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="rounded-[1.8rem] border border-border/70 bg-surface px-6 py-7">
             <div className="flex items-center gap-3">
@@ -96,8 +117,18 @@ export default function ProofPackPage() {
                 variant="outline"
                 className="border-border/80 bg-surface/60 text-foreground"
               >
-                <Link href={buildLeadHref("shadow-mode", "proof-pack-sample")}>
-                  Book Shadow Mode demo
+                <Link href="/demo">
+                  Inspect proof demo
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-border/80 bg-surface/60 text-foreground"
+              >
+                <Link href={buildLeadHref("load-passport", "proof-pack-sample")}>
+                  Request Load Passport
                 </Link>
               </Button>
             </div>
@@ -114,6 +145,7 @@ export default function ProofPackPage() {
               </div>
             ))}
           </div>
+          <ProofLoadingSteps steps={proofLoadingSteps} />
         </div>
       </SectionShell>
 
@@ -131,6 +163,10 @@ export default function ProofPackPage() {
             }))}
           />
         </div>
+      </SectionShell>
+
+      <SectionShell>
+        <UtilityEvidencePacketPreview />
       </SectionShell>
 
       <SectionShell>
@@ -176,7 +212,7 @@ export default function ProofPackPage() {
               variant="outline"
               className="border-border/80 bg-surface/60 text-foreground"
             >
-              <Link href="/proof">See Shadow Mode</Link>
+              <Link href="/demo">Inspect Proof Demo</Link>
             </Button>
           </div>
         </div>

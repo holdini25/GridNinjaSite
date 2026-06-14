@@ -18,6 +18,10 @@ export function SiteHeader() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [solutionsOpen, setSolutionsOpen] = useState(false)
+  const isPathActive = (href: string) =>
+    href === "/"
+      ? pathname === href
+      : pathname === href || pathname.startsWith(`${href}/`)
 
   const handleScroll = useEffectEvent(() => {
     setScrolled(window.scrollY > 24)
@@ -57,25 +61,42 @@ export function SiteHeader() {
           />
         </Link>
         <nav className="hidden items-center gap-7 lg:flex">
-          {navItems.map((item) =>
-            item.children ? (
+          {navItems.map((item) => {
+            const itemActive = item.children
+              ? item.children.some((child) => isPathActive(child.href))
+              : isPathActive(item.href)
+
+            return item.children ? (
               <div
                 key={item.label}
                 className="relative"
                 onMouseEnter={() => setSolutionsOpen(true)}
                 onMouseLeave={() => setSolutionsOpen(false)}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") {
+                    setSolutionsOpen(false)
+                  }
+                }}
               >
                 <button
                   type="button"
                   className={cn(
-                    "flex items-center gap-1 text-base text-muted-foreground transition-colors hover:text-foreground",
-                    pathname.startsWith("/solutions/") && "text-foreground"
+                    "flex items-center gap-1 rounded-full px-2.5 py-1.5 text-base text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
+                    itemActive && "bg-surface-2 text-foreground"
                   )}
                   aria-expanded={solutionsOpen}
+                  aria-haspopup="menu"
+                  aria-label="Open solutions navigation"
+                  onClick={() => setSolutionsOpen(true)}
                   onFocus={() => setSolutionsOpen(true)}
                 >
                   {item.label}
-                  <ChevronDownIcon className="size-4" />
+                  <ChevronDownIcon
+                    className={cn(
+                      "size-4 transition-transform",
+                      solutionsOpen && "rotate-180"
+                    )}
+                  />
                 </button>
                 <div
                   className={cn(
@@ -84,22 +105,31 @@ export function SiteHeader() {
                       ? "pointer-events-auto translate-y-0 opacity-100"
                       : "pointer-events-none -translate-y-2 opacity-0"
                   )}
+                  aria-hidden={!solutionsOpen}
+                  role="menu"
                 >
                   <div className="space-y-1">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className={cn(
-                          "block rounded-2xl border border-transparent px-4 py-3 text-base text-muted-foreground transition-all hover:border-border/80 hover:bg-surface-2 hover:text-foreground",
-                          pathname === child.href &&
-                            "border-border/80 bg-surface-2 text-foreground"
-                        )}
-                        onClick={() => setSolutionsOpen(false)}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                    {item.children.map((child) => {
+                      const childActive = isPathActive(child.href)
+
+                      return (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          aria-current={childActive ? "page" : undefined}
+                          role="menuitem"
+                          tabIndex={solutionsOpen ? undefined : -1}
+                          className={cn(
+                            "block rounded-xl border border-transparent px-4 py-3 text-base text-muted-foreground transition-all hover:border-border/80 hover:bg-surface-2 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
+                            childActive &&
+                              "border-border/80 bg-surface-2 text-foreground"
+                          )}
+                          onClick={() => setSolutionsOpen(false)}
+                        >
+                          {child.label}
+                        </Link>
+                      )
+                    })}
                   </div>
                 </div>
               </div>
@@ -107,18 +137,19 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={itemActive ? "page" : undefined}
                 className={cn(
-                  "text-base text-muted-foreground transition-colors hover:text-foreground",
-                  pathname === item.href && "text-foreground"
+                  "rounded-full px-2.5 py-1.5 text-base text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
+                  itemActive && "bg-surface-2 text-foreground"
                 )}
               >
                 {item.label}
               </Link>
             )
-          )}
+          })}
         </nav>
         <div className="flex items-center gap-3">
-          <Button asChild className="hidden lg:inline-flex">
+          <Button asChild className="hidden xl:inline-flex">
             <Link href={buildLeadHref("capacity-audit", "header")}>
               Request Capacity Audit
             </Link>

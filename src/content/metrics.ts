@@ -2,24 +2,24 @@ import type { StatItem } from "@/types/site"
 
 export const proofStats: StatItem[] = [
   {
-    label: "Virtual Capacity Unlocked",
+    label: "Illustrative Virtual Capacity",
     value: "+18 MW",
-    body: "Turn stranded and delayed infrastructure into safe, sellable capacity.",
+    body: "Sample nominal planning upside that must be reduced into proof-backed dispatch envelope.",
   },
   {
-    label: "Time-to-Power Accelerated",
+    label: "Illustrative Time-to-Power",
     value: "4.2 mo",
-    body: "Bring compute online faster with coordinated bridge power and bounded control.",
+    body: "Potential planning impact from coordinated bridge power and bounded proof workflow.",
   },
   {
-    label: "Critical Violations Prevented",
+    label: "Unsafe Actions Accepted",
     value: "0",
-    body: "Stay inside strict electrical, thermal, and reserve envelopes with runtime-assured action gating.",
+    body: "Target Shadow Mode posture: no unsafe accepted actions in the sample evidence path.",
   },
   {
-    label: "Verified Flexibility Delivered",
+    label: "Illustrative Evidence Coverage",
     value: "93%",
-    body: "Produce auditable dispatch and proof artifacts for operators, buyers, and partners.",
+    body: "Sample share of intervals with enough telemetry, topology, and policy confidence to evaluate.",
   },
 ]
 
@@ -27,7 +27,7 @@ export const homeKpis: StatItem[] = [
   {
     label: "Safe MW Headroom",
     value: "11.6 MW",
-    body: "Available before the feeder thermal envelope binds.",
+    body: "Illustrative safe headroom before the feeder thermal envelope binds.",
   },
   {
     label: "Binding Constraint",
@@ -42,7 +42,7 @@ export const homeKpis: StatItem[] = [
   {
     label: "Flex Delivered",
     value: "7.3 MW",
-    body: "Coordinated cooling, reserve, and workload actions.",
+    body: "Illustrative coordinated cooling, reserve, and workload actions.",
   },
   {
     label: "Actions Blocked",
@@ -52,7 +52,7 @@ export const homeKpis: StatItem[] = [
   {
     label: "SLA Penalty Avoided",
     value: "$2.4M",
-    body: "Estimated avoided exposure across recent constrained intervals.",
+    body: "Illustrative avoided exposure across constrained intervals.",
   },
 ]
 
@@ -72,5 +72,10 @@ export const solutionTeasers = [
     title: "Colocation & REITs",
     body: "Increase sellable kW, oversubscribe more safely, and defend uptime.",
     href: "/solutions/colocation",
+  },
+  {
+    title: "Bridge Power & DER",
+    body: "Make bridge power, batteries, and on-site generation usable inside a visible dispatch envelope.",
+    href: "/solutions/bridge-power",
   },
 ]

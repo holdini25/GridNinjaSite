@@ -6,11 +6,22 @@ export const solutionPages: Record<"ai-cloud" | "colocation", SolutionPageConfig
       slug: "ai-cloud",
       path: "/solutions/ai-cloud",
       hero: {
+        eyebrow: "Solution / AI Cloud",
         headline: "For AI Clouds Racing Against the Grid",
         body: "Bring compute online faster, avoid power-driven throttling, and convert constrained infrastructure into billable capacity.",
       },
       whyThisMatters:
-        "Every month of delay can strand high-value GPU inventory and postpone revenue. GridNinja helps operators energize sooner, protect throughput, and stay inside the envelope.",
+        "Every month of delay can strand high-value GPU inventory and postpone revenue. GridNinja helps operators separate nominal headroom from proof-adjusted virtual capacity before they promise more load.",
+      buyerAnxiety:
+        "Does the site really have enough electrical, reserve, cooling, workload, and telemetry confidence to support the next AI capacity step?",
+      artifact: "AI Data Center Load Passport",
+      caveat:
+        "Outputs are site-specific and depend on telemetry freshness, topology completeness, policy declaration, and workload portability.",
+      stakeholderProof: [
+        "Capacity Waterfall from nominal headroom to safe usable MW",
+        "Dispatch envelope for candidate workload shifts",
+        "No-proof gaps that block credible time-to-power claims",
+      ],
       painPoints: [
         "Interconnection delays",
         "GPU monetization pressure",
@@ -26,19 +37,19 @@ export const solutionPages: Record<"ai-cloud" | "colocation", SolutionPageConfig
       ],
       metrics: [
         {
-          label: "Incremental billable GPU-hours",
+          label: "Illustrative billable GPU-hours",
           value: "+14.8%",
-          body: "Recovered by reducing broad derates during constrained intervals.",
+          body: "Sample output from reducing broad derates during constrained intervals.",
         },
         {
-          label: "Earlier energization revenue",
+          label: "Illustrative earlier revenue",
           value: "$18.2M",
-          body: "Illustrative annualized value from earlier bridge-power operation.",
+          body: "Sample annualized value from earlier bridge-power operation.",
         },
         {
-          label: "Avoided derates and SLA penalties",
+          label: "Illustrative avoided exposure",
           value: "$4.1M",
-          body: "Protected through bounded coordination and runtime assurance.",
+          body: "Sample exposure evaluated through bounded coordination and runtime assurance.",
         },
       ],
       ctaLabel: "Book an AI Capacity Audit",
@@ -48,11 +59,22 @@ export const solutionPages: Record<"ai-cloud" | "colocation", SolutionPageConfig
       slug: "colocation",
       path: "/solutions/colocation",
       hero: {
+        eyebrow: "Solution / Colocation & REITs",
         headline: "For Operators Selling Capacity in Constrained Markets",
         body: "Increase sellable kW, oversubscribe more safely, and protect uptime with proof-backed control.",
       },
       whyThisMatters:
-        "In power-constrained markets, every recoverable megawatt is revenue. GridNinja helps operators increase dynamic sellable capacity without relying on static assumptions or opaque risk.",
+        "In power-constrained markets, every recoverable megawatt needs evidence before it becomes sellable. GridNinja helps operators convert constrained infrastructure into safe, usable, auditable capacity without relying on static assumptions.",
+      buyerAnxiety:
+        "Can the business sell more capacity without creating an unsupported oversubscription or SLA risk?",
+      artifact: "Accepted-Headroom Ledger",
+      caveat:
+        "Sellable-capacity outputs remain bounded by declared site policy, tenant commitments, reserve posture, and evidence quality.",
+      stakeholderProof: [
+        "Accepted-headroom ledger for reviewable capacity states",
+        "Reserve-floor report before dynamic oversubscription",
+        "Operator-readable reject and no-proof reasons",
+      ],
       painPoints: [
         "Stranded buffer capacity",
         "Pressure to monetize scarce power",
@@ -68,22 +90,22 @@ export const solutionPages: Record<"ai-cloud" | "colocation", SolutionPageConfig
       ],
       metrics: [
         {
-          label: "Recovered sellable capacity",
+          label: "Illustrative recovered capacity",
           value: "+9.4 MW",
-          body: "Dynamic headroom unlocked from static buffers and fixed reserve posture.",
+          body: "Sample dynamic headroom separated from static buffers and fixed reserve posture.",
         },
         {
-          label: "Protected uptime posture",
+          label: "Illustrative uptime posture",
           value: "99.99%",
-          body: "Actions remain bounded by feeder, reserve, and thermal margins.",
+          body: "Sample target posture with actions bounded by feeder, reserve, and thermal margins.",
         },
         {
-          label: "Annualized capacity value",
+          label: "Illustrative capacity value",
           value: "$5.2M",
-          body: "Illustrative kW-month recovery across a constrained market footprint.",
+          body: "Sample kW-month recovery across a constrained market footprint.",
         },
       ],
-      ctaLabel: "Request a Sellable Capacity Assessment",
+      ctaLabel: "Request Capacity Audit",
       ctaSource: "colocation-page",
     },
   }

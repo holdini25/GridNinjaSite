@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GridNinja Public Website
 
-## Getting Started
+This repository contains the public-facing GridNinja website.
 
-First, run the development server:
+GridNinja is positioned as an **AI Data Center Virtual Capacity Control Plane**
+and **runtime-assured virtual capacity engine**. The site should communicate
+proof-backed virtual capacity for constrained AI infrastructure, not generic
+energy management software, DCIM, sustainability software, or dashboard SaaS.
+
+## Stack
+
+- Next.js App Router
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui primitives
+- Motion for bounded SVG/diagram animation
+- ECharts for chart surfaces
+
+The repo currently uses `package-lock.json`, so use npm unless package-manager
+migration is explicitly requested.
+
+## Local Setup
+
+Next.js 16.2 requires Node `>=20.9.0`.
 
 ```bash
+node -v
+node -p "require('./node_modules/next/package.json').engines"
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Lead Delivery
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The contact API intentionally requires at least one delivery target:
 
-## Learn More
+- `LEAD_WEBHOOK_URL`
+- or `RESEND_API_KEY` with `LEAD_EMAIL_TO`
 
-To learn more about Next.js, take a look at the following resources:
+Optional variables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `LEAD_WEBHOOK_BEARER_TOKEN`
+- `LEAD_EMAIL_FROM`
+- `NEXT_PUBLIC_SITE_URL`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Without a configured delivery target, `/api/contact` returns a delivery error by
+design.
 
-## Deploy on Vercel
+## Validation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Run these checks before considering substantial UI work complete:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npm exec tsc -- --noEmit
+npm run build
+```
+
+There is no dedicated `typecheck` or `test` script at the moment. Use
+`npm exec tsc -- --noEmit` for TypeScript validation.
+
+## Main Routes
+
+- `/`
+- `/platform`
+- `/solutions/ai-cloud`
+- `/solutions/colocation`
+- `/solutions/bridge-power`
+- `/proof`
+- `/proof/proof-pack`
+- `/demo`
+- `/dcii`
+- `/roi`
+- `/about`
+- `/contact`
+
+## Copy And Product Rules
+
+Preserve the core language:
+
+- AI Data Center Virtual Capacity Control Plane
+- runtime-assured virtual capacity engine
+- virtual capacity
+- safe, usable, auditable capacity
+- proof before autonomy
+- Shadow Mode
+- bounded autonomy
+- Capacity Audit
+- dispatch envelope
+- inside-the-fence orchestration
+- allow / repair / reject / no-proof
+
+Sample KPI and demo values must be labeled illustrative unless backed by
+validated site evidence. DCII and market-context claims should be source-checked
+before publication.

@@ -3,6 +3,7 @@ import type { ReactNode } from "react"
 import Link from "next/link"
 
 import { SectionShell } from "@/components/layout/section-shell"
+import { ProofGridBackground } from "@/components/marketing/proof-grid-background"
 import { Button } from "@/components/ui/button"
 import type { SectionCopy } from "@/types/site"
 
@@ -10,6 +11,8 @@ type HeroProps = SectionCopy & {
   primaryCta?: { label: string; href: string }
   secondaryCta?: { label: string; href: string }
   visual?: ReactNode
+  proofGrid?: boolean
+  proofGridLabels?: string[]
 }
 
 export function Hero({
@@ -19,6 +22,8 @@ export function Hero({
   primaryCta,
   secondaryCta,
   visual,
+  proofGrid = false,
+  proofGridLabels,
 }: HeroProps) {
   const hasVisual = Boolean(visual)
   const containerClassName = hasVisual
@@ -34,6 +39,7 @@ export function Hero({
   return (
     <section className="relative overflow-hidden border-b border-border/70 pb-6">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,159,26,0.12),transparent_34%),linear-gradient(180deg,rgba(19,32,43,0.34),transparent_74%)]" />
+      {proofGrid ? <ProofGridBackground labels={proofGridLabels} /> : null}
       <SectionShell className="relative" containerClassName={containerClassName}>
         <div className={hasVisual ? "max-w-2xl" : "max-w-3xl"}>
           {eyebrow ? (

@@ -11,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/solutions/bridge-power",
     "/proof",
     "/proof/proof-pack",
+    "/demo",
+    "/dcii",
     "/roi",
     "/about",
     "/contact",

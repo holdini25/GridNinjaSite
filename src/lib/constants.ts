@@ -5,6 +5,9 @@ export const leadIntents = [
   "shadow-mode",
   "sellable-capacity",
   "partnership",
+  "book-demo",
+  "dcii-memo",
+  "load-passport",
 ] as const satisfies ReadonlyArray<LeadIntent>
 
 export const buyerTypes = [
@@ -40,6 +43,9 @@ export const constraintOptions = [
   "demand / flex programs",
   "water / cooling constraints",
   "SLA protection",
+  "telemetry / topology confidence",
+  "reserve floor validation",
+  "utility evidence packet",
 ] as const
 
 export const intentLabels: Record<LeadIntent, string> = {
@@ -47,4 +53,7 @@ export const intentLabels: Record<LeadIntent, string> = {
   "shadow-mode": "Shadow Mode Demo",
   "sellable-capacity": "Sellable Capacity Assessment",
   partnership: "Partnership Conversation",
+  "book-demo": "Proof Demo",
+  "dcii-memo": "DCII Memo",
+  "load-passport": "Load Passport",
 }

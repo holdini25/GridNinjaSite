@@ -1,10 +1,26 @@
-import { GridNinjaMark } from "@/components/brand/gridninja-logo"
+import type { CSSProperties } from "react"
 
 type GridNinjaOgCardProps = {
   title: string
   description: string
   host: string
 }
+
+const proofPills = [
+  "Proof before autonomy",
+  "Safe sellable MW",
+  "Runtime assurance",
+]
+
+const systemTiles = [
+  { label: "Power", value: "Utility + DER" },
+  { label: "Thermal", value: "Cooling envelope" },
+  { label: "Reserve", value: "Safety margin" },
+  { label: "Proof", value: "Shadow Mode" },
+]
+
+const fontFamily =
+  'Geist, "Geist Fallback", ui-sans-serif, system-ui, sans-serif'
 
 export function GridNinjaOgCard({
   title,
@@ -14,318 +30,312 @@ export function GridNinjaOgCard({
   const titleLine = title.split("|")[0]?.trim() ?? title
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        overflow: "hidden",
-        background:
-          "radial-gradient(circle at top right, rgba(255,159,26,0.18), transparent 28%), radial-gradient(circle at top left, rgba(19,32,43,0.9), transparent 34%), linear-gradient(180deg, #09131c 0%, #07111a 100%)",
-        color: "#f5f7fa",
-        fontFamily:
-          'Geist, "Geist Fallback", ui-sans-serif, system-ui, sans-serif',
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            "linear-gradient(rgba(159,176,191,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(159,176,191,0.08) 1px, transparent 1px)",
-          backgroundSize: "44px 44px",
-          maskImage:
-            "radial-gradient(circle at center, black 0%, black 58%, transparent 82%)",
-          opacity: 0.35,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          right: 72,
-          top: 66,
-          width: 390,
-          height: 390,
-          borderRadius: 999,
-          border: "1px solid rgba(255,184,74,0.14)",
-          background:
-            "radial-gradient(circle at center, rgba(255,159,26,0.09), rgba(13,23,32,0.18) 55%, transparent 72%)",
-          opacity: 0.9,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          right: 98,
-          top: 96,
-          width: 340,
-          height: 340,
-          borderRadius: 999,
-          border: "1px solid rgba(159,176,191,0.12)",
-        }}
-      />
+    <div style={styles.root}>
+      <div style={styles.grid} />
+      <div style={styles.orbitLarge} />
+      <div style={styles.orbitSmall} />
 
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          display: "flex",
-          width: "100%",
-          height: "100%",
-          padding: "58px 60px",
-          gap: 44,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flex: "1 1 0%",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: 28,
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-            <div
-              style={{
-                maxWidth: 440,
-                fontSize: 14,
-                lineHeight: 1.45,
-                letterSpacing: "0.18em",
-                color: "#9fb0bf",
-                textTransform: "uppercase",
-              }}
-            >
-              {titleLine}
+      <div style={styles.content}>
+        <div style={styles.copyColumn}>
+          <div style={styles.copyStack}>
+            <div style={styles.eyebrow}>{titleLine}</div>
+            <div style={styles.mark}>
+              <div style={styles.markRing} />
+              <div style={styles.markHorizontal} />
+              <div style={styles.markVertical} />
+              <div style={styles.markCore}>GN</div>
             </div>
-            <GridNinjaMark style={{ width: 84, height: 84 }} />
-            <div
-              style={{
-                display: "inline-flex",
-                width: "fit-content",
-                alignItems: "center",
-                gap: 10,
-                borderRadius: 999,
-                border: "1px solid rgba(255,184,74,0.16)",
-                background: "rgba(13,23,32,0.76)",
-                padding: "8px 14px",
-                fontSize: 12,
-                letterSpacing: "0.22em",
-                color: "#9fb0bf",
-                textTransform: "uppercase",
-              }}
-            >
-              Virtual capacity control plane
+            <div style={styles.category}>
+              AI Data Center Virtual Capacity Control Plane
             </div>
-            <div style={{ maxWidth: 620 }}>
-              <div
-                style={{
-                  fontSize: 20,
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  color: "#f5f7fa",
-                  textTransform: "uppercase",
-                }}
-              >
-                GridNinja
-              </div>
-              <div
-                style={{
-                  marginTop: 18,
-                  fontSize: 57,
-                  lineHeight: 1.02,
-                  fontWeight: 600,
-                  letterSpacing: "-0.04em",
-                }}
-              >
+            <div style={styles.titleGroup}>
+              <div style={styles.brand}>GridNinja</div>
+              <div style={styles.headline}>
                 Unlock virtual capacity for AI data centers
               </div>
-              <div
-                style={{
-                  marginTop: 18,
-                  maxWidth: 560,
-                  fontSize: 24,
-                  lineHeight: 1.35,
-                  color: "#9fb0bf",
-                }}
-              >
-                {description}
-              </div>
+              <div style={styles.description}>{description}</div>
             </div>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              flexWrap: "wrap",
-            }}
-          >
-            {["Proof before autonomy", "Safe sellable MW", "Runtime assurance"].map(
-              (item) => (
-                <div
-                  key={item}
-                  style={{
-                    borderRadius: 999,
-                    border: "1px solid rgba(255,184,74,0.16)",
-                    background: "rgba(19,32,43,0.84)",
-                    padding: "10px 14px",
-                    fontSize: 14,
-                    color: "#f5f7fa",
-                  }}
-                >
-                  {item}
-                </div>
-              )
-            )}
+          <div style={styles.pillRow}>
+            {proofPills.map((item) => (
+              <div key={item} style={styles.pill}>
+                {item}
+              </div>
+            ))}
           </div>
         </div>
 
-        <div
-          style={{
-            width: 390,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            gap: 18,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 12,
-              fontSize: 14,
-              letterSpacing: "0.16em",
-              color: "#9fb0bf",
-              textTransform: "uppercase",
-            }}
-          >
+        <div style={styles.panelColumn}>
+          <div style={styles.panelHeader}>
             <span>Runtime-assured</span>
             <span>{host}</span>
           </div>
-          <div
-            style={{
-              position: "relative",
-              borderRadius: 28,
-              border: "1px solid rgba(255,184,74,0.16)",
-              background:
-                "linear-gradient(180deg, rgba(13,23,32,0.96) 0%, rgba(7,17,26,0.96) 100%)",
-              padding: 24,
-              height: 376,
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                inset: 24,
-                borderRadius: 18,
-                border: "1px solid rgba(159,176,191,0.12)",
-              }}
-            />
-            <div
-              style={{
-                position: "absolute",
-                left: 32,
-                top: 34,
-                right: 32,
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: 18,
-              }}
-            >
-              {[
-                { label: "Power", value: "Utility + DER" },
-                { label: "Thermal", value: "Cooling envelope" },
-                { label: "Reserve", value: "Safety margin" },
-                { label: "Proof", value: "Shadow Mode" },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  style={{
-                    borderRadius: 18,
-                    border: "1px solid rgba(255,184,74,0.16)",
-                    background: "rgba(19,32,43,0.9)",
-                    padding: "16px 16px 15px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 14,
-                      letterSpacing: "0.18em",
-                      color: "#ff9f1a",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {item.label}
-                  </div>
-                  <div
-                    style={{
-                      marginTop: 9,
-                      fontSize: 16,
-                      color: "#f5f7fa",
-                      lineHeight: 1.35,
-                    }}
-                  >
-                    {item.value}
-                  </div>
+          <div style={styles.panel}>
+            <div style={styles.tileGrid}>
+              {systemTiles.map((item) => (
+                <div key={item.label} style={styles.tile}>
+                  <div style={styles.tileLabel}>{item.label}</div>
+                  <div style={styles.tileValue}>{item.value}</div>
                 </div>
               ))}
             </div>
-            <div
-              style={{
-                position: "absolute",
-                left: 88,
-                right: 88,
-                bottom: 34,
-                height: 94,
-                borderRadius: 24,
-                border: "1px solid rgba(255,159,26,0.2)",
-                background:
-                  "linear-gradient(180deg, rgba(255,159,26,0.12) 0%, rgba(255,159,26,0.04) 100%)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                padding: "0 20px",
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontSize: 24,
-                    fontWeight: 600,
-                    color: "#f5f7fa",
-                  }}
-                >
-                  Dispatch envelope
-                </div>
-                <div
-                  style={{
-                    marginTop: 6,
-                    fontSize: 14,
-                    color: "#9fb0bf",
-                  }}
-                >
-                  Every action is checked before execution.
-                </div>
+            <div style={styles.dispatchEnvelope}>
+              <div style={styles.dispatchTitle}>Dispatch envelope</div>
+              <div style={styles.dispatchText}>
+                Every action is checked before execution.
               </div>
             </div>
           </div>
-          <div
-            style={{
-              fontSize: 14,
-              lineHeight: 1.45,
-              color: "#9fb0bf",
-            }}
-          >
-            gridninja.ai
-          </div>
+          <div style={styles.footer}>gridninja.ai</div>
         </div>
       </div>
     </div>
   )
 }
+
+const styles = {
+  root: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    overflow: "hidden",
+    background:
+      "linear-gradient(135deg, #09131c 0%, #07111a 48%, #0d1720 100%)",
+    color: "#f5f7fa",
+    fontFamily,
+  },
+  grid: {
+    position: "absolute",
+    inset: 0,
+    opacity: 0.35,
+    backgroundImage:
+      "linear-gradient(rgba(159,176,191,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(159,176,191,0.08) 1px, transparent 1px)",
+    backgroundSize: "44px 44px",
+  },
+  orbitLarge: {
+    position: "absolute",
+    right: 72,
+    top: 66,
+    width: 390,
+    height: 390,
+    borderRadius: 999,
+    border: "1px solid rgba(255,184,74,0.14)",
+    background:
+      "radial-gradient(circle at center, rgba(255,159,26,0.09), rgba(13,23,32,0.18) 55%, transparent 72%)",
+  },
+  orbitSmall: {
+    position: "absolute",
+    right: 98,
+    top: 96,
+    width: 340,
+    height: 340,
+    borderRadius: 999,
+    border: "1px solid rgba(159,176,191,0.12)",
+  },
+  content: {
+    display: "flex",
+    width: "100%",
+    height: "100%",
+    padding: "58px 60px",
+    gap: 44,
+  },
+  copyColumn: {
+    display: "flex",
+    flex: "1 1 0%",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    gap: 28,
+  },
+  copyStack: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 22,
+  },
+  eyebrow: {
+    maxWidth: 440,
+    fontSize: 14,
+    lineHeight: 1.45,
+    letterSpacing: "0.18em",
+    color: "#9fb0bf",
+    textTransform: "uppercase",
+  },
+  mark: {
+    position: "relative",
+    width: 84,
+    height: 84,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+    border: "2px solid #ff9f1a",
+    background: "rgba(255,159,26,0.08)",
+  },
+  markRing: {
+    position: "absolute",
+    inset: 13,
+    borderRadius: 999,
+    border: "1px solid rgba(159,176,191,0.38)",
+  },
+  markHorizontal: {
+    position: "absolute",
+    left: 14,
+    right: 14,
+    top: 41,
+    height: 1,
+    background: "rgba(159,176,191,0.28)",
+  },
+  markVertical: {
+    position: "absolute",
+    top: 14,
+    bottom: 14,
+    left: 41,
+    width: 1,
+    background: "rgba(159,176,191,0.28)",
+  },
+  markCore: {
+    fontSize: 22,
+    fontWeight: 700,
+    color: "#ff9f1a",
+    letterSpacing: "0.06em",
+  },
+  category: {
+    alignSelf: "flex-start",
+    display: "flex",
+    borderRadius: 999,
+    border: "1px solid rgba(255,184,74,0.16)",
+    background: "rgba(13,23,32,0.76)",
+    padding: "8px 14px",
+    fontSize: 12,
+    letterSpacing: "0.18em",
+    color: "#9fb0bf",
+    textTransform: "uppercase",
+  },
+  titleGroup: {
+    maxWidth: 640,
+    display: "flex",
+    flexDirection: "column",
+  },
+  brand: {
+    fontSize: 20,
+    fontWeight: 500,
+    letterSpacing: "0.14em",
+    color: "#f5f7fa",
+    textTransform: "uppercase",
+  },
+  headline: {
+    marginTop: 18,
+    fontSize: 57,
+    lineHeight: 1.02,
+    fontWeight: 600,
+    letterSpacing: "-0.04em",
+  },
+  description: {
+    marginTop: 18,
+    maxWidth: 560,
+    fontSize: 24,
+    lineHeight: 1.35,
+    color: "#9fb0bf",
+  },
+  pillRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    flexWrap: "wrap",
+  },
+  pill: {
+    display: "flex",
+    borderRadius: 999,
+    border: "1px solid rgba(255,184,74,0.16)",
+    background: "rgba(19,32,43,0.84)",
+    padding: "10px 14px",
+    fontSize: 14,
+    color: "#f5f7fa",
+  },
+  panelColumn: {
+    width: 390,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    gap: 18,
+  },
+  panelHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12,
+    fontSize: 14,
+    letterSpacing: "0.16em",
+    color: "#9fb0bf",
+    textTransform: "uppercase",
+  },
+  panel: {
+    position: "relative",
+    borderRadius: 28,
+    border: "1px solid rgba(255,184,74,0.16)",
+    background:
+      "linear-gradient(180deg, rgba(13,23,32,0.96) 0%, rgba(7,17,26,0.96) 100%)",
+    padding: 24,
+    height: 376,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  tileGrid: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 18,
+  },
+  tile: {
+    display: "flex",
+    flexDirection: "column",
+    width: 154,
+    borderRadius: 18,
+    border: "1px solid rgba(255,184,74,0.16)",
+    background: "rgba(19,32,43,0.9)",
+    padding: "16px 16px 15px",
+  },
+  tileLabel: {
+    fontSize: 14,
+    letterSpacing: "0.18em",
+    color: "#ff9f1a",
+    textTransform: "uppercase",
+  },
+  tileValue: {
+    marginTop: 9,
+    fontSize: 16,
+    color: "#f5f7fa",
+    lineHeight: 1.35,
+  },
+  dispatchEnvelope: {
+    alignSelf: "center",
+    width: 250,
+    minHeight: 94,
+    borderRadius: 24,
+    border: "1px solid rgba(255,159,26,0.2)",
+    background:
+      "linear-gradient(180deg, rgba(255,159,26,0.12) 0%, rgba(255,159,26,0.04) 100%)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    padding: "14px 20px",
+  },
+  dispatchTitle: {
+    fontSize: 24,
+    fontWeight: 600,
+    color: "#f5f7fa",
+  },
+  dispatchText: {
+    marginTop: 6,
+    fontSize: 14,
+    color: "#9fb0bf",
+  },
+  footer: {
+    fontSize: 14,
+    lineHeight: 1.45,
+    color: "#9fb0bf",
+  },
+} satisfies Record<string, CSSProperties>

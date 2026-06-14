@@ -8,7 +8,7 @@ export const aboutHero: SectionCopy = {
 
 export const aboutMission = {
   title: "Mission",
-  body: "Unlock safe, usable, auditable capacity from constrained AI infrastructure.",
+  body: "Unlock safe, usable, auditable virtual capacity from constrained AI infrastructure.",
 }
 
 export const aboutWhyNow = {
@@ -23,7 +23,7 @@ export const aboutWhyNow = {
 export const aboutPrinciples = [
   {
     title: "Proof before autonomy",
-    body: "Show what the system would do, why it would do it, and what margin remains before live control expands.",
+    body: "Show what the system would do, why it would do it, what evidence supports it, and what margin remains before live control expands.",
   },
   {
     title: "Inside-the-fence execution",
@@ -47,5 +47,5 @@ export const aboutOperatingModel = {
 export const aboutClosingCta: SectionCopy = {
   eyebrow: "Next step",
   headline: "Start with proof before autonomy",
-  body: "Talk to us about a Capacity Audit, Shadow Mode pilot, or bridge-power orchestration plan.",
+  body: "Talk to us about a Capacity Audit, Shadow Mode pilot, Load Passport sample, or bridge-power proof path.",
 }

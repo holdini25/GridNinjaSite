@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
 
+import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
+import { ProductBoundaryToggle } from "@/components/marketing/product-boundary-toggle"
+import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
+import { ProofChainTrail } from "@/components/marketing/proof-chain-trail"
+import { SafetyBoundaryWall } from "@/components/marketing/safety-boundary-wall"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { TopologyMap } from "@/components/diagrams/topology-map"
 import { SectionShell } from "@/components/layout/section-shell"
@@ -11,6 +16,11 @@ import {
   platformModules,
   platformProofSection,
 } from "@/content/copy/platform"
+import {
+  proofArtifacts,
+  proofChainStages,
+  trustBoundaryItems,
+} from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -18,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({
     title: "Platform | GridNinja",
     description:
-      "See the runtime-assured platform architecture that turns constrained infrastructure into safe, usable, auditable capacity.",
+      "See the runtime-assured virtual capacity platform architecture that turns constrained AI data center infrastructure into proof-backed capacity.",
     path: "/platform",
   })
 }
@@ -27,11 +37,16 @@ export default function PlatformPage() {
   return (
     <div className="space-y-24 pb-24">
       <Hero
+        eyebrow={platformHero.eyebrow}
         headline={platformHero.headline}
         body={platformHero.body}
         primaryCta={{
           label: "Request Capacity Audit",
           href: buildLeadHref("capacity-audit", "platform-hero"),
+        }}
+        secondaryCta={{
+          label: "Inspect Proof Demo",
+          href: "/demo",
         }}
       />
 
@@ -61,13 +76,37 @@ export default function PlatformPage() {
       </SectionShell>
 
       <SectionShell>
+        <ProductBoundaryToggle />
+      </SectionShell>
+
+      <SectionShell>
         <div className="space-y-10">
           <SectionHeader
             eyebrow="Platform architecture"
-            headline="Telemetry adapters to proof system, in one bounded chain"
+            headline="Telemetry to proof, in one bounded chain"
             body="The platform is structured so the same path that ranks and gates action bundles also generates audit-ready evidence."
           />
           <TopologyMap items={architectureFlow} />
+          <ProofChainTrail stages={proofChainStages} />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <AuthorityBoundary items={trustBoundaryItems} />
+      </SectionShell>
+
+      <SectionShell>
+        <SafetyBoundaryWall />
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Artifact surfaces"
+            headline="Proof objects are part of the platform, not presentation polish"
+            body="Each artifact exists so operators and stakeholders can inspect capacity claims, refusal logic, and evidence quality without treating a dashboard as authority."
+          />
+          <ProofArtifactGrid artifacts={proofArtifacts} />
         </div>
       </SectionShell>
 

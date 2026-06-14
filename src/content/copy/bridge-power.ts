@@ -2,17 +2,18 @@ import type { SectionCopy } from "@/types/site"
 
 export const bridgePowerHero: SectionCopy = {
   eyebrow: "Bridge Power & DER",
-  headline: "Make bridge power operationally useful",
-  body: "Coordinate behind-the-meter generation, batteries, cooling, and workload posture so the site can energize faster inside a visible dispatch envelope.",
+  headline: "Make bridge power provably useful",
+  body: "Coordinate behind-the-meter generation, batteries, cooling, and workload posture so the site can energize faster inside a visible dispatch envelope and reserve-floor proof.",
 }
 
 export const bridgePowerProblem = {
   title: "Bridge power solves supply. GridNinja solves the operating problem.",
-  body: "Mode transitions, reserve posture, and thermal coupling decide whether bridge power becomes safe sellable MW or an expensive temporary workaround.",
+  body: "Mode transitions, reserve posture, telemetry confidence, and thermal coupling decide whether bridge power becomes safe sellable MW or an unsupported temporary workaround.",
   bullets: [
     "Mode changes create the highest operational risk.",
     "Reserve posture has to move with thermal demand and workload posture.",
     "Workloads, cooling, and DER assets need one runtime-assured control loop.",
+    "Reserve-safe dispatch must be proven before bridge assets are treated as capacity.",
   ],
 }
 
@@ -31,7 +32,7 @@ export const bridgePowerModes = [
   },
   {
     title: "Prove dispatch readiness",
-    body: "Produce Shadow Mode evidence, replay logs, and operator-readable dispatch envelopes.",
+    body: "Produce Shadow Mode evidence, reserve-floor reports, replay logs, and operator-readable dispatch envelopes.",
   },
 ]
 
@@ -42,7 +43,7 @@ export const bridgePowerOutcomes = [
   },
   {
     title: "Safer reserve utilization",
-    body: "Use the margin you actually have, not a static buffer frozen at commissioning.",
+    body: "Use only the margin that survives the reserve-floor proof, not a static buffer frozen at commissioning.",
   },
   {
     title: "Cleaner multi-asset coordination",
@@ -75,6 +76,6 @@ export const bridgePowerTopology = [
 
 export const bridgePowerFinalCta: SectionCopy = {
   eyebrow: "Next Step",
-  headline: "See how bridge power behaves inside a runtime-assured control loop",
-  body: "Start with a Capacity Audit or partnership conversation to map assets, dispatch envelopes, and the evidence path for your site.",
+  headline: "See how bridge power behaves inside a runtime-assured proof loop",
+  body: "Start with a Capacity Audit or partnership conversation to map assets, reserve floors, dispatch envelopes, and the evidence path for your site.",
 }
