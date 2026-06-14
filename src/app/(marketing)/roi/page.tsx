@@ -6,6 +6,7 @@ import { Hero } from "@/components/marketing/hero"
 import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
 import { NoProofRegister } from "@/components/marketing/no-proof-register"
 import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
+import { ProofComparisonSlider } from "@/components/marketing/proof-comparison-slider"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { roiOutputs, roiAssumptions } from "@/content/roi-assumptions"
@@ -13,6 +14,7 @@ import { roiArchetypes, roiDeliverables, roiHero } from "@/content/copy/roi"
 import {
   illustrativeWaterfall,
   noProofGaps,
+  proofComparison,
   proofArtifacts,
 } from "@/content/proof-artifacts"
 import { createPageMetadata } from "@/lib/seo"
@@ -65,6 +67,10 @@ export default function RoiPage() {
           <CapacityWaterfall steps={illustrativeWaterfall} />
           <LoadPassportPreview />
         </div>
+      </SectionShell>
+
+      <SectionShell>
+        <ProofComparisonSlider comparison={proofComparison} />
       </SectionShell>
 
       <SectionShell>

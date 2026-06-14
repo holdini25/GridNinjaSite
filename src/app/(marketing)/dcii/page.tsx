@@ -6,6 +6,7 @@ import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
+import { ProofComparisonSlider } from "@/components/marketing/proof-comparison-slider"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
@@ -19,7 +20,11 @@ import {
   dciiSummary,
 } from "@/content/copy/dcii"
 import { ladderSteps } from "@/content/copy/proof"
-import { proofArtifacts, trustBoundaryItems } from "@/content/proof-artifacts"
+import {
+  proofArtifacts,
+  proofComparison,
+  trustBoundaryItems,
+} from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -75,6 +80,10 @@ export default function DciiPage() {
 
       <SectionShell>
         <AuthorityBoundary items={trustBoundaryItems} />
+      </SectionShell>
+
+      <SectionShell>
+        <ProofComparisonSlider comparison={proofComparison} />
       </SectionShell>
 
       <SectionShell>

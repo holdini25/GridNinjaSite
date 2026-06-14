@@ -3,9 +3,11 @@ import type { Metadata } from "next"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { DemoInspectionRoom } from "@/components/marketing/demo-inspection-room"
 import { Hero } from "@/components/marketing/hero"
+import { ProofStorySnap } from "@/components/marketing/proof-story-snap"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { demoFinalCta, demoHero, demoScenario } from "@/content/copy/demo"
+import { proofStorySteps } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -45,6 +47,10 @@ export default function DemoPage() {
           />
           <DemoInspectionRoom scenario={demoScenario} />
         </div>
+      </SectionShell>
+
+      <SectionShell>
+        <ProofStorySnap steps={proofStorySteps} />
       </SectionShell>
 
       <SectionShell>

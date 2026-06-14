@@ -3,14 +3,18 @@
 import { useState } from "react"
 
 import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
+import { DemoModeOverlay } from "@/components/marketing/demo-mode-overlay"
 import { ProofGridBackground } from "@/components/marketing/proof-grid-background"
 import { ProofLoadingSteps } from "@/components/marketing/proof-loading-steps"
 import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
 import {
+  demoModeOverlays,
   proofLoadingSteps,
+  type DemoMode,
   type RtaDecisionState,
   type WaterfallStep,
 } from "@/content/proof-artifacts"
+import { runViewTransition } from "@/lib/view-transition"
 
 type DemoTrace = {
   outcome: string
@@ -34,11 +38,21 @@ type DemoInspectionRoomProps = {
 
 export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
   const [mode, setMode] = useState(scenario.modes[0])
-  const [toolMode, setToolMode] = useState<"Inspect" | "Explain" | "Export">(
-    "Inspect"
-  )
+  const [toolMode, setToolMode] = useState<DemoMode>("Inspect")
   const [trace, setTrace] = useState(scenario.traces[0])
   const traceState = toDecisionState(trace.outcome)
+
+  function selectScenarioMode(nextMode: string) {
+    runViewTransition(() => setMode(nextMode))
+  }
+
+  function selectToolMode(nextMode: DemoMode) {
+    runViewTransition(() => setToolMode(nextMode))
+  }
+
+  function selectTrace(nextTrace: DemoTrace) {
+    runViewTransition(() => setTrace(nextTrace))
+  }
 
   return (
     <div className="relative">
@@ -63,7 +77,7 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
                   key={item}
                   type="button"
                   aria-pressed={mode === item}
-                  onClick={() => setMode(item)}
+                  onClick={() => selectScenarioMode(item)}
                   className={`min-h-11 rounded-[0.9rem] border px-4 py-3 text-left text-base transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 ${
                     mode === item
                       ? "border-primary bg-primary text-primary-foreground"
@@ -84,7 +98,7 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
                   key={item}
                   type="button"
                   aria-pressed={toolMode === item}
-                  onClick={() => setToolMode(item)}
+                  onClick={() => selectToolMode(item)}
                   className={`min-h-11 rounded-[0.9rem] border px-4 py-3 text-left text-sm transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 ${
                     toolMode === item
                       ? "border-primary bg-surface-2 text-foreground"
@@ -102,6 +116,10 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
                   ? "Explain follows the proposal -> solver -> RTA authority path."
                   : "Export selects the proof artifacts that would enter the proof pack."}
             </p>
+            <DemoModeOverlay
+              activeMode={toolMode}
+              overlays={demoModeOverlays}
+            />
           </div>
 
           <div className="gn-panel p-6">
@@ -125,7 +143,7 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
                   key={item.outcome}
                   type="button"
                   aria-pressed={trace.outcome === item.outcome}
-                  onClick={() => setTrace(item)}
+                  onClick={() => selectTrace(item)}
                   className={`min-h-11 rounded-[0.9rem] border px-4 py-3 text-left transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 ${
                     trace.outcome === item.outcome
                       ? "border-primary bg-surface-2 text-foreground"
@@ -147,7 +165,7 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
         <div className="space-y-6">
           <CapacityWaterfall steps={scenario.waterfall} />
           <ProofLoadingSteps steps={proofLoadingSteps} />
-          <div className="gn-panel p-6">
+          <div className="gn-panel gn-vt-rta-trace p-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="gn-eyebrow">Selected trace</p>
               <RtaDecisionChip state={traceState} />

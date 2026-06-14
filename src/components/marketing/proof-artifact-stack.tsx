@@ -7,6 +7,7 @@ import {
   artifactFiles,
   type ProofArtifact,
 } from "@/content/proof-artifacts"
+import { runViewTransition } from "@/lib/view-transition"
 import { cn } from "@/lib/utils"
 
 import { EvidenceDrawer } from "@/components/marketing/evidence-drawer"
@@ -21,6 +22,10 @@ export function ProofArtifactStack({
   const activeEvidence = active
     ? artifactFiles.find((item) => item.artifactTitle === active.title)
     : undefined
+
+  function selectArtifact(index: number) {
+    runViewTransition(() => setActiveIndex(index))
+  }
 
   return (
     <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
@@ -51,9 +56,9 @@ export function ProofArtifactStack({
                 <button
                   type="button"
                   aria-pressed={activeIndex === index}
-                  onClick={() => setActiveIndex(index)}
-                  onFocus={() => setActiveIndex(index)}
-                  onMouseEnter={() => setActiveIndex(index)}
+                  onClick={() => selectArtifact(index)}
+                  onFocus={() => selectArtifact(index)}
+                  onMouseEnter={() => selectArtifact(index)}
                   className={cn(
                     "gn-artifact-card gn-panel gn-panel-interactive w-full px-5 py-5 text-left",
                     "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/45",
@@ -77,7 +82,7 @@ export function ProofArtifactStack({
         })}
       </div>
       {active ? (
-        <div className="gn-panel px-6 py-7">
+        <div className="gn-panel gn-vt-proof-artifact px-6 py-7">
           <p className="gn-eyebrow">Selected artifact</p>
           <h3 className="mt-3 text-[2rem] font-medium text-foreground">
             {active.title}

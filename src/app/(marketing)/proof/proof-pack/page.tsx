@@ -7,6 +7,7 @@ import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
 import { Hero } from "@/components/marketing/hero"
 import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
 import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
+import { ProofStorySnap } from "@/components/marketing/proof-story-snap"
 import { ProofLoadingSteps } from "@/components/marketing/proof-loading-steps"
 import { ProofLog } from "@/components/marketing/proof-log"
 import { SectionHeader } from "@/components/marketing/section-header"
@@ -25,6 +26,7 @@ import {
   illustrativeWaterfall,
   proofArtifacts,
   proofLoadingSteps,
+  proofStorySteps,
 } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
@@ -85,6 +87,10 @@ export default function ProofPackPage() {
       </SectionShell>
 
       <SectionShell>
+        <ProofStorySnap steps={proofStorySteps} />
+      </SectionShell>
+
+      <SectionShell>
         <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
           <CapacityWaterfall steps={illustrativeWaterfall} />
           <LoadPassportPreview />
@@ -93,7 +99,7 @@ export default function ProofPackPage() {
 
       <SectionShell>
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-[1.8rem] border border-border/70 bg-surface px-6 py-7">
+          <div className="gn-vt-proof-export rounded-[1.8rem] border border-border/70 bg-surface px-6 py-7">
             <div className="flex items-center gap-3">
               <GridNinjaMark className="size-10 shrink-0" />
               <p className="text-sm tracking-[0.28em] text-primary uppercase">

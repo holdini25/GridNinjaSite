@@ -1,7 +1,10 @@
 import type { Metadata } from "next"
 
 import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
+import { ConstraintBraid } from "@/components/marketing/constraint-braid"
 import { CtaBand } from "@/components/marketing/cta-band"
+import { DataCenterXrayReveal } from "@/components/marketing/data-center-xray-reveal"
+import { FleetSwarmMap } from "@/components/marketing/fleet-swarm-map"
 import { Hero } from "@/components/marketing/hero"
 import { ProductBoundaryToggle } from "@/components/marketing/product-boundary-toggle"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
@@ -17,9 +20,12 @@ import {
   platformProofSection,
 } from "@/content/copy/platform"
 import {
+  constraintBraidDomains,
+  fleetSwarmSites,
   proofArtifacts,
   proofChainStages,
   trustBoundaryItems,
+  xrayLayers,
 } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
@@ -96,7 +102,40 @@ export default function PlatformPage() {
       </SectionShell>
 
       <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Constraint braid"
+            headline="Capacity is accepted only after every binding constraint is visible"
+            body="The braid links power, cooling, storage, workloads, and telemetry trust to the runtime assurance outcome so virtual capacity is not treated as a generic optimizer score."
+          />
+          <ConstraintBraid domains={constraintBraidDomains} />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
         <SafetyBoundaryWall />
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Infrastructure X-ray"
+            headline="The control plane turns infrastructure layers into proof objects"
+            body="This code-native visual keeps the focus on typed topology, workload eligibility, telemetry trust, and exported proof instead of decorative data-center imagery."
+          />
+          <DataCenterXrayReveal layers={xrayLayers} />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Fleet evidence"
+            headline="Fleet views aggregate evidence; local authority still gates action"
+            body="FleetOS can compare proof posture across sites, but site policy, operators, and runtime assurance remain the approval boundary."
+          />
+          <FleetSwarmMap sites={fleetSwarmSites} />
+        </div>
       </SectionShell>
 
       <SectionShell>

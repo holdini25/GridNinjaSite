@@ -4,7 +4,9 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
+import { ConstraintBraid } from "@/components/marketing/constraint-braid"
 import { CtaBand } from "@/components/marketing/cta-band"
+import { FleetSwarmMap } from "@/components/marketing/fleet-swarm-map"
 import { Hero } from "@/components/marketing/hero"
 import { NoProofRegister } from "@/components/marketing/no-proof-register"
 import { ProofLog } from "@/components/marketing/proof-log"
@@ -24,6 +26,8 @@ import {
 } from "@/content/copy/proof"
 import { proofPackDownloadHref } from "@/content/copy/proof-pack"
 import {
+  constraintBraidDomains,
+  fleetSwarmSites,
   noProofGaps,
   proofArtifacts,
   proofChainStages,
@@ -88,6 +92,28 @@ export default function ProofPage() {
 
       <SectionShell>
         <ProofReplayPanel replay={replayFixture} />
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Constraint braid"
+            headline="The RTA decision inherits every active constraint"
+            body="The proof chain stays legible by showing which power, cooling, storage, workload, or telemetry trust constraint produced allow, repair, reject, or no-proof."
+          />
+          <ConstraintBraid domains={constraintBraidDomains} />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Fleet evidence"
+            headline="A fleet panel can compare proof posture without approving actions"
+            body="This view is read-only evidence aggregation. Local site policy, operator review, and runtime assurance remain the authority boundary."
+          />
+          <FleetSwarmMap sites={fleetSwarmSites} />
+        </div>
       </SectionShell>
 
       <SectionShell>

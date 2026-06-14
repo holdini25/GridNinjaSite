@@ -103,6 +103,79 @@ export type NoProofGap = {
   evidenceRows: EvidenceRow[]
 }
 
+export type ConstraintBraidDomain = {
+  id: string
+  title: string
+  input: string
+  bindingConstraint: string
+  proofObject: string
+  acceptedPosture: string
+  trustScore: number
+  state: RtaDecisionState
+  evidenceRows: EvidenceRow[]
+}
+
+export type FleetSwarmState =
+  | "shadow"
+  | "advisory"
+  | "bounded"
+  | "production"
+  | "no-proof"
+
+export type FleetSwarmSite = {
+  id: string
+  name: string
+  region: string
+  state: FleetSwarmState
+  stateLabel: string
+  role: string
+  proofRoot: string
+  acceptedMw: string
+  noProofGaps: number
+  detail: string
+}
+
+export type ProofStoryStep = {
+  id: string
+  eyebrow: string
+  title: string
+  body: string
+  artifact: string
+  state: RtaDecisionState
+  rows: EvidenceRow[]
+}
+
+export type DemoMode = "Inspect" | "Explain" | "Export"
+
+export type DemoModeOverlayFixture = {
+  mode: DemoMode
+  title: string
+  body: string
+  focusLabel: string
+  rows: EvidenceRow[]
+}
+
+export type XrayLayer = {
+  id: string
+  title: string
+  layer: string
+  body: string
+  proofObject: string
+  state: RtaDecisionState
+  telemetry: string
+}
+
+export type ProofComparisonFixture = {
+  title: string
+  body: string
+  beforeLabel: string
+  afterLabel: string
+  beforeMw: string
+  afterMw: string
+  beforeRows: EvidenceRow[]
+  afterRows: EvidenceRow[]
+}
+
 export const rtaDecisionMeta: Record<RtaDecisionState, RtaDecisionMeta> = {
   allow: {
     state: "allow",
@@ -606,13 +679,13 @@ export const productBoundaryStatements = {
 }
 
 export const proofInstrumentRoadmap = [
-  { fixture: "View transitions", phase: "v2 deferred", reason: "Premium continuity after the proof object model stabilizes." },
-  { fixture: "Constraint Braid", phase: "v2 deferred", reason: "Visually dominant; should follow validated page hierarchy." },
-  { fixture: "Fleet Swarm Map", phase: "v2 deferred", reason: "Needs real FleetOS story and filtering scope." },
-  { fixture: "Scroll-snap proof story", phase: "v2 deferred", reason: "Higher choreography risk for mobile and reduced-motion users." },
-  { fixture: "Inspect / Explain / Export cursor modes", phase: "v2 deferred", reason: "Groundwork exists in demo controls; cursor behavior waits." },
-  { fixture: "Data center X-ray reveal", phase: "v2 deferred", reason: "Should be a signature visual only if asset quality is high." },
-  { fixture: "Before / after proof slider", phase: "v2 deferred", reason: "Good investor explainer, but lower priority than proof chain and Load Passport." },
+  { fixture: "View transitions", phase: "v2 progressive", reason: "Same-document continuity only inside proof islands, disabled for reduced motion." },
+  { fixture: "Constraint Braid", phase: "v2 shipped", reason: "Connects binding domains to RTA outcomes without replacing the waterfall." },
+  { fixture: "Fleet Swarm Map", phase: "v2 shipped", reason: "Read-only proof aggregation with explicit local authority boundaries." },
+  { fixture: "Scroll-snap proof story", phase: "v2 shipped", reason: "Desktop enhancement with normal stacked fallback." },
+  { fixture: "Inspect / Explain / Export cursor modes", phase: "v2 shipped", reason: "Accessible overlays ship; custom cursor behavior remains excluded." },
+  { fixture: "Data center X-ray reveal", phase: "v2 shipped", reason: "Code-native proof-object visual, not generic data-center decoration." },
+  { fixture: "Before / after proof slider", phase: "v2 shipped", reason: "Keyboard-accessible ROI/DCII explainer for claimed versus proof-adjusted capacity." },
 ]
 
 export const trustBoundaryItems = [
@@ -681,3 +754,298 @@ export const remediationPaths: NoProofGap[] = [
 ]
 
 export const noProofGaps = remediationPaths
+
+export const constraintBraidDomains: ConstraintBraidDomain[] = [
+  {
+    id: "power",
+    title: "Power",
+    input: "Utility feed, transformer, PCC, bridge-power posture",
+    bindingConstraint: "Transformer T2 ramp envelope",
+    proofObject: "Capacity Waterfall row 002",
+    acceptedPosture: "Repair to declared ramp limit before acceptance",
+    trustScore: 86,
+    state: "repair",
+    evidenceRows: [
+      { label: "source", value: "EPMS-A + PCC telemetry" },
+      { label: "constraint", value: "T2_RAMP_LIMIT" },
+      { label: "proof_row", value: "waterfall.power.row_002" },
+    ],
+  },
+  {
+    id: "cooling",
+    title: "Cooling",
+    input: "Loop state, thermal margin, water caveat",
+    bindingConstraint: "Cooling loop B and water interval",
+    proofObject: "Load Passport cooling-water section",
+    acceptedPosture: "Clip accepted headroom during constrained intervals",
+    trustScore: 79,
+    state: "repair",
+    evidenceRows: [
+      { label: "source", value: "BMS-B + cooling loop state" },
+      { label: "constraint", value: "COOLING_WATER_MARGIN" },
+      { label: "proof_row", value: "lp.cooling_water.row_056" },
+    ],
+  },
+  {
+    id: "storage",
+    title: "UPS / BESS",
+    input: "Reserve floor, state of charge, transition margin",
+    bindingConstraint: "Reserve floor cannot be spent",
+    proofObject: "Reserve-Floor Report",
+    acceptedPosture: "Reject action that spends resilience margin",
+    trustScore: 92,
+    state: "reject",
+    evidenceRows: [
+      { label: "source", value: "UPS/BESS policy + read-only BMS" },
+      { label: "constraint", value: "UPS_RESERVE_FLOOR" },
+      { label: "proof_row", value: "reserve_floor.report_004" },
+    ],
+  },
+  {
+    id: "workload",
+    title: "Workload",
+    input: "Scheduler lanes, SLA locks, rack group eligibility",
+    bindingConstraint: "SLA-locked inference lane",
+    proofObject: "Accepted-Headroom Ledger",
+    acceptedPosture: "Allow only eligible training load shift",
+    trustScore: 81,
+    state: "allow",
+    evidenceRows: [
+      { label: "source", value: "scheduler shadow export" },
+      { label: "constraint", value: "SLA_LOCKED_LANE" },
+      { label: "proof_row", value: "ledger.004921" },
+    ],
+  },
+  {
+    id: "telemetry",
+    title: "Telemetry Trust",
+    input: "Freshness, coverage, topology completeness",
+    bindingConstraint: "Rack group source age exceeds policy",
+    proofObject: "No-Proof Gap Register",
+    acceptedPosture: "Discount capacity until evidence is restored",
+    trustScore: 58,
+    state: "no-proof",
+    evidenceRows: [
+      { label: "source", value: "trust scorer over EPMS/BMS/scheduler" },
+      { label: "constraint", value: "SOURCE_AGE_EXCEEDED" },
+      { label: "proof_row", value: "no_proof.row_012" },
+    ],
+  },
+]
+
+export const fleetSwarmSites: FleetSwarmSite[] = [
+  {
+    id: "atl-1",
+    name: "ATL-1",
+    region: "Southeast",
+    state: "shadow",
+    stateLabel: "Shadow",
+    role: "AI training campus",
+    proofRoot: "8f4c...91a",
+    acceptedMw: "5.8 MW illustrative",
+    noProofGaps: 3,
+    detail: "Read-only proof collection with no write credentials.",
+  },
+  {
+    id: "phx-4",
+    name: "PHX-4",
+    region: "Southwest",
+    state: "advisory",
+    stateLabel: "Advisory",
+    role: "Inference cluster",
+    proofRoot: "4a20...b8e",
+    acceptedMw: "3.1 MW illustrative",
+    noProofGaps: 1,
+    detail: "Operators review repaired actions before any dispatch envelope change.",
+  },
+  {
+    id: "dfw-2",
+    name: "DFW-2",
+    region: "ERCOT",
+    state: "bounded",
+    stateLabel: "Bounded",
+    role: "Hybrid power campus",
+    proofRoot: "bb91...0e5",
+    acceptedMw: "4.4 MW illustrative",
+    noProofGaps: 0,
+    detail: "Narrow actuator set inside declared envelope and runtime assurance.",
+  },
+  {
+    id: "iad-7",
+    name: "IAD-7",
+    region: "Mid-Atlantic",
+    state: "production",
+    stateLabel: "Production",
+    role: "Colocation facility",
+    proofRoot: "c712...af0",
+    acceptedMw: "2.9 MW illustrative",
+    noProofGaps: 0,
+    detail: "Evidence aggregation only; site policy remains the approval boundary.",
+  },
+  {
+    id: "reno-1",
+    name: "RNO-1",
+    region: "West",
+    state: "no-proof",
+    stateLabel: "No-Proof",
+    role: "Bridge power deployment",
+    proofRoot: "pending",
+    acceptedMw: "0.0 MW accepted",
+    noProofGaps: 4,
+    detail: "Fleet view refuses capacity until topology and telemetry trust recover.",
+  },
+]
+
+export const proofStorySteps: ProofStoryStep[] = [
+  {
+    id: "claim",
+    eyebrow: "Step 01",
+    title: "Start with claimed headroom",
+    body: "The story begins with a capacity claim that has not yet earned operator trust.",
+    artifact: "Observed nominal headroom",
+    state: "no-proof",
+    rows: [
+      { label: "nominal_headroom", value: "18.4 MW illustrative" },
+      { label: "proof_posture", value: "claim only" },
+    ],
+  },
+  {
+    id: "constraints",
+    eyebrow: "Step 02",
+    title: "Bind every active constraint",
+    body: "Power, cooling, reserve, workload, and telemetry trust each reduce unsupported headroom.",
+    artifact: "Constraint braid",
+    state: "repair",
+    rows: [
+      { label: "binding", value: "reserve floor + telemetry trust" },
+      { label: "capacity_after", value: "5.8 MW illustrative" },
+    ],
+  },
+  {
+    id: "rta",
+    eyebrow: "Step 03",
+    title: "Run the RTA decision",
+    body: "The runtime assurance layer allows, repairs, rejects, or returns no-proof before authority expands.",
+    artifact: "RTA trace",
+    state: "allow",
+    rows: [
+      { label: "decision", value: "ALLOW after repair" },
+      { label: "authority", value: "solver + RTA gate" },
+    ],
+  },
+  {
+    id: "export",
+    eyebrow: "Step 04",
+    title: "Export the proof pack",
+    body: "Accepted capacity becomes an inspectable proof object, not a hidden dashboard claim.",
+    artifact: "Proof Pack",
+    state: "allow",
+    rows: [
+      { label: "artifact", value: "Load Passport + ledger + evidence packet" },
+      { label: "proof_root", value: "8f4c...91a" },
+    ],
+  },
+]
+
+export const demoModeOverlays: DemoModeOverlayFixture[] = [
+  {
+    mode: "Inspect",
+    title: "Inspect evidence",
+    body: "Shows telemetry freshness, binding constraints, and margin to limit for the selected scenario.",
+    focusLabel: "Evidence lens",
+    rows: [
+      { label: "telemetry", value: "freshness, coverage, topology" },
+      { label: "constraint", value: "active binding limit" },
+      { label: "output", value: "proof row and margin" },
+    ],
+  },
+  {
+    mode: "Explain",
+    title: "Explain authority",
+    body: "Follows proposal generation into deterministic solver checks and runtime assurance decisions.",
+    focusLabel: "Authority lens",
+    rows: [
+      { label: "proposal", value: "advisory only" },
+      { label: "gate", value: "solver + RTA" },
+      { label: "failure", value: "no-proof, reject, or repaired action" },
+    ],
+  },
+  {
+    mode: "Export",
+    title: "Export proof",
+    body: "Maps the selected trace to Load Passport, ledger, RTA trace, and utility evidence packet objects.",
+    focusLabel: "Export lens",
+    rows: [
+      { label: "manifest", value: "proof_pack_manifest.json" },
+      { label: "ledger", value: "accepted_headroom.parquet" },
+      { label: "packet", value: "utility_evidence_packet.pdf" },
+    ],
+  },
+]
+
+export const xrayLayers: XrayLayer[] = [
+  {
+    id: "facility",
+    title: "Facility layer",
+    layer: "Feeders, transformers, UPS/BESS, cooling loops",
+    body: "Physical infrastructure becomes a typed topology graph before any capacity is counted.",
+    proofObject: "Topology map",
+    state: "repair",
+    telemetry: "EPMS-A, BMS-B, UPS/BESS read-only feeds",
+  },
+  {
+    id: "workload",
+    title: "Workload layer",
+    layer: "Training lanes, inference locks, rack groups",
+    body: "Workload eligibility separates movable training demand from protected SLA lanes.",
+    proofObject: "Load Behavior Profile",
+    state: "allow",
+    telemetry: "scheduler shadow export",
+  },
+  {
+    id: "trust",
+    title: "Trust layer",
+    layer: "Freshness, source coverage, topology confidence",
+    body: "Weak or stale evidence becomes no-proof, not hidden capacity.",
+    proofObject: "Telemetry Trust Score",
+    state: "no-proof",
+    telemetry: "trust scorer",
+  },
+  {
+    id: "proof",
+    title: "Proof layer",
+    layer: "RTA trace, ledger, utility packet",
+    body: "Accepted virtual capacity is exported as evidence for operators and stakeholders.",
+    proofObject: "Proof Pack",
+    state: "allow",
+    telemetry: "receipt stream + cold-path replay",
+  },
+]
+
+export const proofComparison: ProofComparisonFixture = {
+  title: "Claimed headroom versus proof-adjusted capacity",
+  body: "Illustrative sample. The right side is not a guarantee; it shows the evidence shape after constraints, policy, and no-proof gaps are applied.",
+  beforeLabel: "Before proof",
+  afterLabel: "After proof",
+  beforeMw: "18.4 MW claimed",
+  afterMw: "5.8 MW proof-adjusted",
+  beforeRows: [
+    { label: "capacity_basis", value: "nominal headroom" },
+    { label: "constraint_status", value: "unknown active limits" },
+    { label: "evidence", value: "no accepted proof root" },
+    { label: "risk", value: "static buffers and no-proof gaps hidden" },
+  ],
+  afterRows: [
+    { label: "capacity_basis", value: "accepted-headroom ledger" },
+    { label: "constraint_status", value: "known binding constraints" },
+    { label: "evidence", value: "proof_root 8f4c...91a" },
+    { label: "risk", value: "no-proof gaps visible and owner-assigned" },
+  ],
+}
+
+export const viewTransitionTargets = {
+  waterfallAccepted: "gn-waterfall-accepted",
+  rtaTrace: "gn-rta-trace",
+  proofArtifact: "gn-proof-artifact",
+  proofExport: "gn-proof-export",
+} as const
