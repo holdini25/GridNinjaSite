@@ -41,12 +41,14 @@ export function RtaDecisionTheater({
     <section className={cn("gn-hd-panel p-6", className)}>
       <div className="gn-scanline" />
       <div className="flex flex-wrap items-start justify-between gap-5">
-        <div>
+        <div className="min-w-0">
           <p className="gn-eyebrow">Runtime Assurance Theater</p>
           <h3
             className={cn(
               "mt-3 max-w-3xl font-medium text-foreground",
-              compact ? "text-[1.65rem]" : "text-[2rem]"
+              compact
+                ? "text-[1.45rem] leading-tight sm:text-[1.65rem]"
+                : "text-[2rem]"
             )}
           >
             Propose an action. Watch GridNinja allow, repair, reject, or
@@ -64,11 +66,11 @@ export function RtaDecisionTheater({
         className={cn(
           "mt-7 grid gap-6",
           compact
-            ? "lg:grid-cols-[0.92fr_1.08fr]"
+            ? "grid-cols-1"
             : "xl:grid-cols-[0.82fr_1.18fr]"
         )}
       >
-        <div className="grid gap-3">
+        <div className={cn("grid gap-3", compact && "sm:grid-cols-2")}>
           {candidates.map((candidate) => (
             <button
               key={candidate.id}
@@ -83,15 +85,15 @@ export function RtaDecisionTheater({
                   : "border-border/60 hover:border-primary/45"
               )}
             >
-              <span className="flex items-center justify-between gap-4">
-                <span className="font-medium text-foreground">
+              <span className="flex min-w-0 items-start justify-between gap-4">
+                <span className="min-w-0 font-medium text-foreground">
                   {candidate.label}
                 </span>
                 <RtaDecisionChip
                   state={candidate.decision}
                   tooltip={false}
                   focusable={false}
-                  className="px-2.5 py-0.5"
+                  className="shrink-0 px-2.5 py-0.5"
                 />
               </span>
               <span className="mt-3 block font-mono text-xs text-muted-foreground">
@@ -115,7 +117,12 @@ export function RtaDecisionTheater({
                 <p className="font-mono text-xs tracking-[0.18em] text-primary uppercase">
                   candidate action
                 </p>
-                <h4 className="mt-3 text-[1.55rem] font-medium text-foreground">
+                <h4
+                  className={cn(
+                    "mt-3 font-medium text-foreground",
+                    compact ? "text-[1.35rem]" : "text-[1.55rem]"
+                  )}
+                >
                   {active.label}
                 </h4>
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">

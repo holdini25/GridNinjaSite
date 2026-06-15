@@ -87,9 +87,9 @@ export default function RoiPage() {
         </div>
       </SectionShell>
 
-      <SectionShell>
+      <SectionShell containerClassName="max-w-7xl">
         <div className="space-y-8">
-          <div className="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+          <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(33rem,0.9fr)]">
             <div className="min-w-0 space-y-6">
               <SectionHeader
                 eyebrow="Illustrative scenario outputs"
