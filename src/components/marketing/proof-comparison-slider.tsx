@@ -38,6 +38,8 @@ export function ProofComparisonSlider({
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               type="button"
+              data-gn-event="proof-comparison-preset"
+              data-gn-mode="claimed"
               className="rounded-full border border-border/70 bg-background/45 px-4 py-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
               onClick={() => setPreset(20)}
             >
@@ -45,6 +47,8 @@ export function ProofComparisonSlider({
             </button>
             <button
               type="button"
+              data-gn-event="proof-comparison-preset"
+              data-gn-mode="proof-adjusted"
               className="rounded-full border border-border/70 bg-background/45 px-4 py-2 font-mono text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
               onClick={() => setPreset(80)}
             >
@@ -67,6 +71,7 @@ export function ProofComparisonSlider({
             max={100}
             value={position}
             onChange={(event) => setPosition(Number(event.target.value))}
+            data-gn-event="proof-comparison-range"
             className="mt-4 w-full accent-primary"
             aria-valuetext={`${proofWeight}% proof-adjusted evidence view`}
           />

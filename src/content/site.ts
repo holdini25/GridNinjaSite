@@ -4,6 +4,7 @@ export const siteConfig = {
   title: "GridNinja | Virtual Capacity Control Plane for AI Data Centers",
   description:
     "GridNinja proves safe, usable, auditable virtual capacity for AI data centers before control, dispatch, or grid commitments are trusted.",
+  lastModified: "2026-06-14",
   footerCopy:
     "GridNinja is the runtime-assured virtual capacity engine for AI data centers.",
 }

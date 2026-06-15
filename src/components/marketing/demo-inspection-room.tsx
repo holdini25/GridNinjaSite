@@ -77,6 +77,8 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
                   key={item}
                   type="button"
                   aria-pressed={mode === item}
+                  data-gn-event="demo-scenario-mode"
+                  data-gn-mode={item}
                   onClick={() => selectScenarioMode(item)}
                   className={`min-h-11 rounded-[0.9rem] border px-4 py-3 text-left text-base transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 ${
                     mode === item
@@ -98,6 +100,8 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
                   key={item}
                   type="button"
                   aria-pressed={toolMode === item}
+                  data-gn-event="demo-tool-mode"
+                  data-gn-mode={item}
                   onClick={() => selectToolMode(item)}
                   className={`min-h-11 rounded-[0.9rem] border px-4 py-3 text-left text-sm transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 ${
                     toolMode === item
@@ -143,6 +147,8 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
                   key={item.outcome}
                   type="button"
                   aria-pressed={trace.outcome === item.outcome}
+                  data-gn-event="demo-rta-outcome"
+                  data-gn-outcome={item.outcome}
                   onClick={() => selectTrace(item)}
                   className={`min-h-11 rounded-[0.9rem] border px-4 py-3 text-left transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 ${
                     trace.outcome === item.outcome

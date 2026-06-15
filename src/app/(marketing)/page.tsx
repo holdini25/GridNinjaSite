@@ -2,16 +2,18 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
-import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
 import { ClaimToProofCards } from "@/components/marketing/claim-to-proof-cards"
 import { ComparisonGrid } from "@/components/marketing/comparison-grid"
 import { CtaBand } from "@/components/marketing/cta-band"
-import { Hero } from "@/components/marketing/hero"
+import { DataCenterXrayHD } from "@/components/marketing/data-center-xray-hd"
 import { KpiPreview } from "@/components/marketing/kpi-preview"
-import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
+import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { OutcomePillars } from "@/components/marketing/outcome-pillars"
+import { ProductBoundaryToggle } from "@/components/marketing/product-boundary-toggle"
+import { ProofOperatingHero } from "@/components/marketing/proof-operating-hero"
 import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
 import { ProofStatStrip } from "@/components/marketing/proof-stat-strip"
+import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { PowerWallChart } from "@/components/diagrams/power-wall-chart"
 import { RtaLoopDiagram } from "@/components/diagrams/rta-loop-diagram"
@@ -24,13 +26,11 @@ import {
   enginePillars,
   engineSection,
   homeFinalCta,
-  homeHero,
   powerWallSection,
 } from "@/content/copy/home"
 import { ladderSteps } from "@/content/copy/proof"
 import {
   claimToProofCards,
-  illustrativeWaterfall,
   proofArtifactIntro,
   proofArtifacts,
 } from "@/content/proof-artifacts"
@@ -49,24 +49,26 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function HomePage() {
   return (
     <div className="space-y-24 pb-24">
-      <Hero
-        eyebrow={homeHero.eyebrow}
-        headline={homeHero.headline}
-        body={homeHero.body}
-        primaryCta={{
-          label: homeHero.primaryCtaLabel,
-          href: buildLeadHref("capacity-audit", "home-hero"),
-        }}
-        secondaryCta={{
-          label: homeHero.secondaryCtaLabel,
-          href: "/demo",
-        }}
-        visual={<CapacityWaterfall steps={illustrativeWaterfall} compact />}
-        proofGrid
-      />
+      <ProofOperatingHero />
 
       <SectionShell>
         <ProofStatStrip items={proofStats} />
+      </SectionShell>
+
+      <SectionShell>
+        <div className="gn-panel border-proof-cyan/35 px-6 py-5">
+          <p className="font-mono text-base leading-7 text-proof-cyan">
+            Every accepted MW must point to a proof row.
+          </p>
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <ProductBoundaryToggle />
+      </SectionShell>
+
+      <SectionShell>
+        <RtaDecisionTheater />
       </SectionShell>
 
       <SectionShell>
@@ -137,7 +139,11 @@ export default function HomePage() {
       </SectionShell>
 
       <SectionShell>
-        <LoadPassportPreview />
+        <LoadPassportHD />
+      </SectionShell>
+
+      <SectionShell>
+        <DataCenterXrayHD />
       </SectionShell>
 
       <SectionShell>

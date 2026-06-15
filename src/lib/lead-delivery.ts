@@ -43,14 +43,22 @@ export async function deliverLead(
   const acceptedAt = new Date().toISOString()
 
   const deliveries = await Promise.all(
-    targets.map((target) => deliverToTarget(target, submission, acceptedAt))
+    targets.map((target) =>
+      deliverToTarget(target, submission, acceptedAt).catch((error) => ({
+        target: target.kind,
+        ok: false,
+        status: 0,
+        response:
+          error instanceof Error ? error.message : "Unknown delivery failure.",
+      }))
+    )
   )
 
-  const failed = deliveries.filter((delivery) => !delivery.ok)
+  const successful = deliveries.filter((delivery) => delivery.ok)
 
-  if (failed.length > 0) {
+  if (successful.length === 0) {
     throw new Error(
-      `Lead delivery failed for ${failed.map((delivery) => delivery.target).join(", ")}.`
+      `Lead delivery failed for ${deliveries.map((delivery) => delivery.target).join(", ")}.`
     )
   }
 

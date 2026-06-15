@@ -34,6 +34,8 @@ export function CapacityAuditForm({
     timeline: "",
     intent,
     source,
+    website: "",
+    startedAt: Date.now(),
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
@@ -92,7 +94,7 @@ export function CapacityAuditForm({
           Capacity Audit intake submitted
         </h3>
         <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground">
-          We’ll use this to frame the first pass on stranded headroom, recurring
+          We&apos;ll use this to frame the first pass on stranded headroom, recurring
           constraints, and the best path into Shadow Mode.
         </p>
       </div>
@@ -104,6 +106,19 @@ export function CapacityAuditForm({
       onSubmit={handleSubmit}
       className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
     >
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="audit-website">Website</label>
+        <input
+          id="audit-website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={form.website}
+          onChange={(event) =>
+            setForm((current) => ({ ...current, website: event.target.value }))
+          }
+        />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <label htmlFor="audit-name" className="text-base text-foreground">
@@ -265,10 +280,15 @@ export function CapacityAuditForm({
       ) : null}
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-base leading-8 text-muted-foreground">
-          This phase-one form records the request internally and keeps delivery
-          wiring isolated behind the API route.
+          Do not submit confidential site drawings, credentials, customer data,
+          or security-sensitive topology through this form.
         </p>
-        <Button type="submit" size="lg" disabled={isPending}>
+        <Button
+          type="submit"
+          size="lg"
+          disabled={isPending}
+          data-gn-event="capacity-audit-submit"
+        >
           {isPending ? "Submitting..." : "Request Capacity Audit"}
         </Button>
       </div>

@@ -102,7 +102,10 @@ export function NavDrawer() {
             )
           })}
           <Button asChild size="lg" className="w-full">
-            <Link href={buildLeadHref("capacity-audit", "mobile-nav")}>
+            <Link
+              href={buildLeadHref("capacity-audit", "mobile-nav")}
+              data-gn-event="mobile-nav-capacity-audit"
+            >
               Request Capacity Audit
             </Link>
           </Button>

@@ -1,28 +1,29 @@
 export const roiAssumptions = [
   "Illustrative scenarios assume constrained AI capacity with existing bridge power or recoverable stranded headroom.",
-  "Revenue examples use blended annualized values and should be refined during a Capacity Audit.",
+  "Public outputs show artifact posture, not guaranteed revenue or utility approval.",
   "Proof generation and bounded autonomy rollout are staged after Shadow Mode evidence is established.",
 ]
 
 export const roiOutputs = [
   {
-    label: "Accelerated Annual Revenue",
-    value: "$24.8M",
-    body: "Earlier energization and higher billable GPU uptime under constrained power windows.",
+    label: "Proof-Adjusted MW Identified",
+    value: "5.8 MW",
+    numericValue: 5.8,
+    body: "Illustrative accepted headroom after constraints, policy, and telemetry trust discounts.",
   },
   {
-    label: "Flexibility Revenue Potential",
-    value: "$3.6M",
-    body: "Verified dispatch envelopes with protected reserve posture.",
+    label: "No-Proof Gaps Assigned",
+    value: "3",
+    body: "Telemetry freshness, topology mapping, and policy declaration gaps remain visible.",
   },
   {
-    label: "Unlocked Sellable Capacity",
-    value: "$5.2M",
-    body: "Recovered kW-month value from conservative static buffers.",
+    label: "Candidate Decisions Reviewed",
+    value: "4 states",
+    body: "Allow, repair, reject, and no-proof outcomes are separated before autonomy expands.",
   },
   {
-    label: "Implied Payback Window",
-    value: "< 6 mo",
-    body: "Illustrative for the Phase 1 operating model and proof workflow.",
+    label: "Exportable Proof Artifacts",
+    value: "6",
+    body: "Load Passport, waterfall, ledger, reserve report, no-proof register, and utility packet.",
   },
 ]

@@ -13,40 +13,26 @@ export const navItems: NavItem[] = [
     href: "/platform",
   },
   {
-    label: "Solutions",
-    href: "/solutions/ai-cloud",
-    children: [
-      {
-        label: "AI Cloud",
-        href: "/solutions/ai-cloud",
-      },
-      {
-        label: "Colocation & REITs",
-        href: "/solutions/colocation",
-      },
-      {
-        label: "Bridge Power & DER",
-        href: "/solutions/bridge-power",
-      },
-    ],
+    label: "Proof & Trust",
+    href: "/proof",
   },
   {
-    label: "Proof",
-    href: "/proof",
+    label: "Demo",
+    href: "/demo",
+  },
+  {
+    label: "DCII",
+    href: "/dcii",
   },
   {
     label: "ROI",
     href: "/roi",
   },
   {
-    label: "About",
-    href: "/about",
-  },
-  {
     label: "Contact",
     href: "/contact",
   },
-] 
+]
 
 export const footerGroups = [
   {
@@ -57,6 +43,7 @@ export const footerGroups = [
       { label: "Proof Before Autonomy", href: "/proof" },
       { label: "Proof Pack", href: "/proof/proof-pack" },
       { label: "Proof Demo", href: "/demo" },
+      { label: "DCII Project", href: "/dcii" },
       { label: "ROI / Capacity Audit", href: "/roi" },
       { label: "About", href: "/about" },
     ],

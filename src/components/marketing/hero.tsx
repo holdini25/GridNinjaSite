@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button"
 import type { SectionCopy } from "@/types/site"
 
 type HeroProps = SectionCopy & {
-  primaryCta?: { label: string; href: string }
-  secondaryCta?: { label: string; href: string }
+  primaryCta?: { label: string; href: string; eventName?: string }
+  secondaryCta?: { label: string; href: string; eventName?: string }
+  trustLine?: string
   visual?: ReactNode
   proofGrid?: boolean
   proofGridLabels?: string[]
@@ -21,20 +22,21 @@ export function Hero({
   body,
   primaryCta,
   secondaryCta,
+  trustLine,
   visual,
   proofGrid = false,
   proofGridLabels,
 }: HeroProps) {
   const hasVisual = Boolean(visual)
   const containerClassName = hasVisual
-    ? "grid gap-10 pt-6 pb-8 lg:min-h-[calc(100svh-9rem)] lg:grid-cols-[minmax(0,1fr)_minmax(340px,520px)] lg:items-center lg:gap-14"
-    : "max-w-3xl pt-10 pb-12 sm:pt-12 sm:pb-14 lg:max-w-4xl lg:pt-14 lg:pb-16"
+    ? "grid gap-8 pt-4 pb-7 sm:gap-10 sm:pt-6 sm:pb-8 lg:min-h-[calc(100svh-9rem)] lg:grid-cols-[minmax(0,1fr)_minmax(340px,520px)] lg:items-center lg:gap-14"
+    : "max-w-3xl pt-8 pb-10 sm:pt-12 sm:pb-14 lg:max-w-4xl lg:pt-14 lg:pb-16"
   const headlineClassName = hasVisual
-    ? "max-w-[11ch] text-balance text-[2.65rem] leading-[0.95] font-medium tracking-tight text-foreground sm:text-[3.85rem] lg:text-[4.7rem]"
-    : "max-w-[13ch] text-balance text-[2.35rem] leading-[0.98] font-medium tracking-tight text-foreground sm:text-[3.05rem] lg:text-[3.7rem]"
+    ? "max-w-[11ch] text-balance text-[2.2rem] leading-[0.95] font-medium tracking-tight text-foreground sm:text-[3.85rem] lg:text-[4.7rem]"
+    : "max-w-[13ch] text-balance text-[2.2rem] leading-[0.98] font-medium tracking-tight text-foreground sm:text-[3.05rem] lg:text-[3.7rem]"
   const bodyClassName = hasVisual
-    ? "mt-5 max-w-xl text-lg leading-8 text-muted-foreground sm:text-[1.16rem]"
-    : "mt-5 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-[1.14rem]"
+    ? "mt-4 max-w-xl text-base leading-7 text-muted-foreground sm:text-[1.16rem] sm:leading-8"
+    : "mt-4 max-w-2xl text-base leading-7 text-muted-foreground sm:text-[1.14rem] sm:leading-8"
 
   return (
     <section className="relative overflow-hidden border-b border-border/70 pb-6">
@@ -57,7 +59,12 @@ export function Hero({
             <div className="mt-7 flex flex-wrap gap-4">
               {primaryCta ? (
                 <Button asChild size="lg">
-                  <Link href={primaryCta.href}>{primaryCta.label}</Link>
+                  <Link
+                    href={primaryCta.href}
+                    data-gn-event={primaryCta.eventName ?? "hero-primary-cta"}
+                  >
+                    {primaryCta.label}
+                  </Link>
                 </Button>
               ) : null}
               {secondaryCta ? (
@@ -67,11 +74,21 @@ export function Hero({
                   variant="outline"
                   className="border-border/80 bg-surface/60 text-foreground"
                 >
-                  <Link href={secondaryCta.href}>{secondaryCta.label}</Link>
+                  <Link
+                    href={secondaryCta.href}
+                    data-gn-event={secondaryCta.eventName ?? "hero-secondary-cta"}
+                  >
+                    {secondaryCta.label}
+                  </Link>
                 </Button>
               ) : null}
             </div>
           )}
+          {trustLine ? (
+            <p className="mt-4 max-w-xl font-mono text-sm leading-7 text-proof-cyan">
+              {trustLine}
+            </p>
+          ) : null}
         </div>
         {visual ? <div className="lg:pl-4">{visual}</div> : null}
       </SectionShell>

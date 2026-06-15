@@ -20,6 +20,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return routes.map((route) => ({
     url: new URL(route, siteConfig.url).toString(),
-    lastModified: new Date(),
+    lastModified: siteConfig.lastModified,
   }))
 }

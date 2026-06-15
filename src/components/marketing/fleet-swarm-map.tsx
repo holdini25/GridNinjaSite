@@ -75,6 +75,8 @@ export function FleetSwarmMap({ sites }: { sites: FleetSwarmSite[] }) {
             key={state}
             type="button"
             aria-pressed={filter === state}
+            data-gn-event="fleet-filter-select"
+            data-gn-state={state}
             onClick={() => selectFilter(state)}
             className={cn(
               "rounded-full border border-border/70 bg-background/45 px-4 py-2 font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase transition-colors",
@@ -94,6 +96,8 @@ export function FleetSwarmMap({ sites }: { sites: FleetSwarmSite[] }) {
               key={site.id}
               type="button"
               aria-pressed={site.id === active?.id}
+              data-gn-event="fleet-site-select"
+              data-gn-site={site.id}
               onClick={() => selectSite(site.id)}
               onFocus={() => selectSite(site.id)}
               className={cn(

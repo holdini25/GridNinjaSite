@@ -3,12 +3,14 @@ import type { Metadata } from "next"
 import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { ConstraintBraid } from "@/components/marketing/constraint-braid"
 import { CtaBand } from "@/components/marketing/cta-band"
-import { DataCenterXrayReveal } from "@/components/marketing/data-center-xray-reveal"
-import { FleetSwarmMap } from "@/components/marketing/fleet-swarm-map"
+import { DataCenterXrayHD } from "@/components/marketing/data-center-xray-hd"
+import { FleetOSTimeTravelMap } from "@/components/marketing/fleetos-time-travel-map"
 import { Hero } from "@/components/marketing/hero"
+import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { ProductBoundaryToggle } from "@/components/marketing/product-boundary-toggle"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { ProofChainTrail } from "@/components/marketing/proof-chain-trail"
+import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SafetyBoundaryWall } from "@/components/marketing/safety-boundary-wall"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { TopologyMap } from "@/components/diagrams/topology-map"
@@ -25,7 +27,6 @@ import {
   proofArtifacts,
   proofChainStages,
   trustBoundaryItems,
-  xrayLayers,
 } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
@@ -55,6 +56,10 @@ export default function PlatformPage() {
           href: "/demo",
         }}
       />
+
+      <SectionShell>
+        <DataCenterXrayHD />
+      </SectionShell>
 
       <SectionShell>
         <div className="space-y-10">
@@ -102,6 +107,14 @@ export default function PlatformPage() {
       </SectionShell>
 
       <SectionShell>
+        <RtaDecisionTheater />
+      </SectionShell>
+
+      <SectionShell>
+        <LoadPassportHD />
+      </SectionShell>
+
+      <SectionShell>
         <div className="space-y-10">
           <SectionHeader
             eyebrow="Constraint braid"
@@ -119,22 +132,11 @@ export default function PlatformPage() {
       <SectionShell>
         <div className="space-y-10">
           <SectionHeader
-            eyebrow="Infrastructure X-ray"
-            headline="The control plane turns infrastructure layers into proof objects"
-            body="This code-native visual keeps the focus on typed topology, workload eligibility, telemetry trust, and exported proof instead of decorative data-center imagery."
-          />
-          <DataCenterXrayReveal layers={xrayLayers} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
             eyebrow="Fleet evidence"
             headline="Fleet views aggregate evidence; local authority still gates action"
             body="FleetOS can compare proof posture across sites, but site policy, operators, and runtime assurance remain the approval boundary."
           />
-          <FleetSwarmMap sites={fleetSwarmSites} />
+          <FleetOSTimeTravelMap sites={fleetSwarmSites} />
         </div>
       </SectionShell>
 

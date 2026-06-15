@@ -6,18 +6,25 @@ import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
+import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { ProofComparisonSlider } from "@/components/marketing/proof-comparison-slider"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import {
+  dciiBenefits,
+  dciiCategoryFit,
+  dciiEvidenceClasses,
   dciiEvidenceOutputs,
+  dciiFundingAsk,
   dciiFundingCopy,
   dciiHero,
   dciiMilestones,
+  dciiPublicPrivateBoundaries,
   dciiRisks,
   dciiSourceNotes,
   dciiSummary,
+  dciiUseOfFunds,
 } from "@/content/copy/dcii"
 import { ladderSteps } from "@/content/copy/proof"
 import {
@@ -47,11 +54,14 @@ export default function DciiPage() {
         primaryCta={{
           label: "Request DCII Memo",
           href: buildLeadHref("dcii-memo", "dcii-hero"),
+          eventName: "dcii-hero-memo",
         }}
         secondaryCta={{
           label: "Inspect Proof Demo",
           href: "/demo",
+          eventName: "dcii-hero-demo",
         }}
+        trustLine="Read-only first. Public claims stay measured; site evidence stays protected."
         proofGrid
       />
 
@@ -64,16 +74,55 @@ export default function DciiPage() {
           />
           <div className="rounded-[1.2rem] border border-border/70 bg-surface px-6 py-7">
             <p className="text-sm tracking-[0.28em] text-primary uppercase">
-              Funding source note
+              Deployment validation funding
             </p>
             <p className="mt-4 text-base leading-8 text-muted-foreground">
               {dciiFundingCopy}
             </p>
+            <div className="mt-5 rounded-[1rem] border border-proof-cyan/35 bg-background/45 px-4 py-4">
+              <p className="font-mono text-xs tracking-[0.16em] text-proof-cyan uppercase">
+                {dciiFundingAsk.label}
+              </p>
+              <p className="mt-2 text-[1.6rem] font-medium text-foreground">
+                {dciiFundingAsk.value}
+              </p>
+              <p className="mt-3 text-base leading-7 text-muted-foreground">
+                {dciiFundingAsk.body}
+              </p>
+            </div>
             <Button asChild className="mt-6" size="lg">
-              <Link href={buildLeadHref("dcii-memo", "dcii-source-note")}>
+              <Link
+                href={buildLeadHref("dcii-memo", "dcii-source-note")}
+                data-gn-event="dcii-source-note-memo"
+              >
                 Request DCII Memo
               </Link>
             </Button>
+          </div>
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Use of funds"
+            headline="Funds support evidence generation, not autonomy theater"
+            body="The project scope is organized around reviewer-ready artifacts, read-only integration, and conservative validation outputs."
+          />
+          <div className="overflow-hidden rounded-[1.2rem] border border-border/70">
+            <div className="grid gap-px bg-border/70">
+              {dciiUseOfFunds.map((item) => (
+                <div
+                  key={item.category}
+                  className="grid gap-3 bg-surface px-5 py-5 md:grid-cols-[0.85fr_1.15fr]"
+                >
+                  <p className="font-medium text-foreground">{item.category}</p>
+                  <p className="text-base leading-7 text-muted-foreground">
+                    {item.output}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </SectionShell>
@@ -87,12 +136,31 @@ export default function DciiPage() {
       </SectionShell>
 
       <SectionShell>
+        <LoadPassportHD />
+      </SectionShell>
+
+      <SectionShell>
         <div className="space-y-10">
           <SectionHeader
             eyebrow="Evidence outputs"
             headline="The project produces deployment evidence, not autonomy theater"
             body="These are the proof objects the DCII project should validate in read-only Shadow Mode before any deeper control or dispatch posture is considered."
           />
+          <div className="grid gap-4 md:grid-cols-2">
+            {dciiEvidenceClasses.map((item) => (
+              <div
+                key={item.className}
+                className="rounded-[1rem] border border-border/70 bg-surface px-5 py-5"
+              >
+                <p className="font-mono text-xs tracking-[0.16em] text-proof-cyan uppercase">
+                  {item.className}
+                </p>
+                <p className="mt-3 text-base leading-8 text-muted-foreground">
+                  {item.output}
+                </p>
+              </div>
+            ))}
+          </div>
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {dciiEvidenceOutputs.map((output) => (
               <div
@@ -104,6 +172,63 @@ export default function DciiPage() {
             ))}
           </div>
           <ProofArtifactGrid artifacts={proofArtifacts} />
+        </div>
+      </SectionShell>
+
+      <SectionShell>
+        <div className="space-y-10">
+          <SectionHeader
+            eyebrow="Reviewer fit"
+            headline="Software belongs only where it strengthens infrastructure evidence"
+            body="GridNinja's DCII posture is to produce auditable proof around power, cooling, water, and local reliability constraints before any deeper control conversation."
+          />
+          <div className="grid gap-5 lg:grid-cols-3">
+            {dciiCategoryFit.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-[1.2rem] border border-border/70 bg-surface px-5 py-6"
+              >
+                <h3 className="text-[1.25rem] font-medium text-foreground">
+                  {item.title}
+                </h3>
+                <p className="mt-3 text-base leading-8 text-muted-foreground">
+                  {item.body}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
+            <div className="rounded-[1.2rem] border border-border/70 bg-surface px-5 py-6">
+              <p className="text-sm tracking-[0.28em] text-primary uppercase">
+                Local and community benefits
+              </p>
+              <ul className="mt-4 space-y-3">
+                {dciiBenefits.map((benefit) => (
+                  <li
+                    key={benefit}
+                    className="border-l border-proof-cyan/45 pl-4 text-base leading-8 text-muted-foreground"
+                  >
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {dciiPublicPrivateBoundaries.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-[1.2rem] border border-border/70 bg-surface px-5 py-6"
+                >
+                  <p className="font-mono text-xs tracking-[0.16em] text-proof-cyan uppercase">
+                    {item.label}
+                  </p>
+                  <p className="mt-3 text-base leading-8 text-muted-foreground">
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </SectionShell>
 

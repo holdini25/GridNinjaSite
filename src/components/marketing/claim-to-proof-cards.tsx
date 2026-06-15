@@ -24,6 +24,8 @@ export function ClaimToProofCards({
             key={card.domain}
             type="button"
             aria-pressed={isActive}
+            data-gn-event="claim-to-proof-select"
+            data-gn-domain={card.domain}
             onClick={() => setActive(card.domain)}
             onFocus={() => setActive(card.domain)}
             onMouseEnter={() => setActive(card.domain)}

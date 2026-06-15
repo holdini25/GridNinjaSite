@@ -2,12 +2,15 @@ import type { Metadata } from "next"
 
 import { CtaBand } from "@/components/marketing/cta-band"
 import { DemoInspectionRoom } from "@/components/marketing/demo-inspection-room"
+import { FleetOSTimeTravelMap } from "@/components/marketing/fleetos-time-travel-map"
 import { Hero } from "@/components/marketing/hero"
+import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { ProofStorySnap } from "@/components/marketing/proof-story-snap"
+import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { demoFinalCta, demoHero, demoScenario } from "@/content/copy/demo"
-import { proofStorySteps } from "@/content/proof-artifacts"
+import { fleetSwarmSites, proofStorySteps } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -30,11 +33,14 @@ export default function DemoPage() {
         primaryCta={{
           label: "Request Capacity Audit",
           href: buildLeadHref("capacity-audit", "demo-hero"),
+          eventName: "demo-hero-capacity-audit",
         }}
         secondaryCta={{
           label: "Book Demo",
           href: buildLeadHref("book-demo", "demo-hero"),
+          eventName: "demo-hero-book-demo",
         }}
+        trustLine="Every accepted MW must point to a proof row. All sample values are illustrative until validated in a Capacity Audit."
         proofGrid
       />
 
@@ -50,7 +56,19 @@ export default function DemoPage() {
       </SectionShell>
 
       <SectionShell>
+        <RtaDecisionTheater />
+      </SectionShell>
+
+      <SectionShell>
         <ProofStorySnap steps={proofStorySteps} />
+      </SectionShell>
+
+      <SectionShell>
+        <LoadPassportHD />
+      </SectionShell>
+
+      <SectionShell>
+        <FleetOSTimeTravelMap sites={fleetSwarmSites} />
       </SectionShell>
 
       <SectionShell>

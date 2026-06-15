@@ -1,12 +1,14 @@
 import type { Metadata } from "next"
 
 import { CapacityAuditForm } from "@/components/forms/capacity-audit-form"
+import { AnimatedMw } from "@/components/marketing/animated-mw"
 import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
 import { Hero } from "@/components/marketing/hero"
-import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
+import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { NoProofRegister } from "@/components/marketing/no-proof-register"
 import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
 import { ProofComparisonSlider } from "@/components/marketing/proof-comparison-slider"
+import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { roiOutputs, roiAssumptions } from "@/content/roi-assumptions"
@@ -63,10 +65,11 @@ export default function RoiPage() {
       </SectionShell>
 
       <SectionShell>
-        <div className="grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
-          <CapacityWaterfall steps={illustrativeWaterfall} />
-          <LoadPassportPreview />
-        </div>
+        <CapacityWaterfall steps={illustrativeWaterfall} />
+      </SectionShell>
+
+      <SectionShell>
+        <LoadPassportHD />
       </SectionShell>
 
       <SectionShell>
@@ -99,9 +102,16 @@ export default function RoiPage() {
                     <p className="text-sm tracking-[0.18em] text-muted-foreground uppercase">
                       {output.label}
                     </p>
-                    <p className="mt-4 font-mono text-3xl text-foreground">
-                      {output.value}
-                    </p>
+                    {typeof output.numericValue === "number" ? (
+                      <AnimatedMw
+                        value={output.numericValue}
+                        className="mt-4 block font-mono text-3xl text-foreground"
+                      />
+                    ) : (
+                      <p className="mt-4 font-mono text-3xl text-foreground">
+                        {output.value}
+                      </p>
+                    )}
                     <p className="mt-4 text-base leading-8 text-muted-foreground">
                       {output.body}
                     </p>
@@ -126,6 +136,7 @@ export default function RoiPage() {
             </div>
 
             <div className="min-w-0 space-y-6">
+              <RtaDecisionTheater compact />
               <CapacityAuditForm
                 intent="capacity-audit"
                 source="roi-page"

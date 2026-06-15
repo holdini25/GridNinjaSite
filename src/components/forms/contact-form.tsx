@@ -43,6 +43,8 @@ export function ContactForm({ intent, source }: ContactFormProps) {
     message: "",
     intent,
     source,
+    website: "",
+    startedAt: Date.now(),
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
@@ -51,30 +53,30 @@ export function ContactForm({ intent, source }: ContactFormProps) {
 
   const successCopy = useMemo(() => {
     if (intent === "shadow-mode") {
-      return "We’ll use this to scope the Shadow Mode walkthrough, the evidence package, and the right operating context."
+      return "We'll use this to scope the Shadow Mode walkthrough, the evidence package, and the right operating context."
     }
 
     if (intent === "sellable-capacity") {
-      return "We’ll use this to frame a sellable-capacity assessment and the proof package needed for constrained-market stakeholders."
+      return "We'll use this to frame a sellable-capacity assessment and the proof package needed for constrained-market stakeholders."
     }
 
     if (intent === "partnership") {
-      return "We’ll use this to frame the partnership workflow, integration surface, and proof artifacts involved."
+      return "We'll use this to frame the partnership workflow, integration surface, and proof artifacts involved."
     }
 
     if (intent === "book-demo") {
-      return "We’ll use this to frame the proof demo around the stakeholder lens, artifact set, and operating constraint you care about."
+      return "We'll use this to frame the proof demo around the stakeholder lens, artifact set, and operating constraint you care about."
     }
 
     if (intent === "dcii-memo") {
-      return "We’ll use this to route the DCII memo request and follow up with the deployment boundary, evidence outputs, and source notes."
+      return "We'll use this to route the DCII memo request and follow up with the deployment boundary, evidence outputs, and source notes."
     }
 
     if (intent === "load-passport") {
-      return "We’ll use this to frame the Load Passport sample around your site type, proof gap, and review audience."
+      return "We'll use this to frame the Load Passport sample around your site type, proof gap, and review audience."
     }
 
-    return "We’ll use this to frame the first Capacity Audit, the recurring constraints, and the path into Shadow Mode evidence."
+    return "We'll use this to frame the first Capacity Audit, the recurring constraints, and the path into Shadow Mode evidence."
   }, [intent])
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -150,6 +152,19 @@ export function ContactForm({ intent, source }: ContactFormProps) {
       onSubmit={handleSubmit}
       className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
     >
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="contact-website">Website</label>
+        <input
+          id="contact-website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={form.website}
+          onChange={(event) =>
+            setForm((current) => ({ ...current, website: event.target.value }))
+          }
+        />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <label htmlFor="contact-name" className="text-base text-foreground">
@@ -365,10 +380,15 @@ export function ContactForm({ intent, source }: ContactFormProps) {
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-base leading-8 text-muted-foreground">
-          Intent and source stay attached to the submission so downstream delivery
-          can be wired without changing the UI contract.
+          Do not submit confidential site drawings, credentials, customer data,
+          or security-sensitive topology through this form.
         </p>
-        <Button type="submit" size="lg" disabled={isPending}>
+        <Button
+          type="submit"
+          size="lg"
+          disabled={isPending}
+          data-gn-event="contact-submit"
+        >
           {isPending ? "Submitting..." : "Start the conversation"}
         </Button>
       </div>

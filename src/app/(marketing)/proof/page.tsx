@@ -6,13 +6,15 @@ import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
 import { ConstraintBraid } from "@/components/marketing/constraint-braid"
 import { CtaBand } from "@/components/marketing/cta-band"
-import { FleetSwarmMap } from "@/components/marketing/fleet-swarm-map"
+import { FleetOSTimeTravelMap } from "@/components/marketing/fleetos-time-travel-map"
 import { Hero } from "@/components/marketing/hero"
+import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { NoProofRegister } from "@/components/marketing/no-proof-register"
 import { ProofLog } from "@/components/marketing/proof-log"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { ProofChainTrail } from "@/components/marketing/proof-chain-trail"
 import { ProofReplayPanel } from "@/components/marketing/proof-replay-panel"
+import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import { SectionShell } from "@/components/layout/section-shell"
@@ -64,11 +66,14 @@ export default function ProofPage() {
         primaryCta={{
           label: "Request Capacity Audit",
           href: buildLeadHref("shadow-mode", "proof-hero"),
+          eventName: "proof-hero-capacity-audit",
         }}
         secondaryCta={{
           label: "Inspect Proof Demo",
           href: "/demo",
+          eventName: "proof-hero-demo",
         }}
+        trustLine="Every accepted MW must point to a proof row."
       />
 
       <SectionShell>
@@ -87,11 +92,19 @@ export default function ProofPage() {
       </SectionShell>
 
       <SectionShell>
+        <RtaDecisionTheater />
+      </SectionShell>
+
+      <SectionShell>
         <ProofChainTrail stages={proofChainStages} proofRoot={replayFixture.proofRoot} />
       </SectionShell>
 
       <SectionShell>
         <ProofReplayPanel replay={replayFixture} />
+      </SectionShell>
+
+      <SectionShell>
+        <LoadPassportHD />
       </SectionShell>
 
       <SectionShell>
@@ -112,7 +125,7 @@ export default function ProofPage() {
             headline="A fleet panel can compare proof posture without approving actions"
             body="This view is read-only evidence aggregation. Local site policy, operator review, and runtime assurance remain the authority boundary."
           />
-          <FleetSwarmMap sites={fleetSwarmSites} />
+          <FleetOSTimeTravelMap sites={fleetSwarmSites} />
         </div>
       </SectionShell>
 

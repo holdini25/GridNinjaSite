@@ -10,12 +10,14 @@ export function CtaBand({
   body,
   label,
   href,
+  eventName = "cta-band",
 }: {
   eyebrow?: string
   headline: string
   body: string
   label: string
   href: string
+  eventName?: string
 }) {
   return (
     <div className="gn-panel px-6 py-7 sm:px-8 sm:py-8 lg:flex lg:items-end lg:justify-between lg:gap-10">
@@ -30,7 +32,7 @@ export function CtaBand({
       </div>
       <div className="mt-8 lg:mt-0">
         <Button asChild size="lg" className="group">
-          <Link href={href}>
+          <Link href={href} data-gn-event={eventName}>
             {label}
             <ArrowRightIcon className="transition-transform group-hover:translate-x-0.5" />
           </Link>

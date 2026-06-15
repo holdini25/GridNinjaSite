@@ -31,6 +31,18 @@ export type RtaDecisionMeta = {
   ariaLabel: string
 }
 
+export type RtaDecisionCandidate = {
+  id: string
+  label: string
+  requestedMw: number
+  acceptedMw: number
+  duration: string
+  target: string
+  decision: RtaDecisionState
+  reason: string
+  proofRow: string
+}
+
 export type ProofChainStage = {
   stage: string
   canDo: string
@@ -131,8 +143,16 @@ export type FleetSwarmSite = {
   role: string
   proofRoot: string
   acceptedMw: string
+  acceptedMwValue: number
   noProofGaps: number
   detail: string
+}
+
+export type FleetEventPhase = {
+  id: string
+  label: string
+  gridEvent: string
+  multiplier: number
 }
 
 export type ProofStoryStep = {
@@ -163,6 +183,7 @@ export type XrayLayer = {
   proofObject: string
   state: RtaDecisionState
   telemetry: string
+  contribution?: string
 }
 
 export type ProofComparisonFixture = {
@@ -206,6 +227,53 @@ export const rtaDecisionMeta: Record<RtaDecisionState, RtaDecisionMeta> = {
     ariaLabel: "RTA decision no-proof, evidence is not sufficient",
   },
 }
+
+export const rtaDecisionCandidates: RtaDecisionCandidate[] = [
+  {
+    id: "repair-ups-floor",
+    label: "Shift flexible AI training load",
+    requestedMw: 2.4,
+    acceptedMw: 1.1,
+    duration: "14 min",
+    target: "Cluster B / UPS Group 2",
+    decision: "repair",
+    reason: "UPS reserve floor would fall below operator policy, so the runtime assurance layer clips the action to a safer dispatch envelope.",
+    proofRow: "rta_row_004921",
+  },
+  {
+    id: "allow-cooling-clear",
+    label: "Use cooling-safe training window",
+    requestedMw: 0.8,
+    acceptedMw: 0.8,
+    duration: "9 min",
+    target: "Cluster D / Loop A",
+    decision: "allow",
+    reason: "All power, cooling, workload, and telemetry margins remain inside the declared proof envelope.",
+    proofRow: "rta_row_004922",
+  },
+  {
+    id: "no-proof-telemetry",
+    label: "Dispatch storage-backed capacity",
+    requestedMw: 1.6,
+    acceptedMw: 0,
+    duration: "12 min",
+    target: "BESS Block 1",
+    decision: "no-proof",
+    reason: "BESS state-of-charge telemetry is stale, so reserve-safe dispatch cannot be proven.",
+    proofRow: "no_proof_gap_000317",
+  },
+  {
+    id: "reject-thermal",
+    label: "Ramp high-density rack zone",
+    requestedMw: 3.2,
+    acceptedMw: 0,
+    duration: "18 min",
+    target: "GPU Hall 3",
+    decision: "reject",
+    reason: "Thermal margin cannot be repaired under current cooling state without violating the declared SLA envelope.",
+    proofRow: "rta_reject_000071",
+  },
+]
 
 export const proofArtifactIntro: SectionCopy = {
   eyebrow: "Proof objects",
@@ -833,6 +901,33 @@ export const constraintBraidDomains: ConstraintBraidDomain[] = [
   },
 ]
 
+export const fleetEventPhases: FleetEventPhase[] = [
+  {
+    id: "baseline",
+    label: "Baseline",
+    gridEvent: "Normal operating posture",
+    multiplier: 0.72,
+  },
+  {
+    id: "stress",
+    label: "Grid Stress",
+    gridEvent: "Utility requests flexible-load posture",
+    multiplier: 0.94,
+  },
+  {
+    id: "rta",
+    label: "RTA Decision",
+    gridEvent: "Site envelopes apply local policy",
+    multiplier: 1,
+  },
+  {
+    id: "recovery",
+    label: "Recovery",
+    gridEvent: "Safe reconnection envelope verified",
+    multiplier: 0.86,
+  },
+]
+
 export const fleetSwarmSites: FleetSwarmSite[] = [
   {
     id: "atl-1",
@@ -843,6 +938,7 @@ export const fleetSwarmSites: FleetSwarmSite[] = [
     role: "AI training campus",
     proofRoot: "8f4c...91a",
     acceptedMw: "5.8 MW illustrative",
+    acceptedMwValue: 5.8,
     noProofGaps: 3,
     detail: "Read-only proof collection with no write credentials.",
   },
@@ -855,6 +951,7 @@ export const fleetSwarmSites: FleetSwarmSite[] = [
     role: "Inference cluster",
     proofRoot: "4a20...b8e",
     acceptedMw: "3.1 MW illustrative",
+    acceptedMwValue: 3.1,
     noProofGaps: 1,
     detail: "Operators review repaired actions before any dispatch envelope change.",
   },
@@ -867,6 +964,7 @@ export const fleetSwarmSites: FleetSwarmSite[] = [
     role: "Hybrid power campus",
     proofRoot: "bb91...0e5",
     acceptedMw: "4.4 MW illustrative",
+    acceptedMwValue: 4.4,
     noProofGaps: 0,
     detail: "Narrow actuator set inside declared envelope and runtime assurance.",
   },
@@ -879,6 +977,7 @@ export const fleetSwarmSites: FleetSwarmSite[] = [
     role: "Colocation facility",
     proofRoot: "c712...af0",
     acceptedMw: "2.9 MW illustrative",
+    acceptedMwValue: 2.9,
     noProofGaps: 0,
     detail: "Evidence aggregation only; site policy remains the approval boundary.",
   },
@@ -891,6 +990,7 @@ export const fleetSwarmSites: FleetSwarmSite[] = [
     role: "Bridge power deployment",
     proofRoot: "pending",
     acceptedMw: "0.0 MW accepted",
+    acceptedMwValue: 0,
     noProofGaps: 4,
     detail: "Fleet view refuses capacity until topology and telemetry trust recover.",
   },
@@ -992,6 +1092,7 @@ export const xrayLayers: XrayLayer[] = [
     proofObject: "Topology map",
     state: "repair",
     telemetry: "EPMS-A, BMS-B, UPS/BESS read-only feeds",
+    contribution: "-7.2 MW",
   },
   {
     id: "workload",
@@ -1001,6 +1102,7 @@ export const xrayLayers: XrayLayer[] = [
     proofObject: "Load Behavior Profile",
     state: "allow",
     telemetry: "scheduler shadow export",
+    contribution: "-1.8 MW",
   },
   {
     id: "trust",
@@ -1010,6 +1112,7 @@ export const xrayLayers: XrayLayer[] = [
     proofObject: "Telemetry Trust Score",
     state: "no-proof",
     telemetry: "trust scorer",
+    contribution: "-1.3 MW",
   },
   {
     id: "proof",
@@ -1019,6 +1122,7 @@ export const xrayLayers: XrayLayer[] = [
     proofObject: "Proof Pack",
     state: "allow",
     telemetry: "receipt stream + cold-path replay",
+    contribution: "5.8 MW",
   },
 ]
 

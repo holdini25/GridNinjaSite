@@ -44,6 +44,8 @@ export function ConstraintBraid({
                 key={domain.id}
                 type="button"
                 aria-pressed={isActive}
+                data-gn-event="constraint-braid-select"
+                data-gn-domain={domain.id}
                 onClick={() => selectDomain(domain.id)}
                 onFocus={() => selectDomain(domain.id)}
                 className={cn(

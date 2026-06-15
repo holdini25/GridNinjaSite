@@ -39,7 +39,7 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 px-4 py-2.5 transition-all duration-300 sm:px-6 sm:py-4 lg:px-8",
+        "sticky top-0 z-50 px-3 py-2 transition-all duration-300 sm:px-6 sm:py-4 lg:px-8",
         scrolled
           ? "bg-background/88 backdrop-blur-xl"
           : "bg-transparent backdrop-blur-none"
@@ -47,7 +47,7 @@ export function SiteHeader() {
     >
       <div
         className={cn(
-          "mx-auto flex max-w-6xl items-center justify-between rounded-full border px-4 py-2 transition-all duration-300 sm:px-5 sm:py-3",
+          "mx-auto flex max-w-6xl items-center justify-between rounded-full border px-3 py-1.5 transition-all duration-300 sm:px-5 sm:py-3",
           scrolled
             ? "border-border/80 bg-surface/92 shadow-[0_24px_90px_-48px_rgba(7,17,26,0.82)]"
             : "border-transparent bg-transparent"
@@ -150,7 +150,10 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-3">
           <Button asChild className="hidden xl:inline-flex">
-            <Link href={buildLeadHref("capacity-audit", "header")}>
+            <Link
+              href={buildLeadHref("capacity-audit", "header")}
+              data-gn-event="header-capacity-audit"
+            >
               Request Capacity Audit
             </Link>
           </Button>

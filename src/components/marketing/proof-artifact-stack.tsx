@@ -56,6 +56,8 @@ export function ProofArtifactStack({
                 <button
                   type="button"
                   aria-pressed={activeIndex === index}
+                  data-gn-event="proof-artifact-select"
+                  data-gn-artifact={artifact.title}
                   onClick={() => selectArtifact(index)}
                   onFocus={() => selectArtifact(index)}
                   onMouseEnter={() => selectArtifact(index)}
