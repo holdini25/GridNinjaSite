@@ -1,9 +1,19 @@
 import type { LeadIntent } from "@/types/site"
 
-export function buildLeadHref(intent: LeadIntent, source: string) {
+export function buildLeadHref(
+  intent: LeadIntent,
+  source: string,
+  context?: Record<string, string | undefined>
+) {
   const params = new URLSearchParams({
     intent,
     source,
+  })
+
+  Object.entries(context ?? {}).forEach(([key, value]) => {
+    if (value) {
+      params.set(key, value)
+    }
   })
 
   return `/contact?${params.toString()}`

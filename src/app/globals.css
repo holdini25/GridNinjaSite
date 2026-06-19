@@ -145,6 +145,11 @@
     box-shadow: inset 0 1px 0 rgba(245, 247, 250, 0.04);
   }
 
+  .gn-content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 960px;
+  }
+
   .gn-panel-interactive {
     transition:
       border-color 180ms ease,
@@ -1128,6 +1133,44 @@
   }
 }
 
+@keyframes gn-why-signal {
+  0% {
+    opacity: 0.45;
+    transform: scaleX(0.2);
+    transform-origin: left;
+  }
+
+  45% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0.78;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes gn-why-gate {
+  from {
+    opacity: 0.72;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gn-why-signal {
+  animation: gn-why-signal 1.8s ease-out both;
+}
+
+.gn-why-gate {
+  animation: gn-why-gate 420ms ease-out both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1161,7 +1204,9 @@
   .gn-proof-lock::after,
   .gn-evidence-line::after,
   .gn-rta-chip[data-state="allow"]::after,
-  .gn-rta-chip[data-state="reject"] {
+  .gn-rta-chip[data-state="reject"],
+  .gn-why-signal,
+  .gn-why-gate {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

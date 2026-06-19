@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/solutions/colocation",
     "/solutions/bridge-power",
     "/proof",
+    "/why-gridninja",
     "/proof/proof-pack",
     "/demo",
     "/dcii",

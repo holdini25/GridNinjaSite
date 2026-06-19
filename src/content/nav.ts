@@ -13,20 +13,29 @@ export const navItems: NavItem[] = [
     href: "/platform",
   },
   {
+    label: "Solutions",
+    href: "/solutions/ai-cloud",
+    children: [
+      { label: "AI Cloud", href: "/solutions/ai-cloud" },
+      { label: "Colocation & REIT", href: "/solutions/colocation" },
+      { label: "Bridge Power & DER", href: "/solutions/bridge-power" },
+    ],
+  },
+  {
     label: "Proof & Trust",
     href: "/proof",
   },
   {
-    label: "Demo",
-    href: "/demo",
+    label: "Why GridNinja",
+    href: "/why-gridninja",
   },
   {
     label: "DCII",
     href: "/dcii",
   },
   {
-    label: "ROI",
-    href: "/roi",
+    label: "About",
+    href: "/about",
   },
   {
     label: "Contact",
@@ -40,6 +49,7 @@ export const footerGroups = [
     links: [
       { label: "Home", href: "/" },
       { label: "Platform", href: "/platform" },
+      { label: "Why GridNinja", href: "/why-gridninja" },
       { label: "Proof Before Autonomy", href: "/proof" },
       { label: "Proof Pack", href: "/proof/proof-pack" },
       { label: "Proof Demo", href: "/demo" },
