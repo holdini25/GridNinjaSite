@@ -17,49 +17,85 @@ export function WhyGridNinjaChapterNav({
       const scrollable =
         document.documentElement.scrollHeight - window.innerHeight
       setProgress(scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0)
+
+      const header = document.querySelector("header")
+      const chapterNav = document.querySelector(
+        'nav[aria-label="Why GridNinja page chapters"]'
+      )
+      const headerHeight = header?.getBoundingClientRect().height ?? 0
+      const chapterNavHeight = chapterNav?.getBoundingClientRect().height ?? 0
+      const activationLine =
+        window.scrollY + headerHeight + chapterNavHeight + 128
+
+      let nextActiveId = chapters[0]?.id
+
+      chapters.forEach((chapter) => {
+        const element = document.getElementById(chapter.id)
+        if (element && element.offsetTop <= activationLine) {
+          nextActiveId = chapter.id
+        }
+      })
+
+      setActiveId(nextActiveId)
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-        if (visible?.target.id) {
-          setActiveId(visible.target.id)
-        }
-      },
-      {
-        rootMargin: "-24% 0px -60% 0px",
-        threshold: [0.1, 0.35, 0.6],
-      }
-    )
+    const syncHashTarget = () => {
+      const hashId = window.location.hash.slice(1)
 
-    chapters.forEach((chapter) => {
-      const element = document.getElementById(chapter.id)
-      if (element) {
-        observer.observe(element)
+      if (!hashId || !chapters.some((chapter) => chapter.id === hashId)) {
+        handleScroll()
+        return
       }
-    })
+
+      const element = document.getElementById(hashId)
+
+      if (!element) {
+        return
+      }
+
+      window.requestAnimationFrame(() => {
+        element.scrollIntoView({ block: "start" })
+        window.requestAnimationFrame(handleScroll)
+      })
+    }
 
     handleScroll()
+    syncHashTarget()
+    const syncTimeouts = [150, 450].map((delay) =>
+      window.setTimeout(syncHashTarget, delay)
+    )
     window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("resize", handleScroll)
+    window.addEventListener("hashchange", syncHashTarget)
+    window.addEventListener("load", syncHashTarget)
 
     return () => {
-      observer.disconnect()
+      syncTimeouts.forEach((timeout) => window.clearTimeout(timeout))
       window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("resize", handleScroll)
+      window.removeEventListener("hashchange", syncHashTarget)
+      window.removeEventListener("load", syncHashTarget)
     }
   }, [chapters])
+
+  useEffect(() => {
+    const activeChapter = document.querySelector(
+      'nav[aria-label="Why GridNinja page chapters"] a[aria-current="location"]'
+    )
+
+    activeChapter?.scrollIntoView({ block: "nearest", inline: "center" })
+  }, [activeId])
 
   return (
     <nav
       aria-label="Why GridNinja page chapters"
-      className="sticky top-[5.5rem] z-40 border-y border-border/60 bg-background/88 backdrop-blur-xl"
+      className="sticky top-[4.75rem] z-40 border-y border-border/60 bg-background/88 backdrop-blur-xl lg:top-[7.75rem] xl:top-24"
     >
       <div
         className="h-px bg-proof-cyan"
         style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
       />
-      <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 py-2 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl scroll-px-4 gap-2 overflow-x-auto px-4 py-2 sm:scroll-px-6 sm:px-6 lg:scroll-px-8 lg:px-8">
         {chapters.map((chapter, index) => (
           <a
             key={chapter.id}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { ArrowRightIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { ContextualShadowCTA } from "@/components/marketing/contextual-shadow-cta"
@@ -50,82 +51,129 @@ export default function WhyGridNinjaPage() {
   )
 
   return (
-    <div className="pb-24">
+    <div className="relative isolate overflow-x-clip bg-[radial-gradient(circle_at_82%_4%,rgba(97,228,255,0.07),transparent_28rem),radial-gradient(circle_at_8%_16%,rgba(255,159,26,0.055),transparent_26rem)] pb-24">
       <WhyGridNinjaChapterNav chapters={whyGridNinjaChapters} />
       <WhyGridNinjaSourceDrawerHost sources={whyGridNinjaSourceRecords} />
       <ContextualShadowCTA />
 
-      <div className="space-y-24">
+      <div className="space-y-20 md:space-y-28 lg:space-y-32">
         <SectionShell
           id="thesis"
-          className="scroll-mt-32 pt-16 md:pt-24"
-          containerClassName="max-w-7xl"
+          className="scroll-mt-60 pt-6 sm:pt-8 lg:pt-10"
+          containerClassName="max-w-[96rem]"
         >
-          <div className="grid gap-10 xl:grid-cols-[1fr_0.9fr] xl:items-center">
-            <div>
-              <p className="gn-eyebrow">{whyGridNinjaHero.eyebrow}</p>
-              <h1 className="mt-5 max-w-4xl text-balance text-[clamp(3rem,7vw,6.4rem)] leading-[0.95] font-medium text-foreground">
-                <span className="md:hidden">
-                  Before you trust another megawatt, ask for proof.
-                </span>
-                <span className="hidden md:inline">
-                  {whyGridNinjaHero.headline}
-                </span>
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-9 text-muted-foreground md:text-xl">
-                {whyGridNinjaHero.body}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Button asChild size="lg">
-                  <Link href="#proof-standard">
-                    {whyGridNinjaHero.primaryCtaLabel}
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="border-border/80 bg-surface/60 text-foreground"
-                >
-                  <Link href="#proof-room">
-                    {whyGridNinjaHero.secondaryCtaLabel}
-                  </Link>
-                </Button>
-              </div>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {["official-source comparisons", "evidence maturity shown", "read-only first"].map(
-                  (item) => (
+          <div className="relative overflow-hidden rounded-[2rem] border border-border/55 bg-[radial-gradient(circle_at_88%_12%,rgba(97,228,255,0.075),transparent_30%),radial-gradient(circle_at_7%_74%,rgba(255,159,26,0.075),transparent_34%),linear-gradient(135deg,rgba(13,23,32,0.86),rgba(7,10,13,0.34))] shadow-[0_46px_140px_-82px_rgba(0,0,0,0.95)]">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(159,176,191,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(159,176,191,0.14)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:linear-gradient(to_bottom,black,transparent_92%)]"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-28 right-[8%] h-72 w-72 rounded-full bg-proof-cyan/8 blur-[100px]"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -bottom-36 -left-20 h-80 w-80 rounded-full bg-primary/8 blur-[110px]"
+            />
+
+            <div className="relative grid min-h-[36rem] gap-10 px-5 py-8 sm:px-8 sm:py-10 lg:px-10 xl:grid-cols-[minmax(0,0.94fr)_minmax(34rem,0.86fr)] xl:items-center xl:gap-14 xl:px-12 xl:py-12">
+              <div className="min-w-0 xl:pr-2">
+                <div className="flex items-center gap-3">
+                  <span className="h-px w-8 bg-primary/75" />
+                  <p className="gn-eyebrow">{whyGridNinjaHero.eyebrow}</p>
+                </div>
+
+                <h1 className="mt-5 max-w-[12em] text-[3.05rem] leading-[0.96] font-medium tracking-normal text-foreground sm:text-[3.25rem] md:text-[3.35rem] 2xl:text-[4rem]">
+                  <span className="md:hidden">
+                    Before you trust another megawatt, ask for proof.
+                  </span>
+                  <span className="hidden md:block [&>span]:whitespace-nowrap">
+                    <span className="block">Before you trust</span>
+                    <span className="block">another megawatt,</span>
+                    <span className="relative inline-block">
+                      ask what proves it.
+                      <span
+                        aria-hidden="true"
+                        className="absolute -bottom-2 left-0 h-px w-full bg-gradient-to-r from-primary via-primary/70 to-proof-cyan/70"
+                      />
+                    </span>
+                  </span>
+                </h1>
+
+                <p className="mt-6 max-w-[40rem] text-base leading-8 text-muted-foreground sm:text-lg md:leading-9">
+                  {whyGridNinjaHero.body}
+                </p>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="min-h-12 rounded-full px-6 shadow-[0_16px_48px_-22px_rgba(255,159,26,0.78)] transition-transform duration-200 hover:-translate-y-0.5"
+                  >
+                    <Link href="#proof-standard">
+                      {whyGridNinjaHero.primaryCtaLabel}
+                      <ArrowRightIcon aria-hidden="true" className="ml-2" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="min-h-12 rounded-full border-border/80 bg-background/35 px-6 text-foreground backdrop-blur-sm transition-transform duration-200 hover:-translate-y-0.5 hover:border-proof-cyan/40 hover:bg-proof-cyan/5"
+                  >
+                    <Link href="#proof-room">
+                      {whyGridNinjaHero.secondaryCtaLabel}
+                    </Link>
+                  </Button>
+                </div>
+
+                <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-border/55 pt-5">
+                  {[
+                    "official-source comparisons",
+                    "evidence maturity shown",
+                    "read-only first",
+                  ].map((item) => (
                     <span
                       key={item}
-                      className="rounded-full border border-border/70 bg-surface px-3 py-1.5 font-mono text-xs tracking-[0.1em] text-muted-foreground uppercase"
+                      className="inline-flex items-center gap-2 font-mono text-[0.7rem] tracking-[0.12em] text-muted-foreground uppercase"
                     >
+                      <span className="size-1.5 rounded-full bg-proof-cyan/90 shadow-[0_0_14px_rgba(97,228,255,0.5)]" />
                       {item}
                     </span>
-                  )
-                )}
+                  ))}
+                </div>
+              </div>
+
+              <div className="relative min-w-0 xl:pl-2">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-10 top-12 bottom-10 rounded-full bg-proof-cyan/10 blur-[90px]"
+                />
+                <div className="relative mx-auto w-full max-w-[46rem] [filter:drop-shadow(0_34px_70px_rgba(0,0,0,0.36))]">
+                  <WhyGridNinjaHeroTrace />
+                </div>
               </div>
             </div>
-            <WhyGridNinjaHeroTrace />
-          </div>
-        </SectionShell>
 
-        <SectionShell containerClassName="max-w-7xl">
-          <div className="grid overflow-hidden rounded-[1.2rem] border border-border/70 bg-surface md:grid-cols-5">
-            {whyGridNinjaTrustItems.map((item) => (
-              <div
-                key={item}
-                className="flex min-h-16 items-center justify-center gap-2 border-b border-border/70 px-4 py-4 text-center font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase last:border-b-0 md:border-r md:border-b-0 md:last:border-r-0"
-              >
-                <span className="size-2 rounded-full bg-proof-cyan shadow-[0_0_18px_rgba(97,228,255,0.55)]" />
-                {item}
+            <div className="relative border-t border-border/55 bg-background/25 px-4 py-3 backdrop-blur-sm sm:px-6">
+              <div className="grid overflow-hidden rounded-[1rem] border border-border/55 bg-background/30 sm:grid-cols-2 lg:grid-cols-5">
+                {whyGridNinjaTrustItems.map((item) => (
+                  <div
+                    key={item}
+                    className="flex min-h-14 items-center justify-center gap-2 border-b border-border/55 px-4 py-3 text-center font-mono text-[0.68rem] tracking-[0.12em] text-muted-foreground uppercase last:border-b-0 sm:[&:nth-child(odd)]:border-r lg:border-r lg:border-b-0 lg:last:border-r-0"
+                  >
+                    <span className="size-1.5 rounded-full bg-proof-cyan shadow-[0_0_14px_rgba(97,228,255,0.48)]" />
+                    {item}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </SectionShell>
 
         <SectionShell
           id="roles"
-          className="scroll-mt-32"
+          className="scroll-mt-60"
           containerClassName="max-w-7xl"
         >
           <div className="space-y-10">
@@ -143,7 +191,7 @@ export default function WhyGridNinjaPage() {
 
         <SectionShell
           id="acceptance-boundary"
-          className="scroll-mt-32"
+          className="scroll-mt-60"
           containerClassName="max-w-7xl"
         >
           <div className="space-y-10">
@@ -175,7 +223,7 @@ export default function WhyGridNinjaPage() {
 
         <SectionShell
           id="proof-standard"
-          className="scroll-mt-32"
+          className="scroll-mt-60"
           containerClassName="max-w-7xl"
         >
           <div className="space-y-10">
@@ -190,7 +238,7 @@ export default function WhyGridNinjaPage() {
 
         <SectionShell
           id="comparison"
-          className="scroll-mt-32"
+          className="scroll-mt-60"
           containerClassName="max-w-7xl"
         >
           <div className="space-y-10">
@@ -208,7 +256,7 @@ export default function WhyGridNinjaPage() {
 
         <SectionShell
           id="competitors"
-          className="gn-content-auto scroll-mt-32"
+          className="gn-content-auto scroll-mt-60"
           containerClassName="max-w-7xl"
         >
           <div className="space-y-10">
@@ -330,7 +378,7 @@ export default function WhyGridNinjaPage() {
 
         <SectionShell
           id="proof-room"
-          className="gn-content-auto scroll-mt-32"
+          className="gn-content-auto scroll-mt-60"
           containerClassName="max-w-7xl"
         >
           <div className="space-y-10">
@@ -388,7 +436,7 @@ export default function WhyGridNinjaPage() {
 
         <SectionShell
           id="site-specific-proof"
-          className="gn-content-auto scroll-mt-32"
+          className="gn-content-auto scroll-mt-60"
           containerClassName="max-w-7xl"
         >
           <div className="rounded-[1.6rem] border border-primary/35 bg-[linear-gradient(135deg,rgba(255,159,26,0.14),rgba(97,228,255,0.04)),var(--surface)] px-6 py-8 md:px-8 lg:grid lg:grid-cols-[1fr_0.72fr] lg:gap-8">

@@ -39,19 +39,14 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 px-3 py-2 transition-all duration-300 sm:px-6 sm:py-4 lg:px-8",
+        "sticky top-0 z-50 border-b border-border/55 px-4 py-3 transition-all duration-300 sm:px-6 lg:px-8",
         scrolled
-          ? "bg-background/88 backdrop-blur-xl"
-          : "bg-transparent backdrop-blur-none"
+          ? "bg-background/92 backdrop-blur-xl"
+          : "bg-background/86 backdrop-blur-md"
       )}
     >
       <div
-        className={cn(
-          "mx-auto flex max-w-6xl items-center justify-between rounded-full border px-3 py-1.5 transition-all duration-300 sm:px-5 sm:py-3",
-          scrolled
-            ? "border-border/80 bg-surface/92 shadow-[0_24px_90px_-48px_rgba(7,17,26,0.82)]"
-            : "border-transparent bg-transparent"
-        )}
+        className="mx-auto flex max-w-7xl items-center justify-between gap-6"
       >
         <Link href="/" aria-label="GridNinja home">
           <GridNinjaLogo
@@ -82,7 +77,7 @@ export function SiteHeader() {
                   type="button"
                   className={cn(
                     "flex items-center gap-1 rounded-full px-2.5 py-1.5 text-base text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
-                    itemActive && "bg-surface-2 text-foreground"
+                    itemActive && "text-foreground"
                   )}
                   aria-expanded={solutionsOpen}
                   aria-haspopup="menu"
@@ -140,7 +135,7 @@ export function SiteHeader() {
                 aria-current={itemActive ? "page" : undefined}
                 className={cn(
                   "rounded-full px-2.5 py-1.5 text-base text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
-                  itemActive && "bg-surface-2 text-foreground"
+                  itemActive && "text-foreground"
                 )}
               >
                 {item.label}

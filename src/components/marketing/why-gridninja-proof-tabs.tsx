@@ -106,7 +106,7 @@ export function WhyGridNinjaProofTabs({
 
       <div className="grid gap-6 lg:grid-cols-[0.82fr_1.18fr]">
         <div
-          className="grid gap-2 lg:sticky lg:top-32 lg:self-start"
+          className="grid gap-2 lg:sticky lg:top-56 lg:self-start xl:top-52"
           role="tablist"
           aria-label="10-point virtual capacity proof test"
           aria-orientation="vertical"
