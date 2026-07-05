@@ -1232,3 +1232,251 @@
     scroll-snap-align: none !important;
   }
 }
+
+.gn-dispatch-shell {
+  box-shadow:
+    0 24px 90px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(245, 247, 250, 0.045);
+}
+
+.gn-dispatch-hatch {
+  border: 1px solid color-mix(in srgb, var(--warning) 70%, transparent);
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(224, 178, 74, 0.72) 0 1px,
+      transparent 1px 4px
+    ),
+    rgba(224, 178, 74, 0.12);
+}
+
+.gn-dispatch-dimension-rail {
+  position: relative;
+  height: 0.7rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(159, 176, 191, 0.14) 0 1px,
+      transparent 1px 16px
+    ),
+    var(--surface-2);
+}
+
+.gn-dispatch-dimension-rail::before,
+.gn-dispatch-dimension-rail::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  border-radius: inherit;
+}
+
+.gn-dispatch-dimension-rail::before {
+  width: var(--requested-width, 0%);
+  background: rgba(255, 159, 26, 0.36);
+}
+
+.gn-dispatch-dimension-rail::after {
+  width: var(--accepted-width, 0%);
+  background: linear-gradient(90deg, rgba(97, 228, 255, 0.5), var(--signal));
+}
+
+.gn-dispatch-chart {
+  --gn-dispatch-phase-opacity: 1;
+}
+
+.gn-dispatch-chart svg {
+  overflow: visible;
+}
+
+.gn-dispatch-layer {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    opacity 220ms ease,
+    filter 220ms ease,
+    transform 220ms ease;
+}
+
+.gn-dispatch-chart[data-animation-phase="request-enter"] .gn-dispatch-layer-constraints,
+.gn-dispatch-chart[data-animation-phase="request-enter"] .gn-dispatch-layer-decision,
+.gn-dispatch-chart[data-animation-phase="request-enter"] .gn-dispatch-layer-proof,
+.gn-dispatch-chart[data-animation-phase="request"] .gn-dispatch-layer-constraints,
+.gn-dispatch-chart[data-animation-phase="request"] .gn-dispatch-layer-decision,
+.gn-dispatch-chart[data-animation-phase="request"] .gn-dispatch-layer-proof {
+  opacity: 0.18;
+}
+
+.gn-dispatch-chart[data-animation-phase="constraints-evaluate"] .gn-dispatch-layer-decision,
+.gn-dispatch-chart[data-animation-phase="constraints-evaluate"] .gn-dispatch-layer-proof,
+.gn-dispatch-chart[data-animation-phase="constraints"] .gn-dispatch-layer-decision,
+.gn-dispatch-chart[data-animation-phase="constraints"] .gn-dispatch-layer-proof {
+  opacity: 0.2;
+}
+
+.gn-dispatch-chart[data-animation-phase="rta-decision"] .gn-dispatch-layer-proof,
+.gn-dispatch-chart[data-animation-phase="outcome-reveal"] .gn-dispatch-layer-proof,
+.gn-dispatch-chart[data-animation-phase="decision"] .gn-dispatch-layer-proof {
+  opacity: 0.32;
+}
+
+.gn-dispatch-chart[data-animation-phase="proof-write"] .gn-dispatch-layer-proof,
+.gn-dispatch-chart[data-animation-phase="settled"] .gn-dispatch-layer,
+.gn-dispatch-chart[data-animation-phase="proof"] .gn-dispatch-layer-proof,
+.gn-dispatch-chart[data-animation-phase="complete"] .gn-dispatch-layer {
+  opacity: 1;
+}
+
+.gn-dispatch-request-path {
+  stroke-linecap: round;
+  animation: gn-dispatch-request-dash 5.8s linear infinite;
+}
+
+.gn-dispatch-accepted-path {
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px rgba(72, 232, 154, 0.2));
+}
+
+.gn-dispatch-repair-delta {
+  filter: drop-shadow(0 0 8px rgba(224, 178, 74, 0.2));
+}
+
+.gn-dispatch-reject-marker,
+.gn-dispatch-no-proof-band {
+  filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.18));
+}
+
+.gn-dispatch-domain-line {
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  transition:
+    opacity 180ms ease,
+    stroke-width 180ms ease,
+    filter 180ms ease;
+}
+
+.gn-dispatch-domain.is-selected .gn-dispatch-domain-line,
+.gn-dispatch-domain-line[data-selected="true"] {
+  filter: drop-shadow(0 0 10px rgba(97, 228, 255, 0.22));
+}
+
+.gn-dispatch-state-binding .gn-dispatch-domain-line {
+  filter: drop-shadow(0 0 9px rgba(224, 178, 74, 0.18));
+}
+
+.gn-dispatch-state-repair .gn-dispatch-domain-line,
+.gn-dispatch-domain-line[data-dispatch-state="repair"] {
+  stroke-dasharray: 10 5;
+}
+
+.gn-dispatch-state-hard-block .gn-dispatch-domain-line,
+.gn-dispatch-domain-line[data-dispatch-state="hard-block"] {
+  stroke-linecap: square;
+  filter: drop-shadow(0 0 12px rgba(255, 107, 107, 0.26));
+}
+
+.gn-dispatch-state-no-proof .gn-dispatch-domain-line,
+.gn-dispatch-domain-line[data-dispatch-state="no-proof"] {
+  filter: none;
+}
+
+.gn-dispatch-event-marker {
+  cursor: pointer;
+  outline: none;
+}
+
+.gn-dispatch-event-marker-line,
+.gn-dispatch-event-marker-dot,
+.gn-dispatch-event-marker-label {
+  transition:
+    opacity 160ms ease,
+    r 160ms ease,
+    stroke-width 160ms ease,
+    transform 160ms ease;
+}
+
+.gn-dispatch-event-marker-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.gn-dispatch-event-marker:hover .gn-dispatch-event-marker-line,
+.gn-dispatch-event-marker:focus-visible .gn-dispatch-event-marker-line,
+.gn-dispatch-event-marker.is-active .gn-dispatch-event-marker-line {
+  opacity: 1;
+  stroke: rgba(97, 228, 255, 0.52);
+  stroke-width: 1.4;
+}
+
+.gn-dispatch-event-marker:hover .gn-dispatch-event-marker-dot,
+.gn-dispatch-event-marker:focus-visible .gn-dispatch-event-marker-dot,
+.gn-dispatch-event-marker.is-active .gn-dispatch-event-marker-dot {
+  r: 6;
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 11px rgba(97, 228, 255, 0.38));
+}
+
+.gn-dispatch-event-marker:focus-visible .gn-dispatch-event-marker-dot {
+  stroke: var(--background);
+  stroke-width: 3;
+}
+
+.gn-dispatch-event-marker:focus-visible .gn-dispatch-event-marker-label,
+.gn-dispatch-event-marker.is-active .gn-dispatch-event-marker-label {
+  fill: var(--foreground);
+}
+
+.gn-dispatch-proof-lens-line {
+  filter: drop-shadow(0 0 10px rgba(97, 228, 255, 0.28));
+}
+
+.gn-dispatch-accepted-reveal {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: gn-dispatch-reveal 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes gn-dispatch-request-dash {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -60;
+  }
+}
+
+@keyframes gn-dispatch-reveal {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gn-dispatch-layer,
+  .gn-dispatch-request-path,
+  .gn-dispatch-domain-line,
+  .gn-dispatch-event-marker-line,
+  .gn-dispatch-event-marker-dot,
+  .gn-dispatch-event-marker-label {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .gn-dispatch-accepted-reveal {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .gn-dispatch-chart[data-animation-phase] .gn-dispatch-layer {
+    opacity: 1;
+  }
+}

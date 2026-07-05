@@ -1,4 +1,7 @@
 import type { Metadata } from "next"
+import Link from "next/link"
+
+import { ArrowRightIcon } from "lucide-react"
 
 import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { ConstraintBraid } from "@/components/marketing/constraint-braid"
@@ -15,6 +18,7 @@ import { SafetyBoundaryWall } from "@/components/marketing/safety-boundary-wall"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { TopologyMap } from "@/components/diagrams/topology-map"
 import { SectionShell } from "@/components/layout/section-shell"
+import { Button } from "@/components/ui/button"
 import {
   architectureFlow,
   platformHero,
@@ -108,6 +112,30 @@ export default function PlatformPage() {
 
       <SectionShell>
         <RtaDecisionTheater />
+      </SectionShell>
+
+      <SectionShell>
+        <div className="gn-panel px-6 py-7 sm:px-8 lg:flex lg:items-end lg:justify-between lg:gap-10">
+          <div className="max-w-2xl">
+            <p className="gn-eyebrow">Dispatch Envelope</p>
+            <h2 className="mt-4 text-balance text-[2.05rem] leading-[1.08] font-medium text-foreground sm:text-[2.45rem] sm:leading-[1.06]">
+              Inspect the runtime-assured capacity aperture
+            </h2>
+            <p className="mt-4 max-w-xl text-[1.02rem] leading-8 text-muted-foreground sm:text-lg sm:leading-9">
+              See how GridNinja turns requested virtual capacity into an
+              allow / repair / reject / no-proof dispatch envelope with binding
+              constraints, evidence artifacts, and read-only Shadow Mode proof.
+            </p>
+          </div>
+          <div className="mt-8 lg:mt-0">
+            <Button asChild size="lg" variant="outline" className="group border-border/80 bg-background/45 text-foreground">
+              <Link href="/platform/dispatch-envelope">
+                Inspect Dispatch Envelope
+                <ArrowRightIcon className="transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
       </SectionShell>
 
       <SectionShell>

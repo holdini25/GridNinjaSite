@@ -11,6 +11,10 @@ export const navItems: NavItem[] = [
   {
     label: "Platform",
     href: "/platform",
+    children: [
+      { label: "Platform Overview", href: "/platform" },
+      { label: "Dispatch Envelope", href: "/platform/dispatch-envelope" },
+    ],
   },
   {
     label: "Solutions",
@@ -49,6 +53,7 @@ export const footerGroups = [
     links: [
       { label: "Home", href: "/" },
       { label: "Platform", href: "/platform" },
+      { label: "Dispatch Envelope", href: "/platform/dispatch-envelope" },
       { label: "Why GridNinja", href: "/why-gridninja" },
       { label: "Proof Before Autonomy", href: "/proof" },
       { label: "Proof Pack", href: "/proof/proof-pack" },

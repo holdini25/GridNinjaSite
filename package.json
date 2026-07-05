@@ -8,12 +8,20 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:unit:dispatch-envelope": "vitest run tests/unit/dispatch-envelope",
+    "test:e2e": "playwright test",
+    "test:e2e:dispatch-envelope": "playwright test tests/e2e/dispatch-envelope.spec.ts",
     "validate": "npm run lint && npm run typecheck && npm run build",
     "audit:prod": "npm audit --omit=dev"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "d3-array": "^3.2.4",
+    "d3-interpolate": "^3.0.1",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0",
     "echarts": "^6.0.0",
     "echarts-for-react": "^3.0.6",
     "lucide-react": "^1.7.0",
@@ -27,13 +35,23 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/d3-array": "^3.2.2",
+    "@types/d3-interpolate": "^3.0.4",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-shape": "^3.1.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.0",
+    "fast-check": "^4.8.0",
+    "jsdom": "^29.1.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.9"
   }
 }
