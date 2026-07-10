@@ -5,6 +5,9 @@ import type {
   DispatchEnvelopeDTO,
   DispatchEnvelopeSpec,
 } from "@/types/dispatch-envelope"
+import { DispatchEnvelopeDTOSchema } from "@/schemas/dispatch-envelope.schema"
+import { assertDispatchEnvelopeInvariants } from "./invariants"
+import { envelopeEndMinute } from "./normalize"
 
 export function compileIllustrativeDispatchEnvelope(input: {
   siteId: string
@@ -236,12 +239,12 @@ function buildDto(args: {
   bindings: DispatchBinding[]
   decision: DispatchDecision
 }): DispatchEnvelopeDTO {
-  return {
+  const dto = DispatchEnvelopeDTOSchema.parse({
     schemaVersion: "dispatch-envelope.v1",
     siteId: args.siteId,
     scenarioId: args.scenarioId,
     tapeId: "demo-tape-illustrative",
-    topologyHash: "topology-demo-83c4-91f",
+    topologyHash: `sha256:${"1".repeat(64)}`,
     policyBundleVersion: "operator-policy-v14-demo",
     telemetryManifestId: "telemetry-demo-manifest",
     decision: args.decision,
@@ -249,12 +252,15 @@ function buildDto(args: {
     accepted: args.accepted,
     constraints: args.constraints,
     bindings: args.bindings,
-    proofRoot: "demo-proof-root-83c4-91f",
+    proofIntervals: [{ startMinute: 0, endMinute: envelopeEndMinute(args.accepted ?? args.request), eligibility: args.decision === "no-proof" ? "not-eligible" : "eligible", reasonCode: args.decision === "no-proof" ? "DECISION_EVIDENCE_INCOMPLETE" : "EVIDENCE_COMPLETE" }],
+    proofRoot: `sha256:${"2".repeat(64)}`,
     evidenceClass: "illustrative",
     issuedAt: new Date("2026-06-18T00:00:00.000Z").toISOString(),
-    signature: "illustrative-demo-only",
+    signature: "illustrative:unsigned",
     authority: "illustrative-demo",
-  }
+  }) as DispatchEnvelopeDTO
+  assertDispatchEnvelopeInvariants(dto)
+  return dto
 }
 
 function minBy<T>(items: T[], accessor: (item: T) => number): T {

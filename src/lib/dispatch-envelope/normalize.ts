@@ -19,17 +19,14 @@ export function buildEnvelopeSamples(
   sampleCount = 96
 ): EnvelopeSample[] {
   const endMinute = getVisualizationEndMinute(dto.request, dto.accepted)
-  const step = endMinute / Math.max(sampleCount - 1, 1)
+  if (!Number.isInteger(sampleCount) || sampleCount < 2) throw new Error("Envelope sampling requires at least two samples")
+  const step = endMinute / (sampleCount - 1)
   const constraints = prepareConstraints(dto.constraints)
-  const proofEligible =
-    dto.decision !== "no-proof" &&
-    dto.constraints.every((constraint) => constraint.state !== "no-proof")
 
   return Array.from({ length: sampleCount }, (_, index) => {
     const minute = round(index * step, 3)
     const requestedMw = envelopeMwAt(dto.request, minute)
-    const rawAcceptedMw = dto.accepted ? envelopeMwAt(dto.accepted, minute) : 0
-    const acceptedMw = dto.accepted ? Math.min(rawAcceptedMw, requestedMw) : 0
+    const acceptedMw = dto.accepted ? envelopeMwAt(dto.accepted, minute) : 0
     const limits = {} as Record<DomainId, number | null>
     const trusted = {} as Record<DomainId, boolean>
     const lowerConfidence: Partial<Record<DomainId, number>> = {}
@@ -60,18 +57,21 @@ export function buildEnvelopeSamples(
       lowerConfidence,
       upperConfidence,
       bindingDomainId: findBindingDomain(limits, trusted, requestedMw),
-      proofEligible,
+      proofEligible: proofEligibleAt(dto, minute),
     }
   })
 }
 
 export function envelopeMwAt(spec: DispatchEnvelopeSpec, minute: number) {
+  assertFeasibleSpec(spec)
+  if (!Number.isFinite(minute)) throw new Error("Envelope minute must be finite")
+  if (spec.maxMw === 0) return 0
   const rampStart = spec.startMinute
   const rampEnd =
-    rampStart + spec.maxMw / Math.max(spec.rampUpMwPerMin, 0.0001)
+    rampStart + spec.maxMw / spec.rampUpMwPerMin
   const holdEnd = rampEnd + spec.holdMinutes
   const rampDownEnd =
-    holdEnd + spec.maxMw / Math.max(spec.rampDownMwPerMin, 0.0001)
+    holdEnd + spec.maxMw / spec.rampDownMwPerMin
 
   if (minute < rampStart) {
     return 0
@@ -97,13 +97,27 @@ export function envelopeMwAt(spec: DispatchEnvelopeSpec, minute: number) {
 }
 
 export function envelopeEndMinute(spec: DispatchEnvelopeSpec) {
+  assertFeasibleSpec(spec)
+  if (spec.maxMw === 0) return spec.startMinute + spec.holdMinutes + spec.recoveryMinutes
   return (
     spec.startMinute +
-    spec.maxMw / Math.max(spec.rampUpMwPerMin, 0.0001) +
+    spec.maxMw / spec.rampUpMwPerMin +
     spec.holdMinutes +
-    spec.maxMw / Math.max(spec.rampDownMwPerMin, 0.0001) +
+    spec.maxMw / spec.rampDownMwPerMin +
     spec.recoveryMinutes
   )
+}
+
+function proofEligibleAt(dto: DispatchEnvelopeDTO, minute: number) {
+  const interval = dto.proofIntervals.find((candidate, index) =>
+    minute >= candidate.startMinute && (minute < candidate.endMinute || (index === dto.proofIntervals.length - 1 && minute <= candidate.endMinute))
+  )
+  if (!interval || interval.eligibility !== "eligible") return false
+  return dto.constraints.filter((constraint) => constraint.isDecisionCritical).every((constraint) => constraintLimitAt({ constraint, limitSamples: constraint.limitSamples ?? [] }, minute)?.trusted === true)
+}
+
+function assertFeasibleSpec(spec: DispatchEnvelopeSpec) {
+  if (spec.maxMw > 0 && (spec.rampUpMwPerMin <= 0 || spec.rampDownMwPerMin <= 0)) throw new Error("Positive envelopes require positive ramp rates")
 }
 
 export function getVisualizationEndMinute(

@@ -157,8 +157,8 @@ export function DispatchEnvelopeChart({
     })
   }
 
-  function handleKeyDown(event: KeyboardEvent<SVGRectElement>) {
-    if (!["ArrowLeft", "ArrowRight", "Home", "End", "Escape", "Enter", " "].includes(event.key)) {
+  function handleLensKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (!["Escape", "Enter", " "].includes(event.key)) {
       return
     }
 
@@ -169,46 +169,13 @@ export function DispatchEnvelopeChart({
       return
     }
 
-    if (event.key === "Home") {
-      onLensChange({ time: samples[0]?.minute ?? 0, visible: true, pinned: lens.pinned })
-      return
-    }
-
-    if (event.key === "End") {
-      onLensChange({
-        time: samples[samples.length - 1]?.minute ?? 0,
-        visible: true,
-        pinned: lens.pinned,
-      })
-      return
-    }
-
     if (event.key === "Enter" || event.key === " ") {
       onLensChange({
         time: lens.visible ? lens.time : samples[Math.floor(samples.length / 2)]?.minute ?? 0,
         visible: true,
         pinned: !lens.pinned,
       })
-      return
     }
-
-    const currentIndex = samples.reduce(
-      (bestIndex, sample, index) =>
-        Math.abs(sample.minute - lensTime) < Math.abs(samples[bestIndex].minute - lensTime)
-          ? index
-          : bestIndex,
-      0
-    )
-    const nextIndex =
-      event.key === "ArrowLeft"
-        ? Math.max(0, currentIndex - 1)
-        : Math.min(samples.length - 1, currentIndex + 1)
-
-    onLensChange({
-      time: samples[nextIndex]?.minute ?? lensTime,
-      visible: true,
-      pinned: lens.pinned,
-    })
   }
 
   function showEventMarker(index: number, pinned = lens.pinned) {
@@ -229,7 +196,7 @@ export function DispatchEnvelopeChart({
   }
 
   function handleEventMarkerKeyDown(
-    event: KeyboardEvent<SVGGElement>,
+    event: KeyboardEvent<HTMLButtonElement>,
     index: number
   ) {
     if (!["ArrowLeft", "ArrowRight", "Home", "End", "Escape", "Enter", " "].includes(event.key)) {
@@ -263,8 +230,8 @@ export function DispatchEnvelopeChart({
     showEventMarker(nextIndex)
     window.requestAnimationFrame(() => {
       document
-        .querySelector<SVGGElement>(
-          `[data-testid="dispatch-event-marker-${nextIndex}"]`
+        .querySelector<HTMLButtonElement>(
+          `[data-testid="dispatch-event-control-${nextIndex}"]`
         )
         ?.focus()
     })
@@ -735,10 +702,8 @@ export function DispatchEnvelopeChart({
           width={geometry.plotWidth}
           height={geometry.plotHeight}
           fill="transparent"
-          tabIndex={0}
-          role="button"
-          aria-label="Interactive proof lens. Use left and right arrow keys to inspect time."
-          className="cursor-crosshair focus:outline-none focus-visible:ring-3 focus-visible:ring-ring/45"
+          aria-hidden="true"
+          className="cursor-crosshair"
           data-testid="dispatch-proof-lens-hitbox"
           onPointerMove={(event) => {
             if (!lens.pinned) {
@@ -751,12 +716,11 @@ export function DispatchEnvelopeChart({
             }
           }}
           onClick={(event) => updateLensFromPointer(event, !lens.pinned)}
-          onKeyDown={handleKeyDown}
         />
 
         <g
           className="gn-dispatch-layer gn-dispatch-layer-proof"
-          aria-label="Dispatch event markers"
+          aria-hidden="true"
           data-testid="dispatch-event-markers"
         >
           {eventMarkers.map((marker, index) => {
@@ -772,16 +736,11 @@ export function DispatchEnvelopeChart({
                   `gn-dispatch-event-${markerPhase}`,
                   active && "is-active"
                 )}
-                role="button"
-                tabIndex={0}
-                aria-label={`${marker.label} at ${marker.short}. Press Enter to pin the proof lens.`}
-                aria-describedby={active ? `${id}-event-inspector` : undefined}
                 data-event-index={index}
                 data-event-phase={markerPhase}
                 data-event-time={marker.time.toFixed(3)}
                 data-active={active ? "true" : "false"}
                 data-testid={`dispatch-event-marker-${index}`}
-                onFocus={() => showEventMarker(index)}
                 onPointerEnter={() => showEventMarker(index)}
                 onPointerLeave={(event) => {
                   if (event.currentTarget !== document.activeElement) {
@@ -789,14 +748,6 @@ export function DispatchEnvelopeChart({
                     if (!lens.pinned) {
                       onLensHide()
                     }
-                  }
-                }}
-                onClick={() => showEventMarker(index, true)}
-                onKeyDown={(event) => handleEventMarkerKeyDown(event, index)}
-                onBlur={() => {
-                  setActiveEventMarkerIndex(null)
-                  if (!lens.pinned) {
-                    onLensHide()
                   }
                 }}
               >
@@ -870,6 +821,33 @@ export function DispatchEnvelopeChart({
           ) : null}
         </g>
       </svg>
+      <div className="border-t border-border/70 bg-background/70 p-4">
+        <label htmlFor={`${id}-proof-lens`} className="font-mono text-xs text-foreground">Inspect event minute</label>
+        <input
+          id={`${id}-proof-lens`}
+          type="range"
+          min={samples[0]?.minute ?? 0}
+          max={samples.at(-1)?.minute ?? 0}
+          step={(samples[1]?.minute ?? 1) - (samples[0]?.minute ?? 0)}
+          value={lensTime}
+          aria-describedby={`${id}-lens-status`}
+          aria-valuetext={`T plus ${lensSnapshot.minute.toFixed(1)} minutes`}
+          className="mt-3 min-h-11 w-full accent-primary"
+          data-testid="dispatch-proof-lens-range"
+          onChange={(event) => onLensChange({ time: Number(event.currentTarget.value), visible: true, pinned: lens.pinned })}
+          onKeyDown={handleLensKeyDown}
+        />
+        <p id={`${id}-lens-status`} className="mt-2 text-xs leading-6 text-muted-foreground" aria-live="polite">
+          T+{lensSnapshot.minute.toFixed(1)}; requested {lensSnapshot.requestedMw.toFixed(1)} MW; accepted {lensSnapshot.acceptedMw.toFixed(1)} MW; binding domain {bindingLabel}; proof {lensSnapshot.proofEligible ? "eligible" : "withheld"}; {lens.pinned ? "pinned" : "not pinned"}.
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2" aria-label="Dispatch event markers">
+          {eventMarkers.map((marker, index) => (
+            <button key={`${marker.short}-${marker.label}-control`} type="button" className="min-h-11 rounded-lg border border-border/70 px-3 py-2 text-xs text-foreground focus-visible:ring-3 focus-visible:ring-ring/45" data-testid={`dispatch-event-control-${index}`} onFocus={() => showEventMarker(index)} onClick={() => showEventMarker(index, true)} onKeyDown={(event) => handleEventMarkerKeyDown(event, index)}>
+              {marker.label} ({marker.short})
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="pointer-events-none absolute right-4 top-4 rounded-full border border-border/70 bg-background/70 px-3 py-1 font-mono text-[0.62rem] tracking-[0.16em] text-muted-foreground uppercase">
         illustrative scenario

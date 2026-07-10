@@ -2,6 +2,16 @@ import type { DispatchDecision, DomainId, EvidenceClass } from "@/types/dispatch
 
 export type DispatchEnvelopeEvent =
   | {
+      name: "dispatch_json_export"
+      scenarioId: string
+      decision: DispatchDecision
+      selectedDomainId: DomainId
+      viewMode: string
+      evidenceClass: EvidenceClass
+      requestedMw: number
+      acceptedMw: number | null
+    }
+  | {
       name: "dispatch_visual_view"
       scenarioId: string
       decision: DispatchDecision

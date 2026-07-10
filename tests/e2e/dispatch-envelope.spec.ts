@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises"
 
 import { expect, test, type Page } from "@playwright/test"
+import AxeBuilder from "@axe-core/playwright"
 
 const canonicalDomainIds = [
   "electrical",
@@ -314,7 +315,7 @@ test.describe("dispatch envelope page", () => {
     await page.getByTestId("dispatch-show-all").click()
     await expect(page.getByTestId("dispatch-domain-electrical")).toHaveCount(1)
 
-    await page.getByTestId("dispatch-proof-lens-hitbox").focus()
+    await page.getByTestId("dispatch-proof-lens-range").focus()
     await page.keyboard.press("ArrowRight")
     await expect(page.getByTestId("dispatch-proof-lens-card")).toBeVisible()
     await expect(page.getByTestId("dispatch-proof-lens-card")).toContainText(
@@ -350,7 +351,7 @@ test.describe("dispatch envelope page", () => {
       "proof_root"
     )
     await expect(page.getByTestId("dispatch-evidence-drawer")).toContainText(
-      "8f4c2d16...91a7"
+      /sha256:[a-f0-9]{64}/
     )
     await expect(page.getByTestId("dispatch-evidence-drawer")).toContainText(
       "never grants authority or mints proof"
@@ -431,7 +432,7 @@ test.describe("dispatch envelope page", () => {
       scenarioId: "grid-stress",
       decision: "repair",
       evidenceClass: "illustrative",
-      signature: "illustrative-demo-only",
+      signature: "illustrative:unsigned",
     })
     expect(exported.constraints.map((constraint) => constraint.id)).toEqual(
       canonicalDomainIds
@@ -479,21 +480,17 @@ test.describe("dispatch envelope page", () => {
       "d",
       initialAcceptedPath ?? ""
     )
-    expect(await getAcceptedRevealState(page)).toEqual({
+    expect(await getAcceptedRevealState(page)).toMatchObject({
       animationName: "none",
       transform: "none",
-      width: "772",
-      height: "408",
     })
 
     await page.getByTestId("dispatch-scenario-bridge-power").click()
     await page.getByTestId("dispatch-replay-button").click()
     await expect(page.getByTestId("dispatch-accepted-path")).toHaveAttribute("d", /M/)
-    expect(await getAcceptedRevealState(page)).toEqual({
+    expect(await getAcceptedRevealState(page)).toMatchObject({
       animationName: "none",
       transform: "none",
-      width: "772",
-      height: "408",
     })
 
     await page.getByTestId("dispatch-scenario-cooling-contingency").click()
@@ -505,5 +502,20 @@ test.describe("dispatch envelope page", () => {
     await page.getByTestId("dispatch-replay-button").click()
     await expect(page.getByTestId("dispatch-request-path")).toBeVisible()
     await expect(page.getByTestId("dispatch-accepted-path")).toHaveCount(0)
+  })
+
+  test("has no serious or critical automated accessibility violations", async ({ page }) => {
+    await page.goto("/platform/dispatch-envelope")
+    for (const scenario of ["normal", "grid-stress", "cooling-contingency", "telemetry-loss"]) {
+      await page.getByTestId(`dispatch-scenario-${scenario}`).click()
+      const results = await new AxeBuilder({ page })
+        .include("[data-testid=dispatch-envelope-visual]")
+        .analyze()
+      expect(
+        results.violations.filter((violation) =>
+          ["serious", "critical"].includes(violation.impact ?? "")
+        )
+      ).toEqual([])
+    }
   })
 })

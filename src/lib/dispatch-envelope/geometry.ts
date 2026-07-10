@@ -39,6 +39,7 @@ export function buildDispatchEnvelopeGeometry(args: {
   dimensions: ChartDimensions
 }): DispatchEnvelopeGeometry {
   const { samples, domainIds, dimensions } = args
+  assertGeometryInputs(samples, domainIds, dimensions)
   const { width, height, margin } = dimensions
   const plotWidth = width - margin.left - margin.right
   const plotHeight = height - margin.top - margin.bottom
@@ -156,17 +157,30 @@ function buildNoProofMaskPath({
   x: ReturnType<typeof scaleLinear<number, number>>
   y: ReturnType<typeof scaleLinear<number, number>>
 }) {
-  const noProofSamples = samples.filter((sample) => !sample.proofEligible)
-
-  if (!noProofSamples.length) {
+  if (!samples.some((sample) => !sample.proofEligible)) {
     return ""
   }
 
   return (
     area<EnvelopeSample>()
+      .defined((sample) => !sample.proofEligible)
       .x((sample) => x(sample.minute))
       .y0(y(0))
       .y1((sample) => y(sample.requestedMw))
-      .curve(curveLinear)(noProofSamples) ?? ""
+      .curve(curveLinear)(samples) ?? ""
   )
+}
+
+function assertGeometryInputs(samples: EnvelopeSample[], domainIds: DomainId[], dimensions: ChartDimensions) {
+  if (samples.length < 2) throw new Error("Geometry requires at least two samples")
+  const values = [dimensions.width, dimensions.height, ...Object.values(dimensions.margin)]
+  if (values.some((value) => !Number.isFinite(value))) throw new Error("Geometry dimensions must be finite")
+  if (dimensions.width <= 0 || dimensions.height <= 0 || dimensions.width - dimensions.margin.left - dimensions.margin.right <= 0 || dimensions.height - dimensions.margin.top - dimensions.margin.bottom <= 0) throw new Error("Geometry plot dimensions must be positive")
+  if (new Set(domainIds).size !== domainIds.length) throw new Error("Geometry domain IDs must be unique")
+  for (let index = 0; index < samples.length; index += 1) {
+    const sample = samples[index]
+    const numeric = [sample.minute, sample.requestedMw, sample.acceptedMw, sample.repairDeltaMw, ...Object.values(sample.limits).filter((value): value is number => value != null), ...Object.values(sample.lowerConfidence), ...Object.values(sample.upperConfidence)]
+    if (numeric.some((value) => !Number.isFinite(value) || value < 0)) throw new Error("Geometry samples must contain finite nonnegative values")
+    if (index > 0 && sample.minute <= samples[index - 1].minute) throw new Error("Geometry sample minutes must be unique and strictly increasing")
+  }
 }

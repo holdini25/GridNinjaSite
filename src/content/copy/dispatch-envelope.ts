@@ -93,11 +93,11 @@ export const dispatchScenarios: DispatchScenario[] = [
     subtitle: "Reserve-limited",
     decision: "repair",
     request: spec(4, 0, 20, 1, 1, 6, 1),
-    accepted: spec(2.8, 1, 20, 0.7, 0.8, 12, 0.8),
+    accepted: spec(2.8, 1, 18, 0.7, 0.8, 12, 0.8),
     primaryReason:
-      "UPS reserve floor clipped the request from 4.0 MW to 2.8 MW; cooling margin delayed start by one minute.",
+      "UPS reserve floor clipped the request from 4.0 MW to 2.8 MW and 18 minutes; cooling margin delayed start by one minute.",
     plainReason:
-      "The site can support the requested 20-minute event, but the declared UPS/BESS reserve floor limits the action to 2.8 MW. Cooling conditions require a one-minute delayed start.",
+      "The site can support an 18-minute repaired event, but the declared UPS/BESS reserve floor limits the action to 2.8 MW. Cooling conditions require a one-minute delayed start.",
     proofRoot: "8f4c2d16...91a7",
     policy: "operator-policy-v14",
     topology: "83c4...91f",
@@ -107,7 +107,7 @@ export const dispatchScenarios: DispatchScenario[] = [
         reason: "T2 feeder margin remains positive throughout the event.",
         artifact: "electrical_margin_trace.json",
       }),
-      constraint("storage", 2.8, 20, 0.7, 0, 12, 0.8, "binding", 97, 212, {
+      constraint("storage", 2.8, 18, 0.7, 0, 12, 0.8, "binding", 97, 212, {
         reasonCode: "UPS_RESERVE_FLOOR",
         reason:
           "Emergency reserve floor must remain above the operator-declared minimum.",
@@ -139,6 +139,7 @@ export const dispatchScenarios: DispatchScenario[] = [
     ],
     bindings: [
       binding("storage", "mw", 4, 2.8, "UPS_RESERVE_FLOOR", "repair"),
+      binding("storage", "hold", 20, 18, "UPS_RESERVE_FLOOR", "repair"),
       binding("cooling-water", "start", "T+0", "T+1", "COOLING_SAFE_START", "repair"),
       binding("storage", "ramp-up", 1, 0.7, "UPS_RESERVE_FLOOR", "repair"),
       binding("storage", "recovery", 6, 12, "UPS_RESERVE_FLOOR", "repair"),
@@ -441,11 +442,10 @@ export function getEventMarkers(
     return []
   }
 
-  const rampEnd =
-    spec.startMinute + spec.maxMw / Math.max(spec.rampUpMwPerMin, 0.001)
+  const rampEnd = spec.startMinute + spec.maxMw / spec.rampUpMwPerMin
   const holdEnd = rampEnd + spec.holdMinutes
   const dispatchEnd =
-    holdEnd + spec.maxMw / Math.max(spec.rampDownMwPerMin, 0.001)
+    holdEnd + spec.maxMw / spec.rampDownMwPerMin
   const recoveryEnd = dispatchEnd + spec.recoveryMinutes
 
   return [
@@ -485,8 +485,8 @@ export function buildDispatchEvidenceRecord(scenario: DispatchScenario) {
     accepted_mw: scenario.dto.accepted?.maxMw ?? null,
     decision: scenario.dto.decision,
     binding_constraints: bindings.map(({ id }) => id),
-    proof_eligible: scenario.dto.constraints.every(
-      (constraint) => constraint.state !== "no-proof"
+    proof_eligible: scenario.dto.proofIntervals.every(
+      (interval) => interval.eligibility === "eligible"
     ),
     policy_version: scenario.dto.policyBundleVersion,
     topology_hash: scenario.dto.topologyHash,
@@ -509,14 +509,15 @@ export function buildDispatchArtifactList(scenario: DispatchScenario) {
 }
 
 export function buildDispatchExport(scenario: DispatchScenario) {
-  return {
-    ...scenario.dto,
-    issuedAt: new Date().toISOString(),
-  }
+  const parsed = DispatchEnvelopeDTOSchema.parse(scenario.dto) as DispatchEnvelopeDTO
+  assertDispatchEnvelopeInvariants(parsed)
+  return parsed
 }
 
 export function getScenarioProofEligible(scenario: DispatchScenario) {
-  return scenario.dto.decision !== "no-proof"
+  return scenario.dto.proofIntervals.every(
+    (interval) => interval.eligibility === "eligible"
+  )
 }
 
 export function getScenarioById(id: string | undefined) {
@@ -659,7 +660,7 @@ function buildScenario(args: {
     siteId: "GRIDNINJA-DEMO-SITE",
     scenarioId: args.id,
     tapeId: `demo-tape-${args.id}`,
-    topologyHash: args.topology,
+    topologyHash: taggedHash(`topology:${args.topology}`),
     policyBundleVersion: args.policy,
     telemetryManifestId: `telemetry-manifest-${args.id}`,
     decision: args.decision,
@@ -667,10 +668,16 @@ function buildScenario(args: {
     accepted: args.accepted,
     constraints: sortConstraints(args.constraints),
     bindings: args.bindings,
-    proofRoot: args.proofRoot,
+    proofIntervals: [{
+      startMinute: 0,
+      endMinute: envelopeEndMinute(args.accepted ?? args.request),
+      eligibility: args.decision === "no-proof" ? "not-eligible" : "eligible",
+      reasonCode: args.decision === "no-proof" ? "DECISION_EVIDENCE_INCOMPLETE" : "EVIDENCE_COMPLETE",
+    }],
+    proofRoot: taggedHash(`proof:${args.proofRoot}`),
     evidenceClass: "illustrative",
     issuedAt,
-    signature: "illustrative-demo-only",
+    signature: "illustrative:unsigned",
     authority: "illustrative-demo",
   }) as DispatchEnvelopeDTO
 
@@ -685,6 +692,10 @@ function buildScenario(args: {
     blockMinute: args.blockMinute,
     dto: parsed,
   }
+}
+
+function taggedHash(seed: string) {
+  return `sha256:${Array.from(seed).map((character) => character.charCodeAt(0).toString(16).padStart(2, "0")).join("").padEnd(64, "0").slice(0, 64)}`
 }
 
 function sortConstraints(constraints: DispatchDomainConstraint[]) {

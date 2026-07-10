@@ -217,6 +217,10 @@ export function useDispatchEnvelopeState({
     })
   }
 
+  function recordJsonExport() {
+    emitDispatchEnvelopeEvent({ name: "dispatch_json_export", ...eventContext() })
+  }
+
   return {
     activeScenario,
     animationPhase: prefersReducedMotion ? "settled" : animationPhase,
@@ -231,6 +235,7 @@ export function useDispatchEnvelopeState({
     hideLens,
     openEvidence,
     replayTrace,
+    recordJsonExport,
     selectConstraint,
     selectScenario,
     setEvidenceOpen,

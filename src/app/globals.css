@@ -1285,6 +1285,7 @@
 
 .gn-dispatch-chart {
   --gn-dispatch-phase-opacity: 1;
+  scrollbar-gutter: stable;
 }
 
 .gn-dispatch-chart svg {

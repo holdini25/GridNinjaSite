@@ -1,7 +1,7 @@
 "use client"
 
 import type { KeyboardEvent } from "react"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import {
   DownloadIcon,
@@ -27,6 +27,7 @@ import {
 } from "@/content/copy/dispatch-envelope"
 import { Button } from "@/components/ui/button"
 import { buildEnvelopeSamples } from "@/lib/dispatch-envelope/normalize"
+import { sanitizeDispatchExportFilename, serializeDispatchEnvelopeExport } from "@/lib/dispatch-envelope/export"
 import { cn } from "@/lib/utils"
 
 import { DispatchConstraintRail } from "./dispatch-constraint-rail"
@@ -57,6 +58,7 @@ export function DispatchEnvelopeVisual({
     proofOpen,
     replayKey,
     replayTrace,
+    recordJsonExport,
     selectConstraint,
     selectScenario,
     selectedDomainId,
@@ -68,6 +70,11 @@ export function DispatchEnvelopeVisual({
     showAllConstraints,
     tableExpanded,
   } = useDispatchEnvelopeState({ initialScenarioId })
+  const [exportStatus, setExportStatus] = useState("")
+
+  useEffect(() => {
+    if (window.matchMedia("(max-width: 639px)").matches) setTableExpanded(true)
+  }, [setTableExpanded])
 
   const orderedConstraints = useMemo(
     () => getOrderedConstraints(activeScenario),
@@ -102,16 +109,22 @@ export function DispatchEnvelopeVisual({
         : `Why GridNinja ${decisionVerb(activeScenario.dto.decision)}`
 
   function exportJson() {
-    const blob = new Blob(
-      [JSON.stringify(buildDispatchExport(activeScenario), null, 2)],
-      { type: "application/json" }
-    )
-    const url = URL.createObjectURL(blob)
-    const anchor = document.createElement("a")
-    anchor.href = url
-    anchor.download = `gridninja-${activeScenario.id}-dispatch-envelope.json`
-    anchor.click()
-    URL.revokeObjectURL(url)
+    try {
+      const json = serializeDispatchEnvelopeExport(buildDispatchExport(activeScenario))
+      const blob = new Blob([json], { type: "application/json" })
+      const url = URL.createObjectURL(blob)
+      const anchor = document.createElement("a")
+      anchor.href = url
+      anchor.download = `gridninja-${sanitizeDispatchExportFilename(activeScenario.id)}-dispatch-envelope.json`
+      document.body.append(anchor)
+      anchor.click()
+      anchor.remove()
+      window.setTimeout(() => URL.revokeObjectURL(url), 0)
+      recordJsonExport()
+      setExportStatus("Evidence JSON exported.")
+    } catch {
+      setExportStatus("Evidence JSON export failed. The data did not pass validation.")
+    }
   }
 
   function handleScenarioKeyDown(
@@ -478,6 +491,7 @@ export function DispatchEnvelopeVisual({
           <DownloadIcon />
           Export evidence JSON
         </Button>
+        <span className="sr-only" aria-live="polite" data-testid="dispatch-export-status">{exportStatus}</span>
       </footer>
 
       {tableExpanded ? (

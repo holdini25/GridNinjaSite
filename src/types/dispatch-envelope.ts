@@ -46,6 +46,13 @@ export interface DispatchLimitSample {
   trusted: boolean
 }
 
+export interface DispatchProofInterval {
+  startMinute: number
+  endMinute: number
+  eligibility: "eligible" | "not-eligible"
+  reasonCode: string
+}
+
 export interface DispatchDomainConstraint {
   id: DomainId
   label: string
@@ -98,6 +105,7 @@ export interface DispatchEnvelopeDTO {
   accepted: DispatchEnvelopeSpec | null
   constraints: DispatchDomainConstraint[]
   bindings: DispatchBinding[]
+  proofIntervals: DispatchProofInterval[]
   proofRoot: string
   evidenceClass: EvidenceClass
   issuedAt: string

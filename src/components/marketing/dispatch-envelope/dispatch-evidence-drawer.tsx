@@ -117,16 +117,14 @@ export function DispatchEvidenceDrawer({
             </h3>
             <div className="mt-3 grid gap-2">
               {artifacts.map((artifact) => (
-                <button
+                <div
                   key={artifact}
-                  type="button"
-                  onClick={() => onOpenChange(true)}
-                  className="min-h-11 rounded-[0.75rem] border border-border/60 bg-surface/70 px-3 py-2 text-left font-mono text-xs transition-colors hover:border-proof-cyan/35 focus-visible:ring-3 focus-visible:ring-ring/45"
+                  className="min-h-11 rounded-[0.75rem] border border-border/60 bg-surface/70 px-3 py-2 text-left font-mono text-xs"
                   data-testid={`dispatch-artifact-${artifact.replace(/[^a-z0-9]/gi, "-")}`}
                 >
                   <span className="block break-all text-foreground">{artifact}</span>
-                  <span className="mt-1 block text-muted-foreground">inspect artifact</span>
-                </button>
+                  <span className="mt-1 block text-muted-foreground">Illustrative artifact — unavailable in this demo</span>
+                </div>
               ))}
             </div>
           </div>

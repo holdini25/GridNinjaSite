@@ -12,6 +12,7 @@ import { assertDispatchEnvelopeInvariants } from "@/lib/dispatch-envelope/invari
 import { compileIllustrativeDispatchEnvelope } from "@/lib/dispatch-envelope/compile-demo-envelope"
 import { buildEnvelopeSamples } from "@/lib/dispatch-envelope/normalize"
 import { buildDispatchEnvelopeGeometry } from "@/lib/dispatch-envelope/geometry"
+import { sanitizeDispatchExportFilename, serializeDispatchEnvelopeExport } from "@/lib/dispatch-envelope/export"
 import { getProofLensSnapshotAtMinute } from "@/lib/dispatch-envelope/proof-lens"
 import { rankConstraints } from "@/lib/dispatch-envelope/binding-rank"
 import type {
@@ -109,6 +110,56 @@ describe("dispatch envelope DTO fixtures", () => {
 })
 
 describe("dispatch envelope invariants", () => {
+  it("rejects unknown fields, zero ramps, malformed hashes, and incomplete canonical domains", () => {
+    const valid = dispatchScenarios[0].dto
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, unexpected: true })).toThrow()
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, topologyHash: "not-a-hash" })).toThrow()
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, request: { ...valid.request, rampUpMwPerMin: 0 } })).toThrow()
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, constraints: valid.constraints.slice(1) })).toThrow()
+  })
+
+  it("rejects duplicate sample minutes and reversed confidence bounds", () => {
+    const valid = dispatchScenarios[0].dto
+    const constraint = valid.constraints[0]
+    const duplicate = { ...constraint, limitSamples: [constraint.limitSamples![0], constraint.limitSamples![0]] }
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, constraints: [duplicate, ...valid.constraints.slice(1)] })).toThrow()
+    const reversed = { ...constraint, limitSamples: [{ minute: 0, maxMw: 2, lowerConfidenceMw: 3, upperConfidenceMw: 4, trusted: true }] }
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, constraints: [reversed, ...valid.constraints.slice(1)] })).toThrow()
+  })
+
+  it("rejects incomplete confidence, discontinuous proof, and contradictory authority states", () => {
+    const valid = dispatchScenarios[0].dto
+    const constraint = valid.constraints[0]
+    const incomplete = { ...constraint, limitSamples: [{ minute: 0, maxMw: 2, lowerConfidenceMw: 1, trusted: true }] }
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, constraints: [incomplete, ...valid.constraints.slice(1)] })).toThrow()
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, proofIntervals: [{ startMinute: 1, endMinute: 2, eligibility: "eligible", reasonCode: "GAP" }] })).toThrow()
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, proofIntervals: [{ startMinute: 0, endMinute: 1, eligibility: "eligible", reasonCode: "A" }, { startMinute: 2, endMinute: 3, eligibility: "eligible", reasonCode: "B" }] })).toThrow()
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, signature: "ed25519:abc" })).toThrow()
+    expect(() => DispatchEnvelopeDTOSchema.parse({ ...valid, authority: "signed-read-only", signature: "illustrative:unsigned" })).toThrow()
+  })
+
+  it("serializes deterministic validated exports and sanitizes filenames", () => {
+    const dto = dispatchScenarios[0].dto
+    expect(serializeDispatchEnvelopeExport(dto)).toBe(serializeDispatchEnvelopeExport(dto))
+    expect(JSON.parse(serializeDispatchEnvelopeExport(dto))).toEqual(dto)
+    expect(sanitizeDispatchExportFilename(" Grid Stress / ../../ ")).toBe("grid-stress")
+  })
+
+  it("fails closed across binding, interval, authority, and accepted-limit contradictions", () => {
+    const valid = dispatchScenarios.find((scenario) => scenario.id === "grid-stress")!.dto
+    const cases: DispatchEnvelopeDTO[] = [
+      { ...valid, bindings: [{ ...valid.bindings[0], reasonCode: "WRONG" }] },
+      { ...valid, bindings: [{ ...valid.bindings[0], severity: "reject" }] },
+      { ...valid, bindings: [{ ...valid.bindings[0], delta: 0 }] },
+      { ...valid, proofIntervals: [{ ...valid.proofIntervals[0], endMinute: 1 }] },
+      { ...valid, proofIntervals: [{ ...valid.proofIntervals[0], eligibility: "not-eligible" }] },
+      { ...valid, evidenceClass: "shadow-validated", authority: "illustrative-demo" },
+      { ...valid, evidenceClass: "illustrative", authority: "signed-read-only" },
+      { ...valid, accepted: { ...valid.accepted!, maxMw: valid.request.maxMw + 1 } },
+      { ...valid, accepted: { ...valid.accepted!, maxMw: 3 } },
+    ]
+    for (const dto of cases) expect(() => assertDispatchEnvelopeInvariants(dto)).toThrow()
+  })
   it("rejects invalid accepted-envelope combinations", () => {
     const allowWithoutAccepted = {
       ...makeDto("allow", null, [makeConstraint("electrical")]),
@@ -164,10 +215,10 @@ describe("illustrative compiler", () => {
       siteId: "demo",
       scenarioId: "allow",
       request: baseRequest,
-      constraints: [
+      constraints: completeConstraints([
         makeConstraint("electrical", "available", { maxMw: 4 }),
         makeConstraint("storage", "available", { maxMw: 3.5 }),
-      ],
+      ]),
     })
 
     expect(dto.decision).toBe("allow")
@@ -179,10 +230,10 @@ describe("illustrative compiler", () => {
       siteId: "demo",
       scenarioId: "repair",
       request: baseRequest,
-      constraints: [
+      constraints: completeConstraints([
         makeConstraint("electrical", "available", { maxMw: 4 }),
         makeConstraint("storage", "binding", { maxMw: 2.4 }),
-      ],
+      ]),
     })
 
     expect(dto.decision).toBe("repair")
@@ -197,25 +248,46 @@ describe("illustrative compiler", () => {
     expect(dto.bindings[0]?.delta).toBeCloseTo(0.6)
   })
 
+  it("derives bindings for every repairable dimension", () => {
+    const dto = compileIllustrativeDispatchEnvelope({
+      siteId: "demo",
+      scenarioId: "all-repairs",
+      request: baseRequest,
+      constraints: completeConstraints([
+        makeConstraint("storage", "binding", {
+          maxMw: 2.5,
+          maxHoldMinutes: 10,
+          maxRampUpMwPerMin: 0.5,
+          earliestStartMinute: 2,
+          requiredRecoveryMinutes: 9,
+          reboundLimitMw: 0.4,
+        }),
+      ]),
+    })
+    expect(dto.bindings.map((binding) => binding.field)).toEqual([
+      "mw", "hold", "ramp-up", "start", "recovery", "rebound",
+    ])
+  })
+
   it("rejects on trusted hard block and returns no-proof on stale evidence", () => {
     const rejected = compileIllustrativeDispatchEnvelope({
       siteId: "demo",
       scenarioId: "reject",
       request: baseRequest,
-      constraints: [
+      constraints: completeConstraints([
         makeConstraint("cooling-water", "hard-block", { maxMw: 0 }),
-      ],
+      ]),
     })
     const noProof = compileIllustrativeDispatchEnvelope({
       siteId: "demo",
       scenarioId: "no-proof",
       request: baseRequest,
-      constraints: [
+      constraints: completeConstraints([
         makeConstraint("storage", "no-proof", {
           isTrusted: false,
           confidencePct: 31,
         }),
-      ],
+      ]),
     })
 
     expect(rejected.decision).toBe("reject")
@@ -237,10 +309,10 @@ describe("illustrative compiler", () => {
             siteId: "demo",
             scenarioId: "generated",
             request,
-            constraints: [
+            constraints: completeConstraints([
               makeConstraint("electrical", "available", { maxMw: maxMw + 1 }),
               makeConstraint("storage", "binding", { maxMw: limitMw }),
-            ],
+            ]),
           })
 
           expect(dto.accepted?.maxMw ?? 0).toBeLessThanOrEqual(request.maxMw)
@@ -257,6 +329,21 @@ describe("illustrative compiler", () => {
 })
 
 describe("dispatch envelope math", () => {
+  it("rejects malformed geometry inputs deterministically", () => {
+    const samples = buildEnvelopeSamples(dispatchScenarios[0].dto, 4)
+    const dimensions = { width: 860, height: 520, margin: { top: 54, right: 26, bottom: 58, left: 62 } }
+    expect(() => buildDispatchEnvelopeGeometry({ samples: [], domainIds: [], dimensions })).toThrow(/at least two/)
+    expect(() => buildDispatchEnvelopeGeometry({ samples, domainIds: [], dimensions: { ...dimensions, width: 0 } })).toThrow(/positive/)
+    expect(() => buildDispatchEnvelopeGeometry({ samples, domainIds: [], dimensions: { ...dimensions, height: Number.NaN } })).toThrow(/finite/)
+    expect(() => buildDispatchEnvelopeGeometry({ samples, domainIds: ["storage", "storage"], dimensions })).toThrow(/unique/)
+    expect(() => buildDispatchEnvelopeGeometry({ samples: [samples[0], samples[0]], domainIds: [], dimensions })).toThrow(/strictly increasing/)
+    expect(() => buildDispatchEnvelopeGeometry({ samples: [{ ...samples[0], requestedMw: Number.POSITIVE_INFINITY }, samples[1]], domainIds: [], dimensions })).toThrow(/finite nonnegative/)
+  })
+
+  it("rejects invalid sampling counts and infeasible ramp semantics", () => {
+    expect(() => buildEnvelopeSamples(dispatchScenarios[0].dto, 1)).toThrow(/at least two/)
+    expect(() => buildEnvelopeSamples({ ...dispatchScenarios[0].dto, request: { ...dispatchScenarios[0].dto.request, rampUpMwPerMin: 0 } }, 4)).toThrow(/positive ramp/)
+  })
   it("builds non-empty paths and repair geometry for repair fixtures", () => {
     const scenario = scenarioById("grid-stress")
     const samples = buildEnvelopeSamples(scenario.dto)
@@ -465,23 +552,36 @@ function makeDto(
   accepted: DispatchEnvelopeSpec | null,
   constraints: DispatchDomainConstraint[]
 ): DispatchEnvelopeDTO {
+  const canonicalConstraints = DISPATCH_DOMAIN_IDS.map(
+    (id) => constraints.find((constraint) => constraint.id === id) ?? makeConstraint(id)
+  )
+  const endMinute = accepted
+    ? accepted.startMinute + accepted.maxMw / accepted.rampUpMwPerMin + accepted.holdMinutes + accepted.maxMw / accepted.rampDownMwPerMin + accepted.recoveryMinutes
+    : baseRequest.startMinute + baseRequest.maxMw / baseRequest.rampUpMwPerMin + baseRequest.holdMinutes + baseRequest.maxMw / baseRequest.rampDownMwPerMin + baseRequest.recoveryMinutes
   return {
     schemaVersion: "dispatch-envelope.v1",
     siteId: "demo",
     scenarioId: `invariant-${decision}`,
     tapeId: "demo-tape",
-    topologyHash: "topology",
+    topologyHash: `sha256:${"1".repeat(64)}`,
     policyBundleVersion: "policy",
     telemetryManifestId: "telemetry",
     decision,
     request: baseRequest,
     accepted,
-    constraints,
+    constraints: canonicalConstraints,
     bindings: [],
-    proofRoot: "proof",
+    proofIntervals: [{ startMinute: 0, endMinute, eligibility: decision === "no-proof" ? "not-eligible" : "eligible", reasonCode: decision === "no-proof" ? "DECISION_EVIDENCE_INCOMPLETE" : "EVIDENCE_COMPLETE" }],
+    proofRoot: `sha256:${"2".repeat(64)}`,
     evidenceClass: "illustrative",
     issuedAt: "2026-06-18T00:00:00.000Z",
-    signature: "illustrative-demo-only",
+    signature: "illustrative:unsigned",
     authority: "illustrative-demo",
   }
+}
+
+function completeConstraints(constraints: DispatchDomainConstraint[]) {
+  return DISPATCH_DOMAIN_IDS.map(
+    (id) => constraints.find((constraint) => constraint.id === id) ?? makeConstraint(id, "available", { maxMw: 20, maxHoldMinutes: 60, maxRampUpMwPerMin: 10, requiredRecoveryMinutes: 0, reboundLimitMw: 20 })
+  )
 }
