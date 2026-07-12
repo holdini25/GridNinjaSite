@@ -1,20 +1,14 @@
 "use client"
 
-import { type FormEvent, useState } from "react"
+import { type FormEvent, useRef, useState } from "react"
 
 import { buyerTypes, siteTypes, timelineOptions } from "@/lib/constants"
 import { capacityAuditSchema, mapZodErrors } from "@/lib/validators"
 
+import { buildCapacityAuditCandidate } from "@/components/forms/lead-form-data"
+import { NativeSelect } from "@/components/forms/native-select"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 
 type CapacityAuditFormProps = {
   intent: "capacity-audit" | "shadow-mode" | "sellable-capacity" | "partnership"
@@ -25,18 +19,7 @@ export function CapacityAuditForm({
   intent,
   source,
 }: CapacityAuditFormProps) {
-  const [form, setForm] = useState({
-    name: "",
-    company: "",
-    email: "",
-    buyerType: "",
-    siteType: "",
-    timeline: "",
-    intent,
-    source,
-    website: "",
-    startedAt: Date.now(),
-  })
+  const startedAt = useRef(Date.now())
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -45,7 +28,12 @@ export function CapacityAuditForm({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const parsed = capacityAuditSchema.safeParse(form)
+    const candidate = buildCapacityAuditCandidate(new FormData(event.currentTarget), {
+      intent,
+      source,
+      startedAt: startedAt.current,
+    })
+    const parsed = capacityAuditSchema.safeParse(candidate)
 
     if (!parsed.success) {
       setErrors(mapZodErrors(parsed))
@@ -86,7 +74,10 @@ export function CapacityAuditForm({
 
   if (submitted) {
     return (
-      <div className="rounded-[1.8rem] border border-border/70 bg-surface p-6">
+      <div
+        className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
+        role="status"
+      >
         <p className="text-sm tracking-[0.28em] text-primary uppercase">
           Request received
         </p>
@@ -104,7 +95,8 @@ export function CapacityAuditForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
+      noValidate
+      className="gn-lead-form rounded-[1.8rem] border border-border/70 bg-surface p-6"
     >
       <div className="hidden" aria-hidden="true">
         <label htmlFor="audit-website">Website</label>
@@ -113,10 +105,6 @@ export function CapacityAuditForm({
           name="website"
           tabIndex={-1}
           autoComplete="off"
-          value={form.website}
-          onChange={(event) =>
-            setForm((current) => ({ ...current, website: event.target.value }))
-          }
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -126,14 +114,16 @@ export function CapacityAuditForm({
           </label>
           <Input
             id="audit-name"
-            value={form.name}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, name: event.target.value }))
-            }
+            name="name"
+            required
+            autoComplete="name"
             aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? "audit-name-error" : undefined}
           />
           {errors.name ? (
-            <p className="text-base text-danger">{errors.name}</p>
+            <p id="audit-name-error" className="text-base text-danger" role="alert">
+              {errors.name}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -142,14 +132,16 @@ export function CapacityAuditForm({
           </label>
           <Input
             id="audit-company"
-            value={form.company}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, company: event.target.value }))
-            }
+            name="company"
+            required
+            autoComplete="organization"
             aria-invalid={Boolean(errors.company)}
+            aria-describedby={errors.company ? "audit-company-error" : undefined}
           />
           {errors.company ? (
-            <p className="text-base text-danger">{errors.company}</p>
+            <p id="audit-company-error" className="text-base text-danger" role="alert">
+              {errors.company}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -159,14 +151,19 @@ export function CapacityAuditForm({
           <Input
             id="audit-email"
             type="email"
-            value={form.email}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, email: event.target.value }))
-            }
+            name="email"
+            required
+            autoComplete="email"
+            inputMode="email"
+            autoCapitalize="none"
+            spellCheck={false}
             aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "audit-email-error" : undefined}
           />
           {errors.email ? (
-            <p className="text-base text-danger">{errors.email}</p>
+            <p id="audit-email-error" className="text-base text-danger" role="alert">
+              {errors.email}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -177,31 +174,34 @@ export function CapacityAuditForm({
           >
             Buyer type
           </label>
-          <Select
-            value={form.buyerType}
-            onValueChange={(value) =>
-              setForm((current) => ({ ...current, buyerType: value }))
+          <NativeSelect
+            id="audit-buyer-type"
+            name="buyerType"
+            required
+            autoComplete="off"
+            defaultValue=""
+            aria-invalid={Boolean(errors.buyerType)}
+            aria-describedby={
+              errors.buyerType ? "audit-buyer-type-error" : undefined
             }
           >
-            <SelectTrigger
-              id="audit-buyer-type"
-              aria-labelledby="audit-buyer-type-label audit-buyer-type"
-              aria-invalid={Boolean(errors.buyerType)}
-            >
-              <SelectValue placeholder="Select buyer type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {buyerTypes.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select buyer type
+            </option>
+            {buyerTypes.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </NativeSelect>
           {errors.buyerType ? (
-            <p className="text-base text-danger">{errors.buyerType}</p>
+            <p
+              id="audit-buyer-type-error"
+              className="text-base text-danger"
+              role="alert"
+            >
+              {errors.buyerType}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -212,31 +212,34 @@ export function CapacityAuditForm({
           >
             Site type
           </label>
-          <Select
-            value={form.siteType}
-            onValueChange={(value) =>
-              setForm((current) => ({ ...current, siteType: value }))
+          <NativeSelect
+            id="audit-site-type"
+            name="siteType"
+            required
+            autoComplete="off"
+            defaultValue=""
+            aria-invalid={Boolean(errors.siteType)}
+            aria-describedby={
+              errors.siteType ? "audit-site-type-error" : undefined
             }
           >
-            <SelectTrigger
-              id="audit-site-type"
-              aria-labelledby="audit-site-type-label audit-site-type"
-              aria-invalid={Boolean(errors.siteType)}
-            >
-              <SelectValue placeholder="Select site type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {siteTypes.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select site type
+            </option>
+            {siteTypes.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </NativeSelect>
           {errors.siteType ? (
-            <p className="text-base text-danger">{errors.siteType}</p>
+            <p
+              id="audit-site-type-error"
+              className="text-base text-danger"
+              role="alert"
+            >
+              {errors.siteType}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -247,36 +250,41 @@ export function CapacityAuditForm({
           >
             Desired timeline
           </label>
-          <Select
-            value={form.timeline}
-            onValueChange={(value) =>
-              setForm((current) => ({ ...current, timeline: value }))
+          <NativeSelect
+            id="audit-timeline"
+            name="timeline"
+            required
+            autoComplete="off"
+            defaultValue=""
+            aria-invalid={Boolean(errors.timeline)}
+            aria-describedby={
+              errors.timeline ? "audit-timeline-error" : undefined
             }
           >
-            <SelectTrigger
-              id="audit-timeline"
-              aria-labelledby="audit-timeline-label audit-timeline"
-              aria-invalid={Boolean(errors.timeline)}
-            >
-              <SelectValue placeholder="Select timeline" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {timelineOptions.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select timeline
+            </option>
+            {timelineOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </NativeSelect>
           {errors.timeline ? (
-            <p className="text-base text-danger">{errors.timeline}</p>
+            <p
+              id="audit-timeline-error"
+              className="text-base text-danger"
+              role="alert"
+            >
+              {errors.timeline}
+            </p>
           ) : null}
         </div>
       </div>
       {serverMessage ? (
-        <p className="mt-4 text-base text-danger">{serverMessage}</p>
+        <p className="mt-4 text-base text-danger" role="alert">
+          {serverMessage}
+        </p>
       ) : null}
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-base leading-8 text-muted-foreground">

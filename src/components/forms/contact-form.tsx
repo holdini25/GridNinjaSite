@@ -1,6 +1,6 @@
 "use client"
 
-import { type FormEvent, useMemo, useState } from "react"
+import { type FormEvent, useMemo, useRef, useState } from "react"
 
 import {
   buyerTypes,
@@ -12,17 +12,10 @@ import {
 import { contactLeadSchema, mapZodErrors } from "@/lib/validators"
 import type { LeadIntent } from "@/types/site"
 
+import { buildContactLeadCandidate } from "@/components/forms/lead-form-data"
+import { NativeSelect } from "@/components/forms/native-select"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 
 type ContactFormProps = {
@@ -31,21 +24,7 @@ type ContactFormProps = {
 }
 
 export function ContactForm({ intent, source }: ContactFormProps) {
-  const [form, setForm] = useState({
-    name: "",
-    company: "",
-    role: "",
-    email: "",
-    buyerType: "",
-    siteType: "",
-    timeline: "",
-    constraints: [] as string[],
-    message: "",
-    intent,
-    source,
-    website: "",
-    startedAt: Date.now(),
-  })
+  const startedAt = useRef(Date.now())
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -82,7 +61,12 @@ export function ContactForm({ intent, source }: ContactFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const parsed = contactLeadSchema.safeParse(form)
+    const candidate = buildContactLeadCandidate(new FormData(event.currentTarget), {
+      intent,
+      source,
+      startedAt: startedAt.current,
+    })
+    const parsed = contactLeadSchema.safeParse(candidate)
 
     if (!parsed.success) {
       setErrors(mapZodErrors(parsed))
@@ -121,19 +105,12 @@ export function ContactForm({ intent, source }: ContactFormProps) {
     }
   }
 
-  function toggleConstraint(option: string, checked: boolean | "indeterminate") {
-    setForm((current) => ({
-      ...current,
-      constraints:
-        checked === true
-          ? Array.from(new Set([...current.constraints, option]))
-          : current.constraints.filter((value) => value !== option),
-    }))
-  }
-
   if (submitted) {
     return (
-      <div className="rounded-[1.8rem] border border-border/70 bg-surface p-6">
+      <div
+        className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
+        role="status"
+      >
         <p className="text-sm tracking-[0.28em] text-primary uppercase">
           {intentLabels[intent]}
         </p>
@@ -150,7 +127,8 @@ export function ContactForm({ intent, source }: ContactFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
+      noValidate
+      className="gn-lead-form rounded-[1.8rem] border border-border/70 bg-surface p-6"
     >
       <div className="hidden" aria-hidden="true">
         <label htmlFor="contact-website">Website</label>
@@ -159,10 +137,6 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           name="website"
           tabIndex={-1}
           autoComplete="off"
-          value={form.website}
-          onChange={(event) =>
-            setForm((current) => ({ ...current, website: event.target.value }))
-          }
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -172,13 +146,17 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           </label>
           <Input
             id="contact-name"
-            value={form.name}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, name: event.target.value }))
-            }
+            name="name"
+            required
+            autoComplete="name"
             aria-invalid={Boolean(errors.name)}
+            aria-describedby={errors.name ? "contact-name-error" : undefined}
           />
-          {errors.name ? <p className="text-base text-danger">{errors.name}</p> : null}
+          {errors.name ? (
+            <p id="contact-name-error" className="text-base text-danger" role="alert">
+              {errors.name}
+            </p>
+          ) : null}
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="contact-company" className="text-base text-foreground">
@@ -186,14 +164,16 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           </label>
           <Input
             id="contact-company"
-            value={form.company}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, company: event.target.value }))
-            }
+            name="company"
+            required
+            autoComplete="organization"
             aria-invalid={Boolean(errors.company)}
+            aria-describedby={errors.company ? "contact-company-error" : undefined}
           />
           {errors.company ? (
-            <p className="text-base text-danger">{errors.company}</p>
+            <p id="contact-company-error" className="text-base text-danger" role="alert">
+              {errors.company}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -202,13 +182,17 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           </label>
           <Input
             id="contact-role"
-            value={form.role}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, role: event.target.value }))
-            }
+            name="role"
+            required
+            autoComplete="organization-title"
             aria-invalid={Boolean(errors.role)}
+            aria-describedby={errors.role ? "contact-role-error" : undefined}
           />
-          {errors.role ? <p className="text-base text-danger">{errors.role}</p> : null}
+          {errors.role ? (
+            <p id="contact-role-error" className="text-base text-danger" role="alert">
+              {errors.role}
+            </p>
+          ) : null}
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="contact-email" className="text-base text-foreground">
@@ -217,14 +201,19 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           <Input
             id="contact-email"
             type="email"
-            value={form.email}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, email: event.target.value }))
-            }
+            name="email"
+            required
+            autoComplete="email"
+            inputMode="email"
+            autoCapitalize="none"
+            spellCheck={false}
             aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "contact-email-error" : undefined}
           />
           {errors.email ? (
-            <p className="text-base text-danger">{errors.email}</p>
+            <p id="contact-email-error" className="text-base text-danger" role="alert">
+              {errors.email}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -235,31 +224,34 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           >
             Buyer type
           </label>
-          <Select
-            value={form.buyerType}
-            onValueChange={(value) =>
-              setForm((current) => ({ ...current, buyerType: value }))
+          <NativeSelect
+            id="contact-buyer-type"
+            name="buyerType"
+            required
+            autoComplete="off"
+            defaultValue=""
+            aria-invalid={Boolean(errors.buyerType)}
+            aria-describedby={
+              errors.buyerType ? "contact-buyer-type-error" : undefined
             }
           >
-            <SelectTrigger
-              id="contact-buyer-type"
-              aria-labelledby="contact-buyer-type-label contact-buyer-type"
-              aria-invalid={Boolean(errors.buyerType)}
-            >
-              <SelectValue placeholder="Select buyer type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {buyerTypes.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select buyer type
+            </option>
+            {buyerTypes.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </NativeSelect>
           {errors.buyerType ? (
-            <p className="text-base text-danger">{errors.buyerType}</p>
+            <p
+              id="contact-buyer-type-error"
+              className="text-base text-danger"
+              role="alert"
+            >
+              {errors.buyerType}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
@@ -270,31 +262,34 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           >
             Site type
           </label>
-          <Select
-            value={form.siteType}
-            onValueChange={(value) =>
-              setForm((current) => ({ ...current, siteType: value }))
+          <NativeSelect
+            id="contact-site-type"
+            name="siteType"
+            required
+            autoComplete="off"
+            defaultValue=""
+            aria-invalid={Boolean(errors.siteType)}
+            aria-describedby={
+              errors.siteType ? "contact-site-type-error" : undefined
             }
           >
-            <SelectTrigger
-              id="contact-site-type"
-              aria-labelledby="contact-site-type-label contact-site-type"
-              aria-invalid={Boolean(errors.siteType)}
-            >
-              <SelectValue placeholder="Select site type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {siteTypes.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select site type
+            </option>
+            {siteTypes.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </NativeSelect>
           {errors.siteType ? (
-            <p className="text-base text-danger">{errors.siteType}</p>
+            <p
+              id="contact-site-type-error"
+              className="text-base text-danger"
+              role="alert"
+            >
+              {errors.siteType}
+            </p>
           ) : null}
         </div>
         <div className="flex flex-col gap-2 sm:col-span-2">
@@ -305,54 +300,75 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           >
             Desired timeline
           </label>
-          <Select
-            value={form.timeline}
-            onValueChange={(value) =>
-              setForm((current) => ({ ...current, timeline: value }))
+          <NativeSelect
+            id="contact-timeline"
+            name="timeline"
+            required
+            autoComplete="off"
+            defaultValue=""
+            aria-invalid={Boolean(errors.timeline)}
+            aria-describedby={
+              errors.timeline ? "contact-timeline-error" : undefined
             }
           >
-            <SelectTrigger
-              id="contact-timeline"
-              aria-labelledby="contact-timeline-label contact-timeline"
-              aria-invalid={Boolean(errors.timeline)}
-            >
-              <SelectValue placeholder="Select timeline" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {timelineOptions.map((option) => (
-                  <SelectItem key={option} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+            <option value="" disabled>
+              Select timeline
+            </option>
+            {timelineOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </NativeSelect>
           {errors.timeline ? (
-            <p className="text-base text-danger">{errors.timeline}</p>
+            <p
+              id="contact-timeline-error"
+              className="text-base text-danger"
+              role="alert"
+            >
+              {errors.timeline}
+            </p>
           ) : null}
         </div>
       </div>
 
-      <fieldset className="mt-6">
+      <fieldset
+        className="mt-6"
+        aria-required="true"
+        aria-invalid={Boolean(errors.constraints)}
+        aria-describedby={
+          errors.constraints ? "contact-constraints-error" : undefined
+        }
+      >
         <legend className="text-base text-foreground">Current constraints</legend>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {constraintOptions.map((option) => (
+          {constraintOptions.map((option, index) => (
             <label
               key={option}
+              htmlFor={`contact-constraint-${index}`}
               className="flex items-start gap-3 rounded-[1rem] border border-border/70 bg-surface-2 px-4 py-4 text-base text-muted-foreground"
             >
-              <Checkbox
-                checked={form.constraints.includes(option)}
-                onCheckedChange={(checked) => toggleConstraint(option, checked)}
+              <input
+                id={`contact-constraint-${index}`}
+                type="checkbox"
+                name="constraints"
+                value={option}
+                autoComplete="off"
                 aria-invalid={Boolean(errors.constraints)}
+                className="mt-1 size-4 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               />
               <span>{option}</span>
             </label>
           ))}
         </div>
         {errors.constraints ? (
-          <p className="mt-3 text-base text-danger">{errors.constraints}</p>
+          <p
+            id="contact-constraints-error"
+            className="mt-3 text-base text-danger"
+            role="alert"
+          >
+            {errors.constraints}
+          </p>
         ) : null}
       </fieldset>
 
@@ -362,20 +378,24 @@ export function ContactForm({ intent, source }: ContactFormProps) {
         </label>
         <Textarea
           id="contact-message"
-          value={form.message}
-          onChange={(event) =>
-            setForm((current) => ({ ...current, message: event.target.value }))
-          }
+          name="message"
+          required
+          autoComplete="off"
           aria-invalid={Boolean(errors.message)}
+          aria-describedby={errors.message ? "contact-message-error" : undefined}
           className="min-h-36"
         />
         {errors.message ? (
-          <p className="text-base text-danger">{errors.message}</p>
+          <p id="contact-message-error" className="text-base text-danger" role="alert">
+            {errors.message}
+          </p>
         ) : null}
       </div>
 
       {serverMessage ? (
-        <p className="mt-4 text-base text-danger">{serverMessage}</p>
+        <p className="mt-4 text-base text-danger" role="alert">
+          {serverMessage}
+        </p>
       ) : null}
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

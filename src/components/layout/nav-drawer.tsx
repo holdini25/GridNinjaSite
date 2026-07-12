@@ -29,12 +29,12 @@ export function NavDrawer() {
       : pathname === href || pathname.startsWith(`${href}/`)
 
   return (
-    <Sheet>
+    <Sheet key={pathname}>
       <SheetTrigger asChild>
         <Button
           variant="outline"
           size="icon-sm"
-          className="border-border/80 bg-surface/80 text-foreground lg:hidden"
+          className="border-border/80 bg-surface/80 text-foreground xl:hidden"
         >
           <MenuIcon />
           <span className="sr-only">Open navigation</span>
@@ -42,7 +42,7 @@ export function NavDrawer() {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="border-border bg-background/98 px-0 text-foreground"
+        className="overflow-hidden border-border bg-background/98 px-0 text-foreground"
       >
         <SheetHeader className="border-b border-border/70">
           <SheetTitle>
@@ -56,7 +56,10 @@ export function NavDrawer() {
             Runtime-assured virtual capacity for AI data centers.
           </SheetDescription>
         </SheetHeader>
-        <div className="flex flex-col gap-6 px-4 py-6">
+        <nav
+          aria-label="Primary"
+          className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto overscroll-contain px-4 pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
+        >
           {navItems.map((item) => {
             const itemActive = item.children
               ? item.children.some((child) => isPathActive(child.href))
@@ -101,15 +104,17 @@ export function NavDrawer() {
               </div>
             )
           })}
-          <Button asChild size="lg" className="w-full">
-            <Link
-              href={buildLeadHref("capacity-audit", "mobile-nav")}
-              data-gn-event="mobile-nav-capacity-audit"
-            >
-              Request Capacity Audit
-            </Link>
-          </Button>
-        </div>
+          <SheetClose asChild>
+            <Button asChild size="lg" className="w-full">
+              <Link
+                href={buildLeadHref("capacity-audit", "mobile-nav")}
+                data-gn-event="mobile-nav-capacity-audit"
+              >
+                Request Capacity Audit
+              </Link>
+            </Button>
+          </SheetClose>
+        </nav>
       </SheetContent>
     </Sheet>
   )

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { useEffect, useEffectEvent, useState } from "react"
+import { useEffect, useEffectEvent, useRef, useState } from "react"
 
 import { ChevronDownIcon } from "lucide-react"
 
@@ -14,10 +14,21 @@ import { GridNinjaLogo } from "@/components/brand/gridninja-logo"
 import { NavDrawer } from "@/components/layout/nav-drawer"
 import { Button } from "@/components/ui/button"
 
+const getSubmenuId = (label: string) =>
+  `primary-nav-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
+
 export function SiteHeader() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
-  const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [openMenu, setOpenMenu] = useState<{
+    label: string
+    pathname: string
+    source: "click" | "hover"
+  } | null>(null)
+  const navRef = useRef<HTMLElement>(null)
+  const menuTriggerRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+  const openMenuLabel =
+    openMenu?.pathname === pathname ? openMenu.label : null
   const isPathActive = (href: string) =>
     href === "/"
       ? pathname === href
@@ -25,6 +36,9 @@ export function SiteHeader() {
 
   const handleScroll = useEffectEvent(() => {
     setScrolled(window.scrollY > 24)
+  })
+  const closeMenusForPathChange = useEffectEvent(() => {
+    setOpenMenu(null)
   })
 
   useEffect(() => {
@@ -35,6 +49,56 @@ export function SiteHeader() {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [])
+
+  useEffect(() => {
+    closeMenusForPathChange()
+  }, [pathname])
+
+  useEffect(() => {
+    if (!openMenuLabel) {
+      return
+    }
+
+    const closeOnOutsidePointerDown = (event: PointerEvent) => {
+      if (!navRef.current?.contains(event.target as Node)) {
+        setOpenMenu(null)
+      }
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsidePointerDown)
+
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsidePointerDown)
+    }
+  }, [openMenuLabel])
+
+  const openMenuOnHover = (label: string) => {
+    setOpenMenu((currentMenu) =>
+      currentMenu?.label === label &&
+      currentMenu.pathname === pathname &&
+      currentMenu.source === "click"
+        ? currentMenu
+        : { label, pathname, source: "hover" }
+    )
+  }
+
+  const toggleMenu = (label: string) => {
+    setOpenMenu((currentMenu) => {
+      const isCurrentMenu =
+        currentMenu?.label === label && currentMenu.pathname === pathname
+
+      if (isCurrentMenu && currentMenu.source === "click") {
+        return null
+      }
+
+      return { label, pathname, source: "click" }
+    })
+  }
+
+  const closeMenuAndRestoreFocus = (label: string) => {
+    setOpenMenu(null)
+    menuTriggerRefs.current[label]?.focus()
+  }
 
   return (
     <header
@@ -55,7 +119,11 @@ export function SiteHeader() {
             textClassName="text-[0.76rem] tracking-[0.16em] sm:text-[0.92rem]"
           />
         </Link>
-        <nav className="hidden items-center gap-7 lg:flex">
+        <nav
+          ref={navRef}
+          aria-label="Primary"
+          className="hidden items-center gap-7 xl:flex"
+        >
           {navItems.map((item) => {
             const itemActive = item.children
               ? item.children.some((child) => isPathActive(child.href))
@@ -65,8 +133,22 @@ export function SiteHeader() {
               <div
                 key={item.label}
                 className="relative"
-                onMouseEnter={() => setOpenMenu(item.label)}
-                onMouseLeave={() => setOpenMenu(null)}
+                onPointerEnter={(event) => {
+                  if (event.pointerType === "mouse") {
+                    openMenuOnHover(item.label)
+                  }
+                }}
+                onPointerLeave={(event) => {
+                  if (event.pointerType === "mouse") {
+                    setOpenMenu((currentMenu) =>
+                      currentMenu?.label === item.label &&
+                      currentMenu.pathname === pathname &&
+                      currentMenu.source === "hover"
+                        ? null
+                        : currentMenu
+                    )
+                  }
+                }}
                 onBlur={(event) => {
                   if (
                     !event.currentTarget.contains(
@@ -78,64 +160,63 @@ export function SiteHeader() {
                 }}
                 onKeyDown={(event) => {
                   if (event.key === "Escape") {
-                    setOpenMenu(null)
+                    event.preventDefault()
+                    event.stopPropagation()
+                    closeMenuAndRestoreFocus(item.label)
                   }
                 }}
               >
                 <button
+                  ref={(node) => {
+                    menuTriggerRefs.current[item.label] = node
+                  }}
                   type="button"
                   className={cn(
                     "flex items-center gap-1 rounded-full px-2.5 py-1.5 text-base text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
                     itemActive && "text-foreground"
                   )}
-                  aria-current={itemActive ? "page" : undefined}
-                  aria-expanded={openMenu === item.label}
-                  aria-haspopup="menu"
-                  onClick={() => setOpenMenu(item.label)}
-                  onFocus={() => setOpenMenu(item.label)}
+                  aria-controls={getSubmenuId(item.label)}
+                  aria-expanded={openMenuLabel === item.label}
+                  onClick={() => toggleMenu(item.label)}
                 >
                   {item.label}
                   <ChevronDownIcon
                     className={cn(
                       "size-4 transition-transform",
-                      openMenu === item.label && "rotate-180"
+                      openMenuLabel === item.label && "rotate-180"
                     )}
+                    aria-hidden="true"
                   />
                 </button>
-                <div
-                  className={cn(
-                    "absolute top-full left-1/2 w-60 -translate-x-1/2 pt-3 transition-all duration-200",
-                    openMenu === item.label
-                      ? "pointer-events-auto translate-y-0 opacity-100"
-                      : "pointer-events-none -translate-y-2 opacity-0"
-                  )}
-                  aria-hidden={openMenu !== item.label}
-                  role="menu"
-                >
-                  <div className="space-y-1 rounded-3xl border border-border/80 bg-surface/95 p-3 shadow-[0_32px_120px_-48px_rgba(7,17,26,0.82)]">
-                    {item.children.map((child) => {
-                      const childActive = isPathActive(child.href)
+                {openMenuLabel === item.label ? (
+                  <div className="absolute top-full left-1/2 w-60 -translate-x-1/2 pt-3">
+                    <ul
+                      id={getSubmenuId(item.label)}
+                      className="space-y-1 rounded-3xl border border-border/80 bg-surface/95 p-3 shadow-[0_32px_120px_-48px_rgba(7,17,26,0.82)]"
+                    >
+                      {item.children.map((child) => {
+                        const childActive = isPathActive(child.href)
 
-                      return (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          aria-current={childActive ? "page" : undefined}
-                          role="menuitem"
-                          tabIndex={openMenu === item.label ? undefined : -1}
-                          className={cn(
-                            "block rounded-xl border border-transparent px-4 py-3 text-base text-muted-foreground transition-all hover:border-border/80 hover:bg-surface-2 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
-                            childActive &&
-                              "border-border/80 bg-surface-2 text-foreground"
-                          )}
-                          onClick={() => setOpenMenu(null)}
-                        >
-                          {child.label}
-                        </Link>
-                      )
-                    })}
+                        return (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              aria-current={childActive ? "page" : undefined}
+                              className={cn(
+                                "block rounded-xl border border-transparent px-4 py-3 text-base text-muted-foreground transition-all hover:border-border/80 hover:bg-surface-2 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
+                                childActive &&
+                                  "border-border/80 bg-surface-2 text-foreground"
+                              )}
+                              onClick={() => setOpenMenu(null)}
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        )
+                      })}
+                    </ul>
                   </div>
-                </div>
+                ) : null}
               </div>
             ) : (
               <Link

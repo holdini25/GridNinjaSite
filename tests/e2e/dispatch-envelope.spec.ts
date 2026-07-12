@@ -91,18 +91,17 @@ test.describe("dispatch envelope page", () => {
         name: "Platform",
         exact: true,
       })
-      const dispatchMenuitem = header.getByRole("menuitem", {
+      const dispatchLink = header.getByRole("link", {
         name: "Dispatch Envelope",
         exact: true,
       })
 
-      await expect(platformMenu).toHaveAttribute("aria-current", "page")
       await platformMenu.hover()
-      await expect(dispatchMenuitem).toBeVisible()
-      await expect(dispatchMenuitem).toHaveAttribute("aria-current", "page")
+      await expect(dispatchLink).toBeVisible()
+      await expect(dispatchLink).toHaveAttribute("aria-current", "page")
 
-      await dispatchMenuitem.hover()
-      await expect(dispatchMenuitem).toBeVisible()
+      await dispatchLink.hover()
+      await expect(dispatchLink).toBeVisible()
 
       const solutionsMenu = header.getByRole("button", {
         name: "Solutions",
@@ -110,15 +109,15 @@ test.describe("dispatch envelope page", () => {
       })
 
       await solutionsMenu.hover()
-      await expect(dispatchMenuitem).toBeHidden()
+      await expect(dispatchLink).toBeHidden()
       await expect(
-        header.getByRole("menuitem", { name: "AI Cloud", exact: true })
+        header.getByRole("link", { name: "AI Cloud", exact: true })
       ).toBeVisible()
 
-      await platformMenu.focus()
-      await expect(dispatchMenuitem).toBeVisible()
+      await platformMenu.click()
+      await expect(dispatchLink).toBeVisible()
       await header.getByRole("link", { name: "Proof & Trust" }).focus()
-      await expect(dispatchMenuitem).toBeHidden()
+      await expect(dispatchLink).toBeHidden()
     }
     expect(errors).toEqual([])
   })

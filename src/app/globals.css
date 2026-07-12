@@ -133,6 +133,37 @@
 }
 
 @layer components {
+  .gn-lead-form {
+    color-scheme: dark;
+  }
+
+  .gn-lead-form select option {
+    background: var(--surface-2);
+    color: var(--foreground);
+  }
+
+  .gn-lead-form input:autofill,
+  .gn-lead-form textarea:autofill,
+  .gn-lead-form select:autofill,
+  .gn-lead-form input:-webkit-autofill,
+  .gn-lead-form textarea:-webkit-autofill,
+  .gn-lead-form select:-webkit-autofill {
+    box-shadow: 0 0 0 1000px var(--surface-2) inset;
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-2) inset;
+    -webkit-text-fill-color: var(--foreground);
+    caret-color: var(--foreground);
+  }
+
+  .gn-lead-form input:autofill:focus-visible,
+  .gn-lead-form textarea:autofill:focus-visible,
+  .gn-lead-form select:autofill:focus-visible,
+  .gn-lead-form input:-webkit-autofill:focus-visible,
+  .gn-lead-form textarea:-webkit-autofill:focus-visible,
+  .gn-lead-form select:-webkit-autofill:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
   .gn-panel {
     position: relative;
     min-width: 0;
