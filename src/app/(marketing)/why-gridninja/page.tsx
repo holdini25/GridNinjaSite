@@ -4,10 +4,10 @@ import { ArrowRightIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { ContextualShadowCTA } from "@/components/marketing/contextual-shadow-cta"
-import { OfficialSourceDrawer } from "@/components/marketing/official-source-drawer"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { WhyGridNinjaChapterNav } from "@/components/marketing/why-gridninja-chapter-nav"
 import { WhyGridNinjaComparisonExplorer } from "@/components/marketing/why-gridninja-comparison-explorer"
+import { WhyGridNinjaCompetitorProfiles } from "@/components/marketing/why-gridninja-competitor-profiles"
 import { WhyGridNinjaHeroTrace } from "@/components/marketing/why-gridninja-hero-trace"
 import { WhyGridNinjaPersonaTabs } from "@/components/marketing/why-gridninja-persona-tabs"
 import { WhyGridNinjaProofRoom } from "@/components/marketing/why-gridninja-proof-room"
@@ -17,7 +17,6 @@ import { WhyGridNinjaScenarioSimulator } from "@/components/marketing/why-gridni
 import { WhyGridNinjaSourceDrawerHost } from "@/components/marketing/why-gridninja-source-drawer-host"
 import { SectionShell } from "@/components/layout/section-shell"
 import {
-  type WhyGridNinjaSourceRecord,
   whyGridNinjaBoundary,
   whyGridNinjaChapters,
   whyGridNinjaComparisonRows,
@@ -46,10 +45,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function WhyGridNinjaPage() {
-  const sourceMap = new Map(
-    whyGridNinjaSourceRecords.map((source) => [source.id, source])
-  )
-
   return (
     <div className="relative isolate overflow-x-clip bg-[radial-gradient(circle_at_82%_4%,rgba(97,228,255,0.07),transparent_28rem),radial-gradient(circle_at_8%_16%,rgba(255,159,26,0.055),transparent_26rem)] pb-24">
       <WhyGridNinjaChapterNav chapters={whyGridNinjaChapters} />
@@ -265,66 +260,10 @@ export default function WhyGridNinjaPage() {
               headline="Respect the strengths. Define the responsibility."
               body="Each profile separates what official materials clearly establish from GridNinja's narrower acceptance-layer thesis."
             />
-            <div className="grid gap-5 lg:grid-cols-2">
-              {whyGridNinjaCompetitorProfiles.map((profile, index) => (
-                <details
-                  key={profile.id}
-                  className="gn-panel group"
-                  open={index === 0}
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 focus-visible:ring-3 focus-visible:ring-ring/45 [&::-webkit-details-marker]:hidden">
-                    <div>
-                      <h3 className="text-[1.45rem] font-medium text-foreground">
-                        {profile.name}
-                      </h3>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {profile.category}
-                      </p>
-                    </div>
-                    <span className="rounded-full border border-proof-cyan/30 px-3 py-1.5 font-mono text-xs text-proof-cyan">
-                      {profile.sourceIds.length} sources
-                    </span>
-                  </summary>
-                  <div className="grid gap-4 px-6 pb-6 md:grid-cols-2">
-                    <ProfileBlock
-                      label="What public materials show"
-                      value={profile.publicMaterialsShow}
-                    />
-                    <ProfileBlock
-                      label="GridNinja distinction"
-                      value={profile.gridNinjaDistinction}
-                    />
-                    <ProfileBlock label="Overlap" value={profile.overlap} />
-                    <ProfileBlock
-                      label="What GridNinja must prove"
-                      value={profile.gridNinjaMustProve}
-                    />
-                  </div>
-                  <div className="flex flex-wrap gap-2 border-t border-border/70 px-6 py-4">
-                    {profile.sourceIds
-                      .map((sourceId) => sourceMap.get(sourceId))
-                      .filter(
-                        (source): source is WhyGridNinjaSourceRecord =>
-                          Boolean(source)
-                      )
-                      .map((source) => (
-                        <OfficialSourceDrawer
-                          key={source.id}
-                          source={source}
-                          trigger={
-                            <button
-                              type="button"
-                              className="min-h-11 rounded-full border border-proof-cyan/30 px-3 py-1.5 font-mono text-xs text-proof-cyan transition-colors hover:bg-proof-cyan/10 focus-visible:ring-3 focus-visible:ring-ring/45"
-                            >
-                              {source.organization}
-                            </button>
-                          }
-                        />
-                      ))}
-                  </div>
-                </details>
-              ))}
-            </div>
+            <WhyGridNinjaCompetitorProfiles
+              profiles={whyGridNinjaCompetitorProfiles}
+              sources={whyGridNinjaSourceRecords}
+            />
           </div>
         </SectionShell>
 
@@ -532,17 +471,6 @@ function BoundaryColumn({
           </div>
         ))}
       </div>
-    </div>
-  )
-}
-
-function ProfileBlock({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-[1rem] border border-border/70 bg-background/45 p-4">
-      <p className="font-mono text-xs tracking-[0.16em] text-muted-foreground uppercase">
-        {label}
-      </p>
-      <p className="mt-2 text-base leading-7 text-muted-foreground">{value}</p>
     </div>
   )
 }

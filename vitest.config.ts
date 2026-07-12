@@ -9,9 +9,13 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["tests/unit/**/*.test.ts", "tests/unit/**/*.spec.ts"],
+    include: [
+      "tests/unit/**/*.test.{ts,tsx}",
+      "tests/unit/**/*.spec.{ts,tsx}",
+    ],
     environment: "jsdom",
     globals: true,
+    setupFiles: ["./tests/setup.ts"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html", "lcov"],

@@ -69,15 +69,45 @@ export type WhyGridNinjaComparisonRow = {
   gridNinja: WhyGridNinjaComparisonCell
 }
 
+export type WhyGridNinjaResponsibilityStageId =
+  | "observe"
+  | "model"
+  | "propose"
+  | "verify"
+  | "rta"
+  | "account"
+  | "prove"
+
+export type WhyGridNinjaCompetitorClaimKind =
+  | "public-materials"
+  | "shared-terrain"
+  | "gridninja-responsibility"
+  | "proof-threshold"
+
+export type WhyGridNinjaCompetitorClaim = {
+  eyebrow: string
+  body: string
+  kind: WhyGridNinjaCompetitorClaimKind
+  sourceIds: readonly string[]
+}
+
 export type WhyGridNinjaCompetitorProfile = {
   id: string
   name: string
   category: string
-  sourceIds: string[]
-  publicMaterialsShow: string
-  gridNinjaDistinction: string
-  overlap: string
-  gridNinjaMustProve: string
+  summary: string
+  tags: readonly string[]
+  claims: {
+    publicMaterials: WhyGridNinjaCompetitorClaim
+    sharedTerrain: WhyGridNinjaCompetitorClaim
+    gridNinjaResponsibility: WhyGridNinjaCompetitorClaim
+    proofThreshold: WhyGridNinjaCompetitorClaim
+  }
+  responsibilityMap: {
+    profile: readonly WhyGridNinjaResponsibilityStageId[]
+    shared: readonly WhyGridNinjaResponsibilityStageId[]
+    gridNinja: readonly WhyGridNinjaResponsibilityStageId[]
+  }
 }
 
 export type WhyGridNinjaScenario = {
@@ -434,6 +464,45 @@ export const whyGridNinjaSourceRecords: WhyGridNinjaSourceRecord[] = [
     gridNinjaInterpretation: "Treat power monitoring as a high-value input into the acceptance boundary, not as the accepted MW contract.",
     confidence: "High",
   },
+  {
+    id: "gridninja-proof-standard",
+    organization: "GridNinja",
+    title: "Proof Before Autonomy standard",
+    sourceType: "GridNinja public product standard",
+    url: "/proof",
+    retrievalDate: "July 11, 2026",
+    officialClaim: "GridNinja describes a staged proof path built around read-only operation, runtime assurance, replayable evidence, and bounded autonomy.",
+    establishes: "GridNinja's stated responsibility is to turn a capacity claim into a policy-bound acceptance decision with evidence, rather than to replace every system that produces an input.",
+    doesNotEstablish: "This internal source does not establish a competitor's public capability or validate a GridNinja claim for every site.",
+    gridNinjaInterpretation: "Use this source only for GridNinja responsibility and proof-threshold claims, never as evidence about a competitor.",
+    confidence: "High",
+  },
+  {
+    id: "enel-x-demand-response",
+    organization: "Enel X",
+    title: "Demand Response",
+    sourceType: "Official product page",
+    url: "https://www.enelx.com/uk/en/demand-response",
+    retrievalDate: "July 11, 2026",
+    officialClaim: "Enel X publicly describes demand-response enrolment, virtual-power-plant participation, real-time dispatch operations, and payment for flexible commercial and industrial energy use.",
+    establishes: "Market access, programme enrolment, dispatch operations, flexibility measurement, and commercial value are credible public responsibilities for a demand-response provider.",
+    doesNotEstablish: "This representative source does not establish identical capabilities for every market-access provider or a GridNinja-style inside-the-fence acceptance contract.",
+    gridNinjaInterpretation: "Treat market access as a partner interface; GridNinja must still verify that a site-side response is feasible, SLA-preserving, and proof-ready before it is offered externally.",
+    confidence: "High",
+  },
+  {
+    id: "eaton-brightlayer-dcim",
+    organization: "Eaton",
+    title: "Brightlayer DCIM software",
+    sourceType: "Official product page",
+    url: "https://www.eaton.com/us/en-us/digital/brightlayer/brightlayer-data-centers-suite/data-center-performance-management-software.html",
+    retrievalDate: "July 11, 2026",
+    officialClaim: "Eaton publicly describes Brightlayer DCIM as vendor-neutral monitoring and management for data-center power, space, cooling, and IT and OT infrastructure.",
+    establishes: "Critical-infrastructure suites can provide monitoring, management, lifecycle context, capacity visibility, and integration across facility systems.",
+    doesNotEstablish: "This representative source does not establish a vendor-neutral GridNinja acceptance layer or equivalent capabilities across every hardware and infrastructure vendor.",
+    gridNinjaInterpretation: "Treat hardware and infrastructure suites as essential telemetry and constraint inputs; GridNinja's role is the cross-domain proof-gated decision above them.",
+    confidence: "High",
+  },
 ]
 
 export const whyGridNinjaComparisonRows: WhyGridNinjaComparisonRow[] = [
@@ -503,48 +572,325 @@ export const whyGridNinjaComparisonRows: WhyGridNinjaComparisonRow[] = [
   },
 ]
 
-export const whyGridNinjaCompetitorProfiles: WhyGridNinjaCompetitorProfile[] = [
+export const whyGridNinjaResponsibilityStages = [
+  {
+    id: "observe",
+    shortLabel: "Observe",
+    fullLabel: "Observe site and grid state",
+  },
+  {
+    id: "model",
+    shortLabel: "Model",
+    fullLabel: "Model or simulate behavior",
+  },
+  {
+    id: "propose",
+    shortLabel: "Propose",
+    fullLabel: "Generate candidate actions",
+  },
+  {
+    id: "verify",
+    shortLabel: "Verify",
+    fullLabel: "Verify feasibility and constraints",
+  },
+  {
+    id: "rta",
+    shortLabel: "RTA",
+    fullLabel: "Allow, repair, reject, or no-proof",
+  },
+  {
+    id: "account",
+    shortLabel: "Account",
+    fullLabel: "Account for accepted headroom",
+  },
+  {
+    id: "prove",
+    shortLabel: "Prove",
+    fullLabel: "Emit replay and proof evidence",
+  },
+] as const satisfies readonly {
+  id: WhyGridNinjaResponsibilityStageId
+  shortLabel: string
+  fullLabel: string
+}[]
+
+export const whyGridNinjaCompetitorProfiles = [
   {
     id: "emerald-ai",
     name: "Emerald AI",
     category: "Grid-facing AI flexibility and orchestration",
-    sourceIds: ["emerald-home", "emerald-svp-pilot"],
-    publicMaterialsShow: "Grid connectivity, workload and on-site energy orchestration, fleet flexibility, digital-twin modeling, and auditable M&V.",
-    gridNinjaDistinction: "Site-local acceptance: constraint verification, four-state RTA, no-proof, receipts, accepted-headroom accounting, and replay evidence.",
-    overlap: "Data-center flexibility, workload coordination, measurement, and grid-facing value.",
-    gridNinjaMustProve: "Cross-domain shadow replay, reserve-floor traces, operator-reviewed ledgers, and stable replay evidence.",
+    summary:
+      "A credible grid-flexibility profile. GridNinja should distinguish itself through site-local acceptance, runtime assurance, and proof-rooted headroom accounting.",
+    tags: ["Grid flexibility", "M&V", "Workload modulation"],
+    claims: {
+      publicMaterials: {
+        eyebrow: "What public materials show",
+        body: "Grid connectivity, workload and on-site energy orchestration, fleet flexibility, digital-twin modeling, and auditable measurement and verification.",
+        kind: "public-materials",
+        sourceIds: ["emerald-home", "emerald-svp-pilot"],
+      },
+      sharedTerrain: {
+        eyebrow: "Shared terrain",
+        body: "Data-center flexibility, workload coordination, measurement, and grid-facing value.",
+        kind: "shared-terrain",
+        sourceIds: ["emerald-home"],
+      },
+      gridNinjaResponsibility: {
+        eyebrow: "GridNinja responsibility",
+        body: "Site-local acceptance: deterministic constraint verification, four-state runtime assurance, no-proof exits, accepted-headroom accounting, receipts, and replay evidence.",
+        kind: "gridninja-responsibility",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+      proofThreshold: {
+        eyebrow: "Proof GridNinja must produce",
+        body: "Cross-domain Shadow Mode replay, reserve-floor traces, operator-reviewed ledgers, stable proof roots, and examples where facility constraints require repair or refusal.",
+        kind: "proof-threshold",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+    },
+    responsibilityMap: {
+      profile: ["observe"],
+      shared: ["model", "propose"],
+      gridNinja: ["verify", "rta", "account", "prove"],
+    },
   },
   {
     id: "phaidra",
     name: "Phaidra",
     category: "AI-operated power, cooling, and workload systems",
-    sourceIds: ["phaidra-home", "phaidra-factory"],
-    publicMaterialsShow: "AI agents, cooling and thermal stability, workload-related AI factory operations, and greater useful compute outcomes.",
-    gridNinjaDistinction: "Capacity acceptance and proof rather than broad infrastructure optimization claims.",
-    overlap: "Cross-domain AI-factory operations and capacity-related outcomes.",
-    gridNinjaMustProve: "Incremental accepted MW, binding constraints, SLA preservation, and proof packs.",
+    summary:
+      "A strong thermal and AI-control profile. GridNinja should lead with proof-adjusted usable capacity rather than an efficiency-only comparison.",
+    tags: ["Thermal AI", "Cooling", "AI operations"],
+    claims: {
+      publicMaterials: {
+        eyebrow: "What public materials show",
+        body: "AI agents, cooling and thermal stability, workload-related AI-factory operations, and greater useful compute outcomes.",
+        kind: "public-materials",
+        sourceIds: ["phaidra-home", "phaidra-factory"],
+      },
+      sharedTerrain: {
+        eyebrow: "Shared terrain",
+        body: "Cross-domain AI-factory operations, capacity-related outcomes, and workload performance preservation.",
+        kind: "shared-terrain",
+        sourceIds: ["phaidra-home"],
+      },
+      gridNinjaResponsibility: {
+        eyebrow: "GridNinja responsibility",
+        body: "Virtual capacity rather than PUE: usable MW under power, thermal, water, workload, reserve, trust, policy, and SLA constraints with final solver and runtime-assurance authority.",
+        kind: "gridninja-responsibility",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+      proofThreshold: {
+        eyebrow: "Proof GridNinja must produce",
+        body: "Incremental safe MW or protected GPU-hours attributable to coordinated actions, with margin traces, runtime-assurance outcomes, and SLA-preserving replay evidence.",
+        kind: "proof-threshold",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+    },
+    responsibilityMap: {
+      profile: ["observe"],
+      shared: ["model", "propose"],
+      gridNinja: ["verify", "rta", "account", "prove"],
+    },
   },
   {
     id: "schneider-etap-nvidia",
     name: "Schneider / ETAP / NVIDIA",
     category: "Grid-to-chip design and digital twins",
-    sourceIds: ["schneider-etap-ai-factory", "nvidia-dsx-blueprint"],
-    publicMaterialsShow: "Electrical, mechanical, thermal, and operational digital-twin modeling for design, simulation, and what-if analysis.",
-    gridNinjaDistinction: "Use twin outputs as inputs to current-state, policy-bound runtime acceptance and replay.",
-    overlap: "Constraint understanding, simulation context, and AI-factory planning.",
-    gridNinjaMustProve: "Twin adapters, runtime parity, policy traces, receipts, and deterministic replay.",
+    summary:
+      "A strong design and simulation ecosystem. GridNinja should integrate with twin outputs while owning runtime acceptance, policy, and proof.",
+    tags: ["Digital twin", "Grid-to-chip", "Reference design"],
+    claims: {
+      publicMaterials: {
+        eyebrow: "What public materials show",
+        body: "Electrical, mechanical, thermal, and operational digital-twin modeling for design, simulation, and what-if analysis.",
+        kind: "public-materials",
+        sourceIds: ["schneider-etap-ai-factory", "nvidia-dsx-blueprint"],
+      },
+      sharedTerrain: {
+        eyebrow: "Shared terrain",
+        body: "Constraint understanding, simulation context, and AI-factory planning.",
+        kind: "shared-terrain",
+        sourceIds: ["schneider-etap-ai-factory", "nvidia-dsx-blueprint"],
+      },
+      gridNinjaResponsibility: {
+        eyebrow: "GridNinja responsibility",
+        body: "Treat digital-twin outputs as inputs to current-state, policy-bound runtime acceptance, not as the final authority on a capacity claim.",
+        kind: "gridninja-responsibility",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+      proofThreshold: {
+        eyebrow: "Proof GridNinja must produce",
+        body: "Twin adapters, runtime parity, policy traces, receipts, and deterministic replay that an operator can inspect.",
+        kind: "proof-threshold",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+    },
+    responsibilityMap: {
+      profile: ["observe"],
+      shared: ["model"],
+      gridNinja: ["propose", "verify", "rta", "account", "prove"],
+    },
   },
   {
     id: "sunbird-dcim",
     name: "Sunbird / DCIM",
     category: "Infrastructure inventory, capacity, and monitoring",
-    sourceIds: ["sunbird-capacity", "sunbird-power"],
-    publicMaterialsShow: "Planning, provisioning, capacity, power monitoring, topology views, and multi-resource infrastructure context.",
-    gridNinjaDistinction: "Consume the infrastructure record and produce a policy-bound capacity acceptance decision.",
-    overlap: "Topology, capacity context, telemetry, and operator workflows.",
-    gridNinjaMustProve: "DCIM adapter, topology reconciliation, and accepted-headroom lineage.",
+    summary:
+      "A trusted observability and planning substrate. GridNinja should present as the proof-gated acceptance layer above DCIM, not as a replacement dashboard.",
+    tags: ["Monitoring", "Inventory", "Capacity planning"],
+    claims: {
+      publicMaterials: {
+        eyebrow: "What public materials show",
+        body: "Planning, provisioning, capacity, power monitoring, topology views, and multi-resource infrastructure context.",
+        kind: "public-materials",
+        sourceIds: ["sunbird-capacity", "sunbird-power"],
+      },
+      sharedTerrain: {
+        eyebrow: "Shared terrain",
+        body: "Topology, capacity context, telemetry, and operator workflows.",
+        kind: "shared-terrain",
+        sourceIds: ["sunbird-capacity"],
+      },
+      gridNinjaResponsibility: {
+        eyebrow: "GridNinja responsibility",
+        body: "Consume the infrastructure record and produce a policy-bound capacity acceptance decision with binding constraints, margins, and replay evidence.",
+        kind: "gridninja-responsibility",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+      proofThreshold: {
+        eyebrow: "Proof GridNinja must produce",
+        body: "A DCIM adapter, topology reconciliation, and accepted-headroom lineage that preserves local system authority.",
+        kind: "proof-threshold",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+    },
+    responsibilityMap: {
+      profile: ["model"],
+      shared: ["observe"],
+      gridNinja: ["propose", "verify", "rta", "account", "prove"],
+    },
   },
-]
+  {
+    id: "market-access-aggregators",
+    name: "Market-access aggregators",
+    category: "Demand response, virtual power plants, and market access",
+    summary:
+      "A mature external-market layer. GridNinja should partner beneath it as the site-side source of safe, verified flexibility envelopes.",
+    tags: ["Market access", "Demand response", "Settlement"],
+    claims: {
+      publicMaterials: {
+        eyebrow: "What public materials show",
+        body: "Representative demand-response material describes programme enrolment, virtual-power-plant participation, dispatch operations, flexibility measurement, and commercial value.",
+        kind: "public-materials",
+        sourceIds: ["enel-x-demand-response"],
+      },
+      sharedTerrain: {
+        eyebrow: "Shared terrain",
+        body: "Dispatchable flexibility, telemetry, measurement and verification, grid programmes, and economic value.",
+        kind: "shared-terrain",
+        sourceIds: ["enel-x-demand-response"],
+      },
+      gridNinjaResponsibility: {
+        eyebrow: "GridNinja responsibility",
+        body: "Operate inside the fence: determine which workload, cooling, power, storage, and reserve actions are feasible, SLA-preserving, and proof-ready before external dispatch is accepted.",
+        kind: "gridninja-responsibility",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+      proofThreshold: {
+        eyebrow: "Proof GridNinja must produce",
+        body: "A joint pilot showing repeatable MW response, dispatch-envelope accuracy, SLA protection, and automated evidence suitable for partner verification or settlement workflows.",
+        kind: "proof-threshold",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+    },
+    responsibilityMap: {
+      profile: ["observe"],
+      shared: ["propose"],
+      gridNinja: ["verify", "rta", "account", "prove"],
+    },
+  },
+  {
+    id: "hardware-infrastructure-suites",
+    name: "Hardware & infrastructure suites",
+    category: "Power, cooling, EPMS, UPS, and lifecycle systems",
+    summary:
+      "A trusted installed-base and service-channel category. GridNinja should be the vendor-neutral assurance overlay across mixed fleets.",
+    tags: ["Installed base", "UPS / EPMS", "Lifecycle service"],
+    claims: {
+      publicMaterials: {
+        eyebrow: "What public materials show",
+        body: "Representative infrastructure-suite material covers vendor-neutral monitoring and management of power, space, cooling, and IT and OT assets.",
+        kind: "public-materials",
+        sourceIds: ["eaton-brightlayer-dcim"],
+      },
+      sharedTerrain: {
+        eyebrow: "Shared terrain",
+        body: "Power hardware, cooling systems, site telemetry, automation, and critical-facility operations.",
+        kind: "shared-terrain",
+        sourceIds: ["eaton-brightlayer-dcim"],
+      },
+      gridNinjaResponsibility: {
+        eyebrow: "GridNinja responsibility",
+        body: "Act as the neutral assurance layer across mixed UPS, cooling, storage, generator, workload, and telemetry ecosystems with no rip-and-replace requirement.",
+        kind: "gridninja-responsibility",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+      proofThreshold: {
+        eyebrow: "Proof GridNinja must produce",
+        body: "Mixed-vendor orchestration in Shadow Mode or advisory mode with deterministic safety outcomes, adapter qualification evidence, and auditable proof artifacts.",
+        kind: "proof-threshold",
+        sourceIds: ["gridninja-proof-standard"],
+      },
+    },
+    responsibilityMap: {
+      profile: ["propose"],
+      shared: ["observe", "model"],
+      gridNinja: ["verify", "rta", "account", "prove"],
+    },
+  },
+] as const satisfies readonly WhyGridNinjaCompetitorProfile[]
+
+export function validateWhyGridNinjaCompetitorProfiles(
+  profiles: readonly WhyGridNinjaCompetitorProfile[] = whyGridNinjaCompetitorProfiles,
+  sources: readonly WhyGridNinjaSourceRecord[] = whyGridNinjaSourceRecords
+): void {
+  if (profiles.length < 1 || profiles.length > 6) {
+    throw new Error("Competitor profiles must contain between one and six entries")
+  }
+
+  const profileIds = new Set<string>()
+  const sourceIds = new Set(sources.map((source) => source.id))
+
+  for (const profile of profiles) {
+    if (profileIds.has(profile.id)) {
+      throw new Error(`Duplicate competitor profile id: ${profile.id}`)
+    }
+    profileIds.add(profile.id)
+
+    for (const [claimKey, claim] of Object.entries(profile.claims)) {
+      if (!claim.body.trim()) {
+        throw new Error(`${profile.id}.${claimKey}: claim body cannot be empty`)
+      }
+
+      if (claim.sourceIds.length < 1) {
+        throw new Error(
+          `${profile.id}.${claimKey}: at least one source id is required`
+        )
+      }
+
+      for (const sourceId of claim.sourceIds) {
+        if (!sourceIds.has(sourceId)) {
+          throw new Error(
+            `${profile.id}.${claimKey}: unknown source id ${sourceId}`
+          )
+        }
+      }
+    }
+  }
+}
+
+validateWhyGridNinjaCompetitorProfiles()
 
 export const whyGridNinjaScenarios: WhyGridNinjaScenario[] = [
   {
