@@ -33,6 +33,11 @@ export default defineConfig({
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 180_000,
+        env: {
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY:
+            process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ??
+            "1x00000000000000000000AA",
+        },
       },
   projects: [
     {
@@ -69,7 +74,7 @@ export default defineConfig({
     {
       name: "webkit-mobile",
       use: {
-        ...devices["iPhone 13"],
+        ...devices["iPhone 15"],
       },
     },
   ],

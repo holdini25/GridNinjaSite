@@ -40,7 +40,35 @@ jobs:
       - run: npm run test:unit
       - uses: actions/upload-artifact@v4
         if: always()
-        with: { name: vitest-coverage, path: coverage, if-no-files-found: ignore }
+        with:
+          name: vitest-coverage
+          path: coverage
+          if-no-files-found: ignore
+
+  integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: gridninja
+          POSTGRES_PASSWORD: gridninja
+          POSTGRES_DB: gridninja_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gridninja -d gridninja_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: npm }
+      - run: npm ci
+      - run: npm run test:integration
+        env:
+          TEST_DATABASE_URL: postgresql://gridninja:gridninja@127.0.0.1:5432/gridninja_test
 
   build:
     runs-on: ubuntu-latest

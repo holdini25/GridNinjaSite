@@ -1,7 +1,7 @@
 "use client"
 
 import type { KeyboardEvent } from "react"
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 import {
   DownloadIcon,
@@ -71,10 +71,6 @@ export function DispatchEnvelopeVisual({
     tableExpanded,
   } = useDispatchEnvelopeState({ initialScenarioId })
   const [exportStatus, setExportStatus] = useState("")
-
-  useEffect(() => {
-    if (window.matchMedia("(max-width: 639px)").matches) setTableExpanded(true)
-  }, [setTableExpanded])
 
   const orderedConstraints = useMemo(
     () => getOrderedConstraints(activeScenario),
@@ -195,40 +191,18 @@ export function DispatchEnvelopeVisual({
 
   return (
     <section
-      className="gn-dispatch-shell gn-hd-panel overflow-hidden"
+      className="gn-dispatch-shell gn-hd-panel relative overflow-hidden"
       aria-label="Dispatch Envelope Visual"
       data-testid="dispatch-envelope-visual"
       data-animation-phase={animationPhase}
     >
       <div className="gn-scanline" />
-      <div className="border-b border-border/70 px-4 py-5 sm:px-6 lg:flex lg:min-h-24 lg:items-center lg:justify-between lg:gap-6">
+      <div className="border-b border-border/70 px-4 py-5 sm:px-6 lg:min-h-24 lg:pr-[23rem]">
         <div>
           <p className="gn-eyebrow text-proof-cyan">Dispatch Envelope</p>
           <h2 className="mt-2 text-[2rem] font-medium tracking-tight text-foreground sm:text-[2.35rem]">
             Constraint Aperture
           </h2>
-        </div>
-        <div className="mt-5 flex flex-wrap gap-3 lg:mt-0">
-          <Button
-            type="button"
-            variant="outline"
-            className="min-h-11 border-border/80 bg-background/45 text-foreground"
-            onClick={replayTrace}
-            data-testid="dispatch-replay-button"
-          >
-            <RotateCcwIcon />
-            Replay trace
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            className="min-h-11 border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan"
-            onClick={(event) => openEvidence(event.currentTarget)}
-            data-testid="dispatch-proof-button"
-          >
-            <EyeIcon />
-            Inspect proof
-          </Button>
         </div>
       </div>
 
@@ -236,6 +210,16 @@ export function DispatchEnvelopeVisual({
         scenario={activeScenario}
         proofEligible={scenarioProofEligible}
         replayKey={replayKey}
+      />
+
+      <DispatchMobileSummary
+        scenario={activeScenario}
+        proofEligible={scenarioProofEligible}
+      />
+
+      <DispatchPrimaryActions
+        onReplay={replayTrace}
+        onOpenProof={openEvidence}
       />
 
       <div className="grid gap-4 border-b border-border/70 bg-background/35 px-4 py-4 sm:px-6 lg:grid-cols-[9rem_minmax(0,1fr)] lg:items-center">
@@ -293,10 +277,10 @@ export function DispatchEnvelopeVisual({
         id="dispatch-scenario-panel"
         role="tabpanel"
         aria-labelledby={`dispatch-scenario-tab-${activeScenario.id}`}
-        className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 px-4 py-3 sm:px-6"
+        className="grid gap-3 border-b border-border/70 px-4 py-3 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:px-6"
       >
         <div
-          className="inline-flex rounded-full border border-border/70 bg-background/55 p-1"
+          className="grid grid-cols-3 rounded-full border border-border/70 bg-background/55 p-1"
           role="tablist"
           aria-label="Visualization mode"
           data-testid="dispatch-mode-tabs"
@@ -313,7 +297,7 @@ export function DispatchEnvelopeVisual({
               onClick={() => setMode(item.id)}
               onKeyDown={(event) => handleModeKeyDown(event, index)}
               className={cn(
-                "min-h-11 rounded-full px-4 py-2 font-mono text-[0.68rem] tracking-[0.14em] uppercase transition-colors focus-visible:ring-3 focus-visible:ring-ring/45",
+                "min-h-11 min-w-0 rounded-full px-2 py-2 font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 sm:px-4 sm:text-[0.68rem] sm:tracking-[0.14em]",
                 item.id === mode
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -325,7 +309,7 @@ export function DispatchEnvelopeVisual({
           ))}
         </div>
         <div
-          className="inline-flex rounded-full border border-border/70 bg-background/55 p-1"
+          className="grid grid-cols-2 rounded-full border border-border/70 bg-background/55 p-1 sm:inline-flex"
           role="group"
           aria-label="Constraint visibility"
         >
@@ -334,7 +318,7 @@ export function DispatchEnvelopeVisual({
             aria-pressed={!showAllConstraints}
             onClick={() => setShowAllConstraints(false)}
             className={cn(
-              "min-h-11 rounded-full px-4 py-2 font-mono text-[0.68rem] tracking-[0.14em] uppercase transition-colors focus-visible:ring-3 focus-visible:ring-ring/45",
+              "min-h-11 rounded-full px-2 py-2 font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 sm:px-4 sm:text-[0.68rem] sm:tracking-[0.14em]",
               !showAllConstraints
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"
@@ -348,7 +332,7 @@ export function DispatchEnvelopeVisual({
             aria-pressed={showAllConstraints}
             onClick={() => setShowAllConstraints(true)}
             className={cn(
-              "min-h-11 rounded-full px-4 py-2 font-mono text-[0.68rem] tracking-[0.14em] uppercase transition-colors focus-visible:ring-3 focus-visible:ring-ring/45",
+              "min-h-11 rounded-full px-2 py-2 font-mono text-[0.62rem] tracking-[0.08em] uppercase transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 sm:px-4 sm:text-[0.68rem] sm:tracking-[0.14em]",
               showAllConstraints
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground"
@@ -374,7 +358,7 @@ export function DispatchEnvelopeVisual({
           onSelect={selectConstraint}
         />
 
-        <section className="border-b border-border/70 p-4 sm:p-6 xl:border-r xl:border-b-0">
+        <section className="order-1 min-w-0 border-b border-border/70 p-4 sm:p-6 xl:order-none xl:border-r xl:border-b-0">
           <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
             <PanelHeading kicker="MW over time" title="Requested vs. accepted envelope" />
             <div className="flex flex-wrap gap-3 font-mono text-[0.68rem] text-muted-foreground">
@@ -396,7 +380,7 @@ export function DispatchEnvelopeVisual({
           />
         </section>
 
-        <aside className="p-4 sm:p-6">
+        <aside className="order-3 min-w-0 p-4 sm:p-6 xl:order-none">
           <PanelHeading kicker="Decision inspector" title="Why this result?" />
           <div className="mt-5 rounded-[1rem] border border-primary/30 bg-background/55 p-5">
             <h3 className="font-medium text-foreground">{inspectorTitle}</h3>
@@ -472,7 +456,14 @@ export function DispatchEnvelopeVisual({
             data-testid="dispatch-table-toggle"
           >
             <TablePropertiesIcon />
-            {tableExpanded ? "Hide equivalent data table" : "View equivalent data table"}
+            {tableExpanded ? (
+              "Hide equivalent data table"
+            ) : (
+              <>
+                <span className="sm:hidden">View accessible data</span>
+                <span className="hidden sm:inline">View equivalent data table</span>
+              </>
+            )}
           </Button>
           <span
             className="rounded-full border border-border/70 bg-background/45 px-3 py-1 font-mono text-xs text-muted-foreground"
@@ -513,6 +504,114 @@ export function DispatchEnvelopeVisual({
         scenario={activeScenario}
       />
     </section>
+  )
+}
+
+function DispatchMobileSummary({
+  scenario,
+  proofEligible,
+}: {
+  scenario: (typeof dispatchScenarios)[number]
+  proofEligible: boolean
+}) {
+  const requestedMw = scenario.dto.request.maxMw
+  const acceptedMw = scenario.dto.accepted?.maxMw ?? 0
+  const deltaMw = Math.max(0, requestedMw - acceptedMw)
+
+  return (
+    <dl
+      className="grid grid-cols-2 gap-2 border-b border-border/70 bg-background/35 p-4 sm:hidden"
+      data-testid="dispatch-mobile-summary"
+    >
+      <MobileMetric
+        label="Requested"
+        value={`${requestedMw.toFixed(1)} MW`}
+        valueClassName="text-primary"
+      />
+      <MobileMetric
+        label="Accepted"
+        value={scenario.dto.accepted ? `${acceptedMw.toFixed(1)} MW` : "Withheld"}
+        valueClassName={
+          scenario.dto.accepted ? "text-signal" : "text-muted-foreground"
+        }
+      />
+      <MobileMetric
+        label={scenario.dto.decision === "repair" ? "Repair delta" : "Decision"}
+        value={
+          scenario.dto.decision === "repair"
+            ? `−${deltaMw.toFixed(1)} MW`
+            : decisionLabel(scenario.dto.decision)
+        }
+        valueClassName={
+          scenario.dto.decision === "reject"
+            ? "text-danger"
+            : scenario.dto.decision === "repair"
+              ? "text-warning"
+              : "text-foreground"
+        }
+      />
+      <MobileMetric
+        label="Proof"
+        value={proofEligible ? "Eligible" : "Withheld"}
+        valueClassName={proofEligible ? "text-proof-cyan" : "text-muted-foreground"}
+      />
+    </dl>
+  )
+}
+
+function MobileMetric({
+  label,
+  value,
+  valueClassName,
+}: {
+  label: string
+  value: string
+  valueClassName?: string
+}) {
+  return (
+    <div className="rounded-xl border border-border/70 bg-background/55 p-3">
+      <dt className="font-mono text-[0.62rem] tracking-[0.14em] text-muted-foreground uppercase">
+        {label}
+      </dt>
+      <dd className={cn("mt-2 text-xl font-medium tabular-nums", valueClassName)}>
+        {value}
+      </dd>
+    </div>
+  )
+}
+
+function DispatchPrimaryActions({
+  onReplay,
+  onOpenProof,
+}: {
+  onReplay: () => void
+  onOpenProof: (trigger: HTMLElement) => void
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-2 border-b border-border/70 p-4 sm:flex sm:flex-wrap sm:gap-3 sm:px-6 lg:absolute lg:top-5 lg:right-6 lg:z-10 lg:border-0 lg:p-0">
+      <Button
+        type="button"
+        variant="outline"
+        className="min-h-11 w-full border-border/80 bg-background/45 text-foreground sm:w-auto"
+        onClick={onReplay}
+        data-testid="dispatch-replay-button"
+      >
+        <RotateCcwIcon />
+        <span className="sm:hidden">Replay</span>
+        <span className="hidden sm:inline">Replay trace</span>
+      </Button>
+      <Button
+        type="button"
+        variant="outline"
+        className="min-h-11 w-full border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan sm:w-auto"
+        onClick={(event) => onOpenProof(event.currentTarget)}
+        data-testid="dispatch-proof-button"
+      >
+        <EyeIcon />
+        <span className="sm:hidden">Proof</span>
+        <span className="hidden sm:inline">Inspect proof</span>
+      </Button>
+    </div>
   )
 }
 

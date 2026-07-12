@@ -130,6 +130,20 @@ export function buildDispatchEnvelopeGeometry(args: {
   }
 }
 
+export function compactTicks(values: readonly number[], desired = 3) {
+  if (values.length <= desired) {
+    return [...values]
+  }
+
+  const lastIndex = values.length - 1
+
+  return Array.from({ length: desired }, (_, index) => {
+    const sourceIndex = Math.round((index / Math.max(1, desired - 1)) * lastIndex)
+
+    return values[sourceIndex]
+  }).filter((value, index, result) => result.indexOf(value) === index)
+}
+
 function buildApertureClipPath({
   width,
   height,

@@ -3,7 +3,47 @@ import { type Page } from "@playwright/test"
 import { expect, test } from "./support/client-health"
 
 type LeadPayload = Record<string, unknown> & {
+  schemaVersion: 1
+  formType: "contact" | "capacity_audit"
+  clientSubmissionId: string
+  turnstileToken: string
   startedAt: number
+}
+
+async function installTurnstileStub(page: Page) {
+  await page.route(
+    "https://challenges.cloudflare.com/turnstile/v0/api.js**",
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/javascript",
+        body: `
+          (() => {
+            let sequence = 0;
+            const widgets = new Map();
+            window.turnstile = {
+              render(container, options) {
+                const id = "test-widget-" + (++sequence);
+                widgets.set(id, options);
+                container.dataset.testWidgetId = id;
+                queueMicrotask(() => options.callback("test-turnstile-token-" + sequence));
+                return id;
+              },
+              reset(id) {
+                const options = widgets.get(id);
+                if (options) {
+                  queueMicrotask(() => options.callback("test-turnstile-token-" + (++sequence)));
+                }
+              },
+              remove(id) {
+                widgets.delete(id);
+              }
+            };
+          })();
+        `,
+      })
+    }
+  )
 }
 
 async function fillContactForm(page: Page) {
@@ -42,6 +82,7 @@ async function fillCapacityAuditForm(page: Page) {
 }
 
 function captureSuccessfulSubmission(page: Page) {
+  let requestCount = 0
   let resolvePayload: (payload: LeadPayload) => void
   const payload = new Promise<LeadPayload>((resolve) => {
     resolvePayload = resolve
@@ -51,18 +92,29 @@ function captureSuccessfulSubmission(page: Page) {
     payload,
     async install() {
       await page.route("**/api/contact", async (route) => {
+        requestCount += 1
         resolvePayload(route.request().postDataJSON() as LeadPayload)
         await route.fulfill({
-          status: 200,
+          status: 202,
           contentType: "application/json",
-          body: JSON.stringify({ ok: true }),
+          body: JSON.stringify({
+            ok: true,
+            requestId: "request-e2e",
+            submissionId: "submission-e2e",
+            status: "queued",
+          }),
         })
       })
     },
+    requestCount: () => requestCount,
   }
 }
 
 test.describe("lead form browser behavior", () => {
+  test.beforeEach(async ({ page }) => {
+    await installTurnstileStub(page)
+  })
+
   test("exposes native, autofill-friendly semantics and uniform Zod errors", async ({
     page,
   }) => {
@@ -129,6 +181,9 @@ test.describe("lead form browser behavior", () => {
     const capture = captureSuccessfulSubmission(page)
     await capture.install()
     await page.goto("/contact?intent=partnership&source=e2e-autofill")
+    await expect(page.getByText("Security verification complete.")).toHaveRole(
+      "status"
+    )
 
     await page.locator("form").evaluate((form: HTMLFormElement) => {
       const setValue = (name: string, value: string) => {
@@ -157,10 +212,14 @@ test.describe("lead form browser behavior", () => {
       if (constraint) constraint.checked = true
 
       form.requestSubmit()
+      form.requestSubmit()
     })
 
     const payload = await capture.payload
     expect(payload).toMatchObject({
+      schemaVersion: 1,
+      formType: "contact",
+      turnstileToken: expect.stringMatching(/^test-turnstile-token-/),
       name: "Chrome Autofill",
       company: "Browser Filled Compute",
       role: "Capacity Director",
@@ -173,8 +232,15 @@ test.describe("lead form browser behavior", () => {
       source: "e2e-autofill",
       website: "",
     })
+    expect(payload.clientSubmissionId).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    )
     expect(payload.startedAt).toEqual(expect.any(Number))
     await expect(page.getByRole("status")).toContainText("Intake submitted")
+    await expect(page.getByRole("status")).toContainText(
+      "Reference: submission-e2e"
+    )
+    expect(capture.requestCount()).toBe(1)
   })
 
   test("submits the Capacity Audit payload and keeps startedAt stable across retries", async ({
@@ -193,12 +259,20 @@ test.describe("lead form browser behavior", () => {
         body: JSON.stringify(
           firstAttempt
             ? { ok: false, message: "Too many requests. Please try again later." }
-            : { ok: true }
+            : {
+                ok: true,
+                requestId: "request-retry-e2e",
+                submissionId: "submission-retry-e2e",
+                status: "already_received",
+              }
         ),
       })
     })
 
     await page.goto("/roi")
+    await expect(page.getByText("Security verification complete.")).toHaveRole(
+      "status"
+    )
     const auditForm = page.locator("form")
 
     await expect(auditForm).toHaveCount(1)
@@ -228,7 +302,15 @@ test.describe("lead form browser behavior", () => {
     )
     expect(submissions).toHaveLength(2)
     expect(submissions[0].startedAt).toBe(submissions[1].startedAt)
+    expect(submissions[0].clientSubmissionId).toBe(
+      submissions[1].clientSubmissionId
+    )
+    expect(submissions[0].turnstileToken).not.toBe(
+      submissions[1].turnstileToken
+    )
     expect(submissions[1]).toMatchObject({
+      schemaVersion: 1,
+      formType: "capacity_audit",
       name: "Grace Operator",
       company: "Proof Cloud",
       email: "grace@example.com",
@@ -247,6 +329,9 @@ test.describe("lead form browser behavior", () => {
   }) => {
     clientHealth.allowError(/console: Failed to load resource:/)
     await page.goto("/contact")
+    await expect(page.getByText("Security verification complete.")).toHaveRole(
+      "status"
+    )
     await fillContactForm(page)
     const submit = page.getByRole("button", { name: "Start the conversation" })
 

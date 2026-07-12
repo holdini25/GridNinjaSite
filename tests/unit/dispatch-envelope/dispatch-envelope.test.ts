@@ -11,7 +11,10 @@ import { DISPATCH_DOMAIN_IDS } from "@/lib/dispatch-envelope/constants"
 import { assertDispatchEnvelopeInvariants } from "@/lib/dispatch-envelope/invariants"
 import { compileIllustrativeDispatchEnvelope } from "@/lib/dispatch-envelope/compile-demo-envelope"
 import { buildEnvelopeSamples } from "@/lib/dispatch-envelope/normalize"
-import { buildDispatchEnvelopeGeometry } from "@/lib/dispatch-envelope/geometry"
+import {
+  buildDispatchEnvelopeGeometry,
+  compactTicks,
+} from "@/lib/dispatch-envelope/geometry"
 import { sanitizeDispatchExportFilename, serializeDispatchEnvelopeExport } from "@/lib/dispatch-envelope/export"
 import { getProofLensSnapshotAtMinute } from "@/lib/dispatch-envelope/proof-lens"
 import { rankConstraints } from "@/lib/dispatch-envelope/binding-rank"
@@ -361,6 +364,28 @@ describe("dispatch envelope math", () => {
     expect(geometry.acceptedLinePath).toMatch(/^M/)
     expect(geometry.repairDeltaAreaPath).toMatch(/^M/)
     expect(geometry.domainLinePaths.storage).toMatch(/^M/)
+  })
+
+  it("builds valid compact geometry with reduced visible tick density", () => {
+    const scenario = scenarioById("grid-stress")
+    const samples = buildEnvelopeSamples(scenario.dto)
+    const compactGeometry = buildDispatchEnvelopeGeometry({
+      samples,
+      domainIds: DISPATCH_DOMAIN_IDS,
+      dimensions: {
+        width: 360,
+        height: 360,
+        margin: { top: 38, right: 14, bottom: 40, left: 42 },
+      },
+    })
+
+    expect(compactGeometry.plotWidth).toBe(304)
+    expect(compactGeometry.plotHeight).toBe(282)
+    expect(compactGeometry.requestedLinePath).toMatch(/^M/)
+    expect(compactGeometry.acceptedLinePath).toMatch(/^M/)
+    expect(compactTicks(compactGeometry.xTicks, 3)).toHaveLength(3)
+    expect(compactTicks(compactGeometry.yTicks, 4).length).toBeLessThanOrEqual(4)
+    expect(compactTicks([0, 1, 2, 3, 4], 3)).toEqual([0, 2, 4])
   })
 
   it("keeps repair deltas positive only where a repair clips the request", () => {

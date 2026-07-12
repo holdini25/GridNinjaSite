@@ -7,6 +7,10 @@ import { capacityAuditSchema, mapZodErrors } from "@/lib/validators"
 
 import { buildCapacityAuditCandidate } from "@/components/forms/lead-form-data"
 import { NativeSelect } from "@/components/forms/native-select"
+import {
+  TurnstileField,
+  type TurnstileFieldHandle,
+} from "@/components/forms/turnstile-field"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -20,15 +24,27 @@ export function CapacityAuditForm({
   source,
 }: CapacityAuditFormProps) {
   const startedAt = useRef(Date.now())
+  const inFlight = useRef(false)
+  const turnstileRef = useRef<TurnstileFieldHandle>(null)
+  const [clientSubmissionId] = useState(() => crypto.randomUUID())
+  const [turnstileToken, setTurnstileToken] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [submissionId, setSubmissionId] = useState<string | null>(null)
   const [serverMessage, setServerMessage] = useState<string | null>(null)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    if (inFlight.current) {
+      return
+    }
+
     const candidate = buildCapacityAuditCandidate(new FormData(event.currentTarget), {
+      schemaVersion: 1,
+      formType: "capacity_audit",
+      clientSubmissionId,
+      turnstileToken,
       intent,
       source,
       startedAt: startedAt.current,
@@ -41,6 +57,7 @@ export function CapacityAuditForm({
     }
 
     setErrors({})
+    inFlight.current = true
     setIsPending(true)
     setServerMessage(null)
 
@@ -54,25 +71,38 @@ export function CapacityAuditForm({
       })
       const payload = (await response.json()) as {
         ok: boolean
+        requestId?: string
+        submissionId?: string
+        status?: "queued" | "already_received"
         fieldErrors?: Record<string, string>
         message?: string
       }
 
-      if (!response.ok || !payload.ok) {
+      const acceptedStatus = response.status === 200 || response.status === 202
+
+      if (
+        !acceptedStatus ||
+        !payload.ok ||
+        typeof payload.submissionId !== "string" ||
+        !payload.submissionId
+      ) {
         setErrors(payload.fieldErrors ?? {})
         setServerMessage(payload.message ?? "Unable to submit the request.")
+        turnstileRef.current?.reset()
         return
       }
 
-      setSubmitted(true)
+      setSubmissionId(payload.submissionId)
     } catch {
       setServerMessage("Unable to submit the request.")
+      turnstileRef.current?.reset()
     } finally {
+      inFlight.current = false
       setIsPending(false)
     }
   }
 
-  if (submitted) {
+  if (submissionId) {
     return (
       <div
         className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
@@ -87,6 +117,10 @@ export function CapacityAuditForm({
         <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground">
           We&apos;ll use this to frame the first pass on stranded headroom, recurring
           constraints, and the best path into Shadow Mode.
+        </p>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Reference:{" "}
+          <span className="font-mono text-foreground">{submissionId}</span>
         </p>
       </div>
     )
@@ -286,6 +320,12 @@ export function CapacityAuditForm({
           {serverMessage}
         </p>
       ) : null}
+      <TurnstileField
+        ref={turnstileRef}
+        action="capacity_audit"
+        error={errors.turnstileToken}
+        onTokenChange={setTurnstileToken}
+      />
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-base leading-8 text-muted-foreground">
           Do not submit confidential site drawings, credentials, customer data,

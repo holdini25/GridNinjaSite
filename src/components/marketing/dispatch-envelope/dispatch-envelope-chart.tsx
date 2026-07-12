@@ -1,9 +1,18 @@
 "use client"
 
-import type { KeyboardEvent, MouseEvent, PointerEvent } from "react"
+import type {
+  CSSProperties,
+  KeyboardEvent,
+  MouseEvent,
+  PointerEvent,
+  RefObject,
+} from "react"
 import { useId, useLayoutEffect, useMemo, useRef, useState } from "react"
 
-import { buildDispatchEnvelopeGeometry } from "@/lib/dispatch-envelope/geometry"
+import {
+  buildDispatchEnvelopeGeometry,
+  compactTicks,
+} from "@/lib/dispatch-envelope/geometry"
 import { buildEnvelopeSamples } from "@/lib/dispatch-envelope/normalize"
 import {
   getProofLensSnapshot,
@@ -50,9 +59,31 @@ const COLORS = {
   grid: "rgba(159,176,191,.12)",
 }
 
-const WIDTH = 860
-const HEIGHT = 520
-const MARGIN = { top: 54, right: 26, bottom: 58, left: 62 }
+type ChartLayout = {
+  width: number
+  height: number
+  margin: {
+    top: number
+    right: number
+    bottom: number
+    left: number
+  }
+  compact: boolean
+}
+
+const WIDE_LAYOUT: ChartLayout = {
+  width: 860,
+  height: 520,
+  margin: { top: 54, right: 26, bottom: 58, left: 62 },
+  compact: false,
+}
+
+const COMPACT_LAYOUT: ChartLayout = {
+  width: 360,
+  height: 360,
+  margin: { top: 38, right: 14, bottom: 40, left: 42 },
+  compact: true,
+}
 const EVENT_MARKER_PHASES = ["start", "ramp", "hold", "recovery"] as const
 
 export function DispatchEnvelopeChart({
@@ -81,6 +112,10 @@ export function DispatchEnvelopeChart({
   >(null)
   const eventControlRefs = useRef<Array<HTMLButtonElement | null>>([])
   const pendingEventFocusIndex = useRef<number | null>(null)
+  const chartRef = useRef<HTMLDivElement>(null)
+  const compact = useCompactChart(chartRef)
+  const layout = compact ? COMPACT_LAYOUT : WIDE_LAYOUT
+  const { width: chartWidth, height: chartHeight, margin } = layout
   const id = useId().replace(/:/g, "")
   const hatchId = `${id}-repair-hatch`
   const gradientId = `${id}-accepted-gradient`
@@ -93,12 +128,12 @@ export function DispatchEnvelopeChart({
         samples,
         domainIds: dto.constraints.map((constraint) => constraint.id),
         dimensions: {
-          width: WIDTH,
-          height: HEIGHT,
-          margin: MARGIN,
+          width: chartWidth,
+          height: chartHeight,
+          margin,
         },
       }),
-    [dto.constraints, samples]
+    [chartHeight, chartWidth, dto.constraints, margin, samples]
   )
   const selectedConstraint =
     dto.constraints.find((constraint) => constraint.id === selectedDomainId) ??
@@ -122,7 +157,7 @@ export function DispatchEnvelopeChart({
     : null
   const activeEventX = activeEventMarker
     ? geometry.x(activeEventMarker.time)
-    : MARGIN.left
+    : margin.left
   const chartTitle = `${scenario.label}: ${dto.decision.toUpperCase()} dispatch envelope`
   const chartDescription = dto.accepted
     ? `Requested ${dto.request.maxMw.toFixed(1)} MW and accepted ${dto.accepted.maxMw.toFixed(1)} MW. ${scenario.primaryReason}`
@@ -138,6 +173,8 @@ export function DispatchEnvelopeChart({
         ? "-"
         : formatSignedMw(selectedMargin)
   const proofState = dto.decision === "no-proof" ? "withheld" : "eligible"
+  const visibleXTicks = compact ? compactTicks(geometry.xTicks, 3) : geometry.xTicks
+  const visibleYTicks = compact ? compactTicks(geometry.yTicks, 4) : geometry.yTicks
 
   useLayoutEffect(() => {
     const index = pendingEventFocusIndex.current
@@ -163,7 +200,7 @@ export function DispatchEnvelopeChart({
   ) {
     const bounds = event.currentTarget.getBoundingClientRect()
     const ratio = bounds.width > 0 ? (event.clientX - bounds.left) / bounds.width : 0
-    const pointerX = MARGIN.left + Math.min(Math.max(ratio, 0), 1) * geometry.plotWidth
+    const pointerX = margin.left + Math.min(Math.max(ratio, 0), 1) * geometry.plotWidth
     const snapshot = getProofLensSnapshot({
       samples,
       xScale: geometry.x,
@@ -253,8 +290,9 @@ export function DispatchEnvelopeChart({
 
   return (
     <div
+      ref={chartRef}
       className={cn(
-        "gn-dispatch-chart relative overflow-x-auto overflow-y-hidden rounded-[1.15rem] border border-border/70 bg-background/50",
+        "gn-dispatch-chart relative overflow-hidden rounded-[1.15rem] border border-border/70 bg-background/50",
         `gn-dispatch-decision-${dto.decision}`,
         `gn-dispatch-phase-${animationPhase}`
       )}
@@ -265,11 +303,16 @@ export function DispatchEnvelopeChart({
       data-selected-state={selectedConstraint.state}
       data-lens-visible={lens.visible ? "true" : "false"}
       data-lens-pinned={lens.pinned ? "true" : "false"}
+      data-chart-layout={compact ? "compact" : "wide"}
       data-testid="dispatch-envelope-chart"
     >
       <svg
-        className="block aspect-[1.65] w-full min-w-[44rem] max-w-none text-muted-foreground sm:min-w-0"
-        viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+        className={cn(
+          "block h-auto w-full max-w-none text-muted-foreground",
+          compact ? "aspect-square" : "aspect-[1.65]"
+        )}
+        viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+        preserveAspectRatio="xMidYMid meet"
         role="img"
         tabIndex={-1}
         aria-labelledby={`${id}-title ${id}-desc`}
@@ -307,8 +350,8 @@ export function DispatchEnvelopeChart({
             <rect
               key={replayKey}
               className="gn-dispatch-accepted-reveal"
-              x={MARGIN.left}
-              y={MARGIN.top}
+              x={margin.left}
+              y={margin.top}
               width={geometry.plotWidth}
               height={geometry.plotHeight}
             />
@@ -316,20 +359,20 @@ export function DispatchEnvelopeChart({
         </defs>
 
         <g aria-hidden="true">
-          {geometry.yTicks.map((tick) => (
+          {visibleYTicks.map((tick) => (
             <g key={`y-${tick}`}>
               <line
-                x1={MARGIN.left}
+                x1={margin.left}
                 y1={geometry.y(tick)}
-                x2={WIDTH - MARGIN.right}
+                x2={chartWidth - margin.right}
                 y2={geometry.y(tick)}
                 stroke={COLORS.grid}
               />
               <text
-                x={MARGIN.left - 12}
+                x={margin.left - 10}
                 y={geometry.y(tick) + 4}
                 fill={COLORS.muted}
-                fontSize="10"
+                fontSize={compact ? 11 : 10}
                 fontFamily="monospace"
                 textAnchor="end"
               >
@@ -337,20 +380,20 @@ export function DispatchEnvelopeChart({
               </text>
             </g>
           ))}
-          {geometry.xTicks.map((tick) => (
+          {visibleXTicks.map((tick) => (
             <g key={`x-${tick}`}>
               <line
                 x1={geometry.x(tick)}
-                y1={MARGIN.top}
+                y1={margin.top}
                 x2={geometry.x(tick)}
-                y2={HEIGHT - MARGIN.bottom}
+                y2={chartHeight - margin.bottom}
                 stroke={COLORS.grid}
               />
               <text
                 x={geometry.x(tick)}
-                y={HEIGHT - 28}
+                y={chartHeight - (compact ? 18 : 28)}
                 fill={COLORS.muted}
-                fontSize="10"
+                fontSize={compact ? 11 : 10}
                 fontFamily="monospace"
                 textAnchor="middle"
               >
@@ -358,27 +401,47 @@ export function DispatchEnvelopeChart({
               </text>
             </g>
           ))}
-          <text
-            x="18"
-            y={MARGIN.top + geometry.plotHeight / 2}
-            fill={COLORS.muted}
-            fontSize="10"
-            fontFamily="monospace"
-            transform={`rotate(-90 18 ${MARGIN.top + geometry.plotHeight / 2})`}
-            textAnchor="middle"
-          >
-            FLEXIBLE MW
-          </text>
-          <text
-            x={MARGIN.left + geometry.plotWidth / 2}
-            y={HEIGHT - 10}
-            fill={COLORS.muted}
-            fontSize="10"
-            fontFamily="monospace"
-            textAnchor="middle"
-          >
-            EVENT TIME (MINUTES)
-          </text>
+          {compact ? (
+            <>
+              <text x="10" y="20" fill={COLORS.muted} fontSize="10" fontFamily="monospace">
+                MW
+              </text>
+              <text
+                x={chartWidth - 10}
+                y={chartHeight - 8}
+                fill={COLORS.muted}
+                fontSize="10"
+                fontFamily="monospace"
+                textAnchor="end"
+              >
+                MIN
+              </text>
+            </>
+          ) : (
+            <>
+              <text
+                x="18"
+                y={margin.top + geometry.plotHeight / 2}
+                fill={COLORS.muted}
+                fontSize="10"
+                fontFamily="monospace"
+                transform={`rotate(-90 18 ${margin.top + geometry.plotHeight / 2})`}
+                textAnchor="middle"
+              >
+                FLEXIBLE MW
+              </text>
+              <text
+                x={margin.left + geometry.plotWidth / 2}
+                y={chartHeight - 10}
+                fill={COLORS.muted}
+                fontSize="10"
+                fontFamily="monospace"
+                textAnchor="middle"
+              >
+                EVENT TIME (MINUTES)
+              </text>
+            </>
+          )}
         </g>
 
         <path
@@ -393,8 +456,8 @@ export function DispatchEnvelopeChart({
           data-testid="dispatch-constraint-aperture"
         />
         <text
-          x={MARGIN.left + geometry.plotWidth / 2}
-          y={MARGIN.top - 16}
+          x={margin.left + geometry.plotWidth / 2}
+          y={margin.top - (compact ? 12 : 16)}
           fill={COLORS.proof}
           fontSize="9"
           fontFamily="monospace"
@@ -414,8 +477,10 @@ export function DispatchEnvelopeChart({
               constraint.state === "binding" ||
               constraint.state === "hard-block" ||
               constraint.state === "no-proof"
-            const show =
-              showAllConstraints || mode === "constraints" || important || selected
+            const show = compact
+              ? mode === "constraints" &&
+                (showAllConstraints || important || selected)
+              : showAllConstraints || mode === "constraints" || important || selected
             const color =
               constraint.state === "hard-block"
                 ? COLORS.reject
@@ -450,9 +515,9 @@ export function DispatchEnvelopeChart({
                 >
                   <line
                     x1={blockX}
-                    y1={MARGIN.top}
+                    y1={margin.top}
                     x2={blockX}
-                    y2={HEIGHT - MARGIN.bottom}
+                    y2={chartHeight - margin.bottom}
                     className="gn-dispatch-domain-line gn-dispatch-hard-block-line"
                     stroke={COLORS.reject}
                     strokeWidth={selected ? 4 : 3}
@@ -463,7 +528,7 @@ export function DispatchEnvelopeChart({
                   />
                   <text
                     x={blockX + 8}
-                    y={MARGIN.top + 16}
+                    y={margin.top + 16}
                     fill={COLORS.reject}
                     fontSize="9"
                     fontFamily="monospace"
@@ -484,8 +549,8 @@ export function DispatchEnvelopeChart({
                     selected && "is-selected",
                     important && "is-critical"
                   )}
-                  x={MARGIN.left}
-                  y={MARGIN.top}
+                  x={margin.left}
+                  y={margin.top}
                   width={geometry.plotWidth}
                   height={geometry.plotHeight}
                   fill="none"
@@ -648,9 +713,9 @@ export function DispatchEnvelopeChart({
               />
             ) : null}
             <line
-              x1={MARGIN.left}
+              x1={margin.left}
               y1={geometry.y(dto.request.maxMw * 0.58)}
-              x2={WIDTH - MARGIN.right}
+              x2={chartWidth - margin.right}
               y2={geometry.y(dto.request.maxMw * 0.58)}
               stroke={COLORS.noProof}
               strokeWidth="2"
@@ -658,7 +723,7 @@ export function DispatchEnvelopeChart({
               opacity=".75"
             />
             <text
-              x={MARGIN.left + geometry.plotWidth / 2}
+              x={margin.left + geometry.plotWidth / 2}
               y={geometry.y(dto.request.maxMw * 0.58) - 11}
               fill={COLORS.noProof}
               fontSize="10"
@@ -678,8 +743,8 @@ export function DispatchEnvelopeChart({
             data-dispatch-state={dto.decision !== "no-proof" ? "proof-eligible" : "no-proof"}
           >
             <text
-              x={MARGIN.left}
-              y={HEIGHT - MARGIN.bottom - 30}
+              x={margin.left}
+              y={chartHeight - margin.bottom - 30}
               fill={COLORS.muted}
               fontSize="9"
               fontFamily="monospace"
@@ -687,8 +752,8 @@ export function DispatchEnvelopeChart({
               EVIDENCE ELIGIBILITY
             </text>
             <rect
-              x={MARGIN.left}
-              y={HEIGHT - MARGIN.bottom - 22}
+              x={margin.left}
+              y={chartHeight - margin.bottom - 22}
               width={geometry.plotWidth}
               height="9"
               rx="4.5"
@@ -698,8 +763,8 @@ export function DispatchEnvelopeChart({
               strokeDasharray={dto.decision !== "no-proof" ? undefined : "6 6"}
             />
             <text
-              x={WIDTH - MARGIN.right}
-              y={HEIGHT - MARGIN.bottom - 30}
+              x={chartWidth - margin.right}
+              y={chartHeight - margin.bottom - 30}
               fill={dto.decision !== "no-proof" ? COLORS.proof : COLORS.noProof}
               fontSize="9"
               fontFamily="monospace"
@@ -711,8 +776,8 @@ export function DispatchEnvelopeChart({
         ) : null}
 
         <rect
-          x={MARGIN.left}
-          y={MARGIN.top}
+          x={margin.left}
+          y={margin.top}
           width={geometry.plotWidth}
           height={geometry.plotHeight}
           fill="transparent"
@@ -767,31 +832,33 @@ export function DispatchEnvelopeChart({
               >
                 <line
                   x1={markerX}
-                  y1={MARGIN.top + 24}
+                  y1={margin.top + 24}
                   x2={markerX}
-                  y2={HEIGHT - MARGIN.bottom}
+                  y2={chartHeight - margin.bottom}
                   stroke="rgba(97,228,255,.16)"
                   strokeDasharray={index === 1 ? undefined : "3 6"}
                   className="gn-dispatch-event-marker-line"
                 />
                 <circle
                   cx={markerX}
-                  cy={MARGIN.top + 18}
+                  cy={margin.top + 18}
                   r="3.5"
                   fill={index === 1 ? COLORS.accepted : COLORS.proof}
                   className="gn-dispatch-event-marker-dot"
                 />
-                <text
-                  x={markerX}
-                  y={MARGIN.top + 8}
-                  fill={COLORS.muted}
-                  fontSize="8"
-                  fontFamily="monospace"
-                  textAnchor="middle"
-                  className="gn-dispatch-event-marker-label"
-                >
-                  {marker.short}
-                </text>
+                {!compact ? (
+                  <text
+                    x={markerX}
+                    y={margin.top + 8}
+                    fill={COLORS.muted}
+                    fontSize="8"
+                    fontFamily="monospace"
+                    textAnchor="middle"
+                    className="gn-dispatch-event-marker-label"
+                  >
+                    {marker.short}
+                  </text>
+                ) : null}
               </g>
             )
           })}
@@ -806,9 +873,9 @@ export function DispatchEnvelopeChart({
         >
           <line
             x1={lensX}
-            y1={MARGIN.top}
+            y1={margin.top}
             x2={lensX}
-            y2={HEIGHT - MARGIN.bottom}
+            y2={chartHeight - margin.bottom}
             stroke={COLORS.proof}
             strokeWidth="1.2"
             opacity=".8"
@@ -854,7 +921,11 @@ export function DispatchEnvelopeChart({
         <p id={`${id}-lens-status`} className="mt-2 text-xs leading-6 text-muted-foreground" aria-live="polite">
           T+{lensSnapshot.minute.toFixed(1)}; requested {lensSnapshot.requestedMw.toFixed(1)} MW; accepted {lensSnapshot.acceptedMw.toFixed(1)} MW; binding domain {bindingLabel}; proof {lensSnapshot.proofEligible ? "eligible" : "withheld"}; {lens.pinned ? "pinned" : "not pinned"}.
         </p>
-        <div className="mt-3 flex flex-wrap gap-2" aria-label="Dispatch event markers">
+        <div
+          className="mt-3 flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain pb-2 sm:flex-wrap sm:overflow-visible sm:pb-0"
+          aria-label="Dispatch event markers"
+          data-testid="dispatch-mobile-event-strip"
+        >
           {eventMarkers.map((marker, index) => (
             <button
               key={`${marker.short}-${marker.label}-control`}
@@ -862,138 +933,235 @@ export function DispatchEnvelopeChart({
                 eventControlRefs.current[index] = element
               }}
               type="button"
-              className="min-h-11 rounded-lg border border-border/70 px-3 py-2 text-xs text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
+              className="min-h-11 shrink-0 snap-start rounded-lg border border-border/70 px-3 py-2 text-xs text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
               data-testid={`dispatch-event-control-${index}`}
               onFocus={() => showEventMarker(index)}
               onClick={() => showEventMarker(index, true)}
               onKeyDown={(event) => handleEventMarkerKeyDown(event, index)}
             >
-              {marker.label} ({marker.short})
+              <span className="font-mono text-proof-cyan">{marker.short}</span>
+              <span className="ml-2">{marker.label}</span>
             </button>
           ))}
         </div>
+        {compact && activeEventMarker && activeEventMarkerSnapshot ? (
+          <EventInspectorCard
+            marker={activeEventMarker}
+            snapshot={activeEventMarkerSnapshot}
+            accepted={Boolean(dto.accepted)}
+            eventIndex={activeEventMarkerIndex}
+          />
+        ) : null}
+        {compact && lens.visible ? (
+          <ProofLensCard
+            snapshot={lensSnapshot}
+            selectedConstraint={selectedConstraint}
+            selectedDomainId={selectedDomainId}
+            decision={dto.decision}
+            proofRoot={dto.proofRoot}
+            accepted={Boolean(dto.accepted)}
+            selectedMarginLabel={selectedMarginLabel}
+            bindingLabel={bindingLabel}
+          />
+        ) : null}
       </div>
 
       <div className="pointer-events-none absolute right-4 top-4 rounded-full border border-border/70 bg-background/70 px-3 py-1 font-mono text-[0.62rem] tracking-[0.16em] text-muted-foreground uppercase">
         illustrative scenario
       </div>
 
-      <div
-        id={`${id}-event-inspector`}
-        className={cn(
-          "pointer-events-none absolute z-10 w-[min(15rem,calc(100%-1rem))] rounded-[0.85rem] border border-border/70 bg-background/95 p-3 shadow-2xl",
-          !activeEventMarker && "hidden"
-        )}
-        style={{
-          left: `${Math.min(Math.max((activeEventX / WIDTH) * 100, 3), 72)}%`,
-          top: `${Math.min(Math.max(((MARGIN.top + 42) / HEIGHT) * 100, 10), 54)}%`,
-        }}
-        data-event-index={activeEventMarkerIndex ?? undefined}
-        data-event-phase={
-          activeEventMarkerIndex == null
-            ? undefined
-            : getEventMarkerPhase(activeEventMarkerIndex)
-        }
-        data-testid="dispatch-event-marker-inspector"
-      >
-        {activeEventMarker && activeEventMarkerSnapshot ? (
-          <>
-            <h4 className="font-mono text-[0.68rem] tracking-[0.16em] text-proof-cyan uppercase">
-              {activeEventMarker.short} - {activeEventMarker.label}
-            </h4>
-            <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-[0.7rem]">
-              <dt className="text-muted-foreground">Requested</dt>
-              <dd className="text-right text-primary">
-                {activeEventMarkerSnapshot.requestedMw.toFixed(2)} MW
-              </dd>
-              <dt className="text-muted-foreground">Accepted</dt>
-              <dd className="text-right text-signal">
-                {dto.accepted
-                  ? `${activeEventMarkerSnapshot.acceptedMw.toFixed(2)} MW`
-                  : "-"}
-              </dd>
-              <dt className="text-muted-foreground">Binding</dt>
-              <dd className="text-right text-foreground">
-                {activeEventMarkerSnapshot.bindingDomainId
-                  ? dispatchDomainMeta[activeEventMarkerSnapshot.bindingDomainId].short
-                  : "None"}
-              </dd>
-              <dt className="text-muted-foreground">Proof</dt>
-              <dd className="text-right text-foreground">
-                {activeEventMarkerSnapshot.proofEligible ? "Eligible" : "No-proof"}
-              </dd>
-            </dl>
-          </>
-        ) : null}
-      </div>
+      {!compact && activeEventMarker && activeEventMarkerSnapshot ? (
+        <EventInspectorCard
+          marker={activeEventMarker}
+          snapshot={activeEventMarkerSnapshot}
+          accepted={Boolean(dto.accepted)}
+          eventIndex={activeEventMarkerIndex}
+          className="pointer-events-none absolute z-10 mt-0 w-[min(15rem,calc(100%-1rem))] shadow-2xl"
+          style={{
+            left: `${Math.min(Math.max((activeEventX / chartWidth) * 100, 3), 72)}%`,
+            top: `${Math.min(Math.max(((margin.top + 42) / chartHeight) * 100, 10), 54)}%`,
+          }}
+        />
+      ) : null}
 
-      <div
-        className={cn(
-          "pointer-events-none absolute z-10 w-[min(18rem,calc(100%-1rem))] rounded-[0.9rem] border border-proof-cyan/35 bg-background/95 p-3 shadow-2xl",
-          !lens.visible && "hidden"
-        )}
-        style={{
-          left: `${Math.min(Math.max((lensX / WIDTH) * 100, 3), 70)}%`,
-          top: `${Math.min(Math.max((lensY / HEIGHT) * 100, 8), 62)}%`,
-        }}
-        data-proof-state={lensSnapshot.proofEligible ? "eligible" : "no-proof"}
-        data-selected-domain={selectedDomainId}
-        data-testid="dispatch-proof-lens-card"
-      >
-        <h4 className="font-mono text-[0.68rem] tracking-[0.16em] text-proof-cyan uppercase">
-          T+{lensSnapshot.minute.toFixed(1)} min - proof lens
-        </h4>
-        <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-[0.72rem]">
-          <dt className="text-muted-foreground">Requested</dt>
-          <dd className="text-right text-primary">
-            {lensSnapshot.requestedMw.toFixed(2)} MW
-          </dd>
-          <dt className="text-muted-foreground">Accepted</dt>
-          <dd className="text-right text-signal">
-            {dto.accepted ? `${lensSnapshot.acceptedMw.toFixed(2)} MW` : "-"}
-          </dd>
-          <dt className="text-muted-foreground">Repair delta</dt>
-          <dd className="text-right text-warning">
-            {lensSnapshot.repairDeltaMw.toFixed(2)} MW
-          </dd>
-          <dt className="text-muted-foreground">
-            {dispatchDomainMeta[selectedDomainId].short} margin
-          </dt>
-          <dd className="text-right text-foreground">
-            {selectedMarginLabel}
-          </dd>
-          <dt className="text-muted-foreground">Binding</dt>
-          <dd className="text-right text-foreground">{bindingLabel}</dd>
-          <dt className="text-muted-foreground">Telemetry age</dt>
-          <dd className="text-right text-foreground">
-            {selectedConstraint.telemetryAgeMs ?? "-"} ms
-          </dd>
-          <dt className="text-muted-foreground">Status</dt>
-          <dd className="text-right text-foreground">
-            {statusLabel(selectedConstraint.state)}
-          </dd>
-          <dt className="text-muted-foreground">Proof</dt>
-          <dd className="text-right text-foreground">
-            {lensSnapshot.proofEligible ? "Eligible" : "No-proof"}
-          </dd>
-          <dt className="text-muted-foreground">Decision</dt>
-          <dd className="text-right text-foreground">
-            {decisionLabel(dto.decision)}
-          </dd>
-          <dt className="text-muted-foreground">Evidence</dt>
-          <dd className="text-right text-foreground">
-            {selectedConstraint.evidenceArtifact}
-          </dd>
-          <dt className="text-muted-foreground">Reason code</dt>
-          <dd className="text-right text-foreground">
-            {selectedConstraint.reasonCode}
-          </dd>
-          <dt className="text-muted-foreground">Proof root</dt>
-          <dd className="text-right text-foreground">{compactHash(dto.proofRoot)}</dd>
-        </dl>
-      </div>
+      {!compact && lens.visible ? (
+        <ProofLensCard
+          snapshot={lensSnapshot}
+          selectedConstraint={selectedConstraint}
+          selectedDomainId={selectedDomainId}
+          decision={dto.decision}
+          proofRoot={dto.proofRoot}
+          accepted={Boolean(dto.accepted)}
+          selectedMarginLabel={selectedMarginLabel}
+          bindingLabel={bindingLabel}
+          className="pointer-events-none absolute z-10 mt-0 w-[min(18rem,calc(100%-1rem))] shadow-2xl"
+          style={{
+            left: `${Math.min(Math.max((lensX / chartWidth) * 100, 3), 70)}%`,
+            top: `${Math.min(Math.max((lensY / chartHeight) * 100, 8), 62)}%`,
+          }}
+        />
+      ) : null}
     </div>
   )
+}
+
+function EventInspectorCard({
+  marker,
+  snapshot,
+  accepted,
+  eventIndex,
+  className,
+  style,
+}: {
+  marker: ReturnType<typeof getEventMarkers>[number]
+  snapshot: ReturnType<typeof getProofLensSnapshotAtMinute>
+  accepted: boolean
+  eventIndex: number | null
+  className?: string
+  style?: CSSProperties
+}) {
+  return (
+    <div
+      className={cn(
+        "mt-3 rounded-[0.85rem] border border-border/70 bg-background/95 p-3",
+        className
+      )}
+      style={style}
+      data-event-index={eventIndex ?? undefined}
+      data-event-phase={eventIndex == null ? undefined : getEventMarkerPhase(eventIndex)}
+      data-testid="dispatch-event-marker-inspector"
+    >
+      <h4 className="font-mono text-[0.68rem] tracking-[0.16em] text-proof-cyan uppercase">
+        {marker.short} - {marker.label}
+      </h4>
+      <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-[0.7rem]">
+        <dt className="text-muted-foreground">Requested</dt>
+        <dd className="text-right text-primary">{snapshot.requestedMw.toFixed(2)} MW</dd>
+        <dt className="text-muted-foreground">Accepted</dt>
+        <dd className="text-right text-signal">
+          {accepted ? `${snapshot.acceptedMw.toFixed(2)} MW` : "-"}
+        </dd>
+        <dt className="text-muted-foreground">Binding</dt>
+        <dd className="text-right text-foreground">
+          {snapshot.bindingDomainId
+            ? dispatchDomainMeta[snapshot.bindingDomainId].short
+            : "None"}
+        </dd>
+        <dt className="text-muted-foreground">Proof</dt>
+        <dd className="text-right text-foreground">
+          {snapshot.proofEligible ? "Eligible" : "No-proof"}
+        </dd>
+      </dl>
+    </div>
+  )
+}
+
+function ProofLensCard({
+  snapshot,
+  selectedConstraint,
+  selectedDomainId,
+  decision,
+  proofRoot,
+  accepted,
+  selectedMarginLabel,
+  bindingLabel,
+  className,
+  style,
+}: {
+  snapshot: ReturnType<typeof getProofLensSnapshotAtMinute>
+  selectedConstraint: DispatchScenario["dto"]["constraints"][number]
+  selectedDomainId: DispatchDomainId
+  decision: DispatchScenario["dto"]["decision"]
+  proofRoot: string
+  accepted: boolean
+  selectedMarginLabel: string
+  bindingLabel: string
+  className?: string
+  style?: CSSProperties
+}) {
+  return (
+    <div
+      className={cn(
+        "mt-3 rounded-[0.9rem] border border-proof-cyan/35 bg-background/95 p-3",
+        className
+      )}
+      style={style}
+      data-proof-state={snapshot.proofEligible ? "eligible" : "no-proof"}
+      data-selected-domain={selectedDomainId}
+      data-testid="dispatch-proof-lens-card"
+    >
+      <h4 className="font-mono text-[0.68rem] tracking-[0.16em] text-proof-cyan uppercase">
+        T+{snapshot.minute.toFixed(1)} min - proof lens
+      </h4>
+      <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-[0.72rem]">
+        <dt className="text-muted-foreground">Requested</dt>
+        <dd className="text-right text-primary">{snapshot.requestedMw.toFixed(2)} MW</dd>
+        <dt className="text-muted-foreground">Accepted</dt>
+        <dd className="text-right text-signal">
+          {accepted ? `${snapshot.acceptedMw.toFixed(2)} MW` : "-"}
+        </dd>
+        <dt className="text-muted-foreground">Repair delta</dt>
+        <dd className="text-right text-warning">{snapshot.repairDeltaMw.toFixed(2)} MW</dd>
+        <dt className="text-muted-foreground">
+          {dispatchDomainMeta[selectedDomainId].short} margin
+        </dt>
+        <dd className="text-right text-foreground">{selectedMarginLabel}</dd>
+        <dt className="text-muted-foreground">Binding</dt>
+        <dd className="text-right text-foreground">{bindingLabel}</dd>
+        <dt className="text-muted-foreground">Telemetry age</dt>
+        <dd className="text-right text-foreground">
+          {selectedConstraint.telemetryAgeMs ?? "-"} ms
+        </dd>
+        <dt className="text-muted-foreground">Status</dt>
+        <dd className="text-right text-foreground">
+          {statusLabel(selectedConstraint.state)}
+        </dd>
+        <dt className="text-muted-foreground">Proof</dt>
+        <dd className="text-right text-foreground">
+          {snapshot.proofEligible ? "Eligible" : "No-proof"}
+        </dd>
+        <dt className="text-muted-foreground">Decision</dt>
+        <dd className="text-right text-foreground">{decisionLabel(decision)}</dd>
+        <dt className="text-muted-foreground">Evidence</dt>
+        <dd className="break-all text-right text-foreground">
+          {selectedConstraint.evidenceArtifact}
+        </dd>
+        <dt className="text-muted-foreground">Reason code</dt>
+        <dd className="break-all text-right text-foreground">{selectedConstraint.reasonCode}</dd>
+        <dt className="text-muted-foreground">Proof root</dt>
+        <dd className="text-right text-foreground">{compactHash(proofRoot)}</dd>
+      </dl>
+    </div>
+  )
+}
+
+function useCompactChart(ref: RefObject<HTMLElement | null>, threshold = 560) {
+  const [compact, setCompact] = useState(false)
+
+  useLayoutEffect(() => {
+    const element = ref.current
+
+    if (!element) {
+      return
+    }
+
+    const container = element.parentElement ?? element
+
+    const update = (width: number) => setCompact(width < threshold)
+
+    update(container.getBoundingClientRect().width)
+
+    const observer = new ResizeObserver(([entry]) => {
+      const borderBox = entry.borderBoxSize[0]
+
+      update(borderBox?.inlineSize ?? entry.target.getBoundingClientRect().width)
+    })
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [ref, threshold])
+
+  return compact
 }
 
 function getEventMarkerPhase(index: number) {

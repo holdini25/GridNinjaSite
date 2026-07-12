@@ -22,7 +22,7 @@ migration is explicitly requested.
 
 ## Local Setup
 
-Next.js 16.2 requires Node `>=20.9.0`.
+This repository pins Node 22 and npm 10 through `package.json`.
 
 ```bash
 node -v
@@ -33,21 +33,50 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## Lead Delivery
+## Contact Intake
 
-The contact API intentionally requires at least one delivery target:
+The Contact and Capacity Audit forms use a durable accept-first pipeline. A
+successful browser response means the lead and its delivery outbox already exist
+in Postgres; Resend and the optional CRM webhook are processed asynchronously by
+signed QStash workers.
 
-- `LEAD_WEBHOOK_URL`
-- or `RESEND_API_KEY` with `LEAD_EMAIL_TO`
+Copy `.env.example` to `.env.local` and configure:
 
-Optional variables:
+- Neon Postgres through `DATABASE_URL`.
+- Upstash Redis for distributed IP/email limits.
+- Upstash QStash for delivery wake-ups, the one-minute recovery sweep, and the
+  daily retention job.
+- Cloudflare Turnstile site and secret keys. The example contains Cloudflare's
+  pass-through test keys for local development only.
+- Resend with a verified `LEAD_EMAIL_FROM` and an internal `LEAD_EMAIL_TO`.
+- `LEAD_PSEUDONYM_SECRET` for HMAC-derived IP/email identifiers.
+- A no-PII `LEAD_ALERT_WEBHOOK_URL` in production.
 
-- `LEAD_WEBHOOK_BEARER_TOKEN`
-- `LEAD_EMAIL_FROM`
-- `NEXT_PUBLIC_SITE_URL`
+CRM delivery is optional. To enable it, configure both `LEAD_WEBHOOK_URL` and
+`LEAD_WEBHOOK_SIGNING_SECRET`. GridNinja sends a versioned
+`lead.accepted.v1` envelope signed over `<timestamp>.<exact-body>` with the
+`X-GridNinja-Timestamp`, `X-GridNinja-Signature`, and idempotency headers. The
+receiver must reject stale timestamps and duplicate event IDs. The legacy
+bearer-token payload is not supported.
 
-Without a configured delivery target, `/api/contact` returns a delivery error by
-design.
+Generate and apply checked-in schema migrations with:
+
+```bash
+npm run db:check
+npm run db:migrate
+```
+
+After deployment, create QStash schedules for
+`POST /api/internal/lead-sweep` using `* * * * *` and
+`POST /api/internal/lead-retention` using `17 3 * * *` (UTC). Internal endpoints
+must never be invoked directly without a valid QStash signature. Use stable
+schedule IDs so a configuration rerun updates rather than duplicates them.
+The repository command `npm run contact:qstash:configure` creates or updates
+both schedules from `QSTASH_TOKEN` and `NEXT_PUBLIC_SITE_URL`.
+
+The manual `Contact staging canary` workflow uses staging-only Turnstile and
+notification destinations, submits one real browser lead, and verifies the lead
+and all configured delivery rows directly in the staging database.
 
 ## Validation
 
@@ -59,8 +88,8 @@ npm exec tsc -- --noEmit
 npm run build
 ```
 
-There is no dedicated `typecheck` or `test` script at the moment. Use
-`npm exec tsc -- --noEmit` for TypeScript validation.
+The repository includes dedicated typecheck, unit, integration, and browser-test
+scripts. The integration suite requires a disposable PostgreSQL database.
 
 ## Main Routes
 

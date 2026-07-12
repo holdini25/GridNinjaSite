@@ -14,6 +14,10 @@ import type { LeadIntent } from "@/types/site"
 
 import { buildContactLeadCandidate } from "@/components/forms/lead-form-data"
 import { NativeSelect } from "@/components/forms/native-select"
+import {
+  TurnstileField,
+  type TurnstileFieldHandle,
+} from "@/components/forms/turnstile-field"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -25,9 +29,13 @@ type ContactFormProps = {
 
 export function ContactForm({ intent, source }: ContactFormProps) {
   const startedAt = useRef(Date.now())
+  const inFlight = useRef(false)
+  const turnstileRef = useRef<TurnstileFieldHandle>(null)
+  const [clientSubmissionId] = useState(() => crypto.randomUUID())
+  const [turnstileToken, setTurnstileToken] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [submissionId, setSubmissionId] = useState<string | null>(null)
   const [serverMessage, setServerMessage] = useState<string | null>(null)
 
   const successCopy = useMemo(() => {
@@ -61,7 +69,15 @@ export function ContactForm({ intent, source }: ContactFormProps) {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
+    if (inFlight.current) {
+      return
+    }
+
     const candidate = buildContactLeadCandidate(new FormData(event.currentTarget), {
+      schemaVersion: 1,
+      formType: "contact",
+      clientSubmissionId,
+      turnstileToken,
       intent,
       source,
       startedAt: startedAt.current,
@@ -74,6 +90,7 @@ export function ContactForm({ intent, source }: ContactFormProps) {
     }
 
     setErrors({})
+    inFlight.current = true
     setIsPending(true)
     setServerMessage(null)
 
@@ -87,25 +104,38 @@ export function ContactForm({ intent, source }: ContactFormProps) {
       })
       const payload = (await response.json()) as {
         ok: boolean
+        requestId?: string
+        submissionId?: string
+        status?: "queued" | "already_received"
         fieldErrors?: Record<string, string>
         message?: string
       }
 
-      if (!response.ok || !payload.ok) {
+      const acceptedStatus = response.status === 200 || response.status === 202
+
+      if (
+        !acceptedStatus ||
+        !payload.ok ||
+        typeof payload.submissionId !== "string" ||
+        !payload.submissionId
+      ) {
         setErrors(payload.fieldErrors ?? {})
         setServerMessage(payload.message ?? "Unable to submit the request.")
+        turnstileRef.current?.reset()
         return
       }
 
-      setSubmitted(true)
+      setSubmissionId(payload.submissionId)
     } catch {
       setServerMessage("Unable to submit the request.")
+      turnstileRef.current?.reset()
     } finally {
+      inFlight.current = false
       setIsPending(false)
     }
   }
 
-  if (submitted) {
+  if (submissionId) {
     return (
       <div
         className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
@@ -119,6 +149,10 @@ export function ContactForm({ intent, source }: ContactFormProps) {
         </h3>
         <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground">
           {successCopy}
+        </p>
+        <p className="mt-4 text-sm text-muted-foreground">
+          Reference:{" "}
+          <span className="font-mono text-foreground">{submissionId}</span>
         </p>
       </div>
     )
@@ -397,6 +431,13 @@ export function ContactForm({ intent, source }: ContactFormProps) {
           {serverMessage}
         </p>
       ) : null}
+
+      <TurnstileField
+        ref={turnstileRef}
+        action="contact"
+        error={errors.turnstileToken}
+        onTokenChange={setTurnstileToken}
+      />
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-base leading-8 text-muted-foreground">

@@ -87,7 +87,7 @@ export function DispatchConstraintRail({
   }
 
   return (
-    <aside className="border-b border-border/70 p-4 sm:p-6 xl:border-r xl:border-b-0">
+    <aside className="order-2 min-w-0 border-b border-border/70 p-4 sm:p-6 xl:order-none xl:border-r xl:border-b-0">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="gn-eyebrow text-[0.68rem]">Binding hierarchy</p>
@@ -100,7 +100,7 @@ export function DispatchConstraintRail({
         </span>
       </div>
       <div
-        className="mt-5 flex gap-3 overflow-x-auto pb-2 xl:grid xl:overflow-visible xl:pb-0"
+        className="mt-5 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain pb-2 xl:grid xl:overflow-visible xl:pb-0"
         role="listbox"
         aria-label="Binding hierarchy constraints"
         data-testid="dispatch-constraint-rail"
@@ -118,7 +118,7 @@ export function DispatchConstraintRail({
             onClick={() => onSelect(id)}
             onKeyDown={(event) => handleKeyDown(event, index)}
             className={cn(
-              "min-h-11 min-w-[15rem] rounded-[0.9rem] border bg-background/45 p-4 text-left transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 xl:min-w-0",
+              "min-h-11 w-[82vw] max-w-[19rem] shrink-0 snap-start rounded-[0.9rem] border bg-background/45 p-4 text-left transition-colors focus-visible:ring-3 focus-visible:ring-ring/45 sm:w-[18rem] xl:w-auto xl:max-w-none xl:min-w-0",
               id === selectedDomainId
                 ? "border-primary/70"
                 : "border-border/70 hover:border-primary/45"
@@ -146,6 +146,9 @@ export function DispatchConstraintRail({
           </button>
         ))}
       </div>
+      <p className="mt-2 text-xs text-muted-foreground xl:hidden">
+        Swipe to inspect each constraint domain.
+      </p>
     </aside>
   )
 }

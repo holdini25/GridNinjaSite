@@ -1,6 +1,9 @@
 import type { LeadIntent } from "@/types/site"
 
 type LeadAttribution = {
+  schemaVersion: 1
+  clientSubmissionId: string
+  turnstileToken: string
   intent: LeadIntent
   source: string
   startedAt: number
@@ -20,9 +23,20 @@ function getStrings(formData: FormData, name: string) {
 
 export function buildCapacityAuditCandidate(
   formData: FormData,
-  attribution: LeadAttribution
+  attribution: LeadAttribution & { formType: "capacity_audit" }
+) {
+  return buildBaseLeadCandidate(formData, attribution)
+}
+
+function buildBaseLeadCandidate(
+  formData: FormData,
+  attribution: LeadAttribution & { formType: "contact" | "capacity_audit" }
 ) {
   return {
+    schemaVersion: attribution.schemaVersion,
+    formType: attribution.formType,
+    clientSubmissionId: attribution.clientSubmissionId,
+    turnstileToken: attribution.turnstileToken,
     name: getString(formData, "name"),
     company: getString(formData, "company"),
     email: getString(formData, "email"),
@@ -38,10 +52,10 @@ export function buildCapacityAuditCandidate(
 
 export function buildContactLeadCandidate(
   formData: FormData,
-  attribution: LeadAttribution
+  attribution: LeadAttribution & { formType: "contact" }
 ) {
   return {
-    ...buildCapacityAuditCandidate(formData, attribution),
+    ...buildBaseLeadCandidate(formData, attribution),
     role: getString(formData, "role"),
     constraints: getStrings(formData, "constraints"),
     message: getString(formData, "message"),

@@ -1265,6 +1265,7 @@
 }
 
 .gn-dispatch-shell {
+  padding-bottom: env(safe-area-inset-bottom);
   box-shadow:
     0 24px 90px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(245, 247, 250, 0.045);
@@ -1316,11 +1317,14 @@
 
 .gn-dispatch-chart {
   --gn-dispatch-phase-opacity: 1;
-  scrollbar-gutter: stable;
 }
 
 .gn-dispatch-chart svg {
   overflow: visible;
+}
+
+.gn-dispatch-chart[data-chart-layout="compact"] svg text {
+  text-rendering: geometricPrecision;
 }
 
 .gn-dispatch-layer {

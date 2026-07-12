@@ -124,7 +124,7 @@ test.describe("dispatch envelope page", () => {
 
   test("supports scenario decisions, canonical domains, visual layers, and URL state", async ({
     page,
-  }) => {
+  }, testInfo) => {
     await page.goto("/platform/dispatch-envelope")
 
     await expect(page.getByTestId("dispatch-decision-pill")).toContainText("REPAIR")
@@ -151,6 +151,10 @@ test.describe("dispatch envelope page", () => {
     await expect(page.getByTestId("dispatch-decision-pill")).toContainText("ALLOW")
     await expect(page.getByTestId("dispatch-accepted-path")).toHaveAttribute("d", /M/)
     await expect(page.getByTestId("dispatch-repair-delta")).toHaveCount(0)
+
+    if (testInfo.project.name.includes("mobile")) {
+      await page.getByTestId("dispatch-mode-constraints").click()
+    }
 
     await page.getByTestId("dispatch-scenario-cooling-contingency").click()
     await expect(page.getByTestId("dispatch-decision-pill")).toContainText("REJECT")
@@ -311,6 +315,9 @@ test.describe("dispatch envelope page", () => {
     )
     await expect(page.getByTestId("dispatch-mode-decision")).toBeFocused()
     await expect(page.getByTestId("dispatch-domain-electrical")).toHaveCount(0)
+    if (testInfo.project.name.includes("mobile")) {
+      await page.getByTestId("dispatch-mode-constraints").click()
+    }
     await page.getByTestId("dispatch-show-all").click()
     await expect(page.getByTestId("dispatch-domain-electrical")).toHaveCount(1)
 
@@ -474,9 +481,181 @@ test.describe("dispatch envelope page", () => {
     }
   })
 
-  test("keeps final paths correct with reduced motion replay", async ({ page }) => {
+  test("uses the compact mobile composition without chart overflow", async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      !testInfo.project.name.includes("mobile"),
+      "Mobile-only layout assertion"
+    )
+
+    const viewports = [
+      { width: 390, height: 844 },
+      { width: 375, height: 667 },
+      { width: 412, height: 915 },
+      { width: 844, height: 390 },
+    ]
+
+    for (const viewport of viewports) {
+      await page.setViewportSize(viewport)
+      await page.goto("/platform/dispatch-envelope")
+
+      const chart = page.getByTestId("dispatch-envelope-chart")
+      const measurements = await chart.evaluate((element) => {
+        const svg = element.querySelector("svg")
+
+        if (!svg) {
+          throw new Error("Dispatch SVG missing")
+        }
+
+        const hostBounds = element.getBoundingClientRect()
+        const svgBounds = svg.getBoundingClientRect()
+
+        return {
+          clientWidth: element.clientWidth,
+          scrollWidth: element.scrollWidth,
+          viewportWidth: window.innerWidth,
+          hostWidth: hostBounds.width,
+          containerWidth:
+            element.parentElement?.getBoundingClientRect().width ?? hostBounds.width,
+          hostLeft: hostBounds.left,
+          hostRight: hostBounds.right,
+          svgLeft: svgBounds.left,
+          svgRight: svgBounds.right,
+        }
+      })
+
+      await expect(chart).toHaveAttribute(
+        "data-chart-layout",
+        measurements.containerWidth < 560 ? "compact" : "wide"
+      )
+      expect(measurements.scrollWidth - measurements.clientWidth).toBeLessThanOrEqual(1)
+      expect(measurements.hostWidth).toBeLessThanOrEqual(measurements.viewportWidth)
+      expect(measurements.svgLeft).toBeGreaterThanOrEqual(measurements.hostLeft - 1)
+      expect(measurements.svgRight).toBeLessThanOrEqual(measurements.hostRight + 1)
+    }
+
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto("/platform/dispatch-envelope")
+    await expect(page.getByTestId("dispatch-mobile-summary")).toBeVisible()
+    await expect(page.getByTestId("dispatch-envelope-chart")).toHaveAttribute(
+      "data-chart-layout",
+      "compact"
+    )
+    await expect(page.getByTestId("dispatch-domain-storage")).toHaveCount(0)
+    await expect(page.getByTestId("dispatch-table-toggle")).toHaveAttribute(
+      "aria-expanded",
+      "false"
+    )
+    await expect(page.getByTestId("dispatch-equivalent-table")).toHaveCount(0)
+
+    const visual = page.getByTestId("dispatch-envelope-visual")
+
+    const siteHeader = page.locator("header").first()
+
+    await siteHeader.evaluate((element) => {
+      element.style.display = "none"
+    })
+    await page.locator("nextjs-portal").evaluateAll((portals) => {
+      portals.forEach((portal) => {
+        const element = portal as HTMLElement
+
+        element.style.display = "none"
+      })
+    })
+    await expect(siteHeader).toBeHidden()
+
+    if (testInfo.project.name.includes("webkit")) {
+      await visual.screenshot({
+        path: testInfo.outputPath("dispatch-envelope-mobile-webkit.png"),
+        animations: "disabled",
+      })
+    } else {
+      await expect(visual).toHaveScreenshot("dispatch-envelope-mobile.png", {
+        animations: "disabled",
+        maxDiffPixelRatio: 0.01,
+      })
+    }
+  })
+
+  test("keeps mobile summary values and inspectors progressive", async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      !testInfo.project.name.includes("mobile"),
+      "Mobile-only interaction assertion"
+    )
+
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto("/platform/dispatch-envelope")
+
+    const summary = page.getByTestId("dispatch-mobile-summary")
+
+    await expect(summary).toContainText("Requested")
+    await expect(summary).toContainText("4.0 MW")
+    await expect(summary).toContainText("Accepted")
+    await expect(summary).toContainText("2.8 MW")
+    await expect(summary).toContainText("Repair delta")
+    await expect(summary).toContainText("−1.2 MW")
+    await expect(summary).toContainText("Eligible")
+
+    await page.getByTestId("dispatch-scenario-normal").click()
+    await expect(summary).toContainText("ALLOW")
+    await page.getByTestId("dispatch-scenario-cooling-contingency").click()
+    await expect(summary).toContainText("Withheld")
+    await expect(summary).toContainText("REJECT")
+    await page.getByTestId("dispatch-scenario-telemetry-loss").click()
+    await expect(summary).toContainText("NO-PROOF")
+    await expect(summary).toContainText("Withheld")
+
+    await page.getByTestId("dispatch-scenario-grid-stress").click()
+    const proofRange = page.getByTestId("dispatch-proof-lens-range")
+    const proofStep = (await proofRange.getAttribute("step")) ?? "1"
+
+    await proofRange.fill(proofStep)
+    const proofCard = page.getByTestId("dispatch-proof-lens-card")
+
+    await expect(proofCard).toBeVisible()
+    await expect(proofCard).toHaveCSS("position", "static")
+
+    await page.getByTestId("dispatch-event-control-1").click()
+    const eventCard = page.getByTestId("dispatch-event-marker-inspector")
+
+    await expect(eventCard).toBeVisible()
+    await expect(eventCard).toHaveCSS("position", "static")
+    await expect(page.getByTestId("dispatch-mobile-event-strip")).toHaveCSS(
+      "scroll-snap-type",
+      /x/
+    )
+    await expect(page.getByTestId("dispatch-constraint-rail")).toHaveCSS(
+      "scroll-snap-type",
+      /x/
+    )
+  })
+
+  test("keeps proof inspectors positioned over the wide chart", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name.includes("mobile"), "Desktop-only layout assertion")
+
+    await page.goto("/platform/dispatch-envelope")
+    const proofRange = page.getByTestId("dispatch-proof-lens-range")
+
+    await proofRange.focus()
+    await page.keyboard.press("ArrowRight")
+    await expect(page.getByTestId("dispatch-proof-lens-card")).toHaveCSS(
+      "position",
+      "absolute"
+    )
+  })
+
+  test("keeps final paths correct with reduced motion replay", async ({ page }, testInfo) => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.goto("/platform/dispatch-envelope")
+    await expect(page.getByTestId("dispatch-envelope-chart")).toHaveAttribute(
+      "data-chart-layout",
+      testInfo.project.name.includes("mobile") ? "compact" : "wide"
+    )
 
     const initialAcceptedPath = await page
       .getByTestId("dispatch-accepted-path")
