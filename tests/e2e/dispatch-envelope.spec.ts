@@ -564,18 +564,13 @@ test.describe("dispatch envelope page", () => {
       })
     })
     await expect(siteHeader).toBeHidden()
-
-    if (testInfo.project.name.includes("webkit")) {
-      await visual.screenshot({
-        path: testInfo.outputPath("dispatch-envelope-mobile-webkit.png"),
-        animations: "disabled",
-      })
-    } else {
-      await expect(visual).toHaveScreenshot("dispatch-envelope-mobile.png", {
-        animations: "disabled",
-        maxDiffPixelRatio: 0.01,
-      })
-    }
+    await expect(visual).toHaveAttribute("data-animation-phase", "settled")
+    await visual.screenshot({
+      path: testInfo.outputPath(
+        `dispatch-envelope-mobile-${testInfo.project.name}.png`
+      ),
+      animations: "disabled",
+    })
   })
 
   test("keeps mobile summary values and inspectors progressive", async ({
