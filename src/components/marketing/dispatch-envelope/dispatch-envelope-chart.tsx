@@ -1,7 +1,7 @@
 "use client"
 
 import type { KeyboardEvent, MouseEvent, PointerEvent } from "react"
-import { useId, useMemo, useState } from "react"
+import { useId, useLayoutEffect, useMemo, useRef, useState } from "react"
 
 import { buildDispatchEnvelopeGeometry } from "@/lib/dispatch-envelope/geometry"
 import { buildEnvelopeSamples } from "@/lib/dispatch-envelope/normalize"
@@ -79,6 +79,8 @@ export function DispatchEnvelopeChart({
   const [activeEventMarkerIndex, setActiveEventMarkerIndex] = useState<
     number | null
   >(null)
+  const eventControlRefs = useRef<Array<HTMLButtonElement | null>>([])
+  const pendingEventFocusIndex = useRef<number | null>(null)
   const id = useId().replace(/:/g, "")
   const hatchId = `${id}-repair-hatch`
   const gradientId = `${id}-accepted-gradient`
@@ -136,6 +138,24 @@ export function DispatchEnvelopeChart({
         ? "-"
         : formatSignedMw(selectedMargin)
   const proofState = dto.decision === "no-proof" ? "withheld" : "eligible"
+
+  useLayoutEffect(() => {
+    const index = pendingEventFocusIndex.current
+
+    if (index == null || index !== activeEventMarkerIndex) {
+      return
+    }
+
+    const target = eventControlRefs.current[index]
+
+    if (!target) {
+      return
+    }
+
+    target.focus()
+    target.scrollIntoView({ block: "nearest", inline: "nearest" })
+    pendingEventFocusIndex.current = null
+  }, [activeEventMarkerIndex])
 
   function updateLensFromPointer(
     event: PointerEvent<SVGRectElement> | MouseEvent<SVGRectElement>,
@@ -227,14 +247,8 @@ export function DispatchEnvelopeChart({
             ? Math.max(0, index - 1)
             : Math.min(eventMarkers.length - 1, index + 1)
 
+    pendingEventFocusIndex.current = nextIndex
     showEventMarker(nextIndex)
-    window.requestAnimationFrame(() => {
-      document
-        .querySelector<HTMLButtonElement>(
-          `[data-testid="dispatch-event-control-${nextIndex}"]`
-        )
-        ?.focus()
-    })
   }
 
   return (
@@ -842,7 +856,18 @@ export function DispatchEnvelopeChart({
         </p>
         <div className="mt-3 flex flex-wrap gap-2" aria-label="Dispatch event markers">
           {eventMarkers.map((marker, index) => (
-            <button key={`${marker.short}-${marker.label}-control`} type="button" className="min-h-11 rounded-lg border border-border/70 px-3 py-2 text-xs text-foreground focus-visible:ring-3 focus-visible:ring-ring/45" data-testid={`dispatch-event-control-${index}`} onFocus={() => showEventMarker(index)} onClick={() => showEventMarker(index, true)} onKeyDown={(event) => handleEventMarkerKeyDown(event, index)}>
+            <button
+              key={`${marker.short}-${marker.label}-control`}
+              ref={(element) => {
+                eventControlRefs.current[index] = element
+              }}
+              type="button"
+              className="min-h-11 rounded-lg border border-border/70 px-3 py-2 text-xs text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
+              data-testid={`dispatch-event-control-${index}`}
+              onFocus={() => showEventMarker(index)}
+              onClick={() => showEventMarker(index, true)}
+              onKeyDown={(event) => handleEventMarkerKeyDown(event, index)}
+            >
               {marker.label} ({marker.short})
             </button>
           ))}

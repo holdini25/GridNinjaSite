@@ -1,7 +1,7 @@
 "use client"
 
 import type { KeyboardEvent } from "react"
-import { useRef } from "react"
+import { useLayoutEffect, useRef } from "react"
 
 import {
   formatMw,
@@ -25,17 +25,37 @@ export function DispatchConstraintRail({
   onSelect: (domainId: DispatchDomainId) => void
 }) {
   const refs = useRef<Array<HTMLButtonElement | null>>([])
+  const pendingFocusDomainId = useRef<DispatchDomainId | null>(null)
   const selectedIndex = Math.max(
     0,
     constraints.findIndex(({ id }) => id === selectedDomainId)
   )
 
+  useLayoutEffect(() => {
+    const domainId = pendingFocusDomainId.current
+
+    if (!domainId || domainId !== selectedDomainId) {
+      return
+    }
+
+    const index = constraints.findIndex(({ id }) => id === domainId)
+    const target = refs.current[index]
+
+    if (!target) {
+      return
+    }
+
+    target.focus()
+    target.scrollIntoView({ block: "nearest", inline: "nearest" })
+    pendingFocusDomainId.current = null
+  }, [constraints, selectedDomainId])
+
   function move(nextIndex: number) {
     const normalized = (nextIndex + constraints.length) % constraints.length
     const next = constraints[normalized]
 
+    pendingFocusDomainId.current = next.id
     onSelect(next.id)
-    window.requestAnimationFrame(() => refs.current[normalized]?.focus())
   }
 
   function handleKeyDown(

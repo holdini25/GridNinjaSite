@@ -379,9 +379,17 @@ test.describe("dispatch envelope page", () => {
     await expect(page.getByTestId("dispatch-table-group-scenario")).toContainText(
       "proof root"
     )
-    await expect(page.getByTestId("dispatch-table-group-constraints")).toBeVisible()
-    await expect(page.getByTestId("dispatch-table-group-timeline")).toBeVisible()
-    await expect(page.getByTestId("dispatch-table-group-dimensions")).toBeVisible()
+    for (const [testId, name] of [
+      ["dispatch-table-group-constraints", "Domain constraints"],
+      ["dispatch-table-group-timeline", "Timeline samples"],
+      ["dispatch-table-group-dimensions", "Dimension audit"],
+    ] as const) {
+      const region = page.getByTestId(testId)
+
+      await expect(region).toBeVisible()
+      await expect(region).toHaveAttribute("tabindex", "0")
+      await expect(region).toHaveAccessibleName(name)
+    }
     await expect(page.getByTestId("dispatch-table-group-artifacts")).toContainText(
       "reserve_floor_report.csv"
     )
@@ -454,10 +462,16 @@ test.describe("dispatch envelope page", () => {
     )
     expect(overflow).toBeLessThanOrEqual(1)
 
-    await page.screenshot({
-      fullPage: true,
-      path: testInfo.outputPath(`dispatch-envelope-${testInfo.project.name}.png`),
-    })
+    const screenshotPath = testInfo.outputPath(
+      `dispatch-envelope-${testInfo.project.name}.png`
+    )
+
+    if (testInfo.project.name.includes("mobile")) {
+      await page.getByTestId("dispatch-envelope-visual").scrollIntoViewIfNeeded()
+      await page.screenshot({ path: screenshotPath })
+    } else {
+      await page.screenshot({ fullPage: true, path: screenshotPath })
+    }
   })
 
   test("keeps final paths correct with reduced motion replay", async ({ page }) => {

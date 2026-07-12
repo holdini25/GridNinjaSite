@@ -201,20 +201,27 @@ function TableShell({
   testId: string
   title: string
 }) {
+  const headingId = `${testId}-heading`
+
   return (
     <section
-      className="overflow-x-auto rounded-[1rem] border border-border/70 bg-background/45"
+      aria-labelledby={headingId}
+      tabIndex={0}
+      className="overflow-x-auto rounded-[1rem] border border-border/70 bg-background/45 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/45 focus-visible:ring-inset"
       data-testid={testId}
     >
-      <TableHeading title={title} />
+      <TableHeading id={headingId} title={title} />
       {children}
     </section>
   )
 }
 
-function TableHeading({ title }: { title: string }) {
+function TableHeading({ id, title }: { id?: string; title: string }) {
   return (
-    <h3 className="border-b border-border/70 px-4 py-3 font-mono text-xs tracking-[0.16em] text-primary uppercase">
+    <h3
+      id={id}
+      className="border-b border-border/70 px-4 py-3 font-mono text-xs tracking-[0.16em] text-primary uppercase"
+    >
       {title}
     </h3>
   )
