@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+import { canonicalSiteUrl } from "./src/content/site";
+
 const securityHeaders = [
   {
     key: "X-Content-Type-Options",
@@ -24,6 +26,21 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "gridninja.ai",
+          },
+        ],
+        destination: `${new URL(canonicalSiteUrl).origin}/:path*`,
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

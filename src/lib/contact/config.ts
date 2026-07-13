@@ -1,5 +1,7 @@
 import "server-only"
 
+import { canonicalSiteUrl } from "@/content/site"
+
 export class ContactConfigurationError extends Error {
   constructor(message: string) {
     super(message)
@@ -79,7 +81,7 @@ function requireLongSecret(name: string) {
 
 export function getContactRuntimeConfig(): ContactRuntimeConfig {
   const publicBaseUrl = normalizeOrigin(
-    process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://gridninja.ai"
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() || canonicalSiteUrl
   )
   const allowedOrigins = new Set([
     publicBaseUrl,

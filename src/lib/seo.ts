@@ -25,12 +25,14 @@ type MetadataInput = {
   title: string
   description: string
   path: string
+  includeCanonicalUrl?: boolean
 }
 
 export function createPageMetadata({
   title,
   description,
   path,
+  includeCanonicalUrl = true,
 }: MetadataInput): Metadata {
   const url = new URL(path, siteConfig.url)
 
@@ -38,14 +40,16 @@ export function createPageMetadata({
     metadataBase: new URL(siteConfig.url),
     title,
     description,
-    alternates: {
-      canonical: path,
-    },
+    alternates: includeCanonicalUrl
+      ? {
+          canonical: path,
+        }
+      : undefined,
     openGraph: {
       title,
       description,
       type: "website",
-      url,
+      ...(includeCanonicalUrl ? { url } : {}),
       siteName: siteConfig.name,
       images: [openGraphImage],
     },

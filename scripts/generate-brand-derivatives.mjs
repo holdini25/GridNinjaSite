@@ -12,6 +12,12 @@ const root = path.resolve(
   rootArgIndex === -1 ? process.cwd() : (args[rootArgIndex + 1] ?? "")
 )
 const brandDir = path.join(root, "public", "brand")
+const faviconSourcePath = path.join(
+  root,
+  "assets",
+  "brand",
+  "gridninja-logo.png"
+)
 
 if (rootArgIndex !== -1 && !args[rootArgIndex + 1]) {
   throw new Error("--root requires a directory path")
@@ -26,6 +32,9 @@ const canonicalHashes = {
   "gridninja-favicon-proof-core.svg": "e9b2ac6db468ae6eed4693c0ad37645a319754f16ea07751151265ecc2718955",
   "gridninja-mark-micro.svg": "0b087bec57396488ef43cc8a9f7d540da95acd7e873af86efc39f141a3f14366",
 }
+
+const canonicalFaviconSourceHash =
+  "e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899"
 
 const colors = {
   navy: "#07182B",
@@ -48,6 +57,15 @@ async function verifyCanonicalMasters() {
         `Canonical brand source changed: ${filename}\nExpected ${expectedHash}\nReceived ${actualHash}`
       )
     }
+  }
+
+  const faviconSource = await readFile(faviconSourcePath)
+  const faviconSourceHash = sha256(faviconSource)
+
+  if (faviconSourceHash !== canonicalFaviconSourceHash) {
+    throw new Error(
+      `Canonical favicon source changed: assets/brand/gridninja-logo.png\nExpected ${canonicalFaviconSourceHash}\nReceived ${faviconSourceHash}`
+    )
   }
 }
 
@@ -155,6 +173,88 @@ async function squarePng(svg, size, artworkScale, background) {
     .toBuffer()
 }
 
+async function exactSquarePng(source, size) {
+  return sharp(source)
+    .resize(size, size, {
+      fit: "fill",
+      kernel: sharp.kernel.lanczos3,
+    })
+    .png({ compressionLevel: 9 })
+    .toBuffer()
+}
+
+async function transparentLogoPng(source, size) {
+  const { data, info } = await sharp(source)
+    .removeAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true })
+  const output = Buffer.alloc(info.width * info.height * 4)
+  const background = [1, 11, 24]
+  const centerX = (info.width - 1) / 2
+  const centerY = info.height * 0.47
+  const fieldRadius = Math.min(info.width, info.height) * 0.39
+  const fieldFeather = Math.max(2, Math.min(info.width, info.height) * 0.004)
+
+  for (let index = 0; index < info.width * info.height; index += 1) {
+    const sourceOffset = index * info.channels
+    const outputOffset = index * 4
+    const x = index % info.width
+    const y = Math.floor(index / info.width)
+    const red = data[sourceOffset]
+    const normalized = Math.min(1, Math.max(0, (red - 4) / 146))
+    const markAlpha = normalized * normalized * (3 - 2 * normalized)
+    const distance = Math.hypot(x - centerX, y - centerY)
+    const fieldPosition = Math.min(
+      1,
+      Math.max(
+        0,
+        (distance - (fieldRadius - fieldFeather)) / (fieldFeather * 2)
+      )
+    )
+    const fieldAlpha = 1 - fieldPosition * fieldPosition * (3 - 2 * fieldPosition)
+    const alpha = Math.max(markAlpha, fieldAlpha)
+
+    if (alpha <= 0.002) {
+      output[outputOffset] = 0
+      output[outputOffset + 1] = 0
+      output[outputOffset + 2] = 0
+      output[outputOffset + 3] = 0
+      continue
+    }
+
+    for (let channel = 0; channel < 3; channel += 1) {
+      const composited = data[sourceOffset + channel]
+      output[outputOffset + channel] =
+        fieldAlpha >= markAlpha
+          ? composited
+          : Math.round(
+              Math.min(
+                255,
+                Math.max(
+                  0,
+                  (composited - (1 - alpha) * background[channel]) / alpha
+                )
+              )
+            )
+    }
+    output[outputOffset + 3] = Math.round(alpha * 255)
+  }
+
+  return sharp(output, {
+    raw: {
+      width: info.width,
+      height: info.height,
+      channels: 4,
+    },
+  })
+    .resize(size, size, {
+      fit: "fill",
+      kernel: sharp.kernel.lanczos3,
+    })
+    .png({ compressionLevel: 9 })
+    .toBuffer()
+}
+
 function svgDataUrl(svg) {
   return `data:image/svg+xml;base64,${svg.toString("base64")}`
 }
@@ -192,23 +292,26 @@ async function buildExpectedOutputs() {
   const proofCore = await readFile(
     path.join(brandDir, "gridninja-favicon-proof-core.svg")
   )
+  const faviconSource = await readFile(faviconSourcePath)
   const detailedText = detailed.toString("utf8")
   const proofCoreText = proofCore.toString("utf8")
-  const icon16 = await squarePng(proofCore, 16, 0.875)
-  const icon32 = await squarePng(proofCore, 32, 0.875)
-  const icon48 = await squarePng(proofCore, 48, 0.875)
+  const icon16 = await transparentLogoPng(faviconSource, 16)
+  const icon32 = await transparentLogoPng(faviconSource, 32)
+  const icon48 = await transparentLogoPng(faviconSource, 48)
+  const icon180 = await exactSquarePng(faviconSource, 180)
+  const icon192 = await transparentLogoPng(faviconSource, 192)
+  const icon512 = await transparentLogoPng(faviconSource, 512)
   const bannerSource = linkedInBannerSource(detailed)
 
   const outputs = new Map([
     ["public/brand/gridninja-proof-star.svg", Buffer.from(proofStarSource(proofCoreText))],
     ["public/brand/gridninja-watermark.svg", Buffer.from(watermarkSource(detailedText))],
-    ["src/app/icon.svg", proofCore],
-    ["src/app/icon1.png", icon16],
-    ["src/app/icon2.png", icon32],
-    ["src/app/apple-icon.png", await squarePng(detailed, 180, 0.86, colors.navy)],
-    ["src/app/favicon.ico", await pngToIco([icon16, icon32, icon48])],
-    ["public/brand/icons/pwa-192.png", await squarePng(detailed, 192, 0.86, colors.navy)],
-    ["public/brand/icons/pwa-512.png", await squarePng(detailed, 512, 0.86, colors.navy)],
+    ["public/favicon.ico", await pngToIco([icon16, icon32, icon48])],
+    ["public/gridninja-apple-touch-icon-180.png", icon180],
+    ["public/gridninja-icon-192.png", icon192],
+    ["public/gridninja-icon-512.png", icon512],
+    ["public/brand/icons/pwa-192.png", icon192],
+    ["public/brand/icons/pwa-512.png", icon512],
     ["public/brand/icons/pwa-maskable-192.png", await squarePng(detailed, 192, 0.72, colors.site)],
     ["public/brand/icons/pwa-maskable-512.png", await squarePng(detailed, 512, 0.72, colors.site)],
     [
@@ -228,7 +331,7 @@ async function buildExpectedOutputs() {
     ],
   ])
 
-  const favicon = outputs.get("src/app/favicon.ico")
+  const favicon = outputs.get("public/favicon.ico")
 
   if (!favicon || favicon.length > 32 * 1024) {
     throw new Error(

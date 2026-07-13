@@ -38,8 +38,8 @@ vi.mock("@/lib/contact/config", async (importOriginal) => {
 
 const runtimeConfig = {
   databaseUrl: "postgresql://test",
-  publicBaseUrl: "https://gridninja.ai",
-  allowedOrigins: new Set(["https://gridninja.ai"]),
+  publicBaseUrl: "https://www.gridninja.ai",
+  allowedOrigins: new Set(["https://www.gridninja.ai"]),
   allowedTurnstileHostnames: new Set(["gridninja.ai"]),
   turnstileSecretKey: "turnstile-secret",
   pseudonymSecret: "pseudonym-secret-at-least-32-characters",
@@ -224,10 +224,10 @@ async function post(
   const serialized = JSON.stringify(body)
 
   return POST(
-    new Request("https://gridninja.ai/api/contact", {
+    new Request("https://www.gridninja.ai/api/contact", {
       method: "POST",
       headers: {
-        origin: overrides.origin ?? "https://gridninja.ai",
+        origin: overrides.origin ?? "https://www.gridninja.ai",
         "content-type": overrides.contentType ?? "application/json",
         "content-length": overrides.declaredLength ?? String(serialized.length),
         "x-vercel-forwarded-for": "203.0.113.10",
@@ -236,4 +236,3 @@ async function post(
     })
   )
 }
-

@@ -27,6 +27,10 @@ const canonicalSources = {
 const canonicalMasters = Object.keys(canonicalSources).filter(
   (filename) => filename.endsWith(".svg")
 )
+const canonicalFaviconSource = {
+  path: "assets/brand/gridninja-logo.png",
+  sha256: "e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899",
+} as const
 const generator = resolve(
   process.cwd(),
   "scripts",
@@ -86,6 +90,20 @@ async function readArtworkBounds(
 }
 
 describe("GridNinja canonical brand sources", () => {
+  it("keeps the supplied favicon raster byte-identical", async () => {
+    const source = await readFile(
+      resolve(process.cwd(), canonicalFaviconSource.path)
+    )
+    const actualHash = createHash("sha256").update(source).digest("hex")
+
+    expect(actualHash).toBe(canonicalFaviconSource.sha256)
+    expect(await sharp(source).metadata()).toMatchObject({
+      width: 1254,
+      height: 1254,
+      format: "png",
+    })
+  })
+
   it.each(Object.entries(canonicalSources))(
     "keeps %s byte-identical to the approved archive",
     async (filename, expectedHash) => {
@@ -141,18 +159,6 @@ describe("GridNinja derived vector artwork", () => {
     expect(derivative).not.toContain("<circle")
   })
 
-  it("uses the transparent canonical proof core for the browser SVG icon", async () => {
-    const canonical = await readFile(
-      resolve(process.cwd(), "public/brand/gridninja-favicon-proof-core.svg")
-    )
-    const derivative = await readFile(
-      resolve(process.cwd(), "src/app/icon.svg")
-    )
-
-    expect(derivative).toEqual(canonical)
-    expect((await sharp(derivative).stats()).isOpaque).toBe(false)
-  })
-
   it("copies the detailed emblem globe and proof fragments into the watermark", async () => {
     const canonical = await readFile(
       resolve(process.cwd(), "public/brand/gridninja-emblem-detailed-dark.svg"),
@@ -193,9 +199,9 @@ describe("GridNinja derived vector artwork", () => {
 
 describe("GridNinja browser and social derivatives", () => {
   it.each([
-    ["src/app/icon1.png", 16, 16, "png"],
-    ["src/app/icon2.png", 32, 32, "png"],
-    ["src/app/apple-icon.png", 180, 180, "png"],
+    ["public/gridninja-apple-touch-icon-180.png", 180, 180, "png"],
+    ["public/gridninja-icon-192.png", 192, 192, "png"],
+    ["public/gridninja-icon-512.png", 512, 512, "png"],
     ["public/brand/icons/pwa-192.png", 192, 192, "png"],
     ["public/brand/icons/pwa-512.png", 512, 512, "png"],
     ["public/brand/icons/pwa-maskable-192.png", 192, 192, "png"],
@@ -213,9 +219,7 @@ describe("GridNinja browser and social derivatives", () => {
   )
 
   it.each([
-    "src/app/apple-icon.png",
-    "public/brand/icons/pwa-192.png",
-    "public/brand/icons/pwa-512.png",
+    "public/gridninja-apple-touch-icon-180.png",
     "public/brand/icons/pwa-maskable-192.png",
     "public/brand/icons/pwa-maskable-512.png",
     "public/brand/social/linkedin-avatar.png",
@@ -224,18 +228,34 @@ describe("GridNinja browser and social derivatives", () => {
     expect(stats.isOpaque).toBe(true)
   })
 
-  it.each(["src/app/icon.svg", "src/app/icon1.png", "src/app/icon2.png"])(
-    "keeps %s transparent for browser chrome",
-    async (filename) => {
-      const stats = await sharp(resolve(process.cwd(), filename)).stats()
-      expect(stats.isOpaque).toBe(false)
-    }
-  )
+  it.each([
+    "public/gridninja-icon-192.png",
+    "public/gridninja-icon-512.png",
+    "public/brand/icons/pwa-192.png",
+    "public/brand/icons/pwa-512.png",
+  ])("keeps %s transparent outside the supplied mark", async (filename) => {
+    const image = sharp(resolve(process.cwd(), filename))
+    const metadata = await image.metadata()
+    const { data, info } = await image.raw().toBuffer({ resolveWithObject: true })
+    const alpha = info.channels - 1
+    const corners = [
+      data[alpha],
+      data[(info.width - 1) * info.channels + alpha],
+      data[(info.height - 1) * info.width * info.channels + alpha],
+      data[(info.width * info.height - 1) * info.channels + alpha],
+    ]
+    const centerOffset =
+      (Math.floor(info.height / 2) * info.width + Math.floor(info.width / 2)) *
+        info.channels +
+      alpha
+
+    expect(metadata.hasAlpha).toBe(true)
+    expect(corners).toEqual([0, 0, 0, 0])
+    expect(data[centerOffset]).toBe(255)
+    expect((await image.stats()).isOpaque).toBe(false)
+  })
 
   it.each([
-    ["src/app/apple-icon.png", [7, 24, 43], 0.13, 0.16],
-    ["public/brand/icons/pwa-192.png", [7, 24, 43], 0.13, 0.16],
-    ["public/brand/icons/pwa-512.png", [7, 24, 43], 0.13, 0.16],
     ["public/brand/icons/pwa-maskable-192.png", [7, 10, 13], 0.2, 0.22],
     ["public/brand/icons/pwa-maskable-512.png", [7, 10, 13], 0.2, 0.22],
   ] as const)(
@@ -303,20 +323,40 @@ describe("GridNinja browser and social derivatives", () => {
   )
 
   it("contains exactly 16, 32, and 48px favicon entries under 32KB", async () => {
-    const favicon = await readFile(resolve(process.cwd(), "src/app/favicon.ico"))
+    const favicon = await readFile(resolve(process.cwd(), "public/favicon.ico"))
     const count = favicon.readUInt16LE(4)
-    const sizes = Array.from({ length: count }, (_, index) => {
+    const entries = Array.from({ length: count }, (_, index) => {
       const offset = 6 + index * 16
-      return [favicon[offset] || 256, favicon[offset + 1] || 256]
+      const width = favicon[offset] || 256
+      const height = favicon[offset + 1] || 256
+      const imageOffset = favicon.readUInt32LE(offset + 12)
+      const pixelOffset = imageOffset + favicon.readUInt32LE(imageOffset)
+      const alphaAt = (x: number, y: number) =>
+        favicon[pixelOffset + (y * width + x) * 4 + 3]
+
+      return {
+        size: [width, height],
+        corners: [
+          alphaAt(0, 0),
+          alphaAt(width - 1, 0),
+          alphaAt(0, height - 1),
+          alphaAt(width - 1, height - 1),
+        ],
+        center: alphaAt(Math.floor(width / 2), Math.floor(height / 2)),
+      }
     })
 
     expect(favicon.readUInt16LE(0)).toBe(0)
     expect(favicon.readUInt16LE(2)).toBe(1)
-    expect(sizes).toEqual([
+    expect(entries.map((entry) => entry.size)).toEqual([
       [16, 16],
       [32, 32],
       [48, 48],
     ])
+    expect(entries.every((entry) => entry.corners.every((alpha) => alpha === 0))).toBe(
+      true
+    )
+    expect(entries.every((entry) => entry.center === 255)).toBe(true)
     expect(favicon.length).toBeLessThanOrEqual(32 * 1024)
   })
 
@@ -342,7 +382,7 @@ describe("GridNinja derivative integrity command", () => {
 
     expect(result.stderr).toBe("")
     expect(result.status).toBe(0)
-    expect(result.stdout).toContain("Verified 15 deterministic GridNinja derivatives.")
+    expect(result.stdout).toContain("Verified 14 deterministic GridNinja derivatives.")
   }, 30_000)
 
   it("detects a stale derivative without rewriting it", async () => {
@@ -354,6 +394,11 @@ describe("GridNinja derivative integrity command", () => {
       await cp(resolve(process.cwd(), "public", "brand"), sandboxBrand, {
         recursive: true,
       })
+      await cp(
+        resolve(process.cwd(), "assets", "brand"),
+        join(sandbox, "assets", "brand"),
+        { recursive: true }
+      )
       const generate = spawnSync(process.execPath, [generator, "--root", sandbox], {
         cwd: process.cwd(),
         encoding: "utf8",

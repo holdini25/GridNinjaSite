@@ -34,22 +34,26 @@ import {
   proofArtifactIntro,
   proofArtifacts,
 } from "@/content/proof-artifacts"
+import { canonicalSiteUrl, siteConfig } from "@/content/site"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
 export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({
-    title: "GridNinja | Virtual Capacity Control Plane for AI Data Centers",
-    description:
-      "GridNinja proves safe, usable, auditable virtual capacity for AI data centers before control, dispatch, or grid commitments are trusted.",
+    title: siteConfig.title,
+    description: siteConfig.description,
     path: "/",
+    includeCanonicalUrl: false,
   })
 }
 
 export default function HomePage() {
   return (
-    <div className="space-y-24 pb-24">
-      <ProofOperatingHero />
+    <>
+      <link rel="canonical" href={canonicalSiteUrl} />
+      <meta property="og:url" content={canonicalSiteUrl} />
+      <div className="space-y-24 pb-24">
+        <ProofOperatingHero />
 
       <SectionShell>
         <ProofStatStrip items={proofStats} />
@@ -208,14 +212,15 @@ export default function HomePage() {
         </div>
       </SectionShell>
 
-      <SectionShell>
-        <CtaBand
-          headline={homeFinalCta.headline}
-          body={homeFinalCta.body}
-          label={homeFinalCta.label}
-          href={buildLeadHref("capacity-audit", "home-final")}
-        />
-      </SectionShell>
-    </div>
+        <SectionShell>
+          <CtaBand
+            headline={homeFinalCta.headline}
+            body={homeFinalCta.body}
+            label={homeFinalCta.label}
+            href={buildLeadHref("capacity-audit", "home-final")}
+          />
+        </SectionShell>
+      </div>
+    </>
   )
 }

@@ -1,6 +1,6 @@
 # GridNinja website brand integration
 
-`README.md` and the six SVG files supplied in the master archive are canonical inputs. They must remain byte-identical. Website-only SVGs, browser icons, install icons, and social exports are deterministic derivatives maintained by `scripts/generate-brand-derivatives.mjs`.
+`README.md` and the six SVG files supplied in the master archive remain canonical vector inputs. `assets/brand/gridninja-logo.png` is the canonical raster source supplied for browser, Apple touch, and standard install icons. All canonical inputs must remain byte-identical. Website-only SVGs, browser icons, install icons, and social exports are deterministic derivatives maintained by `scripts/generate-brand-derivatives.mjs`.
 
 ## Canonical source hashes
 
@@ -13,6 +13,7 @@
 | `gridninja-emblem-monochrome.svg` | `27dde9a57aa6f2f195699b0d2a6007e894be865c49b587816e24777a97ecbfde` |
 | `gridninja-badge-light.svg` | `1632c89ad277a9e24f383ec84fc89045dcc7d8d67a30b9fd600110f9d0b04a36` |
 | `gridninja-favicon-proof-core.svg` | `e9b2ac6db468ae6eed4693c0ad37645a319754f16ea07751151265ecc2718955` |
+| `assets/brand/gridninja-logo.png` | `e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899` |
 
 ## Regeneration and validation
 
@@ -20,14 +21,14 @@
 - `npm run brand:check` builds the same output map in memory and byte-compares it with the repository without writing files.
 - `gridninja-watermark.svg` is derived from the detailed emblem's copper gradient, globe clip/grid, and proof-core path.
 - `gridninja-proof-star.svg` is derived from the favicon proof core's copper gradient and star path.
-- `favicon.ico` contains only 16, 32, and 48px entries and is capped at 32KB.
+- `/favicon.ico` contains only 16, 32, and 48px entries and is capped at 32KB. Browser and standard install icons use a deterministic alpha mask that clears the outer canvas while preserving the navy contrast field behind the white guardians; the 180px Apple touch icon remains an exact opaque square resize.
 
 The generated set also includes App Router icons, Apple and PWA icons, maskable icons with conservative safe-area padding, the Open Graph emblem, and LinkedIn avatar/banner exports. Do not edit a derivative by hand; change the generator and regenerate the entire set.
 
 ## Browser and install presentation
 
-- Browser-tab SVG, PNG, and ICO variants retain transparent backgrounds around the canonical proof core so the mark integrates cleanly with browser chrome. Apple and install icons remain opaque because those surfaces require a controlled field.
-- Apple and standard PWA icons render the detailed emblem at a nominal `0.86` scale, leaving approximately 14–15% visible clear space after the master's internal padding.
+- Browser and standard install icons preserve the canonical raster source's composition, retain the contrast needed by the white mark, and make the outer corners transparent. Apple touch and maskable icons remain fully opaque because those surfaces require a controlled field.
+- The website emits stable, query-free icon links for `/favicon.ico`, `/gridninja-icon-192.png`, and `/gridninja-apple-touch-icon-180.png`; `/gridninja-icon-512.png` is used by install metadata.
 - Maskable PWA icons render the detailed emblem at a nominal `0.72` scale on the full-bleed site background, leaving approximately 20–21% visible padding and keeping artwork inside the central 60% safe area.
 - Square raster composites select an artwork size with matching canvas parity so left/right and top/bottom pixel insets remain equal.
 - The standalone proof-star derivative retains the canonical copper path and gradient with a presentation-focused `13 13 38 38` viewBox for clarity in the 20px proof seal.

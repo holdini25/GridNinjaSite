@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 
-import { siteConfig } from "@/content/site"
+import { siteConfig, websiteStructuredData } from "@/content/site"
 import { openGraphImage, twitterImage } from "@/lib/seo"
 
 import "./globals.css"
@@ -10,6 +10,24 @@ export const metadata: Metadata = {
   applicationName: siteConfig.name,
   title: siteConfig.title,
   description: siteConfig.description,
+  icons: {
+    icon: [
+      {
+        url: "/favicon.ico",
+        sizes: "any",
+      },
+      {
+        url: "/gridninja-icon-192.png",
+        type: "image/png",
+        sizes: "192x192",
+      },
+    ],
+    apple: [
+      {
+        url: "/gridninja-apple-touch-icon-180.png",
+      },
+    ],
+  },
   appleWebApp: {
     capable: true,
     title: siteConfig.name,
@@ -18,7 +36,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteConfig.title,
     description: siteConfig.description,
-    url: siteConfig.url,
     siteName: siteConfig.name,
     type: "website",
     images: [openGraphImage],
@@ -43,6 +60,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          id="gridninja-website-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteStructuredData).replace(
+              /</g,
+              "\\u003c"
+            ),
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
       </body>

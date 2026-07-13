@@ -2,6 +2,11 @@ import { expect, test } from "@playwright/test"
 
 const socialImageAlt =
   "GridNinja — proof-backed virtual capacity for AI data centers"
+const canonicalSiteUrl = "https://www.gridninja.ai/"
+const homepageTitle =
+  "Virtual Capacity Control Plane for AI Data Centers | GridNinja"
+const homepageDescription =
+  "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure."
 
 function pngSize(buffer: Buffer) {
   expect(buffer.subarray(1, 4).toString("ascii")).toBe("PNG")
@@ -32,13 +37,13 @@ test.describe("production brand metadata routes", () => {
       theme_color: "#070a0d",
       icons: [
         {
-          src: "/brand/icons/pwa-192.png",
+          src: "/gridninja-icon-192.png",
           sizes: "192x192",
           type: "image/png",
           purpose: "any",
         },
         {
-          src: "/brand/icons/pwa-512.png",
+          src: "/gridninja-icon-512.png",
           sizes: "512x512",
           type: "image/png",
           purpose: "any",
@@ -63,9 +68,9 @@ test.describe("production brand metadata routes", () => {
   const pngRoutes = [
     ["/opengraph-image", 1200, 630],
     ["/twitter-image", 1200, 630],
-    ["/icon1.png", 16, 16],
-    ["/icon2.png", 32, 32],
-    ["/apple-icon.png", 180, 180],
+    ["/gridninja-apple-touch-icon-180.png", 180, 180],
+    ["/gridninja-icon-192.png", 192, 192],
+    ["/gridninja-icon-512.png", 512, 512],
     ["/brand/icons/pwa-192.png", 192, 192],
     ["/brand/icons/pwa-512.png", 512, 512],
     ["/brand/icons/pwa-maskable-192.png", 192, 192],
@@ -83,7 +88,7 @@ test.describe("production brand metadata routes", () => {
     })
   }
 
-  test("serves the favicon and SVG icon fallbacks", async ({ request }) => {
+  test("serves the stable multi-size favicon", async ({ request }) => {
     const faviconResponse = await request.get("/favicon.ico")
     expect(faviconResponse.status()).toBe(200)
     expect(faviconResponse.headers()["content-type"]).toMatch(
@@ -95,12 +100,6 @@ test.describe("production brand metadata routes", () => {
       Array.from({ length: 3 }, (_, index) => favicon[6 + index * 16] || 256)
     ).toEqual([16, 32, 48])
 
-    const svgResponse = await request.get("/icon.svg")
-    expect(svgResponse.status()).toBe(200)
-    expect(svgResponse.headers()["content-type"]).toContain("image/svg+xml")
-    expect(await svgResponse.text()).toContain(
-      "GridNinja proof-core favicon"
-    )
   })
 
   test("publishes complete social, icon, manifest, and theme metadata in the root head", async ({
@@ -115,6 +114,23 @@ test.describe("production brand metadata routes", () => {
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute(
       "content",
       "#070a0d"
+    )
+    await expect(page).toHaveTitle(homepageTitle)
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      "content",
+      homepageDescription
+    )
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      "href",
+      canonicalSiteUrl
+    )
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+      "content",
+      canonicalSiteUrl
+    )
+    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
+      "content",
+      "GridNinja"
     )
     await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
       "content",
@@ -142,25 +158,87 @@ test.describe("production brand metadata routes", () => {
     )
 
     const icons = await page.locator('link[rel="icon"]').evaluateAll((links) =>
-      links.map((link) => ({
-        path: new URL((link as HTMLLinkElement).href).pathname,
-        type: (link as HTMLLinkElement).type,
-      }))
+      links.map((link) => {
+        const element = link as HTMLLinkElement
+        const url = new URL(element.href)
+        return {
+          path: url.pathname,
+          search: url.search,
+          sizes: element.sizes.value,
+          type: element.type,
+        }
+      })
     )
-    expect(icons).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({ path: "/favicon.ico" }),
-        { path: "/icon.svg", type: "image/svg+xml" },
-        { path: "/icon1.png", type: "image/png" },
-        { path: "/icon2.png", type: "image/png" },
-      ])
-    )
+    expect(icons).toEqual([
+      {
+        path: "/favicon.ico",
+        search: "",
+        sizes: "any",
+        type: "",
+      },
+      {
+        path: "/gridninja-icon-192.png",
+        search: "",
+        sizes: "192x192",
+        type: "image/png",
+      },
+    ])
 
-    const appleIconPaths = await page
+    const appleIcons = await page
       .locator('link[rel="apple-touch-icon"]')
       .evaluateAll((links) =>
-        links.map((link) => new URL((link as HTMLLinkElement).href).pathname)
+        links.map((link) => {
+          const element = link as HTMLLinkElement
+          const url = new URL(element.href)
+          return {
+            path: url.pathname,
+            search: url.search,
+            sizes: element.sizes.value,
+            type: element.type,
+          }
+        })
       )
-    expect(appleIconPaths).toContain("/apple-icon.png")
+    expect(appleIcons).toEqual([
+      {
+        path: "/gridninja-apple-touch-icon-180.png",
+        search: "",
+        sizes: "",
+        type: "",
+      },
+    ])
+
+    const schema = page.locator(
+      'head script#gridninja-website-schema[type="application/ld+json"]'
+    )
+    await expect(schema).toHaveCount(1)
+    expect(JSON.parse((await schema.textContent()) ?? "")).toEqual({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://www.gridninja.ai/#website",
+      url: canonicalSiteUrl,
+      name: "GridNinja",
+      alternateName: ["GridNinja AI", "gridninja.ai"],
+    })
+    await expect(page.getByText(homepageDescription, { exact: true })).toBeVisible()
+    await expect(
+      page.getByRole("link", { name: "Read more", exact: true })
+    ).toHaveCount(0)
+  })
+
+  test("publishes crawlable www robots and sitemap signals", async ({
+    request,
+  }) => {
+    const robotsResponse = await request.get("/robots.txt")
+    expect(robotsResponse.status()).toBe(200)
+    expect(await robotsResponse.text()).toBe(
+      "User-Agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://www.gridninja.ai/sitemap.xml\n"
+    )
+
+    const sitemapResponse = await request.get("/sitemap.xml")
+    expect(sitemapResponse.status()).toBe(200)
+    const sitemap = await sitemapResponse.text()
+    expect(sitemap).toContain(`<loc>${canonicalSiteUrl}</loc>`)
+    expect(sitemap).not.toContain("https://gridninja.ai")
+    expect(sitemap.match(/<loc>https:\/\/www\.gridninja\.ai\//g)).not.toBeNull()
   })
 })

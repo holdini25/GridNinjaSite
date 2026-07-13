@@ -1,10 +1,21 @@
+export const canonicalSiteUrl = "https://www.gridninja.ai/" as const
+
+export const websiteStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${canonicalSiteUrl}#website`,
+  url: canonicalSiteUrl,
+  name: "GridNinja",
+  alternateName: ["GridNinja AI", "gridninja.ai"],
+} as const
+
 export const siteConfig = {
   name: "GridNinja",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://gridninja.ai",
-  title: "GridNinja | Virtual Capacity Control Plane for AI Data Centers",
+  url: canonicalSiteUrl,
+  title: "Virtual Capacity Control Plane for AI Data Centers | GridNinja",
   description:
-    "GridNinja proves safe, usable, auditable virtual capacity for AI data centers before control, dispatch, or grid commitments are trusted.",
-  lastModified: "2026-06-14",
+    "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure.",
+  lastModified: "2026-07-13",
   footerCopy:
     "GridNinja is the runtime-assured virtual capacity engine for AI data centers.",
 }

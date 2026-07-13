@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest"
 
 import manifest from "@/app/manifest"
+import robots from "@/app/robots"
+import sitemap from "@/app/sitemap"
+import {
+  canonicalSiteUrl,
+  siteConfig,
+  websiteStructuredData,
+} from "@/content/site"
 import {
   createPageMetadata,
   openGraphImage,
@@ -9,6 +16,25 @@ import {
 } from "@/lib/seo"
 
 describe("public metadata", () => {
+  it("locks the public site identity to the canonical www origin", () => {
+    expect(canonicalSiteUrl).toBe("https://www.gridninja.ai/")
+    expect(siteConfig).toMatchObject({
+      name: "GridNinja",
+      url: canonicalSiteUrl,
+      title: "Virtual Capacity Control Plane for AI Data Centers | GridNinja",
+      description:
+        "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure.",
+    })
+    expect(websiteStructuredData).toEqual({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://www.gridninja.ai/#website",
+      url: canonicalSiteUrl,
+      name: "GridNinja",
+      alternateName: ["GridNinja AI", "gridninja.ai"],
+    })
+  })
+
   it("uses proof-first accessible text for both social cards", () => {
     expect(socialImageAlt).toBe(
       "GridNinja — proof-backed virtual capacity for AI data centers"
@@ -26,6 +52,8 @@ describe("public metadata", () => {
 
     expect(pageMetadata.openGraph).toMatchObject({
       title: "Capacity Audit",
+      url: new URL("https://www.gridninja.ai/roi"),
+      siteName: "GridNinja",
       images: [openGraphImage],
     })
     expect(pageMetadata.twitter).toMatchObject({
@@ -39,6 +67,35 @@ describe("public metadata", () => {
       type: "image/png",
       alt: socialImageAlt,
     })
+  })
+
+  it("can defer the homepage canonical and Open Graph URL to literal head resources", () => {
+    const pageMetadata = createPageMetadata({
+      title: siteConfig.title,
+      description: siteConfig.description,
+      path: "/",
+      includeCanonicalUrl: false,
+    })
+
+    expect(pageMetadata.alternates).toBeUndefined()
+    expect(pageMetadata.openGraph).not.toHaveProperty("url")
+  })
+
+  it("publishes only www URLs in robots and the sitemap", () => {
+    expect(robots()).toEqual({
+      rules: {
+        userAgent: "*",
+        allow: "/",
+        disallow: "/api/",
+      },
+      sitemap: "https://www.gridninja.ai/sitemap.xml",
+    })
+
+    const entries = sitemap()
+    expect(entries[0]?.url).toBe(canonicalSiteUrl)
+    expect(entries.every((entry) => entry.url.startsWith(canonicalSiteUrl))).toBe(
+      true
+    )
   })
 
   it("declares complete 1200 by 630 PNG descriptors for both cards", () => {
@@ -70,13 +127,13 @@ describe("public metadata", () => {
     })
     expect(value.icons).toEqual([
       {
-        src: "/brand/icons/pwa-192.png",
+        src: "/gridninja-icon-192.png",
         sizes: "192x192",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/brand/icons/pwa-512.png",
+        src: "/gridninja-icon-512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any",

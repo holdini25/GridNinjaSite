@@ -65,9 +65,9 @@ export function ProofOperatingHero({
             Claimed headroom is not proven capacity.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-            GridNinja is a runtime-assured virtual capacity engine that converts
-            constrained AI infrastructure into safe, usable, auditable capacity
-            with proof before autonomy.
+            GridNinja is the virtual capacity control plane for AI data centers,
+            proving safe, usable capacity to accelerate time-to-power while
+            protecting infrastructure.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
