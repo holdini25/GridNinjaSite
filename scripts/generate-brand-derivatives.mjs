@@ -86,42 +86,6 @@ ${star}
 `
 }
 
-function browserIconSource(proofCore) {
-  const copper = extractExactly(
-    proofCore,
-    /    <linearGradient id="copper"[\s\S]*?    <\/linearGradient>/g,
-    "proof-core copper gradient"
-  )
-  const boundary = extractExactly(
-    proofCore,
-    /  <circle cx="32" cy="32" r="27"[^>]+\/>/g,
-    "proof-core control boundary"
-  )
-  const hilts = extractExactly(
-    proofCore,
-    /  <path d="M32 8v12M32 44v12"[^>]+\/>/g,
-    "proof-core hilts"
-  )
-  const star = extractExactly(
-    proofCore,
-    /  <path d="M32 18[^"]+" fill="url\(#copper\)"\/>/g,
-    "proof-core star path"
-  )
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc" shape-rendering="geometricPrecision">
-  <title id="title">GridNinja proof-core favicon</title>
-  <desc id="desc">A copper proof and control core on a canonical navy field.</desc>
-  <defs>
-${copper}
-  </defs>
-  <rect width="64" height="64" fill="${colors.navy}"/>
-${boundary}
-${hilts}
-${star}
-</svg>
-`
-}
-
 function watermarkSource(detailed) {
   const copper = extractExactly(
     detailed,
@@ -230,15 +194,15 @@ async function buildExpectedOutputs() {
   )
   const detailedText = detailed.toString("utf8")
   const proofCoreText = proofCore.toString("utf8")
-  const icon16 = await squarePng(proofCore, 16, 0.875, colors.navy)
-  const icon32 = await squarePng(proofCore, 32, 0.875, colors.navy)
-  const icon48 = await squarePng(proofCore, 48, 0.875, colors.navy)
+  const icon16 = await squarePng(proofCore, 16, 0.875)
+  const icon32 = await squarePng(proofCore, 32, 0.875)
+  const icon48 = await squarePng(proofCore, 48, 0.875)
   const bannerSource = linkedInBannerSource(detailed)
 
   const outputs = new Map([
     ["public/brand/gridninja-proof-star.svg", Buffer.from(proofStarSource(proofCoreText))],
     ["public/brand/gridninja-watermark.svg", Buffer.from(watermarkSource(detailedText))],
-    ["src/app/icon.svg", Buffer.from(browserIconSource(proofCoreText))],
+    ["src/app/icon.svg", proofCore],
     ["src/app/icon1.png", icon16],
     ["src/app/icon2.png", icon32],
     ["src/app/apple-icon.png", await squarePng(detailed, 180, 0.86, colors.navy)],

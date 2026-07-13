@@ -141,40 +141,16 @@ describe("GridNinja derived vector artwork", () => {
     expect(derivative).not.toContain("<circle")
   })
 
-  it("adds a canonical navy field behind the exact proof-core browser icon", async () => {
+  it("uses the transparent canonical proof core for the browser SVG icon", async () => {
     const canonical = await readFile(
-      resolve(process.cwd(), "public/brand/gridninja-favicon-proof-core.svg"),
-      "utf8"
+      resolve(process.cwd(), "public/brand/gridninja-favicon-proof-core.svg")
     )
     const derivative = await readFile(
-      resolve(process.cwd(), "src/app/icon.svg"),
-      "utf8"
+      resolve(process.cwd(), "src/app/icon.svg")
     )
-    const fragments = [
-      extractExactly(
-        canonical,
-        /    <linearGradient id="copper"[\s\S]*?    <\/linearGradient>/g
-      ),
-      extractExactly(
-        canonical,
-        /  <circle cx="32" cy="32" r="27"[^>]+\/>/g
-      ),
-      extractExactly(
-        canonical,
-        /  <path d="M32 8v12M32 44v12"[^>]+\/>/g
-      ),
-      extractExactly(
-        canonical,
-        /  <path d="M32 18[^"]+" fill="url\(#copper\)"\/>/g
-      ),
-    ]
 
-    for (const fragment of fragments) {
-      expect(derivative).toContain(fragment)
-    }
-    expect(derivative).toContain('<rect width="64" height="64" fill="#07182B"/>')
-    expect(derivative).not.toMatch(/<image\b|(?:href|src)=["']https?:|data:image\//i)
-    expect((await sharp(Buffer.from(derivative)).stats()).isOpaque).toBe(true)
+    expect(derivative).toEqual(canonical)
+    expect((await sharp(derivative).stats()).isOpaque).toBe(false)
   })
 
   it("copies the detailed emblem globe and proof fragments into the watermark", async () => {
@@ -237,8 +213,6 @@ describe("GridNinja browser and social derivatives", () => {
   )
 
   it.each([
-    "src/app/icon1.png",
-    "src/app/icon2.png",
     "src/app/apple-icon.png",
     "public/brand/icons/pwa-192.png",
     "public/brand/icons/pwa-512.png",
@@ -249,6 +223,14 @@ describe("GridNinja browser and social derivatives", () => {
     const stats = await sharp(resolve(process.cwd(), filename)).stats()
     expect(stats.isOpaque).toBe(true)
   })
+
+  it.each(["src/app/icon.svg", "src/app/icon1.png", "src/app/icon2.png"])(
+    "keeps %s transparent for browser chrome",
+    async (filename) => {
+      const stats = await sharp(resolve(process.cwd(), filename)).stats()
+      expect(stats.isOpaque).toBe(false)
+    }
+  )
 
   it.each([
     ["src/app/apple-icon.png", [7, 24, 43], 0.13, 0.16],

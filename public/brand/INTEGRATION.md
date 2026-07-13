@@ -26,7 +26,7 @@ The generated set also includes App Router icons, Apple and PWA icons, maskable 
 
 ## Browser and install presentation
 
-- `src/app/icon.svg` adds a full-bleed canonical `#07182B` field behind the proof-core master's exact copper geometry so the scalable browser icon remains legible on light and dark browser chrome.
+- Browser-tab SVG, PNG, and ICO variants retain transparent backgrounds around the canonical proof core so the mark integrates cleanly with browser chrome. Apple and install icons remain opaque because those surfaces require a controlled field.
 - Apple and standard PWA icons render the detailed emblem at a nominal `0.86` scale, leaving approximately 14–15% visible clear space after the master's internal padding.
 - Maskable PWA icons render the detailed emblem at a nominal `0.72` scale on the full-bleed site background, leaving approximately 20–21% visible padding and keeping artwork inside the central 60% safe area.
 - Square raster composites select an artwork size with matching canvas parity so left/right and top/bottom pixel insets remain equal.
