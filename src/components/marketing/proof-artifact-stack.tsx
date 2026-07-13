@@ -10,6 +10,7 @@ import {
 import { runViewTransition } from "@/lib/view-transition"
 import { cn } from "@/lib/utils"
 
+import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
 import { EvidenceDrawer } from "@/components/marketing/evidence-drawer"
 
 export function ProofArtifactStack({
@@ -85,7 +86,10 @@ export function ProofArtifactStack({
       </div>
       {active ? (
         <div className="gn-panel gn-vt-proof-artifact px-6 py-7">
-          <p className="gn-eyebrow">Selected artifact</p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="gn-eyebrow">Selected artifact</p>
+            <GridNinjaProofSeal status={active.evidenceChainStatus} />
+          </div>
           <h3 className="mt-3 text-[2rem] font-medium text-foreground">
             {active.title}
           </h3>

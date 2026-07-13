@@ -6,6 +6,7 @@ import Link from "next/link"
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react"
 
 import { Button } from "@/components/ui/button"
+import { GridNinjaLogo } from "@/components/brand/gridninja-logo"
 import { AnimatedMw } from "@/components/marketing/animated-mw"
 import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
 import { illustrativeWaterfall, type WaterfallStep } from "@/content/proof-artifacts"
@@ -104,13 +105,19 @@ export function ProofOperatingHero({
         </motion.div>
 
         <motion.div
-          className="gn-hd-panel p-5"
+          className="gn-hd-panel relative overflow-hidden p-5"
           initial={{ opacity: 0, scale: 0.985, y: 18 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.08 }}
         >
           <div className="gn-scanline" />
-          <div className="flex flex-wrap items-start justify-between gap-4">
+          <GridNinjaLogo
+            variant="watermark"
+            showWordmark={false}
+            className="pointer-events-none absolute -right-16 -bottom-12 hidden sm:inline-flex"
+            markClassName="size-80 opacity-[0.04]"
+          />
+          <div className="relative z-10 flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="font-mono text-xs tracking-[0.22em] text-primary uppercase">
                 Capacity Waterfall
@@ -122,7 +129,7 @@ export function ProofOperatingHero({
             {activeStep?.decision ? <RtaDecisionChip state={activeStep.decision} /> : null}
           </div>
 
-          <div className="mt-5 rounded-[1.1rem] border border-signal/35 bg-signal/10 p-4">
+          <div className="relative z-10 mt-5 rounded-[1.1rem] border border-signal/35 bg-signal/10 p-4">
             <p className="font-mono text-xs tracking-[0.18em] text-signal uppercase">
               active capacity state
             </p>
@@ -135,7 +142,7 @@ export function ProofOperatingHero({
             </p>
           </div>
 
-          <div className="gn-waterfall-rail mt-5 grid gap-3">
+          <div className="gn-waterfall-rail relative z-10 mt-5 grid gap-3">
             {steps.map((step, index) => {
               const isActive = index <= visibleIndex
               const capacity = step.capacityAfter ?? step.value

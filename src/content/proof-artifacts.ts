@@ -4,9 +4,16 @@ export type ProofArtifact = {
   title: string
   body: string
   audience: string
+  evidenceChainStatus: EvidenceChainStatus
 }
 
 export type RtaDecisionState = "allow" | "repair" | "reject" | "no-proof"
+
+/**
+ * Presentation-only evidence state. This never grants runtime authority and is
+ * intentionally independent from allow / repair / reject decisions.
+ */
+export type EvidenceChainStatus = "complete" | "incomplete" | "no-proof"
 
 export type EvidenceRow = {
   label: string
@@ -21,6 +28,7 @@ export type WaterfallStep = {
   tone?: "claim" | "constraint" | "proof"
   decision?: RtaDecisionState
   proofHint?: string
+  evidenceChainStatus?: EvidenceChainStatus
 }
 
 export type RtaDecisionMeta = {
@@ -88,6 +96,14 @@ export type LoadPassportSection = {
 export type ArtifactEvidence = {
   artifactTitle: string
   whoCares: string
+  caveat: string
+  cta: string
+  sampleFiles: string[]
+  rows: EvidenceRow[]
+  evidenceChainStatus: EvidenceChainStatus
+}
+
+type ProofArtifactDefinition = ProofArtifact & {
   caveat: string
   cta: string
   sampleFiles: string[]
@@ -281,38 +297,101 @@ export const proofArtifactIntro: SectionCopy = {
   body: "GridNinja turns site telemetry, topology, policy, reserve floors, and workload constraints into proof objects operators can inspect before control expands.",
 }
 
-export const proofArtifacts: ProofArtifact[] = [
+const proofArtifactDefinitions = [
   {
     title: "AI Data Center Load Passport",
     body: "A site-specific capacity identity that summarizes proof-adjusted virtual capacity, binding constraints, freshness posture, and declared operating policy.",
     audience: "Operators, hyperscalers, investors",
+    evidenceChainStatus: "complete",
+    caveat: "Illustrative sample shape. Site-specific evidence is produced during a Capacity Audit.",
+    cta: "Request Load Passport",
+    sampleFiles: ["load_passport.json", "site_identity.json", "proof_root.txt"],
+    rows: [
+      { label: "proof_row", value: "lp.accepted_headroom.row_077" },
+      { label: "freshness", value: "all required sample sections present" },
+      { label: "scope", value: "one illustrative Atlas-3 site" },
+    ],
   },
   {
     title: "Capacity Waterfall",
     body: "A transparent reduction from nominal headroom to safe, usable, auditable capacity after electrical, reserve, thermal, workload, and telemetry checks.",
     audience: "Executives, operators, reviewers",
+    evidenceChainStatus: "complete",
+    caveat: "MW values are illustrative until validated against GridNinja deployment evidence.",
+    cta: "Inspect Proof Demo",
+    sampleFiles: ["capacity_waterfall.csv", "constraint_reductions.json"],
+    rows: [
+      { label: "nominal_headroom", value: "18.4 MW illustrative" },
+      { label: "proof_adjusted", value: "5.8 MW illustrative" },
+      { label: "binding", value: "reserve floor + telemetry trust" },
+    ],
   },
   {
     title: "Accepted-Headroom Ledger",
     body: "A time-indexed record of accepted capacity states, rejected actions, no-proof intervals, and the proof root behind each decision.",
     audience: "Operators, auditors, fleet teams",
+    evidenceChainStatus: "complete",
+    caveat: "A ledger row records accepted evidence; it is not a hidden approval path.",
+    cta: "Review Proof Pack",
+    sampleFiles: ["accepted_headroom.parquet", "receipt_edge_004921.json"],
+    rows: [
+      { label: "row_id", value: "ledger.004921" },
+      { label: "decision", value: "REPAIR" },
+      { label: "authority", value: "runtime assurance boundary" },
+    ],
   },
   {
     title: "Reserve-Floor Report",
     body: "A resilience-first view of UPS, BESS, and bridge-power margins so flexibility does not spend emergency posture silently.",
     audience: "Facilities, BESS/UPS partners",
+    evidenceChainStatus: "incomplete",
+    caveat: "Reserve margins remain protected; GridNinja does not spend emergency posture silently.",
+    cta: "Request Capacity Audit",
+    sampleFiles: ["reserve_floor_report.pdf", "bess_margin_trace.csv"],
+    rows: [
+      { label: "reserve_floor", value: "policy declared" },
+      { label: "post_action_margin", value: "+4.8 MW illustrative" },
+      { label: "rta_decision", value: "REPAIR" },
+    ],
   },
   {
     title: "No-Proof Gap Register",
     body: "A remediation list for missing telemetry, incomplete topology, stale policy, or weak evidence that prevents safe approval.",
     audience: "Operators, CISOs, program owners",
+    evidenceChainStatus: "no-proof",
+    caveat: "Local verification only updates this illustrative register, not live site state.",
+    cta: "See Shadow Mode",
+    sampleFiles: ["no_proof_register.csv", "telemetry_trust.csv"],
+    rows: [
+      { label: "open_gaps", value: "3 illustrative" },
+      { label: "discount", value: "-1.3 MW illustrative" },
+      { label: "remediation", value: "owner-assigned evidence path" },
+    ],
   },
   {
     title: "Utility Evidence Packet",
     body: "A planning-facing summary of flexible MW, ramp limits, reconnection envelope, confidence posture, and exceptions.",
     audience: "Utilities, EMCs, partners",
+    evidenceChainStatus: "incomplete",
+    caveat: "Planning-facing evidence does not replace utility approval or interconnection studies.",
+    cta: "Request DCII Memo",
+    sampleFiles: ["utility_evidence_packet.pdf", "ramp_limits.csv"],
+    rows: [
+      { label: "flexible_mw", value: "proof-adjusted sample" },
+      { label: "ramp_limit", value: "+1.1 MW / 30 min" },
+      { label: "exceptions", value: "telemetry trust caveat included" },
+    ],
   },
-]
+] satisfies readonly ProofArtifactDefinition[]
+
+export const proofArtifacts: ProofArtifact[] = proofArtifactDefinitions.map(
+  ({ title, body, audience, evidenceChainStatus }) => ({
+    title,
+    body,
+    audience,
+    evidenceChainStatus,
+  })
+)
 
 export const illustrativeWaterfall: WaterfallStep[] = [
   {
@@ -377,6 +456,7 @@ export const illustrativeWaterfall: WaterfallStep[] = [
     tone: "proof",
     decision: "allow",
     proofHint: "Accepted headroom after runtime assurance and operator evidence.",
+    evidenceChainStatus: "complete",
   },
 ]
 
@@ -606,6 +686,18 @@ export const loadPassportSectionEvidence: LoadPassportSection[] = [
 
 export const loadPassportSections = loadPassportSectionEvidence
 
+export function getLoadPassportEvidenceChainStatus(
+  sections: readonly LoadPassportSection[]
+): EvidenceChainStatus {
+  if (sections.length === 0 || sections.every((section) => !section.verified)) {
+    return "no-proof"
+  }
+
+  return sections.every((section) => section.verified)
+    ? "complete"
+    : "incomplete"
+}
+
 export const instrumentEvents: InstrumentEvent[] = [
   {
     timecode: "T+00:03",
@@ -641,6 +733,9 @@ export const proofLoadingSteps = [
   "Writing proof row...",
 ]
 
+export const proofPackEvidenceChainStatus =
+  "complete" satisfies EvidenceChainStatus
+
 export const evidenceDrawerRows: Record<string, EvidenceRow[]> = {
   replayRoot: [
     { label: "tape", value: "URI_STRESS_2021_02_15" },
@@ -656,80 +751,25 @@ export const evidenceDrawerRows: Record<string, EvidenceRow[]> = {
   ],
 }
 
-export const artifactFiles: ArtifactEvidence[] = [
-  {
-    artifactTitle: "AI Data Center Load Passport",
-    whoCares: "Operators, hyperscalers, investors",
-    caveat: "Illustrative sample shape. Site-specific evidence is produced during a Capacity Audit.",
-    cta: "Request Load Passport",
-    sampleFiles: ["load_passport.json", "site_identity.json", "proof_root.txt"],
-    rows: [
-      { label: "proof_row", value: "lp.accepted_headroom.row_077" },
-      { label: "freshness", value: "all required sample sections present" },
-      { label: "scope", value: "one illustrative Atlas-3 site" },
-    ],
-  },
-  {
-    artifactTitle: "Capacity Waterfall",
-    whoCares: "Executives, operators, reviewers",
-    caveat: "MW values are illustrative until validated against GridNinja deployment evidence.",
-    cta: "Inspect Proof Demo",
-    sampleFiles: ["capacity_waterfall.csv", "constraint_reductions.json"],
-    rows: [
-      { label: "nominal_headroom", value: "18.4 MW illustrative" },
-      { label: "proof_adjusted", value: "5.8 MW illustrative" },
-      { label: "binding", value: "reserve floor + telemetry trust" },
-    ],
-  },
-  {
-    artifactTitle: "Accepted-Headroom Ledger",
-    whoCares: "Operators, auditors, fleet teams",
-    caveat: "A ledger row records accepted evidence; it is not a hidden approval path.",
-    cta: "Review Proof Pack",
-    sampleFiles: ["accepted_headroom.parquet", "receipt_edge_004921.json"],
-    rows: [
-      { label: "row_id", value: "ledger.004921" },
-      { label: "decision", value: "REPAIR" },
-      { label: "authority", value: "runtime assurance boundary" },
-    ],
-  },
-  {
-    artifactTitle: "Reserve-Floor Report",
-    whoCares: "Facilities, BESS/UPS partners",
-    caveat: "Reserve margins remain protected; GridNinja does not spend emergency posture silently.",
-    cta: "Request Capacity Audit",
-    sampleFiles: ["reserve_floor_report.pdf", "bess_margin_trace.csv"],
-    rows: [
-      { label: "reserve_floor", value: "policy declared" },
-      { label: "post_action_margin", value: "+4.8 MW illustrative" },
-      { label: "rta_decision", value: "REPAIR" },
-    ],
-  },
-  {
-    artifactTitle: "No-Proof Gap Register",
-    whoCares: "Operators, CISOs, program owners",
-    caveat: "Local verification only updates this illustrative register, not live site state.",
-    cta: "See Shadow Mode",
-    sampleFiles: ["no_proof_register.csv", "telemetry_trust.csv"],
-    rows: [
-      { label: "open_gaps", value: "3 illustrative" },
-      { label: "discount", value: "-1.3 MW illustrative" },
-      { label: "remediation", value: "owner-assigned evidence path" },
-    ],
-  },
-  {
-    artifactTitle: "Utility Evidence Packet",
-    whoCares: "Utilities, EMCs, partners",
-    caveat: "Planning-facing evidence does not replace utility approval or interconnection studies.",
-    cta: "Request DCII Memo",
-    sampleFiles: ["utility_evidence_packet.pdf", "ramp_limits.csv"],
-    rows: [
-      { label: "flexible_mw", value: "proof-adjusted sample" },
-      { label: "ramp_limit", value: "+1.1 MW / 30 min" },
-      { label: "exceptions", value: "telemetry trust caveat included" },
-    ],
-  },
-]
+export const artifactFiles: ArtifactEvidence[] = proofArtifactDefinitions.map(
+  ({
+    title,
+    audience,
+    caveat,
+    cta,
+    sampleFiles,
+    rows,
+    evidenceChainStatus,
+  }) => ({
+    artifactTitle: title,
+    whoCares: audience,
+    caveat,
+    cta,
+    sampleFiles,
+    rows,
+    evidenceChainStatus,
+  })
+)
 
 export const productBoundaryStatements = {
   does: [

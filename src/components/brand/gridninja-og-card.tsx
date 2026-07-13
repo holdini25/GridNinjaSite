@@ -1,9 +1,9 @@
 import type { CSSProperties } from "react"
 
 type GridNinjaOgCardProps = {
-  title: string
   description: string
   host: string
+  emblemSrc: string
 }
 
 const proofPills = [
@@ -23,12 +23,10 @@ const fontFamily =
   'Geist, "Geist Fallback", ui-sans-serif, system-ui, sans-serif'
 
 export function GridNinjaOgCard({
-  title,
   description,
   host,
+  emblemSrc,
 }: GridNinjaOgCardProps) {
-  const titleLine = title.split("|")[0]?.trim() ?? title
-
   return (
     <div style={styles.root}>
       <div style={styles.grid} />
@@ -38,18 +36,23 @@ export function GridNinjaOgCard({
       <div style={styles.content}>
         <div style={styles.copyColumn}>
           <div style={styles.copyStack}>
-            <div style={styles.eyebrow}>{titleLine}</div>
-            <div style={styles.mark}>
-              <div style={styles.markRing} />
-              <div style={styles.markHorizontal} />
-              <div style={styles.markVertical} />
-              <div style={styles.markCore}>GN</div>
+            <div style={styles.eyebrow}>Proof-backed virtual capacity</div>
+            <div style={styles.brandLockup}>
+              {/* The image is supplied as a local data URL by the metadata route. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={emblemSrc}
+                alt=""
+                width={96}
+                height={96}
+                style={styles.mark}
+              />
+              <div style={styles.brand}>GridNinja</div>
             </div>
             <div style={styles.category}>
               AI Data Center Virtual Capacity Control Plane
             </div>
             <div style={styles.titleGroup}>
-              <div style={styles.brand}>GridNinja</div>
               <div style={styles.headline}>
                 Unlock virtual capacity for AI data centers
               </div>
@@ -161,44 +164,15 @@ const styles = {
     color: "#9fb0bf",
     textTransform: "uppercase",
   },
-  mark: {
-    position: "relative",
-    width: 84,
-    height: 84,
+  brandLockup: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 999,
-    border: "2px solid #ff9f1a",
-    background: "rgba(255,159,26,0.08)",
+    gap: 22,
   },
-  markRing: {
-    position: "absolute",
-    inset: 13,
-    borderRadius: 999,
-    border: "1px solid rgba(159,176,191,0.38)",
-  },
-  markHorizontal: {
-    position: "absolute",
-    left: 14,
-    right: 14,
-    top: 41,
-    height: 1,
-    background: "rgba(159,176,191,0.28)",
-  },
-  markVertical: {
-    position: "absolute",
-    top: 14,
-    bottom: 14,
-    left: 41,
-    width: 1,
-    background: "rgba(159,176,191,0.28)",
-  },
-  markCore: {
-    fontSize: 22,
-    fontWeight: 700,
-    color: "#ff9f1a",
-    letterSpacing: "0.06em",
+  mark: {
+    width: 96,
+    height: 96,
+    objectFit: "contain",
   },
   category: {
     alignSelf: "flex-start",
@@ -218,11 +192,10 @@ const styles = {
     flexDirection: "column",
   },
   brand: {
-    fontSize: 20,
-    fontWeight: 500,
-    letterSpacing: "0.14em",
+    fontSize: 36,
+    fontWeight: 650,
+    letterSpacing: "0.02em",
     color: "#f5f7fa",
-    textTransform: "uppercase",
   },
   headline: {
     marginTop: 18,

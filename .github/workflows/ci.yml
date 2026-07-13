@@ -27,6 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22", cache: npm }
       - run: npm ci
+      - run: npm run brand:check
       - run: npm run lint
       - run: npm run typecheck
 
@@ -66,7 +67,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "22", cache: npm }
       - run: npm ci
-      - run: npm run test:integration
+      - run: npm run test:integration:required
         env:
           TEST_DATABASE_URL: postgresql://gridninja:gridninja@127.0.0.1:5432/gridninja_test
 

@@ -2,24 +2,30 @@
 
 import { useState } from "react"
 
-import {
-  CheckCircle2Icon,
-  Clock3Icon,
-  FileTextIcon,
-  ShieldCheckIcon,
-} from "lucide-react"
+import { Clock3Icon, FileTextIcon } from "lucide-react"
 
-import { loadPassportSections } from "@/content/proof-artifacts"
+import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
+import { LoadPassportVerificationStatus } from "@/components/marketing/load-passport-verification-status"
+import {
+  getLoadPassportEvidenceChainStatus,
+  loadPassportSections,
+  type LoadPassportSection,
+} from "@/content/proof-artifacts"
 import { cn } from "@/lib/utils"
 
-export function LoadPassportPreview() {
-  const [activeTitle, setActiveTitle] = useState(loadPassportSections[0].title)
+export function LoadPassportPreview({
+  sections = loadPassportSections,
+}: {
+  sections?: readonly LoadPassportSection[]
+}) {
+  const [activeTitle, setActiveTitle] = useState(sections[0]?.title)
   const active =
-    loadPassportSections.find((section) => section.title === activeTitle) ??
-    loadPassportSections[0]
-  const allRequiredSectionsVerified = loadPassportSections.every(
-    (section) => section.verified
-  )
+    sections.find((section) => section.title === activeTitle) ?? sections[0]
+  const evidenceChainStatus = getLoadPassportEvidenceChainStatus(sections)
+
+  if (!active) {
+    return null
+  }
 
   return (
     <div className="gn-panel p-6">
@@ -30,16 +36,11 @@ export function LoadPassportPreview() {
             A capacity identity for one AI data center site
           </h3>
         </div>
-        {allRequiredSectionsVerified ? (
-          <div className="inline-flex min-h-10 items-center gap-2 rounded-full border border-signal/45 bg-signal/10 px-3 py-1.5 font-mono text-sm text-signal">
-            <ShieldCheckIcon className="size-4" />
-            verified sample chain
-          </div>
-        ) : null}
+        <GridNinjaProofSeal status={evidenceChainStatus} />
       </div>
       <div className="mt-6 grid gap-5 xl:grid-cols-[0.95fr_1.05fr]">
         <div className="grid gap-2">
-          {loadPassportSections.map((section) => (
+          {sections.map((section) => (
             <button
               key={section.title}
               type="button"
@@ -49,16 +50,28 @@ export function LoadPassportPreview() {
               className={cn(
                 "min-h-11 rounded-[0.85rem] border border-border/70 bg-background/35 px-4 py-3 text-left transition-colors",
                 "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/45",
-                activeTitle === section.title && "border-primary/70 bg-surface-2"
+                activeTitle === section.title && "border-primary/70 bg-surface-2",
+                !section.verified && "gn-dashed-no-proof"
               )}
             >
-              <span className="font-mono text-sm text-muted-foreground">
-                {section.title}
+              <span className="flex items-center justify-between gap-3">
+                <span className="font-mono text-sm text-muted-foreground">
+                  {section.title}
+                </span>
+                <LoadPassportVerificationStatus verified={section.verified} />
               </span>
             </button>
           ))}
         </div>
-        <div className="rounded-[1rem] border border-border/70 bg-background/45 px-5 py-5">
+        <div
+          className={cn(
+            "rounded-[1rem] border border-border/70 bg-background/45 px-5 py-5",
+            !active.verified && "gn-dashed-no-proof"
+          )}
+          data-load-passport-detail-status={
+            active.verified ? "verified" : "no-proof"
+          }
+        >
           <p className="font-mono text-xs tracking-[0.16em] text-primary uppercase">
             Source evidence
           </p>
@@ -91,7 +104,7 @@ export function LoadPassportPreview() {
                 Proof row
               </p>
               <p className="mt-1 inline-flex min-w-0 items-center gap-2 font-mono text-sm leading-6 text-foreground">
-                <CheckCircle2Icon className="size-4 text-signal" />
+                <LoadPassportVerificationStatus verified={active.verified} />
                 <span className="min-w-0 break-all">{active.proofRow}</span>
               </p>
             </div>

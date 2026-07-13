@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" role="img" aria-labelledby="title desc" shape-rendering="geometricPrecision" color="#FFFFFF">
+  <title id="title">GridNinja monochrome emblem</title>
+  <desc id="desc">A single-color globe, mirrored guardian helmets and four-point proof star.</desc>
+  <defs>
+    <clipPath id="globeClip"><circle cx="256" cy="256" r="210"/></clipPath>
+    <g id="guardian">
+      <path d="M204.5 165 271 195.5 275 205.5 188.5 249 141 269 142 266.5 142 259.5 143 258.5 150 203.5 151 198.5 153.5 196Z"/>
+      <path d="M282.5 216Q285.1 215.2 284 218.5L283 219.5 279 250.5 275.5 254 245 273.5 247.5 274 273.5 263 274 269.5 272 275.5 269 298.5 266.5 301 178.5 360 153 330.5 217 281.5 223 252.5 225.5 247Z"/>
+      <path d="M179.5 266 180 274.5 179 275.5 179 285.5 176.5 290 145.5 312 145 280Z"/>
+      <path d="M259.5 333 262 333.5 262 342.5 263 343.5 263 351 206.5 378 202 382.5 185 411 123.5 443 118 436.5 118 434.5 152.5 387Z"/>
+      <path d="M264.5 358Q267.8 356.9 267 359.5L295 417.5 236.5 460 218.5 429 201 417.5 220.5 382Z"/>
+      <path d="M189.5 428 208 439.5 223 468.5 170.5 507 138 461.5Z"/>
+    </g>
+  </defs>
+
+  <g clip-path="url(#globeClip)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="256" cy="256" r="210" stroke-width="12"/>
+    <path d="M256 46v420" stroke-width="8"/>
+    <path d="M166 67c-42 48-64 113-64 189s22 141 64 189M346 67c42 48 64 113 64 189s-22 141-64 189" stroke-width="8"/>
+    <path d="M74 152c52-17 113-26 182-26s130 9 182 26M74 360c52 17 113 26 182 26s130-9 182-26" stroke-width="8"/>
+  </g>
+  <g transform="translate(256 256) scale(.86) translate(-345 -312)" fill="currentColor">
+    <use href="#guardian" xlink:href="#guardian"/>
+    <use href="#guardian" xlink:href="#guardian" transform="translate(690 0) scale(-1 1)"/>
+  </g>
+  <path d="M256 189c8 37 20 57 58 67-38 10-50 30-58 67-8-37-20-57-58-67 38-10 50-30 58-67Z" fill="currentColor"/>
+</svg>

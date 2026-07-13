@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { GridNinjaLogo } from "@/components/brand/gridninja-logo"
+import { GridNinjaMark } from "@/components/brand/gridninja-logo"
 import { footerGroups } from "@/content/nav"
 import { siteConfig } from "@/content/site"
 
@@ -12,11 +12,18 @@ export function SiteFooter() {
       <SectionShell className="py-12">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
           <div className="space-y-4">
-            <GridNinjaLogo
-              className="gap-2.5"
-              markClassName="size-9"
-              textClassName="text-[0.84rem] tracking-[0.17em]"
-            />
+            <div className="grid w-fit max-w-full grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1">
+              <GridNinjaMark
+                variant="detailed"
+                className="row-start-1 size-[4.5rem] sm:row-span-2"
+              />
+              <span className="font-medium tracking-[0.14em] text-foreground uppercase sm:text-[1.05rem]">
+                GridNinja
+              </span>
+              <span className="col-span-2 whitespace-nowrap font-mono text-[0.6rem] leading-tight tracking-[0.05em] text-muted-foreground uppercase sm:col-span-1 sm:col-start-2">
+                Infrastructure · Intelligence · Control
+              </span>
+            </div>
             <h2 className="max-w-md text-[1.9rem] font-medium text-foreground">
               {siteConfig.footerCopy}
             </h2>

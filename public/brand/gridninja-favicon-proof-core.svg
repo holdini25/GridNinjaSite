@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc" shape-rendering="geometricPrecision">
+  <title id="title">GridNinja proof-core favicon</title>
+  <desc id="desc">A copper circular control boundary with a four-point proof star.</desc>
+  <defs>
+    <linearGradient id="copper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF9A2E"/>
+      <stop offset=".55" stop-color="#F58220"/>
+      <stop offset="1" stop-color="#C9570A"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="27" fill="none" stroke="url(#copper)" stroke-width="4"/>
+  <path d="M32 8v12M32 44v12" fill="none" stroke="url(#copper)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 18c2 8 6 12 14 14-8 2-12 6-14 14-2-8-6-12-14-14 8-2 12-6 14-14Z" fill="url(#copper)"/>
+</svg>

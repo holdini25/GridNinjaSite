@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { GridNinjaMark } from "@/components/brand/gridninja-logo"
+import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
 import { Button } from "@/components/ui/button"
 import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
 import { Hero } from "@/components/marketing/hero"
@@ -24,6 +24,7 @@ import {
 } from "@/content/copy/proof-pack"
 import {
   illustrativeWaterfall,
+  proofPackEvidenceChainStatus,
   proofArtifacts,
   proofLoadingSteps,
   proofStorySteps,
@@ -100,11 +101,11 @@ export default function ProofPackPage() {
       <SectionShell>
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="gn-vt-proof-export rounded-[1.8rem] border border-border/70 bg-surface px-6 py-7">
-            <div className="flex items-center gap-3">
-              <GridNinjaMark className="size-10 shrink-0" />
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm tracking-[0.28em] text-primary uppercase">
                 Sample download
               </p>
+              <GridNinjaProofSeal status={proofPackEvidenceChainStatus} />
             </div>
             <h2 className="mt-4 text-[2.2rem] font-medium text-foreground">
               Review the evidence package on your own terms

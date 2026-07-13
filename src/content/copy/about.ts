@@ -20,6 +20,26 @@ export const aboutWhyNow = {
   ],
 }
 
+export const aboutBrandAnatomy = {
+  eyebrow: "The GridNinja emblem",
+  headline: "Coordination protected by proof",
+  body: "The emblem makes GridNinja's operating model visible: infrastructure is coordinated across sites, authority stays bounded, and every accepted action resolves through a proof core.",
+  elements: [
+    {
+      title: "Globe",
+      body: "Infrastructure coordination across sites.",
+    },
+    {
+      title: "Guardians",
+      body: "Runtime assurance and bounded authority.",
+    },
+    {
+      title: "Central star",
+      body: "The proof and control core.",
+    },
+  ],
+}
+
 export const aboutPrinciples = [
   {
     title: "Proof before autonomy",

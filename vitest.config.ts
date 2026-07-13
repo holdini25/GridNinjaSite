@@ -12,6 +12,11 @@ export default defineConfig({
     },
   },
   test: {
+    // A single thread keeps the required command reliable on Windows/WSL
+    // checkouts, where fork startup can exceed Vitest's worker handshake.
+    pool: "threads",
+    maxWorkers: 1,
+    fileParallelism: false,
     include: [
       "tests/unit/**/*.test.{ts,tsx}",
       "tests/unit/**/*.spec.{ts,tsx}",

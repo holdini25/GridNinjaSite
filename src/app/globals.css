@@ -534,34 +534,27 @@
     overflow: hidden;
   }
 
-  .gn-instrument-event::before {
-    content: "";
-    position: absolute;
-    top: 0.85rem;
-    right: 0.85rem;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 999px;
+  .gn-instrument-event-status {
     background: var(--muted-foreground);
     box-shadow: 0 0 0 4px rgba(159, 176, 191, 0.08);
   }
 
-  .gn-instrument-event[data-state="verified"]::before,
-  .gn-instrument-event[data-state="allow"]::before,
-  .gn-instrument-event[data-state="locked"]::before,
-  .gn-instrument-event[data-state="written"]::before {
+  .gn-instrument-event[data-state="verified"] .gn-instrument-event-status,
+  .gn-instrument-event[data-state="allow"] .gn-instrument-event-status,
+  .gn-instrument-event[data-state="locked"] .gn-instrument-event-status,
+  .gn-instrument-event[data-state="written"] .gn-instrument-event-status {
     background: var(--signal);
     box-shadow: 0 0 0 4px rgba(72, 232, 154, 0.12);
   }
 
-  .gn-instrument-event[data-state="repair"]::before {
+  .gn-instrument-event[data-state="repair"] .gn-instrument-event-status {
     background: var(--primary);
     box-shadow: 0 0 0 4px rgba(255, 159, 26, 0.12);
   }
 
-  .gn-instrument-event[data-state="reject"]::before,
-  .gn-instrument-event[data-state="no-proof"]::before,
-  .gn-instrument-event[data-state="untrusted"]::before {
+  .gn-instrument-event[data-state="reject"] .gn-instrument-event-status,
+  .gn-instrument-event[data-state="no-proof"] .gn-instrument-event-status,
+  .gn-instrument-event[data-state="untrusted"] .gn-instrument-event-status {
     background: var(--destructive);
     box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.12);
   }
@@ -1220,7 +1213,7 @@
   .gn-rta-chip::after,
   .gn-terminal-line,
   .gn-instrument-event,
-  .gn-instrument-event::before,
+  .gn-instrument-event-status,
   .gn-loading-step::before,
   .gn-waterfall-step,
   .gn-deployment-ladder > *,

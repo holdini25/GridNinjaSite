@@ -4,7 +4,12 @@ import type { MouseEvent } from "react"
 
 import { motion, useReducedMotion } from "motion/react"
 
-import type { DispatchScenario } from "@/content/copy/dispatch-envelope"
+import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
+import {
+  getScenarioProofEligible,
+  type DispatchScenario,
+} from "@/content/copy/dispatch-envelope"
+import type { EvidenceChainStatus } from "@/content/proof-artifacts"
 
 type ProofTraceStep = {
   id: string
@@ -21,6 +26,11 @@ export function DispatchProofTrace({
 }) {
   const reduced = useReducedMotion()
   const steps = buildTraceSteps(scenario)
+  const evidenceChainStatus: EvidenceChainStatus = getScenarioProofEligible(
+    scenario
+  )
+    ? "complete"
+    : "no-proof"
 
   function handleOpen(event: MouseEvent<HTMLButtonElement>) {
     onOpenEvidence(event.currentTarget)
@@ -35,10 +45,13 @@ export function DispatchProofTrace({
             Decision evidence writes once, then settles
           </h3>
         </div>
-        <p className="max-w-lg text-sm leading-6 text-muted-foreground">
-          The trace links the RTA result to ledger, dispatch envelope, and proof root
-          artifacts for read-only inspection.
-        </p>
+        <div className="flex max-w-xl flex-col items-start gap-3">
+          <GridNinjaProofSeal status={evidenceChainStatus} />
+          <p className="text-sm leading-6 text-muted-foreground">
+            The trace links the RTA result to ledger, dispatch envelope, and proof
+            root artifacts for read-only inspection.
+          </p>
+        </div>
       </div>
       <ol
         className="grid gap-3 md:grid-cols-4"

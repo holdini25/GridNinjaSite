@@ -16,6 +16,7 @@
     "test:unit": "vitest run --coverage",
     "test:unit:dispatch-envelope": "vitest run tests/unit/dispatch-envelope",
     "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:integration:required": "node scripts/run-required-integration-tests.mjs",
     "test:e2e": "playwright test",
     "test:e2e:dispatch-envelope": "playwright test tests/e2e/dispatch-envelope.spec.ts",
     "test:e2e:lead-forms": "playwright test tests/e2e/lead-forms.spec.ts",
@@ -24,8 +25,10 @@
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
     "contact:qstash:configure": "node scripts/configure-contact-qstash.mjs",
-    "validate": "npm run lint && npm run typecheck && npm run build",
-    "audit:prod": "npm audit --omit=dev"
+    "brand:generate": "node scripts/generate-brand-derivatives.mjs",
+    "brand:check": "node scripts/generate-brand-derivatives.mjs --check",
+    "validate": "npm run brand:check && npm run lint && npm run typecheck && npm run build",
+    "audit:prod": "npm audit --omit=dev --audit-level=high"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -73,6 +76,8 @@
     "fast-check": "^4.8.0",
     "jsdom": "^29.1.1",
     "pg": "^8.22.0",
+    "png-to-ico": "^3.0.2",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.9"

@@ -112,11 +112,17 @@ export function SiteHeader() {
       <div
         className="mx-auto flex max-w-7xl items-center justify-between gap-6"
       >
-        <Link href="/" aria-label="GridNinja home">
+        <Link
+          href="/"
+          aria-label="GridNinja home"
+          data-gn-logo-trigger
+        >
           <GridNinjaLogo
+            variant="micro"
+            motion="micro-response"
             className="gap-2 sm:gap-2.5"
-            markClassName="size-[1.9rem] sm:size-[2.15rem]"
-            textClassName="text-[0.76rem] tracking-[0.16em] sm:text-[0.92rem]"
+            markClassName="size-[30px] sm:size-[34px]"
+            textClassName="max-[379px]:hidden text-[0.76rem] tracking-[0.16em] sm:text-[0.92rem]"
           />
         </Link>
         <nav

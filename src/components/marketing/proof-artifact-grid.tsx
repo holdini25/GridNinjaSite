@@ -1,5 +1,7 @@
 import type { ProofArtifact } from "@/content/proof-artifacts"
 
+import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
+
 export function ProofArtifactGrid({ artifacts }: { artifacts: ProofArtifact[] }) {
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -20,6 +22,7 @@ export function ProofArtifactGrid({ artifacts }: { artifacts: ProofArtifact[] })
             <p className="text-base leading-8 text-muted-foreground">
               {artifact.body}
             </p>
+            <GridNinjaProofSeal status={artifact.evidenceChainStatus} />
           </div>
         </article>
       ))}

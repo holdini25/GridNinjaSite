@@ -38,9 +38,15 @@ export function ProofLoadingSteps({
               <p className="font-mono text-xs text-muted-foreground">
                 {event.timecode}
               </p>
-              <p className="font-mono text-xs tracking-[0.16em] text-primary uppercase">
-                {event.state}
-              </p>
+              <div className="flex shrink-0 items-center gap-2">
+                <p className="font-mono text-xs tracking-[0.16em] text-primary uppercase">
+                  {event.state}
+                </p>
+                <span
+                  aria-hidden="true"
+                  className="gn-instrument-event-status size-2 shrink-0 rounded-full"
+                />
+              </div>
             </div>
             <p className="mt-2 text-sm font-medium text-foreground">
               {event.label}

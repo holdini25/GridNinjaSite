@@ -2,6 +2,7 @@ import type { CSSProperties } from "react"
 
 import type { WaterfallStep } from "@/content/proof-artifacts"
 
+import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
 import { ProofTooltip } from "@/components/marketing/proof-tooltip"
 import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
 
@@ -15,9 +16,11 @@ export function CapacityWaterfall({
   compact = false,
 }: CapacityWaterfallProps) {
   const maxValue = Math.max(
+    1,
     ...steps.map((step) => Math.abs(step.capacityAfter ?? step.value))
   )
-  const finalStep = steps.find((step) => step.tone === "proof") ?? steps.at(-1)
+  const finalStep =
+    steps.findLast((step) => step.tone === "proof") ?? steps.at(-1)
 
   return (
     <div
@@ -32,6 +35,9 @@ export function CapacityWaterfall({
           </h3>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {finalStep?.evidenceChainStatus ? (
+            <GridNinjaProofSeal status={finalStep.evidenceChainStatus} />
+          ) : null}
           {finalStep?.decision ? (
             <RtaDecisionChip state={finalStep.decision} />
           ) : null}

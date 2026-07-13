@@ -46,11 +46,21 @@ export function NavDrawer() {
       >
         <SheetHeader className="border-b border-border/70">
           <SheetTitle>
-            <GridNinjaLogo
-              className="gap-2.5"
-              markClassName="size-8"
-              textClassName="text-sm"
-            />
+            <SheetClose asChild>
+              <Link
+                href="/"
+                aria-label="GridNinja home"
+                data-gn-logo-trigger
+              >
+                <GridNinjaLogo
+                  variant="micro"
+                  motion="micro-response"
+                  className="gap-2.5"
+                  markClassName="size-[36px]"
+                  textClassName="text-sm"
+                />
+              </Link>
+            </SheetClose>
           </SheetTitle>
           <SheetDescription>
             Runtime-assured virtual capacity for AI data centers.

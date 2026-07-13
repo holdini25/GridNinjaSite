@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc" shape-rendering="geometricPrecision">
+  <title id="title">GridNinja globe and proof-core watermark</title>
+  <desc id="desc">An outline copper globe surrounding the four-point GridNinja proof and control core.</desc>
+  <defs>
+    <linearGradient id="copper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF9A2E"/>
+      <stop offset="0.52" stop-color="#F58220"/>
+      <stop offset="1" stop-color="#C9570A"/>
+    </linearGradient>
+    <clipPath id="globeClip">
+      <circle cx="256" cy="256" r="210"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#globeClip)" fill="none" stroke="url(#copper)" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="256" cy="256" r="210" stroke-width="12"/>
+    <path d="M256 46v420" stroke-width="8"/>
+    <path d="M166 67c-42 48-64 113-64 189s22 141 64 189M346 67c42 48 64 113 64 189s-22 141-64 189" stroke-width="8"/>
+    <path d="M74 152c52-17 113-26 182-26s130 9 182 26M74 360c52 17 113 26 182 26s130-9 182-26" stroke-width="8"/>
+  </g>
+  <path d="M256 189c8 37 20 57 58 67-38 10-50 30-58 67-8-37-20-57-58-67 38-10 50-30 58-67Z" fill="url(#copper)"/>
+</svg>

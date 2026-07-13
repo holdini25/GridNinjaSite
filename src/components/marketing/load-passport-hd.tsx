@@ -2,26 +2,33 @@
 
 import { useMemo, useState } from "react"
 
-import {
-  CheckCircle2Icon,
-  FileArchiveIcon,
-  FileTextIcon,
-  ShieldCheckIcon,
-} from "lucide-react"
+import { FileArchiveIcon, FileTextIcon } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 
-import { loadPassportSections } from "@/content/proof-artifacts"
+import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
+import { LoadPassportVerificationStatus } from "@/components/marketing/load-passport-verification-status"
+import {
+  getLoadPassportEvidenceChainStatus,
+  loadPassportSections,
+  type LoadPassportSection,
+} from "@/content/proof-artifacts"
 import { runViewTransition } from "@/lib/view-transition"
 import { cn } from "@/lib/utils"
 
-export function LoadPassportHD({ className }: { className?: string }) {
-  const [activeTitle, setActiveTitle] = useState(loadPassportSections[0]?.title)
+export function LoadPassportHD({
+  className,
+  sections = loadPassportSections,
+}: {
+  className?: string
+  sections?: readonly LoadPassportSection[]
+}) {
+  const [activeTitle, setActiveTitle] = useState(sections[0]?.title)
   const active = useMemo(
     () =>
-      loadPassportSections.find((section) => section.title === activeTitle) ??
-      loadPassportSections[0],
-    [activeTitle]
+      sections.find((section) => section.title === activeTitle) ?? sections[0],
+    [activeTitle, sections]
   )
+  const evidenceChainStatus = getLoadPassportEvidenceChainStatus(sections)
 
   function selectSection(title: string) {
     runViewTransition(() => setActiveTitle(title))
@@ -47,15 +54,12 @@ export function LoadPassportHD({ className }: { className?: string }) {
             evidence into one inspectable record.
           </p>
         </div>
-        <div className="gn-proof-lock inline-flex items-center gap-2 rounded-full border border-signal/45 bg-signal/10 px-4 py-2 font-mono text-sm text-signal">
-          <ShieldCheckIcon className="size-4" />
-          sample chain verified
-        </div>
+        <GridNinjaProofSeal status={evidenceChainStatus} />
       </div>
 
       <div className="mt-7 grid gap-6 xl:grid-cols-[0.82fr_1.18fr]">
         <div className="grid gap-2">
-          {loadPassportSections.map((section) => (
+          {sections.map((section) => (
             <button
               key={section.title}
               type="button"
@@ -75,13 +79,7 @@ export function LoadPassportHD({ className }: { className?: string }) {
                 <span className="font-mono text-sm text-foreground">
                   {section.title}
                 </span>
-                {section.verified ? (
-                  <CheckCircle2Icon className="size-4 text-signal" />
-                ) : (
-                  <span className="font-mono text-[0.65rem] text-muted-foreground">
-                    NO-PROOF
-                  </span>
-                )}
+                <LoadPassportVerificationStatus verified={section.verified} />
               </span>
             </button>
           ))}
@@ -90,7 +88,13 @@ export function LoadPassportHD({ className }: { className?: string }) {
         <AnimatePresence mode="wait">
           <motion.div
             key={active.title}
-            className="rounded-[1.15rem] border border-border/70 bg-background/50 p-5"
+            className={cn(
+              "rounded-[1.15rem] border border-border/70 bg-background/50 p-5",
+              !active.verified && "gn-dashed-no-proof"
+            )}
+            data-load-passport-detail-status={
+              active.verified ? "verified" : "no-proof"
+            }
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -109,7 +113,11 @@ export function LoadPassportHD({ className }: { className?: string }) {
             <div className="mt-5 grid gap-3 md:grid-cols-3">
               <PassportMetric label="telemetry" value={active.telemetrySource} />
               <PassportMetric label="freshness" value={active.freshness} />
-              <PassportMetric label="proof_row" value={active.proofRow} />
+              <PassportMetric
+                label="proof_row"
+                value={active.proofRow}
+                verified={active.verified}
+              />
             </div>
 
             <div className="mt-5 rounded-[0.9rem] border border-border/60 bg-surface p-4">
@@ -162,15 +170,28 @@ export function LoadPassportHD({ className }: { className?: string }) {
   )
 }
 
-function PassportMetric({ label, value }: { label: string; value: string }) {
+function PassportMetric({
+  label,
+  value,
+  verified,
+}: {
+  label: string
+  value: string
+  verified?: boolean
+}) {
   return (
     <div className="min-w-0 rounded-[0.85rem] border border-border/60 bg-surface px-3 py-3">
       <p className="font-mono text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">
         {label}
       </p>
-      <p className="mt-1 break-words font-mono text-sm text-foreground">
-        {value}
-      </p>
+      <div className="mt-1 flex min-w-0 items-center gap-2">
+        {typeof verified === "boolean" ? (
+          <LoadPassportVerificationStatus verified={verified} />
+        ) : null}
+        <p className="min-w-0 break-words font-mono text-sm text-foreground">
+          {value}
+        </p>
+      </div>
     </div>
   )
 }

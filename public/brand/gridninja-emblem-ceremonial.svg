@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 640 560" role="img" aria-labelledby="title desc" shape-rendering="geometricPrecision">
+  <title id="title">GridNinja ceremonial guardian emblem</title>
+  <desc id="desc">The detailed GridNinja globe and twin guardians with fully sheathed katana whose hilts face inward beneath the protected core.</desc>
+  <defs>
+    <linearGradient id="copper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF9A2E"/>
+      <stop offset="0.52" stop-color="#F58220"/>
+      <stop offset="1" stop-color="#C9570A"/>
+    </linearGradient>
+    <linearGradient id="armor" x1="0" y1="0" x2=".9" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset=".7" stop-color="#F1F5F9"/>
+      <stop offset="1" stop-color="#D7E0E8"/>
+    </linearGradient>
+    <linearGradient id="saya" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#20364A"/>
+      <stop offset=".48" stop-color="#102438"/>
+      <stop offset="1" stop-color="#071522"/>
+    </linearGradient>
+    <clipPath id="globeClip"><circle cx="320" cy="274" r="216"/></clipPath>
+    <g id="guardian">
+      <path d="M204.5 165 271 195.5 275 205.5 188.5 249 141 269 142 266.5 142 259.5 143 258.5 150 203.5 151 198.5 153.5 196Z"/>
+      <path d="M282.5 216Q285.1 215.2 284 218.5L283 219.5 279 250.5 275.5 254 245 273.5 247.5 274 273.5 263 274 269.5 272 275.5 269 298.5 266.5 301 178.5 360 153 330.5 217 281.5 223 252.5 225.5 247Z"/>
+      <path d="M179.5 266 180 274.5 179 275.5 179 285.5 176.5 290 145.5 312 145 280Z"/>
+      <path d="M259.5 333 262 333.5 262 342.5 263 343.5 263 351 206.5 378 202 382.5 185 411 123.5 443 118 436.5 118 434.5 152.5 387Z"/>
+      <path d="M264.5 358Q267.8 356.9 267 359.5L295 417.5 236.5 460 218.5 429 201 417.5 220.5 382Z"/>
+      <path d="M189.5 428 208 439.5 223 468.5 170.5 507 138 461.5Z"/>
+    </g>
+    <g id="sheathedKatana" stroke-linejoin="round">
+      <!-- Lacquered saya: copper-bound, tapered and capped -->
+      <path d="M104 400 119 386 294 533Q301 539 295 547L287 555Q281 561 274 555L98 414Z" fill="url(#saya)" stroke="url(#copper)" stroke-width="4"/>
+      <path d="M116 398 287 544" fill="none" stroke="#39536A" stroke-width="4" stroke-linecap="round" opacity=".68"/>
+      <path d="m276 553 17-20 13 11-18 20Z" fill="url(#armor)" stroke="#07182B" stroke-width="3"/>
+
+      <!-- Koiguchi collar and restrained copper retention band -->
+      <path d="m97 383 15-10 23 21-18 25-25-22Z" fill="url(#armor)" stroke="#07182B" stroke-width="4"/>
+      <path d="m102 386 22 20" fill="none" stroke="url(#copper)" stroke-width="5"/>
+
+      <!-- Compact tsuba protects the sheathed transition -->
+      <path d="m72 389 8 9 38-38-9-8Z" fill="url(#armor)" stroke="#07182B" stroke-width="3"/>
+      <path d="m82 382 10 10" fill="none" stroke="#B9C4CE" stroke-width="3"/>
+
+      <!-- Tsuka with copper wrap, dark diamonds and metal pommel -->
+      <path d="m49 339 11-11 43 43-11 12Z" fill="url(#copper)" stroke="#07182B" stroke-width="3"/>
+      <path d="m58 338-8 8m17 1-8 8m17 1-8 8m17 1-8 8m17 1-8 8" fill="none" stroke="#07182B" stroke-width="4"/>
+      <path d="m46 316 15 13-17 18-14-14Z" fill="url(#armor)" stroke="#07182B" stroke-width="3"/>
+      <path d="m38 325 15 14" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".7"/>
+    </g>
+  </defs>
+
+  <!-- Complete sheathed weapons remain behind the protected globe and guardians. -->
+  <g transform="translate(320 274) scale(.88) translate(-345 -312)">
+    <use href="#sheathedKatana" xlink:href="#sheathedKatana" transform="rotate(180 168 440)"/>
+    <use href="#sheathedKatana" xlink:href="#sheathedKatana" transform="translate(690 0) scale(-1 1) rotate(180 168 440)"/>
+  </g>
+
+  <g clip-path="url(#globeClip)" fill="none" stroke="url(#copper)" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="320" cy="274" r="216" stroke-width="12"/>
+    <path d="M320 58v432" stroke-width="8"/>
+    <path d="M227 80c-43 49-66 116-66 194s23 145 66 194M413 80c43 49 66 116 66 194s-23 145-66 194" stroke-width="8"/>
+    <path d="M133 167c54-18 117-27 187-27s133 9 187 27M133 381c54 18 117 27 187 27s133-9 187-27" stroke-width="8"/>
+  </g>
+
+  <g transform="translate(320 274) scale(.88) translate(-345 -312)" fill="url(#armor)" stroke="#07182B" stroke-width="3" stroke-linejoin="round">
+    <use href="#guardian" xlink:href="#guardian"/>
+    <use href="#guardian" xlink:href="#guardian" transform="translate(690 0) scale(-1 1)"/>
+  </g>
+  <path d="M320 207c8 37 20 57 58 67-38 10-50 30-58 67-8-37-20-57-58-67 38-10 50-30 58-67Z" fill="url(#copper)"/>
+</svg>

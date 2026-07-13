@@ -98,8 +98,8 @@ export default async function ContactPage({
             headline="A proof-first path before any live authority is discussed"
             body="Capacity Audit, Shadow Mode, and design-partner conversations all start with evidence collection and visible no-proof gaps."
           />
-          <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
-            <AutonomyLadder steps={ladderSteps} />
+          <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(22rem,0.75fr)]">
+            <AutonomyLadder steps={ladderSteps} layout="contact-split" />
             <ProofLoadingSteps steps={proofLoadingSteps} />
           </div>
         </div>

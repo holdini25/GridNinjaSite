@@ -1,120 +1,272 @@
-import { useId, type SVGProps } from "react"
+import Image from "next/image"
+import type { ComponentPropsWithoutRef, CSSProperties } from "react"
 
 import { cn } from "@/lib/utils"
 
-type GridNinjaMarkProps = SVGProps<SVGSVGElement> & {
-  className?: string
+import {
+  AnimatedGridNinjaMark,
+  type GridNinjaLogoMotion as AnimatedGridNinjaLogoMotion,
+} from "./animated-gridninja-mark"
+
+export type GridNinjaLogoVariant =
+  | "proof-core"
+  | "micro"
+  | "detailed"
+  | "ceremonial"
+  | "monochrome"
+  | "light"
+  | "watermark"
+
+const logoAssets: Record<
+  GridNinjaLogoVariant,
+  { src: string; width: number; height: number }
+> = {
+  "proof-core": {
+    src: "/brand/gridninja-favicon-proof-core.svg",
+    width: 64,
+    height: 64,
+  },
+  micro: {
+    src: "/brand/gridninja-mark-micro.svg",
+    width: 256,
+    height: 256,
+  },
+  detailed: {
+    src: "/brand/gridninja-emblem-detailed-dark.svg",
+    width: 512,
+    height: 512,
+  },
+  ceremonial: {
+    src: "/brand/gridninja-emblem-ceremonial.svg",
+    width: 640,
+    height: 560,
+  },
+  monochrome: {
+    src: "/brand/gridninja-emblem-monochrome.svg",
+    width: 512,
+    height: 512,
+  },
+  light: {
+    src: "/brand/gridninja-badge-light.svg",
+    width: 512,
+    height: 512,
+  },
+  watermark: {
+    src: "/brand/gridninja-watermark.svg",
+    width: 512,
+    height: 512,
+  },
 }
 
-export function GridNinjaMark({ className, ...props }: GridNinjaMarkProps) {
-  const strokeId = useId()
-  const fillId = useId()
+type GridNinjaImageVariant = Exclude<GridNinjaLogoVariant, "monochrome">
+
+type GridNinjaAssetProps = Omit<
+  ComponentPropsWithoutRef<typeof Image>,
+  "alt" | "height" | "src" | "width"
+> & {
+  variant: GridNinjaImageVariant
+}
+
+function GridNinjaAsset({
+  variant,
+  className,
+  ...props
+}: GridNinjaAssetProps) {
+  const asset = logoAssets[variant]
 
   return (
-    <svg
-      viewBox="0 0 96 96"
-      fill="none"
-      aria-hidden="true"
-      className={cn("shrink-0", className)}
+    <Image
+      src={asset.src}
+      width={asset.width}
+      height={asset.height}
+      alt=""
+      className={cn("shrink-0 object-contain", className)}
+      unoptimized
       {...props}
-    >
-      <defs>
-        <linearGradient id={strokeId} x1="18" y1="18" x2="78" y2="78">
-          <stop offset="0%" stopColor="#FF9F1A" />
-          <stop offset="100%" stopColor="#E0B24A" />
-        </linearGradient>
-        <linearGradient id={fillId} x1="18" y1="18" x2="78" y2="78">
-          <stop offset="0%" stopColor="#FF9F1A" stopOpacity="0.16" />
-          <stop offset="100%" stopColor="#FF9F1A" stopOpacity="0.04" />
-        </linearGradient>
-      </defs>
-
-      <circle
-        cx="48"
-        cy="48"
-        r="35"
-        fill={`url(#${fillId})`}
-        stroke={`url(#${strokeId})`}
-        strokeWidth="2.5"
-      />
-      <ellipse
-        cx="48"
-        cy="48"
-        rx="21"
-        ry="34"
-        stroke="rgba(159,176,191,0.45)"
-        strokeWidth="1.5"
-      />
-      <ellipse
-        cx="48"
-        cy="48"
-        rx="34"
-        ry="17"
-        stroke="rgba(159,176,191,0.25)"
-        strokeWidth="1.5"
-      />
-      <path
-        d="M19 39 C24 31 31 27 39 27 C35 32 34 36 34 43 C28 46 23 47 19 39Z"
-        fill="rgba(255,159,26,0.85)"
-      />
-      <path
-        d="M77 39 C72 31 65 27 57 27 C61 32 62 36 62 43 C68 46 73 47 77 39Z"
-        fill="rgba(255,159,26,0.85)"
-      />
-      <path
-        d="M48 26 L52.6 39.1 L66.3 39.6 L55.4 47.7 L59.3 60.9 L48 53.2 L36.7 60.9 L40.6 47.7 L29.7 39.6 L43.4 39.1 Z"
-        fill="#FF9F1A"
-      />
-      <path
-        d="M48 20 V76"
-        stroke="rgba(159,176,191,0.2)"
-        strokeWidth="1.25"
-      />
-      <path
-        d="M24 48 H72"
-        stroke="rgba(159,176,191,0.2)"
-        strokeWidth="1.25"
-      />
-      <path
-        d="M28 32 C36 25 61 25 68 32"
-        stroke="rgba(255,159,26,0.45)"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-      <path
-        d="M28 64 C36 71 61 71 68 64"
-        stroke="rgba(255,159,26,0.22)"
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
+    />
   )
 }
 
-type GridNinjaLogoProps = {
+type GridNinjaImageMarkProps = Omit<
+  ComponentPropsWithoutRef<typeof Image>,
+  "alt" | "height" | "src" | "width"
+> & {
+  variant?: GridNinjaImageVariant
+}
+
+type GridNinjaMonochromeMarkProps = {
+  variant: "monochrome"
+  className?: string
+  style?: CSSProperties
+}
+
+export type GridNinjaMarkProps =
+  | GridNinjaImageMarkProps
+  | GridNinjaMonochromeMarkProps
+
+function GridNinjaMonochromeMark({
+  className,
+  style,
+}: Omit<GridNinjaMonochromeMarkProps, "variant">) {
+  const maskImage = `url("${logoAssets.monochrome.src}")`
+
+  return (
+    <span
+      aria-hidden="true"
+      data-gridninja-mark="monochrome"
+      className={cn(
+        "inline-block aspect-square w-[512px] max-w-full shrink-0 bg-current",
+        className
+      )}
+      style={{
+        ...style,
+        backgroundColor: "currentColor",
+        maskImage,
+        maskPosition: "center",
+        maskRepeat: "no-repeat",
+        maskSize: "contain",
+        WebkitMaskImage: maskImage,
+        WebkitMaskPosition: "center",
+        WebkitMaskRepeat: "no-repeat",
+        WebkitMaskSize: "contain",
+      }}
+    />
+  )
+}
+
+/**
+ * Compatibility export for mark-only placements. New brand compositions should
+ * use GridNinjaLogo so their accessible label and live wordmark stay together.
+ */
+export function GridNinjaMark(props: GridNinjaMarkProps) {
+  if (props.variant === "monochrome") {
+    const { className, style } = props
+
+    return <GridNinjaMonochromeMark className={className} style={style} />
+  }
+
+  const { className, variant = "detailed", ...imageProps } = props
+
+  return (
+    <GridNinjaAsset
+      variant={variant}
+      className={className}
+      {...imageProps}
+    />
+  )
+}
+
+type GridNinjaLogoBaseProps = {
+  variant?: GridNinjaLogoVariant
   className?: string
   markClassName?: string
   textClassName?: string
+  signatureClassName?: string
   showWordmark?: boolean
+  showSignature?: boolean
+  label?: string
 }
 
-export function GridNinjaLogo({
-  className,
-  markClassName,
-  textClassName,
-  showWordmark = true,
-}: GridNinjaLogoProps) {
+export type GridNinjaLogoMotion = "none" | AnimatedGridNinjaLogoMotion
+export type GridNinjaLogoReveal = "none" | "once"
+
+type StaticGridNinjaLogoProps = GridNinjaLogoBaseProps & {
+  motion?: "none"
+  reveal?: never
+}
+
+type MicroMotionGridNinjaLogoProps = Omit<
+  GridNinjaLogoBaseProps,
+  "variant"
+> & {
+  variant: "micro"
+  motion: "micro-response"
+  reveal?: never
+}
+
+type GuardianWakeGridNinjaLogoProps = Omit<
+  GridNinjaLogoBaseProps,
+  "variant"
+> & {
+  variant: "ceremonial"
+  motion: "guardian-wake"
+  reveal?: GridNinjaLogoReveal
+}
+
+export type GridNinjaLogoProps =
+  | StaticGridNinjaLogoProps
+  | MicroMotionGridNinjaLogoProps
+  | GuardianWakeGridNinjaLogoProps
+
+export function GridNinjaLogo(props: GridNinjaLogoProps) {
+  const {
+    variant = "micro",
+    className,
+    markClassName,
+    textClassName,
+    signatureClassName,
+    showWordmark = true,
+    showSignature = false,
+    label,
+  } = props
+  const hasVisibleText = showWordmark || showSignature
+  const isDecorative = !label && !hasVisibleText
+  const motion = props.motion ?? "none"
+
   return (
-    <span className={cn("inline-flex items-center gap-3", className)}>
-      <GridNinjaMark className={cn("size-10", markClassName)} />
-      {showWordmark ? (
+    <span
+      className={cn("inline-flex items-center gap-3", className)}
+      role={label ? "img" : undefined}
+      aria-label={label}
+      aria-hidden={isDecorative ? "true" : undefined}
+    >
+      {motion === "micro-response" || motion === "guardian-wake" ? (
+        <AnimatedGridNinjaMark
+          variant={motion}
+          reveal={
+            motion === "guardian-wake" && "reveal" in props
+              ? props.reveal
+              : undefined
+          }
+          className={cn("size-10 shrink-0", markClassName)}
+        />
+      ) : (
+        variant === "monochrome" ? (
+          <GridNinjaMonochromeMark
+            className={cn("size-10", markClassName)}
+          />
+        ) : (
+          <GridNinjaAsset
+            variant={variant}
+            className={cn("size-10", markClassName)}
+          />
+        )
+      )}
+      {hasVisibleText ? (
         <span
-          className={cn(
-            "font-medium tracking-[0.18em] text-foreground uppercase",
-            textClassName
-          )}
+          className="inline-flex min-w-0 flex-col"
+          aria-hidden={label ? "true" : undefined}
         >
-          GridNinja
+          {showWordmark ? (
+            <span
+              className={cn(
+                "font-medium tracking-[0.18em] text-foreground uppercase",
+                textClassName
+              )}
+            >
+              GridNinja
+            </span>
+          ) : null}
+          {showSignature ? (
+            <span
+              className={cn(
+                "mt-1 font-mono text-[0.55rem] leading-tight tracking-[0.13em] text-muted-foreground uppercase",
+                signatureClassName
+              )}
+            >
+              Infrastructure · Intelligence · Control
+            </span>
+          ) : null}
         </span>
       ) : null}
     </span>

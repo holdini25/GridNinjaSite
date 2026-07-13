@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import { GridNinjaLogo } from "@/components/brand/gridninja-logo"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
 import { OutcomePillars } from "@/components/marketing/outcome-pillars"
@@ -9,6 +10,7 @@ import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import {
   aboutClosingCta,
+  aboutBrandAnatomy,
   aboutHero,
   aboutMission,
   aboutOperatingModel,
@@ -74,6 +76,50 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+      </SectionShell>
+
+      <SectionShell aria-labelledby="brand-anatomy-heading">
+        <div className="grid gap-8 rounded-[1.8rem] border border-border/70 bg-surface px-6 py-8 sm:gap-10 sm:px-8 lg:grid-cols-[minmax(220px,0.7fr)_minmax(0,1.3fr)] lg:items-center lg:px-10">
+          <div className="flex min-h-40 items-center justify-center rounded-[1.4rem] bg-[#07182b] p-5 sm:min-h-48">
+            <GridNinjaLogo
+              variant="ceremonial"
+              motion="guardian-wake"
+              reveal="once"
+              showWordmark={false}
+              label="GridNinja ceremonial guardian emblem"
+              markClassName="h-[160px] w-auto sm:h-[192px]"
+            />
+          </div>
+          <div>
+            <p className="text-xs tracking-[0.28em] text-primary uppercase sm:text-sm">
+              {aboutBrandAnatomy.eyebrow}
+            </p>
+            <h2
+              id="brand-anatomy-heading"
+              className="mt-4 text-balance text-[2.15rem] leading-[1.06] font-medium tracking-tight text-foreground sm:text-[2.65rem]"
+            >
+              {aboutBrandAnatomy.headline}
+            </h2>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+              {aboutBrandAnatomy.body}
+            </p>
+            <dl className="mt-7 grid gap-4 sm:grid-cols-3">
+              {aboutBrandAnatomy.elements.map((element) => (
+                <div
+                  key={element.title}
+                  className="border-l border-primary/55 pl-4"
+                >
+                  <dt className="font-medium text-foreground">
+                    {element.title}
+                  </dt>
+                  <dd className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {element.body}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </SectionShell>

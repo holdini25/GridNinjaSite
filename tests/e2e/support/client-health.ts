@@ -20,14 +20,28 @@ export function observeClientHealth(page: Page) {
     errors.push(`pageerror: ${error.message}`)
   })
   page.on("console", (message) => {
-    if (message.type() === "error") {
-      errors.push(`console: ${message.text()}`)
+    const text = message.text()
+    const localTurnstileOriginWarning =
+      page.url().startsWith("http://127.0.0.1:") &&
+      text.includes("postMessage") &&
+      text.includes("https://challenges.cloudflare.com") &&
+      text.includes("http://127.0.0.1:3000")
+
+    if (message.type() === "error" && !localTurnstileOriginWarning) {
+      errors.push(`console: ${text}`)
     }
   })
   page.on("requestfailed", (request: Request) => {
-    if (checkedResourceTypes.has(request.resourceType())) {
+    const errorText = request.failure()?.errorText ?? "unknown error"
+    const navigationCancelledRequest =
+      errorText === "net::ERR_ABORTED" || errorText === "NS_BINDING_ABORTED"
+
+    if (
+      checkedResourceTypes.has(request.resourceType()) &&
+      !navigationCancelledRequest
+    ) {
       errors.push(
-        `requestfailed: ${request.method()} ${request.url()} (${request.failure()?.errorText ?? "unknown error"})`
+        `requestfailed: ${request.method()} ${request.url()} (${errorText})`
       )
     }
   })
