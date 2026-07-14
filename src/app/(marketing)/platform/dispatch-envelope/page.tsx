@@ -6,6 +6,7 @@ import { ArrowRightIcon, ShieldCheckIcon } from "lucide-react"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { PublicClaimValue } from "@/components/seo/public-claim"
 import { DispatchEnvelopeVisual } from "@/components/marketing/dispatch-envelope/dispatch-envelope-visual"
 import { CtaBand } from "@/components/marketing/cta-band"
@@ -235,6 +236,8 @@ export default async function DispatchEnvelopePage({
           </div>
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/platform/dispatch-envelope" />
 
       <SectionShell>
         <CtaBand

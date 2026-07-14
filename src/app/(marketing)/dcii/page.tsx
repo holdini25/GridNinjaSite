@@ -12,6 +12,7 @@ import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import {
   dciiBenefits,
   dciiCategoryFit,
@@ -321,6 +322,8 @@ export default function DciiPage() {
           </div>
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/dcii" />
 
       <SectionShell>
         <CtaBand

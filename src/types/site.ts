@@ -29,7 +29,7 @@ export interface ComparisonRow {
 
 export interface SolutionPageConfig {
   slug: "ai-cloud" | "colocation"
-  path: string
+  path: "/solutions/ai-cloud" | "/solutions/colocation"
   hero: SectionCopy
   whyThisMatters: string
   buyerAnxiety: string

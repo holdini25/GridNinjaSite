@@ -1,12 +1,21 @@
 import { expect, test } from "@playwright/test"
 
+import { PRODUCTION_ORIGIN } from "../../src/seo/policy"
+import { getSeoRoute } from "../../src/seo/route-manifest"
+
 const socialImageAlt =
   "GridNinja — proof-backed virtual capacity for AI data centers"
 const canonicalSiteUrl = "https://gridninja.ai/"
-const homepageTitle =
-  "AI Data Center Virtual Capacity Control Plane | GridNinja"
-const homepageDescription =
-  "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure."
+const homepageRoute = getSeoRoute("/")
+
+function expectHomepageUrl(value: string | null) {
+  expect(value).not.toBeNull()
+  const url = new URL(value ?? "")
+  expect(url.origin).toBe(PRODUCTION_ORIGIN)
+  expect(url.pathname).toBe("/")
+  expect(url.search).toBe("")
+  expect(url.hash).toBe("")
+}
 
 function pngSize(buffer: Buffer) {
   expect(buffer.subarray(1, 4).toString("ascii")).toBe("PNG")
@@ -30,6 +39,7 @@ test.describe("production brand metadata routes", () => {
     expect(manifest).toMatchObject({
       name: "GridNinja",
       short_name: "GridNinja",
+      description: homepageRoute.description,
       start_url: "/",
       scope: "/",
       display: "standalone",
@@ -116,19 +126,25 @@ test.describe("production brand metadata routes", () => {
       "content",
       "#070a0d"
     )
-    await expect(page).toHaveTitle(homepageTitle)
+    await expect(page).toHaveTitle(homepageRoute.title)
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
-      homepageDescription
+      homepageRoute.description
     )
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      canonicalSiteUrl
-    )
-    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+    await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
       "content",
-      canonicalSiteUrl
+      homepageRoute.description
     )
+    await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute(
+      "content",
+      homepageRoute.description
+    )
+    const canonical = page.locator('link[rel="canonical"]')
+    const openGraphUrl = page.locator('meta[property="og:url"]')
+    await expect(canonical).toHaveCount(1)
+    await expect(openGraphUrl).toHaveCount(1)
+    expectHomepageUrl(await canonical.getAttribute("href"))
+    expectHomepageUrl(await openGraphUrl.getAttribute("content"))
     await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
       "content",
       "GridNinja"
@@ -230,8 +246,8 @@ test.describe("production brand metadata routes", () => {
       ])
     )
     await expect(
-      page.getByText("GridNinja is the runtime-assured virtual capacity engine", {
-        exact: false,
+      page.locator("footer").getByRole("heading", {
+        name: "GridNinja is the runtime-assured virtual capacity engine for AI data centers.",
       })
     ).toBeVisible()
     await expect(

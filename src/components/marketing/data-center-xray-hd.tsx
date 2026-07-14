@@ -6,15 +6,21 @@ import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
 import { xrayLayers, type XrayLayer } from "@/content/proof-artifacts"
 import { cn } from "@/lib/utils"
 
+export type XrayHeadingLevel = 2 | 3
+
 export function DataCenterXrayHD({
   layers = xrayLayers,
   className,
+  headingLevel = 2,
 }: {
   layers?: XrayLayer[]
   className?: string
+  headingLevel?: XrayHeadingLevel
 }) {
   const [activeId, setActiveId] = useState(layers[0]?.id)
   const active = layers.find((layer) => layer.id === activeId) ?? layers[0]
+  const Heading = headingLevel === 2 ? "h2" : "h3"
+  const DetailHeading = headingLevel === 2 ? "h3" : "h4"
 
   if (!active) {
     return null
@@ -26,9 +32,9 @@ export function DataCenterXrayHD({
       <div className="grid gap-8 xl:grid-cols-[0.9fr_1.1fr] xl:items-center">
         <div>
           <p className="gn-eyebrow">Infrastructure X-Ray</p>
-          <h3 className="mt-3 text-[2.15rem] font-medium tracking-tight text-foreground">
+          <Heading className="mt-3 text-[2.15rem] font-medium tracking-tight text-foreground">
             Physical constraints become digital proof objects.
-          </h3>
+          </Heading>
           <p className="mt-4 text-base leading-8 text-muted-foreground">
             GridNinja represents power, cooling, storage, workload, policy, and
             telemetry trust as inspectable proof layers before any deeper
@@ -118,9 +124,9 @@ export function DataCenterXrayHD({
               <p className="font-mono text-xs tracking-[0.16em] text-primary uppercase">
                 selected proof layer
               </p>
-              <h4 className="mt-2 text-xl font-medium text-foreground">
+              <DetailHeading className="mt-2 text-xl font-medium text-foreground">
                 {active.title}
-              </h4>
+              </DetailHeading>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 <XrayMetric label="proof_object" value={active.proofObject} />
                 <XrayMetric label="telemetry" value={active.telemetry} />

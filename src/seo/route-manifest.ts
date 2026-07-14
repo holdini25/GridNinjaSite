@@ -74,7 +74,7 @@ export const seoRoutes = [
     contentUpdatedAt: updated,
     breadcrumbs: [],
     targetQuestions: ["How does virtual capacity orchestration work inside the fence?"],
-    relatedPaths: ["/platform/dispatch-envelope", "/proof", "/demo"],
+    relatedPaths: ["/platform/dispatch-envelope", "/proof", "/demo", "/dcii"],
   },
   {
     key: "dispatch-envelope",
@@ -159,7 +159,7 @@ export const seoRoutes = [
     contentUpdatedAt: updated,
     breadcrumbs: [],
     targetQuestions: ["What does proof before autonomy mean for AI data centers?"],
-    relatedPaths: ["/proof/proof-pack", "/demo", "/evidence"],
+    relatedPaths: ["/proof/proof-pack", "/demo", "/evidence", "/why-gridninja"],
   },
   {
     key: "why-gridninja",
@@ -176,7 +176,7 @@ export const seoRoutes = [
     contentUpdatedAt: updated,
     breadcrumbs: [],
     targetQuestions: ["How is capacity acceptance different from DCIM or a digital twin?"],
-    relatedPaths: ["/platform", "/proof", "/methodology/comparison-policy"],
+    relatedPaths: ["/platform", "/proof", "/methodology/comparison-policy", "/about"],
   },
   {
     key: "proof-pack",
@@ -286,13 +286,13 @@ export const seoRoutes = [
 
 function makeHubRoutes(): SeoRoute[] {
   return [
-    hub("insights", "/insights", "Virtual Capacity Insights for AI Data Centers | GridNinja", "Technical explainers for virtual capacity, runtime assurance, Shadow Mode, time-to-power, and cross-domain constraints.", "Virtual capacity insights for constrained AI infrastructure", "definition"),
-    hub("evidence", "/evidence", "Virtual Capacity Evidence Library | GridNinja", "Publication-gated methods, synthetic traces, ledgers, specifications, and proof artifacts for evaluating virtual capacity claims.", "Evidence for safe, usable, auditable capacity", "evidence"),
-    hub("methodology", "/methodology", "GridNinja Claims, Evidence & Capacity Methods", "How GridNinja governs claims, comparisons, corrections, evidence maturity, and Capacity Audit methods.", "Methods for claims that operators can defend", "evidence"),
+    hub("insights", "/insights", "Virtual Capacity Insights for AI Data Centers | GridNinja", "Technical explainers for virtual capacity, runtime assurance, Shadow Mode, time-to-power, and cross-domain constraints.", "Virtual capacity insights for constrained AI infrastructure", "definition", ["/platform", "/evidence", "/roi"]),
+    hub("evidence", "/evidence", "Virtual Capacity Evidence Library | GridNinja", "Publication-gated methods, synthetic traces, ledgers, specifications, and proof artifacts for evaluating virtual capacity claims.", "Evidence for safe, usable, auditable capacity", "evidence", ["/proof", "/insights", "/methodology"]),
+    hub("methodology", "/methodology", "GridNinja Claims, Evidence & Capacity Methods", "How GridNinja governs claims, comparisons, corrections, evidence maturity, and Capacity Audit methods.", "Methods for claims that operators can defend", "evidence", ["/proof", "/evidence", "/roi"]),
   ]
 }
 
-function hub(key: string, path: `/${string}`, title: string, description: string, h1: string, searchIntent: SearchIntent): SeoRoute {
+function hub(key: string, path: `/${string}`, title: string, description: string, h1: string, searchIntent: SearchIntent, relatedPaths: readonly string[]): SeoRoute {
   return {
     key,
     path,
@@ -308,7 +308,7 @@ function hub(key: string, path: `/${string}`, title: string, description: string
     contentUpdatedAt: updated,
     breadcrumbs: [],
     targetQuestions: [`What does GridNinja publish about ${key}?`],
-    relatedPaths: ["/platform", "/proof", "/roi"],
+    relatedPaths,
   }
 }
 
@@ -390,7 +390,15 @@ export function validateSeoRouteManifest(): string[] {
     if (/placeholder|example\.com|vercel\.app/i.test(`${route.title} ${route.description}`)) {
       errors.push(`Placeholder or foreign host in route: ${route.path}`)
     }
+    const relatedPaths = new Set<string>()
     for (const related of route.relatedPaths) {
+      if (relatedPaths.has(related)) {
+        errors.push(`Duplicate related path on ${route.path}: ${related}`)
+      }
+      if (related === route.path) {
+        errors.push(`Self-related path on ${route.path}: ${related}`)
+      }
+      relatedPaths.add(related)
       if (/^https?:/i.test(related) && !related.startsWith(PRODUCTION_ORIGIN)) {
         errors.push(`Foreign related URL on ${route.path}: ${related}`)
       }

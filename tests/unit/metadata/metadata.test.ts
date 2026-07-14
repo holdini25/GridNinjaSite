@@ -14,19 +14,23 @@ import {
   twitterImage,
 } from "@/lib/seo"
 import { PRODUCTION_ORIGIN, SITE_IDENTITY } from "@/seo/policy"
-import { indexableSeoRoutes } from "@/seo/route-manifest"
+import {
+  getSeoRoute,
+  indexableSeoRoutes,
+} from "@/seo/route-manifest"
 import { buildOrganizationSchema, buildWebsiteSchema } from "@/seo/schema"
 
 describe("public metadata", () => {
   it("locks the public site identity to the immutable apex origin", () => {
+    const homepageRoute = getSeoRoute("/")
+
     expect(canonicalSiteUrl).toBe("https://gridninja.ai/")
     expect(PRODUCTION_ORIGIN).toBe("https://gridninja.ai")
     expect(siteConfig).toMatchObject({
       name: "GridNinja",
       url: canonicalSiteUrl,
-      title: "AI Data Center Virtual Capacity Control Plane | GridNinja",
-      description:
-        "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure.",
+      title: homepageRoute.title,
+      description: homepageRoute.description,
     })
     expect(buildWebsiteSchema()).toEqual({
       "@type": "WebSite",
@@ -40,6 +44,28 @@ describe("public metadata", () => {
       "@id": SITE_IDENTITY.organizationId,
       name: "GridNinja",
       logo: { url: "https://gridninja.ai/brand/social/gridninja-og-emblem.png" },
+    })
+  })
+
+  it("projects homepage identity into metadata and install surfaces", () => {
+    const homepageRoute = getSeoRoute("/")
+    const pageMetadata = createPageMetadata({ path: "/" })
+
+    expect(pageMetadata).toMatchObject({
+      title: homepageRoute.title,
+      description: homepageRoute.description,
+      openGraph: {
+        title: homepageRoute.title,
+        description: homepageRoute.description,
+      },
+      twitter: {
+        title: homepageRoute.title,
+        description: homepageRoute.description,
+      },
+    })
+    expect(manifest()).toMatchObject({
+      name: siteConfig.name,
+      description: homepageRoute.description,
     })
   })
 

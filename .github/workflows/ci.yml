@@ -89,16 +89,22 @@ jobs:
         include:
           - project: chrome-stable
             engine: chrome
+            workers: 2
           - project: chromium-desktop
             engine: chromium
+            workers: 2
           - project: firefox-desktop
             engine: firefox
+            workers: 1
           - project: webkit-desktop
             engine: webkit
+            workers: 2
           - project: chromium-mobile
             engine: chromium
+            workers: 2
           - project: webkit-mobile
             engine: webkit
+            workers: 2
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -106,7 +112,9 @@ jobs:
         with: { node-version: "22", cache: npm }
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.engine }}
-      - run: npx playwright test --project=${{ matrix.project }}
+      - run: >-
+          npx playwright test --project=${{ matrix.project }}
+          --workers=${{ matrix.workers }}
         env:
           CI: 1
       - uses: actions/upload-artifact@v4
@@ -133,10 +141,14 @@ jobs:
           --reporter=default --reporter=junit
           --outputFile.junit=test-results/seo-unit-junit.xml
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test --config=playwright.seo.config.ts
+      - name: Run SEO browser suite
+        id: seo_browser
+        continue-on-error: true
+        run: npx playwright test --config=playwright.seo.config.ts
         env:
           CI: 1
       - name: Capture route, metadata, schema, sitemap, and link evidence
+        if: always()
         shell: bash
         run: |
           mkdir -p test-results
@@ -167,6 +179,9 @@ jobs:
             test-results/seo-server.log
           if-no-files-found: ignore
           retention-days: 30
+      - name: Restore SEO browser failure status
+        if: ${{ always() && steps.seo_browser.outcome != 'success' }}
+        run: exit 1
 
   lighthouse:
     runs-on: ubuntu-latest
@@ -176,7 +191,7 @@ jobs:
         with: { node-version: "22", cache: npm }
       - run: npm ci
       - run: npm run build
-      - run: npx lhci autorun --config=./lighthouserc.cjs
+      - run: npm run lighthouse
       - uses: actions/upload-artifact@v4
         if: always()
         with:

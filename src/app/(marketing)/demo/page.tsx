@@ -10,6 +10,7 @@ import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { demoFinalCta, demoHero, demoScenario } from "@/content/copy/demo"
 import { fleetSwarmSites, proofStorySteps } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
@@ -72,6 +73,8 @@ export default function DemoPage() {
       <SectionShell>
         <FleetOSTimeTravelMap sites={fleetSwarmSites} />
       </SectionShell>
+
+      <RelatedSeoLinks path="/demo" />
 
       <SectionShell>
         <CtaBand

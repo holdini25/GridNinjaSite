@@ -14,6 +14,7 @@ export default function MethodologyPage() {
     <>
       <SeoPageJsonLd path="/methodology" />
       <SeoResourceHub
+        path="/methodology"
         eyebrow="GridNinja methodology"
         title="Methods for claims that operators can defend"
         answer="These methods define how GridNinja scopes public claims, comparisons, corrections, and Capacity Audit outputs. The governing principle is proof before autonomy and proof before promotion: exact wording stays tied to an environment, maturity, evidence object, caveat, approved surface, owner, and review date, while no-proof remains a valid published outcome."

@@ -14,6 +14,7 @@ export default function EvidencePage() {
     <>
       <SeoPageJsonLd path="/evidence" />
       <SeoResourceHub
+        path="/evidence"
         eyebrow="GridNinja evidence"
         title="Evidence for safe, usable, auditable capacity"
         answer="GridNinja evidence pages connect a precise capacity claim to its maturity, environment, measurement window, sample, version, method, uncertainty, negative cases, reproduction steps, and review boundary. The first release is deliberately synthetic and sanitized. It demonstrates the proposed proof contract without implying customer, pilot, production, certification, or independent-validation results."

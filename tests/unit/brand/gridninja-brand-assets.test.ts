@@ -31,6 +31,10 @@ const canonicalFaviconSource = {
   path: "assets/brand/gridninja-logo.png",
   sha256: "e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899",
 } as const
+const approvedBinaryExports = {
+  "public/brand/social/linkedin-banner.jpg":
+    "5d26262e258bb67e86c8ba7def76f687a6d51e00db992d2e0215b8160ad4f8d2",
+} as const
 const generator = resolve(
   process.cwd(),
   "scripts",
@@ -198,6 +202,16 @@ describe("GridNinja derived vector artwork", () => {
 })
 
 describe("GridNinja browser and social derivatives", () => {
+  it.each(Object.entries(approvedBinaryExports))(
+    "keeps reviewed binary export %s byte-identical",
+    async (filename, expectedHash) => {
+      const content = await readFile(resolve(process.cwd(), filename))
+      const actualHash = createHash("sha256").update(content).digest("hex")
+
+      expect(actualHash).toBe(expectedHash)
+    }
+  )
+
   it.each([
     ["public/gridninja-apple-touch-icon-180.png", 180, 180, "png"],
     ["public/gridninja-icon-192.png", 192, 192, "png"],
@@ -401,13 +415,22 @@ describe("GridNinja derivative integrity command", () => {
 
     expect(result.stderr).toBe("")
     expect(result.status).toBe(0)
-    expect(result.stdout).toContain("Verified 14 deterministic GridNinja derivatives.")
+    expect(result.stdout).toContain(
+      "Verified 13 deterministic GridNinja derivatives and 1 approved binary export."
+    )
   }, 30_000)
 
   it("detects a stale derivative without rewriting it", async () => {
     const sandbox = await mkdtemp(join(tmpdir(), "gridninja-brand-check-"))
     const sandboxBrand = join(sandbox, "public", "brand")
     const stalePath = join(sandbox, "public", "brand", "gridninja-proof-star.svg")
+    const lockedExportPath = join(
+      sandbox,
+      "public",
+      "brand",
+      "social",
+      "linkedin-banner.jpg"
+    )
 
     try {
       await cp(resolve(process.cwd(), "public", "brand"), sandboxBrand, {
@@ -418,12 +441,14 @@ describe("GridNinja derivative integrity command", () => {
         join(sandbox, "assets", "brand"),
         { recursive: true }
       )
+      const lockedExport = await readFile(lockedExportPath)
       const generate = spawnSync(process.execPath, [generator, "--root", sandbox], {
         cwd: process.cwd(),
         encoding: "utf8",
       })
       expect(generate.stderr).toBe("")
       expect(generate.status).toBe(0)
+      expect(await readFile(lockedExportPath)).toEqual(lockedExport)
 
       const stale = Buffer.concat([await readFile(stalePath), Buffer.from("\n")])
       await writeFile(stalePath, stale)

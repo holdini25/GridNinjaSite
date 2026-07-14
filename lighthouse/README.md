@@ -2,8 +2,13 @@
 
 Lighthouse CI runs three samples for pull requests and uses the median result.
 Set `LHCI_RELEASE_CANDIDATE=1` to collect five samples for a release candidate.
-The blocking lab gates are defined in `lighthouserc.cjs`; transfer budgets live
-in `budgets.json`.
+The blocking lab gates are defined in `lighthouserc.cjs`. After Lighthouse CI
+finishes, `scripts/seo/validate-lighthouse-budgets.mjs` reads every retained
+report and enforces the transfer budgets. Missing routes, samples, audits, or
+resource measurements fail the command rather than silently skipping a budget.
+The publication-gated insight article uses the same performance, accessibility,
+best-practices, heading, and contrast gates as indexable pages; the SEO 100 gate
+applies only to indexable URLs because the article intentionally emits `noindex`.
 
 Field performance remains authoritative. Review Vercel Speed Insights at p75,
 separately for mobile and desktop, against these targets:
@@ -19,10 +24,8 @@ a fresh Node 22 baseline from the same CI runner class. Do not manufacture a
 baseline from a single local run. Retain the raw reports with the deployment URL
 and commit, then compare route medians on the same device profile.
 
-The current resource-hub budgets gate initial compressed script at 200 KiB and
-image transfer at 250 KiB. Publication-gated technical leaves are intentionally
-noindex and therefore are not expected to score 100 in Lighthouse SEO until
-named authorship and review activate them. The global initial transfer and font
-budgets are 1.5 MiB and 160 KiB. A largest-critical-image check should use the
-retained Lighthouse resource report; the aggregate resource image budget is
-intentionally at least as strict for the first release.
+The current insight-article budget gates initial compressed script at 200 KiB.
+Every measured route gates total initial transfer at 1.5 MiB, initial fonts at
+160 KiB, and the largest transferred image at 250 KiB. Publication-gated
+technical leaves are intentionally noindex and therefore are not expected to
+score 100 in Lighthouse SEO until named authorship and review activate them.

@@ -114,6 +114,7 @@ export function SiteHeader() {
       >
         <Link
           href="/"
+          prefetch={false}
           aria-label="GridNinja home"
           data-gn-logo-trigger
         >
@@ -207,6 +208,7 @@ export function SiteHeader() {
                           <li key={child.href}>
                             <Link
                               href={child.href}
+                              prefetch={false}
                               aria-current={childActive ? "page" : undefined}
                               className={cn(
                                 "block rounded-xl border border-transparent px-4 py-3 text-base text-muted-foreground transition-all hover:border-border/80 hover:bg-surface-2 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
@@ -228,6 +230,7 @@ export function SiteHeader() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 aria-current={itemActive ? "page" : undefined}
                 onFocus={() => setOpenMenu(null)}
                 className={cn(
@@ -244,6 +247,7 @@ export function SiteHeader() {
           <Button asChild className="hidden xl:inline-flex">
             <Link
               href={buildLeadHref("capacity-audit", "header")}
+              prefetch={false}
               data-gn-event="header-capacity-audit"
             >
               Request Capacity Audit

@@ -14,6 +14,7 @@ export default function InsightsPage() {
     <>
       <SeoPageJsonLd path="/insights" />
       <SeoResourceHub
+        path="/insights"
         eyebrow="GridNinja insights"
         title="Virtual capacity insights for constrained AI infrastructure"
         answer="This library defines the AI Data Center Virtual Capacity Control Plane in operator terms: what capacity can be accepted, which constraint binds it, what remains unproven, and how evidence accumulates from Shadow Mode toward bounded autonomy. It avoids commodity AI summaries and separates physical capacity, modeled headroom, and safe, usable, auditable capacity."

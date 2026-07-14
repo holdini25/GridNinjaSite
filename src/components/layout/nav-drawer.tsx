@@ -49,6 +49,7 @@ export function NavDrawer() {
             <SheetClose asChild>
               <Link
                 href="/"
+                prefetch={false}
                 aria-label="GridNinja home"
                 data-gn-logo-trigger
               >
@@ -80,6 +81,7 @@ export function NavDrawer() {
                 <SheetClose asChild>
                   <Link
                     href={item.href}
+                    prefetch={false}
                     aria-current={isPathActive(item.href) ? "page" : undefined}
                     className={cn(
                       "rounded-xl px-3 py-2 text-base font-medium tracking-wide text-foreground transition-colors hover:bg-surface-2 hover:text-primary focus-visible:ring-3 focus-visible:ring-ring/45",
@@ -98,6 +100,7 @@ export function NavDrawer() {
                         <SheetClose key={child.href} asChild>
                           <Link
                             href={child.href}
+                            prefetch={false}
                             aria-current={childActive ? "page" : undefined}
                             className={cn(
                               "rounded-lg px-3 py-2 text-base text-muted-foreground transition-colors hover:bg-surface-2 hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45",
@@ -118,6 +121,7 @@ export function NavDrawer() {
             <Button asChild size="lg" className="w-full">
               <Link
                 href={buildLeadHref("capacity-audit", "mobile-nav")}
+                prefetch={false}
                 data-gn-event="mobile-nav-capacity-audit"
               >
                 Request Capacity Audit

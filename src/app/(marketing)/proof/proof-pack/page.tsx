@@ -15,6 +15,7 @@ import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evi
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import {
   proofPackChecklist,
   proofPackDownloadHref,
@@ -210,6 +211,8 @@ export default function ProofPackPage() {
           </ul>
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/proof/proof-pack" />
 
       <SectionShell>
         <div className="rounded-[2rem] border border-border/80 bg-surface px-6 py-8 sm:px-8 lg:flex lg:items-end lg:justify-between lg:gap-10">

@@ -21,6 +21,7 @@ import { SectionHeader } from "@/components/marketing/section-header"
 import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import {
   cisoFaqs,
   ladderSteps,
@@ -256,6 +257,8 @@ export default function ProofPage() {
           </div>
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/proof" />
 
       <SectionShell>
         <CtaBand

@@ -19,6 +19,7 @@ import { ProofStatStrip } from "@/components/marketing/proof-stat-strip"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { homeKpis, proofStats, solutionTeasers, eventLog } from "@/content/metrics"
 import {
   comparisonRows,
@@ -35,7 +36,6 @@ import {
   proofArtifactIntro,
   proofArtifacts,
 } from "@/content/proof-artifacts"
-import { siteConfig } from "@/content/site"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -43,11 +43,7 @@ import { PowerWallChart } from "@/components/diagrams/power-wall-chart"
 import { RtaLoopDiagram } from "@/components/diagrams/rta-loop-diagram"
 
 export async function generateMetadata(): Promise<Metadata> {
-  return createPageMetadata({
-    title: siteConfig.title,
-    description: siteConfig.description,
-    path: "/",
-  })
+  return createPageMetadata({ path: "/" })
 }
 
 export default function HomePage() {
@@ -213,6 +209,8 @@ export default function HomePage() {
           </div>
         </div>
       </SectionShell>
+
+        <RelatedSeoLinks path="/" />
 
         <SectionShell>
           <CtaBand

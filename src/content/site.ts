@@ -1,13 +1,14 @@
 import { PRODUCTION_ORIGIN } from "@/seo/policy"
+import { getSeoRoute } from "@/seo/route-manifest"
 
 export const canonicalSiteUrl = `${PRODUCTION_ORIGIN}/` as const
+const homepageSeoRoute = getSeoRoute("/")
 
 export const siteConfig = {
   name: "GridNinja",
   url: canonicalSiteUrl,
-  title: "AI Data Center Virtual Capacity Control Plane | GridNinja",
-  description:
-    "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure.",
+  title: homepageSeoRoute.title,
+  description: homepageSeoRoute.description,
   footerCopy:
     "GridNinja is the runtime-assured virtual capacity engine for AI data centers.",
 }

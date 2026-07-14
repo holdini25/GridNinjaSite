@@ -1,6 +1,6 @@
 # GridNinja website brand integration
 
-`README.md` and the six SVG files supplied in the master archive remain canonical vector inputs. `assets/brand/gridninja-logo.png` is the canonical raster source supplied for browser, Apple touch, and standard install icons. All canonical inputs must remain byte-identical. Website-only SVGs, browser icons, install icons, and social exports are deterministic derivatives maintained by `scripts/generate-brand-derivatives.mjs`.
+`README.md` and the six SVG files supplied in the master archive remain canonical vector inputs. `assets/brand/gridninja-logo.png` is the canonical raster source supplied for browser, Apple touch, and standard install icons. All canonical inputs must remain byte-identical. Website-only SVGs, browser icons, install icons, and most social exports are deterministic derivatives maintained by `scripts/generate-brand-derivatives.mjs`. The LinkedIn JPEG is a reviewed binary export because system font rasterization is not byte-deterministic across supported development and CI hosts.
 
 ## Canonical source hashes
 
@@ -15,15 +15,23 @@
 | `gridninja-favicon-proof-core.svg` | `e9b2ac6db468ae6eed4693c0ad37645a319754f16ea07751151265ecc2718955` |
 | `assets/brand/gridninja-logo.png` | `e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899` |
 
+## Approved reviewed binary export
+
+| Export | SHA-256 |
+|---|---|
+| `public/brand/social/linkedin-banner.jpg` | `5d26262e258bb67e86c8ba7def76f687a6d51e00db992d2e0215b8160ad4f8d2` |
+
+The generator verifies this hash before writing any deterministic derivatives and never rewrites the JPEG. To replace it intentionally, export and visually review the approved artwork, replace the checked-in file, and update the approved hash in the generator, tests, and this document in the same reviewed change.
+
 ## Regeneration and validation
 
-- `npm run brand:generate` verifies every canonical hash, extracts the approved globe/proof geometry, and writes all expected derivatives.
-- `npm run brand:check` builds the same output map in memory and byte-compares it with the repository without writing files.
+- `npm run brand:generate` verifies every canonical and approved binary-export hash, extracts the approved globe/proof geometry, and writes all deterministic derivatives without touching the locked LinkedIn JPEG.
+- `npm run brand:check` verifies the locked binary export, builds the deterministic output map in memory, and byte-compares it with the repository without writing files.
 - `gridninja-watermark.svg` is derived from the detailed emblem's copper gradient, globe clip/grid, and proof-core path.
 - `gridninja-proof-star.svg` is derived from the favicon proof core's copper gradient and star path.
 - `/favicon.ico` contains only 16, 32, and 48px entries and is capped at 32KB. Its 16px layer uses the canonical simplified proof-core mark for tab-scale clarity; its 32px and 48px layers use the supplied raster logo. Standard install icons use a deterministic alpha mask that clears the outer canvas while preserving the navy contrast field behind the white guardians; the 180px Apple touch icon remains an exact opaque square resize.
 
-The generated set also includes stable browser icons, Apple and PWA icons, maskable icons with conservative safe-area padding, the Open Graph emblem, and LinkedIn avatar/banner exports. Do not edit a derivative by hand; change the generator and regenerate the entire set.
+The generated set also includes stable browser icons, Apple and PWA icons, maskable icons with conservative safe-area padding, the Open Graph emblem, the LinkedIn avatar, and the LinkedIn banner SVG. Do not edit a deterministic derivative by hand; change the generator and regenerate the entire set. Follow the reviewed replacement workflow above for the locked LinkedIn JPEG.
 
 ## Browser and install presentation
 

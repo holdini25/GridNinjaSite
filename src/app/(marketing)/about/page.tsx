@@ -9,6 +9,7 @@ import { OutcomePillars } from "@/components/marketing/outcome-pillars"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import {
   aboutClosingCta,
   aboutBrandAnatomy,
@@ -82,7 +83,10 @@ export default function AboutPage() {
         </div>
       </SectionShell>
 
-      <SectionShell aria-labelledby="brand-anatomy-heading">
+      <SectionShell
+        aria-labelledby="brand-anatomy-heading"
+        deferRendering={false}
+      >
         <div className="grid gap-8 rounded-[1.8rem] border border-border/70 bg-surface px-6 py-8 sm:gap-10 sm:px-8 lg:grid-cols-[minmax(220px,0.7fr)_minmax(0,1.3fr)] lg:items-center lg:px-10">
           <div className="flex min-h-40 items-center justify-center rounded-[1.4rem] bg-[#07182b] p-5 sm:min-h-48">
             <GridNinjaLogo
@@ -161,6 +165,8 @@ export default function AboutPage() {
           </div>
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/about" />
 
       <SectionShell>
         <CtaBand

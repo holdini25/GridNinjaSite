@@ -7,6 +7,7 @@ import { ProofLoadingSteps } from "@/components/marketing/proof-loading-steps"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { contactHero } from "@/content/copy/contact"
 import { ladderSteps } from "@/content/copy/proof"
 import { proofLoadingSteps } from "@/content/proof-artifacts"
@@ -106,6 +107,8 @@ export default async function ContactPage({
           </div>
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/contact" />
 
       <SectionShell>
         <ContactForm intent={intent} source={source} />

@@ -1,5 +1,11 @@
 import { request as playwrightRequest, expect, test } from "@playwright/test"
+import { JSDOM } from "jsdom"
 
+import {
+  analyzeLinkGraph,
+  buildLinkGraph,
+  classifyInternalHref,
+} from "../../src/seo/internal-link-graph.mjs"
 import {
   indexableSeoRoutes,
   seoRoutes,
@@ -256,6 +262,116 @@ test.describe("manifest-derived search eligibility", () => {
     }
   })
 
+  test("contextual internal-link graph is complete and within discovery depth", async ({
+    page,
+    request,
+  }, testInfo) => {
+    test.skip(
+      !["seo-chromium", "seo-googlebot-smartphone"].includes(
+        testInfo.project.name
+      ),
+      "The contextual graph is verified for a browser and Googlebot smartphone."
+    )
+
+    const allManifestPaths = new Set(seoRoutes.map((route) => route.path))
+    const indexablePaths = new Set<string>(
+      indexableSeoRoutes.map((route) => route.path)
+    )
+    const edgeKeys = new Set<string>()
+    const edges: { source: string; target: string }[] = []
+    const malformedLinks: string[] = []
+    const unknownLinks: string[] = []
+    const requestPaths = new Set<string>()
+    const missingDeclaredEdges: { source: string; target: string }[] = []
+
+    for (const route of indexableSeoRoutes) {
+      const response = await page.goto(route.path, {
+        waitUntil: "domcontentloaded",
+      })
+      expect(response?.status(), route.path).toBe(200)
+      const html = (await response?.text()) ?? ""
+      const document = new JSDOM(html).window.document
+      const main = document.querySelector("main")
+      expect(main, `${route.path} must have a server-rendered main`).not.toBeNull()
+
+      const relatedSection = main?.querySelector(
+        `[data-seo-related-source="${route.path}"]`
+      )
+      expect(
+        relatedSection,
+        `${route.path} must render one contextual related-resources section`
+      ).not.toBeNull()
+      expect(
+        main?.querySelectorAll("[data-seo-related-source]").length,
+        `${route.path} must render the related-resources section exactly once`
+      ).toBe(1)
+
+      const renderedDeclaredTargets = new Set(
+        [...(relatedSection?.querySelectorAll("a[data-seo-related-target]") ?? [])]
+          .map((anchor) => anchor.getAttribute("data-seo-related-target"))
+          .filter((target): target is string => Boolean(target))
+      )
+      for (const target of route.relatedPaths) {
+        if (!renderedDeclaredTargets.has(target)) {
+          missingDeclaredEdges.push({ source: route.path, target })
+        }
+      }
+
+      for (const anchor of main?.querySelectorAll("a[href]") ?? []) {
+        const href = anchor.getAttribute("href")
+        const classified = classifyInternalHref(href, {
+          sourcePath: route.path,
+          deploymentOrigin: testInfo.project.use.baseURL ?? PRODUCTION_ORIGIN,
+          productionOrigin: PRODUCTION_ORIGIN,
+          knownPaths: allManifestPaths,
+        })
+
+        if (classified.kind === "malformed") {
+          malformedLinks.push(`${route.path}: ${String(href)}`)
+          continue
+        }
+        if (classified.kind === "unknown") {
+          unknownLinks.push(`${route.path} -> ${classified.path}`)
+          continue
+        }
+        if (classified.kind !== "internal") continue
+
+        requestPaths.add(`${classified.path}${classified.search}`)
+        if (!indexablePaths.has(classified.path)) continue
+
+        const edgeKey = `${route.path}\0${classified.path}`
+        if (edgeKeys.has(edgeKey)) continue
+        edgeKeys.add(edgeKey)
+        edges.push({ source: route.path, target: classified.path })
+      }
+    }
+
+    expect(malformedLinks, "malformed internal hrefs").toEqual([])
+    expect(unknownLinks, "navigational paths absent from the route manifest").toEqual(
+      []
+    )
+
+    for (const path of [...requestPaths].sort()) {
+      const response = await request.get(path, { maxRedirects: 0 })
+      expect(response.status(), path).toBe(200)
+    }
+
+    const graph = buildLinkGraph(
+      indexableSeoRoutes.map((route) => route.path),
+      edges
+    )
+    const analysis = analyzeLinkGraph({
+      graph,
+      routes: indexableSeoRoutes,
+      missingDeclaredEdges,
+    })
+
+    expect(
+      analysis.violations.map((violation) => violation.message),
+      `${testInfo.project.name} contextual graph violations`
+    ).toEqual([])
+  })
+
   test("comparison sources have crawlable, stable fragment targets", async ({
     request,
   }, testInfo) => {
@@ -287,8 +403,9 @@ test.describe("snippet and raw-content controls", () => {
       for (let index = 0; index < (await excluded.count()); index += 1) {
         const element = excluded.nth(index)
         const tagName = await element.evaluate((node) => node.tagName.toLowerCase())
-        const value = (await element.innerText()).trim()
-        const surroundingText = (await element.locator("xpath=..").innerText()).trim()
+        const value = (await element.textContent())?.trim() ?? ""
+        const surroundingText =
+          (await element.locator("xpath=..").textContent())?.trim() ?? ""
 
         expect(["span", "div", "section"], route.path).toContain(tagName)
         expect(value.length, route.path).toBeGreaterThan(0)

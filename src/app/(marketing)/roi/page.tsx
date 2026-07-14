@@ -15,6 +15,7 @@ import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { PublicClaimCaveat, PublicClaimValue } from "@/components/seo/public-claim"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { roiOutputs, roiAssumptions } from "@/content/roi-assumptions"
 import { roiArchetypes, roiDeliverables, roiHero } from "@/content/copy/roi"
 import {
@@ -91,6 +92,8 @@ export default function RoiPage() {
           <ProofArtifactStack artifacts={proofArtifacts} />
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/roi" />
 
       <SectionShell containerClassName="max-w-7xl">
         <div className="space-y-8">

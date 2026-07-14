@@ -6,6 +6,7 @@ import { SectionShell } from "@/components/layout/section-shell"
 import { Hero } from "@/components/marketing/hero"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { PublicClaimValue } from "@/components/seo/public-claim"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { Button } from "@/components/ui/button"
 import { buildLeadHref } from "@/lib/lead"
 import type { SolutionPageConfig } from "@/types/site"
@@ -118,6 +119,8 @@ export function SolutionPageTemplate({ config }: { config: SolutionPageConfig })
           </div>
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path={config.path} />
 
       <SectionShell>
         <div className="rounded-[1.8rem] border border-border/70 bg-surface px-6 py-8 lg:flex lg:items-end lg:justify-between lg:gap-8">

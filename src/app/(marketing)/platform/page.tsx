@@ -21,6 +21,7 @@ import { SectionHeader } from "@/components/marketing/section-header"
 import { TopologyMap } from "@/components/diagrams/topology-map"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { Button } from "@/components/ui/button"
 import {
   architectureFlow,
@@ -97,7 +98,7 @@ export default function PlatformPage() {
         <ProductBoundaryToggle />
       </SectionShell>
 
-      <SectionShell>
+      <SectionShell deferRendering={false}>
         <div className="space-y-10">
           <SectionHeader
             eyebrow="Platform architecture"
@@ -145,7 +146,7 @@ export default function PlatformPage() {
         <DeferredLoadPassportHD />
       </SectionShell>
 
-      <SectionShell>
+      <SectionShell deferRendering={false}>
         <div className="space-y-10">
           <SectionHeader
             eyebrow="Constraint braid"
@@ -181,6 +182,8 @@ export default function PlatformPage() {
           <ProofArtifactGrid artifacts={proofArtifacts} />
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/platform" />
 
       <SectionShell>
         <CtaBand

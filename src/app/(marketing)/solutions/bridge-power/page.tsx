@@ -8,6 +8,7 @@ import { Hero } from "@/components/marketing/hero"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import {
   bridgePowerFinalCta,
@@ -138,6 +139,8 @@ export default function BridgePowerPage() {
           <OutcomePillars items={bridgePowerOutcomes} />
         </div>
       </SectionShell>
+
+      <RelatedSeoLinks path="/solutions/bridge-power" />
 
       <SectionShell>
         <CtaBand

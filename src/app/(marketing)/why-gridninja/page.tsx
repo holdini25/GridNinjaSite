@@ -17,6 +17,7 @@ import { WhyGridNinjaScenarioSimulator } from "@/components/marketing/why-gridni
 import { WhyGridNinjaSourceDrawerHost } from "@/components/marketing/why-gridninja-source-drawer-host"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import {
   whyGridNinjaBoundary,
   whyGridNinjaChapters,
@@ -403,6 +404,8 @@ export default function WhyGridNinjaPage() {
             </div>
           </details>
         </SectionShell>
+
+        <RelatedSeoLinks path="/why-gridninja" />
 
         <SectionShell
           id="site-specific-proof"

@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { Button } from "@/components/ui/button"
 import type { SeoEvidenceRecord, SeoResource } from "@/content/seo-resources"
 import { buildLeadHref } from "@/lib/lead"
@@ -90,6 +91,7 @@ function EvidenceRecord({ evidence }: { evidence: SeoEvidenceRecord }) {
       <Button asChild variant="outline" className="border-border/80 bg-surface/60">
         <Link
           href={evidence.downloadHref}
+          prefetch={false}
           data-analytics-event="evidence_artifact_view"
           data-analytics-source="evidence-resource"
           data-analytics-artifact={evidence.downloadHref}
@@ -124,9 +126,9 @@ export function SeoResourcePage({ resource }: { resource: SeoResource }) {
         <SectionShell>
           <nav aria-label="Breadcrumb" className="mb-7">
             <ol className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <li><Link className="hover:text-foreground" href="/">Home</Link></li>
+              <li><Link className="hover:text-foreground" href="/" prefetch={false}>Home</Link></li>
               <li aria-hidden="true">/</li>
-              <li><Link className="hover:text-foreground" href={hubPath}>{hubLabel}</Link></li>
+              <li><Link className="hover:text-foreground" href={hubPath} prefetch={false}>{hubLabel}</Link></li>
               <li aria-hidden="true">/</li>
               <li aria-current="page" className="text-foreground">{resource.h1}</li>
             </ol>
@@ -265,7 +267,7 @@ export function SeoResourcePage({ resource }: { resource: SeoResource }) {
             <ul className="rounded-[1.8rem] border border-border/70 bg-surface px-6 py-3">
               {resource.evidenceLinks.map((link) => (
                 <li key={link.href} className="border-b border-border/60 py-4 last:border-b-0">
-                  <Link className="font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-primary" href={link.href}>
+                  <Link className="font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-primary" href={link.href} prefetch={false}>
                     {link.label}
                   </Link>
                 </li>
@@ -292,6 +294,8 @@ export function SeoResourcePage({ resource }: { resource: SeoResource }) {
         </section>
       </SectionShell>
 
+      <RelatedSeoLinks path={resource.path} />
+
       <SectionShell>
         <section className="rounded-[2rem] border border-border/80 bg-surface px-6 py-8 sm:px-8 lg:flex lg:items-end lg:justify-between lg:gap-10">
           <div className="max-w-2xl">
@@ -307,12 +311,12 @@ export function SeoResourcePage({ resource }: { resource: SeoResource }) {
           </div>
           <div className="mt-8 flex flex-wrap gap-4 lg:mt-0">
             <Button asChild size="lg">
-              <Link href={buildLeadHref("capacity-audit", `${resource.kind}-${resource.slug}`)}>
+              <Link href={buildLeadHref("capacity-audit", `${resource.kind}-${resource.slug}`)} prefetch={false}>
                 Request Capacity Audit
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-border/80 bg-background/45">
-              <Link href="/proof">See Shadow Mode</Link>
+              <Link href="/proof" prefetch={false}>See Shadow Mode</Link>
             </Button>
           </div>
         </section>

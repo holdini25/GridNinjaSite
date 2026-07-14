@@ -36,6 +36,11 @@ const canonicalHashes = {
 const canonicalFaviconSourceHash =
   "e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899"
 
+const approvedBinaryExports = {
+  "public/brand/social/linkedin-banner.jpg":
+    "5d26262e258bb67e86c8ba7def76f687a6d51e00db992d2e0215b8160ad4f8d2",
+}
+
 const colors = {
   navy: "#07182B",
   site: "#070A0D",
@@ -66,6 +71,21 @@ async function verifyCanonicalMasters() {
     throw new Error(
       `Canonical favicon source changed: assets/brand/gridninja-logo.png\nExpected ${canonicalFaviconSourceHash}\nReceived ${faviconSourceHash}`
     )
+  }
+}
+
+async function verifyApprovedBinaryExports() {
+  for (const [relativePath, expectedHash] of Object.entries(
+    approvedBinaryExports
+  )) {
+    const content = await readFile(path.join(root, relativePath))
+    const actualHash = sha256(content)
+
+    if (actualHash !== expectedHash) {
+      throw new Error(
+        `Approved brand binary export changed: ${relativePath}\nExpected ${expectedHash}\nReceived ${actualHash}`
+      )
+    }
   }
 }
 
@@ -323,12 +343,6 @@ async function buildExpectedOutputs() {
     ],
     ["public/brand/social/linkedin-avatar.png", await squarePng(detailed, 400, 0.76, colors.navy)],
     ["public/brand/social/linkedin-banner.svg", Buffer.from(bannerSource)],
-    [
-      "public/brand/social/linkedin-banner.jpg",
-      await sharp(Buffer.from(bannerSource))
-        .jpeg({ quality: 90, chromaSubsampling: "4:4:4" })
-        .toBuffer(),
-    ],
   ])
 
   const favicon = outputs.get("public/favicon.ico")
@@ -381,12 +395,17 @@ async function writeOutputs(outputs) {
 }
 
 await verifyCanonicalMasters()
+await verifyApprovedBinaryExports()
 const outputs = await buildExpectedOutputs()
 
 if (checkOnly) {
   await checkOutputs(outputs)
-  console.log(`Verified ${outputs.size} deterministic GridNinja derivatives.`)
+  console.log(
+    `Verified ${outputs.size} deterministic GridNinja derivatives and ${Object.keys(approvedBinaryExports).length} approved binary export.`
+  )
 } else {
   await writeOutputs(outputs)
-  console.log(`Verified canonical sources and generated ${outputs.size} GridNinja derivatives.`)
+  console.log(
+    `Verified canonical sources and ${Object.keys(approvedBinaryExports).length} approved binary export; generated ${outputs.size} deterministic GridNinja derivatives.`
+  )
 }

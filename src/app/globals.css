@@ -963,7 +963,7 @@
   }
 
   .gn-deployment-ladder > * {
-    animation: gn-step-in both;
+    animation: gn-ladder-step-in both;
     animation-timeline: view();
     animation-range: entry 10% cover 30%;
   }
@@ -976,6 +976,23 @@
 }
 
 @supports (view-transition-name: none) {
+  ::view-transition-group(root) {
+    animation-duration: 0s;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+
+  ::view-transition-old(root) {
+    display: none;
+  }
+
+  ::view-transition-new(root) {
+    mix-blend-mode: normal;
+  }
+
   .gn-vt-rta-trace {
     view-transition-name: gn-rta-trace;
   }
@@ -1037,6 +1054,16 @@
 
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gn-ladder-step-in {
+  from {
+    transform: translateY(0.75rem);
+  }
+
+  to {
     transform: translateY(0);
   }
 }

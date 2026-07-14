@@ -5,7 +5,6 @@ import { useState } from "react"
 
 import type { ConstraintBraidDomain } from "@/content/proof-artifacts"
 import { cn } from "@/lib/utils"
-import { runViewTransition } from "@/lib/view-transition"
 
 import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
 
@@ -19,7 +18,7 @@ export function ConstraintBraid({
     domains.find((domain) => domain.id === activeId) ?? domains[0]
 
   function selectDomain(id: string) {
-    runViewTransition(() => setActiveId(id))
+    setActiveId(id)
   }
 
   return (

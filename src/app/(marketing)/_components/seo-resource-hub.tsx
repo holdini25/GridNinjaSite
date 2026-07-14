@@ -1,11 +1,13 @@
 import Link from "next/link"
 
 import { SectionShell } from "@/components/layout/section-shell"
+import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { Button } from "@/components/ui/button"
 import type { SeoResource } from "@/content/seo-resources"
 import { buildLeadHref } from "@/lib/lead"
 
 type ResourceHubProps = {
+  path: "/insights" | "/evidence" | "/methodology"
   eyebrow: string
   title: string
   answer: string
@@ -14,6 +16,7 @@ type ResourceHubProps = {
 }
 
 export function SeoResourceHub({
+  path,
   eyebrow,
   title,
   answer,
@@ -81,6 +84,8 @@ export function SeoResourceHub({
           </div>
         </section>
       </SectionShell>
+
+      <RelatedSeoLinks path={path} />
 
       <SectionShell>
         <section className="rounded-[2rem] border border-border/80 bg-surface px-6 py-8 sm:px-8 lg:flex lg:items-end lg:justify-between lg:gap-10">

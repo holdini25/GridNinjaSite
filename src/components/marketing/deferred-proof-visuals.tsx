@@ -9,6 +9,8 @@ import {
   type ReactNode,
 } from "react"
 
+import type { XrayHeadingLevel } from "@/components/marketing/data-center-xray-hd"
+
 const DataCenterXrayHD = lazy(
   () =>
     import("@/components/marketing/data-center-xray-hd").then(
@@ -34,10 +36,16 @@ const FleetOSTimeTravelMap = lazy(
     )
 )
 
-export function DeferredDataCenterXrayHD() {
+export function DeferredDataCenterXrayHD({
+  headingLevel = 2,
+}: {
+  headingLevel?: XrayHeadingLevel
+} = {}) {
   return (
-    <NearViewportIsland fallback={<XrayTextEquivalent />}>
-      <DataCenterXrayHD />
+    <NearViewportIsland
+      fallback={<XrayTextEquivalent headingLevel={headingLevel} />}
+    >
+      <DataCenterXrayHD headingLevel={headingLevel} />
     </NearViewportIsland>
   )
 }
@@ -111,13 +119,18 @@ function NearViewportIsland({
   )
 }
 
-function XrayTextEquivalent() {
+function XrayTextEquivalent({
+  headingLevel,
+}: {
+  headingLevel: XrayHeadingLevel
+}) {
   return (
     <DeferredPanel
       eyebrow="Infrastructure X-Ray"
       title="Physical constraints become digital proof objects."
       body="GridNinja evaluates power, cooling, storage, workload, policy, and telemetry trust as inspectable layers before authority can expand."
       items={["Power and reserve limits", "Thermal and water limits", "Workload and SLA limits", "Telemetry trust and policy"]}
+      headingLevel={headingLevel}
     />
   )
 }
@@ -160,18 +173,22 @@ function DeferredPanel({
   title,
   body,
   items,
+  headingLevel = 3,
 }: {
   eyebrow: string
   title: string
   body: string
   items: string[]
+  headingLevel?: XrayHeadingLevel
 }) {
+  const Heading = headingLevel === 2 ? "h2" : "h3"
+
   return (
     <section className="gn-hd-panel p-6" aria-label={`${eyebrow} text equivalent`}>
       <p className="gn-eyebrow">{eyebrow}</p>
-      <h3 className="mt-3 max-w-3xl text-[2rem] font-medium text-foreground">
+      <Heading className="mt-3 max-w-3xl text-[2rem] font-medium text-foreground">
         {title}
-      </h3>
+      </Heading>
       <p className="mt-3 max-w-2xl text-base leading-8 text-muted-foreground">
         {body}
       </p>
