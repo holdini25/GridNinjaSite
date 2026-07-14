@@ -12,6 +12,7 @@ export function buildOrganizationSchema(): JsonLd {
     "@type": "Organization",
     "@id": SITE_IDENTITY.organizationId,
     name: SITE_IDENTITY.name,
+    alternateName: SITE_IDENTITY.organizationAlternateName,
     url: absoluteUrl("/"),
     logo: {
       "@type": "ImageObject",
@@ -19,6 +20,7 @@ export function buildOrganizationSchema(): JsonLd {
       width: 400,
       height: 400,
     },
+    sameAs: ["https://www.linkedin.com/company/gridninja"],
   }
 }
 
@@ -28,7 +30,7 @@ export function buildWebsiteSchema(): JsonLd {
     "@id": SITE_IDENTITY.websiteId,
     url: absoluteUrl("/"),
     name: SITE_IDENTITY.name,
-    alternateName: SITE_IDENTITY.alternateName,
+    alternateName: SITE_IDENTITY.alternateNames,
     publisher: { "@id": SITE_IDENTITY.organizationId },
   }
 }

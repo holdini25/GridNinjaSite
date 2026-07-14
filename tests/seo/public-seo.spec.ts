@@ -127,8 +127,12 @@ test.describe("manifest-derived search eligibility", () => {
       nodes.filter((node) => node["@id"] === `${PRODUCTION_ORIGIN}/#organization`)
     ).toHaveLength(1)
     expect(serialized).toContain('"name":"GridNinja"')
+    expect(serialized).toContain('"alternateName":["Grid Ninja","gridninja.ai"]')
+    expect(serialized).toContain('"alternateName":"Grid Ninja"')
     expect(serialized).toContain('"gridninja.ai"')
-    expect(serialized).not.toContain('"sameAs"')
+    expect(serialized).toContain(
+      '"sameAs":["https://www.linkedin.com/company/gridninja"]'
+    )
 
     const robots = [
       (await page.locator('meta[name="robots"]').getAttribute("content")) ?? "",

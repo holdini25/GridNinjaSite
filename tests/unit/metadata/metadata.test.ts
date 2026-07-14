@@ -41,13 +41,15 @@ describe("public metadata", () => {
       "@id": "https://gridninja.ai/#website",
       url: canonicalSiteUrl,
       name: "GridNinja",
-      alternateName: "gridninja.ai",
+      alternateName: ["Grid Ninja", "gridninja.ai"],
       publisher: { "@id": "https://gridninja.ai/#organization" },
     })
     expect(buildOrganizationSchema()).toMatchObject({
       "@id": SITE_IDENTITY.organizationId,
       name: "GridNinja",
+      alternateName: "Grid Ninja",
       logo: { url: "https://gridninja.ai/brand/social/gridninja-og-emblem.png" },
+      sameAs: ["https://www.linkedin.com/company/gridninja"],
     })
   })
 

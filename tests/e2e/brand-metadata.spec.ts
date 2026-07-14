@@ -262,11 +262,14 @@ test.describe("production brand metadata routes", () => {
           "@id": "https://gridninja.ai/#website",
           url: canonicalSiteUrl,
           name: "GridNinja",
-          alternateName: "gridninja.ai",
+          alternateName: ["Grid Ninja", "gridninja.ai"],
         }),
         expect.objectContaining({
           "@type": "Organization",
           "@id": "https://gridninja.ai/#organization",
+          name: "GridNinja",
+          alternateName: "Grid Ninja",
+          sameAs: ["https://www.linkedin.com/company/gridninja"],
         }),
       ])
     )

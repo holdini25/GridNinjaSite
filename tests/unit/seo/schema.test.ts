@@ -10,19 +10,20 @@ import {
 import { getSeoRoute } from "@/seo/route-manifest"
 
 describe("structured identity and safe serialization", () => {
-  it("uses stable apex IDs without unsupported identity properties", () => {
+  it("uses stable apex IDs with alternate brand identity properties", () => {
     expect(buildWebsiteSchema()).toEqual({
       "@type": "WebSite",
       "@id": "https://gridninja.ai/#website",
       url: "https://gridninja.ai/",
       name: "GridNinja",
-      alternateName: "gridninja.ai",
+      alternateName: ["Grid Ninja", "gridninja.ai"],
       publisher: { "@id": "https://gridninja.ai/#organization" },
     })
     expect(buildOrganizationSchema()).toEqual({
       "@type": "Organization",
       "@id": "https://gridninja.ai/#organization",
       name: "GridNinja",
+      alternateName: "Grid Ninja",
       url: "https://gridninja.ai/",
       logo: {
         "@type": "ImageObject",
@@ -30,8 +31,8 @@ describe("structured identity and safe serialization", () => {
         width: 400,
         height: 400,
       },
+      sameAs: ["https://www.linkedin.com/company/gridninja"],
     })
-    expect(buildOrganizationSchema()).not.toHaveProperty("sameAs")
   })
 
   it("refuses to manufacture authorless TechArticle records", () => {

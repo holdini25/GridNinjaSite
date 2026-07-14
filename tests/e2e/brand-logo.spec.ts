@@ -3,7 +3,7 @@ import { expect, test } from "./support/client-health"
 test.describe("GridNinja brand placements", () => {
   const widths = [320, 360, 375, 768, 1024, 1280, 1440] as const
 
-  test("keeps the canonical micro identity responsive in the header", async ({
+  test("keeps the canonical 34px micro identity stable in the header", async ({
     page,
     clientHealth,
   }) => {
@@ -13,14 +13,14 @@ test.describe("GridNinja brand placements", () => {
       await page.setViewportSize({ width, height: 900 })
 
       const header = page.locator("header")
+      const home = header.locator("[data-gn-logo-trigger]")
       const mark = header.locator('[data-logo-motion="micro-response"] svg')
       const wordmark = header.getByText("GridNinja", { exact: true })
 
+      expect((await header.boundingBox())?.height).toBeCloseTo(70, 2)
+      expect((await home.boundingBox())?.height).toBeGreaterThanOrEqual(44)
       await expect(mark).toBeVisible()
-      expect((await mark.boundingBox())?.height).toBeCloseTo(
-        width < 640 ? 30 : 34,
-        2
-      )
+      expect((await mark.boundingBox())?.height).toBeCloseTo(34, 2)
       if (width < 380) {
         await expect(wordmark).toBeHidden()
       } else {

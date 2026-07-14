@@ -980,6 +980,23 @@
     view-transition-name: none;
   }
 
+  ::view-transition-group(root) {
+    animation-duration: 0s;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+
+  ::view-transition-old(root) {
+    display: none;
+  }
+
+  ::view-transition-new(root) {
+    mix-blend-mode: normal;
+  }
+
   .gn-vt-rta-trace {
     view-transition-name: gn-rta-trace;
   }

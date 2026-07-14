@@ -99,7 +99,7 @@ export default function ProofPage() {
         <DeferredRtaDecisionTheater />
       </SectionShell>
 
-      <SectionShell>
+      <SectionShell deferRendering={false}>
         <ProofChainTrail stages={proofChainStages} proofRoot={replayFixture.proofRoot} />
       </SectionShell>
 
@@ -111,7 +111,7 @@ export default function ProofPage() {
         <DeferredLoadPassportHD />
       </SectionShell>
 
-      <SectionShell>
+      <SectionShell deferRendering={false}>
         <div className="space-y-10">
           <SectionHeader
             eyebrow="Constraint braid"

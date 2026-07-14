@@ -11,7 +11,8 @@ export const HOMEPAGE_PRIMARY_IMAGE = {
 
 export const SITE_IDENTITY = {
   name: "GridNinja",
-  alternateName: "gridninja.ai",
+  alternateNames: ["Grid Ninja", "gridninja.ai"] as const,
+  organizationAlternateName: "Grid Ninja",
   organizationId: `${PRODUCTION_ORIGIN}/#organization`,
   websiteId: `${PRODUCTION_ORIGIN}/#website`,
   logoPath: "/brand/social/gridninja-og-emblem.png",

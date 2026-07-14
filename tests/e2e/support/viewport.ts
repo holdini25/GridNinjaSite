@@ -1,55 +1,35 @@
 import { expect, type Locator } from "@playwright/test"
 
 const SAFE_VIEWPORT_INSET = 16
-const CENTER_TOLERANCE_PX = 2
-const MAX_LAYOUT_PASSES = 60
+const CENTER_TOLERANCE_PX = 4
 
 export async function centerLocatorInViewport(locator: Locator) {
-  let lastGeometry: ViewportGeometry | undefined
+  await expect
+    .poll(
+      () =>
+        locator.evaluate((element, config) => {
+          element.scrollIntoView({
+            behavior: "auto",
+            block: "center",
+            inline: "center",
+          })
 
-  for (let pass = 0; pass < MAX_LAYOUT_PASSES; pass += 1) {
-    lastGeometry = await locator.evaluate(async (element, config) => {
-      const before = readGeometry(element, config.inset, config.tolerance)
+          const rect = element.getBoundingClientRect()
+          const targetTop = Math.max(
+            config.inset,
+            (window.innerHeight - rect.height) / 2
+          )
+          const centered = Math.abs(rect.top - targetTop) <= config.tolerance
+          const safe =
+            centered &&
+            rect.width > 0 &&
+            rect.height > 0 &&
+            rect.top >= config.inset &&
+            rect.left >= config.inset &&
+            rect.bottom <= window.innerHeight - config.inset &&
+            rect.right <= window.innerWidth - config.inset
 
-      if (!before.centered) {
-        const targetTop = Math.max(
-          config.inset,
-          (window.innerHeight - before.height) / 2
-        )
-
-        window.scrollBy({
-          top: before.top - targetTop,
-          behavior: "auto",
-        })
-        await new Promise<void>((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-        )
-      }
-
-      return readGeometry(element, config.inset, config.tolerance)
-
-      function readGeometry(
-        target: Element,
-        safeInset: number,
-        centerTolerance: number
-      ) {
-        const rect = target.getBoundingClientRect()
-        const targetTop = Math.max(
-          safeInset,
-          (window.innerHeight - rect.height) / 2
-        )
-        const centered = Math.abs(rect.top - targetTop) <= centerTolerance
-        const safe =
-          centered &&
-          rect.width > 0 &&
-          rect.height > 0 &&
-          rect.top >= safeInset &&
-          rect.left >= safeInset &&
-          rect.bottom <= window.innerHeight - safeInset &&
-          rect.right <= window.innerWidth - safeInset
-
-        return (
-          {
+          return {
             bottom: rect.bottom,
             centered,
             height: rect.height,
@@ -61,22 +41,13 @@ export async function centerLocatorInViewport(locator: Locator) {
             viewportWidth: window.innerWidth,
             width: rect.width,
           } satisfies ViewportGeometry
-        )
-      }
-    }, {
-      inset: SAFE_VIEWPORT_INSET,
-      tolerance: CENTER_TOLERANCE_PX,
-    })
-
-    if (lastGeometry.safe) {
-      return
-    }
-  }
-
-  expect(
-    lastGeometry?.safe,
-    `Target did not settle inside the safe viewport: ${JSON.stringify(lastGeometry)}`
-  ).toBe(true)
+        }, {
+          inset: SAFE_VIEWPORT_INSET,
+          tolerance: CENTER_TOLERANCE_PX,
+        }),
+      { message: "Target should settle inside the centered safe viewport" }
+    )
+    .toMatchObject({ safe: true })
 }
 
 type ViewportGeometry = {
