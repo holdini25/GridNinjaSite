@@ -47,6 +47,9 @@ describe("structured identity and safe serialization", () => {
     expect(buildWebPageSchema(getSeoRoute("/"))).toMatchObject({
       "@type": "WebPage",
       "@id": "https://gridninja.ai/#webpage",
+      name: "GridNinja | Virtual Capacity Control Plane",
+      description:
+        "Unlock safe, usable and auditable capacity from constrained AI infrastructure with GridNinja’s runtime-assured virtual capacity control plane.",
       primaryImageOfPage: {
         "@type": "ImageObject",
         "@id": "https://gridninja.ai/#primaryimage",

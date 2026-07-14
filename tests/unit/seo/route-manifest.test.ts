@@ -9,7 +9,7 @@ import {
 import { expectUnique, expectValidatorToPass } from "../../support/seo-contracts"
 
 const requiredTitles = new Map([
-  ["/", "AI Data Center Virtual Capacity Control Plane | GridNinja"],
+  ["/", "GridNinja | Virtual Capacity Control Plane"],
   ["/platform", "Virtual Capacity Control Plane Platform | GridNinja"],
   [
     "/platform/dispatch-envelope",
@@ -81,6 +81,12 @@ describe("SEO route manifest", () => {
     for (const [path, title] of requiredTitles) {
       expect(getSeoRoute(path).title, path).toBe(title)
     }
+  })
+
+  it("locks the concise homepage search summary", () => {
+    expect(getSeoRoute("/").description).toBe(
+      "Unlock safe, usable and auditable capacity from constrained AI infrastructure with GridNinja’s runtime-assured virtual capacity control plane."
+    )
   })
 
   it("derives the indexable projection and resolves every relationship", () => {

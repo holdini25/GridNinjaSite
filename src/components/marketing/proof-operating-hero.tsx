@@ -7,8 +7,10 @@ import {
   type WaterfallStep,
 } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
+import { getSeoRoute } from "@/seo/route-manifest"
 
 const HERO_SECTION_ID = "proof-operating-hero"
+const homepageSeoRoute = getSeoRoute("/")
 
 export function ProofOperatingHero({
   steps = illustrativeWaterfall,
@@ -31,12 +33,7 @@ export function ProofOperatingHero({
             Claimed headroom is not proven capacity.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-            GridNinja is the runtime-assured virtual capacity engine for AI data
-            centers.
-          </p>
-          <p className="mt-1 max-w-2xl text-lg leading-8 text-muted-foreground">
-            It proves safe, usable, auditable capacity to accelerate
-            time-to-power while protecting infrastructure.
+            {homepageSeoRoute.description}
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">

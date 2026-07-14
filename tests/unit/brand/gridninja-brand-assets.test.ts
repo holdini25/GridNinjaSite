@@ -21,15 +21,21 @@ const canonicalSources = {
   "gridninja-badge-light.svg":
     "1632c89ad277a9e24f383ec84fc89045dcc7d8d67a30b9fd600110f9d0b04a36",
   "gridninja-favicon-proof-core.svg":
-    "e9b2ac6db468ae6eed4693c0ad37645a319754f16ea07751151265ecc2718955",
+    "ca2e916c85bdb9e9f62c7e1f4e4cf3d9faf0765b34b10abd12038b42753682c8",
 } as const
 
 const canonicalMasters = Object.keys(canonicalSources).filter(
   (filename) => filename.endsWith(".svg")
 )
-const canonicalFaviconSource = {
+const archivedRasterSource = {
   path: "assets/brand/gridninja-logo.png",
   sha256: "e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899",
+} as const
+const preservedMaskableHashes = {
+  "public/brand/icons/pwa-maskable-192.png":
+    "4181715b55a1433d3e01d9fff808a1caa1188095f2db39db661f1dc436dfcb33",
+  "public/brand/icons/pwa-maskable-512.png":
+    "6cb3f7362a8d83551351db9ba6e3fc671f6c5e5f37c170faa87b55e45d7f1221",
 } as const
 const approvedBinaryExports = {
   "public/brand/search/gridninja-virtual-capacity.png":
@@ -96,18 +102,35 @@ async function readArtworkBounds(
 }
 
 describe("GridNinja canonical brand sources", () => {
-  it("keeps the supplied favicon raster byte-identical", async () => {
-    const source = await readFile(
-      resolve(process.cwd(), canonicalFaviconSource.path)
-    )
+  it("keeps the archived supplied raster byte-identical", async () => {
+    const source = await readFile(resolve(process.cwd(), archivedRasterSource.path))
     const actualHash = createHash("sha256").update(source).digest("hex")
 
-    expect(actualHash).toBe(canonicalFaviconSource.sha256)
+    expect(actualHash).toBe(archivedRasterSource.sha256)
     expect(await sharp(source).metadata()).toMatchObject({
       width: 1254,
       height: 1254,
       format: "png",
     })
+  })
+
+  it("keeps the canonical favicon limited to the approved ring and proof star", async () => {
+    const source = await readFile(
+      resolve(process.cwd(), "public/brand/gridninja-favicon-proof-core.svg"),
+      "utf8"
+    )
+
+    expect(source.match(/<circle\b/g)).toHaveLength(1)
+    expect(source.match(/<path\b/g)).toHaveLength(1)
+    expect(source).toContain(
+      '<circle cx="32" cy="32" r="26.5" fill="none" stroke="url(#copper)" stroke-width="5"/>'
+    )
+    expect(source).toContain(
+      '<path d="M32 17c2.2 8.5 6.5 12.8 15 15-8.5 2.2-12.8 6.5-15 15-2.2-8.5-6.5-12.8-15-15 8.5-2.2 12.8-6.5 15-15Z" fill="url(#copper)"/>'
+    )
+    expect(source).not.toMatch(
+      /<(?:text|image|line|polyline|polygon|ellipse|rect|use)\b|guardian|globe|sword|face|filter/i
+    )
   })
 
   it.each(Object.entries(canonicalSources))(
@@ -155,7 +178,7 @@ describe("GridNinja derived vector artwork", () => {
     )
     const star = extractExactly(
       canonical,
-      /  <path d="M32 18[^"]+" fill="url\(#copper\)"\/>/g
+      /  <path d="M32 17[^"]+" fill="url\(#copper\)"\/>/g
     )
 
     expect(derivative).toContain(gradient)
@@ -204,6 +227,16 @@ describe("GridNinja derived vector artwork", () => {
 })
 
 describe("GridNinja browser and social derivatives", () => {
+  it.each(Object.entries(preservedMaskableHashes))(
+    "keeps maskable derivative %s byte-identical",
+    async (filename, expectedHash) => {
+      const content = await readFile(resolve(process.cwd(), filename))
+      expect(createHash("sha256").update(content).digest("hex")).toBe(
+        expectedHash
+      )
+    }
+  )
+
   it.each(Object.entries(approvedBinaryExports))(
     "keeps reviewed binary export %s byte-identical",
     async (filename, expectedHash) => {
@@ -274,6 +307,74 @@ describe("GridNinja browser and social derivatives", () => {
   })
 
   it.each([
+    "public/gridninja-icon-192.png",
+    "public/gridninja-icon-512.png",
+    "public/brand/icons/pwa-192.png",
+    "public/brand/icons/pwa-512.png",
+  ])(
+    "uses only copper artwork on the transparent standard icon %s",
+    async (filename) => {
+      const { data, info } = await sharp(resolve(process.cwd(), filename))
+        .raw()
+        .toBuffer({ resolveWithObject: true })
+      let copperPixels = 0
+      let whitePixels = 0
+
+      for (let offset = 0; offset < data.length; offset += info.channels) {
+        const red = data[offset]
+        const green = data[offset + 1]
+        const blue = data[offset + 2]
+        const alpha = data[offset + 3]
+
+        if (
+          alpha > 128 &&
+          red > 150 &&
+          green > 40 &&
+          green < 190 &&
+          blue < 110
+        ) {
+          copperPixels += 1
+        }
+        if (alpha > 128 && red > 200 && green > 200 && blue > 200) {
+          whitePixels += 1
+        }
+      }
+
+      expect(copperPixels).toBeGreaterThan(0)
+      expect(whitePixels).toBe(0)
+    }
+  )
+
+  it("keeps the Apple icon opaque on the approved navy field", async () => {
+    const image = sharp(
+      resolve(process.cwd(), "public/gridninja-apple-touch-icon-180.png")
+    )
+    const { data, info } = await image.raw().toBuffer({ resolveWithObject: true })
+    const rgbAt = (x: number, y: number) => {
+      const offset = (y * info.width + x) * info.channels
+      return [...data.subarray(offset, offset + 3)]
+    }
+
+    expect((await image.stats()).isOpaque).toBe(true)
+    expect([
+      rgbAt(0, 0),
+      rgbAt(info.width - 1, 0),
+      rgbAt(0, info.height - 1),
+      rgbAt(info.width - 1, info.height - 1),
+    ]).toEqual([
+      [7, 24, 43],
+      [7, 24, 43],
+      [7, 24, 43],
+      [7, 24, 43],
+    ])
+  })
+
+  it.each([
+    ["public/gridninja-apple-touch-icon-180.png", [7, 24, 43], 0.12, 0.14],
+    ["public/gridninja-icon-192.png", [0, 0, 0], 0.12, 0.14],
+    ["public/gridninja-icon-512.png", [0, 0, 0], 0.12, 0.14],
+    ["public/brand/icons/pwa-192.png", [0, 0, 0], 0.12, 0.14],
+    ["public/brand/icons/pwa-512.png", [0, 0, 0], 0.12, 0.14],
     ["public/brand/icons/pwa-maskable-192.png", [7, 10, 13], 0.2, 0.22],
     ["public/brand/icons/pwa-maskable-512.png", [7, 10, 13], 0.2, 0.22],
   ] as const)(
@@ -408,7 +509,7 @@ describe("GridNinja browser and social derivatives", () => {
     }
   )
 
-  it("uses the proof core only for the 16px favicon entry", async () => {
+  it("uses the proof core for every favicon entry", async () => {
     const favicon = await readFile(resolve(process.cwd(), "public/favicon.ico"))
     const count = favicon.readUInt16LE(4)
     const entries = Array.from({ length: count }, (_, index) => {
@@ -443,6 +544,14 @@ describe("GridNinja browser and social derivatives", () => {
           ({ alpha, blue, green, red }) =>
             alpha > 128 && red > 200 && green > 200 && blue > 200
         ),
+        containsCopperArtwork: pixels.some(
+          ({ alpha, blue, green, red }) =>
+            alpha > 128 &&
+            red > 150 &&
+            green > 40 &&
+            green < 190 &&
+            blue < 110
+        ),
       }
     })
 
@@ -457,11 +566,8 @@ describe("GridNinja browser and social derivatives", () => {
       true
     )
     expect(entries.every((entry) => entry.center === 255)).toBe(true)
-    expect(entries.map((entry) => entry.containsWhiteArtwork)).toEqual([
-      false,
-      true,
-      true,
-    ])
+    expect(entries.every((entry) => entry.containsCopperArtwork)).toBe(true)
+    expect(entries.every((entry) => !entry.containsWhiteArtwork)).toBe(true)
     expect(favicon.length).toBeLessThanOrEqual(32 * 1024)
   })
 

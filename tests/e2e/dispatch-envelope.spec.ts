@@ -113,8 +113,8 @@ test.describe("dispatch envelope page", () => {
       const dialog = page.getByRole("dialog")
 
       await expect(
-        dialog.getByRole("link", { name: "Platform", exact: true })
-      ).toHaveAttribute("aria-current", "page")
+        dialog.getByRole("button", { name: "Platform", exact: true })
+      ).toHaveAttribute("aria-expanded", "true")
       await expect(
         dialog.getByRole("link", { name: "Dispatch Envelope", exact: true })
       ).toHaveAttribute("aria-current", "page")
@@ -144,12 +144,12 @@ test.describe("dispatch envelope page", () => {
       await solutionsMenu.hover()
       await expect(dispatchLink).toBeHidden()
       await expect(
-        header.getByRole("link", { name: "AI Cloud", exact: true })
+        header.getByRole("link", { name: "AI Cloud Providers", exact: true })
       ).toBeVisible()
 
       await platformMenu.click()
       await expect(dispatchLink).toBeVisible()
-      await header.getByRole("link", { name: "Proof & Trust" }).focus()
+      await header.getByRole("link", { name: "Why GridNinja" }).focus()
       await expect(dispatchLink).toBeHidden()
     }
     expect(errors).toEqual([])

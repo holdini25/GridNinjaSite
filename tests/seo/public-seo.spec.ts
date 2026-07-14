@@ -7,6 +7,7 @@ import {
   classifyInternalHref,
 } from "../../src/seo/internal-link-graph.mjs"
 import {
+  getSeoRoute,
   indexableSeoRoutes,
   seoRoutes,
 } from "../../src/seo/route-manifest"
@@ -424,6 +425,10 @@ test.describe("snippet and raw-content controls", () => {
     expect(response?.status()).toBe(200)
     await expect(page.locator("main h1")).toHaveCount(1)
     await expect(page.locator("main h1")).toBeVisible()
+    await expect(page.locator("main h1 + p")).toHaveText(
+      getSeoRoute("/").description
+    )
+    await expect(page.locator("main h1 + p")).toBeVisible()
     await expect(
       page.getByText("AI Data Center Virtual Capacity Control Plane", {
         exact: false,

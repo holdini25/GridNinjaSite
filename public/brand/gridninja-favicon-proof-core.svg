@@ -8,7 +8,6 @@
       <stop offset="1" stop-color="#C9570A"/>
     </linearGradient>
   </defs>
-  <circle cx="32" cy="32" r="27" fill="none" stroke="url(#copper)" stroke-width="4"/>
-  <path d="M32 8v12M32 44v12" fill="none" stroke="url(#copper)" stroke-width="3" stroke-linecap="round"/>
-  <path d="M32 18c2 8 6 12 14 14-8 2-12 6-14 14-2-8-6-12-14-14 8-2 12-6 14-14Z" fill="url(#copper)"/>
+  <circle cx="32" cy="32" r="26.5" fill="none" stroke="url(#copper)" stroke-width="5"/>
+  <path d="M32 17c2.2 8.5 6.5 12.8 15 15-8.5 2.2-12.8 6.5-15 15-2.2-8.5-6.5-12.8-15-15 8.5-2.2 12.8-6.5 15-15Z" fill="url(#copper)"/>
 </svg>

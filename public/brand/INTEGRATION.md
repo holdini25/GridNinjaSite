@@ -1,6 +1,6 @@
 # GridNinja website brand integration
 
-`README.md` and the six SVG files supplied in the master archive remain canonical vector inputs. `assets/brand/gridninja-logo.png` is the canonical raster source supplied for browser, Apple touch, and standard install icons. All canonical inputs must remain byte-identical. Website-only SVGs, browser icons, install icons, and most social exports are deterministic derivatives maintained by `scripts/generate-brand-derivatives.mjs`. The LinkedIn JPEG and homepage search candidate are reviewed binary exports: the JPEG depends on system font rasterization, while the search candidate preserves approved supplied artwork without generative redrawing.
+`README.md` and the six SVG files supplied in the master archive remain canonical vector inputs. `gridninja-favicon-proof-core.svg` is the canonical source for browser, Apple touch, and standard install icons. `assets/brand/gridninja-logo.png` remains hash-locked as an archived supplied raster, but it is not used to generate favicon or install assets. All canonical inputs must remain byte-identical. Website-only SVGs, browser icons, install icons, and most social exports are deterministic derivatives maintained by `scripts/generate-brand-derivatives.mjs`. The LinkedIn JPEG and homepage search candidate are reviewed binary exports: the JPEG depends on system font rasterization, while the search candidate preserves approved supplied artwork without generative redrawing.
 
 ## Canonical source hashes
 
@@ -12,8 +12,12 @@
 | `gridninja-mark-micro.svg` | `0b087bec57396488ef43cc8a9f7d540da95acd7e873af86efc39f141a3f14366` |
 | `gridninja-emblem-monochrome.svg` | `27dde9a57aa6f2f195699b0d2a6007e894be865c49b587816e24777a97ecbfde` |
 | `gridninja-badge-light.svg` | `1632c89ad277a9e24f383ec84fc89045dcc7d8d67a30b9fd600110f9d0b04a36` |
-| `gridninja-favicon-proof-core.svg` | `e9b2ac6db468ae6eed4693c0ad37645a319754f16ea07751151265ecc2718955` |
+| `gridninja-favicon-proof-core.svg` | `ca2e916c85bdb9e9f62c7e1f4e4cf3d9faf0765b34b10abd12038b42753682c8` |
 | `assets/brand/gridninja-logo.png` | `e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899` |
+
+## Approved favicon visual reference
+
+The simplified proof-core geometry was approved from `ChatGPT Image Jul 14, 2026, 01_57_37 PM.png`, a 1254×1254 opaque RGB reference with SHA-256 `2df93b00e44105c0bbb99975b99188c6dbf95d2e29753d3c658874ac3f969360`. The reference is not a production raster master: the canonical SVG preserves its orange ring and enlarged four-point star while removing the opaque field, glow, and all nonessential detail.
 
 ## Approved reviewed binary exports
 
@@ -32,13 +36,13 @@ The generator verifies both final hashes before writing deterministic derivative
 - `npm run brand:check` verifies the locked binary export, builds the deterministic output map in memory, and byte-compares it with the repository without writing files.
 - `gridninja-watermark.svg` is derived from the detailed emblem's copper gradient, globe clip/grid, and proof-core path.
 - `gridninja-proof-star.svg` is derived from the favicon proof core's copper gradient and star path.
-- `/favicon.ico` contains only 16, 32, and 48px entries and is capped at 32KB. Its 16px layer uses the canonical simplified proof-core mark for tab-scale clarity; its 32px and 48px layers use the supplied raster logo. Standard install icons use a deterministic alpha mask that clears the outer canvas while preserving the navy contrast field behind the white guardians; the 180px Apple touch icon remains an exact opaque square resize.
+- `/favicon.ico` contains only 16, 32, and 48px proof-core entries and is capped at 32KB. The linked 192px icon, 512px standard icon, and `purpose:any` PWA icons use the same proof-core on transparent canvases. The 180px Apple touch icon uses the proof-core on an opaque `#07182B` field. Detailed maskable icons remain unchanged on their full-bleed site background.
 
 The generated set also includes stable browser icons, Apple and PWA icons, maskable icons with conservative safe-area padding, the Open Graph emblem, the LinkedIn avatar, and the LinkedIn banner SVG. Do not edit a deterministic derivative by hand; change the generator and regenerate the entire set. Follow the reviewed replacement workflow above for either locked binary export.
 
 ## Browser and install presentation
 
-- The 16px browser-tab icon uses the transparent proof-core mark; the 32px and larger standard icons preserve the canonical raster source's composition, retain the contrast needed by the white mark, and make the outer corners transparent. Apple touch and maskable icons remain fully opaque because those surfaces require a controlled field.
+- Every browser and standard PWA icon uses the transparent proof-core mark with no faces, globe lines, swords, or text. Apple touch and maskable icons remain fully opaque because those surfaces require a controlled field.
 - The website emits stable, query-free icon links for `/favicon.ico`, `/gridninja-icon-192.png`, and `/gridninja-apple-touch-icon-180.png`; `/gridninja-icon-512.png` is used by install metadata.
 - Maskable PWA icons render the detailed emblem at a nominal `0.72` scale on the full-bleed site background, leaving approximately 20–21% visible padding and keeping artwork inside the central 60% safe area.
 - Square raster composites select an artwork size with matching canvas parity so left/right and top/bottom pixel insets remain equal.
