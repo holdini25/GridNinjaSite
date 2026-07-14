@@ -32,6 +32,8 @@ const canonicalFaviconSource = {
   sha256: "e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899",
 } as const
 const approvedBinaryExports = {
+  "public/brand/search/gridninja-virtual-capacity.png":
+    "e49caec5c01d6852c247ac6f1226fa20923647029be5a5485d0f47cb9686a350",
   "public/brand/social/linkedin-banner.jpg":
     "5d26262e258bb67e86c8ba7def76f687a6d51e00db992d2e0215b8160ad4f8d2",
 } as const
@@ -220,6 +222,7 @@ describe("GridNinja browser and social derivatives", () => {
     ["public/brand/icons/pwa-512.png", 512, 512, "png"],
     ["public/brand/icons/pwa-maskable-192.png", 192, 192, "png"],
     ["public/brand/icons/pwa-maskable-512.png", 512, 512, "png"],
+    ["public/brand/search/gridninja-virtual-capacity.png", 1200, 1200, "png"],
     ["public/brand/social/gridninja-og-emblem.png", 400, 400, "png"],
     ["public/brand/social/linkedin-avatar.png", 400, 400, "png"],
     ["public/brand/social/linkedin-banner.jpg", 4200, 700, "jpeg"],
@@ -236,6 +239,7 @@ describe("GridNinja browser and social derivatives", () => {
     "public/gridninja-apple-touch-icon-180.png",
     "public/brand/icons/pwa-maskable-192.png",
     "public/brand/icons/pwa-maskable-512.png",
+    "public/brand/search/gridninja-virtual-capacity.png",
     "public/brand/social/linkedin-avatar.png",
   ])("keeps %s fully opaque", async (filename) => {
     const stats = await sharp(resolve(process.cwd(), filename)).stats()
@@ -299,6 +303,74 @@ describe("GridNinja browser and social derivatives", () => {
       resolve(process.cwd(), "public/brand/social/gridninja-og-emblem.png")
     ).stats()
     expect(stats.isOpaque).toBe(false)
+  })
+
+  it("keeps the homepage search candidate on navy with balanced safe padding", async () => {
+    const filename = resolve(
+      process.cwd(),
+      "public/brand/search/gridninja-virtual-capacity.png"
+    )
+    const image = sharp(filename)
+    const metadata = await image.metadata()
+    const { data, info } = await image.raw().toBuffer({ resolveWithObject: true })
+    let minX = info.width
+    let minY = info.height
+    let maxX = -1
+    let maxY = -1
+
+    for (let y = 0; y < info.height; y += 1) {
+      for (let x = 0; x < info.width; x += 1) {
+        const offset = (y * info.width + x) * info.channels
+        const red = data[offset]
+        const green = data[offset + 1]
+        const blue = data[offset + 2]
+        const copper =
+          red > 150 && green > 45 && green < 190 && blue < 110
+        const armor = red > 175 && green > 175 && blue > 175
+
+        if (copper || armor) {
+          minX = Math.min(minX, x)
+          minY = Math.min(minY, y)
+          maxX = Math.max(maxX, x)
+          maxY = Math.max(maxY, y)
+        }
+      }
+    }
+
+    const margins = [
+      minX,
+      info.width - 1 - maxX,
+      minY,
+      info.height - 1 - maxY,
+    ]
+    const cornerRgb = (x: number, y: number) => {
+      const offset = (y * info.width + x) * info.channels
+      return [...data.subarray(offset, offset + 3)]
+    }
+
+    expect(metadata).toMatchObject({
+      width: 1200,
+      height: 1200,
+      format: "png",
+      channels: 3,
+    })
+    expect([minX, minY, maxX, maxY].every((value) => value >= 0)).toBe(true)
+    expect(Math.abs(margins[0] - margins[1])).toBeLessThanOrEqual(1)
+    for (const margin of margins) {
+      expect(margin / info.width).toBeGreaterThanOrEqual(0.145)
+      expect(margin / info.width).toBeLessThanOrEqual(0.205)
+    }
+    expect([
+      cornerRgb(0, 0),
+      cornerRgb(info.width - 1, 0),
+      cornerRgb(0, info.height - 1),
+      cornerRgb(info.width - 1, info.height - 1),
+    ]).toEqual([
+      [1, 5, 22],
+      [1, 5, 22],
+      [1, 5, 22],
+      [1, 5, 22],
+    ])
   })
 
   it.each([192, 512])(
@@ -416,7 +488,7 @@ describe("GridNinja derivative integrity command", () => {
     expect(result.stderr).toBe("")
     expect(result.status).toBe(0)
     expect(result.stdout).toContain(
-      "Verified 13 deterministic GridNinja derivatives and 1 approved binary export."
+      "Verified 13 deterministic GridNinja derivatives and 2 approved binary exports."
     )
   }, 30_000)
 
@@ -424,12 +496,8 @@ describe("GridNinja derivative integrity command", () => {
     const sandbox = await mkdtemp(join(tmpdir(), "gridninja-brand-check-"))
     const sandboxBrand = join(sandbox, "public", "brand")
     const stalePath = join(sandbox, "public", "brand", "gridninja-proof-star.svg")
-    const lockedExportPath = join(
-      sandbox,
-      "public",
-      "brand",
-      "social",
-      "linkedin-banner.jpg"
+    const lockedExportPaths = Object.keys(approvedBinaryExports).map((filename) =>
+      join(sandbox, filename)
     )
 
     try {
@@ -441,14 +509,18 @@ describe("GridNinja derivative integrity command", () => {
         join(sandbox, "assets", "brand"),
         { recursive: true }
       )
-      const lockedExport = await readFile(lockedExportPath)
+      const lockedExports = await Promise.all(
+        lockedExportPaths.map((filename) => readFile(filename))
+      )
       const generate = spawnSync(process.execPath, [generator, "--root", sandbox], {
         cwd: process.cwd(),
         encoding: "utf8",
       })
       expect(generate.stderr).toBe("")
       expect(generate.status).toBe(0)
-      expect(await readFile(lockedExportPath)).toEqual(lockedExport)
+      for (const [index, lockedExportPath] of lockedExportPaths.entries()) {
+        expect(await readFile(lockedExportPath)).toEqual(lockedExports[index])
+      }
 
       const stale = Buffer.concat([await readFile(stalePath), Buffer.from("\n")])
       await writeFile(stalePath, stale)

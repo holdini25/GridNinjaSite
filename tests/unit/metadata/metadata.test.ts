@@ -13,7 +13,11 @@ import {
   socialImageAlt,
   twitterImage,
 } from "@/lib/seo"
-import { PRODUCTION_ORIGIN, SITE_IDENTITY } from "@/seo/policy"
+import {
+  HOMEPAGE_PRIMARY_IMAGE,
+  PRODUCTION_ORIGIN,
+  SITE_IDENTITY,
+} from "@/seo/policy"
 import {
   getSeoRoute,
   indexableSeoRoutes,
@@ -75,6 +79,30 @@ describe("public metadata", () => {
     )
     expect(openGraphImage.alt).toBe(socialImageAlt)
     expect(twitterImage.alt).toBe(socialImageAlt)
+  })
+
+  it("appends the square search candidate only to homepage Open Graph metadata", () => {
+    const homepageMetadata = createPageMetadata({ path: "/" })
+
+    expect(homepageMetadata.openGraph?.images).toEqual([
+      {
+        ...openGraphImage,
+        url: "https://gridninja.ai/og/home",
+      },
+      {
+        url: `https://gridninja.ai${HOMEPAGE_PRIMARY_IMAGE.path}`,
+        width: HOMEPAGE_PRIMARY_IMAGE.width,
+        height: HOMEPAGE_PRIMARY_IMAGE.height,
+        type: HOMEPAGE_PRIMARY_IMAGE.type,
+        alt: HOMEPAGE_PRIMARY_IMAGE.alt,
+      },
+    ])
+    expect(homepageMetadata.twitter?.images).toEqual([
+      {
+        ...twitterImage,
+        url: "https://gridninja.ai/og/home",
+      },
+    ])
   })
 
   it("reuses complete social image descriptors on page metadata", () => {

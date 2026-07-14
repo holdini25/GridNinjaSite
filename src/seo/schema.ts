@@ -1,4 +1,8 @@
-import { absoluteUrl, SITE_IDENTITY } from "@/seo/policy"
+import {
+  absoluteUrl,
+  HOMEPAGE_PRIMARY_IMAGE,
+  SITE_IDENTITY,
+} from "@/seo/policy"
 import type { SeoRoute } from "@/seo/route-manifest"
 
 type JsonLd = Record<string, unknown>
@@ -39,6 +43,18 @@ export function buildWebPageSchema(route: SeoRoute): JsonLd {
     isPartOf: { "@id": SITE_IDENTITY.websiteId },
     about: { "@id": SITE_IDENTITY.organizationId },
     dateModified: route.contentUpdatedAt,
+    ...(route.path === "/"
+      ? {
+          primaryImageOfPage: {
+            "@type": "ImageObject",
+            "@id": HOMEPAGE_PRIMARY_IMAGE.id,
+            url: absoluteUrl(HOMEPAGE_PRIMARY_IMAGE.path),
+            contentUrl: absoluteUrl(HOMEPAGE_PRIMARY_IMAGE.path),
+            width: HOMEPAGE_PRIMARY_IMAGE.width,
+            height: HOMEPAGE_PRIMARY_IMAGE.height,
+          },
+        }
+      : {}),
     ...(route.breadcrumbs.length > 0
       ? { breadcrumb: { "@id": `${absoluteUrl(route.path)}#breadcrumbs` } }
       : {}),

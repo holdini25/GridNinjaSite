@@ -1,7 +1,12 @@
 import type { Metadata } from "next"
 
 import { siteConfig } from "@/content/site"
-import { absoluteUrl, isPreviewDeployment, PRODUCTION_ORIGIN } from "@/seo/policy"
+import {
+  absoluteUrl,
+  HOMEPAGE_PRIMARY_IMAGE,
+  isPreviewDeployment,
+  PRODUCTION_ORIGIN,
+} from "@/seo/policy"
 import { getSeoRoute, type PublicPath } from "@/seo/route-manifest"
 
 export const socialImageAlt =
@@ -60,6 +65,20 @@ export function createPageMetadata({
     ...openGraphImage,
     url: absoluteUrl(`/og/${socialImageKey}`),
   }
+  const openGraphImages = [
+    socialImage,
+    ...(routePath === "/"
+      ? [
+          {
+            url: absoluteUrl(HOMEPAGE_PRIMARY_IMAGE.path),
+            width: HOMEPAGE_PRIMARY_IMAGE.width,
+            height: HOMEPAGE_PRIMARY_IMAGE.height,
+            type: HOMEPAGE_PRIMARY_IMAGE.type,
+            alt: HOMEPAGE_PRIMARY_IMAGE.alt,
+          },
+        ]
+      : []),
+  ]
 
   return {
     metadataBase: new URL(PRODUCTION_ORIGIN),
@@ -91,7 +110,7 @@ export function createPageMetadata({
       type: "website",
       ...(includeCanonicalUrl ? { url: canonical } : {}),
       siteName: siteConfig.name,
-      images: [socialImage],
+      images: openGraphImages,
     },
     twitter: {
       card: "summary_large_image",

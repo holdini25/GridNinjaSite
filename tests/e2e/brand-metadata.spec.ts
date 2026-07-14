@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test"
 
-import { PRODUCTION_ORIGIN } from "../../src/seo/policy"
+import {
+  HOMEPAGE_PRIMARY_IMAGE,
+  PRODUCTION_ORIGIN,
+} from "../../src/seo/policy"
 import { getSeoRoute } from "../../src/seo/route-manifest"
 
 const socialImageAlt =
@@ -86,6 +89,7 @@ test.describe("production brand metadata routes", () => {
     ["/brand/icons/pwa-512.png", 512, 512],
     ["/brand/icons/pwa-maskable-192.png", 192, 192],
     ["/brand/icons/pwa-maskable-512.png", 512, 512],
+    ["/brand/search/gridninja-virtual-capacity.png", 1200, 1200],
     ["/brand/social/gridninja-og-emblem.png", 400, 400],
   ] as const
 
@@ -149,22 +153,43 @@ test.describe("production brand metadata routes", () => {
       "content",
       "GridNinja"
     )
-    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
-      "content",
-      "1200"
-    )
-    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute(
-      "content",
-      "630"
-    )
-    await expect(page.locator('meta[property="og:image:type"]')).toHaveAttribute(
-      "content",
-      "image/png"
-    )
-    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
-      "content",
-      socialImageAlt
-    )
+    const openGraphImages = await page
+      .locator('meta[property="og:image"]')
+      .evaluateAll((elements) =>
+        elements.map((element) => element.getAttribute("content"))
+      )
+    expect(openGraphImages).toEqual([
+      "https://gridninja.ai/og/home",
+      `https://gridninja.ai${HOMEPAGE_PRIMARY_IMAGE.path}`,
+    ])
+    expect(
+      await page
+        .locator('meta[property="og:image:width"]')
+        .evaluateAll((elements) =>
+          elements.map((element) => element.getAttribute("content"))
+        )
+    ).toEqual(["1200", "1200"])
+    expect(
+      await page
+        .locator('meta[property="og:image:height"]')
+        .evaluateAll((elements) =>
+          elements.map((element) => element.getAttribute("content"))
+        )
+    ).toEqual(["630", "1200"])
+    expect(
+      await page
+        .locator('meta[property="og:image:type"]')
+        .evaluateAll((elements) =>
+          elements.map((element) => element.getAttribute("content"))
+        )
+    ).toEqual(["image/png", "image/png"])
+    expect(
+      await page
+        .locator('meta[property="og:image:alt"]')
+        .evaluateAll((elements) =>
+          elements.map((element) => element.getAttribute("content"))
+        )
+    ).toEqual([socialImageAlt, HOMEPAGE_PRIMARY_IMAGE.alt])
     await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
       "content",
       "summary_large_image"
@@ -245,6 +270,17 @@ test.describe("production brand metadata routes", () => {
         }),
       ])
     )
+    const homepageWebPage = graph["@graph"].find(
+      (entry: { "@type"?: string }) => entry["@type"] === "WebPage"
+    )
+    expect(homepageWebPage?.primaryImageOfPage).toEqual({
+      "@type": "ImageObject",
+      "@id": HOMEPAGE_PRIMARY_IMAGE.id,
+      url: openGraphImages[1],
+      contentUrl: openGraphImages[1],
+      width: HOMEPAGE_PRIMARY_IMAGE.width,
+      height: HOMEPAGE_PRIMARY_IMAGE.height,
+    })
     await expect(
       page.locator("footer").getByRole("heading", {
         name: "GridNinja is the runtime-assured virtual capacity engine for AI data centers.",

@@ -37,6 +37,8 @@ const canonicalFaviconSourceHash =
   "e0d0da30b043d3a0d9a4eb7c2c61071cf583e50efb19f94075af9b06bb18b899"
 
 const approvedBinaryExports = {
+  "public/brand/search/gridninja-virtual-capacity.png":
+    "e49caec5c01d6852c247ac6f1226fa20923647029be5a5485d0f47cb9686a350",
   "public/brand/social/linkedin-banner.jpg":
     "5d26262e258bb67e86c8ba7def76f687a6d51e00db992d2e0215b8160ad4f8d2",
 }
@@ -401,11 +403,11 @@ const outputs = await buildExpectedOutputs()
 if (checkOnly) {
   await checkOutputs(outputs)
   console.log(
-    `Verified ${outputs.size} deterministic GridNinja derivatives and ${Object.keys(approvedBinaryExports).length} approved binary export.`
+    `Verified ${outputs.size} deterministic GridNinja derivatives and ${Object.keys(approvedBinaryExports).length} approved binary exports.`
   )
 } else {
   await writeOutputs(outputs)
   console.log(
-    `Verified canonical sources and ${Object.keys(approvedBinaryExports).length} approved binary export; generated ${outputs.size} deterministic GridNinja derivatives.`
+    `Verified canonical sources and ${Object.keys(approvedBinaryExports).length} approved binary exports; generated ${outputs.size} deterministic GridNinja derivatives.`
   )
 }

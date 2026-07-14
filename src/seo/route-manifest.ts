@@ -54,7 +54,7 @@ export const seoRoutes = [
     searchIntent: "brand",
     schemaTypes: ["WebPage"],
     socialImageKey: "home",
-    contentUpdatedAt: updated,
+    contentUpdatedAt: "2026-07-14",
     breadcrumbs: [],
     targetQuestions: ["What is an AI Data Center Virtual Capacity Control Plane?"],
     relatedPaths: ["/platform", "/proof", "/roi"],

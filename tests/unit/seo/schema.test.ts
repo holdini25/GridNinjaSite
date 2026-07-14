@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import {
   buildOrganizationSchema,
   buildTechArticleSchema,
+  buildWebPageSchema,
   buildWebsiteSchema,
   serializeJsonLd,
 } from "@/seo/schema"
@@ -40,6 +41,25 @@ describe("structured identity and safe serialization", () => {
         []
       )
     ).toThrow(/requires at least one real public author/i)
+  })
+
+  it("publishes the square primary image on the homepage WebPage only", () => {
+    expect(buildWebPageSchema(getSeoRoute("/"))).toMatchObject({
+      "@type": "WebPage",
+      "@id": "https://gridninja.ai/#webpage",
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        "@id": "https://gridninja.ai/#primaryimage",
+        url: "https://gridninja.ai/brand/search/gridninja-virtual-capacity.png",
+        contentUrl:
+          "https://gridninja.ai/brand/search/gridninja-virtual-capacity.png",
+        width: 1200,
+        height: 1200,
+      },
+    })
+    expect(
+      buildWebPageSchema(getSeoRoute("/platform"))
+    ).not.toHaveProperty("primaryImageOfPage")
   })
 
   it("neutralizes script-breaking input in server-rendered JSON-LD", () => {

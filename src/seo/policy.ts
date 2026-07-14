@@ -1,5 +1,14 @@
 export const PRODUCTION_ORIGIN = "https://gridninja.ai" as const
 
+export const HOMEPAGE_PRIMARY_IMAGE = {
+  id: `${PRODUCTION_ORIGIN}/#primaryimage`,
+  path: "/brand/search/gridninja-virtual-capacity.png",
+  width: 1200,
+  height: 1200,
+  type: "image/png",
+  alt: "GridNinja twin-guardian virtual capacity emblem on a navy field",
+} as const
+
 export const SITE_IDENTITY = {
   name: "GridNinja",
   alternateName: "gridninja.ai",
