@@ -6,9 +6,13 @@ import {
   testMatchMedia,
 } from "./support/match-media"
 
-installTestMatchMedia()
+if (typeof window !== "undefined") {
+  installTestMatchMedia()
+}
 
 afterEach(() => {
   testMatchMedia.reset()
-  installTestMatchMedia()
+  if (typeof window !== "undefined") {
+    installTestMatchMedia()
+  }
 })
