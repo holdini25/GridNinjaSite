@@ -193,21 +193,30 @@ export function useDispatchEnvelopeState({
     }
   }
 
-  function openEvidence(trigger?: HTMLElement | null) {
-    evidenceTriggerRef.current = trigger ?? null
-    setProofOpen(true)
-    emitDispatchEnvelopeEvent({
-      name: "dispatch_evidence_drawer_open",
-      ...eventContext(),
-    })
+  function registerEvidenceTrigger(trigger: HTMLElement) {
+    evidenceTriggerRef.current = trigger
   }
 
   function setEvidenceOpen(open: boolean) {
+    if (open === proofOpen) {
+      return
+    }
+
     setProofOpen(open)
 
-    if (!open) {
-      window.setTimeout(() => evidenceTriggerRef.current?.focus(), 0)
+    if (open) {
+      emitDispatchEnvelopeEvent({
+        name: "dispatch_evidence_drawer_open",
+        ...eventContext(),
+      })
     }
+  }
+
+  function restoreEvidenceTrigger() {
+    const trigger = evidenceTriggerRef.current
+
+    evidenceTriggerRef.current = null
+    trigger?.focus()
   }
 
   function copyProofRoot() {
@@ -233,9 +242,10 @@ export function useDispatchEnvelopeState({
     tableExpanded,
     copyProofRoot,
     hideLens,
-    openEvidence,
+    registerEvidenceTrigger,
     replayTrace,
     recordJsonExport,
+    restoreEvidenceTrigger,
     selectConstraint,
     selectScenario,
     setEvidenceOpen,

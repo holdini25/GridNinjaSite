@@ -1,4 +1,4 @@
-import { cleanup, render, screen, within } from "@testing-library/react"
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
 import {
@@ -10,6 +10,7 @@ import { DispatchProofTrace } from "@/components/marketing/dispatch-envelope/dis
 import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
+import { Sheet } from "@/components/ui/sheet"
 import { dispatchScenarios } from "@/content/copy/dispatch-envelope"
 import {
   artifactFiles,
@@ -57,6 +58,50 @@ describe("GridNinjaProofSeal", () => {
 })
 
 describe("proof-seal presentation semantics", () => {
+  it("selects Load Passport evidence without starting a root view transition", () => {
+    const transitionDocument = document as Document & {
+      startViewTransition?: () => unknown
+    }
+    const originalDescriptor = Object.getOwnPropertyDescriptor(
+      transitionDocument,
+      "startViewTransition"
+    )
+    const startViewTransition = vi.fn()
+    Object.defineProperty(transitionDocument, "startViewTransition", {
+      configurable: true,
+      value: startViewTransition,
+    })
+
+    try {
+      render(<LoadPassportHD />)
+      const target = screen.getByRole("button", {
+        name: /Telemetry Trust Score/i,
+      })
+
+      fireEvent.focus(target)
+      fireEvent.click(target)
+
+      expect(target).toHaveAttribute("aria-pressed", "true")
+      expect(
+        screen.getByRole("heading", {
+          level: 4,
+          name: "Telemetry Trust Score",
+        })
+      ).toBeVisible()
+      expect(startViewTransition).not.toHaveBeenCalled()
+    } finally {
+      if (originalDescriptor) {
+        Object.defineProperty(
+          transitionDocument,
+          "startViewTransition",
+          originalDescriptor
+        )
+      } else {
+        Reflect.deleteProperty(transitionDocument, "startViewTransition")
+      }
+    }
+  })
+
   it("computes Load Passport completion from every required section", () => {
     expect(getLoadPassportEvidenceChainStatus(loadPassportSections)).toBe(
       "complete"
@@ -298,7 +343,12 @@ describe("proof-seal presentation semantics", () => {
       )!
 
       render(
-        <DispatchProofTrace scenario={scenario} onOpenEvidence={vi.fn()} />
+        <Sheet>
+          <DispatchProofTrace
+            scenario={scenario}
+            onEvidenceTrigger={vi.fn()}
+          />
+        </Sheet>
       )
 
       expect(screen.getByText(GRIDNINJA_PROOF_SEAL_LABEL)).toBeVisible()
@@ -310,7 +360,14 @@ describe("proof-seal presentation semantics", () => {
       (candidate) => candidate.id === "telemetry-loss"
     )!
 
-    render(<DispatchProofTrace scenario={scenario} onOpenEvidence={vi.fn()} />)
+    render(
+      <Sheet>
+        <DispatchProofTrace
+          scenario={scenario}
+          onEvidenceTrigger={vi.fn()}
+        />
+      </Sheet>
+    )
 
     expect(
       screen.queryByText(GRIDNINJA_PROOF_SEAL_LABEL)

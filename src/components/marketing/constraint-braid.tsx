@@ -48,7 +48,7 @@ export function ConstraintBraid({
                 onClick={() => selectDomain(domain.id)}
                 onFocus={() => selectDomain(domain.id)}
                 className={cn(
-                  "gn-v2-braid-node rounded-[1rem] border border-border/70 bg-background/45 px-4 py-4 text-left transition-colors",
+                  "gn-v2-braid-node rounded-[1rem] border border-border/70 bg-background px-4 py-4 text-left transition-colors",
                   "focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/45",
                   isActive && "border-primary/70 bg-surface-2 text-foreground"
                 )}

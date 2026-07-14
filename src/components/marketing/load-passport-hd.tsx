@@ -11,7 +11,6 @@ import {
   loadPassportSections,
   type LoadPassportSection,
 } from "@/content/proof-artifacts"
-import { runViewTransition } from "@/lib/view-transition"
 import { cn } from "@/lib/utils"
 
 export function LoadPassportHD({
@@ -30,7 +29,7 @@ export function LoadPassportHD({
   const evidenceChainStatus = getLoadPassportEvidenceChainStatus(sections)
 
   function selectSection(title: string) {
-    runViewTransition(() => setActiveTitle(title))
+    setActiveTitle(title)
   }
 
   if (!active) {

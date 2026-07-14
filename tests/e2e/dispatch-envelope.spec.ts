@@ -261,7 +261,7 @@ test.describe("dispatch envelope page", () => {
     )
   })
 
-  test("supports keyboard tabs, modes, proof lens, drawer, table, and export", async ({
+  test("supports keyboard tabs, modes, and proof lens", async ({
     page,
   }, testInfo) => {
     await page.goto("/platform/dispatch-envelope")
@@ -344,32 +344,76 @@ test.describe("dispatch envelope page", () => {
     )
     await page.keyboard.press("Escape")
     await expect(page.getByTestId("dispatch-proof-lens-card")).toBeHidden()
+  })
+
+  test("opens evidence after deep proof inspection and restores the exact trigger", async ({
+    page,
+  }) => {
+    await page.goto("/platform/dispatch-envelope")
 
     const proofButton = page.getByTestId("dispatch-proof-button")
+    const proofRange = page.getByTestId("dispatch-proof-lens-range")
+
+    await expect(proofButton).toHaveAttribute("aria-haspopup", "dialog")
+    await expect(proofButton).toHaveAttribute("aria-expanded", "false")
+    const controlledDrawerId = await proofButton.getAttribute("aria-controls")
+
+    expect(controlledDrawerId).toBeTruthy()
+
+    await proofRange.focus()
+    await page.keyboard.press("ArrowRight")
+    await expect(page.getByTestId("dispatch-proof-lens-card")).toBeVisible()
+    await page.keyboard.press("Escape")
+    await expect(page.getByTestId("dispatch-proof-lens-card")).toBeHidden()
 
     await proofButton.click()
-    await expect(page.getByTestId("dispatch-evidence-drawer")).toBeVisible()
-    await expect(page.getByText("schema_version")).toBeVisible()
+    const drawer = page.getByTestId("dispatch-evidence-drawer")
+
+    await expect(drawer).toBeVisible()
+    await expect(drawer).toHaveAttribute("role", "dialog")
+    await expect(drawer).toHaveAttribute("id", controlledDrawerId ?? "")
+    await expect(proofButton).toHaveAttribute("aria-expanded", "true")
+    await expect(drawer.getByText("schema_version")).toBeVisible()
     await expect(
-      page.getByTestId("dispatch-evidence-drawer").getByText("dispatch-envelope.v1")
+      drawer.getByText("dispatch-envelope.v1")
     ).toBeVisible()
-    await expect(page.getByTestId("dispatch-evidence-drawer")).toContainText(
-      "proof_root"
-    )
-    await expect(page.getByTestId("dispatch-evidence-drawer")).toContainText(
-      /sha256:[a-f0-9]{64}/
-    )
-    await expect(page.getByTestId("dispatch-evidence-drawer")).toContainText(
+    await expect(drawer).toContainText("proof_root")
+    await expect(drawer).toContainText(/sha256:[a-f0-9]{64}/)
+    await expect(drawer).toContainText(
       "never grants authority or mints proof"
     )
     await expect(
-      page
-        .getByTestId("dispatch-evidence-drawer")
-        .getByText("reserve_floor_report.csv")
+      drawer.getByText("reserve_floor_report.csv")
     ).toBeVisible()
-    await page.getByRole("button", { name: "Close" }).click()
-    await expect(page.getByTestId("dispatch-evidence-drawer")).toBeHidden()
+    await drawer.getByRole("button", { name: "Close" }).click()
+    await expect(drawer).toBeHidden()
+    await expect(proofButton).toHaveAttribute("aria-expanded", "false")
     await expect(proofButton).toBeFocused()
+
+    const pinnedTrigger = page
+      .getByTestId("dispatch-pinned-artifact")
+      .getByRole("button")
+      .first()
+
+    await pinnedTrigger.click()
+    await expect(drawer).toBeVisible()
+    await page.keyboard.press("Escape")
+    await expect(drawer).toBeHidden()
+    await expect(pinnedTrigger).toBeFocused()
+
+    const traceTrigger = page.getByTestId("dispatch-proof-trace-proof-root")
+
+    await traceTrigger.click()
+    await expect(drawer).toBeVisible()
+    await drawer.getByRole("button", { name: "Close" }).click()
+    await expect(drawer).toBeHidden()
+    await expect(traceTrigger).toBeFocused()
+  })
+
+  test("renders the equivalent table and exports deterministic evidence", async ({
+    page,
+  }, testInfo) => {
+    await page.goto("/platform/dispatch-envelope")
 
     await page.getByTestId("dispatch-table-toggle").click()
     await expect(page.getByTestId("dispatch-table-toggle")).toHaveAttribute(

@@ -119,7 +119,7 @@ export default async function DispatchEnvelopePage({
         </div>
       </SectionShell>
 
-      <SectionShell containerClassName="max-w-[96rem]">
+      <SectionShell containerClassName="max-w-[96rem]" deferRendering={false}>
         <DispatchEnvelopeVisual initialScenarioId={initialScenarioId} />
       </SectionShell>
 

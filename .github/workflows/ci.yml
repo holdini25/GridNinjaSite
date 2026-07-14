@@ -191,7 +191,15 @@ jobs:
         with: { node-version: "22", cache: npm }
       - run: npm ci
       - run: npm run build
-      - run: npm run lighthouse
+      - name: Collect and assert Lighthouse reports
+        id: lighthouse_collect
+        continue-on-error: true
+        run: npm run lighthouse:collect
+      - name: Validate Lighthouse resource budgets
+        id: lighthouse_budgets
+        if: always()
+        continue-on-error: true
+        run: npm run lighthouse:validate-budgets
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -201,6 +209,12 @@ jobs:
             test-results/lighthouse
           if-no-files-found: ignore
           retention-days: 30
+      - name: Restore Lighthouse failure status
+        if: >-
+          ${{ always() &&
+          (steps.lighthouse_collect.outcome != 'success' ||
+          steps.lighthouse_budgets.outcome != 'success') }}
+        run: exit 1
 
   audit:
     runs-on: ubuntu-latest

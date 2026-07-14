@@ -26,6 +26,7 @@ import {
   type DispatchDecision,
 } from "@/content/copy/dispatch-envelope"
 import { Button } from "@/components/ui/button"
+import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 import { buildEnvelopeSamples } from "@/lib/dispatch-envelope/normalize"
 import { sanitizeDispatchExportFilename, serializeDispatchEnvelopeExport } from "@/lib/dispatch-envelope/export"
 import { cn } from "@/lib/utils"
@@ -35,7 +36,7 @@ import { DispatchDecisionRibbon } from "./dispatch-decision-ribbon"
 import { DispatchDimensionAuditPanel } from "./dispatch-dimension-audit-panel"
 import { DispatchEnvelopeChart } from "./dispatch-envelope-chart"
 import { DispatchEquivalentDataTable } from "./dispatch-equivalent-data-table"
-import { DispatchEvidenceDrawer } from "./dispatch-evidence-drawer"
+import { DispatchEvidenceDrawerContent } from "./dispatch-evidence-drawer"
 import { DispatchProofTrace } from "./dispatch-proof-trace"
 import {
   dispatchViewModes,
@@ -54,11 +55,12 @@ export function DispatchEnvelopeVisual({
     hideLens,
     lens,
     mode,
-    openEvidence,
     proofOpen,
+    registerEvidenceTrigger,
     replayKey,
     replayTrace,
     recordJsonExport,
+    restoreEvidenceTrigger,
     selectConstraint,
     selectScenario,
     selectedDomainId,
@@ -121,6 +123,11 @@ export function DispatchEnvelopeVisual({
     } catch {
       setExportStatus("Evidence JSON export failed. The data did not pass validation.")
     }
+  }
+
+  function showEvidenceTable() {
+    setTableExpanded(true)
+    setEvidenceOpen(false)
   }
 
   function handleScenarioKeyDown(
@@ -190,21 +197,26 @@ export function DispatchEnvelopeVisual({
   }
 
   return (
-    <section
-      className="gn-dispatch-shell gn-hd-panel relative overflow-hidden"
-      aria-label="Dispatch Envelope Visual"
-      data-testid="dispatch-envelope-visual"
-      data-animation-phase={animationPhase}
-    >
-      <div className="gn-scanline" />
-      <div className="border-b border-border/70 px-4 py-5 sm:px-6 lg:min-h-24 lg:pr-[23rem]">
-        <div>
-          <p className="gn-eyebrow text-proof-cyan">Dispatch Envelope</p>
-          <h2 className="mt-2 text-[2rem] font-medium tracking-tight text-foreground sm:text-[2.35rem]">
-            Constraint Aperture
-          </h2>
+    <Sheet open={proofOpen} onOpenChange={setEvidenceOpen}>
+      <section
+        className="gn-dispatch-shell gn-hd-panel relative overflow-hidden"
+        aria-label="Dispatch Envelope Visual"
+        data-testid="dispatch-envelope-visual"
+        data-animation-phase={animationPhase}
+      >
+        <div className="gn-scanline" />
+        <div className="grid gap-4 border-b border-border/70 px-4 py-5 sm:flex sm:items-center sm:justify-between sm:px-6">
+          <div>
+            <p className="gn-eyebrow text-proof-cyan">Dispatch Envelope</p>
+            <h2 className="mt-2 text-[2rem] font-medium tracking-tight text-foreground sm:text-[2.35rem]">
+              Constraint Aperture
+            </h2>
+          </div>
+          <DispatchPrimaryActions
+            onEvidenceTrigger={registerEvidenceTrigger}
+            onReplay={replayTrace}
+          />
         </div>
-      </div>
 
       <DispatchDecisionRibbon
         scenario={activeScenario}
@@ -215,11 +227,6 @@ export function DispatchEnvelopeVisual({
       <DispatchMobileSummary
         scenario={activeScenario}
         proofEligible={scenarioProofEligible}
-      />
-
-      <DispatchPrimaryActions
-        onReplay={replayTrace}
-        onOpenProof={openEvidence}
       />
 
       <div className="grid gap-4 border-b border-border/70 bg-background/35 px-4 py-4 sm:px-6 lg:grid-cols-[9rem_minmax(0,1fr)] lg:items-center">
@@ -421,17 +428,23 @@ export function DispatchEnvelopeVisual({
             {orderedConstraints
               .filter(({ constraint }) => isBindingStatus(constraint.state))
               .map(({ id, constraint, meta }) => (
-                <button
+                <SheetTrigger
                   key={`${id}-${constraint.evidenceArtifact}`}
-                  type="button"
-                  onClick={(event) => openEvidence(event.currentTarget)}
-                  className="flex min-h-11 items-center justify-between gap-3 rounded-[0.7rem] border border-proof-cyan/25 bg-proof-cyan/5 px-3 py-2 text-left text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
+                  asChild
+                  onClick={(event) =>
+                    registerEvidenceTrigger(event.currentTarget)
+                  }
                 >
-                  <span>
-                    {meta.short}: {constraint.evidenceArtifact}
-                  </span>
-                  <span aria-hidden="true">-&gt;</span>
-                </button>
+                  <button
+                    type="button"
+                    className="flex min-h-11 items-center justify-between gap-3 rounded-[0.7rem] border border-proof-cyan/25 bg-proof-cyan/5 px-3 py-2 text-left text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
+                  >
+                    <span>
+                      {meta.short}: {constraint.evidenceArtifact}
+                    </span>
+                    <span aria-hidden="true">-&gt;</span>
+                  </button>
+                </SheetTrigger>
               ))}
           </div>
         </aside>
@@ -442,7 +455,10 @@ export function DispatchEnvelopeVisual({
         scenarioId={activeScenario.id}
       />
 
-      <DispatchProofTrace scenario={activeScenario} onOpenEvidence={openEvidence} />
+      <DispatchProofTrace
+        onEvidenceTrigger={registerEvidenceTrigger}
+        scenario={activeScenario}
+      />
 
       <footer className="flex flex-wrap items-center justify-between gap-4 border-t border-border/70 px-4 py-5 sm:px-6">
         <div className="flex flex-wrap items-center gap-3">
@@ -494,16 +510,17 @@ export function DispatchEnvelopeVisual({
         />
       ) : null}
 
-      <DispatchEvidenceDrawer
+      </section>
+
+      <DispatchEvidenceDrawerContent
         artifacts={artifacts}
         onCopyProofRoot={copyProofRoot}
-        onOpenChange={setEvidenceOpen}
-        onShowTable={() => setTableExpanded(true)}
-        open={proofOpen}
+        onRestoreFocus={restoreEvidenceTrigger}
+        onShowTable={showEvidenceTable}
         record={evidenceRecord}
         scenario={activeScenario}
       />
-    </section>
+    </Sheet>
   )
 }
 
@@ -581,14 +598,14 @@ function MobileMetric({
 }
 
 function DispatchPrimaryActions({
+  onEvidenceTrigger,
   onReplay,
-  onOpenProof,
 }: {
+  onEvidenceTrigger: (trigger: HTMLElement) => void
   onReplay: () => void
-  onOpenProof: (trigger: HTMLElement) => void
 }) {
   return (
-    <div className="grid grid-cols-2 gap-2 border-b border-border/70 p-4 sm:flex sm:flex-wrap sm:gap-3 sm:px-6 lg:absolute lg:top-5 lg:right-6 lg:z-10 lg:border-0 lg:p-0">
+    <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-end sm:gap-3">
       <Button
         type="button"
         variant="outline"
@@ -600,17 +617,21 @@ function DispatchPrimaryActions({
         <span className="sm:hidden">Replay</span>
         <span className="hidden sm:inline">Replay trace</span>
       </Button>
-      <Button
-        type="button"
-        variant="outline"
-        className="min-h-11 w-full border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan sm:w-auto"
-        onClick={(event) => onOpenProof(event.currentTarget)}
-        data-testid="dispatch-proof-button"
+      <SheetTrigger
+        asChild
+        onClick={(event) => onEvidenceTrigger(event.currentTarget)}
       >
-        <EyeIcon />
-        <span className="sm:hidden">Proof</span>
-        <span className="hidden sm:inline">Inspect proof</span>
-      </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="min-h-11 w-full border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan sm:w-auto"
+          data-testid="dispatch-proof-button"
+        >
+          <EyeIcon />
+          <span className="sm:hidden">Proof</span>
+          <span className="hidden sm:inline">Inspect proof</span>
+        </Button>
+      </SheetTrigger>
     </div>
   )
 }
