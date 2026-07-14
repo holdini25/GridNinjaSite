@@ -10,7 +10,6 @@ import { DispatchProofTrace } from "@/components/marketing/dispatch-envelope/dis
 import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { LoadPassportPreview } from "@/components/marketing/load-passport-preview"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
-import { Sheet } from "@/components/ui/sheet"
 import { dispatchScenarios } from "@/content/copy/dispatch-envelope"
 import {
   artifactFiles,
@@ -343,12 +342,12 @@ describe("proof-seal presentation semantics", () => {
       )!
 
       render(
-        <Sheet>
-          <DispatchProofTrace
-            scenario={scenario}
-            onEvidenceTrigger={vi.fn()}
-          />
-        </Sheet>
+        <DispatchProofTrace
+          drawerId="dispatch-evidence-drawer"
+          evidenceOpen={false}
+          scenario={scenario}
+          onOpenEvidence={vi.fn()}
+        />
       )
 
       expect(screen.getByText(GRIDNINJA_PROOF_SEAL_LABEL)).toBeVisible()
@@ -361,12 +360,12 @@ describe("proof-seal presentation semantics", () => {
     )!
 
     render(
-      <Sheet>
-        <DispatchProofTrace
-          scenario={scenario}
-          onEvidenceTrigger={vi.fn()}
-        />
-      </Sheet>
+      <DispatchProofTrace
+        drawerId="dispatch-evidence-drawer"
+        evidenceOpen={false}
+        scenario={scenario}
+        onOpenEvidence={vi.fn()}
+      />
     )
 
     expect(

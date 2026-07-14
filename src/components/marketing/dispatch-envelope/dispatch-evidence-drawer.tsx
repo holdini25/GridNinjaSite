@@ -18,6 +18,7 @@ import {
 
 export function DispatchEvidenceDrawerContent({
   artifacts,
+  drawerId,
   onCopyProofRoot,
   onRestoreFocus,
   onShowTable,
@@ -25,6 +26,7 @@ export function DispatchEvidenceDrawerContent({
   scenario,
 }: {
   artifacts: string[]
+  drawerId: string
   onCopyProofRoot: () => void
   onRestoreFocus: () => void
   onShowTable: () => void
@@ -52,6 +54,7 @@ export function DispatchEvidenceDrawerContent({
 
   return (
     <SheetContent
+      id={drawerId}
       side="right"
       className="w-[min(92vw,40rem)] border-border/80 bg-surface p-0 sm:max-w-xl max-sm:inset-x-0 max-sm:top-auto max-sm:bottom-0 max-sm:h-[88dvh] max-sm:w-full max-sm:max-w-none max-sm:rounded-t-[1.1rem] max-sm:border-t max-sm:border-l-0"
       data-testid="dispatch-evidence-drawer"

@@ -26,7 +26,7 @@ import {
   type DispatchDecision,
 } from "@/content/copy/dispatch-envelope"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet } from "@/components/ui/sheet"
 import { buildEnvelopeSamples } from "@/lib/dispatch-envelope/normalize"
 import { sanitizeDispatchExportFilename, serializeDispatchEnvelopeExport } from "@/lib/dispatch-envelope/export"
 import { cn } from "@/lib/utils"
@@ -43,6 +43,8 @@ import {
   useDispatchEnvelopeState,
 } from "./use-dispatch-envelope-state"
 
+const DISPATCH_EVIDENCE_DRAWER_ID = "dispatch-evidence-drawer"
+
 export function DispatchEnvelopeVisual({
   initialScenarioId,
 }: {
@@ -55,8 +57,8 @@ export function DispatchEnvelopeVisual({
     hideLens,
     lens,
     mode,
+    openEvidence,
     proofOpen,
-    registerEvidenceTrigger,
     replayKey,
     replayTrace,
     recordJsonExport,
@@ -213,7 +215,9 @@ export function DispatchEnvelopeVisual({
             </h2>
           </div>
           <DispatchPrimaryActions
-            onEvidenceTrigger={registerEvidenceTrigger}
+            drawerId={DISPATCH_EVIDENCE_DRAWER_ID}
+            evidenceOpen={proofOpen}
+            onOpenEvidence={openEvidence}
             onReplay={replayTrace}
           />
         </div>
@@ -428,23 +432,20 @@ export function DispatchEnvelopeVisual({
             {orderedConstraints
               .filter(({ constraint }) => isBindingStatus(constraint.state))
               .map(({ id, constraint, meta }) => (
-                <SheetTrigger
+                <button
                   key={`${id}-${constraint.evidenceArtifact}`}
-                  asChild
-                  onClick={(event) =>
-                    registerEvidenceTrigger(event.currentTarget)
-                  }
+                  type="button"
+                  aria-haspopup="dialog"
+                  aria-expanded={proofOpen}
+                  aria-controls={DISPATCH_EVIDENCE_DRAWER_ID}
+                  onClick={(event) => openEvidence(event.currentTarget)}
+                  className="flex min-h-11 items-center justify-between gap-3 rounded-[0.7rem] border border-proof-cyan/25 bg-proof-cyan/5 px-3 py-2 text-left text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
                 >
-                  <button
-                    type="button"
-                    className="flex min-h-11 items-center justify-between gap-3 rounded-[0.7rem] border border-proof-cyan/25 bg-proof-cyan/5 px-3 py-2 text-left text-xs text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/45"
-                  >
-                    <span>
-                      {meta.short}: {constraint.evidenceArtifact}
-                    </span>
-                    <span aria-hidden="true">-&gt;</span>
-                  </button>
-                </SheetTrigger>
+                  <span>
+                    {meta.short}: {constraint.evidenceArtifact}
+                  </span>
+                  <span aria-hidden="true">-&gt;</span>
+                </button>
               ))}
           </div>
         </aside>
@@ -456,7 +457,9 @@ export function DispatchEnvelopeVisual({
       />
 
       <DispatchProofTrace
-        onEvidenceTrigger={registerEvidenceTrigger}
+        drawerId={DISPATCH_EVIDENCE_DRAWER_ID}
+        evidenceOpen={proofOpen}
+        onOpenEvidence={openEvidence}
         scenario={activeScenario}
       />
 
@@ -514,6 +517,7 @@ export function DispatchEnvelopeVisual({
 
       <DispatchEvidenceDrawerContent
         artifacts={artifacts}
+        drawerId={DISPATCH_EVIDENCE_DRAWER_ID}
         onCopyProofRoot={copyProofRoot}
         onRestoreFocus={restoreEvidenceTrigger}
         onShowTable={showEvidenceTable}
@@ -598,10 +602,14 @@ function MobileMetric({
 }
 
 function DispatchPrimaryActions({
-  onEvidenceTrigger,
+  drawerId,
+  evidenceOpen,
+  onOpenEvidence,
   onReplay,
 }: {
-  onEvidenceTrigger: (trigger: HTMLElement) => void
+  drawerId: string
+  evidenceOpen: boolean
+  onOpenEvidence: (trigger: HTMLElement) => void
   onReplay: () => void
 }) {
   return (
@@ -617,21 +625,20 @@ function DispatchPrimaryActions({
         <span className="sm:hidden">Replay</span>
         <span className="hidden sm:inline">Replay trace</span>
       </Button>
-      <SheetTrigger
-        asChild
-        onClick={(event) => onEvidenceTrigger(event.currentTarget)}
+      <Button
+        type="button"
+        variant="outline"
+        className="min-h-11 w-full border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan sm:w-auto"
+        aria-haspopup="dialog"
+        aria-expanded={evidenceOpen}
+        aria-controls={drawerId}
+        onClick={(event) => onOpenEvidence(event.currentTarget)}
+        data-testid="dispatch-proof-button"
       >
-        <Button
-          type="button"
-          variant="outline"
-          className="min-h-11 w-full border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan sm:w-auto"
-          data-testid="dispatch-proof-button"
-        >
-          <EyeIcon />
-          <span className="sm:hidden">Proof</span>
-          <span className="hidden sm:inline">Inspect proof</span>
-        </Button>
-      </SheetTrigger>
+        <EyeIcon />
+        <span className="sm:hidden">Proof</span>
+        <span className="hidden sm:inline">Inspect proof</span>
+      </Button>
     </div>
   )
 }

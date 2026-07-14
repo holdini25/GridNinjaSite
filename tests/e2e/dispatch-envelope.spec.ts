@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises"
 import { expect, test, type Page } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
 
+import { centerLocatorInViewport } from "./support/viewport"
+
 const canonicalDomainIds = [
   "electrical",
   "storage",
@@ -56,6 +58,37 @@ async function getAcceptedRevealState(page: Page) {
       height: node.getAttribute("height"),
     }
   })
+}
+
+async function observeEvidenceDrawerOpens(page: Page) {
+  await page.evaluate(() => {
+    const trackedWindow = window as Window & {
+      __dispatchEvidenceDrawerOpenCount?: number
+    }
+
+    trackedWindow.__dispatchEvidenceDrawerOpenCount = 0
+    window.addEventListener("gridninja:dispatch-envelope", (event) => {
+      const detail = (event as CustomEvent<{ name?: string }>).detail
+
+      if (detail?.name === "dispatch_evidence_drawer_open") {
+        trackedWindow.__dispatchEvidenceDrawerOpenCount =
+          (trackedWindow.__dispatchEvidenceDrawerOpenCount ?? 0) + 1
+      }
+    })
+  })
+}
+
+async function expectEvidenceDrawerOpenCount(page: Page, expected: number) {
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          (window as Window & {
+            __dispatchEvidenceDrawerOpenCount?: number
+          }).__dispatchEvidenceDrawerOpenCount ?? 0
+      )
+    )
+    .toBe(expected)
 }
 
 test.describe("dispatch envelope page", () => {
@@ -350,6 +383,7 @@ test.describe("dispatch envelope page", () => {
     page,
   }) => {
     await page.goto("/platform/dispatch-envelope")
+    await observeEvidenceDrawerOpens(page)
 
     const proofButton = page.getByTestId("dispatch-proof-button")
     const proofRange = page.getByTestId("dispatch-proof-lens-range")
@@ -366,9 +400,13 @@ test.describe("dispatch envelope page", () => {
     await page.keyboard.press("Escape")
     await expect(page.getByTestId("dispatch-proof-lens-card")).toBeHidden()
 
-    await proofButton.click()
+    await proofButton.focus()
+    await expect(proofButton).toBeFocused()
+    await page.keyboard.press("Enter")
     const drawer = page.getByTestId("dispatch-evidence-drawer")
 
+    await expect(proofButton).toHaveAttribute("aria-expanded", "true")
+    await expectEvidenceDrawerOpenCount(page, 1)
     await expect(drawer).toBeVisible()
     await expect(drawer).toHaveAttribute("role", "dialog")
     await expect(drawer).toHaveAttribute("id", controlledDrawerId ?? "")
@@ -389,13 +427,35 @@ test.describe("dispatch envelope page", () => {
     await expect(drawer).toBeHidden()
     await expect(proofButton).toHaveAttribute("aria-expanded", "false")
     await expect(proofButton).toBeFocused()
+  })
+
+  test("opens evidence by pointer from each registered trigger", async ({
+    page,
+  }) => {
+    await page.goto("/platform/dispatch-envelope")
+    await observeEvidenceDrawerOpens(page)
+
+    const drawer = page.getByTestId("dispatch-evidence-drawer")
+    const proofButton = page.getByTestId("dispatch-proof-button")
+
+    await centerLocatorInViewport(proofButton)
+    await proofButton.click()
+    await expect(proofButton).toHaveAttribute("aria-expanded", "true")
+    await expectEvidenceDrawerOpenCount(page, 1)
+    await expect(drawer).toBeVisible()
+    await drawer.getByRole("button", { name: "Close" }).click()
+    await expect(drawer).toBeHidden()
+    await expect(proofButton).toBeFocused()
 
     const pinnedTrigger = page
       .getByTestId("dispatch-pinned-artifact")
-      .getByRole("button")
+      .locator("button")
       .first()
 
+    await centerLocatorInViewport(pinnedTrigger)
     await pinnedTrigger.click()
+    await expect(pinnedTrigger).toHaveAttribute("aria-expanded", "true")
+    await expectEvidenceDrawerOpenCount(page, 2)
     await expect(drawer).toBeVisible()
     await page.keyboard.press("Escape")
     await expect(drawer).toBeHidden()
@@ -403,11 +463,15 @@ test.describe("dispatch envelope page", () => {
 
     const traceTrigger = page.getByTestId("dispatch-proof-trace-proof-root")
 
+    await centerLocatorInViewport(traceTrigger)
     await traceTrigger.click()
+    await expect(traceTrigger).toHaveAttribute("aria-expanded", "true")
+    await expectEvidenceDrawerOpenCount(page, 3)
     await expect(drawer).toBeVisible()
-    await drawer.getByRole("button", { name: "Close" }).click()
+    await drawer.getByTestId("dispatch-drawer-view-table").click()
     await expect(drawer).toBeHidden()
     await expect(traceTrigger).toBeFocused()
+    await expect(page.getByTestId("dispatch-equivalent-table")).toBeVisible()
   })
 
   test("renders the equivalent table and exports deterministic evidence", async ({

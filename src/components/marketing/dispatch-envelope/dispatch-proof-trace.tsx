@@ -5,7 +5,6 @@ import type { MouseEvent } from "react"
 import { motion, useReducedMotion } from "motion/react"
 
 import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
-import { SheetTrigger } from "@/components/ui/sheet"
 import {
   getScenarioProofEligible,
   type DispatchScenario,
@@ -19,10 +18,14 @@ type ProofTraceStep = {
 }
 
 export function DispatchProofTrace({
-  onEvidenceTrigger,
+  drawerId,
+  evidenceOpen,
+  onOpenEvidence,
   scenario,
 }: {
-  onEvidenceTrigger: (trigger: HTMLElement) => void
+  drawerId: string
+  evidenceOpen: boolean
+  onOpenEvidence: (trigger: HTMLElement) => void
   scenario: DispatchScenario
 }) {
   const reduced = useReducedMotion()
@@ -34,7 +37,7 @@ export function DispatchProofTrace({
     : "no-proof"
 
   function handleOpen(event: MouseEvent<HTMLElement>) {
-    onEvidenceTrigger(event.currentTarget)
+    onOpenEvidence(event.currentTarget)
   }
 
   return (
@@ -70,26 +73,28 @@ export function DispatchProofTrace({
                 transition={{ delay: 0.16 + index * 0.08, duration: 0.58 }}
               />
             ) : null}
-            <SheetTrigger asChild onClick={handleOpen}>
-              <motion.button
-                type="button"
-                className="min-h-11 w-full rounded-[0.85rem] border border-proof-cyan/25 bg-proof-cyan/5 p-4 text-left transition-colors hover:border-proof-cyan/50 focus-visible:ring-3 focus-visible:ring-ring/45"
-                initial={reduced ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.08, duration: 0.24 }}
-                data-testid={`dispatch-proof-trace-${step.id}`}
-              >
-                <span className="font-mono text-[0.65rem] tracking-[0.16em] text-proof-cyan uppercase">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <strong className="mt-2 block text-sm text-foreground">
-                  {step.label}
-                </strong>
-                <span className="mt-2 block break-all font-mono text-xs text-muted-foreground">
-                  {step.value}
-                </span>
-              </motion.button>
-            </SheetTrigger>
+            <motion.button
+              type="button"
+              className="min-h-11 w-full rounded-[0.85rem] border border-proof-cyan/25 bg-proof-cyan/5 p-4 text-left transition-colors hover:border-proof-cyan/50 focus-visible:ring-3 focus-visible:ring-ring/45"
+              initial={reduced ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.08, duration: 0.24 }}
+              aria-haspopup="dialog"
+              aria-expanded={evidenceOpen}
+              aria-controls={drawerId}
+              onClick={handleOpen}
+              data-testid={`dispatch-proof-trace-${step.id}`}
+            >
+              <span className="font-mono text-[0.65rem] tracking-[0.16em] text-proof-cyan uppercase">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <strong className="mt-2 block text-sm text-foreground">
+                {step.label}
+              </strong>
+              <span className="mt-2 block break-all font-mono text-xs text-muted-foreground">
+                {step.value}
+              </span>
+            </motion.button>
           </li>
         ))}
       </ol>

@@ -1,6 +1,7 @@
 import { type Page } from "@playwright/test"
 
 import { expect, test } from "./support/client-health"
+import { centerLocatorInViewport } from "./support/viewport"
 
 type LeadPayload = Record<string, unknown> & {
   schemaVersion: 1
@@ -159,7 +160,23 @@ test.describe("lead form browser behavior", () => {
     await expect(constraint).toHaveAttribute("value", "interconnection delay")
     await expect(constraint).toHaveAttribute("id", /contact-constraint-/)
 
-    await page.getByRole("button", { name: "Start the conversation" }).click()
+    await expect(page.getByText("Security verification complete.")).toHaveRole(
+      "status"
+    )
+    const submit = page.getByRole("button", {
+      name: "Start the conversation",
+    })
+
+    await centerLocatorInViewport(submit)
+    await submit.click()
+    await expect(page.getByLabel("Name", { exact: true })).toHaveAttribute(
+      "aria-invalid",
+      "true"
+    )
+    await expect(page.getByLabel("Name", { exact: true })).toHaveAttribute(
+      "aria-describedby",
+      "contact-name-error"
+    )
     await expect(page.getByText("Enter your name.", { exact: true })).toHaveRole(
       "alert"
     )
@@ -169,10 +186,6 @@ test.describe("lead form browser behavior", () => {
     await expect(
       page.getByText("Select at least one current constraint.", { exact: true })
     ).toHaveRole("alert")
-    await expect(page.getByLabel("Name", { exact: true })).toHaveAttribute(
-      "aria-describedby",
-      "contact-name-error"
-    )
   })
 
   test("submits current DOM values even when autofill emits no input events", async ({

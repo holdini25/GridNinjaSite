@@ -65,6 +65,7 @@ export function useDispatchEnvelopeState({
     visible: false,
     pinned: false,
   })
+  const proofOpenRef = useRef(false)
   const evidenceTriggerRef = useRef<HTMLElement | null>(null)
   const viewedRef = useRef(false)
 
@@ -193,15 +194,12 @@ export function useDispatchEnvelopeState({
     }
   }
 
-  function registerEvidenceTrigger(trigger: HTMLElement) {
-    evidenceTriggerRef.current = trigger
-  }
-
   function setEvidenceOpen(open: boolean) {
-    if (open === proofOpen) {
+    if (open === proofOpenRef.current) {
       return
     }
 
+    proofOpenRef.current = open
     setProofOpen(open)
 
     if (open) {
@@ -210,6 +208,15 @@ export function useDispatchEnvelopeState({
         ...eventContext(),
       })
     }
+  }
+
+  function openEvidence(trigger: HTMLElement) {
+    if (proofOpenRef.current) {
+      return
+    }
+
+    evidenceTriggerRef.current = trigger
+    setEvidenceOpen(true)
   }
 
   function restoreEvidenceTrigger() {
@@ -242,7 +249,7 @@ export function useDispatchEnvelopeState({
     tableExpanded,
     copyProofRoot,
     hideLens,
-    registerEvidenceTrigger,
+    openEvidence,
     replayTrace,
     recordJsonExport,
     restoreEvidenceTrigger,
