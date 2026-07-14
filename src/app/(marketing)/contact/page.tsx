@@ -6,6 +6,7 @@ import { Hero } from "@/components/marketing/hero"
 import { ProofLoadingSteps } from "@/components/marketing/proof-loading-steps"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { contactHero } from "@/content/copy/contact"
 import { ladderSteps } from "@/content/copy/proof"
 import { proofLoadingSteps } from "@/content/proof-artifacts"
@@ -60,6 +61,7 @@ export default async function ContactPage({
 
   return (
     <div className="space-y-24 pb-24">
+      <SeoPageJsonLd path="/contact" />
       <Hero
         eyebrow={contactHero.eyebrow}
         headline={contactHero.headline}

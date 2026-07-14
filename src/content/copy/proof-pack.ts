@@ -31,10 +31,10 @@ export const proofPackPreview = [
 ]
 
 export const proofPackSampleLog = [
-  { label: "14:05:12", value: "REPAIR Cluster cap reduced 4%" },
+  { label: "14:05:12", value: "REPAIR Cluster cap reduced 4%", claimId: "proof-pack-repair-log" },
   { label: "Reason", value: "PCC margin projected below threshold" },
   { label: "Constraint", value: "Feeder thermal envelope" },
-  { label: "Margin", value: "+3.2%" },
+  { label: "Margin", value: "+3.2%", claimId: "proof-pack-margin-log" },
   { label: "SLA impact", value: "None predicted" },
   { label: "Proof posture", value: "Accepted after repair, not autonomous approval" },
 ]

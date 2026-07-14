@@ -4,6 +4,8 @@ type GridNinjaOgCardProps = {
   description: string
   host: string
   emblemSrc: string
+  headline?: string
+  eyebrow?: string
 }
 
 const proofPills = [
@@ -26,6 +28,8 @@ export function GridNinjaOgCard({
   description,
   host,
   emblemSrc,
+  headline = "Unlock virtual capacity for AI data centers",
+  eyebrow = "Proof-backed virtual capacity",
 }: GridNinjaOgCardProps) {
   return (
     <div style={styles.root}>
@@ -36,7 +40,7 @@ export function GridNinjaOgCard({
       <div style={styles.content}>
         <div style={styles.copyColumn}>
           <div style={styles.copyStack}>
-            <div style={styles.eyebrow}>Proof-backed virtual capacity</div>
+            <div style={styles.eyebrow}>{eyebrow}</div>
             <div style={styles.brandLockup}>
               {/* The image is supplied as a local data URL by the metadata route. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -54,7 +58,7 @@ export function GridNinjaOgCard({
             </div>
             <div style={styles.titleGroup}>
               <div style={styles.headline}>
-                Unlock virtual capacity for AI data centers
+                {headline}
               </div>
               <div style={styles.description}>{description}</div>
             </div>

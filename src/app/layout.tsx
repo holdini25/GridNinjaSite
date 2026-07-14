@@ -1,15 +1,30 @@
 import type { Metadata, Viewport } from "next"
 
-import { siteConfig, websiteStructuredData } from "@/content/site"
+import { VercelObservability } from "@/components/analytics/vercel-observability"
+import { siteConfig } from "@/content/site"
 import { openGraphImage, twitterImage } from "@/lib/seo"
+import { isPreviewDeployment, PRODUCTION_ORIGIN } from "@/seo/policy"
 
 import "./globals.css"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(PRODUCTION_ORIGIN),
   applicationName: siteConfig.name,
   title: siteConfig.title,
   description: siteConfig.description,
+  robots: isPreviewDeployment()
+    ? { index: false, follow: false, noarchive: true }
+    : {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+          "max-video-preview": -1,
+        },
+      },
   icons: {
     icon: [
       {
@@ -60,20 +75,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <script
-          id="gridninja-website-schema"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteStructuredData).replace(
-              /</g,
-              "\\u003c"
-            ),
-          }}
-        />
-      </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
+        {process.env.VERCEL === "1" ? <VercelObservability /> : null}
       </body>
     </html>
   )

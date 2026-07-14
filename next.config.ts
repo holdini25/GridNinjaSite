@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-import { canonicalSiteUrl } from "./src/content/site";
+import { PRODUCTION_ORIGIN } from "./src/seo/policy";
 
 const securityHeaders = [
   {
@@ -25,6 +25,13 @@ const securityHeaders = [
   },
 ];
 
+const noindexHeaders = [
+  {
+    key: "X-Robots-Tag",
+    value: "noindex, nofollow, noarchive",
+  },
+];
+
 const nextConfig: NextConfig = {
   async redirects() {
     return [
@@ -33,10 +40,10 @@ const nextConfig: NextConfig = {
         has: [
           {
             type: "host",
-            value: "gridninja.ai",
+            value: "www.gridninja.ai",
           },
         ],
-        destination: `${new URL(canonicalSiteUrl).origin}/:path*`,
+        destination: `${PRODUCTION_ORIGIN}/:path*`,
         permanent: true,
       },
     ];
@@ -46,6 +53,37 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: securityHeaders,
+      },
+      ...(process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production"
+        ? [
+            {
+              source: "/(.*)",
+              headers: noindexHeaders,
+            },
+          ]
+        : []),
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host" as const,
+            value: "(?<vercelAlias>.+\\.vercel\\.app)",
+          },
+        ],
+        headers: noindexHeaders,
+      },
+      {
+        source: "/evidence/releases/:path*",
+        headers: [
+          {
+            key: "X-Robots-Tag",
+            value: "noindex, follow, noarchive",
+          },
+          {
+            key: "Link",
+            value: `<${PRODUCTION_ORIGIN}/evidence>; rel=\"canonical\"`,
+          },
+        ],
       },
     ];
   },

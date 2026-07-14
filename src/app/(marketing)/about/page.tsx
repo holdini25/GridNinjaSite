@@ -8,6 +8,7 @@ import { Hero } from "@/components/marketing/hero"
 import { OutcomePillars } from "@/components/marketing/outcome-pillars"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import {
   aboutClosingCta,
   aboutBrandAnatomy,
@@ -32,6 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function AboutPage() {
   return (
     <div className="space-y-14 pb-14 sm:space-y-16 sm:pb-16">
+      <SeoPageJsonLd path="/about" />
       <Hero
         eyebrow={aboutHero.eyebrow}
         headline={aboutHero.headline}

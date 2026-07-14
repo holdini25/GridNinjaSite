@@ -6,6 +6,8 @@ import { TopologyMap } from "@/components/diagrams/topology-map"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import {
   bridgePowerFinalCta,
@@ -30,6 +32,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function BridgePowerPage() {
   return (
     <div className="space-y-14 pb-14 sm:space-y-16 sm:pb-16">
+      <SeoPageJsonLd path="/solutions/bridge-power" />
+      <SeoBreadcrumbs path="/solutions/bridge-power" />
       <Hero
         eyebrow={bridgePowerHero.eyebrow}
         headline={bridgePowerHero.headline}

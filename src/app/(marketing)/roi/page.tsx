@@ -3,14 +3,18 @@ import type { Metadata } from "next"
 import { CapacityAuditForm } from "@/components/forms/capacity-audit-form"
 import { AnimatedMw } from "@/components/marketing/animated-mw"
 import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
+import {
+  DeferredLoadPassportHD,
+  DeferredRtaDecisionTheater,
+} from "@/components/marketing/deferred-proof-visuals"
 import { Hero } from "@/components/marketing/hero"
-import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { NoProofRegister } from "@/components/marketing/no-proof-register"
 import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
 import { ProofComparisonSlider } from "@/components/marketing/proof-comparison-slider"
-import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { PublicClaimCaveat, PublicClaimValue } from "@/components/seo/public-claim"
 import { roiOutputs, roiAssumptions } from "@/content/roi-assumptions"
 import { roiArchetypes, roiDeliverables, roiHero } from "@/content/copy/roi"
 import {
@@ -33,6 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RoiPage() {
   return (
     <div className="space-y-24 pb-24">
+      <SeoPageJsonLd path="/roi" />
       <Hero
         eyebrow={roiHero.eyebrow}
         headline={roiHero.headline}
@@ -69,7 +74,7 @@ export default function RoiPage() {
       </SectionShell>
 
       <SectionShell>
-        <LoadPassportHD />
+        <DeferredLoadPassportHD />
       </SectionShell>
 
       <SectionShell>
@@ -103,18 +108,26 @@ export default function RoiPage() {
                       {output.label}
                     </p>
                     {typeof output.numericValue === "number" ? (
-                      <AnimatedMw
-                        value={output.numericValue}
-                        className="mt-4 block font-mono text-3xl text-foreground"
-                      />
+                      <div data-nosnippet data-claim-id={output.claimId}>
+                        <AnimatedMw
+                          value={output.numericValue}
+                          className="mt-4 block font-mono text-3xl text-foreground"
+                        />
+                      </div>
                     ) : (
                       <p className="mt-4 font-mono text-3xl text-foreground">
-                        {output.value}
+                        <PublicClaimValue claimId={output.claimId} value={output.value} />
                       </p>
                     )}
                     <p className="mt-4 text-base leading-8 text-muted-foreground">
                       {output.body}
                     </p>
+                    {typeof output.numericValue === "number" ? (
+                      <PublicClaimCaveat
+                        claimId={output.claimId}
+                        className="mt-3 block text-xs leading-5 text-muted-foreground"
+                      />
+                    ) : null}
                   </div>
                 ))}
               </div>
@@ -136,7 +149,7 @@ export default function RoiPage() {
             </div>
 
             <div className="min-w-0 space-y-6">
-              <RtaDecisionTheater compact />
+              <DeferredRtaDecisionTheater compact />
               <CapacityAuditForm
                 intent="capacity-audit"
                 source="roi-page"

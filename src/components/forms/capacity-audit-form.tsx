@@ -13,6 +13,7 @@ import {
 } from "@/components/forms/turnstile-field"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { trackGridNinjaEvent } from "@/lib/analytics"
 
 type CapacityAuditFormProps = {
   intent: "capacity-audit" | "shadow-mode" | "sellable-capacity" | "partnership"
@@ -93,6 +94,11 @@ export function CapacityAuditForm({
       }
 
       setSubmissionId(payload.submissionId)
+      trackGridNinjaEvent("capacity_audit_request_success", {
+        source,
+        intent,
+        success: true,
+      })
     } catch {
       setServerMessage("Unable to submit the request.")
       turnstileRef.current?.reset()

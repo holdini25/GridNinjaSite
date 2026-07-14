@@ -84,8 +84,11 @@ Run these checks before considering substantial UI work complete:
 
 ```bash
 npm run lint
-npm exec tsc -- --noEmit
+npm run typecheck
+npm run seo:validate
 npm run build
+npm run test:seo
+npm run lighthouse
 ```
 
 The repository includes dedicated typecheck, unit, integration, and browser-test
@@ -105,6 +108,13 @@ scripts. The integration suite requires a disposable PostgreSQL database.
 - `/roi`
 - `/about`
 - `/contact`
+- `/insights` and publication-gated technical explainers
+- `/evidence` and versioned public evidence releases
+- `/methodology` for claims, comparisons, corrections, and Capacity Audit methods
+
+Search-facing identity, route, query, claim, and schema contracts live in
+`src/seo`. See `docs/seo-release-runbook.md` for Vercel domain, webmaster-tool,
+evidence publication, observation, and waiver controls.
 
 ## Copy And Product Rules
 

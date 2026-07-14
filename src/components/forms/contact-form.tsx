@@ -21,6 +21,10 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import {
+  trackGridNinjaEvent,
+  type AnalyticsEventName,
+} from "@/lib/analytics"
 
 type ContactFormProps = {
   intent: LeadIntent
@@ -126,6 +130,10 @@ export function ContactForm({ intent, source }: ContactFormProps) {
       }
 
       setSubmissionId(payload.submissionId)
+      trackGridNinjaEvent(contactSuccessEventName(intent), {
+        intent,
+        success: true,
+      })
     } catch {
       setServerMessage("Unable to submit the request.")
       turnstileRef.current?.reset()
@@ -455,4 +463,16 @@ export function ContactForm({ intent, source }: ContactFormProps) {
       </div>
     </form>
   )
+}
+
+function contactSuccessEventName(intent: LeadIntent): AnalyticsEventName {
+  if (intent === "capacity-audit") {
+    return "capacity_audit_request_success"
+  }
+
+  if (intent === "partnership") {
+    return "partner_inquiry_success"
+  }
+
+  return "contact_submit_success"
 }

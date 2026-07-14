@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gridninja.ai/evidence/releases/v1.0.0/load-passport.schema.json",
+  "title": "GridNinja Load Passport",
+  "description": "Publication-gated, sanitized workload-to-capacity contract schema candidate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "passportId",
+    "workloadClass",
+    "requestedMw",
+    "durationMinutes",
+    "slaClass",
+    "permittedActions",
+    "recoveryDeadlineMinutes",
+    "policyVersion"
+  ],
+  "properties": {
+    "passportId": { "type": "string", "pattern": "^synthetic-" },
+    "workloadClass": { "enum": ["training", "inference", "batch", "mixed"] },
+    "requestedMw": { "type": "number", "minimum": 0 },
+    "durationMinutes": { "type": "integer", "minimum": 1 },
+    "slaClass": { "type": "string", "minLength": 1 },
+    "permittedActions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "enum": ["timing-shift", "placement-shift", "rate-limit", "no-interruption"] }
+    },
+    "recoveryDeadlineMinutes": { "type": "integer", "minimum": 0 },
+    "policyVersion": { "type": "string", "pattern": "^synthetic-" }
+  }
+}

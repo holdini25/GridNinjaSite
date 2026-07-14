@@ -322,7 +322,7 @@ describe("GridNinja browser and social derivatives", () => {
     }
   )
 
-  it("contains exactly 16, 32, and 48px favicon entries under 32KB", async () => {
+  it("uses the proof core only for the 16px favicon entry", async () => {
     const favicon = await readFile(resolve(process.cwd(), "public/favicon.ico"))
     const count = favicon.readUInt16LE(4)
     const entries = Array.from({ length: count }, (_, index) => {
@@ -333,6 +333,16 @@ describe("GridNinja browser and social derivatives", () => {
       const pixelOffset = imageOffset + favicon.readUInt32LE(imageOffset)
       const alphaAt = (x: number, y: number) =>
         favicon[pixelOffset + (y * width + x) * 4 + 3]
+      const pixels = Array.from({ length: width * height }, (_, pixelIndex) => {
+        const pixelDataOffset = pixelOffset + pixelIndex * 4
+
+        return {
+          alpha: favicon[pixelDataOffset + 3],
+          blue: favicon[pixelDataOffset],
+          green: favicon[pixelDataOffset + 1],
+          red: favicon[pixelDataOffset + 2],
+        }
+      })
 
       return {
         size: [width, height],
@@ -343,6 +353,10 @@ describe("GridNinja browser and social derivatives", () => {
           alphaAt(width - 1, height - 1),
         ],
         center: alphaAt(Math.floor(width / 2), Math.floor(height / 2)),
+        containsWhiteArtwork: pixels.some(
+          ({ alpha, blue, green, red }) =>
+            alpha > 128 && red > 200 && green > 200 && blue > 200
+        ),
       }
     })
 
@@ -357,6 +371,11 @@ describe("GridNinja browser and social derivatives", () => {
       true
     )
     expect(entries.every((entry) => entry.center === 255)).toBe(true)
+    expect(entries.map((entry) => entry.containsWhiteArtwork)).toEqual([
+      false,
+      true,
+      true,
+    ])
     expect(favicon.length).toBeLessThanOrEqual(32 * 1024)
   })
 

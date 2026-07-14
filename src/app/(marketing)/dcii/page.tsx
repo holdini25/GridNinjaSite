@@ -11,6 +11,7 @@ import { ProofComparisonSlider } from "@/components/marketing/proof-comparison-s
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import {
   dciiBenefits,
   dciiCategoryFit,
@@ -47,6 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function DciiPage() {
   return (
     <div className="space-y-24 pb-24">
+      <SeoPageJsonLd path="/dcii" />
       <Hero
         eyebrow={dciiHero.eyebrow}
         headline={dciiHero.headline}

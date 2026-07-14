@@ -30,6 +30,15 @@ export const navItems: NavItem[] = [
     href: "/proof",
   },
   {
+    label: "Resources",
+    href: "/insights",
+    children: [
+      { label: "Insights", href: "/insights" },
+      { label: "Evidence", href: "/evidence" },
+      { label: "Methodology", href: "/methodology" },
+    ],
+  },
+  {
     label: "Why GridNinja",
     href: "/why-gridninja",
   },
@@ -58,6 +67,9 @@ export const footerGroups = [
       { label: "Proof Before Autonomy", href: "/proof" },
       { label: "Proof Pack", href: "/proof/proof-pack" },
       { label: "Proof Demo", href: "/demo" },
+      { label: "Insights", href: "/insights" },
+      { label: "Evidence", href: "/evidence" },
+      { label: "Methodology", href: "/methodology" },
       { label: "DCII Project", href: "/dcii" },
       { label: "ROI / Capacity Audit", href: "/roi" },
       { label: "About", href: "/about" },

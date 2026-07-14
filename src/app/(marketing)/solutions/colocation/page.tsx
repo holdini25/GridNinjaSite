@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 
 import { SolutionPageTemplate } from "@/components/marketing/solution-page-template"
+import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { solutionPages } from "@/content/copy/solutions"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -14,5 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ColocationPage() {
-  return <SolutionPageTemplate config={solutionPages.colocation} />
+  return (
+    <>
+      <SeoPageJsonLd path="/solutions/colocation" />
+      <SeoBreadcrumbs path="/solutions/colocation" />
+      <SolutionPageTemplate config={solutionPages.colocation} />
+    </>
+  )
 }

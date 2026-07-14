@@ -1,0 +1,30 @@
+{
+  "benchmark": "Synthetic Virtual Capacity Proof Benchmark",
+  "version": "1.0.0-publication-candidate",
+  "environment": "synthetic",
+  "status": "publication-gated",
+  "illustrativeNotice": "Synthetic illustrative scenario—not a customer or production result.",
+  "method": "Negative cases are scored on expected decision, prohibited output, evidence completeness, and deterministic replay.",
+  "metrics": [
+    "expected-decision-match",
+    "prohibited-output-absence",
+    "required-evidence-completeness",
+    "identical-input-replay-equivalence"
+  ],
+  "caseFamilies": [
+    "stale-telemetry",
+    "topology-mismatch",
+    "reserve-floor",
+    "thermal-constraint",
+    "water-constraint",
+    "sla-and-rebound",
+    "connection-loss"
+  ],
+  "results": null,
+  "resultsNote": "No benchmark result is published until named ownership, reviewer approval, and evaluator-independence checks are complete.",
+  "knownLimits": [
+    "Synthetic fixtures do not establish facility performance.",
+    "Coverage completeness has not received independent review.",
+    "The benchmark does not certify safety or authorize field control."
+  ]
+}

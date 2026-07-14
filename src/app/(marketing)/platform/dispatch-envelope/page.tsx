@@ -4,6 +4,9 @@ import Link from "next/link"
 import { ArrowRightIcon, ShieldCheckIcon } from "lucide-react"
 
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
+import { PublicClaimValue } from "@/components/seo/public-claim"
 import { DispatchEnvelopeVisual } from "@/components/marketing/dispatch-envelope/dispatch-envelope-visual"
 import { CtaBand } from "@/components/marketing/cta-band"
 import { Hero } from "@/components/marketing/hero"
@@ -48,6 +51,8 @@ export default async function DispatchEnvelopePage({
 
   return (
     <div className="space-y-24 pb-24">
+      <SeoPageJsonLd path="/platform/dispatch-envelope" />
+      <SeoBreadcrumbs path="/platform/dispatch-envelope" />
       <Hero
         eyebrow={dispatchEnvelopeHero.eyebrow}
         headline={dispatchEnvelopeHero.headline}
@@ -103,7 +108,7 @@ export default async function DispatchEnvelopePage({
                 {card.label}
               </p>
               <p className="mt-3 font-mono text-[2.1rem] leading-none text-foreground">
-                {card.value}
+                <PublicClaimValue claimId={card.claimId} value={card.value} />
               </p>
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
                 {card.body}

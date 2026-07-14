@@ -1,0 +1,55 @@
+{
+  "release": "GridNinja Public Evidence",
+  "releaseId": "gridninja-public-evidence-1.0.0-candidate",
+  "version": "1.0.0-publication-candidate",
+  "releaseStatus": "publication-gated",
+  "createdAt": "2026-07-13",
+  "canonicalBase": "https://gridninja.ai/evidence/releases/v1.0.0/",
+  "classification": "public-synthetic",
+  "signature": {
+    "status": "unsigned",
+    "reason": "Approved signing identity, key custody, named technical ownership, and independent review are not yet supplied."
+  },
+  "artifacts": [
+    {
+      "file": "CHANGELOG.md",
+      "sha256": "b57389a66149670127de070dfbecef52e8652bd3005650b72314b15c03e25a8d"
+    },
+    {
+      "file": "README.md",
+      "sha256": "293553368e5e9d013dccf328237c97e1d0fc25f337a51b1004a8cd8025d889e7"
+    },
+    {
+      "file": "capacity-waterfall-methodology.json",
+      "sha256": "56da78403b31e55dc60575e56e9348139cae48939c2b059a46167d0410a52394"
+    },
+    {
+      "file": "dispatch-envelope.schema.json",
+      "sha256": "5119afb23b593a131f54e28d5f172ebd2fe4d708a3ccc9787e8593e404201882"
+    },
+    {
+      "file": "load-passport.schema.json",
+      "sha256": "3f29aa90b1246c24da41c52d86898e07cb96c68077b3054f3ed2c5839be753fb"
+    },
+    {
+      "file": "proof-pack.example.json",
+      "sha256": "d59d9568fe6c8629d0c9c83483d5710d1012ad0ab4b6ac64b86d5a12b5996966"
+    },
+    {
+      "file": "proof-pack.schema.json",
+      "sha256": "54501694c16d4a1bddd75df8c2f6a49de0129bf085869d8b4c43531556351c5c"
+    },
+    {
+      "file": "synthetic-virtual-capacity-benchmark.json",
+      "sha256": "de900fb0a06248563b07f20fcc06c70a7ddc2b558e63607942c4bd5cce85e20f"
+    },
+    {
+      "file": "validate-proof-pack.mjs",
+      "sha256": "1a7d9740019c9a077b5d734a7834f1c4be5be7b34e5a93b10fa744e14d460e85"
+    },
+    {
+      "file": "virtual-capacity-proof-test.json",
+      "sha256": "c23bb0aa34b7bc9e369cd243f95780874f35821f20faa9a48bf0139a5e44632c"
+    }
+  ]
+}

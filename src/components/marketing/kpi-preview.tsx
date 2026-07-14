@@ -1,4 +1,5 @@
 import { KpiLineChart } from "@/components/charts/kpi-line-chart"
+import { PublicClaimValue } from "@/components/seo/public-claim"
 import type { StatItem } from "@/types/site"
 
 export function KpiPreview({
@@ -31,7 +32,9 @@ export function KpiPreview({
                 {card.label}
               </p>
               <p className="mt-3 font-mono text-[1.9rem] text-foreground">
-                {card.value}
+                {card.value ? (
+                  <PublicClaimValue claimId={card.claimId} value={card.value} />
+                ) : null}
               </p>
               <p className="mt-3 text-base leading-8 text-muted-foreground">
                 {card.body}

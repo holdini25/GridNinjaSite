@@ -39,16 +39,19 @@ export const solutionPages: Record<"ai-cloud" | "colocation", SolutionPageConfig
         {
           label: "Illustrative billable GPU-hours",
           value: "+14.8%",
+          claimId: "ai-cloud-gpu-hours",
           body: "Sample output from reducing broad derates during constrained intervals.",
         },
         {
           label: "Illustrative earlier revenue",
           value: "$18.2M",
+          claimId: "ai-cloud-earlier-revenue",
           body: "Sample annualized value from earlier bridge-power operation.",
         },
         {
           label: "Illustrative avoided exposure",
           value: "$4.1M",
+          claimId: "ai-cloud-avoided-exposure",
           body: "Sample exposure evaluated through bounded coordination and runtime assurance.",
         },
       ],
@@ -92,16 +95,19 @@ export const solutionPages: Record<"ai-cloud" | "colocation", SolutionPageConfig
         {
           label: "Illustrative recovered capacity",
           value: "+9.4 MW",
+          claimId: "colocation-recovered-capacity",
           body: "Sample dynamic headroom separated from static buffers and fixed reserve posture.",
         },
         {
           label: "Illustrative uptime posture",
           value: "99.99%",
+          claimId: "colocation-uptime-posture",
           body: "Sample target posture with actions bounded by feeder, reserve, and thermal margins.",
         },
         {
           label: "Illustrative capacity value",
           value: "$5.2M",
+          claimId: "colocation-capacity-value",
           body: "Sample kW-month recovery across a constrained market footprint.",
         },
       ],

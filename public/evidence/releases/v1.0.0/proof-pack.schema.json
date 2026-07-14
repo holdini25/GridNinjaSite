@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gridninja.ai/evidence/releases/v1.0.0/proof-pack.schema.json",
+  "title": "GridNinja Public Proof Pack",
+  "description": "Publication-gated schema candidate for sanitized proof artifacts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "artifactId",
+    "classification",
+    "environment",
+    "illustrativeNotice",
+    "decisionTrace",
+    "acceptedHeadroomLedger",
+    "loadPassport",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "artifactId": { "type": "string", "pattern": "^synthetic-" },
+    "classification": { "const": "public-synthetic" },
+    "environment": { "const": "synthetic" },
+    "illustrativeNotice": {
+      "const": "Synthetic illustrative scenario—not a customer or production result."
+    },
+    "decisionTrace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestedMw", "acceptedMw", "decision", "bindingConstraint", "rollbackPosture"],
+      "properties": {
+        "requestedMw": { "type": "number", "minimum": 0 },
+        "acceptedMw": { "type": "number", "minimum": 0 },
+        "decision": { "enum": ["allow", "repair", "reject", "no-proof"] },
+        "bindingConstraint": { "type": "string", "minLength": 1 },
+        "rollbackPosture": { "type": "string", "minLength": 1 }
+      }
+    },
+    "acceptedHeadroomLedger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entryId", "acceptedMw", "validFrom", "validUntil", "evidenceRefs", "status"],
+      "properties": {
+        "entryId": { "type": "string", "pattern": "^synthetic-" },
+        "acceptedMw": { "type": "number", "minimum": 0 },
+        "validFrom": { "type": "string", "format": "date-time" },
+        "validUntil": { "type": "string", "format": "date-time" },
+        "evidenceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "status": { "enum": ["active", "expired", "corrected", "retracted"] }
+      }
+    },
+    "loadPassport": { "$ref": "./load-passport.schema.json" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdAt", "topologyVersion", "policyVersion", "telemetryClass"],
+      "properties": {
+        "createdAt": { "type": "string", "format": "date-time" },
+        "topologyVersion": { "type": "string", "pattern": "^synthetic-" },
+        "policyVersion": { "type": "string", "pattern": "^synthetic-" },
+        "telemetryClass": { "const": "generated-fixture" }
+      }
+    }
+  }
+}

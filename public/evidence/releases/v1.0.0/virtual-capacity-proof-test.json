@@ -1,0 +1,59 @@
+{
+  "protocol": "GridNinja Virtual Capacity Proof Test",
+  "version": "1.0.0-publication-candidate",
+  "environment": "synthetic",
+  "status": "publication-gated",
+  "illustrativeNotice": "Synthetic illustrative scenario—not a customer or production result.",
+  "authorityBoundary": "Fixtures define expected protocol behavior only and do not authorize control.",
+  "cases": [
+    {
+      "id": "stale-telemetry",
+      "condition": "A required telemetry input exceeds the declared freshness policy.",
+      "expectedDecision": "no-proof",
+      "requiredEvidence": ["input-version", "freshness-policy", "stale-input-reason"],
+      "mustNotEmit": ["active-accepted-headroom"]
+    },
+    {
+      "id": "topology-mismatch",
+      "condition": "The telemetry topology version differs from the evaluation topology.",
+      "expectedDecision": "no-proof",
+      "requiredEvidence": ["expected-topology-version", "observed-topology-version"],
+      "mustNotEmit": ["active-accepted-headroom"]
+    },
+    {
+      "id": "reserve-floor",
+      "condition": "The request would cross the synthetic reserve floor.",
+      "expectedDecision": "repair",
+      "requiredEvidence": ["original-request", "repaired-action", "binding-constraint", "rollback-posture"],
+      "mustNotEmit": ["unrepaired-request-as-accepted"]
+    },
+    {
+      "id": "thermal-limit",
+      "condition": "The forecast thermal margin is negative inside the requested window.",
+      "expectedDecision": "reject",
+      "requiredEvidence": ["thermal-constraint", "margin-class", "forecast-window"],
+      "mustNotEmit": ["active-accepted-headroom"]
+    },
+    {
+      "id": "water-constraint",
+      "condition": "A declared water operating constraint cannot be proven.",
+      "expectedDecision": "no-proof",
+      "requiredEvidence": ["water-constraint", "missing-evidence-reason"],
+      "mustNotEmit": ["active-accepted-headroom"]
+    },
+    {
+      "id": "sla-rebound-limit",
+      "condition": "Recovery would exceed the workload passport deadline.",
+      "expectedDecision": "reject",
+      "requiredEvidence": ["load-passport", "recovery-deadline", "forecast-recovery"],
+      "mustNotEmit": ["active-accepted-headroom"]
+    },
+    {
+      "id": "connection-loss",
+      "condition": "The evidence source disconnects before decision completion.",
+      "expectedDecision": "no-proof",
+      "requiredEvidence": ["connection-state", "last-known-good-timestamp", "safe-fallback"],
+      "mustNotEmit": ["active-accepted-headroom"]
+    }
+  ]
+}

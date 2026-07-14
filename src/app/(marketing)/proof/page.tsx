@@ -6,18 +6,21 @@ import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
 import { ConstraintBraid } from "@/components/marketing/constraint-braid"
 import { CtaBand } from "@/components/marketing/cta-band"
-import { FleetOSTimeTravelMap } from "@/components/marketing/fleetos-time-travel-map"
+import {
+  DeferredFleetOSTimeTravelMap,
+  DeferredLoadPassportHD,
+  DeferredRtaDecisionTheater,
+} from "@/components/marketing/deferred-proof-visuals"
 import { Hero } from "@/components/marketing/hero"
-import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { NoProofRegister } from "@/components/marketing/no-proof-register"
 import { ProofLog } from "@/components/marketing/proof-log"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { ProofChainTrail } from "@/components/marketing/proof-chain-trail"
 import { ProofReplayPanel } from "@/components/marketing/proof-replay-panel"
-import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import {
   cisoFaqs,
   ladderSteps,
@@ -29,7 +32,6 @@ import {
 import { proofPackDownloadHref } from "@/content/copy/proof-pack"
 import {
   constraintBraidDomains,
-  fleetSwarmSites,
   noProofGaps,
   proofArtifacts,
   proofChainStages,
@@ -59,6 +61,7 @@ export default function ProofPage() {
 
   return (
     <div className="space-y-24 pb-24">
+      <SeoPageJsonLd path="/proof" />
       <Hero
         eyebrow={proofHero.eyebrow}
         headline={proofHero.headline}
@@ -92,7 +95,7 @@ export default function ProofPage() {
       </SectionShell>
 
       <SectionShell>
-        <RtaDecisionTheater />
+        <DeferredRtaDecisionTheater />
       </SectionShell>
 
       <SectionShell>
@@ -104,7 +107,7 @@ export default function ProofPage() {
       </SectionShell>
 
       <SectionShell>
-        <LoadPassportHD />
+        <DeferredLoadPassportHD />
       </SectionShell>
 
       <SectionShell>
@@ -125,7 +128,7 @@ export default function ProofPage() {
             headline="A fleet panel can compare proof posture without approving actions"
             body="This view is read-only evidence aggregation. Local site policy, operator review, and runtime assurance remain the authority boundary."
           />
-          <FleetOSTimeTravelMap sites={fleetSwarmSites} />
+          <DeferredFleetOSTimeTravelMap />
         </div>
       </SectionShell>
 
@@ -240,7 +243,15 @@ export default function ProofPage() {
               variant="outline"
               className="border-border/80 bg-surface/60 text-foreground"
             >
-              <Link href={proofPackDownloadHref}>Download sample</Link>
+              <Link
+                href={proofPackDownloadHref}
+                data-analytics-event="proof_pack_download"
+                data-analytics-source="proof-page"
+                data-analytics-artifact="sample-proof-pack"
+                data-analytics-version="1.0"
+              >
+                Download sample
+              </Link>
             </Button>
           </div>
         </div>

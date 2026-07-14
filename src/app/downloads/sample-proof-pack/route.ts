@@ -52,6 +52,8 @@ export function GET() {
       "Content-Disposition":
         'attachment; filename="gridninja-sample-proof-pack.md"',
       "Cache-Control": "public, max-age=0, must-revalidate",
+      Link: '<https://gridninja.ai/proof/proof-pack>; rel="canonical"',
+      "X-Robots-Tag": "noindex, follow, noarchive",
     },
   })
 }

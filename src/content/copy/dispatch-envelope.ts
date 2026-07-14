@@ -68,16 +68,19 @@ export const dispatchEnvelopeOutcomeCards = [
   {
     label: "Requested envelope",
     value: "4.0 MW",
+    claimId: "dispatch-requested-envelope",
     body: "The operator or workload plan asks for a timed capacity maneuver.",
   },
   {
     label: "Accepted envelope",
     value: "2.8 MW",
+    claimId: "dispatch-accepted-envelope",
     body: "Runtime assurance repairs the request into the safe, usable envelope.",
   },
   {
     label: "Binding source",
     value: "UPS / BESS",
+    claimId: "dispatch-binding-source",
     body: "The evidence trail identifies the limiting domain instead of hiding it.",
   },
 ] as const

@@ -8,10 +8,10 @@ import nextConfig from "../../../next.config"
 
 describe("canonical host redirect", () => {
   it.each([
-    ["https://gridninja.ai/", "https://www.gridninja.ai/"],
+    ["https://www.gridninja.ai/", "https://gridninja.ai/"],
     [
-      "https://gridninja.ai/platform/dispatch-envelope?source=canonical-test",
       "https://www.gridninja.ai/platform/dispatch-envelope?source=canonical-test",
+      "https://gridninja.ai/platform/dispatch-envelope?source=canonical-test",
     ],
   ])("permanently redirects %s to %s", async (source, destination) => {
     const response = await unstable_getResponseFromNextConfig({
@@ -23,9 +23,9 @@ describe("canonical host redirect", () => {
     expect(getRedirectUrl(response)).toBe(destination)
   })
 
-  it("does not redirect the canonical www host", async () => {
+  it("does not redirect the canonical apex host", async () => {
     const response = await unstable_getResponseFromNextConfig({
-      url: "https://www.gridninja.ai/platform?source=canonical-test",
+      url: "https://gridninja.ai/platform?source=canonical-test",
       nextConfig,
     })
 

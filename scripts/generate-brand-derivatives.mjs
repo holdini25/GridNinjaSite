@@ -295,7 +295,7 @@ async function buildExpectedOutputs() {
   const faviconSource = await readFile(faviconSourcePath)
   const detailedText = detailed.toString("utf8")
   const proofCoreText = proofCore.toString("utf8")
-  const icon16 = await transparentLogoPng(faviconSource, 16)
+  const icon16 = await squarePng(proofCore, 16, 0.875)
   const icon32 = await transparentLogoPng(faviconSource, 32)
   const icon48 = await transparentLogoPng(faviconSource, 48)
   const icon180 = await exactSquarePng(faviconSource, 180)

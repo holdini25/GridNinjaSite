@@ -9,6 +9,7 @@ import { ProofStorySnap } from "@/components/marketing/proof-story-snap"
 import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { demoFinalCta, demoHero, demoScenario } from "@/content/copy/demo"
 import { fleetSwarmSites, proofStorySteps } from "@/content/proof-artifacts"
 import { buildLeadHref } from "@/lib/lead"
@@ -26,6 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function DemoPage() {
   return (
     <div className="space-y-24 pb-24">
+      <SeoPageJsonLd path="/demo" />
       <Hero
         eyebrow={demoHero.eyebrow}
         headline={demoHero.headline}

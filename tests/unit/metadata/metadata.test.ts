@@ -6,7 +6,6 @@ import sitemap from "@/app/sitemap"
 import {
   canonicalSiteUrl,
   siteConfig,
-  websiteStructuredData,
 } from "@/content/site"
 import {
   createPageMetadata,
@@ -14,24 +13,33 @@ import {
   socialImageAlt,
   twitterImage,
 } from "@/lib/seo"
+import { PRODUCTION_ORIGIN, SITE_IDENTITY } from "@/seo/policy"
+import { indexableSeoRoutes } from "@/seo/route-manifest"
+import { buildOrganizationSchema, buildWebsiteSchema } from "@/seo/schema"
 
 describe("public metadata", () => {
-  it("locks the public site identity to the canonical www origin", () => {
-    expect(canonicalSiteUrl).toBe("https://www.gridninja.ai/")
+  it("locks the public site identity to the immutable apex origin", () => {
+    expect(canonicalSiteUrl).toBe("https://gridninja.ai/")
+    expect(PRODUCTION_ORIGIN).toBe("https://gridninja.ai")
     expect(siteConfig).toMatchObject({
       name: "GridNinja",
       url: canonicalSiteUrl,
-      title: "Virtual Capacity Control Plane for AI Data Centers | GridNinja",
+      title: "AI Data Center Virtual Capacity Control Plane | GridNinja",
       description:
         "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure.",
     })
-    expect(websiteStructuredData).toEqual({
-      "@context": "https://schema.org",
+    expect(buildWebsiteSchema()).toEqual({
       "@type": "WebSite",
-      "@id": "https://www.gridninja.ai/#website",
+      "@id": "https://gridninja.ai/#website",
       url: canonicalSiteUrl,
       name: "GridNinja",
-      alternateName: ["GridNinja AI", "gridninja.ai"],
+      alternateName: "gridninja.ai",
+      publisher: { "@id": "https://gridninja.ai/#organization" },
+    })
+    expect(buildOrganizationSchema()).toMatchObject({
+      "@id": SITE_IDENTITY.organizationId,
+      name: "GridNinja",
+      logo: { url: "https://gridninja.ai/brand/social/gridninja-og-emblem.png" },
     })
   })
 
@@ -51,14 +59,14 @@ describe("public metadata", () => {
     })
 
     expect(pageMetadata.openGraph).toMatchObject({
-      title: "Capacity Audit",
-      url: new URL("https://www.gridninja.ai/roi"),
+      title: "AI Data Center Capacity Audit & ROI | GridNinja",
+      url: "https://gridninja.ai/roi",
       siteName: "GridNinja",
-      images: [openGraphImage],
+      images: [{ ...openGraphImage, url: "https://gridninja.ai/og/capacity-audit" }],
     })
     expect(pageMetadata.twitter).toMatchObject({
-      title: "Capacity Audit",
-      images: [twitterImage],
+      title: "AI Data Center Capacity Audit & ROI | GridNinja",
+      images: [{ ...twitterImage, url: "https://gridninja.ai/og/capacity-audit" }],
     })
     expect(openGraphImage).toEqual({
       url: "/opengraph-image",
@@ -69,26 +77,26 @@ describe("public metadata", () => {
     })
   })
 
-  it("can defer the homepage canonical and Open Graph URL to literal head resources", () => {
+  it("canonicalizes query-string states to the registered base route", () => {
     const pageMetadata = createPageMetadata({
       title: siteConfig.title,
       description: siteConfig.description,
-      path: "/",
-      includeCanonicalUrl: false,
+      path: "/contact?intent=capacity-audit",
     })
 
-    expect(pageMetadata.alternates).toBeUndefined()
-    expect(pageMetadata.openGraph).not.toHaveProperty("url")
+    expect(pageMetadata.alternates).toEqual({ canonical: "https://gridninja.ai/contact" })
+    expect(pageMetadata.openGraph).toHaveProperty("url", "https://gridninja.ai/contact")
   })
 
-  it("publishes only www URLs in robots and the sitemap", () => {
+  it("publishes only apex URLs in robots and the sitemap", () => {
     expect(robots()).toEqual({
       rules: {
         userAgent: "*",
         allow: "/",
-        disallow: "/api/",
+        disallow: ["/api/", "/internal/"],
       },
-      sitemap: "https://www.gridninja.ai/sitemap.xml",
+      sitemap: "https://gridninja.ai/sitemap.xml",
+      host: "https://gridninja.ai/",
     })
 
     const entries = sitemap()
@@ -96,6 +104,7 @@ describe("public metadata", () => {
     expect(entries.every((entry) => entry.url.startsWith(canonicalSiteUrl))).toBe(
       true
     )
+    expect(entries).toHaveLength(indexableSeoRoutes.length)
   })
 
   it("declares complete 1200 by 630 PNG descriptors for both cards", () => {

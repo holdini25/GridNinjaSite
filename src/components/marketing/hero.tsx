@@ -5,11 +5,23 @@ import Link from "next/link"
 import { SectionShell } from "@/components/layout/section-shell"
 import { ProofGridBackground } from "@/components/marketing/proof-grid-background"
 import { Button } from "@/components/ui/button"
+import type { AnalyticsEventName } from "@/lib/analytics"
 import type { SectionCopy } from "@/types/site"
 
+type HeroCta = {
+  label: string
+  href: string
+  eventName?: string
+  analyticsEvent?: AnalyticsEventName
+  analyticsSource?: string
+  analyticsIntent?: string
+  analyticsArtifact?: string
+  analyticsVersion?: string
+}
+
 type HeroProps = SectionCopy & {
-  primaryCta?: { label: string; href: string; eventName?: string }
-  secondaryCta?: { label: string; href: string; eventName?: string }
+  primaryCta?: HeroCta
+  secondaryCta?: HeroCta
   trustLine?: string
   visual?: ReactNode
   proofGrid?: boolean
@@ -39,10 +51,18 @@ export function Hero({
     : "mt-4 max-w-2xl text-base leading-7 text-muted-foreground sm:text-[1.14rem] sm:leading-8"
 
   return (
-    <section className="relative overflow-hidden border-b border-border/70 pb-6">
+    <div
+      role="region"
+      aria-label={eyebrow ?? "Page introduction"}
+      className="relative overflow-hidden border-b border-border/70 pb-6"
+    >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,159,26,0.12),transparent_34%),linear-gradient(180deg,rgba(19,32,43,0.34),transparent_74%)]" />
       {proofGrid ? <ProofGridBackground labels={proofGridLabels} /> : null}
-      <SectionShell className="relative" containerClassName={containerClassName}>
+      <SectionShell
+        className="relative"
+        containerClassName={containerClassName}
+        deferRendering={false}
+      >
         <div className={hasVisual ? "max-w-2xl" : "max-w-3xl"}>
           {eyebrow ? (
             <p className="mb-5 text-sm tracking-[0.28em] text-primary uppercase">
@@ -62,6 +82,11 @@ export function Hero({
                   <Link
                     href={primaryCta.href}
                     data-gn-event={primaryCta.eventName ?? "hero-primary-cta"}
+                    data-analytics-event={primaryCta.analyticsEvent}
+                    data-analytics-source={primaryCta.analyticsSource}
+                    data-analytics-intent={primaryCta.analyticsIntent}
+                    data-analytics-artifact={primaryCta.analyticsArtifact}
+                    data-analytics-version={primaryCta.analyticsVersion}
                   >
                     {primaryCta.label}
                   </Link>
@@ -77,6 +102,11 @@ export function Hero({
                   <Link
                     href={secondaryCta.href}
                     data-gn-event={secondaryCta.eventName ?? "hero-secondary-cta"}
+                    data-analytics-event={secondaryCta.analyticsEvent}
+                    data-analytics-source={secondaryCta.analyticsSource}
+                    data-analytics-intent={secondaryCta.analyticsIntent}
+                    data-analytics-artifact={secondaryCta.analyticsArtifact}
+                    data-analytics-version={secondaryCta.analyticsVersion}
                   >
                     {secondaryCta.label}
                   </Link>
@@ -92,6 +122,6 @@ export function Hero({
         </div>
         {visual ? <div className="lg:pl-4">{visual}</div> : null}
       </SectionShell>
-    </section>
+    </div>
   )
 }

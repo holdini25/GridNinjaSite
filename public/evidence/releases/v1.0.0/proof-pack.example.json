@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "artifactId": "synthetic-proof-pack-001",
+  "classification": "public-synthetic",
+  "environment": "synthetic",
+  "illustrativeNotice": "Synthetic illustrative scenario—not a customer or production result.",
+  "decisionTrace": {
+    "requestedMw": 4,
+    "acceptedMw": 2.5,
+    "decision": "repair",
+    "bindingConstraint": "synthetic-reserve-floor",
+    "rollbackPosture": "Return to synthetic baseline before the declared recovery deadline."
+  },
+  "acceptedHeadroomLedger": {
+    "entryId": "synthetic-ledger-001",
+    "acceptedMw": 2.5,
+    "validFrom": "2026-01-01T00:00:00Z",
+    "validUntil": "2026-01-01T00:15:00Z",
+    "evidenceRefs": ["synthetic-rta-trace-001", "synthetic-passport-001"],
+    "status": "expired"
+  },
+  "loadPassport": {
+    "passportId": "synthetic-passport-001",
+    "workloadClass": "training",
+    "requestedMw": 4,
+    "durationMinutes": 15,
+    "slaClass": "synthetic-protected",
+    "permittedActions": ["rate-limit", "no-interruption"],
+    "recoveryDeadlineMinutes": 30,
+    "policyVersion": "synthetic-policy-1"
+  },
+  "provenance": {
+    "createdAt": "2026-01-01T00:00:00Z",
+    "topologyVersion": "synthetic-topology-1",
+    "policyVersion": "synthetic-policy-1",
+    "telemetryClass": "generated-fixture"
+  }
+}

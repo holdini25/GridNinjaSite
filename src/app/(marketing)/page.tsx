@@ -5,19 +5,20 @@ import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
 import { ClaimToProofCards } from "@/components/marketing/claim-to-proof-cards"
 import { ComparisonGrid } from "@/components/marketing/comparison-grid"
 import { CtaBand } from "@/components/marketing/cta-band"
-import { DataCenterXrayHD } from "@/components/marketing/data-center-xray-hd"
-import { KpiPreview } from "@/components/marketing/kpi-preview"
-import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
+import { DeferredKpiPreview } from "@/components/marketing/deferred-kpi-preview"
+import {
+  DeferredDataCenterXrayHD,
+  DeferredLoadPassportHD,
+  DeferredRtaDecisionTheater,
+} from "@/components/marketing/deferred-proof-visuals"
 import { OutcomePillars } from "@/components/marketing/outcome-pillars"
 import { ProductBoundaryToggle } from "@/components/marketing/product-boundary-toggle"
 import { ProofOperatingHero } from "@/components/marketing/proof-operating-hero"
 import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
 import { ProofStatStrip } from "@/components/marketing/proof-stat-strip"
-import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SectionHeader } from "@/components/marketing/section-header"
-import { PowerWallChart } from "@/components/diagrams/power-wall-chart"
-import { RtaLoopDiagram } from "@/components/diagrams/rta-loop-diagram"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { homeKpis, proofStats, solutionTeasers, eventLog } from "@/content/metrics"
 import {
   comparisonRows,
@@ -34,24 +35,25 @@ import {
   proofArtifactIntro,
   proofArtifacts,
 } from "@/content/proof-artifacts"
-import { canonicalSiteUrl, siteConfig } from "@/content/site"
+import { siteConfig } from "@/content/site"
 import { buildLeadHref } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
+
+import { PowerWallChart } from "@/components/diagrams/power-wall-chart"
+import { RtaLoopDiagram } from "@/components/diagrams/rta-loop-diagram"
 
 export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({
     title: siteConfig.title,
     description: siteConfig.description,
     path: "/",
-    includeCanonicalUrl: false,
   })
 }
 
 export default function HomePage() {
   return (
     <>
-      <link rel="canonical" href={canonicalSiteUrl} />
-      <meta property="og:url" content={canonicalSiteUrl} />
+      <SeoPageJsonLd path="/" includeSiteIdentity />
       <div className="space-y-24 pb-24">
         <ProofOperatingHero />
 
@@ -72,7 +74,7 @@ export default function HomePage() {
       </SectionShell>
 
       <SectionShell>
-        <RtaDecisionTheater />
+        <DeferredRtaDecisionTheater />
       </SectionShell>
 
       <SectionShell>
@@ -143,11 +145,11 @@ export default function HomePage() {
       </SectionShell>
 
       <SectionShell>
-        <LoadPassportHD />
+        <DeferredLoadPassportHD />
       </SectionShell>
 
       <SectionShell>
-        <DataCenterXrayHD />
+        <DeferredDataCenterXrayHD />
       </SectionShell>
 
       <SectionShell>
@@ -168,7 +170,7 @@ export default function HomePage() {
             headline="See safe headroom, binding constraints, and proof in one view"
             body="The operating surface should explain why an action is allowed, repaired, or rejected before autonomy expands."
           />
-          <KpiPreview cards={homeKpis} eventLog={eventLog} />
+          <DeferredKpiPreview cards={homeKpis} eventLog={eventLog} />
         </div>
       </SectionShell>
 

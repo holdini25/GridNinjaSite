@@ -1,14 +1,8 @@
 import type { RtaDecisionState } from "@/content/proof-artifacts"
+import type { EvidenceMaturity } from "@/seo/evidence"
 import type { SectionCopy } from "@/types/site"
 
-export type WhyGridNinjaMaturity =
-  | "DESIGN TARGET"
-  | "IMPLEMENTED"
-  | "REPLAY-VALIDATED"
-  | "SHADOW-VALIDATED"
-  | "OPERATOR-ACCEPTED"
-  | "THIRD-PARTY-VALIDATED"
-  | "PLANNED"
+export type WhyGridNinjaMaturity = EvidenceMaturity
 
 export type WhyGridNinjaMaturityFilter =
   | "all"

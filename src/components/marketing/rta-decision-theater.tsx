@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react"
 
 import { ArrowRightIcon, ShieldCheckIcon } from "lucide-react"
-import { AnimatePresence, motion } from "motion/react"
 
 import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
 import { rtaDecisionCandidates, type RtaDecisionCandidate } from "@/content/proof-artifacts"
@@ -105,13 +104,9 @@ export function RtaDecisionTheater({
         </div>
 
         <div className="rounded-[1.15rem] border border-border/70 bg-background/45 p-5">
-          <AnimatePresence mode="wait">
-            <motion.div
+            <div
               key={active.id}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.28 }}
+              className="animate-in fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none"
             >
               <div className="rounded-[1rem] border border-border/70 bg-surface p-5">
                 <p className="font-mono text-xs tracking-[0.18em] text-primary uppercase">
@@ -134,7 +129,7 @@ export function RtaDecisionTheater({
 
               <div className="mt-5 grid gap-3 md:grid-cols-6">
                 {chain.map((stage, index) => (
-                  <motion.div
+                  <div
                     key={stage}
                     className={cn(
                       "gn-evidence-line rounded-[0.9rem] border border-border/70 bg-background/50 p-3 text-center",
@@ -144,14 +139,12 @@ export function RtaDecisionTheater({
                         active.decision === "no-proof" &&
                         "gn-dashed-no-proof opacity-70"
                     )}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.055 }}
+                    style={{ animationDelay: `${index * 55}ms` }}
                   >
                     <span className="font-mono text-[0.68rem] tracking-[0.14em] text-muted-foreground uppercase">
                       {stage}
                     </span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
@@ -188,8 +181,7 @@ export function RtaDecisionTheater({
                   <span>proof</span>
                 </div>
               </div>
-            </motion.div>
-          </AnimatePresence>
+            </div>
         </div>
       </div>
     </section>

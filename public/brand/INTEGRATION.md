@@ -21,13 +21,13 @@
 - `npm run brand:check` builds the same output map in memory and byte-compares it with the repository without writing files.
 - `gridninja-watermark.svg` is derived from the detailed emblem's copper gradient, globe clip/grid, and proof-core path.
 - `gridninja-proof-star.svg` is derived from the favicon proof core's copper gradient and star path.
-- `/favicon.ico` contains only 16, 32, and 48px entries and is capped at 32KB. Browser and standard install icons use a deterministic alpha mask that clears the outer canvas while preserving the navy contrast field behind the white guardians; the 180px Apple touch icon remains an exact opaque square resize.
+- `/favicon.ico` contains only 16, 32, and 48px entries and is capped at 32KB. Its 16px layer uses the canonical simplified proof-core mark for tab-scale clarity; its 32px and 48px layers use the supplied raster logo. Standard install icons use a deterministic alpha mask that clears the outer canvas while preserving the navy contrast field behind the white guardians; the 180px Apple touch icon remains an exact opaque square resize.
 
-The generated set also includes App Router icons, Apple and PWA icons, maskable icons with conservative safe-area padding, the Open Graph emblem, and LinkedIn avatar/banner exports. Do not edit a derivative by hand; change the generator and regenerate the entire set.
+The generated set also includes stable browser icons, Apple and PWA icons, maskable icons with conservative safe-area padding, the Open Graph emblem, and LinkedIn avatar/banner exports. Do not edit a derivative by hand; change the generator and regenerate the entire set.
 
 ## Browser and install presentation
 
-- Browser and standard install icons preserve the canonical raster source's composition, retain the contrast needed by the white mark, and make the outer corners transparent. Apple touch and maskable icons remain fully opaque because those surfaces require a controlled field.
+- The 16px browser-tab icon uses the transparent proof-core mark; the 32px and larger standard icons preserve the canonical raster source's composition, retain the contrast needed by the white mark, and make the outer corners transparent. Apple touch and maskable icons remain fully opaque because those surfaces require a controlled field.
 - The website emits stable, query-free icon links for `/favicon.ico`, `/gridninja-icon-192.png`, and `/gridninja-apple-touch-icon-180.png`; `/gridninja-icon-512.png` is used by install metadata.
 - Maskable PWA icons render the detailed emblem at a nominal `0.72` scale on the full-bleed site background, leaving approximately 20–21% visible padding and keeping artwork inside the central 60% safe area.
 - Square raster composites select an artwork size with matching canvas parity so left/right and top/bottom pixel insets remain equal.

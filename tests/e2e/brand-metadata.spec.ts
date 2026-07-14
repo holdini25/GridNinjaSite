@@ -2,9 +2,9 @@ import { expect, test } from "@playwright/test"
 
 const socialImageAlt =
   "GridNinja — proof-backed virtual capacity for AI data centers"
-const canonicalSiteUrl = "https://www.gridninja.ai/"
+const canonicalSiteUrl = "https://gridninja.ai/"
 const homepageTitle =
-  "Virtual Capacity Control Plane for AI Data Centers | GridNinja"
+  "AI Data Center Virtual Capacity Control Plane | GridNinja"
 const homepageDescription =
   "GridNinja is the virtual capacity control plane for AI data centers, proving safe, usable capacity to accelerate time-to-power while protecting infrastructure."
 
@@ -68,6 +68,7 @@ test.describe("production brand metadata routes", () => {
   const pngRoutes = [
     ["/opengraph-image", 1200, 630],
     ["/twitter-image", 1200, 630],
+    ["/og/home", 1200, 630],
     ["/gridninja-apple-touch-icon-180.png", 180, 180],
     ["/gridninja-icon-192.png", 192, 192],
     ["/gridninja-icon-512.png", 512, 512],
@@ -208,37 +209,52 @@ test.describe("production brand metadata routes", () => {
     ])
 
     const schema = page.locator(
-      'head script#gridninja-website-schema[type="application/ld+json"]'
+      'script#gridninja-schema-home[type="application/ld+json"]'
     )
     await expect(schema).toHaveCount(1)
-    expect(JSON.parse((await schema.textContent()) ?? "")).toEqual({
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "@id": "https://www.gridninja.ai/#website",
-      url: canonicalSiteUrl,
-      name: "GridNinja",
-      alternateName: ["GridNinja AI", "gridninja.ai"],
-    })
-    await expect(page.getByText(homepageDescription, { exact: true })).toBeVisible()
+    const graph = JSON.parse((await schema.textContent()) ?? "")
+    expect(graph).toMatchObject({ "@context": "https://schema.org" })
+    expect(graph["@graph"]).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          "@type": "WebSite",
+          "@id": "https://gridninja.ai/#website",
+          url: canonicalSiteUrl,
+          name: "GridNinja",
+          alternateName: "gridninja.ai",
+        }),
+        expect.objectContaining({
+          "@type": "Organization",
+          "@id": "https://gridninja.ai/#organization",
+        }),
+      ])
+    )
+    await expect(
+      page.getByText("GridNinja is the runtime-assured virtual capacity engine", {
+        exact: false,
+      })
+    ).toBeVisible()
     await expect(
       page.getByRole("link", { name: "Read more", exact: true })
     ).toHaveCount(0)
   })
 
-  test("publishes crawlable www robots and sitemap signals", async ({
+  test("publishes crawlable apex robots and sitemap signals", async ({
     request,
   }) => {
     const robotsResponse = await request.get("/robots.txt")
     expect(robotsResponse.status()).toBe(200)
-    expect(await robotsResponse.text()).toBe(
-      "User-Agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://www.gridninja.ai/sitemap.xml\n"
-    )
+    const robotsText = await robotsResponse.text()
+    expect(robotsText).toContain("User-Agent: *\nAllow: /")
+    expect(robotsText).toContain("Disallow: /api/")
+    expect(robotsText).toContain("Disallow: /internal/")
+    expect(robotsText).toContain("Sitemap: https://gridninja.ai/sitemap.xml")
 
     const sitemapResponse = await request.get("/sitemap.xml")
     expect(sitemapResponse.status()).toBe(200)
     const sitemap = await sitemapResponse.text()
     expect(sitemap).toContain(`<loc>${canonicalSiteUrl}</loc>`)
-    expect(sitemap).not.toContain("https://gridninja.ai")
-    expect(sitemap.match(/<loc>https:\/\/www\.gridninja\.ai\//g)).not.toBeNull()
+    expect(sitemap).not.toContain("https://www.gridninja.ai")
+    expect(sitemap.match(/<loc>https:\/\/gridninja\.ai\//g)).not.toBeNull()
   })
 })

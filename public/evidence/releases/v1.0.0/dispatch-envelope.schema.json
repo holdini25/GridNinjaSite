@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gridninja.ai/evidence/releases/v1.0.0/dispatch-envelope.schema.json",
+  "title": "GridNinja Dispatch Envelope",
+  "description": "Publication-gated schema candidate for a sanitized runtime-assurance decision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "decision",
+    "constraints",
+    "bindingConstraint",
+    "rollbackPosture",
+    "evidenceRefs"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "requestId": { "type": "string", "pattern": "^synthetic-" },
+    "decision": { "enum": ["allow", "repair", "reject", "no-proof"] },
+    "constraints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "status", "marginClass"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["inside", "binding", "violated", "unproven"] },
+          "marginClass": { "enum": ["positive", "zero", "negative", "unknown"] }
+        }
+      }
+    },
+    "bindingConstraint": { "type": "string", "minLength": 1 },
+    "rollbackPosture": { "type": "string", "minLength": 1 },
+    "evidenceRefs": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+  }
+}

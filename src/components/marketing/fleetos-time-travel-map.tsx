@@ -2,8 +2,6 @@
 
 import { useMemo, useState } from "react"
 
-import { motion } from "motion/react"
-
 import { AnimatedMw } from "@/components/marketing/animated-mw"
 import {
   fleetEventPhases,
@@ -120,10 +118,9 @@ export function FleetOSTimeTravelMap({
       <div className="mt-7 grid gap-6 xl:grid-cols-[1.05fr_0.95fr]">
         <div className="grid gap-3 sm:grid-cols-2">
           {sites.map((site) => (
-            <motion.button
+            <button
               key={site.id}
               type="button"
-              layout
               aria-pressed={site.id === active.id}
               onClick={() => setActiveId(site.id)}
               onFocus={() => setActiveId(site.id)}
@@ -149,15 +146,13 @@ export function FleetOSTimeTravelMap({
               <span className="mt-4 block font-mono text-sm text-signal">
                 {site.state === "no-proof" ? "excluded" : site.acceptedMw}
               </span>
-            </motion.button>
+            </button>
           ))}
         </div>
 
-        <motion.div
+        <div
           key={`${active.id}-${phase.id}`}
-          className="rounded-[1.2rem] border border-border/70 bg-background/50 p-5"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          className="animate-in rounded-[1.2rem] border border-border/70 bg-background/50 p-5 fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none"
         >
           <p className="font-mono text-xs tracking-[0.16em] text-primary uppercase">
             selected site evidence
@@ -174,7 +169,7 @@ export function FleetOSTimeTravelMap({
             <FleetMetric label="phase" value={phase.label} />
             <FleetMetric label="proof_root" value={active.proofRoot} />
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react"
 
 import { FileArchiveIcon, FileTextIcon } from "lucide-react"
-import { AnimatePresence, motion } from "motion/react"
 
 import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
 import { LoadPassportVerificationStatus } from "@/components/marketing/load-passport-verification-status"
@@ -85,20 +84,15 @@ export function LoadPassportHD({
           ))}
         </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
+          <div
             key={active.title}
             className={cn(
-              "rounded-[1.15rem] border border-border/70 bg-background/50 p-5",
+              "animate-in rounded-[1.15rem] border border-border/70 bg-background/50 p-5 fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none",
               !active.verified && "gn-dashed-no-proof"
             )}
             data-load-passport-detail-status={
               active.verified ? "verified" : "no-proof"
             }
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25 }}
           >
             <p className="font-mono text-xs tracking-[0.18em] text-primary uppercase">
               selected passport section
@@ -130,12 +124,10 @@ export function LoadPassportHD({
                 role="img"
               >
                 {active.chartPoints.map((height, index) => (
-                  <motion.span
+                  <span
                     key={`${height}-${index}`}
-                    className="w-full rounded-t-sm bg-primary/70"
-                    initial={{ height: "8%" }}
-                    animate={{ height: `${height}%` }}
-                    transition={{ delay: index * 0.025, duration: 0.34 }}
+                    className="w-full rounded-t-sm bg-primary/70 transition-[height] duration-300"
+                    style={{ height: `${height}%`, transitionDelay: `${index * 25}ms` }}
                   />
                 ))}
               </div>
@@ -150,21 +142,18 @@ export function LoadPassportHD({
               </div>
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 {active.artifactFiles.map((file, index) => (
-                  <motion.div
+                  <div
                     key={file}
-                    className="inline-flex min-w-0 items-center gap-2 rounded-[0.75rem] border border-border/70 bg-background/50 px-3 py-2 font-mono text-xs text-muted-foreground"
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.045 }}
+                    className="inline-flex min-w-0 animate-in items-center gap-2 rounded-[0.75rem] border border-border/70 bg-background/50 px-3 py-2 font-mono text-xs text-muted-foreground fade-in slide-in-from-left-2 duration-300 motion-reduce:animate-none"
+                    style={{ animationDelay: `${index * 45}ms` }}
                   >
                     <FileTextIcon className="size-4 shrink-0 text-primary" />
                     <span className="min-w-0 break-all">{file}</span>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          </div>
       </div>
     </section>
   )

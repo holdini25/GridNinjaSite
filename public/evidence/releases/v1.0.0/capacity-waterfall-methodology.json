@@ -1,0 +1,34 @@
+{
+  "method": "Proof-Adjusted Capacity Waterfall",
+  "version": "1.0.0-publication-candidate",
+  "status": "publication-gated",
+  "illustrativeNotice": "Synthetic illustrative scenario—not a customer or production result.",
+  "orderedSteps": [
+    {
+      "name": "physical-ceiling",
+      "rule": "Declare the site- and window-specific physical ceiling without treating nameplate as dispatchable capacity."
+    },
+    {
+      "name": "committed-load",
+      "rule": "Subtract protected and committed workload in the same operating window."
+    },
+    {
+      "name": "policy-reserves",
+      "rule": "Subtract power, thermal, storage, water, SLA, and recovery reserves without double counting."
+    },
+    {
+      "name": "evidence-adjustment",
+      "rule": "Exclude residual headroom whose topology, freshness, authority, or recovery dependencies cannot be proven."
+    },
+    {
+      "name": "accepted-headroom",
+      "rule": "Record only the surviving quantity with validity window, binding constraint, evidence references, and expiry."
+    }
+  ],
+  "noProofRule": "Missing, stale, conflicting, or unreviewed dependencies cannot contribute to accepted headroom.",
+  "limitations": [
+    "The method does not create physical capacity.",
+    "Outputs cannot be transferred across sites or time windows without re-evaluation.",
+    "Commercial treatment requires separate contractual review."
+  ]
+}

@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 
 import { SolutionPageTemplate } from "@/components/marketing/solution-page-template"
+import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { solutionPages } from "@/content/copy/solutions"
 import { createPageMetadata } from "@/lib/seo"
 
@@ -14,5 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function AiCloudPage() {
-  return <SolutionPageTemplate config={solutionPages["ai-cloud"]} />
+  return (
+    <>
+      <SeoPageJsonLd path="/solutions/ai-cloud" />
+      <SeoBreadcrumbs path="/solutions/ai-cloud" />
+      <SolutionPageTemplate config={solutionPages["ai-cloud"]} />
+    </>
+  )
 }

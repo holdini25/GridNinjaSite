@@ -6,18 +6,21 @@ import { ArrowRightIcon } from "lucide-react"
 import { AuthorityBoundary } from "@/components/marketing/authority-boundary"
 import { ConstraintBraid } from "@/components/marketing/constraint-braid"
 import { CtaBand } from "@/components/marketing/cta-band"
-import { DataCenterXrayHD } from "@/components/marketing/data-center-xray-hd"
-import { FleetOSTimeTravelMap } from "@/components/marketing/fleetos-time-travel-map"
+import {
+  DeferredDataCenterXrayHD,
+  DeferredFleetOSTimeTravelMap,
+  DeferredLoadPassportHD,
+  DeferredRtaDecisionTheater,
+} from "@/components/marketing/deferred-proof-visuals"
 import { Hero } from "@/components/marketing/hero"
-import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
 import { ProductBoundaryToggle } from "@/components/marketing/product-boundary-toggle"
 import { ProofArtifactGrid } from "@/components/marketing/proof-artifact-grid"
 import { ProofChainTrail } from "@/components/marketing/proof-chain-trail"
-import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
 import { SafetyBoundaryWall } from "@/components/marketing/safety-boundary-wall"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { TopologyMap } from "@/components/diagrams/topology-map"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { Button } from "@/components/ui/button"
 import {
   architectureFlow,
@@ -27,7 +30,6 @@ import {
 } from "@/content/copy/platform"
 import {
   constraintBraidDomains,
-  fleetSwarmSites,
   proofArtifacts,
   proofChainStages,
   trustBoundaryItems,
@@ -47,6 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function PlatformPage() {
   return (
     <div className="space-y-24 pb-24">
+      <SeoPageJsonLd path="/platform" />
       <Hero
         eyebrow={platformHero.eyebrow}
         headline={platformHero.headline}
@@ -62,7 +65,7 @@ export default function PlatformPage() {
       />
 
       <SectionShell>
-        <DataCenterXrayHD />
+        <DeferredDataCenterXrayHD />
       </SectionShell>
 
       <SectionShell>
@@ -111,7 +114,7 @@ export default function PlatformPage() {
       </SectionShell>
 
       <SectionShell>
-        <RtaDecisionTheater />
+        <DeferredRtaDecisionTheater />
       </SectionShell>
 
       <SectionShell>
@@ -139,7 +142,7 @@ export default function PlatformPage() {
       </SectionShell>
 
       <SectionShell>
-        <LoadPassportHD />
+        <DeferredLoadPassportHD />
       </SectionShell>
 
       <SectionShell>
@@ -164,7 +167,7 @@ export default function PlatformPage() {
             headline="Fleet views aggregate evidence; local authority still gates action"
             body="FleetOS can compare proof posture across sites, but site policy, operators, and runtime assurance remain the approval boundary."
           />
-          <FleetOSTimeTravelMap sites={fleetSwarmSites} />
+          <DeferredFleetOSTimeTravelMap />
         </div>
       </SectionShell>
 

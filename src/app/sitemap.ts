@@ -1,27 +1,13 @@
 import type { MetadataRoute } from "next"
 
-import { siteConfig } from "@/content/site"
+import { absoluteUrl } from "@/seo/policy"
+import { indexableSeoRoutes } from "@/seo/route-manifest"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = [
-    "/",
-    "/platform",
-    "/platform/dispatch-envelope",
-    "/solutions/ai-cloud",
-    "/solutions/colocation",
-    "/solutions/bridge-power",
-    "/proof",
-    "/why-gridninja",
-    "/proof/proof-pack",
-    "/demo",
-    "/dcii",
-    "/roi",
-    "/about",
-    "/contact",
-  ]
-
-  return routes.map((route) => ({
-    url: new URL(route, siteConfig.url).toString(),
-    lastModified: siteConfig.lastModified,
+  return indexableSeoRoutes.map((route) => ({
+    url: absoluteUrl(route.path),
+    lastModified: route.contentUpdatedAt,
+    changeFrequency: route.tier === 0 ? "monthly" : "yearly",
+    priority: route.tier === 0 ? 1 : route.tier === 1 ? 0.7 : 0.5,
   }))
 }

@@ -5,15 +5,18 @@ import type { WaterfallStep } from "@/content/proof-artifacts"
 import { GridNinjaProofSeal } from "@/components/brand/gridninja-proof-seal"
 import { ProofTooltip } from "@/components/marketing/proof-tooltip"
 import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
+import { PublicClaimCaveat } from "@/components/seo/public-claim"
 
 type CapacityWaterfallProps = {
   steps: WaterfallStep[]
   compact?: boolean
+  claimId?: string
 }
 
 export function CapacityWaterfall({
   steps,
   compact = false,
+  claimId = "illustrative-capacity-waterfall",
 }: CapacityWaterfallProps) {
   const maxValue = Math.max(
     1,
@@ -52,9 +55,9 @@ export function CapacityWaterfall({
           <p className="font-mono text-xs tracking-[0.18em] text-muted-foreground uppercase">
             accepted headroom
           </p>
-          <p className="mt-2 font-mono text-[2.3rem] leading-none text-signal">
+          <div className="mt-2 font-mono text-[2.3rem] leading-none text-signal" data-nosnippet data-claim-id={claimId}>
             {(finalStep.capacityAfter ?? finalStep.value).toFixed(1)} MW
-          </p>
+          </div>
           <p className="mt-2 font-mono text-xs text-muted-foreground">
             proof_root: 8f4c...91a
           </p>
@@ -84,7 +87,9 @@ export function CapacityWaterfall({
                       focusable={false}
                     />
                   ) : null}
-                  <p
+                  <div
+                    data-nosnippet
+                    data-claim-id={claimId}
                     className={`font-mono text-lg ${
                       isProof
                         ? "text-signal"
@@ -95,7 +100,7 @@ export function CapacityWaterfall({
                   >
                     {step.value > 0 && !isClaim ? "+" : ""}
                     {step.value.toFixed(1)} MW
-                  </p>
+                  </div>
                 </div>
                 {!compact ? (
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">
@@ -114,7 +119,7 @@ export function CapacityWaterfall({
                 {typeof step.capacityAfter === "number" ? (
                   <p className="mb-2 font-mono text-xs tracking-[0.14em] text-muted-foreground uppercase">
                     capacity after:{" "}
-                    <span className="text-foreground">
+                    <span className="text-foreground" data-nosnippet data-claim-id={claimId}>
                       {step.capacityAfter.toFixed(1)} MW
                     </span>
                   </p>
@@ -136,6 +141,10 @@ export function CapacityWaterfall({
           )
         })}
       </div>
+      <PublicClaimCaveat
+        claimId={claimId}
+        className="mt-4 block text-xs leading-5 text-muted-foreground"
+      />
     </div>
   )
 }

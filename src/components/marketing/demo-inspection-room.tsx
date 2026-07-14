@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { CapacityWaterfall } from "@/components/marketing/capacity-waterfall"
 import { DemoModeOverlay } from "@/components/marketing/demo-mode-overlay"
@@ -14,6 +14,8 @@ import {
   type RtaDecisionState,
   type WaterfallStep,
 } from "@/content/proof-artifacts"
+import { trackGridNinjaEvent } from "@/lib/analytics"
+import { PublicClaimValue } from "@/components/seo/public-claim"
 import { runViewTransition } from "@/lib/view-transition"
 
 type DemoTrace = {
@@ -21,6 +23,7 @@ type DemoTrace = {
   check: string
   reason: string
   margin: string
+  claimId?: string
 }
 
 type DemoInspectionRoomProps = {
@@ -28,8 +31,11 @@ type DemoInspectionRoomProps = {
     siteName: string
     disclaimer: string
     contractedService: string
+    contractedServiceClaimId: string
     candidateAction: string
+    candidateActionClaimId: string
     freshnessRequirement: string
+    freshnessRequirementClaimId: string
     waterfall: WaterfallStep[]
     modes: readonly string[]
     traces: DemoTrace[]
@@ -40,7 +46,22 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
   const [mode, setMode] = useState(scenario.modes[0])
   const [toolMode, setToolMode] = useState<DemoMode>("Inspect")
   const [trace, setTrace] = useState(scenario.traces[0])
+  const hasTrackedStart = useRef(false)
+  const hasTrackedCompletion = useRef(false)
+  const inspectedOutcomes = useRef(
+    new Set(scenario.traces[0] ? [scenario.traces[0].outcome] : [])
+  )
   const traceState = toDecisionState(trace.outcome)
+
+  useEffect(() => {
+    if (hasTrackedStart.current) return
+
+    hasTrackedStart.current = true
+    trackGridNinjaEvent("demo_start", {
+      source: "demo-inspection-room",
+      success: true,
+    })
+  }, [])
 
   function selectScenarioMode(nextMode: string) {
     runViewTransition(() => setMode(nextMode))
@@ -52,6 +73,19 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
 
   function selectTrace(nextTrace: DemoTrace) {
     runViewTransition(() => setTrace(nextTrace))
+
+    inspectedOutcomes.current.add(nextTrace.outcome)
+
+    if (
+      !hasTrackedCompletion.current &&
+      inspectedOutcomes.current.size >= scenario.traces.length
+    ) {
+      hasTrackedCompletion.current = true
+      trackGridNinjaEvent("proof_demo_complete", {
+        source: "demo-inspection-room",
+        success: true,
+      })
+    }
   }
 
   return (
@@ -129,13 +163,13 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
           <div className="gn-panel p-6">
             <p className="gn-eyebrow">Candidate action</p>
             <p className="mt-4 text-lg leading-8 text-foreground">
-              {scenario.candidateAction}
+              <PublicClaimValue claimId={scenario.candidateActionClaimId} value={scenario.candidateAction} />
             </p>
             <p className="mt-4 border-l border-border/80 pl-4 text-base leading-8 text-muted-foreground">
-              {scenario.freshnessRequirement}
+              <PublicClaimValue claimId={scenario.freshnessRequirementClaimId} value={scenario.freshnessRequirement} />
             </p>
             <p className="mt-4 font-mono text-sm text-muted-foreground">
-              Contracted utility service: {scenario.contractedService}
+              Contracted utility service: <PublicClaimValue claimId={scenario.contractedServiceClaimId} value={scenario.contractedService} />
             </p>
           </div>
 
@@ -183,7 +217,11 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
               {trace.reason}
             </p>
             <p className="mt-5 border-l border-primary/70 pl-4 font-mono text-base leading-8 text-foreground">
-              {trace.margin}
+              {trace.claimId ? (
+                <PublicClaimValue claimId={trace.claimId} value={trace.margin} />
+              ) : (
+                trace.margin
+              )}
             </p>
           </div>
         </div>

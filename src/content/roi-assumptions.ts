@@ -9,21 +9,25 @@ export const roiOutputs = [
     label: "Proof-Adjusted MW Identified",
     value: "5.8 MW",
     numericValue: 5.8,
+    claimId: "roi-proof-adjusted-mw",
     body: "Illustrative accepted headroom after constraints, policy, and telemetry trust discounts.",
   },
   {
     label: "No-Proof Gaps Assigned",
     value: "3",
+    claimId: "roi-no-proof-gaps",
     body: "Telemetry freshness, topology mapping, and policy declaration gaps remain visible.",
   },
   {
     label: "Candidate Decisions Reviewed",
     value: "4 states",
+    claimId: "roi-decision-states",
     body: "Allow, repair, reject, and no-proof outcomes are separated before autonomy expands.",
   },
   {
     label: "Exportable Proof Artifacts",
     value: "6",
+    claimId: "roi-proof-artifacts",
     body: "Load Passport, waterfall, ledger, reserve report, no-proof register, and utility packet.",
   },
 ]

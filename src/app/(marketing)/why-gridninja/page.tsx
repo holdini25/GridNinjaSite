@@ -16,6 +16,7 @@ import { WhyGridNinjaRoleExplorer } from "@/components/marketing/why-gridninja-r
 import { WhyGridNinjaScenarioSimulator } from "@/components/marketing/why-gridninja-scenario-simulator"
 import { WhyGridNinjaSourceDrawerHost } from "@/components/marketing/why-gridninja-source-drawer-host"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import {
   whyGridNinjaBoundary,
   whyGridNinjaChapters,
@@ -47,6 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function WhyGridNinjaPage() {
   return (
     <div className="relative isolate overflow-x-clip bg-[radial-gradient(circle_at_82%_4%,rgba(97,228,255,0.07),transparent_28rem),radial-gradient(circle_at_8%_16%,rgba(255,159,26,0.055),transparent_26rem)] pb-24">
+      <SeoPageJsonLd path="/why-gridninja" />
       <WhyGridNinjaChapterNav chapters={whyGridNinjaChapters} />
       <WhyGridNinjaSourceDrawerHost sources={whyGridNinjaSourceRecords} />
       <ContextualShadowCTA />
@@ -79,20 +81,7 @@ export default function WhyGridNinjaPage() {
                 </div>
 
                 <h1 className="mt-5 max-w-[12em] text-[3.05rem] leading-[0.96] font-medium tracking-normal text-foreground sm:text-[3.25rem] md:text-[3.35rem] 2xl:text-[4rem]">
-                  <span className="md:hidden">
-                    Before you trust another megawatt, ask for proof.
-                  </span>
-                  <span className="hidden md:block [&>span]:whitespace-nowrap">
-                    <span className="block">Before you trust</span>
-                    <span className="block">another megawatt,</span>
-                    <span className="relative inline-block">
-                      ask what proves it.
-                      <span
-                        aria-hidden="true"
-                        className="absolute -bottom-2 left-0 h-px w-full bg-gradient-to-r from-primary via-primary/70 to-proof-cyan/70"
-                      />
-                    </span>
-                  </span>
+                  Before you trust another megawatt, ask what proves it.
                 </h1>
 
                 <p className="mt-6 max-w-[40rem] text-base leading-8 text-muted-foreground sm:text-lg md:leading-9">
@@ -164,6 +153,48 @@ export default function WhyGridNinjaPage() {
               </div>
             </div>
           </div>
+        </SectionShell>
+
+        <SectionShell
+          id="source-index"
+          className="scroll-mt-32"
+          containerClassName="max-w-[96rem]"
+        >
+          <section aria-labelledby="source-index-heading">
+            <SectionHeader
+              eyebrow="Crawlable source index"
+              headline="Every comparison source has a stable public anchor"
+              body="These links expose the reviewed public materials behind the comparison. They establish only the scoped facts recorded for each source; they do not imply unsupported performance, customer, or authority claims."
+            />
+            <ol className="mt-8 grid gap-4 lg:grid-cols-2">
+              {whyGridNinjaSourceRecords.map((source) => (
+                <li
+                  key={source.id}
+                  id={`source-${source.id}`}
+                  className="scroll-mt-32 rounded-[1.35rem] border border-border/70 bg-surface px-5 py-5"
+                >
+                  <p className="font-mono text-xs tracking-[0.14em] text-proof-cyan uppercase">
+                    {source.organization} · retrieved {source.retrievalDate}
+                  </p>
+                  <h2 className="mt-3 text-lg font-medium text-foreground">
+                    <a
+                      href={source.url}
+                      rel="noreferrer"
+                      className="underline decoration-border underline-offset-4 hover:decoration-proof-cyan"
+                    >
+                      {source.title}
+                    </a>
+                  </h2>
+                  <p className="mt-3 text-sm leading-7 text-muted-foreground">
+                    Establishes: {source.establishes}
+                  </p>
+                  <p className="mt-2 text-sm leading-7 text-muted-foreground">
+                    Does not establish: {source.doesNotEstablish}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </section>
         </SectionShell>
 
         <SectionShell

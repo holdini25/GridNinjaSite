@@ -28,6 +28,8 @@ jobs:
         with: { node-version: "22", cache: npm }
       - run: npm ci
       - run: npm run brand:check
+      - run: node scripts/seo/validate-source-contracts.mjs
+      - run: node scripts/seo/validate-evidence-releases.mjs
       - run: npm run lint
       - run: npm run typecheck
 
@@ -116,6 +118,74 @@ jobs:
             test-results
           if-no-files-found: ignore
           retention-days: 14
+
+  seo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: npm }
+      - run: npm ci
+      - run: node scripts/seo/validate-source-contracts.mjs
+      - run: node scripts/seo/validate-evidence-releases.mjs
+      - run: >-
+          npx vitest run tests/unit/seo --coverage.enabled=false
+          --reporter=default --reporter=junit
+          --outputFile.junit=test-results/seo-unit-junit.xml
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --config=playwright.seo.config.ts
+        env:
+          CI: 1
+      - name: Capture route, metadata, schema, sitemap, and link evidence
+        shell: bash
+        run: |
+          mkdir -p test-results
+          npm run start -- --hostname 127.0.0.1 --port 3000 > test-results/seo-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:3000/ >/dev/null; then
+              break
+            fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then
+              cat test-results/seo-server.log
+              exit 1
+            fi
+            sleep 1
+          done
+          SEO_EVIDENCE_BASE_URL=http://127.0.0.1:3000 node scripts/seo/capture-seo-evidence.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-evidence-${{ github.sha }}
+          path: |
+            playwright-report/seo
+            test-results/seo
+            test-results/seo-evidence
+            test-results/seo-junit.xml
+            test-results/seo-unit-junit.xml
+            test-results/seo-server.log
+          if-no-files-found: ignore
+          retention-days: 30
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "22", cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - run: npx lhci autorun --config=./lighthouserc.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-${{ github.sha }}
+          path: |
+            .lighthouseci
+            test-results/lighthouse
+          if-no-files-found: ignore
+          retention-days: 30
 
   audit:
     runs-on: ubuntu-latest

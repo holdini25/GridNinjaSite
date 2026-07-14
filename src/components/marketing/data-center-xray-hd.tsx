@@ -2,8 +2,6 @@
 
 import { useState } from "react"
 
-import { motion } from "motion/react"
-
 import { RtaDecisionChip } from "@/components/marketing/rta-decision-chip"
 import { xrayLayers, type XrayLayer } from "@/content/proof-artifacts"
 import { cn } from "@/lib/utils"
@@ -76,32 +74,29 @@ export function DataCenterXrayHD({
           <div className="absolute inset-0 bg-[linear-gradient(rgba(159,176,191,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(159,176,191,0.06)_1px,transparent_1px)] bg-[size:34px_34px]" />
           <div className="relative grid h-full place-items-center">
             <div className="relative h-72 w-full max-w-lg">
-              <motion.div
+              <div
                 className="absolute inset-x-10 bottom-8 h-36 rounded-[1.2rem] border border-muted-foreground/30 bg-surface/70"
-                animate={{ opacity: active.id === "trust" ? 0.32 : 0.72 }}
+                style={{ opacity: active.id === "trust" ? 0.32 : 0.72 }}
               />
 
               {layers.map((layer, index) => {
                 const isActive = layer.id === active.id
 
                 return (
-                  <motion.div
+                  <div
                     key={layer.id}
                     className={cn(
-                      "absolute left-1/2 h-12 w-[82%] -translate-x-1/2 rounded-[0.85rem] border px-4 py-3",
+                      "absolute left-1/2 h-12 w-[82%] rounded-[0.85rem] border px-4 py-3 transition-[transform,opacity] duration-300",
                       layer.state === "no-proof"
                         ? "gn-dashed-no-proof border-muted-foreground/45"
                         : "border-primary/45 bg-primary/10",
                       isActive && "border-signal/60 bg-signal/10"
                     )}
-                    style={{ top: `${index * 3.1}rem` }}
-                    initial={false}
-                    animate={{
-                      x: isActive ? 18 : 0,
+                    style={{
+                      top: `${index * 3.1}rem`,
                       opacity: isActive ? 1 : 0.52,
-                      scale: isActive ? 1.03 : 1,
+                      transform: `translateX(calc(-50% + ${isActive ? "18px" : "0px"})) scale(${isActive ? 1.03 : 1})`,
                     }}
-                    transition={{ type: "spring", stiffness: 180, damping: 22 }}
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="font-mono text-xs text-foreground">
@@ -111,16 +106,14 @@ export function DataCenterXrayHD({
                         {layer.contribution ?? layer.proofObject}
                       </span>
                     </div>
-                  </motion.div>
+                  </div>
                 )
               })}
             </div>
 
-            <motion.div
+            <div
               key={active.id}
-              className="mt-8 w-full rounded-[1rem] border border-border/70 bg-background/70 p-4"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
+              className="mt-8 w-full animate-in rounded-[1rem] border border-border/70 bg-background/70 p-4 fade-in slide-in-from-bottom-2 duration-300 motion-reduce:animate-none"
             >
               <p className="font-mono text-xs tracking-[0.16em] text-primary uppercase">
                 selected proof layer
@@ -132,7 +125,7 @@ export function DataCenterXrayHD({
                 <XrayMetric label="proof_object" value={active.proofObject} />
                 <XrayMetric label="telemetry" value={active.telemetry} />
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

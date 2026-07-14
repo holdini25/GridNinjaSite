@@ -13,6 +13,8 @@ import { ProofLog } from "@/components/marketing/proof-log"
 import { SectionHeader } from "@/components/marketing/section-header"
 import { UtilityEvidencePacketPreview } from "@/components/marketing/utility-evidence-packet-preview"
 import { SectionShell } from "@/components/layout/section-shell"
+import { SeoBreadcrumbs } from "@/components/seo/breadcrumbs"
+import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import {
   proofPackChecklist,
   proofPackDownloadHref,
@@ -44,6 +46,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ProofPackPage() {
   return (
     <div className="space-y-16 pb-16 sm:space-y-20 sm:pb-20">
+      <SeoPageJsonLd path="/proof/proof-pack" />
+      <SeoBreadcrumbs path="/proof/proof-pack" />
       <Hero
         eyebrow={proofPackHero.eyebrow}
         headline={proofPackHero.headline}
@@ -51,6 +55,10 @@ export default function ProofPackPage() {
         primaryCta={{
           label: "Download sample proof pack",
           href: proofPackDownloadHref,
+          analyticsEvent: "proof_pack_download",
+          analyticsSource: "proof-pack-hero",
+          analyticsArtifact: "sample-proof-pack",
+          analyticsVersion: "1.0",
         }}
         secondaryCta={{
           label: "Request Capacity Audit",
@@ -116,7 +124,15 @@ export default function ProofPackPage() {
             </p>
             <div className="mt-6 flex flex-wrap gap-4">
               <Button asChild size="lg">
-                <Link href={proofPackDownloadHref}>Download sample proof pack</Link>
+                <Link
+                  href={proofPackDownloadHref}
+                  data-analytics-event="proof_pack_download"
+                  data-analytics-source="proof-pack-sample"
+                  data-analytics-artifact="sample-proof-pack"
+                  data-analytics-version="1.0"
+                >
+                  Download sample proof pack
+                </Link>
               </Button>
               <Button
                 asChild
@@ -167,6 +183,7 @@ export default function ProofPackPage() {
             lines={proofPackSampleLog.map((line) => ({
               label: line.label,
               value: line.value,
+              claimId: "claimId" in line ? line.claimId : undefined,
             }))}
           />
         </div>

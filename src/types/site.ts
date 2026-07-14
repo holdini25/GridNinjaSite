@@ -16,6 +16,7 @@ export interface SectionCopy {
 export interface StatItem {
   label: string
   value?: string
+  claimId: string
   body: string
   annotation?: string
 }

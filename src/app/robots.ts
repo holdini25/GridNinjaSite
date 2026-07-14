@@ -1,14 +1,21 @@
 import type { MetadataRoute } from "next"
 
-import { siteConfig } from "@/content/site"
+import { absoluteUrl, isPreviewDeployment, SEO_ROBOTS_POLICY } from "@/seo/policy"
 
 export default function robots(): MetadataRoute.Robots {
+  if (isPreviewDeployment()) {
+    return {
+      rules: { userAgent: "*", disallow: "/" },
+    }
+  }
+
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/api/",
+      disallow: [...SEO_ROBOTS_POLICY.disallow],
     },
-    sitemap: new URL("/sitemap.xml", siteConfig.url).toString(),
+    sitemap: absoluteUrl("/sitemap.xml"),
+    host: absoluteUrl("/"),
   }
 }
