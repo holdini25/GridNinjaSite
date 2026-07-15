@@ -1,7 +1,7 @@
 import type { LeadIntent } from "@/types/site"
 
-type LeadAttribution = {
-  schemaVersion: 1
+type LeadAttribution<TSchemaVersion extends 1 | 2 = 1 | 2> = {
+  schemaVersion: TSchemaVersion
   clientSubmissionId: string
   turnstileToken: string
   intent: LeadIntent
@@ -21,9 +21,15 @@ function getStrings(formData: FormData, name: string) {
     .filter((value): value is string => typeof value === "string")
 }
 
+function getOptionalString(formData: FormData, name: string) {
+  const value = getString(formData, name).trim()
+
+  return value || undefined
+}
+
 export function buildCapacityAuditCandidate(
   formData: FormData,
-  attribution: LeadAttribution & { formType: "capacity_audit" }
+  attribution: LeadAttribution<1> & { formType: "capacity_audit" }
 ) {
   return buildBaseLeadCandidate(formData, attribution)
 }
@@ -52,12 +58,15 @@ function buildBaseLeadCandidate(
 
 export function buildContactLeadCandidate(
   formData: FormData,
-  attribution: LeadAttribution & { formType: "contact" }
+  attribution: LeadAttribution<2> & { formType: "contact" }
 ) {
   return {
     ...buildBaseLeadCandidate(formData, attribution),
-    role: getString(formData, "role"),
+    role: getOptionalString(formData, "role"),
+    siteType: getOptionalString(formData, "siteType"),
+    timeline: getOptionalString(formData, "timeline"),
     constraints: getStrings(formData, "constraints"),
+    capacityRange: getOptionalString(formData, "capacityRange"),
     message: getString(formData, "message"),
   }
 }

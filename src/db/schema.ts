@@ -58,6 +58,7 @@ export const leadSubmissions = pgTable(
     buyerType: varchar("buyer_type", { length: 120 }),
     siteType: varchar("site_type", { length: 120 }),
     timeline: varchar("timeline", { length: 120 }),
+    capacityRange: varchar("capacity_range", { length: 80 }),
     constraints: jsonb("constraints").$type<string[]>(),
     message: text("message"),
     source: varchar("source", { length: 120 }),

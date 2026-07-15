@@ -34,7 +34,7 @@ export type AcceptLeadInput = {
   requestId: string
   clientSubmissionId: string
   requestFingerprint: string
-  schemaVersion: number
+  schemaVersion: 1 | 2
   formType: LeadFormType
   intent: string
   name: string
@@ -42,9 +42,10 @@ export type AcceptLeadInput = {
   email: string
   normalizedEmail: string
   role?: string | null
-  buyerType: string
-  siteType: string
-  timeline: string
+  buyerType?: string | null
+  siteType?: string | null
+  timeline?: string | null
+  capacityRange?: string | null
   constraints?: string[] | null
   message?: string | null
   source: string
@@ -185,9 +186,10 @@ export function createLeadRepository(database: LeadDatabase) {
         email: input.email,
         normalizedEmail: input.normalizedEmail,
         role: input.role ?? null,
-        buyerType: input.buyerType,
-        siteType: input.siteType,
-        timeline: input.timeline,
+        buyerType: input.buyerType ?? null,
+        siteType: input.siteType ?? null,
+        timeline: input.timeline ?? null,
+        capacityRange: input.capacityRange ?? null,
         constraints: input.constraints ?? null,
         message: input.message ?? null,
         source: input.source,
@@ -652,6 +654,7 @@ export function createLeadRepository(database: LeadDatabase) {
         buyerType: null,
         siteType: null,
         timeline: null,
+        capacityRange: null,
         constraints: null,
         message: null,
         source: null,

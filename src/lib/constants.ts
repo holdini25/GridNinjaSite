@@ -8,7 +8,18 @@ export const leadIntents = [
   "book-demo",
   "dcii-memo",
   "load-passport",
+  "other",
 ] as const satisfies ReadonlyArray<LeadIntent>
+
+export const contactConversationTypes = [
+  "capacity-audit",
+  "shadow-mode",
+  "partnership",
+  "other",
+] as const
+
+export type ContactConversationType =
+  (typeof contactConversationTypes)[number]
 
 export const buyerTypes = [
   "AI cloud operator",
@@ -56,4 +67,5 @@ export const intentLabels: Record<LeadIntent, string> = {
   "book-demo": "Proof Demo",
   "dcii-memo": "DCII Memo",
   "load-passport": "Load Passport",
+  other: "Other",
 }

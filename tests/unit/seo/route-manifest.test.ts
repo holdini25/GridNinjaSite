@@ -89,6 +89,22 @@ describe("SEO route manifest", () => {
     )
   })
 
+  it("keeps the contact confirmation out of search and the sitemap projection", () => {
+    expect(getSeoRoute("/contact")).toMatchObject({
+      h1: "Tell us where capacity is constrained.",
+      contentUpdatedAt: "2026-07-15",
+      relatedPaths: ["/proof"],
+    })
+    expect(getSeoRoute("/contact/thanks")).toMatchObject({
+      indexable: false,
+      h1: "Request received.",
+      relatedPaths: ["/proof"],
+    })
+    expect(
+      indexableSeoRoutes.some((route) => route.path === "/contact/thanks")
+    ).toBe(false)
+  })
+
   it("derives the indexable projection and resolves every relationship", () => {
     expect(indexableSeoRoutes).toEqual(
       seoRoutes.filter((route) => route.indexable)

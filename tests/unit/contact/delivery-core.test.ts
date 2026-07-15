@@ -17,6 +17,7 @@ const acceptedAt = new Date("2026-07-12T16:00:00.000Z")
 
 const lead: LeadDeliveryPayload = {
   id: "0a40bf9f-3e46-4d0c-b550-89e992ed5eef",
+  schemaVersion: 1,
   acceptedAt,
   formType: "contact",
   name: "Ada Operator",
@@ -25,6 +26,7 @@ const lead: LeadDeliveryPayload = {
   buyerType: "AI cloud operator",
   siteType: "AI data center",
   timeline: "0–6 months",
+  capacityRange: null,
   intent: "capacity-audit",
   source: "contact-page",
   role: "VP Infrastructure",
@@ -109,6 +111,51 @@ describe("contact delivery core", () => {
         attribution: { source: lead.source },
       },
     })
+  })
+
+  it("emits nullable contact qualification through the v2 envelope", () => {
+    const v2Lead: LeadDeliveryPayload = {
+      ...lead,
+      schemaVersion: 2,
+      buyerType: null,
+      siteType: null,
+      timeline: null,
+      capacityRange: "5–20 MW",
+      intent: "other",
+      role: null,
+      constraints: [],
+    }
+
+    expect(buildLeadAcceptedEvent(v2Lead, "event-v2")).toMatchObject({
+      schemaVersion: 2,
+      type: "lead.accepted.v2",
+      data: {
+        formType: "contact",
+        qualification: {
+          buyerType: null,
+          siteType: null,
+          timeline: null,
+          capacityRange: "5–20 MW",
+          intent: "other",
+          constraints: [],
+        },
+      },
+    })
+
+    const html = buildLeadEmailHtml(v2Lead)
+    expect(html).toContain("Capacity range")
+    expect(html).not.toContain("Buyer type")
+    expect(html).not.toContain("Site type")
+    expect(html).not.toContain("Timeline</th>")
+  })
+
+  it("rejects unsupported v2 Capacity Audit delivery records", () => {
+    expect(() =>
+      buildLeadAcceptedEvent(
+        { ...lead, schemaVersion: 2, formType: "capacity_audit" },
+        "event-invalid-version"
+      )
+    ).toThrow("UnsupportedLeadSchemaVersion")
   })
 
   it("removes subject control characters and HTML-escapes visitor content", () => {

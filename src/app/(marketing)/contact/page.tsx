@@ -1,117 +1,115 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
+import { GridNinjaMark } from "@/components/brand/gridninja-logo"
 import { ContactForm } from "@/components/forms/contact-form"
-import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
-import { Hero } from "@/components/marketing/hero"
-import { ProofLoadingSteps } from "@/components/marketing/proof-loading-steps"
-import { SectionHeader } from "@/components/marketing/section-header"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
-import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
-import { contactHero } from "@/content/copy/contact"
-import { ladderSteps } from "@/content/copy/proof"
-import { proofLoadingSteps } from "@/content/proof-artifacts"
-import { leadIntents } from "@/lib/constants"
-import { getFirstQueryValue } from "@/lib/lead"
+import {
+  contactHero,
+  contactNextSteps,
+  contactTrustCommitments,
+} from "@/content/copy/contact"
 import { createPageMetadata } from "@/lib/seo"
-import type { LeadIntent } from "@/types/site"
 
-type ContactPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}
+export const dynamic = "force-static"
 
-export async function generateMetadata(): Promise<Metadata> {
-  return createPageMetadata({
-    title: "Contact | GridNinja",
-    description:
-      "Start with a Capacity Audit and tell GridNinja about your site, constraints, and operating priorities.",
-    path: "/contact",
-  })
-}
+export const metadata: Metadata = createPageMetadata({ path: "/contact" })
 
-export default async function ContactPage({
-  searchParams,
-}: ContactPageProps) {
-  const query = await searchParams
-  const rawIntent = getFirstQueryValue(query.intent)
-  const source = getFirstQueryValue(query.source) ?? "contact-page"
-
-  const intent: LeadIntent =
-    rawIntent && (leadIntents as readonly string[]).includes(rawIntent)
-      ? (rawIntent as LeadIntent)
-      : "capacity-audit"
-
-  const paths = [
-    {
-      title: "Capacity Audit",
-      body: "Turn nominal headroom into a Capacity Waterfall, Load Passport, no-proof register, and next-step proof plan.",
-    },
-    {
-      title: "Shadow Mode / Demo",
-      body: "Review the proof chain, dispatch envelope, and allow / repair / reject / no-proof behavior before live access.",
-    },
-    {
-      title: "DCII memo",
-      body: "Discuss the deployment-focused validation project, evidence outputs, source notes, and read-only boundary.",
-    },
-    {
-      title: "Partnership",
-      body: "Map how bridge power, UPS/BESS, cooling, utility, or integration partners show up as validated capacity.",
-    },
-  ]
-
+export default function ContactPage() {
   return (
-    <div className="space-y-24 pb-24">
+    <div className="relative overflow-hidden bg-[#070A0D] pb-20 sm:pb-24">
       <SeoPageJsonLd path="/contact" />
-      <Hero
-        eyebrow={contactHero.eyebrow}
-        headline={contactHero.headline}
-        body={contactHero.body}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[52rem] opacity-[0.16] [background-image:linear-gradient(rgba(159,176,191,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(159,176,191,0.16)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"
       />
 
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow="Engagement paths"
-            headline="Every path starts with proof, not a generic demo"
-            body="Pick the conversation that matches the decision in front of your team. The same intake form preserves the intent and source for downstream lead delivery."
-          />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {paths.map((path) => (
-              <div
-                key={path.title}
-                className="rounded-[1.2rem] border border-border/70 bg-surface px-5 py-6"
+      <SectionShell
+        deferRendering={false}
+        className="relative pt-7 sm:pt-12 lg:pt-14"
+        containerClassName="max-w-[73.75rem]"
+      >
+        <div className="grid items-start gap-6 sm:gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-16">
+          <div className="lg:col-span-5 lg:pt-5">
+            <div className="flex items-center gap-3">
+              <GridNinjaMark
+                variant="proof-core"
+                className="size-7"
+                priority
+              />
+              <p className="gn-eyebrow">{contactHero.eyebrow}</p>
+            </div>
+
+            <h1 className="mt-5 max-w-[11ch] text-balance text-[2.5rem] leading-[0.98] font-medium tracking-tight text-foreground sm:mt-6 sm:text-[3.1rem] lg:text-[3.5rem]">
+              {contactHero.headline}
+            </h1>
+            <p className="mt-3 max-w-xl text-[0.9375rem] leading-7 text-muted-foreground sm:mt-6 sm:text-[1.05rem] sm:leading-8">
+              {contactHero.body}
+            </p>
+
+            <ul className="mt-5 space-y-2 sm:mt-8 sm:space-y-3" aria-label="Intake commitments">
+              {contactTrustCommitments.map((commitment) => (
+                <li
+                  key={commitment}
+                  className="flex items-start gap-3 text-sm leading-6 text-foreground"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-1 grid size-4 shrink-0 place-items-center rounded-full border border-signal/50 text-[0.65rem] text-signal"
+                  >
+                    ✓
+                  </span>
+                  {commitment}
+                </li>
+              ))}
+            </ul>
+
+            <div
+              data-seo-related-source="/contact"
+              data-seo-related-paths='["/proof"]'
+              data-seo-route-tier="0"
+            >
+              <Link
+                href="/proof"
+                prefetch={false}
+                className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm font-medium text-proof-cyan transition-[border-color,color,transform] duration-150 hover:border-proof-cyan/50 hover:text-foreground active:translate-y-px motion-reduce:transition-none sm:mt-8"
+                data-seo-related-target="/proof"
               >
-                <h2 className="text-[1.25rem] font-medium text-foreground">
-                  {path.title}
-                </h2>
-                <p className="mt-3 text-base leading-7 text-muted-foreground">
-                  {path.body}
-                </p>
-              </div>
+                View proof before autonomy
+                <span aria-hidden="true">→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="min-w-0 lg:col-span-7">
+            <ContactForm />
+          </div>
+        </div>
+
+        <section
+          aria-labelledby="contact-next-steps"
+          className="mt-12 border-t border-white/10 pt-7 sm:mt-16"
+        >
+          <h2 id="contact-next-steps" className="sr-only">
+            What happens next
+          </h2>
+          <ol className="grid gap-6 md:grid-cols-3">
+            {contactNextSteps.map((step, index) => (
+              <li key={step.title} className="grid grid-cols-[auto_1fr] gap-3">
+                <span className="font-mono text-sm text-primary">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className="font-medium text-foreground">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {step.body}
+                  </p>
+                </div>
+              </li>
             ))}
-          </div>
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow="What happens next"
-            headline="A proof-first path before any live authority is discussed"
-            body="Capacity Audit, Shadow Mode, and design-partner conversations all start with evidence collection and visible no-proof gaps."
-          />
-          <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(22rem,0.75fr)]">
-            <AutonomyLadder steps={ladderSteps} layout="contact-split" />
-            <ProofLoadingSteps steps={proofLoadingSteps} />
-          </div>
-        </div>
-      </SectionShell>
-
-      <RelatedSeoLinks path="/contact" />
-
-      <SectionShell>
-        <ContactForm intent={intent} source={source} />
+          </ol>
+        </section>
       </SectionShell>
     </div>
   )

@@ -3,6 +3,9 @@
 import { track } from "@vercel/analytics"
 
 export const analyticsEventNames = [
+  "contact_form_start",
+  "contact_form_submit",
+  "contact_form_error",
   "capacity_audit_request_success",
   "contact_submit_success",
   "proof_pack_download",
@@ -15,6 +18,17 @@ export const analyticsEventNames = [
 
 export type AnalyticsEventName = (typeof analyticsEventNames)[number]
 
+export const analyticsErrorCategories = [
+  "validation",
+  "verification",
+  "rate_limit",
+  "server",
+  "network",
+] as const
+
+export type AnalyticsErrorCategory =
+  (typeof analyticsErrorCategories)[number]
+
 type AnalyticsProperties = {
   route?: string
   source?: string
@@ -22,6 +36,7 @@ type AnalyticsProperties = {
   artifact?: string
   version?: string
   success?: boolean
+  errorCategory?: AnalyticsErrorCategory
 }
 
 const analyticsEventNameSet = new Set<string>(analyticsEventNames)
@@ -41,6 +56,9 @@ export function trackGridNinjaEvent(
     ...toSafeStringProperty("intent", properties.intent),
     ...toSafeStringProperty("artifact", properties.artifact),
     ...toSafeStringProperty("version", properties.version),
+    ...(properties.errorCategory
+      ? { errorCategory: properties.errorCategory }
+      : {}),
     ...(typeof properties.success === "boolean"
       ? { success: properties.success }
       : {}),

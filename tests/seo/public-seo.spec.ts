@@ -456,6 +456,26 @@ test.describe("snippet and raw-content controls", () => {
     })
   })
 
+  test("contact intake remains complete in server-rendered HTML", async ({
+    page,
+  }, testInfo) => {
+    test.skip(testInfo.project.name !== "seo-raw-html")
+    const response = await page.goto("/contact", {
+      waitUntil: "domcontentloaded",
+    })
+
+    expect(response?.status()).toBe(200)
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Tell us where capacity is constrained."
+    )
+    await expect(page.locator("form [required]")).toHaveCount(4)
+    await expect(page.getByLabel("Intake commitments").getByRole("listitem")).toHaveCount(4)
+    await expect(page.getByText("Review", { exact: true })).toBeVisible()
+    await expect(page.getByText("Evidence map", { exact: true })).toBeVisible()
+    await expect(page.getByText("Scoped next step", { exact: true })).toBeVisible()
+    await expect(page.locator("main .gn-content-auto")).toHaveCount(0)
+  })
+
   test("Googlebot smartphone receives materially equivalent semantic HTML", async ({
     baseURL,
   }, testInfo) => {

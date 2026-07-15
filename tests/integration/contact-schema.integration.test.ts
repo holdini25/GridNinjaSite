@@ -12,11 +12,13 @@ describeWithPostgres("contact intake PostgreSQL migration", () => {
 
   beforeAll(async () => {
     await client.connect()
-    const migration = await readFile(
-      new URL("../../drizzle/0000_contact_intake.sql", import.meta.url),
-      "utf8"
-    )
-    await client.query(migration)
+    for (const name of ["0000_contact_intake.sql", "0001_contact_intake_v2.sql"]) {
+      const migration = await readFile(
+        new URL(`../../drizzle/${name}`, import.meta.url),
+        "utf8"
+      )
+      await client.query(migration)
+    }
   })
 
   afterAll(async () => {
@@ -80,6 +82,37 @@ describeWithPostgres("contact intake PostgreSQL migration", () => {
     )
     expect(deliveries.rowCount).toBe(0)
   })
+
+  it("stores contact v2 with nullable qualification and a bounded capacity range", async () => {
+    const id = randomUUID()
+    await client.query(
+      `insert into lead_submissions
+        (id, client_submission_id, request_id, schema_version, form_type, intent,
+         request_fingerprint, name, company, email, normalized_email,
+         capacity_range, message, source, ip_hash, turnstile_hostname,
+         turnstile_action, redact_after, delete_after)
+       values
+        ($1, $2, $3, 2, 'contact', 'other', $4, 'Test Operator',
+         'Test Compute', 'operator@example.com', 'operator@example.com',
+         '5–20 MW', 'Review this capacity decision.', 'integration-test', $5,
+         'localhost', 'contact', now() + interval '180 days',
+         now() + interval '365 days')`,
+      [id, randomUUID(), randomUUID(), "a".repeat(64), "b".repeat(64)]
+    )
+
+    const result = await client.query(
+      `select buyer_type, site_type, timeline, capacity_range
+       from lead_submissions where id = $1`,
+      [id]
+    )
+
+    expect(result.rows[0]).toEqual({
+      buyer_type: null,
+      site_type: null,
+      timeline: null,
+      capacity_range: "5–20 MW",
+    })
+  })
 })
 
 async function insertLead(
@@ -102,4 +135,3 @@ async function insertLead(
     [id, clientSubmissionId, randomUUID(), "a".repeat(64), "b".repeat(64)]
   )
 }
-

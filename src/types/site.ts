@@ -6,6 +6,7 @@ export type LeadIntent =
   | "book-demo"
   | "dcii-memo"
   | "load-passport"
+  | "other"
 
 export interface SectionCopy {
   eyebrow?: string
@@ -48,11 +49,12 @@ export interface LeadSubmission {
   company: string
   role?: string
   email: string
-  buyerType: string
-  siteType: string
-  timeline: string
+  buyerType?: string
+  siteType?: string
+  timeline?: string
   constraints?: string[]
   message?: string
+  capacityRange?: string
   intent: LeadIntent
   source: string
 }

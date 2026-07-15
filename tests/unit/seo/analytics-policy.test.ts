@@ -18,6 +18,9 @@ describe("privacy-first measurement policy", () => {
 
   it("allows only the approved successful-outcome and engagement events", () => {
     expect(analyticsEventNames).toEqual([
+      "contact_form_start",
+      "contact_form_submit",
+      "contact_form_error",
       "capacity_audit_request_success",
       "contact_submit_success",
       "proof_pack_download",
@@ -46,6 +49,23 @@ describe("privacy-first measurement policy", () => {
       source: "contact-page",
       intent: "capacity-audit",
       success: true,
+    })
+  })
+
+  it("records only an approved contact failure category", () => {
+    trackGridNinjaEvent("contact_form_error", {
+      source: "contact-page",
+      intent: "shadow-mode",
+      errorCategory: "verification",
+      success: false,
+    })
+
+    expect(track).toHaveBeenCalledWith("contact_form_error", {
+      route: "/proof",
+      source: "contact-page",
+      intent: "shadow-mode",
+      errorCategory: "verification",
+      success: false,
     })
   })
 })

@@ -4,7 +4,7 @@ import { expect, test } from "./support/client-health"
 import { centerLocatorInViewport } from "./support/viewport"
 
 type LeadPayload = Record<string, unknown> & {
-  schemaVersion: 1
+  schemaVersion: 1 | 2
   formType: "contact" | "capacity_audit"
   clientSubmissionId: string
   turnstileToken: string
@@ -50,20 +50,11 @@ async function installTurnstileStub(page: Page) {
 async function fillContactForm(page: Page) {
   await page.getByLabel("Name", { exact: true }).fill("Ada Operator")
   await page.getByLabel("Company", { exact: true }).fill("Atlas Compute")
-  await page.getByLabel("Role", { exact: true }).fill("VP Infrastructure")
-  await page.getByLabel("Email", { exact: true }).fill("ada@example.com")
+  await page.getByLabel("Work email", { exact: true }).fill("ada@example.com")
   await page
-    .getByLabel("Buyer type", { exact: true })
-    .selectOption("AI cloud operator")
-  await page
-    .getByLabel("Site type", { exact: true })
-    .selectOption("AI training campus")
-  await page
-    .getByLabel("Desired timeline", { exact: true })
-    .selectOption("Immediate (0-3 months)")
-  await page.getByLabel("interconnection delay", { exact: true }).check()
-  await page
-    .getByLabel("Message", { exact: true })
+    .getByLabel("What constraint or decision are you working through?", {
+      exact: true,
+    })
     .fill("We need a proof-backed capacity baseline for the next deployment.")
 }
 
@@ -101,7 +92,7 @@ function captureSuccessfulSubmission(page: Page) {
           body: JSON.stringify({
             ok: true,
             requestId: "request-e2e",
-            submissionId: "submission-e2e",
+            submissionId: "0a40bf9f-3e46-4d0c-b550-89e992ed5eef",
             status: "queued",
           }),
         })
@@ -139,32 +130,17 @@ test.describe("lead form browser behavior", () => {
       "autocomplete",
       "organization"
     )
-    await expect(page.getByLabel("Email", { exact: true })).toHaveAttribute(
+    await expect(page.getByLabel("Work email", { exact: true })).toHaveAttribute(
       "autocomplete",
       "email"
     )
-    await expect(page.getByLabel("Buyer type", { exact: true })).toHaveJSProperty(
-      "tagName",
-      "SELECT"
-    )
-    await expect(page.getByLabel("Site type", { exact: true })).toHaveJSProperty(
-      "tagName",
-      "SELECT"
-    )
-    await expect(
-      page.getByLabel("Desired timeline", { exact: true })
-    ).toHaveJSProperty("tagName", "SELECT")
+    await expect(page.getByRole("radio", { name: "Capacity Audit" })).toBeChecked()
+    await expect(page.locator("form [required]")).toHaveCount(4)
 
-    const constraint = page.getByLabel("interconnection delay", { exact: true })
-    await expect(constraint).toHaveAttribute("name", "constraints")
-    await expect(constraint).toHaveAttribute("value", "interconnection delay")
-    await expect(constraint).toHaveAttribute("id", /contact-constraint-/)
-
-    await expect(page.getByText("Security verification complete.")).toHaveRole(
-      "status"
-    )
+    await page.getByLabel("Name", { exact: true }).focus()
+    await expect(page.getByText("Security verification complete.")).toHaveRole("status")
     const submit = page.getByRole("button", {
-      name: "Start the conversation",
+      name: "Request assessment",
     })
 
     await centerLocatorInViewport(submit)
@@ -177,15 +153,15 @@ test.describe("lead form browser behavior", () => {
       "aria-describedby",
       "contact-name-error"
     )
-    await expect(page.getByText("Enter your name.", { exact: true })).toHaveRole(
+    await expect(page.getByText("Enter your name.", { exact: true }).first()).toHaveRole(
       "alert"
     )
-    await expect(page.getByText("Enter a valid email address.", { exact: true })).toHaveRole(
+    await expect(page.getByText("Enter a valid email address.", { exact: true }).first()).toHaveRole(
       "alert"
     )
     await expect(
-      page.getByText("Select at least one current constraint.", { exact: true })
-    ).toHaveRole("alert")
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toBeFocused()
   })
 
   test("submits current DOM values even when autofill emits no input events", async ({
@@ -193,10 +169,10 @@ test.describe("lead form browser behavior", () => {
   }) => {
     const capture = captureSuccessfulSubmission(page)
     await capture.install()
-    await page.goto("/contact?intent=partnership&source=e2e-autofill")
-    await expect(page.getByText("Security verification complete.")).toHaveRole(
-      "status"
-    )
+    await page.goto("/contact?intent=book-demo&source=e2e-autofill")
+    await page.getByLabel("Name", { exact: true }).focus()
+    await expect(page.getByText("Security verification complete.")).toHaveRole("status")
+    await expect(page.getByRole("radio", { name: "Other" })).toBeChecked()
 
     await page.locator("form").evaluate((form: HTMLFormElement) => {
       const setValue = (name: string, value: string) => {
@@ -211,9 +187,9 @@ test.describe("lead form browser behavior", () => {
       setValue("company", "Browser Filled Compute")
       setValue("role", "Capacity Director")
       setValue("email", "chrome@example.com")
-      setValue("buyerType", "AI cloud operator")
       setValue("siteType", "AI training campus")
       setValue("timeline", "Immediate (0-3 months)")
+      setValue("capacityRange", "5–20 MW")
       setValue(
         "message",
         "These values were inserted directly without input or change events."
@@ -230,18 +206,18 @@ test.describe("lead form browser behavior", () => {
 
     const payload = await capture.payload
     expect(payload).toMatchObject({
-      schemaVersion: 1,
+      schemaVersion: 2,
       formType: "contact",
       turnstileToken: expect.stringMatching(/^test-turnstile-token-/),
       name: "Chrome Autofill",
       company: "Browser Filled Compute",
       role: "Capacity Director",
       email: "chrome@example.com",
-      buyerType: "AI cloud operator",
       siteType: "AI training campus",
       timeline: "Immediate (0-3 months)",
+      capacityRange: "5–20 MW",
       constraints: ["interconnection delay"],
-      intent: "partnership",
+      intent: "book-demo",
       source: "e2e-autofill",
       website: "",
     })
@@ -249,11 +225,50 @@ test.describe("lead form browser behavior", () => {
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
     )
     expect(payload.startedAt).toEqual(expect.any(Number))
-    await expect(page.getByRole("status")).toContainText("Intake submitted")
-    await expect(page.getByRole("status")).toContainText(
-      "Reference: submission-e2e"
+    await expect(page).toHaveURL(/\/contact\/thanks$/)
+    await expect(page.getByText(/^Reference:/)).toContainText(
+      "0a40bf9f-3e46-4d0c-b550-89e992ed5eef"
     )
     expect(capture.requestCount()).toBe(1)
+  })
+
+  test("maps every incoming intent to four stable conversation cards", async ({
+    page,
+  }) => {
+    const cases = [
+      ["capacity-audit", "Capacity Audit"],
+      ["sellable-capacity", "Capacity Audit"],
+      ["shadow-mode", "Shadow Mode"],
+      ["partnership", "Partnership"],
+      ["book-demo", "Other"],
+      ["dcii-memo", "Other"],
+      ["load-passport", "Other"],
+      ["other", "Other"],
+    ] as const
+
+    for (const [intent, label] of cases) {
+      await page.goto(`/contact?intent=${intent}&source=footer`)
+      await expect(page.getByRole("radio", { name: label })).toBeChecked()
+    }
+  })
+
+  test("loads Turnstile after engagement when idle loading is deferred", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      window.requestIdleCallback = () => 1
+      window.cancelIdleCallback = () => undefined
+    })
+    await page.goto("/contact", { waitUntil: "domcontentloaded" })
+
+    const verification = page.locator('[data-turnstile-container="contact"]')
+    await expect(verification).not.toHaveAttribute("data-test-widget-id")
+
+    await page.getByLabel("Name", { exact: true }).focus()
+    await expect(page.getByText("Security verification complete.")).toHaveRole(
+      "status"
+    )
+    await expect(verification).toHaveAttribute("data-test-widget-id", /test-widget-/)
   })
 
   test("submits the Capacity Audit payload and keeps startedAt stable across retries", async ({
@@ -342,11 +357,12 @@ test.describe("lead form browser behavior", () => {
   }) => {
     clientHealth.allowError(/console: Failed to load resource:/)
     await page.goto("/contact")
+    await page.getByLabel("Name", { exact: true }).focus()
     await expect(page.getByText("Security verification complete.")).toHaveRole(
       "status"
     )
     await fillContactForm(page)
-    const submit = page.getByRole("button", { name: "Start the conversation" })
+    const submit = page.getByRole("button", { name: "Request assessment" })
 
     await page.route("**/api/contact", async (route) => {
       await route.fulfill({
@@ -360,12 +376,15 @@ test.describe("lead form browser behavior", () => {
       })
     })
     await submit.click()
-    await expect(page.getByText("Use a work email address.", { exact: true })).toHaveRole(
+    await expect(page.getByText("Use a work email address.", { exact: true }).first()).toHaveRole(
       "alert"
     )
-    await expect(page.getByText("Review the highlighted field.", { exact: true })).toHaveRole(
-      "alert"
-    )
+    await expect(
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toHaveRole("alert")
+    await expect(
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toContainText("Review the highlighted field.")
 
     await page.unroute("**/api/contact")
     await page.route("**/api/contact", async (route) => {
@@ -380,8 +399,8 @@ test.describe("lead form browser behavior", () => {
     })
     await submit.click()
     await expect(
-      page.getByText("Too many requests. Please try again later.", { exact: true })
-    ).toHaveRole("alert")
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toContainText("Too many requests. Please try again later.")
 
     await page.unroute("**/api/contact")
     await page.route("**/api/contact", async (route) => {
@@ -396,14 +415,14 @@ test.describe("lead form browser behavior", () => {
     })
     await submit.click()
     await expect(
-      page.getByText("Lead delivery is temporarily unavailable.", { exact: true })
-    ).toHaveRole("alert")
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toContainText("Lead delivery is temporarily unavailable.")
 
     await page.unroute("**/api/contact")
     await page.route("**/api/contact", (route) => route.abort("failed"))
     await submit.click()
-    await expect(page.getByText("Unable to submit the request.", { exact: true })).toHaveRole(
-      "alert"
-    )
+    await expect(
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toContainText("Unable to submit the request.")
   })
 })

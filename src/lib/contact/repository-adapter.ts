@@ -69,12 +69,23 @@ function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
     !lead.name ||
     !lead.company ||
     !lead.email ||
-    !lead.buyerType ||
-    !lead.siteType ||
-    !lead.timeline ||
     !lead.source
   ) {
     throw new Error("ClaimedDeliveryLeadWasRedacted")
+  }
+
+  if (
+    (lead.schemaVersion !== 1 && lead.schemaVersion !== 2) ||
+    (lead.schemaVersion === 2 && lead.formType !== "contact")
+  ) {
+    throw new Error("ClaimedDeliverySchemaVersionUnsupported")
+  }
+
+  if (
+    lead.schemaVersion === 1 &&
+    (!lead.buyerType || !lead.siteType || !lead.timeline)
+  ) {
+    throw new Error("ClaimedDeliveryLegacyQualificationMissing")
   }
 
   return {
@@ -88,6 +99,7 @@ function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
     },
     lead: {
       id: lead.id,
+      schemaVersion: lead.schemaVersion,
       acceptedAt: lead.acceptedAt,
       formType: lead.formType,
       name: lead.name,
@@ -96,6 +108,7 @@ function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
       buyerType: lead.buyerType,
       siteType: lead.siteType,
       timeline: lead.timeline,
+      capacityRange: lead.capacityRange,
       intent: lead.intent,
       source: lead.source,
       role: lead.role,

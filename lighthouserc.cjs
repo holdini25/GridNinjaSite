@@ -14,8 +14,9 @@ const commonAssertions = {
 
 const insightArticlePattern =
   "^https?://[^/]+/insights/virtual-capacity-control-plane/?$"
+const contactPattern = "^https?://[^/]+/contact/?$"
 const indexableRoutePattern =
-  "^(?!https?://[^/]+/insights/virtual-capacity-control-plane/?$).*$"
+  "^(?!https?://[^/]+/(?:insights/virtual-capacity-control-plane|contact)/?$).*$"
 
 module.exports = {
   ci: {
@@ -30,6 +31,7 @@ module.exports = {
         "http://127.0.0.1:3000/platform",
         "http://127.0.0.1:3000/proof",
         "http://127.0.0.1:3000/roi",
+        "http://127.0.0.1:3000/contact",
         "http://127.0.0.1:3000/insights",
         "http://127.0.0.1:3000/insights/virtual-capacity-control-plane",
       ],
@@ -50,6 +52,15 @@ module.exports = {
         {
           matchingUrlPattern: insightArticlePattern,
           assertions: commonAssertions,
+        },
+        {
+          matchingUrlPattern: contactPattern,
+          assertions: {
+            ...commonAssertions,
+            "categories:seo": ["error", { minScore: 1, aggregationMethod: "median-run" }],
+            "largest-contentful-paint": ["error", { maxNumericValue: 2000, aggregationMethod: "median-run" }],
+            "cumulative-layout-shift": ["error", { maxNumericValue: 0.05, aggregationMethod: "median-run" }],
+          },
         },
       ],
     },

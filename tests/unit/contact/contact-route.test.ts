@@ -119,6 +119,37 @@ describe("POST /api/contact", () => {
     )
   })
 
+  it("accepts contact v2 without optional qualification fields", async () => {
+    const response = await post({
+      schemaVersion: 2,
+      formType: "contact",
+      clientSubmissionId: "0191f7d6-9f48-7be7-9d17-f6ea958a70c3",
+      turnstileToken: "test-token",
+      name: "Morgan Operator",
+      company: "Proof Compute",
+      email: "morgan@example.com",
+      message: "We need to review a constrained capacity decision.",
+      constraints: [],
+      intent: "other",
+      source: "contact-page",
+      website: "",
+      startedAt: 1_725_000_000_000,
+    })
+
+    expect(response.status).toBe(202)
+    expect(mocks.acceptLead).toHaveBeenCalledWith(
+      expect.objectContaining({
+        schemaVersion: 2,
+        formType: "contact",
+        intent: "other",
+        buyerType: null,
+        siteType: null,
+        timeline: null,
+        capacityRange: null,
+      })
+    )
+  })
+
   it("returns the original submission without spending another Turnstile token", async () => {
     const normalized = {
       ...stripLeadSecurityFields(payload),

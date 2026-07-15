@@ -144,6 +144,19 @@ describe("public metadata", () => {
     expect(pageMetadata.openGraph).toHaveProperty("url", "https://gridninja.ai/contact")
   })
 
+  it("keeps the contact confirmation canonical but noindex", () => {
+    const pageMetadata = createPageMetadata({ path: "/contact/thanks" })
+
+    expect(pageMetadata.alternates).toEqual({
+      canonical: "https://gridninja.ai/contact/thanks",
+    })
+    expect(pageMetadata.robots).toEqual({
+      index: false,
+      follow: true,
+      noarchive: true,
+    })
+  })
+
   it("publishes only apex URLs in robots and the sitemap", () => {
     expect(robots()).toEqual({
       rules: {

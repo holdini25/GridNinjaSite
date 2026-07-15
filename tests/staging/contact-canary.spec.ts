@@ -12,26 +12,18 @@ test("one browser submission becomes one durable delivered lead", async ({
   await page.goto("/contact?intent=capacity-audit&source=staging-canary")
   await page.getByLabel("Name", { exact: true }).fill("GridNinja Canary")
   await page.getByLabel("Company", { exact: true }).fill("GridNinja Staging")
-  await page.getByLabel("Role", { exact: true }).fill("Delivery Monitor")
   await page
-    .getByLabel("Email", { exact: true })
+    .getByLabel("Work email", { exact: true })
     .fill("contact-canary@gridninja.ai")
   await page
-    .getByLabel("Buyer type", { exact: true })
-    .selectOption("AI cloud operator")
-  await page
-    .getByLabel("Site type", { exact: true })
-    .selectOption("AI training campus")
-  await page
-    .getByLabel("Desired timeline", { exact: true })
-    .selectOption("Exploratory")
-  await page.getByLabel("telemetry / topology confidence").check()
-  await page
-    .getByLabel("Message", { exact: true })
+    .getByLabel("What constraint or decision are you working through?", {
+      exact: true,
+    })
     .fill("Automated staging-only durability and delivery canary submission.")
 
   await expect(page.getByText("Security verification complete.")).toBeVisible()
-  await page.getByRole("button", { name: "Start the conversation" }).click()
+  await page.getByRole("button", { name: "Request assessment" }).click()
+  await expect(page).toHaveURL(/\/contact\/thanks$/)
   const reference = page.getByText(/^Reference:/)
   await expect(reference).toBeVisible()
   const submissionId = (await reference.textContent())?.replace("Reference:", "").trim()

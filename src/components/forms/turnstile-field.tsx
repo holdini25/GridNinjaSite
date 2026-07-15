@@ -41,6 +41,7 @@ export type TurnstileFieldHandle = {
 
 type TurnstileFieldProps = {
   action: "contact" | "capacity_audit"
+  enabled?: boolean
   error?: string
   onTokenChange: (token: string) => void
 }
@@ -55,7 +56,10 @@ type VerificationState =
 export const TurnstileField = forwardRef<
   TurnstileFieldHandle,
   TurnstileFieldProps
->(function TurnstileField({ action, error, onTokenChange }, forwardedRef) {
+>(function TurnstileField(
+  { action, enabled = true, error, onTokenChange },
+  forwardedRef
+) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim()
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetIdRef = useRef<string | null>(null)
@@ -83,7 +87,7 @@ export const TurnstileField = forwardRef<
     const container = containerRef.current
     const turnstile = window.turnstile
 
-    if (!siteKey || !scriptReady || !container || !turnstile) {
+    if (!enabled || !siteKey || !scriptReady || !container || !turnstile) {
       return
     }
 
@@ -119,11 +123,12 @@ export const TurnstileField = forwardRef<
       }
       widgetIdRef.current = null
     }
-  }, [action, scriptReady, siteKey])
+  }, [action, enabled, scriptReady, siteKey])
 
   const stateMessage = getVerificationStateMessage(
     verificationState,
-    Boolean(siteKey)
+    Boolean(siteKey),
+    enabled
   )
   const stateIsError =
     verificationState === "error" || verificationState === "expired"
@@ -134,7 +139,7 @@ export const TurnstileField = forwardRef<
       aria-describedby={error ? `${action}-turnstile-error` : undefined}
     >
       <p className="mb-3 text-base text-foreground">Security verification</p>
-      {siteKey ? (
+      {siteKey && enabled ? (
         <Script
           id="gridninja-cloudflare-turnstile"
           src={TURNSTILE_SCRIPT_URL}
@@ -143,33 +148,42 @@ export const TurnstileField = forwardRef<
           onError={() => setVerificationState("error")}
         />
       ) : null}
-      <div ref={containerRef} data-turnstile-container={action} />
-      <p
-        className={`mt-2 text-sm ${stateIsError ? "text-danger" : "text-muted-foreground"}`}
-        role={stateIsError ? "alert" : "status"}
-        aria-live="polite"
-      >
-        {stateMessage}
-      </p>
-      {error ? (
+      <div
+        ref={containerRef}
+        className="min-h-[72px]"
+        data-turnstile-container={action}
+      />
+      <div className="h-16 overflow-y-auto">
+        <p
+          className={`mt-2 text-sm ${stateIsError ? "text-danger" : "text-muted-foreground"}`}
+          role={stateIsError ? "alert" : "status"}
+          aria-live="polite"
+        >
+          {stateMessage}
+        </p>
         <p
           id={`${action}-turnstile-error`}
-          className="mt-2 text-base text-danger"
-          role="alert"
+          className="mt-1 text-sm text-danger"
+          role={error ? "alert" : undefined}
         >
-          {error}
+          {error ?? ""}
         </p>
-      ) : null}
+      </div>
     </div>
   )
 })
 
 function getVerificationStateMessage(
   state: VerificationState,
-  hasSiteKey: boolean
+  hasSiteKey: boolean,
+  enabled: boolean
 ) {
   if (!hasSiteKey) {
     return "Security verification is temporarily unavailable. Please try again later."
+  }
+
+  if (!enabled) {
+    return "Security verification will load when the form is engaged."
   }
 
   if (state === "verified") {

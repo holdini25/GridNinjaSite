@@ -23,7 +23,6 @@ const timelineSchema = z.enum(timelineOptions)
 const leadIntentSchema = z.enum(leadIntents)
 
 const commonLeadShape = {
-  schemaVersion: z.literal(1),
   clientSubmissionId: z.uuid("Invalid submission reference."),
   turnstileToken: withoutAsciiControlCharacters(
     z
@@ -49,9 +48,6 @@ const commonLeadShape = {
       .email("Enter a valid email address.")
       .max(254, "Email is too long.")
   ),
-  buyerType: buyerTypeSchema,
-  siteType: siteTypeSchema,
-  timeline: timelineSchema,
   intent: leadIntentSchema,
   source: withoutAsciiControlCharacters(
     z
@@ -66,12 +62,20 @@ const commonLeadShape = {
 
 export const capacityAuditSchema = z.object({
   ...commonLeadShape,
+  schemaVersion: z.literal(1),
   formType: z.literal("capacity_audit"),
+  buyerType: buyerTypeSchema,
+  siteType: siteTypeSchema,
+  timeline: timelineSchema,
 })
 
-export const contactLeadSchema = z.object({
+export const legacyContactLeadSchema = z.object({
   ...commonLeadShape,
+  schemaVersion: z.literal(1),
   formType: z.literal("contact"),
+  buyerType: buyerTypeSchema,
+  siteType: siteTypeSchema,
+  timeline: timelineSchema,
   role: withoutAsciiControlCharacters(
     z.string().trim().min(2, "Enter your role.").max(120, "Role is too long.")
   ),
@@ -88,16 +92,44 @@ export const contactLeadSchema = z.object({
   ),
 })
 
-export const leadSubmissionSchema = z.discriminatedUnion("formType", [
-  contactLeadSchema,
+export const contactLeadSchema = z.object({
+  ...commonLeadShape,
+  schemaVersion: z.literal(2),
+  formType: z.literal("contact"),
+  role: withoutAsciiControlCharacters(
+    z.string().trim().min(2, "Enter at least two characters.").max(120, "Role is too long.")
+  ).optional(),
+  siteType: siteTypeSchema.optional(),
+  timeline: timelineSchema.optional(),
+  constraints: z
+    .array(z.enum(constraintOptions))
+    .max(8, "Select fewer constraints.")
+    .default([]),
+  capacityRange: withoutAsciiControlCharacters(
+    z.string().trim().min(1).max(80, "Capacity range is too long.")
+  ).optional(),
+  message: withoutAsciiControlCharacters(
+    z
+      .string()
+      .trim()
+      .min(12, "Describe the constraint or decision in a little more detail.")
+      .max(2000, "Message is too long.")
+  ),
+})
+
+export const leadSubmissionSchema = z.union([
   capacityAuditSchema,
+  legacyContactLeadSchema,
+  contactLeadSchema,
 ])
 
 export type CapacityAuditInput = z.infer<typeof capacityAuditSchema>
 export type ContactLeadInput = z.infer<typeof contactLeadSchema>
+export type LegacyContactLeadInput = z.infer<typeof legacyContactLeadSchema>
 export type LeadSubmissionInput = z.infer<typeof leadSubmissionSchema>
 export type LeadDeliveryInput =
   | Omit<CapacityAuditInput, "website" | "startedAt" | "turnstileToken">
+  | Omit<LegacyContactLeadInput, "website" | "startedAt" | "turnstileToken">
   | Omit<ContactLeadInput, "website" | "startedAt" | "turnstileToken">
 
 export function stripLeadSecurityFields(
@@ -117,7 +149,7 @@ export function mapZodErrors<T extends z.ZodType>(
 ) {
   const fieldErrors: Record<string, string> = {}
 
-  for (const issue of result.error.issues) {
+  for (const issue of flattenIssues(result.error.issues)) {
     const key = issue.path[0]
 
     if (typeof key === "string" && !fieldErrors[key]) {
@@ -126,4 +158,12 @@ export function mapZodErrors<T extends z.ZodType>(
   }
 
   return fieldErrors
+}
+
+function flattenIssues(issues: readonly z.core.$ZodIssue[]): z.core.$ZodIssue[] {
+  return issues.flatMap((issue) => {
+    if (issue.code !== "invalid_union") return [issue]
+
+    return flattenIssues(issue.errors.flat())
+  })
 }

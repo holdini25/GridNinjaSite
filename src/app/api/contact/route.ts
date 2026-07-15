@@ -190,6 +190,12 @@ export async function POST(request: Request) {
     }
 
     const acceptedAt = new Date()
+    const buyerType =
+      "buyerType" in submission ? submission.buyerType : null
+    const siteType = "siteType" in submission ? submission.siteType : null
+    const timeline = "timeline" in submission ? submission.timeline : null
+    const capacityRange =
+      "capacityRange" in submission ? submission.capacityRange : null
     const accepted = await acceptLead({
       requestId,
       clientSubmissionId: submission.clientSubmissionId,
@@ -202,9 +208,10 @@ export async function POST(request: Request) {
       email: submission.email,
       normalizedEmail,
       role: submission.formType === "contact" ? submission.role : null,
-      buyerType: submission.buyerType,
-      siteType: submission.siteType,
-      timeline: submission.timeline,
+      buyerType,
+      siteType,
+      timeline,
+      capacityRange,
       constraints:
         submission.formType === "contact" ? submission.constraints : null,
       message: submission.formType === "contact" ? submission.message : null,

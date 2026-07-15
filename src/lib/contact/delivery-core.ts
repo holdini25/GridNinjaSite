@@ -17,14 +17,16 @@ export type DeliveryChannel = "internal_email" | "crm_webhook"
 
 export type LeadDeliveryPayload = {
   id: string
+  schemaVersion: 1 | 2
   acceptedAt: Date
   formType: "capacity_audit" | "contact"
   name: string
   company: string
   email: string
-  buyerType: string
-  siteType: string
-  timeline: string
+  buyerType: string | null
+  siteType: string | null
+  timeline: string | null
+  capacityRange: string | null
   intent: string
   source: string
   role: string | null
@@ -45,7 +47,7 @@ export type DeliveryProviderResult =
       retryable: boolean
     }
 
-export type LeadAcceptedEvent = {
+export type LeadAcceptedEventV1 = {
   schemaVersion: 1
   type: "lead.accepted.v1"
   eventId: string
@@ -74,6 +76,38 @@ export type LeadAcceptedEvent = {
   }
 }
 
+export type LeadAcceptedEventV2 = {
+  schemaVersion: 2
+  type: "lead.accepted.v2"
+  eventId: string
+  occurredAt: string
+  data: {
+    submissionId: string
+    formType: "contact"
+    acceptedAt: string
+    contact: {
+      name: string
+      company: string
+      email: string
+      role: string | null
+    }
+    qualification: {
+      buyerType: string | null
+      siteType: string | null
+      timeline: string | null
+      capacityRange: string | null
+      intent: string
+      constraints: string[]
+      message: string | null
+    }
+    attribution: {
+      source: string
+    }
+  }
+}
+
+export type LeadAcceptedEvent = LeadAcceptedEventV1 | LeadAcceptedEventV2
+
 export function getNextAttemptAt(
   attemptCount: number,
   now: Date,
@@ -100,6 +134,44 @@ export function buildLeadAcceptedEvent(
   lead: LeadDeliveryPayload,
   eventId: string
 ): LeadAcceptedEvent {
+  if (lead.schemaVersion === 2) {
+    if (lead.formType !== "contact") {
+      throw new Error("UnsupportedLeadSchemaVersion")
+    }
+
+    return {
+      schemaVersion: 2,
+      type: "lead.accepted.v2",
+      eventId,
+      occurredAt: lead.acceptedAt.toISOString(),
+      data: {
+        submissionId: lead.id,
+        formType: lead.formType,
+        acceptedAt: lead.acceptedAt.toISOString(),
+        contact: {
+          name: lead.name,
+          company: lead.company,
+          email: lead.email,
+          role: lead.role,
+        },
+        qualification: {
+          buyerType: lead.buyerType,
+          siteType: lead.siteType,
+          timeline: lead.timeline,
+          capacityRange: lead.capacityRange,
+          intent: lead.intent,
+          constraints: lead.constraints,
+          message: lead.message,
+        },
+        attribution: {
+          source: lead.source,
+        },
+      },
+    }
+  }
+
+  const qualification = requireLegacyQualification(lead)
+
   return {
     schemaVersion: 1,
     type: "lead.accepted.v1",
@@ -116,9 +188,9 @@ export function buildLeadAcceptedEvent(
         role: lead.role,
       },
       qualification: {
-        buyerType: lead.buyerType,
-        siteType: lead.siteType,
-        timeline: lead.timeline,
+        buyerType: qualification.buyerType,
+        siteType: qualification.siteType,
+        timeline: qualification.timeline,
         intent: lead.intent,
         constraints: lead.constraints,
         message: lead.message,
@@ -142,7 +214,7 @@ export function signWebhookBody(
 
 export function buildLeadEmailSubject(lead: LeadDeliveryPayload) {
   const company = singleLine(lead.company, 80) || "Unknown company"
-  const timeline = singleLine(lead.timeline, 48) || "Timeline not specified"
+  const timeline = singleLine(lead.timeline ?? "", 48) || "Timeline not specified"
 
   return `[${lead.formType === "capacity_audit" ? "Capacity Audit" : "Contact"}] ${company} — ${timeline}`
 }
@@ -155,12 +227,14 @@ export function buildLeadEmailText(lead: LeadDeliveryPayload) {
     `Name: ${lead.name}`,
     `Company: ${lead.company}`,
     `Email: ${lead.email}`,
-    `Buyer type: ${lead.buyerType}`,
-    `Site type: ${lead.siteType}`,
-    `Timeline: ${lead.timeline}`,
     `Intent: ${lead.intent}`,
     `Source: ${lead.source}`,
   ]
+
+  if (lead.buyerType) lines.push(`Buyer type: ${lead.buyerType}`)
+  if (lead.siteType) lines.push(`Site type: ${lead.siteType}`)
+  if (lead.timeline) lines.push(`Timeline: ${lead.timeline}`)
+  if (lead.capacityRange) lines.push(`Capacity range: ${lead.capacityRange}`)
 
   if (lead.role) {
     lines.push(`Role: ${lead.role}`)
@@ -185,12 +259,14 @@ export function buildLeadEmailHtml(lead: LeadDeliveryPayload) {
     ["Name", lead.name],
     ["Company", lead.company],
     ["Email", lead.email],
-    ["Buyer type", lead.buyerType],
-    ["Site type", lead.siteType],
-    ["Timeline", lead.timeline],
     ["Intent", lead.intent],
     ["Source", lead.source],
   ]
+
+  if (lead.buyerType) rows.push(["Buyer type", lead.buyerType])
+  if (lead.siteType) rows.push(["Site type", lead.siteType])
+  if (lead.timeline) rows.push(["Timeline", lead.timeline])
+  if (lead.capacityRange) rows.push(["Capacity range", lead.capacityRange])
 
   if (lead.role) {
     rows.push(["Role", lead.role])
@@ -231,6 +307,18 @@ export function sanitizeProviderErrorCode(value: unknown, fallback: string) {
 
 function singleLine(value: string, maxLength: number) {
   return value.replace(ASCII_CONTROL_CHARACTERS, " ").replace(/\s+/g, " ").trim().slice(0, maxLength)
+}
+
+function requireLegacyQualification(lead: LeadDeliveryPayload) {
+  if (!lead.buyerType || !lead.siteType || !lead.timeline) {
+    throw new Error("LegacyLeadQualificationMissing")
+  }
+
+  return {
+    buyerType: lead.buyerType,
+    siteType: lead.siteType,
+    timeline: lead.timeline,
+  }
 }
 
 function escapeHtml(value: string) {

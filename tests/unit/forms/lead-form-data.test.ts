@@ -67,7 +67,7 @@ describe("lead form data candidates", () => {
 
     expect(
       buildContactLeadCandidate(formData, {
-        schemaVersion: 1,
+        schemaVersion: 2,
         formType: "contact",
         clientSubmissionId,
         turnstileToken: "turnstile-contact-token",
@@ -76,6 +76,7 @@ describe("lead form data candidates", () => {
         startedAt: 1_725_000_000_123,
       })
     ).toMatchObject({
+      schemaVersion: 2,
       constraints: ["interconnection delay", "SLA protection"],
       website: "bot.example",
       intent: "shadow-mode",
@@ -150,7 +151,7 @@ describe("lead form data candidates", () => {
 
   it("allows normal line breaks in contact messages", () => {
     const candidate = {
-      schemaVersion: 1,
+      schemaVersion: 2,
       formType: "contact",
       clientSubmissionId,
       turnstileToken: "turnstile-contact-token",
@@ -158,7 +159,6 @@ describe("lead form data candidates", () => {
       company: "Capacity Works",
       role: "VP Infrastructure",
       email: "morgan@example.com",
-      buyerType: "Colo / REIT",
       siteType: "Colocation facility",
       timeline: "Near term (3-6 months)",
       constraints: ["SLA protection"],
@@ -171,4 +171,50 @@ describe("lead form data candidates", () => {
 
     expect(leadSubmissionSchema.safeParse(candidate).success).toBe(true)
   })
+
+  it("accepts a contact v2 request with only four required visitor fields", () => {
+    const formData = new FormData()
+    formData.set("name", "Morgan Operator")
+    formData.set("company", "Capacity Works")
+    formData.set("email", "morgan@example.com")
+    formData.set(
+      "message",
+      "We need to determine which capacity claim can be accepted."
+    )
+
+    const candidate = buildContactLeadCandidate(formData, {
+      schemaVersion: 2,
+      formType: "contact",
+      clientSubmissionId,
+      turnstileToken: "turnstile-contact-token",
+      intent: "other",
+      source: "contact-page",
+      startedAt: 1_725_000_000_123,
+    })
+
+    expect(contactCandidate(candidate)).toEqual({
+      success: true,
+      buyerType: undefined,
+      siteType: undefined,
+      timeline: undefined,
+      capacityRange: undefined,
+    })
+  })
 })
+
+function contactCandidate(candidate: unknown) {
+  const result = leadSubmissionSchema.safeParse(candidate)
+
+  if (!result.success || result.data.formType !== "contact") {
+    return { success: false }
+  }
+
+  return {
+    success: true,
+    buyerType: "buyerType" in result.data ? result.data.buyerType : undefined,
+    siteType: result.data.siteType,
+    timeline: result.data.timeline,
+    capacityRange:
+      "capacityRange" in result.data ? result.data.capacityRange : undefined,
+  }
+}

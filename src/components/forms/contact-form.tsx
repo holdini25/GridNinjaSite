@@ -1,17 +1,29 @@
 "use client"
 
-import { type FormEvent, useMemo, useRef, useState } from "react"
+import {
+  type FocusEvent,
+  type FormEvent,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 
 import {
-  buyerTypes,
+  type ContactConversationType,
   constraintOptions,
-  intentLabels,
   siteTypes,
   timelineOptions,
 } from "@/lib/constants"
 import { contactLeadSchema, mapZodErrors } from "@/lib/validators"
 import type { LeadIntent } from "@/types/site"
 
+import {
+  contactSubmissionStorageKey,
+  intentAfterConversationSelection,
+  isContactConversationType,
+  resolveContactAttribution,
+} from "@/components/forms/contact-attribution"
 import { buildContactLeadCandidate } from "@/components/forms/lead-form-data"
 import { NativeSelect } from "@/components/forms/native-select"
 import {
@@ -23,62 +35,94 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import {
   trackGridNinjaEvent,
+  type AnalyticsErrorCategory,
   type AnalyticsEventName,
 } from "@/lib/analytics"
 
-type ContactFormProps = {
-  intent: LeadIntent
-  source: string
-}
+const conversationOptions = [
+  { label: "Capacity Audit", value: "capacity-audit" },
+  { label: "Shadow Mode", value: "shadow-mode" },
+  { label: "Partnership", value: "partnership" },
+  { label: "Other", value: "other" },
+] as const satisfies readonly {
+  label: string
+  value: ContactConversationType
+}[]
 
-export function ContactForm({ intent, source }: ContactFormProps) {
+const blurValidatedFields = new Set([
+  "name",
+  "email",
+  "company",
+  "message",
+  "role",
+  "siteType",
+  "timeline",
+  "capacityRange",
+])
+
+export function ContactForm() {
   const startedAt = useRef(Date.now())
   const inFlight = useRef(false)
+  const formStarted = useRef(false)
+  const errorSummaryRef = useRef<HTMLDivElement>(null)
   const turnstileRef = useRef<TurnstileFieldHandle>(null)
   const [clientSubmissionId] = useState(() => crypto.randomUUID())
+  const [intent, setIntent] = useState<LeadIntent>("capacity-audit")
+  const [conversationType, setConversationType] =
+    useState<ContactConversationType>("capacity-audit")
+  const [source, setSource] = useState("contact-page")
   const [turnstileToken, setTurnstileToken] = useState("")
+  const [verificationEnabled, setVerificationEnabled] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
-  const [submissionId, setSubmissionId] = useState<string | null>(null)
   const [serverMessage, setServerMessage] = useState<string | null>(null)
+  const [errorFocusVersion, setErrorFocusVersion] = useState(0)
 
-  const successCopy = useMemo(() => {
-    if (intent === "shadow-mode") {
-      return "We'll use this to scope the Shadow Mode walkthrough, the evidence package, and the right operating context."
+  useEffect(() => {
+    const attribution = resolveContactAttribution(window.location.search)
+    setIntent(attribution.intent)
+    setConversationType(attribution.conversationType)
+    setSource(attribution.source)
+  }, [])
+
+  useEffect(() => {
+    if (errorFocusVersion > 0) {
+      errorSummaryRef.current?.focus()
+    }
+  }, [errorFocusVersion])
+
+  useEffect(() => {
+    const activate = () => setVerificationEnabled(true)
+    const idleWindow = window as Window & {
+      requestIdleCallback?: Window["requestIdleCallback"]
+      cancelIdleCallback?: Window["cancelIdleCallback"]
     }
 
-    if (intent === "sellable-capacity") {
-      return "We'll use this to frame a sellable-capacity assessment and the proof package needed for constrained-market stakeholders."
+    if (
+      typeof idleWindow.requestIdleCallback === "function" &&
+      typeof idleWindow.cancelIdleCallback === "function"
+    ) {
+      const idleId = idleWindow.requestIdleCallback(activate, {
+        timeout: 4_000,
+      })
+      return () => idleWindow.cancelIdleCallback?.(idleId)
     }
 
-    if (intent === "partnership") {
-      return "We'll use this to frame the partnership workflow, integration surface, and proof artifacts involved."
-    }
+    const timeoutId = globalThis.setTimeout(activate, 2_500)
+    return () => globalThis.clearTimeout(timeoutId)
+  }, [])
 
-    if (intent === "book-demo") {
-      return "We'll use this to frame the proof demo around the stakeholder lens, artifact set, and operating constraint you care about."
-    }
+  function startForm() {
+    setVerificationEnabled(true)
 
-    if (intent === "dcii-memo") {
-      return "We'll use this to route the DCII memo request and follow up with the deployment boundary, evidence outputs, and source notes."
-    }
+    if (formStarted.current) return
+    formStarted.current = true
+    trackGridNinjaEvent("contact_form_start", { source, intent })
+  }
 
-    if (intent === "load-passport") {
-      return "We'll use this to frame the Load Passport sample around your site type, proof gap, and review audience."
-    }
-
-    return "We'll use this to frame the first Capacity Audit, the recurring constraints, and the path into Shadow Mode evidence."
-  }, [intent])
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    if (inFlight.current) {
-      return
-    }
-
-    const candidate = buildContactLeadCandidate(new FormData(event.currentTarget), {
-      schemaVersion: 1,
+  function buildCandidate(form: HTMLFormElement) {
+    return buildContactLeadCandidate(new FormData(form), {
+      schemaVersion: 2,
       formType: "contact",
       clientSubmissionId,
       turnstileToken,
@@ -86,10 +130,66 @@ export function ContactForm({ intent, source }: ContactFormProps) {
       source,
       startedAt: startedAt.current,
     })
-    const parsed = contactLeadSchema.safeParse(candidate)
+  }
+
+  function handleBlur(event: FocusEvent<HTMLFormElement>) {
+    const target = event.target
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) {
+      return
+    }
+    if (!blurValidatedFields.has(target.name)) return
+
+    const parsed = contactLeadSchema.safeParse(buildCandidate(event.currentTarget))
+    const nextMessage = parsed.success
+      ? undefined
+      : mapZodErrors(parsed)[target.name]
+
+    setErrors((current) => {
+      const next = { ...current }
+      if (nextMessage) next[target.name] = nextMessage
+      else delete next[target.name]
+      return next
+    })
+  }
+
+  function handleConversationChange(value: string) {
+    if (!isContactConversationType(value)) return
+
+    setConversationType(value)
+    setIntent(intentAfterConversationSelection(value))
+  }
+
+  function reportError(category: AnalyticsErrorCategory) {
+    trackGridNinjaEvent("contact_form_error", {
+      source,
+      intent,
+      errorCategory: category,
+      success: false,
+    })
+  }
+
+  function focusErrorSummary() {
+    setErrorFocusVersion((version) => version + 1)
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    startForm()
+
+    if (inFlight.current) return
+
+    const parsed = contactLeadSchema.safeParse(buildCandidate(event.currentTarget))
 
     if (!parsed.success) {
-      setErrors(mapZodErrors(parsed))
+      const nextErrors = mapZodErrors(parsed)
+      setErrors(nextErrors)
+      setServerMessage("Review the highlighted fields before submitting.")
+      reportError(
+        Object.keys(nextErrors).every((field) => field === "turnstileToken")
+          ? "verification"
+          : "validation"
+      )
+      focusErrorSummary()
       return
     }
 
@@ -97,13 +197,12 @@ export function ContactForm({ intent, source }: ContactFormProps) {
     inFlight.current = true
     setIsPending(true)
     setServerMessage(null)
+    trackGridNinjaEvent("contact_form_submit", { source, intent })
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(parsed.data),
       })
       const payload = (await response.json()) as {
@@ -114,7 +213,6 @@ export function ContactForm({ intent, source }: ContactFormProps) {
         fieldErrors?: Record<string, string>
         message?: string
       }
-
       const acceptedStatus = response.status === 200 || response.status === 202
 
       if (
@@ -125,121 +223,102 @@ export function ContactForm({ intent, source }: ContactFormProps) {
       ) {
         setErrors(payload.fieldErrors ?? {})
         setServerMessage(payload.message ?? "Unable to submit the request.")
+        reportError(errorCategoryForStatus(response.status, payload.fieldErrors))
         turnstileRef.current?.reset()
+        focusErrorSummary()
         return
       }
 
-      setSubmissionId(payload.submissionId)
       trackGridNinjaEvent(contactSuccessEventName(intent), {
+        source,
         intent,
         success: true,
       })
+
+      try {
+        window.sessionStorage.setItem(
+          contactSubmissionStorageKey,
+          JSON.stringify({ submissionId: payload.submissionId, intent })
+        )
+      } catch {
+        // Confirmation remains useful when storage is unavailable.
+      }
+
+      window.location.assign("/contact/thanks")
     } catch {
       setServerMessage("Unable to submit the request.")
+      reportError("network")
       turnstileRef.current?.reset()
+      focusErrorSummary()
     } finally {
       inFlight.current = false
       setIsPending(false)
     }
   }
 
-  if (submissionId) {
-    return (
-      <div
-        className="rounded-[1.8rem] border border-border/70 bg-surface p-6"
-        role="status"
-      >
-        <p className="text-sm tracking-[0.28em] text-primary uppercase">
-          {intentLabels[intent]}
-        </p>
-        <h3 className="mt-4 text-[2.1rem] font-medium text-foreground">
-          Intake submitted
-        </h3>
-        <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground">
-          {successCopy}
-        </p>
-        <p className="mt-4 text-sm text-muted-foreground">
-          Reference:{" "}
-          <span className="font-mono text-foreground">{submissionId}</span>
-        </p>
-      </div>
-    )
-  }
+  const summaryMessages = [
+    ...new Set([...Object.values(errors), ...(serverMessage ? [serverMessage] : [])]),
+  ]
 
   return (
     <form
       onSubmit={handleSubmit}
+      onBlur={handleBlur}
+      onFocusCapture={startForm}
+      onPointerDownCapture={startForm}
       noValidate
-      className="gn-lead-form rounded-[1.8rem] border border-border/70 bg-surface p-6"
+      aria-busy={isPending}
+      className="gn-lead-form rounded-2xl border border-white/10 bg-[#0D151C] p-5 [--ring:#22D3EE] sm:p-7"
     >
       <div className="hidden" aria-hidden="true">
         <label htmlFor="contact-website">Website</label>
-        <input
-          id="contact-website"
-          name="website"
-          tabIndex={-1}
-          autoComplete="off"
-        />
+        <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <label htmlFor="contact-name" className="text-base text-foreground">
-            Name
-          </label>
+
+      <p className="gn-eyebrow">Request an assessment</p>
+      <h2 className="mt-3 text-[1.75rem] leading-tight font-medium text-foreground">
+        Start with the decision in front of your team
+      </h2>
+
+      <fieldset className="mt-6">
+        <legend className="text-sm font-medium text-foreground">
+          Conversation type
+        </legend>
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          {conversationOptions.map((option) => (
+            <label
+              key={option.value}
+              className="relative flex min-h-11 cursor-pointer items-center rounded-xl border border-white/10 bg-background/45 px-3 py-2.5 text-sm text-muted-foreground transition-[border-color,background-color,color,transform] duration-150 has-checked:border-primary/70 has-checked:bg-primary/10 has-checked:text-foreground focus-within:border-[#22D3EE] focus-within:ring-2 focus-within:ring-[#22D3EE]/25 active:translate-y-px motion-reduce:transition-none"
+            >
+              <input
+                type="radio"
+                name="conversationType"
+                value={option.value}
+                checked={conversationType === option.value}
+                onChange={(changeEvent) =>
+                  handleConversationChange(changeEvent.currentTarget.value)
+                }
+                className="sr-only"
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <div className="mt-6 grid gap-x-4 sm:grid-cols-2">
+        <ContactField label="Name" name="name" error={errors.name}>
           <Input
             id="contact-name"
             name="name"
             required
             autoComplete="name"
+            className="min-h-12 bg-background/35"
             aria-invalid={Boolean(errors.name)}
-            aria-describedby={errors.name ? "contact-name-error" : undefined}
+            aria-describedby="contact-name-error"
           />
-          {errors.name ? (
-            <p id="contact-name-error" className="text-base text-danger" role="alert">
-              {errors.name}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="contact-company" className="text-base text-foreground">
-            Company
-          </label>
-          <Input
-            id="contact-company"
-            name="company"
-            required
-            autoComplete="organization"
-            aria-invalid={Boolean(errors.company)}
-            aria-describedby={errors.company ? "contact-company-error" : undefined}
-          />
-          {errors.company ? (
-            <p id="contact-company-error" className="text-base text-danger" role="alert">
-              {errors.company}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="contact-role" className="text-base text-foreground">
-            Role
-          </label>
-          <Input
-            id="contact-role"
-            name="role"
-            required
-            autoComplete="organization-title"
-            aria-invalid={Boolean(errors.role)}
-            aria-describedby={errors.role ? "contact-role-error" : undefined}
-          />
-          {errors.role ? (
-            <p id="contact-role-error" className="text-base text-danger" role="alert">
-              {errors.role}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="contact-email" className="text-base text-foreground">
-            Email
-          </label>
+        </ContactField>
+        <ContactField label="Work email" name="email" error={errors.email}>
           <Input
             id="contact-email"
             type="email"
@@ -249,230 +328,271 @@ export function ContactForm({ intent, source }: ContactFormProps) {
             inputMode="email"
             autoCapitalize="none"
             spellCheck={false}
+            className="min-h-12 bg-background/35"
             aria-invalid={Boolean(errors.email)}
-            aria-describedby={errors.email ? "contact-email-error" : undefined}
+            aria-describedby="contact-email-error"
           />
-          {errors.email ? (
-            <p id="contact-email-error" className="text-base text-danger" role="alert">
-              {errors.email}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2">
-          <label
-            id="contact-buyer-type-label"
-            htmlFor="contact-buyer-type"
-            className="text-base text-foreground"
-          >
-            Buyer type
-          </label>
-          <NativeSelect
-            id="contact-buyer-type"
-            name="buyerType"
+        </ContactField>
+        <ContactField
+          label="Company"
+          name="company"
+          error={errors.company}
+          className="sm:col-span-2"
+        >
+          <Input
+            id="contact-company"
+            name="company"
             required
-            autoComplete="off"
-            defaultValue=""
-            aria-invalid={Boolean(errors.buyerType)}
-            aria-describedby={
-              errors.buyerType ? "contact-buyer-type-error" : undefined
-            }
-          >
-            <option value="" disabled>
-              Select buyer type
-            </option>
-            {buyerTypes.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </NativeSelect>
-          {errors.buyerType ? (
-            <p
-              id="contact-buyer-type-error"
-              className="text-base text-danger"
-              role="alert"
-            >
-              {errors.buyerType}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2">
-          <label
-            id="contact-site-type-label"
-            htmlFor="contact-site-type"
-            className="text-base text-foreground"
-          >
-            Site type
-          </label>
-          <NativeSelect
-            id="contact-site-type"
-            name="siteType"
-            required
-            autoComplete="off"
-            defaultValue=""
-            aria-invalid={Boolean(errors.siteType)}
-            aria-describedby={
-              errors.siteType ? "contact-site-type-error" : undefined
-            }
-          >
-            <option value="" disabled>
-              Select site type
-            </option>
-            {siteTypes.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </NativeSelect>
-          {errors.siteType ? (
-            <p
-              id="contact-site-type-error"
-              className="text-base text-danger"
-              role="alert"
-            >
-              {errors.siteType}
-            </p>
-          ) : null}
-        </div>
-        <div className="flex flex-col gap-2 sm:col-span-2">
-          <label
-            id="contact-timeline-label"
-            htmlFor="contact-timeline"
-            className="text-base text-foreground"
-          >
-            Desired timeline
-          </label>
-          <NativeSelect
-            id="contact-timeline"
-            name="timeline"
-            required
-            autoComplete="off"
-            defaultValue=""
-            aria-invalid={Boolean(errors.timeline)}
-            aria-describedby={
-              errors.timeline ? "contact-timeline-error" : undefined
-            }
-          >
-            <option value="" disabled>
-              Select timeline
-            </option>
-            {timelineOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </NativeSelect>
-          {errors.timeline ? (
-            <p
-              id="contact-timeline-error"
-              className="text-base text-danger"
-              role="alert"
-            >
-              {errors.timeline}
-            </p>
-          ) : null}
-        </div>
-      </div>
-
-      <fieldset
-        className="mt-6"
-        aria-required="true"
-        aria-invalid={Boolean(errors.constraints)}
-        aria-describedby={
-          errors.constraints ? "contact-constraints-error" : undefined
-        }
-      >
-        <legend className="text-base text-foreground">Current constraints</legend>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          {constraintOptions.map((option, index) => (
-            <label
-              key={option}
-              htmlFor={`contact-constraint-${index}`}
-              className="flex items-start gap-3 rounded-[1rem] border border-border/70 bg-surface-2 px-4 py-4 text-base text-muted-foreground"
-            >
-              <input
-                id={`contact-constraint-${index}`}
-                type="checkbox"
-                name="constraints"
-                value={option}
-                autoComplete="off"
-                aria-invalid={Boolean(errors.constraints)}
-                className="mt-1 size-4 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-              />
-              <span>{option}</span>
-            </label>
-          ))}
-        </div>
-        {errors.constraints ? (
-          <p
-            id="contact-constraints-error"
-            className="mt-3 text-base text-danger"
-            role="alert"
-          >
-            {errors.constraints}
-          </p>
-        ) : null}
-      </fieldset>
-
-      <div className="mt-6 flex flex-col gap-2">
-        <label htmlFor="contact-message" className="text-base text-foreground">
-          Message
-        </label>
-        <Textarea
-          id="contact-message"
+            autoComplete="organization"
+            className="min-h-12 bg-background/35"
+            aria-invalid={Boolean(errors.company)}
+            aria-describedby="contact-company-error"
+          />
+        </ContactField>
+        <ContactField
+          label="What constraint or decision are you working through?"
           name="message"
-          required
-          autoComplete="off"
-          aria-invalid={Boolean(errors.message)}
-          aria-describedby={errors.message ? "contact-message-error" : undefined}
-          className="min-h-36"
-        />
-        {errors.message ? (
-          <p id="contact-message-error" className="text-base text-danger" role="alert">
-            {errors.message}
+          error={errors.message}
+          className="sm:col-span-2"
+        >
+          <Textarea
+            id="contact-message"
+            name="message"
+            required
+            autoComplete="off"
+            className="min-h-36 resize-y bg-background/35"
+            aria-invalid={Boolean(errors.message)}
+            aria-describedby="contact-message-helper contact-message-error"
+          />
+          <p
+            id="contact-message-helper"
+            className="mt-2 text-sm leading-6 text-muted-foreground"
+          >
+            Describe the operating decision, capacity claim, recurring constraint,
+            or evidence gap. Do not include credentials, site drawings, customer
+            data or sensitive topology.
           </p>
-        ) : null}
+        </ContactField>
       </div>
 
-      {serverMessage ? (
-        <p className="mt-4 text-base text-danger" role="alert">
-          {serverMessage}
-        </p>
-      ) : null}
+      <details className="mt-2 rounded-xl border border-white/10 bg-background/25">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-sm font-medium text-foreground marker:content-none">
+          Add optional site details
+          <span aria-hidden="true" className="text-primary">+</span>
+        </summary>
+        <div className="grid gap-x-4 border-t border-white/10 px-4 pt-4 sm:grid-cols-2">
+          <OptionalSelect
+            id="contact-site-type"
+            label="Site type"
+            name="siteType"
+            error={errors.siteType}
+            options={siteTypes}
+          />
+          <OptionalSelect
+            id="contact-timeline"
+            label="Desired timeline"
+            name="timeline"
+            error={errors.timeline}
+            options={timelineOptions}
+          />
+          <ContactField label="Role" name="role" error={errors.role}>
+            <Input
+              id="contact-role"
+              name="role"
+              autoComplete="organization-title"
+              className="min-h-12 bg-background/35"
+              aria-invalid={Boolean(errors.role)}
+              aria-describedby="contact-role-error"
+            />
+          </ContactField>
+          <ContactField
+            label="Approximate capacity range"
+            name="capacityRange"
+            controlId="contact-capacity-range"
+            error={errors.capacityRange}
+          >
+            <Input
+              id="contact-capacity-range"
+              name="capacityRange"
+              maxLength={80}
+              autoComplete="off"
+              placeholder="For example, 5–20 MW"
+              className="min-h-12 bg-background/35"
+              aria-invalid={Boolean(errors.capacityRange)}
+              aria-describedby="contact-capacityRange-error"
+            />
+          </ContactField>
+          <fieldset className="pb-5 sm:col-span-2">
+            <legend className="text-sm font-medium text-foreground">
+              Current constraints
+            </legend>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {constraintOptions.map((option, index) => (
+                <label
+                  key={option}
+                  htmlFor={`contact-constraint-${index}`}
+                  className="flex min-h-11 items-start gap-3 rounded-lg border border-white/10 bg-background/30 px-3 py-3 text-sm text-muted-foreground"
+                >
+                  <input
+                    id={`contact-constraint-${index}`}
+                    type="checkbox"
+                    name="constraints"
+                    value={option}
+                    autoComplete="off"
+                    className="mt-0.5 size-4 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#22D3EE]"
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+            <ErrorSlot id="contact-constraints-error" message={errors.constraints} />
+          </fieldset>
+        </div>
+      </details>
+
+      <div className="mt-5 h-36 overflow-y-auto">
+        {summaryMessages.length > 0 ? (
+          <div
+            ref={errorSummaryRef}
+            tabIndex={-1}
+            role="alert"
+            aria-labelledby="contact-error-summary-title"
+            className="rounded-xl border border-danger/50 bg-danger/8 px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-[#22D3EE]"
+          >
+            <p id="contact-error-summary-title" className="font-medium text-foreground">
+              Review this request
+            </p>
+            <ul className="mt-2 space-y-1 text-sm text-danger">
+              {summaryMessages.map((message) => (
+                <li key={message}>{message}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </div>
 
       <TurnstileField
         ref={turnstileRef}
         action="contact"
+        enabled={verificationEnabled}
         error={errors.turnstileToken}
         onTokenChange={setTurnstileToken}
       />
 
-      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="max-w-md text-base leading-8 text-muted-foreground">
-          Do not submit confidential site drawings, credentials, customer data,
-          or security-sensitive topology through this form.
-        </p>
-        <Button
-          type="submit"
-          size="lg"
-          disabled={isPending}
-          data-gn-event="contact-submit"
-        >
-          {isPending ? "Submitting..." : "Start the conversation"}
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        size="lg"
+        disabled={isPending}
+        aria-busy={isPending}
+        data-gn-event="contact-submit"
+        className="mt-5 min-h-12 w-full rounded-[10px]"
+      >
+        {isPending ? (
+          <>
+            <span
+              aria-hidden="true"
+              className="size-4 animate-spin rounded-full border-2 border-primary-foreground/35 border-t-primary-foreground motion-reduce:animate-none"
+            />
+            Submitting request…
+          </>
+        ) : (
+          "Request assessment"
+        )}
+      </Button>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">
+        Do not include security-sensitive or confidential information.
+      </p>
     </form>
   )
 }
 
+function ContactField({
+  label,
+  name,
+  error,
+  className = "",
+  controlId,
+  children,
+}: {
+  label: string
+  name: string
+  error?: string
+  className?: string
+  controlId?: string
+  children: ReactNode
+}) {
+  return (
+    <div className={`flex flex-col ${className}`}>
+      <label htmlFor={controlId ?? `contact-${name}`} className="mb-2 text-sm font-medium text-foreground">
+        {label}
+      </label>
+      {children}
+      <ErrorSlot id={`contact-${name}-error`} message={error} />
+    </div>
+  )
+}
+
+function OptionalSelect({
+  id,
+  label,
+  name,
+  error,
+  options,
+}: {
+  id: string
+  label: string
+  name: string
+  error?: string
+  options: readonly string[]
+}) {
+  return (
+    <ContactField label={label} name={name} controlId={id} error={error}>
+      <NativeSelect
+        id={id}
+        name={name}
+        autoComplete="off"
+        defaultValue=""
+        className="min-h-12 bg-background/35"
+        aria-invalid={Boolean(error)}
+        aria-describedby={`contact-${name}-error`}
+      >
+        <option value="">Not specified</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </NativeSelect>
+    </ContactField>
+  )
+}
+
+function ErrorSlot({ id, message }: { id: string; message?: string }) {
+  return (
+    <div className="h-12 overflow-y-auto pt-1 sm:h-7">
+      <p
+        id={id}
+        className="text-sm text-danger"
+        role={message ? "alert" : undefined}
+      >
+        {message ?? ""}
+      </p>
+    </div>
+  )
+}
+
+function errorCategoryForStatus(
+  status: number,
+  fieldErrors?: Record<string, string>
+): AnalyticsErrorCategory {
+  if (fieldErrors && Object.keys(fieldErrors).length > 0) return "validation"
+  if (status === 403) return "verification"
+  if (status === 429) return "rate_limit"
+  return "server"
+}
+
 function contactSuccessEventName(intent: LeadIntent): AnalyticsEventName {
-  if (intent === "capacity-audit") {
-    return "capacity_audit_request_success"
-  }
-
-  if (intent === "partnership") {
-    return "partner_inquiry_success"
-  }
-
+  if (intent === "capacity-audit") return "capacity_audit_request_success"
+  if (intent === "partnership") return "partner_inquiry_success"
   return "contact_submit_success"
 }
