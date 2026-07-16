@@ -256,9 +256,11 @@ export function ContactForm() {
     }
   }
 
-  const summaryMessages = [
-    ...new Set([...Object.values(errors), ...(serverMessage ? [serverMessage] : [])]),
-  ]
+  const summaryMessage =
+    serverMessage ??
+    (Object.keys(errors).length > 0
+      ? "Review the highlighted fields before submitting your request again."
+      : null)
 
   return (
     <form
@@ -450,23 +452,19 @@ export function ContactForm() {
         </div>
       </details>
 
-      <div className="mt-5 h-36 overflow-y-auto">
-        {summaryMessages.length > 0 ? (
+      <div className="mt-5 h-24">
+        {summaryMessage ? (
           <div
             ref={errorSummaryRef}
             tabIndex={-1}
             role="alert"
             aria-labelledby="contact-error-summary-title"
-            className="rounded-xl border border-danger/50 bg-danger/8 px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-[#22D3EE]"
+            className="flex h-full flex-col justify-center rounded-xl border border-danger/50 bg-danger/8 px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-[#22D3EE]"
           >
             <p id="contact-error-summary-title" className="font-medium text-foreground">
               Review this request
             </p>
-            <ul className="mt-2 space-y-1 text-sm text-danger">
-              {summaryMessages.map((message) => (
-                <li key={message}>{message}</li>
-              ))}
-            </ul>
+            <p className="mt-1 text-sm leading-5 text-danger">{summaryMessage}</p>
           </div>
         ) : null}
       </div>

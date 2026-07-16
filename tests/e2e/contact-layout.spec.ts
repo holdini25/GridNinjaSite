@@ -140,6 +140,14 @@ test.describe("contact intake layout", () => {
     await expect(
       page.locator('[aria-labelledby="contact-error-summary-title"]')
     ).toBeFocused()
+    await expect(
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toContainText("Review the highlighted fields before submitting.")
+    expect(
+      await page
+        .locator('[aria-labelledby="contact-error-summary-title"]')
+        .evaluate((element) => element.scrollHeight <= element.clientHeight)
+    ).toBe(true)
 
     const validationFormBox = await form.boundingBox()
     expect(Math.abs(validationFormBox!.height - initialFormBox!.height)).toBeLessThan(2)

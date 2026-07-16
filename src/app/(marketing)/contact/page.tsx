@@ -31,58 +31,62 @@ export default function ContactPage() {
         containerClassName="max-w-[73.75rem]"
       >
         <div className="grid items-start gap-6 sm:gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-16">
-          <div className="lg:col-span-5 lg:pt-5">
-            <div className="flex items-center gap-3">
-              <GridNinjaMark
-                variant="proof-core"
-                className="size-7"
-                priority
-              />
-              <p className="gn-eyebrow">{contactHero.eyebrow}</p>
+          <div className="contents lg:col-span-5 lg:block lg:pt-5">
+            <div className="order-1">
+              <div className="flex items-center gap-3">
+                <GridNinjaMark
+                  variant="proof-core"
+                  className="size-7"
+                  priority
+                />
+                <p className="gn-eyebrow">{contactHero.eyebrow}</p>
+              </div>
+
+              <h1 className="mt-5 max-w-[11ch] text-balance text-[2.5rem] leading-[0.98] font-medium tracking-tight text-foreground sm:mt-6 sm:text-[3.1rem] lg:text-[3.5rem]">
+                {contactHero.headline}
+              </h1>
+              <p className="mt-3 max-w-xl text-[0.9375rem] leading-7 text-muted-foreground sm:mt-6 sm:text-[1.05rem] sm:leading-8">
+                {contactHero.body}
+              </p>
             </div>
 
-            <h1 className="mt-5 max-w-[11ch] text-balance text-[2.5rem] leading-[0.98] font-medium tracking-tight text-foreground sm:mt-6 sm:text-[3.1rem] lg:text-[3.5rem]">
-              {contactHero.headline}
-            </h1>
-            <p className="mt-3 max-w-xl text-[0.9375rem] leading-7 text-muted-foreground sm:mt-6 sm:text-[1.05rem] sm:leading-8">
-              {contactHero.body}
-            </p>
-
-            <ul className="mt-5 space-y-2 sm:mt-8 sm:space-y-3" aria-label="Intake commitments">
-              {contactTrustCommitments.map((commitment) => (
-                <li
-                  key={commitment}
-                  className="flex items-start gap-3 text-sm leading-6 text-foreground"
-                >
-                  <span
-                    aria-hidden="true"
-                    className="mt-1 grid size-4 shrink-0 place-items-center rounded-full border border-signal/50 text-[0.65rem] text-signal"
+            <div className="order-3 mt-5 sm:mt-8">
+              <ul className="space-y-2 sm:space-y-3" aria-label="Intake commitments">
+                {contactTrustCommitments.map((commitment) => (
+                  <li
+                    key={commitment}
+                    className="flex items-start gap-3 text-sm leading-6 text-foreground"
                   >
-                    ✓
-                  </span>
-                  {commitment}
-                </li>
-              ))}
-            </ul>
+                    <span
+                      aria-hidden="true"
+                      className="mt-1 grid size-4 shrink-0 place-items-center rounded-full border border-signal/50 text-[0.65rem] text-signal"
+                    >
+                      ✓
+                    </span>
+                    {commitment}
+                  </li>
+                ))}
+              </ul>
 
-            <div
-              data-seo-related-source="/contact"
-              data-seo-related-paths='["/proof"]'
-              data-seo-route-tier="0"
-            >
-              <Link
-                href="/proof"
-                prefetch={false}
-                className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm font-medium text-proof-cyan transition-[border-color,color,transform] duration-150 hover:border-proof-cyan/50 hover:text-foreground active:translate-y-px motion-reduce:transition-none sm:mt-8"
-                data-seo-related-target="/proof"
+              <div
+                data-seo-related-source="/contact"
+                data-seo-related-paths='["/proof"]'
+                data-seo-route-tier="0"
               >
-                View proof before autonomy
-                <span aria-hidden="true">→</span>
-              </Link>
+                <Link
+                  href="/proof"
+                  prefetch={false}
+                  className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm font-medium text-proof-cyan transition-[border-color,color,transform] duration-150 hover:border-proof-cyan/50 hover:text-foreground active:translate-y-px motion-reduce:transition-none"
+                  data-seo-related-target="/proof"
+                >
+                  View proof before autonomy
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
             </div>
           </div>
 
-          <div className="min-w-0 lg:col-span-7">
+          <div className="order-2 min-w-0 lg:col-span-7">
             <ContactForm />
           </div>
         </div>
