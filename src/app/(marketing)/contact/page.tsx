@@ -50,25 +50,55 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <div className="order-3 mt-5 sm:mt-8">
-              <ul className="space-y-2 sm:space-y-3" aria-label="Intake commitments">
+            <section
+              aria-labelledby="contact-safeguards"
+              className="order-3 mt-5 rounded-[1.25rem] border border-white/10 bg-[#0D151C]/90 p-4 sm:mt-8 sm:p-5"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="gn-eyebrow text-proof-cyan">Assessment safeguards</p>
+                  <h2
+                    id="contact-safeguards"
+                    className="mt-2 text-base font-medium tracking-tight text-foreground"
+                  >
+                    Proof-first, access-bounded engagement.
+                  </h2>
+                </div>
+                <span className="mt-0.5 shrink-0 rounded-full border border-white/10 bg-background/50 px-2.5 py-1 font-mono text-[0.65rem] tracking-[0.14em] text-muted-foreground uppercase">
+                  01—04
+                </span>
+              </div>
+
+              <ul
+                className="mt-4 grid gap-2 sm:grid-cols-2"
+                aria-label="Intake commitments"
+              >
                 {contactTrustCommitments.map((commitment) => (
                   <li
                     key={commitment}
-                    className="flex items-start gap-3 text-sm leading-6 text-foreground"
+                    className="flex min-h-16 items-center gap-3 rounded-xl border border-white/[0.08] bg-background/35 px-3 py-3 text-sm font-medium leading-5 text-foreground"
                   >
                     <span
                       aria-hidden="true"
-                      className="mt-1 grid size-4 shrink-0 place-items-center rounded-full border border-signal/50 text-[0.65rem] text-signal"
+                      className="grid size-7 shrink-0 place-items-center rounded-lg border border-signal/30 bg-signal/10 text-signal"
                     >
-                      ✓
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        className="size-3.5"
+                      >
+                        <path d="m3.25 8.25 2.9 2.9 6.6-6.45" />
+                      </svg>
                     </span>
-                    {commitment}
+                    <span>{commitment}</span>
                   </li>
                 ))}
               </ul>
 
               <div
+                className="mt-4 border-t border-white/[0.08] pt-3"
                 data-seo-related-source="/contact"
                 data-seo-related-paths='["/proof"]'
                 data-seo-route-tier="0"
@@ -76,14 +106,14 @@ export default function ContactPage() {
                 <Link
                   href="/proof"
                   prefetch={false}
-                  className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 px-3 text-sm font-medium text-proof-cyan transition-[border-color,color,transform] duration-150 hover:border-proof-cyan/50 hover:text-foreground active:translate-y-px motion-reduce:transition-none"
+                  className="inline-flex min-h-10 items-center gap-2 text-sm font-medium text-proof-cyan transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-proof-cyan/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0D151C] motion-reduce:transition-none"
                   data-seo-related-target="/proof"
                 >
                   View proof before autonomy
                   <span aria-hidden="true">→</span>
                 </Link>
               </div>
-            </div>
+            </section>
           </div>
 
           <div className="order-2 min-w-0 lg:col-span-7">
