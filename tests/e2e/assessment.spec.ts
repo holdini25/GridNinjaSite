@@ -46,14 +46,35 @@ test.describe("capacity assessment", () => {
     }
   })
 
-  test("actual technical download contains the current record and its publication version", async ({ page }) => {
+  test("technical download serves the current record and its publication version", async ({ page, request, browserName }) => {
     await page.goto("/demo?scenario=c&version=1.0.0")
-    const downloadPromise = page.waitForEvent("download")
-    await page.getByRole("link", { name: "Download this technical record" }).click()
-    const download = await downloadPromise
-    const file = await download.path()
-    expect(file).toBeTruthy()
-    const record = JSON.parse(await readFile(file!, "utf8"))
+    const target = "/downloads/assessment/demo-01-c/v1.0.0/json"
+    const link = page.getByRole("link", { name: "Download this technical record" })
+    await expect(link).toHaveAttribute("href", target)
+    const responsePromise = page.waitForResponse((response) => new URL(response.url()).pathname === target)
+    // Linux WebKit can render an attachment navigation without reporting a download.
+    // Check the browser response there; other engines still verify the saved file.
+    const downloadPromise = browserName === "webkit" && process.platform === "linux"
+      ? null
+      : page.waitForEvent("download")
+    await link.click()
+    const response = await responsePromise
+    expect(response.status()).toBe(200)
+    expect(response.headers()["content-type"]).toContain("application/json")
+    expect(response.headers()["content-disposition"]).toBe('attachment; filename="gridninja-demo-01-c-v1.0.0.json"')
+    let bytes: Buffer
+    if (downloadPromise) {
+      const download = await downloadPromise
+      expect(download.suggestedFilename()).toBe("gridninja-demo-01-c-v1.0.0.json")
+      const file = await download.path()
+      expect(file).toBeTruthy()
+      bytes = await readFile(file!)
+    } else {
+      const artifact = await request.get(target)
+      expect(artifact.status()).toBe(200)
+      bytes = await artifact.body()
+    }
+    const record = JSON.parse(bytes.toString("utf8"))
     expect(record.scenario).toBe("c")
     expect(record.publication).toMatchObject({ id: "demo-01-c", version: "1.0.0" })
     expect(record.screeningOutcome).toBe("REJECT")
