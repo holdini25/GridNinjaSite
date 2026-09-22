@@ -58,6 +58,14 @@ async function fillContactForm(page: Page) {
     .fill("We need a proof-backed capacity baseline for the next deployment.")
 }
 
+async function engageVerification(page: Page) {
+  const name = page.getByLabel("Name", { exact: true })
+  await expect(name).toBeEnabled()
+  await name.focus()
+  await expect(name).toBeFocused()
+  await expect(page.getByText("Security verification complete.")).toHaveRole("status")
+}
+
 function captureSuccessfulSubmission(page: Page) {
   let requestCount = 0
   let resolvePayload: (payload: LeadPayload) => void
@@ -122,8 +130,7 @@ test.describe("lead form browser behavior", () => {
     await expect(page.getByRole("radio", { name: "Capacity assessment" })).toBeChecked()
     await expect(page.locator("form [required]")).toHaveCount(3)
 
-    await page.getByLabel("Name", { exact: true }).focus()
-    await expect(page.getByText("Security verification complete.")).toHaveRole("status")
+    await engageVerification(page)
     const submit = page.getByRole("button", {
       name: "Scope an assessment",
     })
@@ -155,8 +162,7 @@ test.describe("lead form browser behavior", () => {
     const capture = captureSuccessfulSubmission(page)
     await capture.install()
     await page.goto("/contact?intent=book-demo&source=e2e-autofill")
-    await page.getByLabel("Name", { exact: true }).focus()
-    await expect(page.getByText("Security verification complete.")).toHaveRole("status")
+    await engageVerification(page)
     await expect(page.getByRole("radio", { name: "Other" })).toBeChecked()
 
     await page.locator("form").evaluate((form: HTMLFormElement) => {
@@ -249,10 +255,7 @@ test.describe("lead form browser behavior", () => {
     const verification = page.locator('[data-turnstile-container="contact"]')
     await expect(verification).not.toHaveAttribute("data-test-widget-id")
 
-    await page.getByLabel("Name", { exact: true }).focus()
-    await expect(page.getByText("Security verification complete.")).toHaveRole(
-      "status"
-    )
+    await engageVerification(page)
     await expect(verification).toHaveAttribute("data-test-widget-id", /test-widget-/)
   })
 
@@ -283,10 +286,7 @@ test.describe("lead form browser behavior", () => {
     })
 
     await page.goto("/assessment")
-    await page.getByLabel("Name", { exact: true }).focus()
-    await expect(page.getByText("Security verification complete.")).toHaveRole(
-      "status"
-    )
+    await engageVerification(page)
     const auditForm = page.locator("form")
 
     await expect(auditForm).toHaveCount(1)
@@ -336,10 +336,7 @@ test.describe("lead form browser behavior", () => {
   }) => {
     clientHealth.allowError(/console: Failed to load resource:/)
     await page.goto("/contact")
-    await page.getByLabel("Name", { exact: true }).focus()
-    await expect(page.getByText("Security verification complete.")).toHaveRole(
-      "status"
-    )
+    await engageVerification(page)
     await fillContactForm(page)
     const submit = page.getByRole("button", { name: "Scope an assessment" })
 
