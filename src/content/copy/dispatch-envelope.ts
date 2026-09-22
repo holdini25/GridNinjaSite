@@ -44,23 +44,23 @@ export const dispatchEnvelopeHero: SectionCopy = {
   eyebrow: "AI Data Center Virtual Capacity Control Plane",
   headline:
     "How much virtual capacity is safe, for how long, and under which evidence?",
-  body: "GridNinja turns constrained infrastructure into safe, usable, auditable capacity by rendering a signed dispatch envelope: the requested MW, the accepted MW, the binding constraints, and the proof trail behind every allow / repair / reject / no-proof decision.",
+  body: "Explore a synthetic timed-dispatch record: requested MW, a model-screened envelope, binding constraints, and allow / repair / reject / no-proof outcomes. This separate teaching dataset does not establish site feasibility or operational authority.",
 }
 
 export const dispatchEnvelopeSections = {
   roleMap: {
     eyebrow: "Dispatch Envelope",
     headline: "The runtime-assured capacity aperture, not a dashboard claim",
-    body: "The dispatch envelope shows what an AI data center can safely use, sell, defer, or refuse inside declared electrical, storage, cooling, bridge-power, workload, telemetry, and policy limits. It is designed for Shadow Mode first, then bounded autonomy only after proof accumulates.",
+    body: "The intended dispatch envelope would constrain proposed actions against declared electrical, storage, cooling, workload, and policy limits. This synthetic example illustrates that record structure; it does not establish safe sellable capacity.",
   },
   proof: {
     eyebrow: "Proof Artifacts",
-    headline: "Every accepted MW should point to replayable evidence",
+    headline: "Every modeled result needs its evidence boundary",
     body: "The visual exposes proof roots, policy versions, topology hashes, freshness, confidence, and artifact names so operators can inspect why a capacity claim was allowed, repaired, rejected, or withheld as no-proof.",
   },
   cta: {
-    headline: "Turn site constraints into a Capacity Audit",
-    body: "Use Shadow Mode to quantify safe sellable MW, binding constraints, proof gaps, and the decision path before autonomy or capacity commitments expand.",
+    headline: "Scope a historical-data capacity assessment",
+    body: "Agree the capacity question, evidence inputs, and review responsibilities before paid assessment work begins.",
   },
 } satisfies Record<string, SectionCopy>
 
@@ -72,10 +72,10 @@ export const dispatchEnvelopeOutcomeCards = [
     body: "The operator or workload plan asks for a timed capacity maneuver.",
   },
   {
-    label: "Accepted envelope",
+    label: "Model-screened envelope",
     value: "2.8 MW",
     claimId: "dispatch-accepted-envelope",
-    body: "Runtime assurance repairs the request into the safe, usable envelope.",
+    body: "The synthetic model proposes a smaller envelope; no operating permission follows.",
   },
   {
     label: "Binding source",
@@ -124,7 +124,7 @@ export const dispatchScenarios: DispatchScenario[] = [
       constraint("bridge-power", 4.4, 30, 1.2, 0, 6, 1.2, "available", 98, 305, {
         reasonCode: "BRIDGE_AVAILABLE_UNUSED",
         reason:
-          "Bridge-power assets remain available but are not required by the accepted envelope.",
+          "Bridge-power assets remain available but are not required by the model-screened envelope.",
         artifact: "bridge_power_state.json",
         isDecisionCritical: false,
       }),
@@ -237,7 +237,7 @@ export const dispatchScenarios: DispatchScenario[] = [
       constraint("workload-sla", 4, 20, 0.9, 0, 8, 1.1, "available", 98, 139, {
         reasonCode: "WORKLOAD_FLEX_INSUFFICIENT",
         reason:
-          "Workload flexibility exists but cannot be accepted without cooling margin.",
+          "Workload flexibility exists but cannot pass the model screen without cooling margin.",
         artifact: "sla_constraint_manifest.json",
       }),
       constraint("telemetry-policy", 4.5, 24, 1, 0, 9, 1.1, "available", 99, 190, {
@@ -458,7 +458,7 @@ export function getEventMarkers(
       time: spec.startMinute,
     },
     {
-      label: "Full accepted ramp",
+      label: "Full model-screened ramp",
       short: `T+${rampEnd.toFixed(0)}`,
       time: rampEnd,
     },

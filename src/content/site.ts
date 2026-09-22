@@ -10,5 +10,5 @@ export const siteConfig = {
   title: homepageSeoRoute.title,
   description: homepageSeoRoute.description,
   footerCopy:
-    "GridNinja is the runtime-assured virtual capacity engine for AI data centers.",
+    "Capacity decisions with a reviewable basis.",
 }

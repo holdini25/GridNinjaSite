@@ -9,7 +9,7 @@ import {
 import { expectUnique, expectValidatorToPass } from "../../support/seo-contracts"
 
 const requiredTitles = new Map([
-  ["/", "GridNinja | Virtual Capacity Control Plane"],
+  ["/", "GridNinja | Capacity Decisions with Confidence"],
   ["/platform", "Virtual Capacity Control Plane Platform | GridNinja"],
   [
     "/platform/dispatch-envelope",
@@ -36,13 +36,13 @@ const requiredTitles = new Map([
     "/proof/proof-pack",
     "AI Data Center Virtual Capacity Proof Pack | GridNinja",
   ],
-  ["/demo", "Virtual Capacity Proof Demo | GridNinja"],
+  ["/demo", "Synthetic Capacity Decision Brief and Scenarios | GridNinja"],
   ["/dcii", "GridNinja DCII Project | Proof-Backed AI Capacity"],
-  ["/roi", "AI Data Center Capacity Audit & ROI | GridNinja"],
+  ["/assessment", "Capacity Decision Assessment for AI Infrastructure | GridNinja"],
   ["/about", "About GridNinja | Proof-First AI Infrastructure"],
   [
     "/contact",
-    "Request an AI Data Center Capacity Audit | GridNinja",
+    "Scope a Capacity Assessment | Contact GridNinja",
   ],
 ] as const)
 
@@ -85,7 +85,7 @@ describe("SEO route manifest", () => {
 
   it("locks the concise homepage search summary", () => {
     expect(getSeoRoute("/").description).toBe(
-      "Unlock safe, usable and auditable capacity from constrained AI infrastructure with GridNinja’s runtime-assured virtual capacity control plane."
+      "Make your next capacity commitment with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief."
     )
   })
 
@@ -97,12 +97,21 @@ describe("SEO route manifest", () => {
     })
     expect(getSeoRoute("/contact/thanks")).toMatchObject({
       indexable: false,
-      h1: "Request received.",
+      h1: "Check your inquiry receipt.",
       relatedPaths: ["/proof"],
     })
     expect(
       indexableSeoRoutes.some((route) => route.path === "/contact/thanks")
     ).toBe(false)
+  })
+
+  it("publishes the assessment and data boundary while withholding candidate artifacts from indexing", () => {
+    expect(getSeoRoute("/assessment").indexable).toBe(true)
+    expect(getSeoRoute("/data-handling").indexable).toBe(true)
+    expect(seoRoutes.some(route => route.path === "/roi")).toBe(false)
+    for (const scenario of ["a", "b", "c", "d"]) {
+      expect(getSeoRoute(`/evidence/assessments/demo-01-${scenario}/v1.0.0`).indexable).toBe(false)
+    }
   })
 
   it("derives the indexable projection and resolves every relationship", () => {

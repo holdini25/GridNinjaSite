@@ -111,17 +111,17 @@ describe("public metadata", () => {
     const pageMetadata = createPageMetadata({
       title: "Capacity Audit",
       description: "A page-specific description.",
-      path: "/roi",
+      path: "/assessment",
     })
 
     expect(pageMetadata.openGraph).toMatchObject({
-      title: "AI Data Center Capacity Audit & ROI | GridNinja",
-      url: "https://gridninja.ai/roi",
+      title: "Capacity Decision Assessment for AI Infrastructure | GridNinja",
+      url: "https://gridninja.ai/assessment",
       siteName: "GridNinja",
       images: [{ ...openGraphImage, url: "https://gridninja.ai/og/capacity-audit" }],
     })
     expect(pageMetadata.twitter).toMatchObject({
-      title: "AI Data Center Capacity Audit & ROI | GridNinja",
+      title: "Capacity Decision Assessment for AI Infrastructure | GridNinja",
       images: [{ ...twitterImage, url: "https://gridninja.ai/og/capacity-audit" }],
     })
     expect(openGraphImage).toEqual({

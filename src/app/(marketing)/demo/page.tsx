@@ -1,90 +1,24 @@
 import type { Metadata } from "next"
-
-import { CtaBand } from "@/components/marketing/cta-band"
-import { DemoInspectionRoom } from "@/components/marketing/demo-inspection-room"
-import { FleetOSTimeTravelMap } from "@/components/marketing/fleetos-time-travel-map"
-import { Hero } from "@/components/marketing/hero"
-import { LoadPassportHD } from "@/components/marketing/load-passport-hd"
-import { ProofStorySnap } from "@/components/marketing/proof-story-snap"
-import { RtaDecisionTheater } from "@/components/marketing/rta-decision-theater"
-import { SectionHeader } from "@/components/marketing/section-header"
+import { AssessmentExplorer } from "@/components/assessment/assessment-explorer"
 import { SectionShell } from "@/components/layout/section-shell"
+import { CtaBand } from "@/components/marketing/cta-band"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
-import { demoFinalCta, demoHero, demoScenario } from "@/content/copy/demo"
-import { fleetSwarmSites, proofStorySteps } from "@/content/proof-artifacts"
-import { buildLeadHref } from "@/lib/lead"
+import { assessmentFixtures } from "@/content/assessments/fixtures"
+import { resolveAssessmentSelection } from "@/lib/assessment/selectors"
 import { createPageMetadata } from "@/lib/seo"
 
 export async function generateMetadata(): Promise<Metadata> {
-  return createPageMetadata({
-    title: "Proof Demo | GridNinja",
-    description:
-      "Inspect an illustrative GridNinja proof flow from nominal headroom to proof-adjusted virtual capacity and RTA trace.",
-    path: "/demo",
-  })
+  return createPageMetadata({ title: "Sample capacity decision brief | GridNinja", description: "Explore a synthetic capacity assessment: the requested workload, modeled increment, governing conditions, unresolved commercial decision, and limits of the evidence.", path: "/demo" })
 }
 
-export default function DemoPage() {
-  return (
-    <div className="space-y-24 pb-24">
-      <SeoPageJsonLd path="/demo" />
-      <Hero
-        eyebrow={demoHero.eyebrow}
-        headline={demoHero.headline}
-        body={demoHero.body}
-        primaryCta={{
-          label: "Request Capacity Audit",
-          href: buildLeadHref("capacity-audit", "demo-hero"),
-          eventName: "demo-hero-capacity-audit",
-        }}
-        secondaryCta={{
-          label: "Book Demo",
-          href: buildLeadHref("book-demo", "demo-hero"),
-          eventName: "demo-hero-book-demo",
-        }}
-        trustLine="Every accepted MW must point to a proof row. All sample values are illustrative until validated in a Capacity Audit."
-        proofGrid
-      />
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow="Sales engineering inspection room"
-            headline="One scenario, four stakeholder lenses, four runtime assurance outcomes"
-            body="The demo is ungated and illustrative. It shows how GridNinja should explain claimed headroom, binding constraints, candidate actions, and no-proof behavior before a site-specific deployment."
-          />
-          <DemoInspectionRoom scenario={demoScenario} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <RtaDecisionTheater />
-      </SectionShell>
-
-      <SectionShell>
-        <ProofStorySnap steps={proofStorySteps} />
-      </SectionShell>
-
-      <SectionShell>
-        <LoadPassportHD />
-      </SectionShell>
-
-      <SectionShell>
-        <FleetOSTimeTravelMap sites={fleetSwarmSites} />
-      </SectionShell>
-
-      <RelatedSeoLinks path="/demo" />
-
-      <SectionShell>
-        <CtaBand
-          eyebrow={demoFinalCta.eyebrow}
-          headline={demoFinalCta.headline}
-          body={demoFinalCta.body}
-          label="Request Capacity Audit"
-          href={buildLeadHref("capacity-audit", "demo-final")}
-        />
-      </SectionShell>
-    </div>
-  )
+export default async function DemoPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const selection = resolveAssessmentSelection(await searchParams)
+  return <div className="space-y-16 pb-24">
+    <SeoPageJsonLd path="/demo" />
+    <SectionShell className="pt-12 sm:pt-16" deferRendering={false}><div className="max-w-3xl"><p className="gn-eyebrow">Proof before autonomy</p><h1 className="mt-4 text-balance text-4xl leading-tight font-medium tracking-tight sm:text-5xl">See the decision, the conditions, and the unanswered question.</h1><p className="mt-5 text-lg leading-8 text-muted-foreground">A synthetic decision brief for a bounded capacity assessment. Explore how a workload request compares with a modeled increment, then see what still needs operational and commercial review.</p><p className="mt-4 text-sm leading-6 text-muted-foreground">This is an authored teaching example. It uses no customer data, demonstrates no live control, and grants no operational authority.</p></div></SectionShell>
+    <SectionShell deferRendering={false}><h2 className="sr-only">Sample capacity decision brief</h2><AssessmentExplorer key={JSON.stringify(selection)} initialSelection={selection} records={assessmentFixtures} /></SectionShell>
+    <SectionShell><CtaBand eyebrow="Your capacity decision" headline="Put a real decision inside a clear assessment scope." body="Start with one capacity commitment, the relevant facility boundary, and the evidence available. We will discuss fit and readiness before agreeing a paid scope and price." label="Scope an assessment" href="/assessment#scope" /></SectionShell>
+    <RelatedSeoLinks path="/demo" />
+  </div>
 }

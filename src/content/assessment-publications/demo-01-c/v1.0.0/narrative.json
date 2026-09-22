@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "title": "No admissible revision under the stated minimum",
+  "conclusion": "The 7.0 MW request cannot fit the modeled 5.8 MW increment, and the stated 6.5 MW minimum prevents an admissible revision in this fixture.",
+  "businessQuestion": "Which assumption or investment option should be investigated before this capacity commitment is reconsidered?",
+  "governingConditions": [
+    "Stated minimum exceeds the modeled increment: 6.5 MW is required for the workload in this fixture. A 5.8 MW revision would not satisfy that minimum."
+  ],
+  "economics": "No price, utilization, investment cost, or commercial service requirement has been assessed.",
+  "limitations": [
+    "All inputs and results are synthetic. They are not measured customer results or a guarantee of recoverable capacity.",
+    "The model screen provides no permission to operate equipment or commit capacity.",
+    "Site validation, authorized data, operational review, and commercial review would be required for a real decision."
+  ],
+  "nextStep": "Scope a bounded paid assessment using authorized historical inputs. Scope and price follow the decision and data-readiness discussion."
+}

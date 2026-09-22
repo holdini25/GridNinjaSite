@@ -8,6 +8,8 @@ import {
   analyticsEventNames,
   isAnalyticsEventName,
   trackGridNinjaEvent,
+  normalizeAnalyticsRoute,
+  sanitizeTelemetryUrl,
 } from "@/lib/analytics"
 
 describe("privacy-first measurement policy", () => {
@@ -29,6 +31,11 @@ describe("privacy-first measurement policy", () => {
       "proof_demo_complete",
       "partner_inquiry_success",
       "outbound_schedule_click",
+      "assessment_cta_selected",
+      "sample_opened",
+      "scenario_selected",
+      "perspective_selected",
+      "sample_download_clicked",
     ])
     expect(analyticsEventNames.every(isAnalyticsEventName)).toBe(true)
     expect(isAnalyticsEventName("form_submit_attempt")).toBe(false)
@@ -38,7 +45,7 @@ describe("privacy-first measurement policy", () => {
     trackGridNinjaEvent("contact_submit_success", {
       route: "/contact?intent=audit&email=private@example.com#form",
       source: "contact-page",
-      intent: "capacity audit",
+      intent: "capacity-audit",
       success: true,
       email: "private@example.com",
       facility: "customer-site-17",
@@ -50,6 +57,34 @@ describe("privacy-first measurement policy", () => {
       intent: "capacity-audit",
       success: true,
     })
+  })
+
+  it("drops arbitrary strings even when they look like safe identifiers", () => {
+    trackGridNinjaEvent("evidence_artifact_view", {
+      source: "customer-jane", intent: "private-company", artifact: "/secret.pdf",
+      version: "customer-123", errorCategory: "customer-error", route: "/private/customer-name",
+    } as never)
+    expect(track).toHaveBeenCalledWith("evidence_artifact_view", { route: "/unknown" })
+  })
+
+  it("removes query, fragment and unapproved paths from both telemetry streams", () => {
+    expect(sanitizeTelemetryUrl("https://gridninja.com/contact?email=private@example.com#person")).toBe("https://gridninja.com/contact")
+    expect(sanitizeTelemetryUrl("https://gridninja.com/private-person")).toBe("https://gridninja.com/unknown")
+    expect(normalizeAnalyticsRoute("/demo?scenario=b")).toBe("/demo")
+  })
+
+  it.each([
+    "mailto:private@example.com",
+    "data:text/plain,private-customer-information",
+    "javascript:alert('private-information')",
+    "file:///private/customer-name",
+  ])("withholds non-HTTP telemetry URL payloads: %s", (value) => {
+    expect(sanitizeTelemetryUrl(value)).toBe("https://gridninja.ai/unknown")
+  })
+
+  it("measurement failure cannot break the action", () => {
+    track.mockImplementationOnce(() => { throw new Error("unavailable") })
+    expect(() => trackGridNinjaEvent("assessment_cta_selected", { source: "home-hero" })).not.toThrow()
   })
 
   it("records only an approved contact failure category", () => {

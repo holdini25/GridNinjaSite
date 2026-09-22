@@ -4,14 +4,7 @@ import {
   type ContactConversationType,
 } from "@/lib/constants"
 import type { LeadIntent } from "@/types/site"
-
-const approvedContactSources = new Set([
-  "contact-page",
-  "header",
-  "footer",
-  "staging-canary",
-  "e2e-autofill",
-])
+import { isLeadSource } from "@/lib/lead"
 
 export const contactSubmissionStorageKey = "gridninja.contactSubmission"
 
@@ -21,21 +14,24 @@ export type ContactAttribution = {
   source: string
 }
 
-export function resolveContactAttribution(search: string): ContactAttribution {
+export function resolveContactAttribution(
+  search: string,
+  defaults: { intent?: LeadIntent; source?: string } = {}
+): ContactAttribution {
   const query = new URLSearchParams(search)
   const requestedIntent = query.get("intent")
   const requestedSource = query.get("source")
   const intent = isLeadIntent(requestedIntent)
     ? requestedIntent
-    : "capacity-audit"
+    : defaults.intent ?? "capacity-audit"
 
   return {
     intent,
     conversationType: conversationTypeForIntent(intent),
     source:
-      requestedSource && approvedContactSources.has(requestedSource)
+      requestedSource && isLeadSource(requestedSource)
         ? requestedSource
-        : "contact-page",
+        : defaults.source && isLeadSource(defaults.source) ? defaults.source : "contact-page",
   }
 }
 

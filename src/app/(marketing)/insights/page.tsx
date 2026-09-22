@@ -18,7 +18,7 @@ export default function InsightsPage() {
         eyebrow="GridNinja insights"
         title="Virtual capacity insights for constrained AI infrastructure"
         answer="This library defines the AI Data Center Virtual Capacity Control Plane in operator terms: what capacity can be accepted, which constraint binds it, what remains unproven, and how evidence accumulates from Shadow Mode toward bounded autonomy. It avoids commodity AI summaries and separates physical capacity, modeled headroom, and safe, usable, auditable capacity."
-        boundary="The hub is a crawlable map of the core operator questions. Technical leaves remain noindex while named authors, affiliations, disclosures, and reviewers are unassigned. That publication gate prevents polished but unowned explanations from becoming search-visible claims."
+        boundary="This is a map of intended operator questions. Candidate articles are withheld while named authors, reviewers, evidence, and publication permissions remain unassigned. Public examples remain explicitly synthetic."
         resources={insightResources}
       />
     </>

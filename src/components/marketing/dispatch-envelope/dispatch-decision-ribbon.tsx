@@ -87,7 +87,7 @@ export function DispatchDecisionRibbon({
           >
             {dto.decision === "no-proof"
               ? "INSUFFICIENT EVIDENCE"
-              : "NO ACCEPTED ENVELOPE"}
+              : "NO MODEL-SCREENED ENVELOPE"}
           </strong>
         )}
         {repairDelta > 0 ? (

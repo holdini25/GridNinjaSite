@@ -9,9 +9,9 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run seo:validate",
+    "prebuild": "npm run assessment:validate && npm run seo:validate",
     "build": "next build",
-    "postbuild": "node scripts/validate-contact-build.mjs",
+    "postbuild": "node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -36,7 +36,9 @@
     "brand:generate": "node scripts/generate-brand-derivatives.mjs",
     "brand:check": "node scripts/generate-brand-derivatives.mjs --check",
     "validate": "npm run brand:check && npm run lint && npm run typecheck && npm run build",
-    "audit:prod": "npm audit --omit=dev --audit-level=high"
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "assessment:generate": "node --import ./scripts/assessment/register.mjs scripts/assessment/generate.ts",
+    "assessment:validate": "node --import ./scripts/assessment/register.mjs scripts/assessment/validate.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -56,7 +58,7 @@
     "echarts-for-react": "^3.0.6",
     "lucide-react": "^1.7.0",
     "motion": "^12.38.0",
-    "next": "16.2.9",
+    "next": "16.3.6",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -83,12 +85,12 @@
     "@vitest/coverage-v8": "^4.1.9",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
-    "eslint-config-next": "16.2.0",
+    "eslint-config-next": "16.3.6",
     "fast-check": "^4.8.0",
     "jsdom": "^29.1.1",
     "pg": "^8.22.0",
     "png-to-ico": "^3.0.2",
-    "sharp": "^0.34.5",
+    "sharp": "0.35.4",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.9"

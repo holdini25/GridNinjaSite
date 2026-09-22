@@ -214,7 +214,7 @@ export async function POST(request: Request) {
       capacityRange,
       constraints:
         submission.formType === "contact" ? submission.constraints : null,
-      message: submission.formType === "contact" ? submission.message : null,
+      message: submission.formType === "contact" ? submission.message ?? null : null,
       source: submission.source,
       ipHash,
       turnstileHostname: turnstile.hostname,

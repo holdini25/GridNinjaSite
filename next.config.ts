@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 import { PRODUCTION_ORIGIN } from "./src/seo/policy";
+import assessmentRegistry from "./src/content/assessment-publications/registry.json";
+
+const assessmentFiles = assessmentRegistry.filter(entry => entry.status === "available").flatMap(entry =>
+  ["snapshot.json", "narrative.json", "brief.html", "brief.pdf", "manifest.json"].map(file =>
+    `./src/content/assessment-publications/${entry.publicationId}/${entry.version}/${file}`));
 
 const securityHeaders = [
   {
@@ -33,8 +38,13 @@ const noindexHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    "/evidence/assessments/*/*": assessmentFiles,
+    "/downloads/assessment/*/*/*": assessmentFiles,
+  },
   async redirects() {
     return [
+      { source: "/roi", destination: "/assessment", permanent: true },
       {
         source: "/:path*",
         has: [

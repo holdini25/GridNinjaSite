@@ -8,7 +8,7 @@ export type SeoPrimarySource = {
 
 export type SeoEvidenceRecord = {
   claim: string
-  maturity: "DESIGN TARGET" | "REPLAY-VALIDATED" | "SHADOW-VALIDATED"
+  maturity: "Specified" | "Implemented and tested in a stated environment" | "Evaluated with authorized site data" | "Accepted for a stated customer decision"
   environment: "synthetic" | "replay" | "shadow"
   measurementWindow: string
   sampleSize: string
@@ -139,7 +139,7 @@ export const seoResources: readonly SeoResource[] = [
       "The control plane begins in Shadow Mode and does not imply autonomous control authority.",
     ],
     primarySources: [nistAiRmf, nistOta, provO],
-    relatedPaths: ["/platform", "/proof", "/roi"],
+    relatedPaths: ["/platform", "/proof", "/assessment"],
     publicationStatus: "gated",
   },
   {
@@ -188,7 +188,7 @@ export const seoResources: readonly SeoResource[] = [
       "Commercial treatment requires separate contractual and regulatory review.",
     ],
     primarySources: [provO, jsonCanonicalization, nistAiRmf],
-    relatedPaths: ["/roi", "/proof/proof-pack", "/why-gridninja"],
+    relatedPaths: ["/assessment", "/proof/proof-pack", "/why-gridninja"],
     publicationStatus: "gated",
   },
   {
@@ -433,7 +433,7 @@ export const seoResources: readonly SeoResource[] = [
       "Any commercial forecast needs separately approved assumptions and sensitivity analysis.",
     ],
     primarySources: [nistAiRmf, nistOta, provO],
-    relatedPaths: ["/solutions/ai-cloud", "/roi", "/contact"],
+    relatedPaths: ["/solutions/ai-cloud", "/assessment", "/contact"],
     publicationStatus: "gated",
   },
   {
@@ -486,7 +486,7 @@ export const seoResources: readonly SeoResource[] = [
     publicationStatus: "gated",
     evidence: {
       claim: "The supplied synthetic fixtures specify deterministic acceptance and refusal expectations for seven failure families.",
-      maturity: "DESIGN TARGET",
+      maturity: "Specified",
       environment: "synthetic",
       measurementWindow: "Fixture timestamps span a synthetic 15-minute operating window.",
       sampleSize: "Seven negative-case families; fixture expansion is pending review.",
@@ -574,7 +574,7 @@ export const seoResources: readonly SeoResource[] = [
     publicationStatus: "gated",
     evidence: {
       claim: "The sample demonstrates a trace structure that separates request, repair, binding constraint, and rollback posture.",
-      maturity: "DESIGN TARGET",
+      maturity: "Specified",
       environment: "synthetic",
       measurementWindow: "One synthetic decision instant plus a declared recovery window.",
       sampleSize: "One illustrative trace; no population inference.",
@@ -643,7 +643,7 @@ export const seoResources: readonly SeoResource[] = [
     publicationStatus: "gated",
     evidence: {
       claim: "The proposed ledger schema preserves capacity lineage, evidence references, and expiry conditions.",
-      maturity: "DESIGN TARGET",
+      maturity: "Specified",
       environment: "synthetic",
       measurementWindow: "Illustrative entries use declared start, end, and evidence-expiry timestamps.",
       sampleSize: "One schema and one synthetic example.",
@@ -712,7 +712,7 @@ export const seoResources: readonly SeoResource[] = [
     publicationStatus: "gated",
     evidence: {
       claim: "The schema candidate separates workload requirements, permitted flexibility, recovery, and evidence references.",
-      maturity: "DESIGN TARGET",
+      maturity: "Specified",
       environment: "synthetic",
       measurementWindow: "The example declares a synthetic 30-minute operating and recovery window.",
       sampleSize: "One schema and one synthetic example embedded in the proof pack.",
@@ -909,7 +909,7 @@ export const seoResources: readonly SeoResource[] = [
     textDiagram:
       "Business capacity question → constraint and evidence inventory → proof-adjusted waterfall → gaps and refusal cases → Shadow Mode test plan → reviewed capacity report.",
     evidenceLinks: [
-      { label: "Request a Capacity Audit", href: "/roi" },
+      { label: "Request a Capacity Audit", href: "/assessment" },
       { label: "Proof-adjusted capacity", href: "/insights/proof-adjusted-data-center-capacity" },
       { label: "Virtual Capacity Proof Test", href: "/evidence/virtual-capacity-proof-test" },
     ],
@@ -924,7 +924,7 @@ export const seoResources: readonly SeoResource[] = [
       "Commercial projections require separate assumptions and approval.",
     ],
     primarySources: [nistAiRmf, nistOta, provO],
-    relatedPaths: ["/roi", "/contact", "/insights/ai-data-center-time-to-power"],
+    relatedPaths: ["/assessment", "/contact", "/insights/ai-data-center-time-to-power"],
     publicationStatus: "gated",
   },
 ] as const

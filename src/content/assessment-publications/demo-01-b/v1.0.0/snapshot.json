@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "assessment.v1",
+  "scenario": "b",
+  "title": "A smaller commitment needs review",
+  "datasetId": "demo-01-synthetic-v1",
+  "modelVersion": "illustrative-assessment-1.0.0",
+  "publication": {
+    "id": "demo-01-b",
+    "version": "1.0.0",
+    "narrativeVersion": "1.0.0",
+    "templateVersion": "1.0.0"
+  },
+  "provenance": "synthetic",
+  "operationalAuthority": "none",
+  "basis": {
+    "id": "demo-01-meter-hour-20260922",
+    "siteId": "DEMO-01",
+    "meterBoundary": "Fictional facility electrical meter",
+    "referenceLoadKW": 20000,
+    "startUTC": "2026-09-22T00:00:00Z",
+    "endUTC": "2026-09-22T01:00:00Z",
+    "quantityBasis": "additional-to-reference"
+  },
+  "nominal": {
+    "status": "known",
+    "valueKW": 12000,
+    "unit": "kW",
+    "basisId": "demo-01-meter-hour-20260922"
+  },
+  "modeledEligible": {
+    "status": "known",
+    "valueKW": 5800,
+    "unit": "kW",
+    "basisId": "demo-01-meter-hour-20260922"
+  },
+  "operatorAccepted": {
+    "status": "not-applicable",
+    "reason": "No operator has accepted this synthetic result.",
+    "basisId": "demo-01-meter-hour-20260922"
+  },
+  "observedDelivered": {
+    "status": "not-applicable",
+    "reason": "No workload was operated or measured for this example.",
+    "basisId": "demo-01-meter-hour-20260922"
+  },
+  "requestedProfile": {
+    "id": "demo-01-b-requested",
+    "familyId": "demo-01-b-workload",
+    "basisId": "demo-01-meter-hour-20260922",
+    "label": "Requested workload",
+    "incrementKW": 7000
+  },
+  "revisedProfile": {
+    "id": "demo-01-b-revised",
+    "familyId": "demo-01-b-workload",
+    "basisId": "demo-01-meter-hour-20260922",
+    "label": "Proposed reduced workload",
+    "incrementKW": 5800
+  },
+  "minimumViableIncrementKW": null,
+  "screeningOutcome": "REPAIR",
+  "conclusion": "The proposed 7.0 MW increment exceeds the fixture’s modeled 5.8 MW increment. A reduced workload profile requires review.",
+  "commercial": {
+    "status": "requires-review",
+    "question": "Would the reduced 5.8 MW profile still meet the service and commercial requirement?"
+  },
+  "economics": {
+    "status": "unestimated",
+    "reason": "No price, utilization, investment cost, or commercial service requirement has been assessed."
+  },
+  "reportAcceptance": {
+    "status": "not-applicable",
+    "reason": "This is an authored example, not an accepted customer report."
+  },
+  "reasons": [
+    {
+      "id": "request-exceeds",
+      "label": "Request exceeds the modeled increment",
+      "detail": "The proposed revision is 1.2 MW below the request. No minimum commercially viable workload is specified for this fixture."
+    }
+  ],
+  "assumptions": [
+    "Every MW quantity is additional load above a steady 20.0 MW reference at the same fictional facility meter.",
+    "The authored assessment window is one hour; the example does not model ramp, rebound, or workload transitions.",
+    "For A–C, the example assumes the listed evidence is sufficient for the stated modeled screen."
+  ],
+  "limitations": [
+    "All inputs and results are synthetic. They are not measured customer results or a guarantee of recoverable capacity.",
+    "The model screen provides no permission to operate equipment or commit capacity.",
+    "Site validation, authorized data, operational review, and commercial review would be required for a real decision."
+  ],
+  "evidence": [
+    {
+      "id": "electrical",
+      "label": "Electrical boundary",
+      "status": "synthetic",
+      "detail": "Authored nominal headroom and reference load; no connection to a live facility."
+    },
+    {
+      "id": "cooling",
+      "label": "Cooling constraint",
+      "status": "synthetic",
+      "detail": "Authored cooling margin for the fixed window; no physical feasibility validation."
+    },
+    {
+      "id": "operating-reserve",
+      "label": "Operating reserve and service conditions",
+      "status": "synthetic",
+      "detail": "Authored assumptions, not agreed operating envelopes or SLAs."
+    }
+  ],
+  "attribution": [
+    {
+      "id": "electrical-reserve",
+      "label": "Electrical reserve",
+      "reductionKW": 2000
+    },
+    {
+      "id": "cooling-margin",
+      "label": "Cooling margin",
+      "reductionKW": 1500
+    },
+    {
+      "id": "service-reserve",
+      "label": "Service reserve",
+      "reductionKW": 1200
+    },
+    {
+      "id": "evidence-margin",
+      "label": "Evidence margin",
+      "reductionKW": 1500
+    }
+  ],
+  "investigationOptions": [
+    {
+      "id": "phase",
+      "label": "Phase the workload",
+      "status": "unassessed"
+    },
+    {
+      "id": "reschedule",
+      "label": "Assess another time window",
+      "status": "unassessed"
+    },
+    {
+      "id": "cooling-investment",
+      "label": "Investigate cooling investment",
+      "status": "unassessed"
+    },
+    {
+      "id": "bridge-power",
+      "label": "Investigate bridge power",
+      "status": "unassessed"
+    }
+  ]
+}

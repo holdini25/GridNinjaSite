@@ -12,7 +12,6 @@ import {
   seoRoutes,
 } from "../../src/seo/route-manifest"
 import { PRODUCTION_ORIGIN } from "../../src/seo/policy"
-import { whyGridNinjaSourceRecords } from "../../src/content/copy/why-gridninja"
 import { publicAuthors } from "../../src/content/authors"
 
 const productionHost = new URL(PRODUCTION_ORIGIN).host
@@ -163,7 +162,7 @@ test.describe("manifest-derived search eligibility", () => {
   }, testInfo) => {
     test.skip(testInfo.project.name !== "seo-chromium")
 
-    for (const route of seoRoutes.filter((candidate) => !candidate.indexable)) {
+    for (const route of seoRoutes.filter((candidate) => !candidate.indexable && getSeoRoute(candidate.path).presentation !== "publication")) {
       const response = await page.goto(route.path, { waitUntil: "domcontentloaded" })
       expect(response?.status(), route.path).toBe(200)
       await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
@@ -185,6 +184,28 @@ test.describe("manifest-derived search eligibility", () => {
         }
       }
       expect(jsonLd, route.path).not.toMatch(/placeholder|example person|jane doe/i)
+    }
+  })
+
+  test("frozen assessment publications preserve identity and working links without site-shell requirements", async ({ page, request }, testInfo) => {
+    test.skip(testInfo.project.name !== "seo-chromium")
+    for (const route of seoRoutes.filter(candidate => getSeoRoute(candidate.path).presentation === "publication")) {
+      const response = await page.goto(route.path, { waitUntil: "domcontentloaded" })
+      expect(response?.status(), route.path).toBe(200)
+      await expect(page).toHaveTitle(route.title)
+      await expect(page.locator("h1")).toHaveCount(1)
+      await expect(page.locator("h1")).toHaveText(route.h1)
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", absolute(route.path))
+      await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/)
+      expect(await page.locator("body").innerText()).toMatch(/synthetic/i)
+      const links = await page.locator('a[href]').evaluateAll(anchors => anchors.map(anchor => anchor.getAttribute("href")!))
+      expect(links.length).toBeGreaterThan(0)
+      for (const href of links) {
+        const url = new URL(href, absolute(route.path))
+        if (url.origin !== PRODUCTION_ORIGIN) continue
+        const linked = await request.get(`${url.pathname}${url.search}`)
+        expect(linked.status(), `${route.path} -> ${href}`).toBeLessThan(400)
+      }
     }
   })
 
@@ -211,14 +232,14 @@ test.describe("manifest-derived search eligibility", () => {
     expect(response.status()).toBe(200)
     expect(response.headers()["x-robots-tag"]).toMatch(/noindex/i)
     expect(response.headers().link).toContain(
-      `<${PRODUCTION_ORIGIN}/proof/proof-pack>; rel="canonical"`
+      `<${PRODUCTION_ORIGIN}/evidence/assessments/demo-01-b/v1.0.0>; rel="canonical"`
     )
 
     const releaseArtifact = await request.get(
       "/evidence/releases/v1.0.0/virtual-capacity-proof-test.json"
     )
-    expect(releaseArtifact.status()).toBe(200)
-    expect(releaseArtifact.headers()["content-type"]).toContain("application/json")
+    expect(releaseArtifact.status()).toBe(410)
+    expect(await releaseArtifact.text()).toMatch(/withdrawn|unavailable|publication|not published/i)
     expect(releaseArtifact.headers()["x-robots-tag"]).toMatch(/noindex/i)
     expect(releaseArtifact.headers().link).toContain(
       `<${PRODUCTION_ORIGIN}/evidence>; rel="canonical"`
@@ -339,6 +360,10 @@ test.describe("manifest-derived search eligibility", () => {
           unknownLinks.push(`${route.path} -> ${classified.path}`)
           continue
         }
+        if (classified.kind === "same-page-state") {
+          requestPaths.add(`${classified.path}${classified.search}`)
+          continue
+        }
         if (classified.kind !== "internal") continue
 
         requestPaths.add(`${classified.path}${classified.search}`)
@@ -377,18 +402,13 @@ test.describe("manifest-derived search eligibility", () => {
     ).toEqual([])
   })
 
-  test("comparison sources have crawlable, stable fragment targets", async ({
-    request,
-  }, testInfo) => {
+  test("comparison page describes a scoped role without unsupported superiority or customer results", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "seo-chromium")
-    const response = await request.get("/why-gridninja")
-    const html = await response.text()
-
-    expect(response.status()).toBe(200)
-    for (const source of whyGridNinjaSourceRecords) {
-      expect(html, source.id).toContain(`id="source-${source.id}"`)
-      expect(html, source.id).toContain(`href="${source.url}`)
-    }
+    await page.goto("/why-gridninja")
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(getSeoRoute("/why-gridninja").h1)
+    await expect(page.locator("main")).toContainText("cannot establish superiority")
+    await expect(page.locator('main a[href="/methodology/comparison-policy"]')).not.toHaveCount(0)
+    await expect(page.locator("main [data-claim-record]")).toHaveCount(0)
   })
 })
 
@@ -429,9 +449,7 @@ test.describe("snippet and raw-content controls", () => {
     expect(response?.status()).toBe(200)
     await expect(page.locator("main h1")).toHaveCount(1)
     await expect(page.locator("main h1")).toBeVisible()
-    await expect(page.locator("main h1 + p")).toHaveText(
-      getSeoRoute("/").description
-    )
+    await expect(page.locator("main h1 + p")).toContainText("paid, bounded capacity decision assessment")
     await expect(page.locator("main h1 + p")).toBeVisible()
     await expect(
       page.getByText("AI Data Center Virtual Capacity Control Plane", {
@@ -439,7 +457,7 @@ test.describe("snippet and raw-content controls", () => {
       }).first()
     ).toBeVisible()
     await expect(
-      page.getByRole("link", { name: "Request Capacity Audit", exact: true }).first()
+      page.getByRole("link", { name: "Scope an assessment", exact: true }).first()
     ).toBeVisible()
     expect((await page.locator("main section").count())).toBeGreaterThan(0)
     expect((await page.locator("main").innerText()).toLowerCase()).toContain(
@@ -468,7 +486,7 @@ test.describe("snippet and raw-content controls", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
       "Tell us where capacity is constrained."
     )
-    await expect(page.locator("form [required]")).toHaveCount(4)
+    await expect(page.locator("form [required]")).toHaveCount(3)
     await expect(page.getByLabel("Intake commitments").getByRole("listitem")).toHaveCount(4)
     await expect(page.getByText("Review", { exact: true })).toBeVisible()
     await expect(page.getByText("Evidence map", { exact: true })).toBeVisible()
@@ -547,7 +565,7 @@ test.describe("snippet and raw-content controls", () => {
     ).toBe(true)
     await expect(page.locator("main h1")).toBeVisible()
     await expect(
-      page.getByRole("link", { name: "Request Capacity Audit", exact: true }).first()
+      page.getByRole("link", { name: "Scope an assessment", exact: true }).first()
     ).toBeVisible()
     expect(await page.locator("main h1").evaluate((node) => getComputedStyle(node).opacity)).toBe(
       "1"

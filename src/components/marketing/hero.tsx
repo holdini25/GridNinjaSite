@@ -24,6 +24,7 @@ type HeroProps = SectionCopy & {
   secondaryCta?: HeroCta
   trustLine?: string
   visual?: ReactNode
+  visualClassName?: string
   proofGrid?: boolean
   proofGridLabels?: string[]
 }
@@ -36,15 +37,16 @@ export function Hero({
   secondaryCta,
   trustLine,
   visual,
+  visualClassName,
   proofGrid = false,
   proofGridLabels,
 }: HeroProps) {
   const hasVisual = Boolean(visual)
   const containerClassName = hasVisual
-    ? "grid gap-8 pt-4 pb-7 sm:gap-10 sm:pt-6 sm:pb-8 lg:min-h-[calc(100svh-9rem)] lg:grid-cols-[minmax(0,1fr)_minmax(340px,520px)] lg:items-center lg:gap-14"
+    ? "grid gap-8 pt-4 pb-7 sm:gap-10 sm:pt-6 sm:pb-8 lg:min-h-[34rem] lg:grid-cols-[minmax(0,1fr)_minmax(340px,520px)] lg:items-center lg:gap-14"
     : "max-w-3xl pt-8 pb-10 sm:pt-12 sm:pb-14 lg:max-w-4xl lg:pt-14 lg:pb-16"
   const headlineClassName = hasVisual
-    ? "max-w-[11ch] text-balance text-[2.2rem] leading-[0.95] font-medium tracking-tight text-foreground sm:text-[3.85rem] lg:text-[4.7rem]"
+    ? "max-w-[15ch] text-balance text-[2.2rem] leading-[0.95] font-medium tracking-tight text-foreground sm:text-[3.85rem] lg:text-[3.65rem]"
     : "max-w-[13ch] text-balance text-[2.2rem] leading-[0.98] font-medium tracking-tight text-foreground sm:text-[3.05rem] lg:text-[3.7rem]"
   const bodyClassName = hasVisual
     ? "mt-4 max-w-xl text-base leading-7 text-muted-foreground sm:text-[1.16rem] sm:leading-8"
@@ -80,6 +82,7 @@ export function Hero({
               {primaryCta ? (
                 <Button asChild size="lg">
                   <Link
+                    prefetch={false}
                     href={primaryCta.href}
                     data-gn-event={primaryCta.eventName ?? "hero-primary-cta"}
                     data-analytics-event={primaryCta.analyticsEvent}
@@ -100,6 +103,7 @@ export function Hero({
                   className="border-border/80 bg-surface/60 text-foreground"
                 >
                   <Link
+                    prefetch={false}
                     href={secondaryCta.href}
                     data-gn-event={secondaryCta.eventName ?? "hero-secondary-cta"}
                     data-analytics-event={secondaryCta.analyticsEvent}
@@ -120,7 +124,7 @@ export function Hero({
             </p>
           ) : null}
         </div>
-        {visual ? <div className="lg:pl-4">{visual}</div> : null}
+        {visual ? <div className={visualClassName ?? "lg:pl-4"}>{visual}</div> : null}
       </SectionShell>
     </div>
   )

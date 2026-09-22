@@ -1,10 +1,10 @@
 import Link from "next/link"
+import type { ReactNode } from "react"
 
 import { SectionShell } from "@/components/layout/section-shell"
 import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { Button } from "@/components/ui/button"
 import type { SeoResource } from "@/content/seo-resources"
-import { buildLeadHref } from "@/lib/lead"
 
 type ResourceHubProps = {
   path: "/insights" | "/evidence" | "/methodology"
@@ -13,6 +13,7 @@ type ResourceHubProps = {
   answer: string
   boundary: string
   resources: readonly SeoResource[]
+  introduction?: ReactNode
 }
 
 export function SeoResourceHub({
@@ -22,6 +23,7 @@ export function SeoResourceHub({
   answer,
   boundary,
   resources,
+  introduction,
 }: ResourceHubProps) {
   return (
     <div className="space-y-16 pb-20 sm:space-y-20 sm:pb-24">
@@ -36,6 +38,8 @@ export function SeoResourceHub({
           </p>
         </SectionShell>
       </header>
+
+      {introduction}
 
       <SectionShell>
         <section className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
@@ -74,10 +78,10 @@ export function SeoResourceHub({
                   </Link>
                 </h3>
                 <p className="mt-4 line-clamp-4 text-base leading-8 text-muted-foreground">
-                  {resource.shortAnswer}
+                  {resource.publicationStatus === "published" ? resource.shortAnswer : "Technical resource withheld pending evidence review, named responsibility, and publication permission. No site or customer outcome is established."}
                 </p>
                 <Link className="mt-6 inline-flex font-medium text-foreground underline decoration-border underline-offset-4 hover:decoration-primary" href={resource.path}>
-                  Inspect resource
+                  Review publication status
                 </Link>
               </article>
             ))}
@@ -95,14 +99,12 @@ export function SeoResourceHub({
               Bring the operator question before the capacity claim
             </h2>
             <p className="mt-4 text-base leading-8 text-muted-foreground">
-              A Capacity Audit maps constrained infrastructure to proof-adjusted
-              opportunities, refusal conditions, and a read-only Shadow Mode
-              plan.
+              A bounded assessment reviews one capacity question, its evidence, constraints, and unresolved commercial decisions.
             </p>
           </div>
           <Button asChild size="lg" className="mt-8 lg:mt-0">
-            <Link href={buildLeadHref("capacity-audit", `${eyebrow.toLowerCase().replaceAll(" ", "-")}-hub`)}>
-              Request Capacity Audit
+            <Link href="/assessment">
+              Scope an assessment
             </Link>
           </Button>
         </section>

@@ -5,7 +5,7 @@ import { ArrowRightIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function CtaBand({
-  eyebrow = "Capacity Audit",
+  eyebrow = "Capacity assessment",
   headline,
   body,
   label,
@@ -32,7 +32,7 @@ export function CtaBand({
       </div>
       <div className="mt-8 lg:mt-0">
         <Button asChild size="lg" className="group">
-          <Link href={href} data-gn-event={eventName}>
+          <Link prefetch={false} href={href} data-gn-event={eventName}>
             {label}
             <ArrowRightIcon className="transition-transform group-hover:translate-x-0.5" />
           </Link>

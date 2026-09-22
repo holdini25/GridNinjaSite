@@ -28,7 +28,7 @@ export function SiteFooter() {
               {siteConfig.footerCopy}
             </h2>
             <p className="max-w-md text-base leading-8 text-muted-foreground">
-              Unlock safe, usable, auditable capacity from constrained AI infrastructure.
+              A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
             </p>
           </div>
           {footerGroups.map((group) => (
@@ -40,6 +40,8 @@ export function SiteFooter() {
                     <Link
                       href={link.href}
                       prefetch={false}
+                      data-analytics-event={link.href === "/assessment#scope" ? "assessment_cta_selected" : undefined}
+                      data-analytics-source={link.href === "/assessment#scope" ? "footer" : undefined}
                       className="text-base text-muted-foreground transition-colors hover:text-foreground"
                     >
                       {link.label}

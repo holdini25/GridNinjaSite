@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "assessment-publication.v1",
+  "publicationId": "demo-01-d",
+  "version": "1.0.0",
+  "status": "available",
+  "provenance": "synthetic",
+  "narrativeVersion": "1.0.0",
+  "templateVersion": "1.0.0",
+  "artifacts": [
+    {
+      "file": "snapshot.json",
+      "sha256": "ac9dd6f67724b9bede7774618123054219c9ee72492e9370e40ce3b45d2c7cda",
+      "bytes": 4377
+    },
+    {
+      "file": "narrative.json",
+      "sha256": "0e646d1f749bf679429c997445c417edc7748c37078949f60ab77b54fd348de0",
+      "bytes": 1148
+    },
+    {
+      "file": "brief.html",
+      "sha256": "6af04b7f3d2f9f30555673df74aa09f707f36e8b693437b7c60d55c0a42ad262",
+      "bytes": 5423
+    },
+    {
+      "file": "brief.pdf",
+      "sha256": "8034cd033675386964a4d0192b2d92b88c274cc6e4a72026953da8e2c4588dd5",
+      "bytes": 115870
+    }
+  ]
+}

@@ -1,226 +1,30 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-
-import { AutonomyLadder } from "@/components/marketing/autonomy-ladder"
-import { ClaimToProofCards } from "@/components/marketing/claim-to-proof-cards"
-import { ComparisonGrid } from "@/components/marketing/comparison-grid"
-import { CtaBand } from "@/components/marketing/cta-band"
-import { DeferredKpiPreview } from "@/components/marketing/deferred-kpi-preview"
-import {
-  DeferredDataCenterXrayHD,
-  DeferredLoadPassportHD,
-  DeferredRtaDecisionTheater,
-} from "@/components/marketing/deferred-proof-visuals"
-import { OutcomePillars } from "@/components/marketing/outcome-pillars"
-import { ProductBoundaryToggle } from "@/components/marketing/product-boundary-toggle"
-import { ProofOperatingHero } from "@/components/marketing/proof-operating-hero"
-import { ProofArtifactStack } from "@/components/marketing/proof-artifact-stack"
-import { ProofStatStrip } from "@/components/marketing/proof-stat-strip"
-import { SectionHeader } from "@/components/marketing/section-header"
+import { AssessmentSummary } from "@/components/assessment/assessment-summary"
+import { assessmentFixtures } from "@/content/assessments/fixtures"
 import { SectionShell } from "@/components/layout/section-shell"
+import { AssessmentCards } from "@/components/marketing/assessment-cards"
+import { CtaBand } from "@/components/marketing/cta-band"
+import { Hero } from "@/components/marketing/hero"
+import { SectionHeader } from "@/components/marketing/section-header"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
-import { homeKpis, proofStats, solutionTeasers, eventLog } from "@/content/metrics"
-import {
-  comparisonRows,
-  comparisonSection,
-  controlLoopSection,
-  enginePillars,
-  engineSection,
-  homeFinalCta,
-  powerWallSection,
-} from "@/content/copy/home"
-import { ladderSteps } from "@/content/copy/proof"
-import {
-  claimToProofCards,
-  proofArtifactIntro,
-  proofArtifacts,
-} from "@/content/proof-artifacts"
-import { buildLeadHref } from "@/lib/lead"
+import { assessmentDeliverables, assessmentInputs } from "@/content/copy/assessment"
 import { createPageMetadata } from "@/lib/seo"
 
-import { PowerWallChart } from "@/components/diagrams/power-wall-chart"
-import { RtaLoopDiagram } from "@/components/diagrams/rta-loop-diagram"
-
-export async function generateMetadata(): Promise<Metadata> {
-  return createPageMetadata({ path: "/" })
-}
+export async function generateMetadata(): Promise<Metadata> { return createPageMetadata({ path: "/" }) }
 
 export default function HomePage() {
-  return (
-    <>
-      <SeoPageJsonLd path="/" includeSiteIdentity />
-      <div className="space-y-24 pb-24">
-        <ProofOperatingHero />
-
-      <SectionShell>
-        <ProofStatStrip items={proofStats} />
-      </SectionShell>
-
-      <SectionShell>
-        <div className="gn-panel border-proof-cyan/35 px-6 py-5">
-          <p className="font-mono text-base leading-7 text-proof-cyan">
-            Every accepted MW must point to a proof row.
-          </p>
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <ProductBoundaryToggle />
-      </SectionShell>
-
-      <SectionShell>
-        <DeferredRtaDecisionTheater />
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow="Claim to proof"
-            headline="Available capacity becomes usable only after runtime assurance"
-            body="Touch each domain to see how a nominal claim turns into allow / repair / reject / no-proof evidence."
-          />
-          <ClaimToProofCards cards={claimToProofCards} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow={proofArtifactIntro.eyebrow}
-            headline={proofArtifactIntro.headline}
-            body={proofArtifactIntro.body}
-          />
-          <ProofArtifactStack artifacts={proofArtifacts} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <SectionHeader
-            eyebrow={powerWallSection.eyebrow}
-            headline={powerWallSection.headline}
-            body={powerWallSection.body}
-          />
-          <div className="space-y-4">
-            <PowerWallChart />
-            <ul className="grid gap-3">
-              {powerWallSection.bullets.map((bullet) => (
-                <li
-                  key={bullet}
-                  className="border-l border-border/80 pl-4 text-base leading-8 text-muted-foreground"
-                >
-                  {bullet}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow={comparisonSection.eyebrow}
-            headline={comparisonSection.headline}
-            body={comparisonSection.body}
-          />
-          <ComparisonGrid rows={comparisonRows} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow={engineSection.eyebrow}
-            headline={engineSection.headline}
-            body={engineSection.body}
-          />
-          <OutcomePillars items={enginePillars} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <DeferredLoadPassportHD />
-      </SectionShell>
-
-      <SectionShell>
-        <DeferredDataCenterXrayHD />
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow={controlLoopSection.eyebrow}
-            headline={controlLoopSection.headline}
-            body={controlLoopSection.body}
-          />
-          <RtaLoopDiagram steps={controlLoopSection.steps} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow="KPI preview"
-            headline="See safe headroom, binding constraints, and proof in one view"
-            body="The operating surface should explain why an action is allowed, repaired, or rejected before autonomy expands."
-          />
-          <DeferredKpiPreview cards={homeKpis} eventLog={eventLog} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow="Proof Before Autonomy"
-            headline="Trust is earned before control is expanded"
-            body="GridNinja proves the decision path in Shadow Mode before it touches live controls."
-          />
-          <AutonomyLadder steps={ladderSteps} />
-        </div>
-      </SectionShell>
-
-      <SectionShell>
-        <div className="space-y-10">
-          <SectionHeader
-            eyebrow="Built for the Operators Under the Most Pressure"
-            headline="Designed for AI cloud and colocation operators under hard infrastructure limits"
-            body="Phase one stays focused on the buyers who need the business case, the assurance model, and the proof workflow immediately."
-          />
-          <div className="grid gap-6 lg:grid-cols-3">
-            {solutionTeasers.map((solution) => (
-              <Link
-                key={solution.href}
-                href={solution.href}
-                className="gn-panel gn-panel-interactive px-6 py-7"
-              >
-                <p className="text-sm tracking-[0.28em] text-primary uppercase">
-                  Solution
-                </p>
-                <h3 className="mt-4 text-[1.75rem] font-medium text-foreground">
-                  {solution.title}
-                </h3>
-                <p className="mt-4 max-w-md text-base leading-8 text-muted-foreground">
-                  {solution.body}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </SectionShell>
-
-        <RelatedSeoLinks path="/" />
-
-        <SectionShell>
-          <CtaBand
-            headline={homeFinalCta.headline}
-            body={homeFinalCta.body}
-            label={homeFinalCta.label}
-            href={buildLeadHref("capacity-audit", "home-final")}
-          />
-        </SectionShell>
-      </div>
-    </>
-  )
+  return <><SeoPageJsonLd path="/" includeSiteIdentity /><div className="space-y-16 pb-16 sm:space-y-20">
+    <Hero eyebrow="Capacity decisions · proof before autonomy" headline="Make your next capacity commitment with confidence." body="Scope a paid, bounded capacity decision assessment using authorized historical inputs. Understand the constraints, test a workload profile, and give decision-makers a reviewable basis for the next commitment." primaryCta={{ label: "Scope an assessment", href: "/assessment", analyticsEvent: "assessment_cta_selected", analyticsSource: "home-hero" }} secondaryCta={{ label: "See a sample decision brief", href: "/demo#decision-brief" }} trustLine="A decision assessment. No live connection or equipment control." visualClassName="hidden lg:block lg:pl-4" visual={<AssessmentSummary record={assessmentFixtures.b} compact showLinks={false} />} />
+    <SectionShell id="solutions" deferRendering={false}><div className="space-y-8"><SectionHeader eyebrow="Start with the decision" headline="What are you ready to commit?" body="Constrained AI infrastructure makes each capacity commitment consequential. Start with one defined question and the person accountable for it." /><div className="grid gap-5 md:grid-cols-2">{[
+      { title: "Admit the next AI workload", body: "Compare the requested profile with modeled constraints before a service or revenue commitment. For AI cloud infrastructure and operations teams.", href: "/solutions/ai-cloud" },
+      { title: "Commit colocation capacity", body: "Review a proposed tenant increment against the declared facility conditions before commercial commitment. For colocation operators and infrastructure executives.", href: "/solutions/colocation" },
+    ].map(item => <article className="gn-panel p-7" key={item.href}><h3 className="text-2xl font-medium">{item.title}</h3><p className="mt-4 text-base leading-8 text-muted-foreground">{item.body}</p><Link prefetch={false} className="mt-5 inline-flex min-h-11 items-center text-primary underline underline-offset-4" href={item.href}>Explore the decision →</Link></article>)}</div><p className="max-w-3xl text-base leading-8 text-muted-foreground">Considering cooling investment or <Link prefetch={false} className="text-foreground underline underline-offset-4" href="/solutions/bridge-power">bridge power and on-site generation</Link>? These are investigation options until a separate scope evaluates their feasibility and economics.</p></div></SectionShell>
+    <SectionShell id="decision-brief" deferRendering={false}><div className="space-y-8"><SectionHeader eyebrow="Worked example · synthetic" headline="A smaller profile is only useful if it meets the business need." body="The example separates the requested increment, modeled limit, and unresolved commercial decision. It is not a customer result or permission to operate." /><AssessmentSummary record={assessmentFixtures.b} /><p className="max-w-3xl text-base leading-8 text-muted-foreground">The brief carries the conditions with the conclusion, so the next reviewer can see what remains unproven. <Link prefetch={false} className="text-primary underline underline-offset-4" href="/proof/proof-pack">See what belongs in the review package.</Link></p></div></SectionShell>
+    <SectionShell deferRendering={false}><div className="space-y-8"><SectionHeader eyebrow="The assessment" headline="A defined question. A reviewable answer." body="Agree the deliverables before work begins. A useful finding can support a conditional path, explain why a request does not fit, or identify evidence that is still missing." /><AssessmentCards items={assessmentDeliverables} /><Link prefetch={false} className="inline-flex min-h-11 items-center text-primary underline underline-offset-4" href="/assessment#deliverables">Review the assessment scope →</Link></div></SectionShell>
+    <SectionShell deferRendering={false}><div className="space-y-8"><SectionHeader eyebrow="Inputs and responsibilities" headline="Agree the evidence boundary first." body="The assessment uses authorized historical inputs. Data readiness and review responsibilities are part of scoping." /><AssessmentCards items={assessmentInputs} /><div className="flex flex-wrap gap-6 text-base"><Link prefetch={false} className="text-primary underline underline-offset-4" href="/methodology">Assessment methodology</Link><Link prefetch={false} className="text-primary underline underline-offset-4" href="/data-handling">Data handling and permissions</Link></div></div></SectionShell>
+    <SectionShell deferRendering={false}><div className="grid gap-8 border-y border-border py-10 lg:grid-cols-2"><SectionHeader eyebrow="What is demonstrated" headline="Inspect the work and its limits." body="The public assessment example is synthetic software and explanatory material. It does not establish performance on an operating site." /><div className="space-y-5 text-base leading-8 text-muted-foreground"><p>GridNinja is developing an AI Data Center Virtual Capacity Control Plane: a runtime-assured virtual capacity engine for inside-the-fence orchestration. That development direction is separate from the current assessment offer.</p><p>Named delivery responsibilities, relevant experience, and reviewer availability must be established during scoping. Public team credentials and customer outcomes are not yet published.</p><div className="flex flex-wrap gap-6"><Link prefetch={false} className="text-primary underline underline-offset-4" href="/about">About the work</Link><Link prefetch={false} className="text-primary underline underline-offset-4" href="/evidence">Inspect public evidence</Link></div></div></div></SectionShell>
+    <SectionShell deferRendering={false}><CtaBand eyebrow="Your next capacity decision" headline="Bring the question before the commitment." body="Start with fit and data readiness. A paid assessment proceeds only after scope, responsibilities, price, and deliverables are agreed." label="Scope an assessment" href="/assessment#scope" /><RelatedSeoLinks path="/" /></SectionShell>
+  </div></>
 }

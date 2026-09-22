@@ -23,9 +23,7 @@ async function findManifests(directory) {
 }
 
 const manifests = await findManifests(releasesRoot)
-if (manifests.length === 0) {
-  failures.push("No versioned evidence release manifest exists under public/evidence/releases")
-}
+
 
 for (const manifestPath of manifests) {
   let manifest
@@ -54,9 +52,9 @@ for (const manifestPath of manifests) {
       `${relative(root, manifestPath)} must include publishedAt when releaseStatus is published`
     )
   }
-  if (manifest.releaseStatus !== "published" && "publishedAt" in manifest) {
+  if (manifest.releaseStatus !== "published") {
     failures.push(
-      `${relative(root, manifestPath)} must not include publishedAt before publication`
+      `${relative(root, manifestPath)} is not published and must not be stored under public/`
     )
   }
   if (!Array.isArray(manifest.artifacts) || manifest.artifacts.length === 0) {

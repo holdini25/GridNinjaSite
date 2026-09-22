@@ -27,7 +27,7 @@ export function DispatchDimensionAuditPanel({
           </h3>
         </div>
         <p className="font-mono text-xs text-muted-foreground">
-          requested -&gt; accepted -&gt; binding source
+          requested -&gt; model-screened -&gt; binding source
         </p>
       </div>
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">

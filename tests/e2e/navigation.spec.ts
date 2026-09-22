@@ -1,6 +1,6 @@
 import { expect, test } from "./support/client-health"
 
-const headerCtaHref = "/contact?intent=capacity-audit&source=header"
+const headerCtaHref = "/assessment"
 
 function isMobileProject(projectName: string) {
   return projectName.includes("mobile")
@@ -29,7 +29,7 @@ test.describe("desktop primary navigation", () => {
     ).toBeVisible()
     await expect(
       nav.getByText(
-        "Define the safe operating boundary before execution.",
+        "Inspect a separate synthetic timed-dispatch example.",
         { exact: true }
       )
     ).toBeVisible()
@@ -48,7 +48,7 @@ test.describe("desktop primary navigation", () => {
     await expect(solutions).toHaveAttribute("aria-expanded", "false")
     await expect(proof).toHaveAttribute("aria-expanded", "true")
     await expect(
-      nav.getByRole("link", { name: "Interactive Proof Demo", exact: true })
+      nav.getByRole("link", { name: "Sample decision brief", exact: true })
     ).toBeVisible()
 
     await proof.click()
@@ -70,6 +70,7 @@ test.describe("desktop primary navigation", () => {
 
   test("traverses submenu links and restores trigger focus on Escape", async ({
     page,
+    browserName,
   }) => {
     const nav = page.getByRole("navigation", { name: "Primary" })
     const platform = nav.getByRole("button", { name: "Platform", exact: true })
@@ -81,7 +82,10 @@ test.describe("desktop primary navigation", () => {
     await platform.focus()
     await platform.press("Enter")
     await expect(platform).toHaveAttribute("aria-expanded", "true")
-    await page.keyboard.press("Tab")
+    // macOS WebKit uses Option-Tab to include links with default keyboard settings.
+    await page.keyboard.press(
+      browserName === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab"
+    )
     await expect(overview).toBeFocused()
 
     await overview.press("Escape")
@@ -146,10 +150,10 @@ test.describe("responsive navigation boundaries", () => {
       const drawerTrigger = page.getByRole("button", { name: "Open navigation" })
       const compactCta = header
         .locator('a[data-gn-event="header-capacity-audit"]')
-        .filter({ hasText: /^Request Audit$/ })
+        .filter({ hasText: /^Scope assessment$/ })
       const desktopCta = header
         .locator('a[data-gn-event="header-capacity-audit"]')
-        .filter({ hasText: /^Request Capacity Audit$/ })
+        .filter({ hasText: /^Scope an assessment$/ })
 
       if (width >= 1120) {
         await expect(primary, `desktop navigation at ${width}px`).toBeVisible()
@@ -213,7 +217,7 @@ test.describe("responsive navigation boundaries", () => {
     ).toBeVisible()
     await expect(
       dialog.getByText(
-        "See how GridNinja converts constrained infrastructure into proof-adjusted virtual capacity.",
+        "Understand the intended control-plane architecture and current assessment offer.",
         { exact: true }
       )
     ).toHaveCount(0)
@@ -233,7 +237,7 @@ test.describe("responsive navigation boundaries", () => {
     await page.goto("/platform/dispatch-envelope")
 
     const compactCta = page.getByRole("banner").getByRole("link", {
-      name: "Request Audit",
+      name: "Scope assessment",
       exact: true,
     })
     await expect(compactCta).toHaveAttribute("href", headerCtaHref)
@@ -244,7 +248,7 @@ test.describe("responsive navigation boundaries", () => {
     const platform = dialog.getByRole("button", { name: "Platform", exact: true })
     const footer = dialog.locator("[data-mobile-nav-footer]")
     const drawerCta = footer.getByRole("link", {
-      name: "Request Capacity Audit",
+      name: "Scope an assessment",
       exact: true,
     })
 

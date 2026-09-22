@@ -39,27 +39,17 @@ test.describe("GridNinja brand placements", () => {
     const footerMark = page
       .locator("footer")
       .locator('img[src*="gridninja-emblem-detailed-dark.svg"]')
-    const watermark = page.locator('img[src*="gridninja-watermark.svg"]')
 
     await expect(footerMark).toBeVisible()
     await expect(page.locator("footer")).toContainText(
       "Infrastructure · Intelligence · Control"
     )
     expect((await footerMark.boundingBox())?.height).toBeGreaterThanOrEqual(72)
-    await expect(watermark).toBeVisible()
-    await expect(watermark).toHaveCSS("opacity", "0.04")
     await expect(page.locator("footer [data-logo-motion]")).toHaveCount(0)
-    await expect(watermark).not.toHaveAttribute("data-logo-motion")
 
     await page.goto("/about")
-    const ceremonial = page.locator(
-      '[data-logo-motion="guardian-wake"] svg'
-    )
-    await expect(ceremonial).toBeVisible()
-    expect((await ceremonial.boundingBox())?.height).toBeCloseTo(192, 2)
-    await expect(
-      page.getByRole("heading", { name: "Coordination protected by proof" })
-    ).toBeVisible()
+    await expect(page.locator('[data-logo-motion="guardian-wake"]')).toHaveCount(0)
+    await expect(page.locator("main")).toContainText("development")
   })
 
   test("links the 36px micro identity in the mobile drawer", async ({ page }) => {
@@ -74,19 +64,14 @@ test.describe("GridNinja brand placements", () => {
     await expect(home).toBeVisible()
     expect((await mark.boundingBox())?.height).toBeCloseTo(36, 2)
     await expect(drawer).toContainText(
-      "Runtime-assured virtual capacity for AI data centers."
+      "Capacity decisions supported by explicit evidence."
     )
   })
 
-  test("keeps proof seals static", async ({ page }) => {
+  test("does not imply verified evidence on the synthetic sample page", async ({ page }) => {
     await page.goto("/proof/proof-pack")
-
-    const seal = page
-      .locator('[data-evidence-chain-status="complete"]')
-      .first()
-    await expect(seal).toBeVisible()
-    await expect(seal.locator("[data-logo-motion]")).toHaveCount(0)
-    await expect(seal).not.toHaveAttribute("data-logo-motion")
+    await expect(page.locator('[data-evidence-chain-status="complete"]')).toHaveCount(0)
+    await expect(page.locator("main")).toContainText("synthetic")
   })
 
   test("keeps the footer brand signature on one line without overflow", async ({
@@ -126,6 +111,7 @@ test.describe("GridNinja brand placements", () => {
 
   test("runs the micro response from keyboard focus before any hover", async ({
     page,
+    browserName,
   }) => {
     await page.goto("/")
 
@@ -137,8 +123,12 @@ test.describe("GridNinja brand placements", () => {
       '[data-part="guardian-left"], [data-part="guardian-right"]'
     )
 
-    await page.keyboard.press("Tab")
-    await page.keyboard.press("Tab")
+    // macOS WebKit uses Option-Tab to include links with default keyboard settings.
+    const nextFocusable = browserName === "webkit" && process.platform === "darwin"
+      ? "Alt+Tab"
+      : "Tab"
+    await page.keyboard.press(nextFocusable)
+    await page.keyboard.press(nextFocusable)
     await expect(trigger).toBeFocused()
     await expect.poll(() => core.evaluate(readMotionStyle)).toMatchObject({
       hasFilter: true,
@@ -196,89 +186,6 @@ test.describe("GridNinja brand placements", () => {
     )
   })
 
-  test("reveals the ceremonial guardian once and stays settled after re-entry", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 768, height: 500 })
-    await page.goto("/about")
-
-    const logo = page.locator('[data-logo-motion="guardian-wake"]')
-    await expect(logo).toHaveAttribute("data-logo-reveal", "once")
-
-    await logo.scrollIntoViewIfNeeded()
-    await expect(logo).toHaveAttribute("data-logo-revealed", "true")
-
-    await page.evaluate(() => window.scrollTo(0, 0))
-    await expect(logo).toHaveAttribute("data-logo-revealed", "true")
-    await logo.scrollIntoViewIfNeeded()
-    await expect(logo).toHaveAttribute("data-logo-revealed", "true")
-  })
-
-  test("keeps the ceremonial emblem visible when hydration is unavailable", async ({
-    browser,
-  }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false })
-    const page = await context.newPage()
-
-    try {
-      await page.goto("/about")
-      const logo = page.locator('[data-logo-motion="guardian-wake"]')
-
-      await expect(logo).toHaveAttribute("data-logo-revealed", "true")
-      await expect(logo).toHaveAttribute("data-logo-reveal-stage", "settled")
-      await expect(logo.locator("svg")).toBeVisible()
-    } finally {
-      await context.close()
-    }
-  })
-
-  test("caps fine-pointer ceremonial tilt at two degrees and resets on leave", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 1024, height: 700 })
-    await page.goto("/about")
-    const finePointer = await page.evaluate(() =>
-      matchMedia("(pointer: fine)").matches
-    )
-    test.skip(!finePointer, "Tilt is intentionally disabled on coarse pointers")
-
-    const logo = page.locator('[data-logo-motion="guardian-wake"]')
-    await logo.scrollIntoViewIfNeeded()
-    const box = await logo.boundingBox()
-    expect(box).not.toBeNull()
-
-    await page.mouse.move(box!.x + box!.width - 1, box!.y + 1)
-    const tilt = await logo.evaluate(readTiltProperties)
-    expect(Math.abs(tilt.x)).toBeLessThanOrEqual(2)
-    expect(Math.abs(tilt.y)).toBeLessThanOrEqual(2)
-
-    await page.mouse.move(0, 0)
-    await expect.poll(() => logo.evaluate(readTiltProperties)).toEqual({
-      x: 0,
-      y: 0,
-    })
-  })
-
-  test("keeps ceremonial tilt disabled on coarse pointers", async ({ page }) => {
-    await page.goto("/about")
-    const coarsePointer = await page.evaluate(() =>
-      matchMedia("(pointer: coarse)").matches
-    )
-    test.skip(!coarsePointer, "This assertion applies to mobile/coarse projects")
-
-    const logo = page.locator('[data-logo-motion="guardian-wake"]')
-    await logo.scrollIntoViewIfNeeded()
-    const box = await logo.boundingBox()
-    expect(box).not.toBeNull()
-
-    await page.touchscreen.tap(
-      box!.x + box!.width - 1,
-      box!.y + Math.min(20, box!.height - 1)
-    )
-    expect(await logo.evaluate(readTiltProperties)).toEqual({ x: 0, y: 0 })
-    await expect(logo.locator("svg")).toHaveCSS("transform", "none")
-  })
-
   test("settles both motion modes immediately when reduced motion is requested", async ({
     page,
   }) => {
@@ -291,13 +198,6 @@ test.describe("GridNinja brand placements", () => {
     await trigger.focus()
     expect(await microParts.evaluateAll(hasReducedMotionContract)).toBe(true)
 
-    await page.goto("/about")
-    const guardian = page.locator('[data-logo-motion="guardian-wake"]')
-    await guardian.scrollIntoViewIfNeeded()
-    await expect(guardian).toHaveAttribute("data-logo-revealed", "true")
-    expect(
-      await guardian.locator("[data-part]").evaluateAll(hasReducedMotionContract)
-    ).toBe(true)
   })
 })
 
@@ -310,18 +210,6 @@ function readPartColors(elements: Element[]) {
 
 function readTransformAttributes(elements: Element[]) {
   return elements.map((element) => element.getAttribute("transform"))
-}
-
-function readTiltProperties(element: Element) {
-  const style = (element as HTMLElement).style
-  return {
-    x: Number.parseFloat(
-      style.getPropertyValue("--gridninja-tilt-x") || "0"
-    ),
-    y: Number.parseFloat(
-      style.getPropertyValue("--gridninja-tilt-y") || "0"
-    ),
-  }
 }
 
 function readMotionStyle(element: Element) {

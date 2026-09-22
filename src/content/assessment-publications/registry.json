@@ -1,0 +1,26 @@
+[
+  {
+    "publicationId": "demo-01-a",
+    "version": "v1.0.0",
+    "status": "available",
+    "manifestSha256": "d281ac1ca296521bf5f5a4414fb1cb8b15ded1ea43ce905d15506a4f67ef8b50"
+  },
+  {
+    "publicationId": "demo-01-b",
+    "version": "v1.0.0",
+    "status": "available",
+    "manifestSha256": "27186e35caf97f0fe0e095bed864ee3cbc943c37efbfd7d7227a9b09c4adab3a"
+  },
+  {
+    "publicationId": "demo-01-c",
+    "version": "v1.0.0",
+    "status": "available",
+    "manifestSha256": "c93fca98a6bc9c0155423b80b2a7258c97ae1736652b611e9f6962ae30746823"
+  },
+  {
+    "publicationId": "demo-01-d",
+    "version": "v1.0.0",
+    "status": "available",
+    "manifestSha256": "db3cf5cbe10513f79fdfd88d28dc09bcbe884a72c572d1c0f573258294a95315"
+  }
+]

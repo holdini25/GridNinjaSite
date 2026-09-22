@@ -34,6 +34,10 @@ export function validateLighthouseReport(report) {
       violations
     )
 
+    // Core journey initial JavaScript is capped at 180 KiB Brotli by
+    // validate-contact-build.mjs, including rootMainFiles/framework. Lighthouse
+    // transferSize includes the server's actual encoding and response headers;
+    // retain it as a diagnostic, not a falsely equivalent Brotli measurement.
     if (isInsightArticle(route)) {
       enforceSummaryBudget(
         summary,

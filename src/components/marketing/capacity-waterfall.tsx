@@ -141,7 +141,7 @@ export function CapacityWaterfall({
           )
         })}
       </div>
-      <PublicClaimCaveat
+      <PublicClaimCaveat surface="/demo"
         claimId={claimId}
         className="mt-4 block text-xs leading-5 text-muted-foreground"
       />

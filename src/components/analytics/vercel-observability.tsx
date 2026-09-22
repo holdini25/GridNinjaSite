@@ -8,6 +8,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import {
   isAnalyticsEventName,
   trackGridNinjaEvent,
+  normalizeAnalyticsRoute,
+  sanitizeTelemetryUrl,
 } from "@/lib/analytics"
 
 export function VercelObservability() {
@@ -18,10 +20,13 @@ export function VercelObservability() {
       <Analytics
         beforeSend={(event) => ({
           ...event,
-          url: stripQueryAndFragment(event.url),
+          url: sanitizeTelemetryUrl(event.url),
         })}
       />
-      <SpeedInsights />
+      <SpeedInsights beforeSend={(event) => ({
+        ...event, url: sanitizeTelemetryUrl(event.url),
+        ...(event.route ? { route: normalizeAnalyticsRoute(event.route) } : {}),
+      })} />
     </>
   )
 }
@@ -46,6 +51,9 @@ function useAnalyticsClickObserver() {
         intent: trackedElement.dataset.analyticsIntent,
         artifact: trackedElement.dataset.analyticsArtifact,
         version: trackedElement.dataset.analyticsVersion,
+        scenario: trackedElement.dataset.analyticsScenario,
+        perspective: trackedElement.dataset.analyticsPerspective,
+        maturity: trackedElement.dataset.analyticsMaturity,
         success: trackedElement.dataset.analyticsSuccess === "true" || undefined,
       })
     }
@@ -54,15 +62,4 @@ function useAnalyticsClickObserver() {
 
     return () => document.removeEventListener("click", handleClick)
   }, [])
-}
-
-function stripQueryAndFragment(value: string) {
-  try {
-    const url = new URL(value)
-    url.search = ""
-    url.hash = ""
-    return url.toString()
-  } catch {
-    return value.split(/[?#]/, 1)[0]
-  }
 }

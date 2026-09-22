@@ -43,6 +43,8 @@ describe("internal-link normalization", () => {
     expect(classify("#runtime-assurance")).toMatchObject({
       kind: "same-page-fragment",
     })
+    expect(classify("/platform?scenario=b&version=1.0.0")).toMatchObject({ kind: "same-page-state", path: "/platform" })
+    expect(classify("/platform")).toMatchObject({ kind: "internal", path: "/platform" })
     expect(classify("mailto:proof@gridninja.ai")).toMatchObject({
       kind: "external",
     })

@@ -16,7 +16,6 @@ import {
   getLoadPassportEvidenceChainStatus,
   loadPassportSections,
   proofArtifacts,
-  type WaterfallStep,
 } from "@/content/proof-artifacts"
 
 afterEach(cleanup)
@@ -248,69 +247,14 @@ describe("proof-seal presentation semantics", () => {
     )
   })
 
-  it("uses the final proof row for waterfall summary state", () => {
-    const multipleProofRows: WaterfallStep[] = [
-      {
-        label: "Earlier proof row",
-        value: 5.1,
-        capacityAfter: 5.1,
-        detail: "Superseded illustrative proof row.",
-        tone: "proof",
-        decision: "allow",
-        evidenceChainStatus: "complete",
-      },
-      {
-        label: "Intervening constraint",
-        value: -0.9,
-        capacityAfter: 4.2,
-        detail: "Later constraint in the illustrative sequence.",
-        tone: "constraint",
-        decision: "repair",
-      },
-      {
-        label: "Final proof row",
-        value: 4.2,
-        capacityAfter: 4.2,
-        detail: "Final illustrative proof row.",
-        tone: "proof",
-        decision: "repair",
-        evidenceChainStatus: "complete",
-      },
-    ]
-
-    render(<CapacityWaterfall steps={multipleProofRows} />)
-
-    const acceptedHeadroom = screen.getByText("accepted headroom").parentElement
-    expect(acceptedHeadroom).not.toBeNull()
-    expect(within(acceptedHeadroom!).getByText("4.2 MW")).toBeVisible()
-    expect(
-      within(acceptedHeadroom!).queryByText("5.1 MW")
-    ).not.toBeInTheDocument()
+  it("refuses to render a legacy numeric waterfall with a withdrawn public claim", () => {
+    expect(() => render(<CapacityWaterfall steps={[]} />)).toThrow(/withdrawn public claim/)
   })
 
-  it("renders an empty waterfall without inventing accepted headroom", () => {
-    render(<CapacityWaterfall steps={[]} />)
-
-    expect(screen.queryByText("accepted headroom")).not.toBeInTheDocument()
-    expect(screen.getByText("illustrative")).toBeVisible()
-  })
-
-  it("uses explicit waterfall and artifact evidence state rather than decision color", () => {
-    const repairedComplete: WaterfallStep[] = [
-      {
-        label: "Proof-adjusted capacity",
-        value: 2.8,
-        capacityAfter: 2.8,
-        detail: "Illustrative repaired capacity with a complete evidence chain.",
-        tone: "proof",
-        decision: "repair",
-        evidenceChainStatus: "complete",
-      },
-    ]
+  it("uses explicit artifact evidence state rather than decision color", () => {
 
     render(
       <>
-        <CapacityWaterfall steps={repairedComplete} />
         <ProofArtifactGrid
           artifacts={[
             {
@@ -330,7 +274,7 @@ describe("proof-seal presentation semantics", () => {
       </>
     )
 
-    expect(screen.getAllByText(GRIDNINJA_PROOF_SEAL_LABEL)).toHaveLength(2)
+    expect(screen.getAllByText(GRIDNINJA_PROOF_SEAL_LABEL)).toHaveLength(1)
     expect(screen.getByText("Withheld Ledger")).toBeVisible()
   })
 

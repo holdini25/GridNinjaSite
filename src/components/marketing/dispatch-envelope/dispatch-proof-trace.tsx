@@ -114,7 +114,7 @@ function buildTraceSteps(scenario: DispatchScenario): ProofTraceStep[] {
     },
     {
       id: "ledger",
-      label: "Accepted-headroom ledger",
+      label: "Model-screened headroom ledger",
       value: scenario.dto.accepted ? "ledger_0184" : "withheld",
     },
     {

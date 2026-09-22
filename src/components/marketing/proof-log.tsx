@@ -46,7 +46,7 @@ export function ProofLog({
                   <span className="text-muted-foreground">{line.label}: </span>
                   <span>
                     {line.claimId ? (
-                      <PublicClaimValue claimId={line.claimId} value={line.value} />
+                      <PublicClaimValue surface="/proof/proof-pack" claimId={line.claimId} value={line.value} />
                     ) : (
                       line.value
                     )}

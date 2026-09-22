@@ -5,7 +5,6 @@ import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { Button } from "@/components/ui/button"
 import type { SeoEvidenceRecord, SeoResource } from "@/content/seo-resources"
-import { buildLeadHref } from "@/lib/lead"
 
 function DetailList({
   title,
@@ -105,6 +104,9 @@ function EvidenceRecord({ evidence }: { evidence: SeoEvidenceRecord }) {
 }
 
 export function SeoResourcePage({ resource }: { resource: SeoResource }) {
+  if (resource.publicationStatus !== "published") {
+    return <div className="space-y-12 py-12"><SeoPageJsonLd path={resource.path} /><SectionShell deferRendering={false}><p className="gn-eyebrow">Publication pending</p><h1 className="mt-5 max-w-3xl text-4xl leading-tight font-medium">{resource.h1}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">This technical resource is withheld pending named ownership, evidence review, and publication permission. Candidate text and artifacts are not public evidence. No customer, site-validation, or operational capability claim is established by this page.</p><div className="mt-8 flex flex-wrap gap-6"><Link href="/demo#decision-brief" className="text-primary underline underline-offset-4">See the approved synthetic decision brief</Link><Link href="/assessment" className="text-primary underline underline-offset-4">Scope an assessment</Link></div></SectionShell><RelatedSeoLinks path={resource.path} /></div>
+  }
   const hubPath =
     resource.kind === "methodology"
       ? "/methodology"
@@ -304,15 +306,13 @@ export function SeoResourcePage({ resource }: { resource: SeoResource }) {
               Test the evidence boundary against your capacity question
             </h2>
             <p className="mt-4 text-base leading-8 text-muted-foreground">
-              Start with a Capacity Audit or read-only Shadow Mode discussion.
-              GridNinja does not require control authority to identify where a
-              capacity claim remains unproven.
+              Start with a bounded assessment using authorized historical inputs. Agree the evidence and review responsibilities before work begins.
             </p>
           </div>
           <div className="mt-8 flex flex-wrap gap-4 lg:mt-0">
             <Button asChild size="lg">
-              <Link href={buildLeadHref("capacity-audit", `${resource.kind}-${resource.slug}`)} prefetch={false}>
-                Request Capacity Audit
+              <Link href="/assessment" prefetch={false}>
+                Scope an assessment
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-border/80 bg-background/45">

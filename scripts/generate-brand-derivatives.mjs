@@ -291,7 +291,26 @@ async function checkOutputs(outputs) {
       throw error
     }
 
-    if (!actual.equals(expected)) {
+    // libvips SIMD rounding can differ by one channel level across CPU/OS builds.
+    // Keep the approved checked-in bytes; tolerate only sparse one-level raster noise.
+    let equivalentRaster = false
+    if (!actual.equals(expected) && relativePath.endsWith(".png")) {
+      try {
+        const left = await sharp(actual).raw().toBuffer({ resolveWithObject: true })
+        const right = await sharp(expected).raw().toBuffer({ resolveWithObject: true })
+        if (left.info.width === right.info.width && left.info.height === right.info.height && left.info.channels === right.info.channels) {
+          let changed = 0
+          let maximum = 0
+          for (let index = 0; index < left.data.length; index++) {
+            const delta = Math.abs(left.data[index] - right.data[index])
+            if (delta) changed++
+            maximum = Math.max(maximum, delta)
+          }
+          equivalentRaster = maximum <= 1 && changed / left.data.length <= 0.0002
+        }
+      } catch { /* Invalid images still fail the byte check below. */ }
+    }
+    if (!actual.equals(expected) && !equivalentRaster) {
       mismatches.push(`${relativePath} (expected ${sha256(expected)}, received ${sha256(actual)})`)
     }
   }

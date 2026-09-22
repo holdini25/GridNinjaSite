@@ -58,21 +58,6 @@ async function fillContactForm(page: Page) {
     .fill("We need a proof-backed capacity baseline for the next deployment.")
 }
 
-async function fillCapacityAuditForm(page: Page) {
-  await page.getByLabel("Name", { exact: true }).fill("Grace Operator")
-  await page.getByLabel("Company", { exact: true }).fill("Proof Cloud")
-  await page.getByLabel("Email", { exact: true }).fill("grace@example.com")
-  await page
-    .getByLabel("Buyer type", { exact: true })
-    .selectOption("Colo / REIT")
-  await page
-    .getByLabel("Site type", { exact: true })
-    .selectOption("Colocation facility")
-  await page
-    .getByLabel("Desired timeline", { exact: true })
-    .selectOption("Near term (3-6 months)")
-}
-
 function captureSuccessfulSubmission(page: Page) {
   let requestCount = 0
   let resolvePayload: (payload: LeadPayload) => void
@@ -134,13 +119,13 @@ test.describe("lead form browser behavior", () => {
       "autocomplete",
       "email"
     )
-    await expect(page.getByRole("radio", { name: "Capacity Audit" })).toBeChecked()
-    await expect(page.locator("form [required]")).toHaveCount(4)
+    await expect(page.getByRole("radio", { name: "Capacity assessment" })).toBeChecked()
+    await expect(page.locator("form [required]")).toHaveCount(3)
 
     await page.getByLabel("Name", { exact: true }).focus()
     await expect(page.getByText("Security verification complete.")).toHaveRole("status")
     const submit = page.getByRole("button", {
-      name: "Request assessment",
+      name: "Scope an assessment",
     })
 
     await centerLocatorInViewport(submit)
@@ -225,7 +210,7 @@ test.describe("lead form browser behavior", () => {
       /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
     )
     expect(payload.startedAt).toEqual(expect.any(Number))
-    await expect(page).toHaveURL(/\/contact\/thanks$/)
+    await expect(page.getByRole("heading", { name: "Inquiry received" })).toBeVisible()
     await expect(page.getByText(/^Reference:/)).toContainText(
       "0a40bf9f-3e46-4d0c-b550-89e992ed5eef"
     )
@@ -236,8 +221,8 @@ test.describe("lead form browser behavior", () => {
     page,
   }) => {
     const cases = [
-      ["capacity-audit", "Capacity Audit"],
-      ["sellable-capacity", "Capacity Audit"],
+      ["capacity-audit", "Capacity assessment"],
+      ["sellable-capacity", "Capacity assessment"],
       ["shadow-mode", "Shadow Mode"],
       ["partnership", "Partnership"],
       ["book-demo", "Other"],
@@ -271,7 +256,7 @@ test.describe("lead form browser behavior", () => {
     await expect(verification).toHaveAttribute("data-test-widget-id", /test-widget-/)
   })
 
-  test("submits the Capacity Audit payload and keeps startedAt stable across retries", async ({
+  test("submits the assessment inquiry and keeps startedAt stable across retries", async ({
     page,
     clientHealth,
   }) => {
@@ -290,14 +275,15 @@ test.describe("lead form browser behavior", () => {
             : {
                 ok: true,
                 requestId: "request-retry-e2e",
-                submissionId: "submission-retry-e2e",
+                submissionId: "a130cb30-f0bb-4a87-9983-b3c64e246329",
                 status: "already_received",
               }
         ),
       })
     })
 
-    await page.goto("/roi")
+    await page.goto("/assessment")
+    await page.getByLabel("Name", { exact: true }).focus()
     await expect(page.getByText("Security verification complete.")).toHaveRole(
       "status"
     )
@@ -308,25 +294,21 @@ test.describe("lead form browser behavior", () => {
       "autocomplete",
       "name"
     )
-    await expect(page.getByLabel("Email", { exact: true })).toHaveAttribute(
+    await expect(page.getByLabel("Work email", { exact: true })).toHaveAttribute(
       "name",
       "email"
     )
-    await expect(page.getByLabel("Buyer type", { exact: true })).toHaveJSProperty(
-      "tagName",
-      "SELECT"
-    )
-    await fillCapacityAuditForm(page)
-    const submit = page.getByRole("button", { name: "Request Capacity Audit" }).last()
+    await fillContactForm(page)
+    const submit = page.getByRole("button", { name: "Scope an assessment" }).last()
 
     await submit.click()
     await expect(
-      page.getByText("Too many requests. Please try again later.", { exact: true })
-    ).toHaveRole("alert")
+      page.locator('[aria-labelledby="contact-error-summary-title"]')
+    ).toContainText("Too many requests. Please try again later.")
     await submit.click()
 
     await expect(page.getByRole("status")).toContainText(
-      "Capacity Audit intake submitted"
+      "Inquiry received"
     )
     expect(submissions).toHaveLength(2)
     expect(submissions[0].startedAt).toBe(submissions[1].startedAt)
@@ -337,16 +319,13 @@ test.describe("lead form browser behavior", () => {
       submissions[1].turnstileToken
     )
     expect(submissions[1]).toMatchObject({
-      schemaVersion: 1,
-      formType: "capacity_audit",
-      name: "Grace Operator",
-      company: "Proof Cloud",
-      email: "grace@example.com",
-      buyerType: "Colo / REIT",
-      siteType: "Colocation facility",
-      timeline: "Near term (3-6 months)",
+      schemaVersion: 2,
+      formType: "contact",
+      name: "Ada Operator",
+      company: "Atlas Compute",
+      email: "ada@example.com",
       intent: "capacity-audit",
-      source: "roi-page",
+      source: "assessment-page",
       website: "",
     })
   })
@@ -362,7 +341,7 @@ test.describe("lead form browser behavior", () => {
       "status"
     )
     await fillContactForm(page)
-    const submit = page.getByRole("button", { name: "Request assessment" })
+    const submit = page.getByRole("button", { name: "Scope an assessment" })
 
     await page.route("**/api/contact", async (route) => {
       await route.fulfill({
@@ -416,13 +395,36 @@ test.describe("lead form browser behavior", () => {
     await submit.click()
     await expect(
       page.locator('[aria-labelledby="contact-error-summary-title"]')
-    ).toContainText("Lead delivery is temporarily unavailable.")
+    ).toContainText("Receipt is unconfirmed.")
 
     await page.unroute("**/api/contact")
     await page.route("**/api/contact", (route) => route.abort("failed"))
-    await submit.click()
+    await page.getByRole("button", { name: "Retry original inquiry" }).click()
     await expect(
       page.locator('[aria-labelledby="contact-error-summary-title"]')
-    ).toContainText("Unable to submit the request.")
+    ).toContainText("Receipt is unconfirmed.")
+  })
+})
+
+test.describe("static inquiry recovery", () => {
+  test.use({ javaScriptEnabled: false })
+
+  test("keeps no-JavaScript inputs disabled with POST transport and recovery instructions", async ({ page }) => {
+    const apiRequests: string[] = []
+    page.on("request", request => { if (new URL(request.url()).pathname === "/api/contact") apiRequests.push(request.url()) })
+    await page.goto("/contact")
+    await expect(page.locator("form")).toHaveAttribute("method", "post")
+    await expect(page.locator("form")).toHaveAttribute("action", "/api/contact")
+    await expect(page.getByLabel("Name", { exact: true })).toBeDisabled()
+    await expect(page.getByRole("button", { name: "Scope an assessment" })).toBeDisabled()
+    await expect(page.getByText(/Enable JavaScript and reload this page/)).toBeVisible()
+    expect(apiRequests).toEqual([])
+  })
+
+  test("a direct receipt-page visit never claims an inquiry was received", async ({ page }) => {
+    await page.goto("/contact/thanks")
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Check your inquiry receipt.")
+    await expect(page.getByText(/No current receipt is available in this tab/)).toBeVisible()
+    await expect(page.getByRole("heading", { name: "Inquiry received" })).toHaveCount(0)
   })
 })

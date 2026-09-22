@@ -187,7 +187,7 @@ export function NavDrawer() {
             </SheetClose>
           </SheetTitle>
           <SheetDescription>
-            Runtime-assured virtual capacity for AI data centers.
+            Capacity decisions supported by explicit evidence.
           </SheetDescription>
         </SheetHeader>
         <DrawerNavigation key={pathname} pathname={pathname} />
@@ -201,8 +201,10 @@ export function NavDrawer() {
                 href={headerCapacityAuditHref}
                 prefetch={false}
                 data-gn-event="mobile-nav-capacity-audit"
+                data-analytics-event="assessment_cta_selected"
+                data-analytics-source="header"
               >
-                Request Capacity Audit
+                Scope an assessment
               </Link>
             </Button>
           </SheetClose>

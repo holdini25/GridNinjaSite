@@ -24,7 +24,7 @@ export default function ContactThanksPage() {
           Contact
         </Link>
         <span aria-hidden="true" className="mx-2">/</span>
-        <span aria-current="page">Request received</span>
+        <span aria-current="page">Inquiry reference</span>
       </nav>
 
       <div className="mt-8 rounded-2xl border border-white/10 bg-[#0D151C] p-6 sm:p-9">
@@ -33,12 +33,11 @@ export default function ContactThanksPage() {
           <p className="gn-eyebrow">Scoped review</p>
         </div>
         <h1 className="mt-6 text-[2.5rem] leading-tight font-medium text-foreground sm:text-[3.25rem]">
-          Request received.
+          Check your inquiry receipt.
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-8 text-muted-foreground">
-          GridNinja will review the operating decision, engagement fit and safest
-          evidence path before recommending a Capacity Audit, Shadow Mode
-          evaluation or partner workflow.
+          A confirmed receipt appears below only when this browser tab holds a
+          valid response from the intake service. Keep your reference for any follow-up.
         </p>
 
         <ContactConfirmation />

@@ -45,7 +45,7 @@ export function DispatchEquivalentDataTable({
           <SummaryCell label="decision" value={decisionLabel(scenario.dto.decision)} />
           <SummaryCell label="requested" value={formatMw(scenario.dto.request.maxMw)} />
           <SummaryCell
-            label="accepted"
+            label="model-screened"
             value={
               scenario.dto.accepted ? formatMw(scenario.dto.accepted.maxMw) : "withheld"
             }
@@ -108,7 +108,7 @@ export function DispatchEquivalentDataTable({
             <tr>
               <th className="px-4 py-3">Time</th>
               <th className="px-4 py-3">Requested</th>
-              <th className="px-4 py-3">Accepted</th>
+              <th className="px-4 py-3">Model-screened</th>
               <th className="px-4 py-3">Repair delta</th>
               <th className="px-4 py-3">Binding domain</th>
               <th className="px-4 py-3">Proof</th>
@@ -152,7 +152,7 @@ export function DispatchEquivalentDataTable({
             <tr>
               <th className="px-4 py-3">Dimension</th>
               <th className="px-4 py-3">Requested</th>
-              <th className="px-4 py-3">Accepted</th>
+              <th className="px-4 py-3">Model-screened</th>
               <th className="px-4 py-3">Binding source</th>
             </tr>
           </thead>

@@ -41,11 +41,11 @@ describe("primary navigation contract", () => {
       { label: "Bridge Power & DER", href: "/solutions/bridge-power" },
       { label: "Proof Before Autonomy", href: "/proof" },
       { label: "Proof Pack", href: "/proof/proof-pack" },
-      { label: "Interactive Proof Demo", href: "/demo" },
+      { label: "Sample decision brief", href: "/demo" },
       { label: "Insights", href: "/insights" },
       { label: "Evidence Library", href: "/evidence" },
       { label: "Methodology", href: "/methodology" },
-      { label: "Capacity Audit & ROI", href: "/roi" },
+      { label: "Capacity assessment", href: "/assessment" },
       { label: "DCII Project", href: "/dcii" },
     ])
     expect(groupedDestinations.every((item) => item.description.trim().length > 0)).toBe(
@@ -62,7 +62,7 @@ describe("primary navigation contract", () => {
     expect(footerLinks).toContainEqual({ label: "About", href: "/about" })
     expect(footerLinks).toContainEqual({ label: "Contact", href: "/contact" })
     expect(headerCapacityAuditHref).toBe(
-      "/contact?intent=capacity-audit&source=header"
+      "/assessment"
     )
   })
 })

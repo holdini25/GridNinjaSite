@@ -2,10 +2,14 @@
 
 This repository contains the public-facing GridNinja website.
 
-GridNinja is positioned as an **AI Data Center Virtual Capacity Control Plane**
-and **runtime-assured virtual capacity engine**. The site should communicate
-proof-backed virtual capacity for constrained AI infrastructure, not generic
-energy management software, DCIM, sustainability software, or dashboard SaaS.
+The current offer is one **bounded, paid capacity decision assessment** using
+authorized historical inputs. The site invites buyers to **Scope an assessment**
+and inspect an ungated synthetic decision brief. The **AI Data Center Virtual
+Capacity Control Plane** and **runtime-assured virtual capacity engine** describe
+the conditional development direction; they do not imply current equipment authority.
+
+The implemented scope, backlog, evidence and outstanding release gates are in
+[docs/website-upgrade/implementation-plan.md](docs/website-upgrade/implementation-plan.md).
 
 ## Stack
 
@@ -35,7 +39,7 @@ Open `http://localhost:3000`.
 
 ## Contact Intake
 
-The Contact and Capacity Audit forms use a durable accept-first pipeline. A
+The Contact and Assessment forms use a durable accept-first pipeline. A
 successful browser response means the lead and its delivery outbox already exist
 in Postgres; Resend and the optional CRM webhook are processed asynchronously by
 signed QStash workers.
@@ -105,12 +109,13 @@ scripts. The integration suite requires a disposable PostgreSQL database.
 - `/proof/proof-pack`
 - `/demo`
 - `/dcii`
-- `/roi`
+- `/assessment` and `/data-handling`
+- `/roi` (one-hop redirect to `/assessment`)
 - `/about`
 - `/contact`
 - `/insights` and publication-gated technical explainers
-- `/evidence` and versioned public evidence releases
-- `/methodology` for claims, comparisons, corrections, and Capacity Audit methods
+- `/evidence` and frozen synthetic assessment publications
+- `/methodology` for claims, comparisons, corrections, and assessment methods
 
 Search-facing identity, route, query, claim, and schema contracts live in
 `src/seo`. See `docs/seo-release-runbook.md` for Vercel domain, webmaster-tool,
@@ -135,3 +140,26 @@ Preserve the core language:
 Sample KPI and demo values must be labeled illustrative unless backed by
 validated site evidence. DCII and market-context claims should be source-checked
 before publication.
+
+## Synthetic assessment publications
+
+Run `npm run assessment:validate` to verify checked-in snapshot, narrative, HTML,
+PDF, hashes and live fixture parity. `npm run build` runs it automatically.
+`npm run assessment:generate` authors a **new** version using the existing
+Playwright Chromium dependency (`npx playwright install chromium` if needed).
+Generation never overwrites an existing version. Do not regenerate published
+bytes to pick up a new template; version and review the change instead.
+
+The resolver only serves registry entries from `src/content/assessment-publications`.
+`evidence-candidates/` is review material, excluded from public routes and tracing.
+Unknown publications return 404; withdrawn entries and old gated release URLs return 410.
+The legacy Markdown download remains a pointer to fixture B v1.0.0.
+
+No assessment customer data belongs in Git. Opportunity cohorts are computed by
+`src/lib/measurement/opportunity-cohorts.ts` from a private, reviewed ledger;
+this repository contains only synthetic tests and no ingestion route.
+
+Available publication registry entries must pin the reviewed `manifestSha256`.
+Withdraw an existing entry by changing its status, never by adding a duplicate
+identity. Missing/corrupt available files return 503; they never select a fallback.
+The postbuild trace check verifies exact approved artifact deployment.

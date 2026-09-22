@@ -371,10 +371,10 @@ export function DispatchEnvelopeVisual({
 
         <section className="order-1 min-w-0 border-b border-border/70 p-4 sm:p-6 xl:order-none xl:border-r xl:border-b-0">
           <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
-            <PanelHeading kicker="MW over time" title="Requested vs. accepted envelope" />
+            <PanelHeading kicker="MW over time" title="Requested vs. model-screened envelope" />
             <div className="flex flex-wrap gap-3 font-mono text-[0.68rem] text-muted-foreground">
               <Legend color="bg-primary" label="Requested" dashed />
-              <Legend color="bg-signal" label="Accepted" />
+              <Legend color="bg-signal" label="Model-screened" />
               <Legend color="bg-warning" label="Repair delta" hatched />
             </div>
           </div>
@@ -550,7 +550,7 @@ function DispatchMobileSummary({
         valueClassName="text-primary"
       />
       <MobileMetric
-        label="Accepted"
+        label="Model-screened"
         value={scenario.dto.accepted ? `${acceptedMw.toFixed(1)} MW` : "Withheld"}
         valueClassName={
           scenario.dto.accepted ? "text-signal" : "text-muted-foreground"

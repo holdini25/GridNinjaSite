@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "title": "Request fits the modeled conditions",
+  "conclusion": "The proposed 5.0 MW increment fits within the fixture’s modeled 5.8 MW increment. The unchanged workload still requires operational and commercial review.",
+  "businessQuestion": "Do the workload’s service requirements and the site’s operating conditions support this commitment?",
+  "governingConditions": [
+    "Request within the modeled increment: 5.0 MW is below 5.8 MW for this fictional meter and hour. This is a model screening result only."
+  ],
+  "economics": "No price, utilization, investment cost, or commercial service requirement has been assessed.",
+  "limitations": [
+    "All inputs and results are synthetic. They are not measured customer results or a guarantee of recoverable capacity.",
+    "The model screen provides no permission to operate equipment or commit capacity.",
+    "Site validation, authorized data, operational review, and commercial review would be required for a real decision."
+  ],
+  "nextStep": "Scope a bounded paid assessment using authorized historical inputs. Scope and price follow the decision and data-readiness discussion."
+}

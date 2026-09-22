@@ -150,6 +150,15 @@ describe("POST /api/contact", () => {
     )
   })
 
+  it.each([undefined, "", "  "])("persists an optional v2 message as null for %j", async message => {
+    const response = await post({
+      ...payload, schemaVersion: 2, formType: "contact", message,
+      constraints: [], intent: "capacity-audit", source: "assessment-page",
+    })
+    expect(response.status).toBe(202)
+    expect(mocks.acceptLead).toHaveBeenCalledWith(expect.objectContaining({ schemaVersion: 2, message: null }))
+  })
+
   it("returns the original submission without spending another Turnstile token", async () => {
     const normalized = {
       ...stripLeadSecurityFields(payload),

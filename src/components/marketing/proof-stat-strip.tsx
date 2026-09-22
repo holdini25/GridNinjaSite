@@ -9,7 +9,7 @@ export function ProofStatStrip({ items }: { items: StatItem[] }) {
           <p className="text-base text-muted-foreground">{item.label}</p>
           {item.value ? (
             <p className="mt-3 font-mono text-[2.2rem] tracking-tight text-foreground">
-              <PublicClaimValue claimId={item.claimId} value={item.value} />
+              <PublicClaimValue surface="/" claimId={item.claimId} value={item.value} />
             </p>
           ) : null}
           <p className="mt-3 max-w-xs text-base leading-8 text-muted-foreground">

@@ -75,13 +75,13 @@ test.describe("contact intake layout", () => {
     ).toBeVisible()
     await expect(
       page.getByText(
-        "Share the operating decision, site constraint, or proof gap in front of your team. GridNinja will determine the safest evidence path—from a read-only Capacity Audit to Shadow Mode.",
+        "Share the capacity decision in front of your team. Scoping establishes fit, authorized historical inputs, deliverables and price for one bounded paid assessment.",
         { exact: true }
       )
     ).toBeVisible()
     await expect(page.getByLabel("Intake commitments").getByRole("listitem")).toHaveCount(4)
     await expect(page.locator("main .gn-content-auto")).toHaveCount(0)
-    await expect(page.locator("form [required]")).toHaveCount(4)
+    await expect(page.locator("form [required]")).toHaveCount(3)
     await expect(page.locator("details > summary")).toContainText(
       "Add optional site details"
     )
@@ -100,7 +100,7 @@ test.describe("contact intake layout", () => {
       expect(formBox!.y).toBeGreaterThan(h1Box!.y + h1Box!.height)
     }
 
-    for (const label of ["Capacity Audit", "Shadow Mode", "Partnership", "Other"]) {
+    for (const label of ["Capacity assessment", "Shadow Mode", "Partnership", "Other"]) {
       const target = page.getByRole("radio", { name: label }).locator("..")
       expect((await target.boundingBox())?.height).toBeGreaterThanOrEqual(44)
     }
@@ -134,7 +134,7 @@ test.describe("contact intake layout", () => {
     await expect(page.locator('[data-test-turnstile="ready"]')).toBeVisible()
     await expect(page.getByText("Security verification complete.")).toBeVisible()
 
-    const submit = page.getByRole("button", { name: "Request assessment" })
+    const submit = page.getByRole("button", { name: "Scope an assessment" })
     await centerLocatorInViewport(submit)
     await submit.click()
     await expect(
@@ -179,10 +179,7 @@ test.describe("contact intake layout", () => {
     expect(scores.allInputStates).toBeLessThan(0.05)
 
     await submit.click()
-    await expect(page).toHaveURL(/\/contact\/thanks$/)
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      "Request received."
-    )
+    await expect(page.getByRole("heading", { name: "Inquiry received" })).toBeVisible()
   })
 })
 

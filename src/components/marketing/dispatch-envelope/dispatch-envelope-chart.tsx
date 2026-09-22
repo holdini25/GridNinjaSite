@@ -160,8 +160,8 @@ export function DispatchEnvelopeChart({
     : margin.left
   const chartTitle = `${scenario.label}: ${dto.decision.toUpperCase()} dispatch envelope`
   const chartDescription = dto.accepted
-    ? `Requested ${dto.request.maxMw.toFixed(1)} MW and accepted ${dto.accepted.maxMw.toFixed(1)} MW. ${scenario.primaryReason}`
-    : `Requested ${dto.request.maxMw.toFixed(1)} MW and no accepted envelope. ${scenario.primaryReason}`
+    ? `Requested ${dto.request.maxMw.toFixed(1)} MW and model-screened ${dto.accepted.maxMw.toFixed(1)} MW. ${scenario.primaryReason}`
+    : `Requested ${dto.request.maxMw.toFixed(1)} MW and no model-screened envelope. ${scenario.primaryReason}`
   const selectedMargin = lensSnapshot.margins[selectedDomainId]
   const bindingLabel = lensSnapshot.bindingDomainId
     ? dispatchDomainMeta[lensSnapshot.bindingDomainId].short
@@ -731,7 +731,7 @@ export function DispatchEnvelopeChart({
               textAnchor="middle"
               letterSpacing="1.4"
             >
-              EVIDENCE GAP - ACCEPTED ENVELOPE WITHHELD
+              EVIDENCE GAP - MODELED ENVELOPE WITHHELD
             </text>
           </g>
         ) : null}
@@ -919,7 +919,7 @@ export function DispatchEnvelopeChart({
           onKeyDown={handleLensKeyDown}
         />
         <p id={`${id}-lens-status`} className="mt-2 text-xs leading-6 text-muted-foreground" aria-live="polite">
-          T+{lensSnapshot.minute.toFixed(1)}; requested {lensSnapshot.requestedMw.toFixed(1)} MW; accepted {lensSnapshot.acceptedMw.toFixed(1)} MW; binding domain {bindingLabel}; proof {lensSnapshot.proofEligible ? "eligible" : "withheld"}; {lens.pinned ? "pinned" : "not pinned"}.
+          T+{lensSnapshot.minute.toFixed(1)}; requested {lensSnapshot.requestedMw.toFixed(1)} MW; model-screened {dto.accepted ? `${lensSnapshot.acceptedMw.toFixed(1)} MW` : "withheld"}; binding domain {bindingLabel}; proof {lensSnapshot.proofEligible ? "eligible" : "withheld"}; {lens.pinned ? "pinned" : "not pinned"}.
         </p>
         <div
           className="mt-3 flex snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain pb-2 sm:flex-wrap sm:overflow-visible sm:pb-0"
@@ -1037,7 +1037,7 @@ function EventInspectorCard({
       <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-[0.7rem]">
         <dt className="text-muted-foreground">Requested</dt>
         <dd className="text-right text-primary">{snapshot.requestedMw.toFixed(2)} MW</dd>
-        <dt className="text-muted-foreground">Accepted</dt>
+        <dt className="text-muted-foreground">Model-screened</dt>
         <dd className="text-right text-signal">
           {accepted ? `${snapshot.acceptedMw.toFixed(2)} MW` : "-"}
         </dd>
@@ -1096,7 +1096,7 @@ function ProofLensCard({
       <dl className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 font-mono text-[0.72rem]">
         <dt className="text-muted-foreground">Requested</dt>
         <dd className="text-right text-primary">{snapshot.requestedMw.toFixed(2)} MW</dd>
-        <dt className="text-muted-foreground">Accepted</dt>
+        <dt className="text-muted-foreground">Model-screened</dt>
         <dd className="text-right text-signal">
           {accepted ? `${snapshot.acceptedMw.toFixed(2)} MW` : "-"}
         </dd>

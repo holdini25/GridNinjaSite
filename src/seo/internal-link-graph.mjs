@@ -7,7 +7,7 @@ const DEFAULT_EXCLUDED_PATH_PREFIXES = [
 
 export const DEFAULT_DESTINATION_PATHS = [
   "/contact",
-  "/roi",
+  "/assessment",
   "/proof",
   "/demo",
 ]
@@ -72,6 +72,10 @@ export function classifyInternalHref(
       search: resolved.search,
       hash: resolved.hash,
     }
+  }
+
+  if (path === normalizeRoutePath(sourcePath) && (resolved.search || resolved.hash)) {
+    return { kind: "same-page-state", href: trimmed, path, search: resolved.search, hash: resolved.hash }
   }
 
   if (knownPaths && !knownPaths.has(path)) {

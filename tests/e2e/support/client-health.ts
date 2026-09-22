@@ -107,9 +107,12 @@ export function observeClientHealth(page: Page) {
 
 export const test = base.extend<{ clientHealth: ClientHealth }>({
   clientHealth: [
-    async ({ page }, use) => {
+    async ({ page, javaScriptEnabled }, use) => {
       const health = observeClientHealth(page)
       const allowedErrors: RegExp[] = []
+      // Chromium reports script preload requests as CSP-blocked when this test
+      // context deliberately disables JavaScript. Other failures still fail.
+      if (javaScriptEnabled === false) allowedErrors.push(/requestfailed: GET https?:\/\/[^ ]+\/_next\/static\/chunks\/[^ ]+\.js \(csp\)$/)
 
       await use({
         allowError(pattern) {

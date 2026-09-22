@@ -11,7 +11,7 @@ export type NavItem = {
 }
 
 export const headerCapacityAuditHref =
-  "/contact?intent=capacity-audit&source=header" as const
+  "/assessment" as const
 
 export const navItems = [
   {
@@ -22,12 +22,12 @@ export const navItems = [
         label: "Platform Overview",
         href: "/platform",
         description:
-          "See how GridNinja converts constrained infrastructure into proof-adjusted virtual capacity.",
+          "Understand the intended control-plane architecture and current assessment offer.",
       },
       {
         label: "Dispatch Envelope",
         href: "/platform/dispatch-envelope",
-        description: "Define the safe operating boundary before execution.",
+        description: "Inspect a separate synthetic timed-dispatch example.",
       },
     ],
   },
@@ -39,19 +39,19 @@ export const navItems = [
         label: "AI Cloud Providers",
         href: "/solutions/ai-cloud",
         description:
-          "Accelerate time-to-power while protecting infrastructure and workload SLAs.",
+          "Review the next workload increment before a service commitment.",
       },
       {
         label: "Colocation & REITs",
         href: "/solutions/colocation",
         description:
-          "Turn constrained infrastructure into proof-backed sellable capacity.",
+          "Review a proposed tenant increment before commercial commitment.",
       },
       {
         label: "Bridge Power & DER",
         href: "/solutions/bridge-power",
         description:
-          "Coordinate on-site power, cooling, storage, and workloads inside strict envelopes.",
+          "Scope the investigation of on-site power and operating constraints.",
       },
     ],
   },
@@ -72,10 +72,10 @@ export const navItems = [
           "Inspect constraints, decisions, provenance, replay, and rollback evidence.",
       },
       {
-        label: "Interactive Proof Demo",
+        label: "Sample decision brief",
         href: "/demo",
         description:
-          "Walk through an illustrative allow, repair, reject, and no-proof decision.",
+          "Compare synthetic profiles, model results, and the unresolved business question.",
       },
     ],
   },
@@ -102,10 +102,10 @@ export const navItems = [
           "Understand how GridNinja governs claims, comparisons, and capacity methods.",
       },
       {
-        label: "Capacity Audit & ROI",
-        href: "/roi",
+        label: "Capacity assessment",
+        href: "/assessment",
         description:
-          "Quantify proof-adjusted capacity, evidence gaps, and commercial value.",
+          "Scope one historical-data decision, its inputs, deliverables, and review.",
       },
       {
         label: "DCII Project",
@@ -136,7 +136,8 @@ export const footerGroups = [
       { label: "Evidence", href: "/evidence" },
       { label: "Methodology", href: "/methodology" },
       { label: "DCII Project", href: "/dcii" },
-      { label: "ROI / Capacity Audit", href: "/roi" },
+      { label: "Capacity assessment", href: "/assessment" },
+      { label: "Data handling", href: "/data-handling" },
       { label: "About", href: "/about" },
     ],
   },
@@ -152,9 +153,9 @@ export const footerGroups = [
   {
     title: "Contact",
     links: [
-      { label: "Request Capacity Audit", href: "/contact?intent=capacity-audit&source=footer" },
+      { label: "Scope an assessment", href: "/assessment#scope" },
       { label: "See Shadow Mode", href: "/proof" },
-      { label: "Book Demo", href: "/contact?intent=book-demo&source=footer" },
+      { label: "Sample decision brief", href: "/demo#decision-brief" },
       { label: "Request DCII Memo", href: "/contact?intent=dcii-memo&source=footer" },
       { label: "Download Proof Pack", href: "/proof/proof-pack" },
       { label: "Contact", href: "/contact" },

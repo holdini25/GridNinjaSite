@@ -22,8 +22,8 @@ test("one browser submission becomes one durable delivered lead", async ({
     .fill("Automated staging-only durability and delivery canary submission.")
 
   await expect(page.getByText("Security verification complete.")).toBeVisible()
-  await page.getByRole("button", { name: "Request assessment" }).click()
-  await expect(page).toHaveURL(/\/contact\/thanks$/)
+  await page.getByRole("button", { name: "Scope an assessment" }).click()
+  await expect(page.getByRole("heading", { name: "Inquiry received" })).toBeVisible()
   const reference = page.getByText(/^Reference:/)
   await expect(reference).toBeVisible()
   const submissionId = (await reference.textContent())?.replace("Reference:", "").trim()

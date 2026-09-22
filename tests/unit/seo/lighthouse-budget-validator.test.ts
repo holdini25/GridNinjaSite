@@ -92,6 +92,13 @@ describe("Lighthouse resource budgets", () => {
     ])
   })
 
+  it.each(["/", "/assessment", "/demo", "/contact", "/evidence/assessments/demo-01-b/v1.0.0"])("keeps raw network transfer separate from the build's Brotli budget for %s", path => {
+    // The real 180 KiB Brotli gate includes shared framework in the build guard.
+    // HTTP transfer bytes cannot be compared directly to that compressed asset metric.
+    expect(validateLighthouseReport(makeReport(path, { script: 220 * 1024 }))).toEqual([])
+    expect(validateLighthouseReport(makeReport(path, { script: 220 * 1024, total: LIGHTHOUSE_RESOURCE_BUDGETS.totalBytes + 1 }))).toHaveLength(1)
+  })
+
   it("requires the configured sample count for every route", () => {
     expect(
       validateLighthouseReports([makeReport("/")], {

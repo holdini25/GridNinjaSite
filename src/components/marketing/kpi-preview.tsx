@@ -33,7 +33,7 @@ export function KpiPreview({
               </p>
               <p className="mt-3 font-mono text-[1.9rem] text-foreground">
                 {card.value ? (
-                  <PublicClaimValue claimId={card.claimId} value={card.value} />
+                  <PublicClaimValue surface="/" claimId={card.claimId} value={card.value} />
                 ) : null}
               </p>
               <p className="mt-3 text-base leading-8 text-muted-foreground">

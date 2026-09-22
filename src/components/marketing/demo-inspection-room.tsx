@@ -163,13 +163,13 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
           <div className="gn-panel p-6">
             <p className="gn-eyebrow">Candidate action</p>
             <p className="mt-4 text-lg leading-8 text-foreground">
-              <PublicClaimValue claimId={scenario.candidateActionClaimId} value={scenario.candidateAction} />
+              <PublicClaimValue surface="/demo" claimId={scenario.candidateActionClaimId} value={scenario.candidateAction} />
             </p>
             <p className="mt-4 border-l border-border/80 pl-4 text-base leading-8 text-muted-foreground">
-              <PublicClaimValue claimId={scenario.freshnessRequirementClaimId} value={scenario.freshnessRequirement} />
+              <PublicClaimValue surface="/demo" claimId={scenario.freshnessRequirementClaimId} value={scenario.freshnessRequirement} />
             </p>
             <p className="mt-4 font-mono text-sm text-muted-foreground">
-              Contracted utility service: <PublicClaimValue claimId={scenario.contractedServiceClaimId} value={scenario.contractedService} />
+              Contracted utility service: <PublicClaimValue surface="/demo" claimId={scenario.contractedServiceClaimId} value={scenario.contractedService} />
             </p>
           </div>
 
@@ -218,7 +218,7 @@ export function DemoInspectionRoom({ scenario }: DemoInspectionRoomProps) {
             </p>
             <p className="mt-5 border-l border-primary/70 pl-4 font-mono text-base leading-8 text-foreground">
               {trace.claimId ? (
-                <PublicClaimValue claimId={trace.claimId} value={trace.margin} />
+                <PublicClaimValue surface="/demo" claimId={trace.claimId} value={trace.margin} />
               ) : (
                 trace.margin
               )}

@@ -105,7 +105,7 @@ test.describe("dispatch envelope page", () => {
       })
     ).toBeVisible()
     await expect(
-      page.getByRole("link", { name: "Request Capacity Audit" }).first()
+      page.getByRole("link", { name: "Scope an assessment" }).first()
     ).toBeVisible()
     await expect(page.getByTestId("dispatch-envelope-visual")).toBeVisible()
     if (testInfo.project.name.includes("mobile")) {
@@ -270,7 +270,7 @@ test.describe("dispatch envelope page", () => {
     await page.goto("/platform/dispatch-envelope")
 
     const rampMarker = page.getByRole("button", {
-      name: /Full accepted ramp/i,
+      name: /Full model-screened ramp/i,
     })
     const holdMarker = page.getByRole("button", { name: /Hold complete/i })
 
@@ -279,7 +279,7 @@ test.describe("dispatch envelope page", () => {
     await expect(rampMarker).toBeFocused()
     await page.keyboard.press("Enter")
     await expect(page.getByTestId("dispatch-event-marker-inspector")).toContainText(
-      "Full accepted ramp",
+      "Full model-screened ramp",
       { timeout: 1_000 }
     )
     await expect(page.getByTestId("dispatch-event-marker-inspector")).toContainText(
@@ -364,7 +364,7 @@ test.describe("dispatch envelope page", () => {
       "Requested"
     )
     await expect(page.getByTestId("dispatch-proof-lens-card")).toContainText(
-      "Accepted"
+      "Model-screened"
     )
     await expect(page.getByTestId("dispatch-proof-lens-card")).toContainText(
       "Repair delta"
@@ -718,7 +718,7 @@ test.describe("dispatch envelope page", () => {
 
     await expect(summary).toContainText("Requested")
     await expect(summary).toContainText("4.0 MW")
-    await expect(summary).toContainText("Accepted")
+    await expect(summary).toContainText("Model-screened")
     await expect(summary).toContainText("2.8 MW")
     await expect(summary).toContainText("Repair delta")
     await expect(summary).toContainText("−1.2 MW")

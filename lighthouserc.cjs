@@ -1,3 +1,5 @@
+const externalServer = process.env.LHCI_EXTERNAL_SERVER === "1"
+const mobileProfile = process.env.LHCI_FORM_FACTOR === "mobile"
 const releaseCandidate = process.env.LHCI_RELEASE_CANDIDATE === "1"
 
 const commonAssertions = {
@@ -12,32 +14,34 @@ const commonAssertions = {
   "color-contrast": ["error", { minScore: 1, aggregationMethod: "pessimistic" }],
 }
 
-const insightArticlePattern =
-  "^https?://[^/]+/insights/virtual-capacity-control-plane/?$"
+const unindexedBriefPattern =
+  "^https?://[^/]+/evidence/assessments/demo-01-b/v1\\.0\\.0/?$"
 const contactPattern = "^https?://[^/]+/contact/?$"
 const indexableRoutePattern =
-  "^(?!https?://[^/]+/(?:insights/virtual-capacity-control-plane|contact)/?$).*$"
+  "^(?!https?://[^/]+/(?:evidence/assessments/demo-01-b/v1\\.0\\.0|contact)/?$).*$"
 
 module.exports = {
   ci: {
     collect: {
       numberOfRuns: releaseCandidate ? 5 : 3,
-      startServerCommand:
-        "npm run start -- --hostname 127.0.0.1 --port 3000",
-      startServerReadyPattern: "Ready in|Local:",
-      startServerReadyTimeout: 120000,
+      ...(externalServer ? {} : {
+        startServerCommand: "npm run start -- --hostname 127.0.0.1 --port 3000",
+        startServerReadyPattern: "Ready in|Local:",
+        startServerReadyTimeout: 120000,
+      }),
       url: [
         "http://127.0.0.1:3000/",
         "http://127.0.0.1:3000/platform",
         "http://127.0.0.1:3000/proof",
-        "http://127.0.0.1:3000/roi",
+        "http://127.0.0.1:3000/assessment",
+        "http://127.0.0.1:3000/demo",
         "http://127.0.0.1:3000/contact",
         "http://127.0.0.1:3000/insights",
-        "http://127.0.0.1:3000/insights/virtual-capacity-control-plane",
+        "http://127.0.0.1:3000/evidence/assessments/demo-01-b/v1.0.0",
       ],
       settings: {
         chromeFlags: "--headless --no-sandbox",
-        preset: "desktop",
+        ...(mobileProfile ? { formFactor: "mobile" } : { preset: "desktop" }),
       },
     },
     assert: {
@@ -50,7 +54,7 @@ module.exports = {
           },
         },
         {
-          matchingUrlPattern: insightArticlePattern,
+          matchingUrlPattern: unindexedBriefPattern,
           assertions: commonAssertions,
         },
         {

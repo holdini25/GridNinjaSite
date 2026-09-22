@@ -110,20 +110,20 @@ export function maturityMatchesFilter(
   }
 
   if (filter === "validated") {
-    return ["IMPLEMENTED", "REPLAY-VALIDATED", "SHADOW-VALIDATED"].includes(
+    return ["Implemented and tested in a stated environment", "Evaluated with authorized site data"].includes(
       maturity
     )
   }
 
   if (filter === "operator") {
-    return ["OPERATOR-ACCEPTED", "THIRD-PARTY-VALIDATED"].includes(maturity)
+    return ["Accepted for a stated customer decision"].includes(maturity)
   }
 
   if (filter === "design") {
-    return maturity === "DESIGN TARGET"
+    return maturity === "Specified"
   }
 
-  return maturity === "PLANNED"
+  return maturity === "Specified"
 }
 
 export function buildMaturityEvidence({
@@ -151,48 +151,14 @@ export function buildMaturityEvidence({
 }
 
 function validationMethodForMaturity(maturity: WhyGridNinjaMaturity) {
-  if (maturity === "REPLAY-VALIDATED") {
-    return "Deterministic replay over eligible Shadow Mode inputs."
+  const methods: Record<WhyGridNinjaMaturity, string> = {
+    "Specified": "Documented design only; no site validation or customer acceptance is implied.",
+    "Implemented and tested in a stated environment": "Software tests in the stated environment; limits and evidence must be attached.",
+    "Evaluated with authorized site data": "Evaluation using authorized inputs for the stated site, window, and method.",
+    "Accepted for a stated customer decision": "Customer acceptance for the named decision and criteria, not operating permission.",
   }
-
-  if (maturity === "SHADOW-VALIDATED") {
-    return "Read-only Shadow Mode validation against current telemetry."
-  }
-
-  if (maturity === "IMPLEMENTED") {
-    return "Implemented product surface or artifact contract."
-  }
-
-  if (maturity === "OPERATOR-ACCEPTED") {
-    return "Operator-reviewed acceptance in the defined scenario."
-  }
-
-  if (maturity === "THIRD-PARTY-VALIDATED") {
-    return "External validation for the defined evidence class."
-  }
-
-  if (maturity === "DESIGN TARGET") {
-    return "Designed target state; requires deployment validation before accepted-capacity claims."
-  }
-
-  return "Planned capability; not presented as current validated capacity."
+  return methods[maturity]
 }
-
 function maturityClassName(maturity: WhyGridNinjaMaturity) {
-  return cn(
-    maturity === "IMPLEMENTED" &&
-      "border-proof-cyan/35 bg-proof-cyan/5 text-proof-cyan hover:bg-proof-cyan/10",
-    maturity === "REPLAY-VALIDATED" &&
-      "border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan hover:bg-proof-cyan/15",
-    maturity === "SHADOW-VALIDATED" &&
-      "border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan hover:bg-proof-cyan/15",
-    maturity === "OPERATOR-ACCEPTED" &&
-      "border-signal/40 bg-signal/10 text-signal hover:bg-signal/15",
-    maturity === "THIRD-PARTY-VALIDATED" &&
-      "border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan hover:bg-proof-cyan/15",
-    maturity === "DESIGN TARGET" &&
-      "border-warning/40 bg-warning/10 text-warning hover:bg-warning/15",
-    maturity === "PLANNED" &&
-      "border-muted-foreground/40 bg-muted-foreground/10 text-muted-foreground hover:bg-muted-foreground/15"
-  )
+  return cn(maturity === "Specified" ? "border-warning/40 bg-warning/10 text-warning" : "border-proof-cyan/40 bg-proof-cyan/10 text-proof-cyan")
 }

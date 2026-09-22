@@ -298,8 +298,10 @@ export function SiteHeader() {
               href={headerCapacityAuditHref}
               prefetch={false}
               data-gn-event="header-capacity-audit"
+              data-analytics-event="assessment_cta_selected"
+              data-analytics-source="header"
             >
-              Request Audit
+              Scope assessment
             </Link>
           </Button>
           <Button
@@ -310,8 +312,10 @@ export function SiteHeader() {
               href={headerCapacityAuditHref}
               prefetch={false}
               data-gn-event="header-capacity-audit"
+              data-analytics-event="assessment_cta_selected"
+              data-analytics-source="header"
             >
-              Request Capacity Audit
+              Scope an assessment
             </Link>
           </Button>
           <NavDrawer />

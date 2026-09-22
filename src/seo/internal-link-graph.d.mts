@@ -56,7 +56,7 @@ export function classifyInternalHref(
   | { kind: "external"; href: string; url: string }
   | { kind: "same-page-fragment"; href: string }
   | {
-      kind: "excluded" | "unknown" | "internal"
+      kind: "excluded" | "unknown" | "internal" | "same-page-state"
       href: string
       path: string
       search: string

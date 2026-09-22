@@ -7,6 +7,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react"
 
 import {
@@ -15,11 +16,20 @@ import {
   siteTypes,
   timelineOptions,
 } from "@/lib/constants"
-import { contactLeadSchema, mapZodErrors } from "@/lib/validators"
+import type { ContactLeadInput } from "@/lib/validators"
+import { loadContactValidation } from "@/components/forms/contact-validation-loader"
+import { isLeadSource } from "@/lib/lead"
+import {
+  CONTACT_REFERENCE_LIFETIME_MS, clearContactAttempt, contactAttemptStorageKey,
+  fingerprintContactCandidate, parseStoredAttempt, parseStoredReceipt, readContactStorage,
+  sendContactInquiry, storeContactReceipt, writeContactStorage, parseRejectedResponse,
+  type ContactAttempt, type ContactReceipt,
+} from "@/components/forms/contact-receipt"
 import type { LeadIntent } from "@/types/site"
 
 import {
   contactSubmissionStorageKey,
+  conversationTypeForIntent,
   intentAfterConversationSelection,
   isContactConversationType,
   resolveContactAttribution,
@@ -40,7 +50,7 @@ import {
 } from "@/lib/analytics"
 
 const conversationOptions = [
-  { label: "Capacity Audit", value: "capacity-audit" },
+  { label: "Capacity assessment", value: "capacity-audit" },
   { label: "Shadow Mode", value: "shadow-mode" },
   { label: "Partnership", value: "partnership" },
   { label: "Other", value: "other" },
@@ -60,61 +70,67 @@ const blurValidatedFields = new Set([
   "capacityRange",
 ])
 
-export function ContactForm() {
+const subscribeToHydration = () => () => undefined
+
+export function ContactForm({
+  source: defaultSource = "contact-page",
+  initialIntent = "capacity-audit",
+}: { source?: string; initialIntent?: LeadIntent } = {}) {
+  const hydrated = useSyncExternalStore(subscribeToHydration, () => true, () => false)
   const startedAt = useRef(Date.now())
   const inFlight = useRef(false)
+  const validationInFlight = useRef(false)
+  const inputRevision = useRef(0)
   const formStarted = useRef(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
+  const receiptRef = useRef<HTMLDivElement>(null)
   const turnstileRef = useRef<TurnstileFieldHandle>(null)
-  const [clientSubmissionId] = useState(() => crypto.randomUUID())
-  const [intent, setIntent] = useState<LeadIntent>("capacity-audit")
-  const [conversationType, setConversationType] =
-    useState<ContactConversationType>("capacity-audit")
-  const [source, setSource] = useState("contact-page")
+  const [clientSubmissionId, setClientSubmissionId] = useState(() => crypto.randomUUID())
+  const [intent, setIntent] = useState<LeadIntent>(initialIntent)
+  const [conversationType, setConversationType] = useState<ContactConversationType>(() => conversationTypeForIntent(initialIntent))
+  const [source, setSource] = useState(defaultSource)
   const [turnstileToken, setTurnstileToken] = useState("")
   const [verificationEnabled, setVerificationEnabled] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
+  const isBusy = isPending || isValidating
   const [serverMessage, setServerMessage] = useState<string | null>(null)
   const [errorFocusVersion, setErrorFocusVersion] = useState(0)
+  const [uncertain, setUncertain] = useState(false)
+  const [expiredAttempt, setExpiredAttempt] = useState(false)
+  const [receipt, setReceipt] = useState<ContactReceipt | null>(null)
+  const attemptRef = useRef<ContactAttempt | null>(null)
+  const originalPayloadRef = useRef<Omit<ContactLeadInput, "turnstileToken"> | null>(null)
+  const countedReceipts = useRef(new Set<string>())
 
   useEffect(() => {
-    const attribution = resolveContactAttribution(window.location.search)
-    setIntent(attribution.intent)
-    setConversationType(attribution.conversationType)
-    setSource(attribution.source)
-  }, [])
-
-  useEffect(() => {
-    if (errorFocusVersion > 0) {
-      errorSummaryRef.current?.focus()
+    const stored = readContactStorage(contactAttemptStorageKey)
+    const attempt = parseStoredAttempt(stored)
+    const attribution = resolveContactAttribution(window.location.search, {
+      intent: attempt?.intent ?? initialIntent, source: attempt?.source ?? defaultSource,
+    })
+    setIntent(attempt?.intent ?? attribution.intent)
+    setConversationType(attempt ? conversationTypeForIntent(attempt.intent) : attribution.conversationType)
+    setSource(attempt?.source ?? attribution.source)
+    if (attempt) {
+      attemptRef.current = attempt
+      setClientSubmissionId(attempt.clientSubmissionId)
+      startedAt.current = attempt.startedAt
+      setUncertain(true)
+      setServerMessage("A previous inquiry has no confirmed receipt in this tab. Re-enter the original details to retry with its existing reference, or explicitly start another inquiry.")
+    } else if (stored) {
+      setExpiredAttempt(true)
+      setServerMessage("The previous inquiry reference has expired or cannot be recovered. That does not prove nonreceipt. Starting another inquiry may create a duplicate.")
     }
-  }, [errorFocusVersion])
+  }, [defaultSource, initialIntent])
 
-  useEffect(() => {
-    const activate = () => setVerificationEnabled(true)
-    const idleWindow = window as Window & {
-      requestIdleCallback?: Window["requestIdleCallback"]
-      cancelIdleCallback?: Window["cancelIdleCallback"]
-    }
-
-    if (
-      typeof idleWindow.requestIdleCallback === "function" &&
-      typeof idleWindow.cancelIdleCallback === "function"
-    ) {
-      const idleId = idleWindow.requestIdleCallback(activate, {
-        timeout: 4_000,
-      })
-      return () => idleWindow.cancelIdleCallback?.(idleId)
-    }
-
-    const timeoutId = globalThis.setTimeout(activate, 2_500)
-    return () => globalThis.clearTimeout(timeoutId)
-  }, [])
+  useEffect(() => { if (errorFocusVersion > 0) errorSummaryRef.current?.focus() }, [errorFocusVersion])
+  useEffect(() => { if (receipt) receiptRef.current?.focus() }, [receipt])
 
   function startForm() {
+    inputRevision.current += 1
     setVerificationEnabled(true)
-
     if (formStarted.current) return
     formStarted.current = true
     trackGridNinjaEvent("contact_form_start", { source, intent })
@@ -122,138 +138,182 @@ export function ContactForm() {
 
   function buildCandidate(form: HTMLFormElement) {
     return buildContactLeadCandidate(new FormData(form), {
-      schemaVersion: 2,
-      formType: "contact",
-      clientSubmissionId,
-      turnstileToken,
-      intent,
-      source,
-      startedAt: startedAt.current,
+      schemaVersion: 2, formType: "contact", clientSubmissionId,
+      turnstileToken, intent, source, startedAt: startedAt.current,
     })
   }
 
-  function handleBlur(event: FocusEvent<HTMLFormElement>) {
+  async function handleBlur(event: FocusEvent<HTMLFormElement>) {
     const target = event.target
-    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) {
-      return
+    if (!(target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement)) return
+    if (!blurValidatedFields.has(target.name) || inFlight.current || validationInFlight.current) return
+    const name = target.name
+    const candidate = buildCandidate(event.currentTarget)
+    const revision = inputRevision.current
+    try {
+      const { contactLeadSchema, mapZodErrors } = await loadContactValidation()
+      if (revision !== inputRevision.current || inFlight.current || validationInFlight.current) return
+      const parsed = contactLeadSchema.safeParse(candidate)
+      const nextMessage = parsed.success ? undefined : mapZodErrors(parsed)[name]
+      setErrors(current => {
+        const next = { ...current }
+        if (nextMessage) next[name] = nextMessage
+        else delete next[name]
+        return next
+      })
+    } catch {
+      // Submission provides a visible recovery message if validation cannot load.
     }
-    if (!blurValidatedFields.has(target.name)) return
-
-    const parsed = contactLeadSchema.safeParse(buildCandidate(event.currentTarget))
-    const nextMessage = parsed.success
-      ? undefined
-      : mapZodErrors(parsed)[target.name]
-
-    setErrors((current) => {
-      const next = { ...current }
-      if (nextMessage) next[target.name] = nextMessage
-      else delete next[target.name]
-      return next
-    })
   }
 
   function handleConversationChange(value: string) {
     if (!isContactConversationType(value)) return
-
     setConversationType(value)
     setIntent(intentAfterConversationSelection(value))
   }
 
   function reportError(category: AnalyticsErrorCategory) {
-    trackGridNinjaEvent("contact_form_error", {
-      source,
-      intent,
-      errorCategory: category,
-      success: false,
-    })
+    trackGridNinjaEvent("contact_form_error", { source, intent, errorCategory: category, success: false })
   }
+  function focusErrorSummary() { setErrorFocusVersion(version => version + 1) }
 
-  function focusErrorSummary() {
-    setErrorFocusVersion((version) => version + 1)
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    startForm()
-
-    if (inFlight.current) return
-
-    const parsed = contactLeadSchema.safeParse(buildCandidate(event.currentTarget))
-
-    if (!parsed.success) {
-      const nextErrors = mapZodErrors(parsed)
-      setErrors(nextErrors)
-      setServerMessage("Review the highlighted fields before submitting.")
-      reportError(
-        Object.keys(nextErrors).every((field) => field === "turnstileToken")
-          ? "verification"
-          : "validation"
-      )
-      focusErrorSummary()
-      return
-    }
-
+  function startAnotherInquiry() {
+    if (inFlight.current || validationInFlight.current) return
+    inputRevision.current += 1
+    clearContactAttempt()
+    attemptRef.current = null
+    originalPayloadRef.current = null
+    setClientSubmissionId(crypto.randomUUID())
+    startedAt.current = Date.now()
+    setUncertain(false)
+    setExpiredAttempt(false)
     setErrors({})
+    setServerMessage("A new inquiry reference is ready. Your previous inquiry may still have been received.")
+    turnstileRef.current?.reset()
+  }
+
+  async function submitCandidate(candidate: ContactLeadInput) {
+    if (inFlight.current) return
     inFlight.current = true
     setIsPending(true)
+    setErrors({})
     setServerMessage(null)
-    trackGridNinjaEvent("contact_form_submit", { source, intent })
-
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(parsed.data),
-      })
-      const payload = (await response.json()) as {
-        ok: boolean
-        requestId?: string
-        submissionId?: string
-        status?: "queued" | "already_received"
-        fieldErrors?: Record<string, string>
-        message?: string
-      }
-      const acceptedStatus = response.status === 200 || response.status === 202
-
-      if (
-        !acceptedStatus ||
-        !payload.ok ||
-        typeof payload.submissionId !== "string" ||
-        !payload.submissionId
-      ) {
-        setErrors(payload.fieldErrors ?? {})
-        setServerMessage(payload.message ?? "Unable to submit the request.")
-        reportError(errorCategoryForStatus(response.status, payload.fieldErrors))
-        turnstileRef.current?.reset()
+      const fingerprint = await fingerprintContactCandidate(candidate)
+      if (attemptRef.current && attemptRef.current.fingerprint !== fingerprint) {
+        setUncertain(true)
+        setServerMessage("These details differ from the original inquiry. Retry the original details or choose Start another inquiry to use a new reference.")
+        reportError("conflict")
         focusErrorSummary()
         return
       }
-
-      trackGridNinjaEvent(contactSuccessEventName(intent), {
-        source,
-        intent,
-        success: true,
-      })
-
-      try {
-        window.sessionStorage.setItem(
-          contactSubmissionStorageKey,
-          JSON.stringify({ submissionId: payload.submissionId, intent })
-        )
-      } catch {
-        // Confirmation remains useful when storage is unavailable.
+      if (!isLeadSource(candidate.source)) throw new Error("Invalid source")
+      const attempt: ContactAttempt = attemptRef.current ?? {
+        version: 1, clientSubmissionId: candidate.clientSubmissionId, fingerprint,
+        intent: candidate.intent, source: candidate.source, startedAt: candidate.startedAt,
+        expiresAt: candidate.startedAt + CONTACT_REFERENCE_LIFETIME_MS,
       }
-
-      window.location.assign("/contact/thanks")
+      if (attempt.expiresAt <= Date.now()) {
+        setExpiredAttempt(true)
+        setServerMessage("This inquiry reference has expired. Expiry does not prove nonreceipt. Explicitly start another inquiry to continue.")
+        focusErrorSummary()
+        return
+      }
+      attemptRef.current = attempt
+      // Verification can expire or be consumed by a request that later fails.
+      // Keep the business payload and inquiry identity immutable, not its token.
+      const { turnstileToken: verificationToken, ...retryPayload } = candidate
+      void verificationToken
+      originalPayloadRef.current = retryPayload
+      writeContactStorage(contactAttemptStorageKey, attempt)
+      trackGridNinjaEvent("contact_form_submit", { source, intent })
+      const result = await sendContactInquiry(candidate)
+      if (result.receipt) {
+        const previous = parseStoredReceipt(readContactStorage(contactSubmissionStorageKey))
+        if (!countedReceipts.current.has(result.receipt.submissionId) && previous?.submissionId !== result.receipt.submissionId) {
+          countedReceipts.current.add(result.receipt.submissionId)
+          trackGridNinjaEvent(contactSuccessEventName(candidate.intent), { source, intent: candidate.intent, success: true })
+        }
+        const confirmed = storeContactReceipt(result.receipt.submissionId, candidate.intent)
+        attemptRef.current = null
+        originalPayloadRef.current = null
+        setReceipt(confirmed)
+        setUncertain(false)
+        return
+      }
+      const rejected = parseRejectedResponse(result.body)
+      if (result.status >= 400 && result.status < 500 && rejected) {
+        setErrors(rejected.fieldErrors ?? {})
+        setServerMessage(rejected.message ?? "Unable to accept this inquiry. Review the form and try again.")
+        if (result.status === 409) {
+          setUncertain(true)
+          setServerMessage("This reference belongs to different inquiry details. Retry the original inquiry or explicitly start another inquiry.")
+        } else if (!uncertain) {
+          // A definite rejection of a first attempt permits correction. An earlier
+          // uncertain attempt remains recoverable even when this retry is rejected.
+          clearContactAttempt()
+          attemptRef.current = null
+          originalPayloadRef.current = null
+        }
+        reportError(errorCategoryForStatus(result.status, rejected.fieldErrors))
+        turnstileRef.current?.reset()
+      } else {
+        setUncertain(true)
+        setServerMessage("Receipt is unconfirmed. The inquiry may have been received. Retry the original inquiry with the same reference before starting another.")
+        reportError("server")
+      }
+      focusErrorSummary()
     } catch {
-      setServerMessage("Unable to submit the request.")
+      setUncertain(true)
+      setServerMessage("Receipt is unconfirmed. The connection ended or timed out; the inquiry may have been received. Retry the original inquiry with the same reference.")
       reportError("network")
-      turnstileRef.current?.reset()
       focusErrorSummary()
     } finally {
       inFlight.current = false
       setIsPending(false)
     }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    startForm()
+    if (!hydrated || inFlight.current || validationInFlight.current || expiredAttempt) return
+    // Capture autofill/current DOM values before the async import and before
+    // controls are disabled. No transport occurs until the unchanged schema passes.
+    const candidate = buildCandidate(event.currentTarget)
+    validationInFlight.current = true
+    setIsValidating(true)
+    setServerMessage(null)
+    try {
+      const { contactLeadSchema, mapZodErrors } = await loadContactValidation()
+      const parsed = contactLeadSchema.safeParse(candidate)
+      if (!parsed.success) {
+        const nextErrors = mapZodErrors(parsed)
+        setErrors(nextErrors)
+        setServerMessage("Review the highlighted fields before submitting.")
+        reportError(Object.keys(nextErrors).every(field => field === "turnstileToken") ? "verification" : "validation")
+        focusErrorSummary()
+        return
+      }
+      setIsValidating(false)
+      await submitCandidate(parsed.data)
+    } catch {
+      setServerMessage("Form validation could not load. Your details remain here and no new request was sent. Check the connection and try again; reload if the problem continues.")
+      reportError("network")
+      focusErrorSummary()
+    } finally {
+      validationInFlight.current = false
+      setIsValidating(false)
+    }
+  }
+
+  if (receipt) {
+    return <div ref={receiptRef} tabIndex={-1} role="status" className="rounded-2xl border border-primary/50 bg-surface p-6 outline-none focus-visible:ring-2 focus-visible:ring-primary">
+      <h2 className="text-2xl font-medium">Inquiry received</h2>
+      <p className="mt-3 leading-7 text-muted-foreground">Your inquiry is recorded for review. This receipt confirms intake; it does not confirm engagement fit, email delivery, an assessment purchase, or permission to operate equipment.</p>
+      <p className="mt-4 break-all text-sm">Reference: <span className="font-mono">{receipt.submissionId}</span></p>
+      <p className="mt-3 text-sm text-muted-foreground">Keep this reference. Browser recovery is limited to this tab for 24 hours and may be unavailable when storage is blocked.</p>
+    </div>
   }
 
   const summaryMessage =
@@ -266,18 +326,24 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit}
       onBlur={handleBlur}
-      onFocusCapture={startForm}
-      onPointerDownCapture={startForm}
+      onInput={startForm}
+      onFocusCapture={() => setVerificationEnabled(true)}
+      action="/api/contact"
+      method="post"
+      encType="application/x-www-form-urlencoded"
       noValidate
-      aria-busy={isPending}
+      aria-busy={isBusy}
       className="gn-lead-form rounded-2xl border border-white/10 bg-[#0D151C] p-5 [--ring:#22D3EE] sm:p-7"
     >
+      <noscript><p className="mb-5 leading-7">This form needs JavaScript and security verification to submit safely. Enable JavaScript and reload this page. No inquiry has been sent by opening this page.</p></noscript>
+      <fieldset disabled={!hydrated || isBusy || (uncertain && Boolean(originalPayloadRef.current)) || expiredAttempt} className="min-w-0">
+      <legend className="sr-only">Assessment inquiry details</legend>
       <div className="hidden" aria-hidden="true">
         <label htmlFor="contact-website">Website</label>
         <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <p className="gn-eyebrow">Request an assessment</p>
+      <p className="gn-eyebrow">Scope an assessment</p>
       <h2 className="mt-3 text-[1.75rem] leading-tight font-medium text-foreground">
         Start with the decision in front of your team
       </h2>
@@ -360,7 +426,6 @@ export function ContactForm() {
           <Textarea
             id="contact-message"
             name="message"
-            required
             autoComplete="off"
             className="min-h-36 resize-y bg-background/35"
             aria-invalid={Boolean(errors.message)}
@@ -370,7 +435,7 @@ export function ContactForm() {
             id="contact-message-helper"
             className="mt-2 text-sm leading-6 text-muted-foreground"
           >
-            Describe the operating decision, capacity claim, recurring constraint,
+            Optional. Describe the operating decision, capacity claim, recurring constraint,
             or evidence gap. Do not include credentials, site drawings, customer
             data or sensitive topology.
           </p>
@@ -452,14 +517,16 @@ export function ContactForm() {
         </div>
       </details>
 
-      <div className="mt-5 h-24">
+      </fieldset>
+
+      <div className="mt-5 min-h-24">
         {summaryMessage ? (
           <div
             ref={errorSummaryRef}
             tabIndex={-1}
             role="alert"
             aria-labelledby="contact-error-summary-title"
-            className="flex h-full flex-col justify-center rounded-xl border border-danger/50 bg-danger/8 px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-[#22D3EE]"
+            className="flex min-h-24 flex-col justify-center rounded-xl border border-danger/50 bg-danger/8 px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-[#22D3EE]"
           >
             <p id="contact-error-summary-title" className="font-medium text-foreground">
               Review this request
@@ -468,6 +535,16 @@ export function ContactForm() {
           </div>
         ) : null}
       </div>
+
+      {(uncertain || expiredAttempt) ? <div className="mt-4 flex flex-wrap gap-3">
+        {originalPayloadRef.current && !expiredAttempt ? <Button type="button" disabled={isBusy || !turnstileToken} onClick={() => {
+          const original = originalPayloadRef.current
+          if (original && turnstileToken) void submitCandidate({ ...original, turnstileToken })
+        }}>Retry original inquiry</Button> : null}
+        <Button type="button" variant="outline" disabled={isBusy} onClick={startAnotherInquiry}>Start another inquiry</Button>
+        {originalPayloadRef.current && !expiredAttempt && !turnstileToken ? <p className="text-sm leading-6 text-muted-foreground">Complete security verification again to retry the original inquiry with its existing reference.</p> : null}
+        <p className="text-sm leading-6 text-muted-foreground">Starting another inquiry creates a new reference and may duplicate an earlier inquiry whose receipt is unconfirmed.</p>
+      </div> : null}
 
       <TurnstileField
         ref={turnstileRef}
@@ -480,8 +557,8 @@ export function ContactForm() {
       <Button
         type="submit"
         size="lg"
-        disabled={isPending}
-        aria-busy={isPending}
+        disabled={!hydrated || isBusy || expiredAttempt || (uncertain && Boolean(originalPayloadRef.current))}
+        aria-busy={isBusy}
         data-gn-event="contact-submit"
         className="mt-5 min-h-12 w-full rounded-[10px]"
       >
@@ -494,7 +571,7 @@ export function ContactForm() {
             Submitting request…
           </>
         ) : (
-          "Request assessment"
+          isValidating ? "Checking details…" : uncertain ? "Retry original details" : "Scope an assessment"
         )}
       </Button>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">
@@ -586,6 +663,7 @@ function errorCategoryForStatus(
   if (fieldErrors && Object.keys(fieldErrors).length > 0) return "validation"
   if (status === 403) return "verification"
   if (status === 429) return "rate_limit"
+  if (status === 409) return "conflict"
   return "server"
 }
 

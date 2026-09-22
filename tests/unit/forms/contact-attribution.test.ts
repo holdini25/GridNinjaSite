@@ -33,6 +33,10 @@ describe("contact attribution", () => {
     })
   })
 
+  it.each(["home-final", "demo-hero", "assessment-page", "bridge-power-page"])("retains approved placement %s", source => {
+    expect(resolveContactAttribution(`?intent=book-demo&source=${source}`)).toMatchObject({ intent: "book-demo", source })
+  })
+
   it("uses an active card selection as the new submission intent", () => {
     expect(intentAfterConversationSelection("other")).toBe("other")
     expect(intentAfterConversationSelection("shadow-mode")).toBe("shadow-mode")

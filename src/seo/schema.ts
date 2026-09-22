@@ -88,12 +88,11 @@ export function buildCapacityAuditServiceSchema(route: SeoRoute): JsonLd {
   return {
     "@type": "Service",
     "@id": `${absoluteUrl(route.path)}#service`,
-    name: "AI Data Center Capacity Audit",
+    name: "Capacity Decision Assessment",
     description: route.description,
     url: absoluteUrl(route.path),
     provider: { "@id": SITE_IDENTITY.organizationId },
     serviceType: "AI data center virtual capacity assessment",
-    areaServed: "Worldwide",
   }
 }
 

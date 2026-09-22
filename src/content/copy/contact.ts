@@ -3,7 +3,7 @@ import type { SectionCopy } from "@/types/site"
 export const contactHero: SectionCopy = {
   eyebrow: "Capacity assessment",
   headline: "Tell us where capacity is constrained.",
-  body: "Share the operating decision, site constraint, or proof gap in front of your team. GridNinja will determine the safest evidence path—from a read-only Capacity Audit to Shadow Mode.",
+  body: "Share the capacity decision in front of your team. Scoping establishes fit, authorized historical inputs, deliverables and price for one bounded paid assessment.",
 }
 
 export const contactTrustCommitments = [
@@ -20,10 +20,10 @@ export const contactNextSteps = [
   },
   {
     title: "Evidence map",
-    body: "We identify the required telemetry, constraints and visible no-proof gaps.",
+    body: "We identify the authorized historical inputs, constraints, permission roles and unresolved evidence gaps.",
   },
   {
     title: "Scoped next step",
-    body: "We recommend a Capacity Audit, Shadow Mode evaluation or partner workflow.",
+    body: "If there is a fit, agree the decision boundary, deliverables, review rounds and price before a paid assessment begins.",
   },
 ] as const

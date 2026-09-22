@@ -83,7 +83,7 @@ export function SolutionPageTemplate({ config }: { config: SolutionPageConfig })
                 </p>
                 <p className="mt-4 font-mono text-[2.2rem] leading-none text-foreground">
                   {metric.value ? (
-                    <PublicClaimValue claimId={metric.claimId} value={metric.value} />
+                    <PublicClaimValue surface="/solutions/ai-cloud" claimId={metric.claimId} value={metric.value} />
                   ) : null}
                 </p>
                 <p className="mt-4 text-base leading-8 text-muted-foreground">

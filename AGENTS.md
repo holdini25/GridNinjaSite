@@ -1,3 +1,14 @@
+## Approved assessment-first upgrade (22 September 2026)
+
+The current public offer is a bounded, paid capacity decision assessment using
+authorized historical inputs. Use “Scope an assessment” as the primary CTA and
+“See a sample decision brief” as the secondary. The control-plane/category rules
+below describe the development direction and must not imply shipped live control.
+Use the source and release boundaries in `docs/website-upgrade/implementation-plan.md`.
+All public examples remain synthetic; economics unestimated; accepted/delivered
+capacity not applicable. Preserve immutable published brief versions and do not
+reintroduce gated files under `public/`. Use npm and the existing package-lock.
+
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 

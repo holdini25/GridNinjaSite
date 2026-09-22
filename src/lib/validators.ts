@@ -108,12 +108,13 @@ export const contactLeadSchema = z.object({
   capacityRange: withoutAsciiControlCharacters(
     z.string().trim().min(1).max(80, "Capacity range is too long.")
   ).optional(),
-  message: withoutAsciiControlCharacters(
-    z
-      .string()
-      .trim()
-      .min(12, "Describe the constraint or decision in a little more detail.")
-      .max(2000, "Message is too long.")
+  message: z.preprocess(
+    (value) => typeof value === "string" && !value.trim() ? undefined : value,
+    withoutAsciiControlCharacters(
+      z.string().trim()
+        .min(12, "Describe the constraint or decision in a little more detail.")
+        .max(2000, "Message is too long.")
+    ).optional()
   ),
 })
 

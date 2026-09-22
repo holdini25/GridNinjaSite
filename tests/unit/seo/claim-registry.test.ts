@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest"
 
 import {
   getPublicClaim,
+  assertClaimApprovedForSurface,
+  validatePublicClaim,
   publicClaims,
   validatePublicClaims,
 } from "@/seo/claim-registry"
@@ -14,6 +16,15 @@ const syntheticDisclosure =
 describe("public claim registry", () => {
   it("passes its fail-closed validator", () => {
     expectValidatorToPass(validatePublicClaims, "claim registry")
+  })
+
+  it("refuses withdrawn numbers, wrong surfaces, expired reviews, and missing permissions", () => {
+    expect(() => getPublicClaim("home-sla-exposure")).toThrow()
+    expect(() => assertClaimApprovedForSurface("assessment-b-model-limit", "/about")).toThrow()
+    expect(() => assertClaimApprovedForSurface("assessment-b-model-limit", "/demo", new Date("2028-01-01"))).toThrow()
+    const claim = getPublicClaim("assessment-b-model-limit")
+    expect(validatePublicClaim({ ...claim, publicationPermission: "not-approved" })).not.toEqual([])
+    expect(validatePublicClaim({ ...claim, maturity: "Accepted for a stated customer decision" })).not.toEqual([])
   })
 
   it("keeps claims attributable, scoped, reviewable, and surface-bound", () => {

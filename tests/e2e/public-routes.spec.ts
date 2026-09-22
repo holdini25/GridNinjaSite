@@ -13,6 +13,8 @@ const publicRoutes = [
   "/demo",
   "/dcii",
   "/roi",
+  "/assessment",
+  "/data-handling",
   "/about",
   "/contact",
 ] as const

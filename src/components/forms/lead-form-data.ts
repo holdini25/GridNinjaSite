@@ -67,6 +67,6 @@ export function buildContactLeadCandidate(
     timeline: getOptionalString(formData, "timeline"),
     constraints: getStrings(formData, "constraints"),
     capacityRange: getOptionalString(formData, "capacityRange"),
-    message: getString(formData, "message"),
+    message: getOptionalString(formData, "message"),
   }
 }

@@ -23,7 +23,7 @@ import {
   getOrderedConstraints,
   isBindingStatus,
 } from "@/content/copy/dispatch-envelope"
-import { buildLeadHref, getFirstQueryValue } from "@/lib/lead"
+import { getFirstQueryValue } from "@/lib/lead"
 import { createPageMetadata } from "@/lib/seo"
 
 type DispatchEnvelopePageProps = {
@@ -59,14 +59,14 @@ export default async function DispatchEnvelopePage({
         headline={dispatchEnvelopeHero.headline}
         body={dispatchEnvelopeHero.body}
         primaryCta={{
-          label: "Request Capacity Audit",
-          href: buildLeadHref("capacity-audit", "dispatch-envelope-hero"),
+          label: "Scope an assessment",
+          href: "/assessment",
         }}
         secondaryCta={{
           label: "See Shadow Mode",
           href: "/proof",
         }}
-        trustLine="Read-only visual: the browser renders a signed decision record preview; runtime assurance remains the authority boundary."
+        trustLine="Synthetic timed-dispatch teaching example. Separate dataset from DEMO-01; no operational acceptance or equipment authority."
       />
 
       <SectionShell>
@@ -89,11 +89,7 @@ export default async function DispatchEnvelopePage({
                   Read-only proof before autonomy
                 </h2>
                 <p className="mt-3 text-base leading-8 text-muted-foreground">
-                  A production DispatchEnvelopeDTO is produced by telemetry,
-                  topology, policy, deterministic solver / verification,
-                  runtime assurance, and a signed proof record. The frontend
-                  never infers accepted capacity, downgrades no-proof, or
-                  becomes an approval path.
+                  This synthetic example illustrates a possible decision record. Displayed hashes and signatures are teaching data, not verified operational proof. The model-screened envelope does not establish physical feasibility, customer acceptance, or permission to operate.
                 </p>
               </div>
             </div>
@@ -109,7 +105,7 @@ export default async function DispatchEnvelopePage({
                 {card.label}
               </p>
               <p className="mt-3 font-mono text-[2.1rem] leading-none text-foreground">
-                <PublicClaimValue claimId={card.claimId} value={card.value} />
+                <PublicClaimValue surface="/platform/dispatch-envelope" claimId={card.claimId} value={card.value} />
               </p>
               <p className="mt-4 text-sm leading-7 text-muted-foreground">
                 {card.body}
@@ -146,7 +142,7 @@ export default async function DispatchEnvelopePage({
                     <th className="px-5 py-3">Scenario</th>
                     <th className="px-5 py-3">Decision</th>
                     <th className="px-5 py-3">Requested</th>
-                    <th className="px-5 py-3">Accepted</th>
+                    <th className="px-5 py-3">Model-screened</th>
                     <th className="px-5 py-3">Binding evidence</th>
                   </tr>
                 </thead>
@@ -200,7 +196,7 @@ export default async function DispatchEnvelopePage({
         <div className="gn-panel p-6 sm:p-8">
           <div className="grid gap-8 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
             <div>
-              <p className="gn-eyebrow">Production path</p>
+              <p className="gn-eyebrow">Conditional development path</p>
               <h2 className="mt-4 text-[2.15rem] leading-tight font-medium text-foreground">
                 From Shadow Mode to bounded autonomy, only after evidence
               </h2>
@@ -216,7 +212,7 @@ export default async function DispatchEnvelopePage({
                 "telemetry + topology + policy",
                 "deterministic solver / verification",
                 "runtime assurance gate",
-                "signed DispatchEnvelopeDTO",
+                "versioned decision record",
                 "read-only visual",
                 "audit-ready proof pack",
               ].map((step, index) => (
@@ -243,8 +239,8 @@ export default async function DispatchEnvelopePage({
         <CtaBand
           headline={dispatchEnvelopeSections.cta.headline}
           body={dispatchEnvelopeSections.cta.body}
-          label="Request Capacity Audit"
-          href={buildLeadHref("capacity-audit", "dispatch-envelope-final")}
+          label="Scope an assessment"
+          href="/assessment"
           eventName="dispatch-envelope-final-cta"
         />
       </SectionShell>

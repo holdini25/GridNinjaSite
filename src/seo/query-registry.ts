@@ -35,7 +35,7 @@ const seeds = [
   ["reserve-floor", "How do UPS and BESS reserve floors constrain flexible load?", "operator", "learn", 2, "/platform/dispatch-envelope"],
   ["sla-protection", "How can virtual capacity protect data center SLAs?", "operator", "evaluate", 3, "/platform"],
   ["capacity-audit-inputs", "What inputs are required for a Capacity Audit?", "operator", "buy", 3, "/methodology/capacity-audit"],
-  ["capacity-audit-output", "What does an AI data center Capacity Audit deliver?", "operator", "buy", 3, "/roi"],
+  ["capacity-audit-output", "What does an AI data center Capacity Audit deliver?", "operator", "buy", 3, "/assessment"],
   ["shadow-mode", "What is Shadow Mode for data center control?", "proof-safety", "learn", 3, "/insights/data-center-shadow-mode"],
   ["proof-before-autonomy", "What does proof before autonomy mean?", "proof-safety", "learn", 3, "/proof"],
   ["bounded-autonomy", "What is bounded autonomy in critical infrastructure?", "proof-safety", "learn", 2, "/proof"],
@@ -66,11 +66,7 @@ const seeds = [
 ] as const
 
 const expectedClaimByQuestionId: Readonly<Record<string, string>> = {
-  "safe-sellable-mw": "colocation-recovered-capacity",
-  "accelerate-time-to-power": "home-illustrative-time-to-power",
-  "gpu-capacity-grid-delay": "ai-cloud-earlier-revenue",
-  "sla-protection": "home-sla-exposure",
-  "gridninja-capacity-audit": "home-safe-headroom",
+  "gridninja-proof-demo": "assessment-b-model-limit",
 }
 
 export const operatorQuestions: readonly OperatorQuestion[] = seeds.map(

@@ -24,6 +24,7 @@ export type Breadcrumb = {
 export type SeoRoute = {
   key: string
   path: `/${string}` | "/"
+  presentation?: "page" | "publication"
   tier: 0 | 1 | 2
   indexable: boolean
   title: string
@@ -39,7 +40,7 @@ export type SeoRoute = {
   relatedPaths: readonly string[]
 }
 
-const updated = "2026-07-13" as const
+const updated = "2026-09-22" as const
 
 export const seoRoutes = [
   {
@@ -47,9 +48,9 @@ export const seoRoutes = [
     path: "/",
     tier: 0,
     indexable: true,
-    title: "GridNinja | Virtual Capacity Control Plane",
-    description: "Unlock safe, usable and auditable capacity from constrained AI infrastructure with GridNinja’s runtime-assured virtual capacity control plane.",
-    h1: "Claimed headroom is not proven capacity.",
+    title: "GridNinja | Capacity Decisions with Confidence",
+    description: "Make your next capacity commitment with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief.",
+    h1: "Make your next capacity commitment with confidence.",
     topicCluster: "virtual-capacity-control-plane",
     searchIntent: "brand",
     schemaTypes: ["WebPage"],
@@ -57,7 +58,7 @@ export const seoRoutes = [
     contentUpdatedAt: "2026-07-14",
     breadcrumbs: [],
     targetQuestions: ["What is an AI Data Center Virtual Capacity Control Plane?"],
-    relatedPaths: ["/platform", "/proof", "/roi"],
+    relatedPaths: ["/platform", "/proof", "/assessment"],
   },
   {
     key: "platform",
@@ -65,8 +66,8 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "Virtual Capacity Control Plane Platform | GridNinja",
-    description: "See how GridNinja coordinates workloads, cooling, storage, and bridge power inside a runtime-assured dispatch envelope.",
-    h1: "The platform for runtime-assured virtual capacity",
+    description: "Explore the intended virtual capacity control-plane architecture, its evidence and authority boundaries, and the current bounded assessment offer.",
+    h1: "A control-plane direction, with evidence before authority.",
     topicCluster: "platform",
     searchIntent: "definition",
     schemaTypes: ["WebPage"],
@@ -99,8 +100,8 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "AI Cloud Time-to-Power & Virtual Capacity | GridNinja",
-    description: "Accelerate AI cloud time-to-power by proving virtual capacity across power, cooling, workloads, reserves, and bridge power.",
-    h1: "For AI Clouds Racing Against the Grid",
+    description: "Assess a proposed AI workload increment using historical inputs and declared constraints before service, time-to-power, or commercial commitments.",
+    h1: "Evaluate the next workload before committing capacity.",
     topicCluster: "ai-cloud",
     searchIntent: "commercial",
     schemaTypes: ["WebPage", "BreadcrumbList"],
@@ -108,7 +109,7 @@ export const seoRoutes = [
     contentUpdatedAt: updated,
     breadcrumbs: [{ name: "Solutions", path: "/#solutions" }],
     targetQuestions: ["How can AI clouds accelerate time-to-power safely?"],
-    relatedPaths: ["/roi", "/solutions/bridge-power", "/proof"],
+    relatedPaths: ["/assessment", "/solutions/bridge-power", "/proof"],
   },
   {
     key: "colocation",
@@ -116,8 +117,8 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "Proof-Backed Sellable Capacity for Colocation | GridNinja",
-    description: "Convert constrained colocation infrastructure into proof-adjusted sellable capacity while protecting tenant SLAs and reserve posture.",
-    h1: "For Operators Selling Capacity in Constrained Markets",
+    description: "Review a proposed tenant increment against declared facility conditions, evidence gaps, reserve policy, and the unresolved commercial decision.",
+    h1: "Review the evidence before the next tenant commitment.",
     topicCluster: "colocation",
     searchIntent: "commercial",
     schemaTypes: ["WebPage", "BreadcrumbList"],
@@ -125,7 +126,7 @@ export const seoRoutes = [
     contentUpdatedAt: updated,
     breadcrumbs: [{ name: "Solutions", path: "/#solutions" }],
     targetQuestions: ["How can colocation operators sell more capacity safely?"],
-    relatedPaths: ["/roi", "/proof/proof-pack", "/proof"],
+    relatedPaths: ["/assessment", "/proof/proof-pack", "/proof"],
   },
   {
     key: "bridge-power",
@@ -133,8 +134,8 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "Bridge Power & DER for AI Data Centers | GridNinja",
-    description: "Coordinate bridge power, storage, generation, cooling, and AI workloads inside a visible, runtime-assured dispatch envelope.",
-    h1: "Make bridge power provably useful",
+    description: "Scope the evidence needed to investigate bridge power and DER for constrained AI infrastructure, with explicit site and commercial boundaries.",
+    h1: "Define the capacity question before selecting the asset.",
     topicCluster: "bridge-power",
     searchIntent: "commercial",
     schemaTypes: ["WebPage", "BreadcrumbList"],
@@ -151,7 +152,7 @@ export const seoRoutes = [
     indexable: true,
     title: "Proof Before Autonomy for AI Data Centers | GridNinja",
     description: "See how Shadow Mode, replay, allow / repair / reject decisions, audit logs, and proof packs establish evidence before bounded autonomy.",
-    h1: "Trust starts with boundaries",
+    h1: "Evidence informs a decision. Authority stays explicit.",
     topicCluster: "proof-before-autonomy",
     searchIntent: "evidence",
     schemaTypes: ["WebPage"],
@@ -167,8 +168,8 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "Capacity Acceptance vs DCIM & Digital Twins | GridNinja",
-    description: "Compare GridNinja's inside-the-fence capacity-acceptance role with DCIM, digital twins, AIOps, and grid flexibility platforms using scoped public sources.",
-    h1: "Before you trust another megawatt, ask what proves it.",
+    description: "Understand the proposed GridNinja assessment role alongside existing monitoring, models, controls, and commercial planning, with explicit evidence limits.",
+    h1: "Connect a capacity question to its evidence.",
     topicCluster: "comparison",
     searchIntent: "comparison",
     schemaTypes: ["WebPage"],
@@ -184,8 +185,8 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "AI Data Center Virtual Capacity Proof Pack | GridNinja",
-    description: "Inspect the proof artifacts that make virtual capacity reviewable: constraints, decisions, accepted headroom, provenance, replay, and rollback evidence.",
-    h1: "Review the proof objects before a live review",
+    description: "Review the contents of a capacity decision package: profiles, conditions, model records, unknowns, review responsibilities, and publication versions.",
+    h1: "A concise brief, with a traceable supporting record.",
     topicCluster: "proof-before-autonomy",
     searchIntent: "evidence",
     schemaTypes: ["WebPage", "BreadcrumbList"],
@@ -200,9 +201,9 @@ export const seoRoutes = [
     path: "/demo",
     tier: 1,
     indexable: true,
-    title: "Virtual Capacity Proof Demo | GridNinja",
-    description: "Walk through a synthetic virtual capacity request as runtime assurance allows, repairs, or rejects actions and records the evidence.",
-    h1: "Inspect how claimed headroom becomes proof-adjusted capacity",
+    title: "Synthetic Capacity Decision Brief and Scenarios | GridNinja",
+    description: "Inspect a synthetic capacity decision brief. Compare requested and revised profiles, model screening, unknowns, and the unresolved business decision.",
+    h1: "See the decision, the conditions, and the unanswered question.",
     topicCluster: "proof-demo",
     searchIntent: "evidence",
     schemaTypes: ["WebPage"],
@@ -219,7 +220,7 @@ export const seoRoutes = [
     indexable: true,
     title: "GridNinja DCII Project | Proof-Backed AI Capacity",
     description: "Explore GridNinja's proof-backed AI capacity project framing for infrastructure partners, operators, and technical evaluators.",
-    h1: "Read-only validation for proof-backed AI data center capacity",
+    h1: "A research direction for proof-backed AI capacity.",
     topicCluster: "dcii",
     searchIntent: "commercial",
     schemaTypes: ["WebPage"],
@@ -230,13 +231,13 @@ export const seoRoutes = [
     relatedPaths: ["/platform", "/proof", "/contact"],
   },
   {
-    key: "roi",
-    path: "/roi",
+    key: "assessment",
+    path: "/assessment",
     tier: 0,
     indexable: true,
-    title: "AI Data Center Capacity Audit & ROI | GridNinja",
-    description: "Request a Capacity Audit to quantify proof-adjusted safe MW, time-to-power, constraints, evidence gaps, and potential commercial value.",
-    h1: "Quantify proof-adjusted capacity before you promise flexible MW",
+    title: "Capacity Decision Assessment for AI Infrastructure | GridNinja",
+    description: "Scope a paid, bounded capacity decision assessment using authorized historical inputs, explicit conditions, model comparisons, and a reviewable brief.",
+    h1: "Scope your next capacity decision.",
     topicCluster: "capacity-audit",
     searchIntent: "commercial",
     schemaTypes: ["WebPage", "Service"],
@@ -244,7 +245,7 @@ export const seoRoutes = [
     contentUpdatedAt: updated,
     breadcrumbs: [],
     targetQuestions: ["What does an AI data center Capacity Audit measure?"],
-    relatedPaths: ["/contact", "/platform", "/methodology/capacity-audit"],
+    relatedPaths: ["/contact", "/data-handling", "/methodology/capacity-audit"],
   },
   {
     key: "about",
@@ -252,8 +253,8 @@ export const seoRoutes = [
     tier: 1,
     indexable: true,
     title: "About GridNinja | Proof-First AI Infrastructure",
-    description: "GridNinja builds proof-first infrastructure software for safe, usable, auditable AI data center capacity.",
-    h1: "Built for the constraint era of AI infrastructure",
+    description: "Understand GridNinja’s current historical-data assessment offer, demonstrated synthetic work, delivery responsibilities, and conditional platform direction.",
+    h1: "Building a defensible basis for capacity decisions.",
     topicCluster: "brand",
     searchIntent: "brand",
     schemaTypes: ["WebPage"],
@@ -268,8 +269,8 @@ export const seoRoutes = [
     path: "/contact",
     tier: 0,
     indexable: true,
-    title: "Request an AI Data Center Capacity Audit | GridNinja",
-    description: "Talk with GridNinja about a Capacity Audit, Shadow Mode evaluation, virtual capacity pilot, or bridge-power partnership.",
+    title: "Scope a Capacity Assessment | Contact GridNinja",
+    description: "Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.",
     h1: "Tell us where capacity is constrained.",
     topicCluster: "conversion",
     searchIntent: "commercial",
@@ -285,9 +286,9 @@ export const seoRoutes = [
     path: "/contact/thanks",
     tier: 2,
     indexable: false,
-    title: "Capacity Assessment Request Received | GridNinja",
-    description: "Your GridNinja capacity assessment request was received and is ready for a proof-first engagement review.",
-    h1: "Request received.",
+    title: "Check Your Inquiry Receipt | GridNinja",
+    description: "Check a confirmed GridNinja inquiry receipt or return to the contact form. Visiting this page alone does not establish that an inquiry was received.",
+    h1: "Check your inquiry receipt.",
     topicCluster: "conversion",
     searchIntent: "commercial",
     schemaTypes: ["WebPage", "BreadcrumbList"],
@@ -297,15 +298,39 @@ export const seoRoutes = [
     targetQuestions: ["What happens after a GridNinja capacity assessment request?"],
     relatedPaths: ["/proof"],
   },
+  {
+    key: "data-handling", path: "/data-handling", tier: 1, indexable: true,
+    title: "Assessment Data Handling and Permissions | GridNinja",
+    description: "Understand inquiry handling, historical input permissions, separate operational-data exchange, and the responsibilities to agree before sharing site data.",
+    h1: "Agree the data boundary before sharing operational inputs.", topicCluster: "assessment", searchIntent: "commercial",
+    schemaTypes: ["WebPage"], socialImageKey: "data-handling", contentUpdatedAt: updated, breadcrumbs: [],
+    targetQuestions: ["How are assessment inputs and inquiry details handled?"], relatedPaths: ["/assessment", "/contact", "/methodology"],
+  },
+  ...makeAssessmentPublicationRoutes(),
   ...makeHubRoutes(),
   ...makeResourceRoutes(),
 ] as const satisfies readonly SeoRoute[]
 
+function makeAssessmentPublicationRoutes(): SeoRoute[] {
+  return [
+    ["a", "Request fits the modeled conditions"],
+    ["b", "A smaller commitment needs review"],
+    ["c", "No admissible revision under the stated minimum"],
+    ["d", "Missing evidence prevents assessment"],
+  ].map(([scenario, h1]) => ({
+    presentation: "publication", key: `assessment-publication-${scenario}`, path: `/evidence/assessments/demo-01-${scenario}/v1.0.0`, tier: 2, indexable: false,
+    title: `GridNinja decision brief — scenario ${scenario.toUpperCase()} v1.0.0`,
+    description: `Synthetic DEMO-01 scenario ${scenario.toUpperCase()} decision brief, publication v1.0.0. Model screening does not establish operating permission or a customer outcome.`,
+    h1, topicCluster: "assessment-evidence", searchIntent: "evidence", schemaTypes: ["WebPage"], socialImageKey: "assessment", contentUpdatedAt: updated,
+    breadcrumbs: [], targetQuestions: ["What does this synthetic capacity assessment conclude?"], relatedPaths: ["/demo", "/assessment", "/evidence"],
+  }))
+}
+
 function makeHubRoutes(): SeoRoute[] {
   return [
-    hub("insights", "/insights", "Virtual Capacity Insights for AI Data Centers | GridNinja", "Technical explainers for virtual capacity, runtime assurance, Shadow Mode, time-to-power, and cross-domain constraints.", "Virtual capacity insights for constrained AI infrastructure", "definition", ["/platform", "/evidence", "/roi"]),
+    hub("insights", "/insights", "Virtual Capacity Insights for AI Data Centers | GridNinja", "Technical explainers for virtual capacity, runtime assurance, Shadow Mode, time-to-power, and cross-domain constraints.", "Virtual capacity insights for constrained AI infrastructure", "definition", ["/platform", "/evidence", "/assessment"]),
     hub("evidence", "/evidence", "Virtual Capacity Evidence Library | GridNinja", "Publication-gated methods, synthetic traces, ledgers, specifications, and proof artifacts for evaluating virtual capacity claims.", "Evidence for safe, usable, auditable capacity", "evidence", ["/proof", "/insights", "/methodology"]),
-    hub("methodology", "/methodology", "GridNinja Claims, Evidence & Capacity Methods", "How GridNinja governs claims, comparisons, corrections, evidence maturity, and Capacity Audit methods.", "Methods for claims that operators can defend", "evidence", ["/proof", "/evidence", "/roi"]),
+    hub("methodology", "/methodology", "GridNinja Claims, Evidence & Capacity Methods", "How GridNinja governs claims, comparisons, corrections, evidence maturity, and Capacity Audit methods.", "Methods for claims that operators can defend", "evidence", ["/proof", "/evidence", "/assessment"]),
   ]
 }
 
@@ -336,7 +361,7 @@ function makeResourceRoutes(): SeoRoute[] {
     tier: 2,
     indexable: false,
     title: resource.title,
-    description: resource.description,
+    description: resource.publicationStatus === "published" ? resource.description : `Publication of this GridNinja technical resource awaits named ownership, evidence review, and permission. Inspect the synthetic decision brief meanwhile.`,
     h1: resource.h1,
     topicCluster: resource.kind,
     searchIntent: resource.kind === "evidence" ? "evidence" : "definition",

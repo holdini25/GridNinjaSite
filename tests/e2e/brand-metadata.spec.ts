@@ -286,7 +286,7 @@ test.describe("production brand metadata routes", () => {
     })
     await expect(
       page.locator("footer").getByRole("heading", {
-        name: "GridNinja is the runtime-assured virtual capacity engine for AI data centers.",
+        name: "Capacity decisions with a reviewable basis.",
       })
     ).toBeVisible()
     await expect(
