@@ -14,8 +14,8 @@ export function SectionHeader({
     <div
       className={
         align === "center"
-          ? "mx-auto max-w-3xl text-center"
-          : "max-w-3xl text-left"
+          ? "mx-auto min-w-0 max-w-3xl text-center [overflow-wrap:anywhere]"
+          : "min-w-0 max-w-3xl text-left [overflow-wrap:anywhere]"
       }
     >
       {eyebrow ? (

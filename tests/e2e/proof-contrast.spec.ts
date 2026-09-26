@@ -12,7 +12,9 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await expect(page.getByRole("heading", { name: "Operating permission", exact: true })).toBeVisible()
     const results = await new AxeBuilder({ page }).include("main").withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
     expect(results.violations).toEqual([])
-    await expect(page.locator('main a[href="/assessment"]').first()).toBeVisible()
+    const assessmentLink = page.getByRole("main").getByRole("link", { name: "Contact Us", exact: true }).first()
+    await expect(assessmentLink).toBeVisible()
+    await expect(assessmentLink).toHaveAttribute("href", "/assessment?source=proof-hero#scope")
     expect(await page.locator("main h1").evaluate(node => getComputedStyle(node).opacity)).toBe("1")
   })
 }

@@ -29,10 +29,10 @@ export function KpiLineChart() {
         },
         tooltip: {
           trigger: "axis",
-          backgroundColor: "#13202B",
+          backgroundColor: "#222222",
           borderColor: "rgba(255,184,74,0.18)",
           textStyle: {
-            color: "#F5F7FA",
+            color: "#F4F4F4",
             fontFamily: "Geist Mono, monospace",
           },
         },
@@ -53,21 +53,21 @@ export function KpiLineChart() {
             "15:20",
             "15:40",
           ],
-          axisLine: { lineStyle: { color: "rgba(159,176,191,0.18)" } },
-          axisLabel: { color: "#9FB0BF", fontFamily: "Geist Mono, monospace" },
+          axisLine: { lineStyle: { color: "rgba(184,184,184,0.18)" } },
+          axisLabel: { color: "#B8B8B8", fontFamily: "Geist Mono, monospace" },
         },
         yAxis: {
           type: "value",
           name: "Safe MW",
           nameTextStyle: {
-            color: "#9FB0BF",
+            color: "#B8B8B8",
             padding: [0, 0, 0, 8],
             fontFamily: "Geist Mono, monospace",
           },
           splitLine: {
-            lineStyle: { color: "rgba(159,176,191,0.12)", type: "dashed" },
+            lineStyle: { color: "rgba(184,184,184,0.12)", type: "dashed" },
           },
-          axisLabel: { color: "#9FB0BF", fontFamily: "Geist Mono, monospace" },
+          axisLabel: { color: "#B8B8B8", fontFamily: "Geist Mono, monospace" },
         },
         series: [
           {
@@ -92,7 +92,7 @@ export function KpiLineChart() {
             },
             itemStyle: {
               color: "#FF9F1A",
-              borderColor: "#07111A",
+              borderColor: "#080808",
               borderWidth: 2,
             },
             markLine: {

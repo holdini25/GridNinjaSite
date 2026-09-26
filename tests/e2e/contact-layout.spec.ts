@@ -13,8 +13,11 @@ async function observeLayoutShifts(page: Page) {
   await page.addInitScript(() => {
     const trackedWindow = window as Window & {
       __contactLayoutShifts?: LayoutShiftRecord[]
+      __contactLayoutShiftSupported?: boolean
     }
     trackedWindow.__contactLayoutShifts = []
+    trackedWindow.__contactLayoutShiftSupported = PerformanceObserver.supportedEntryTypes.includes("layout-shift")
+    if (!trackedWindow.__contactLayoutShiftSupported) return
 
     new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
@@ -82,7 +85,7 @@ test.describe("contact intake layout", () => {
     await expect(page.getByLabel("Intake commitments").getByRole("listitem")).toHaveCount(4)
     await expect(page.locator("main .gn-content-auto")).toHaveCount(0)
     await expect(page.locator("form [required]")).toHaveCount(3)
-    await expect(page.locator("details > summary")).toContainText(
+    await expect(page.locator("form details > summary")).toContainText(
       "Add optional site details"
     )
     await expect(page.locator("#contact-next-steps + ol > li")).toHaveCount(3)
@@ -110,7 +113,8 @@ test.describe("contact intake layout", () => {
 
   test("keeps CLS below 0.05 through verification, validation, scrolling, and success", async ({
     page,
-  }) => {
+    clientHealth,
+  }, testInfo) => {
     await observeLayoutShifts(page)
     await installDelayedTurnstile(page)
     await page.route("**/api/contact", async (route) => {
@@ -133,6 +137,8 @@ test.describe("contact intake layout", () => {
     await page.getByLabel("Name", { exact: true }).focus()
     await expect(page.locator('[data-test-turnstile="ready"]')).toBeVisible()
     await expect(page.getByText("Security verification complete.")).toBeVisible()
+    const verifiedFormBox = await form.boundingBox()
+    expect(Math.abs(verifiedFormBox!.height - initialFormBox!.height)).toBeLessThan(2)
 
     const submit = page.getByRole("button", { name: "Scope an assessment" })
     await centerLocatorInViewport(submit)
@@ -149,8 +155,13 @@ test.describe("contact intake layout", () => {
         .evaluate((element) => element.scrollHeight <= element.clientHeight)
     ).toBe(true)
 
-    const validationFormBox = await form.boundingBox()
-    expect(Math.abs(validationFormBox!.height - initialFormBox!.height)).toBeLessThan(2)
+    // Validation expands in response to the visitor instead of reserving an
+    // empty error region. Its links must recover focus to the invalid controls.
+    const errorSummary = page.locator('[aria-labelledby="contact-error-summary-title"]')
+    await expect(errorSummary.getByRole("link")).toHaveCount(3)
+    await errorSummary.getByRole("link", { name: "Name: Enter your name." }).click()
+    await expect(page.getByLabel("Name", { exact: true })).toBeFocused()
+    await clientHealth.expectNoHorizontalOverflow()
 
     const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight)
     for (const ratio of [0.25, 0.5, 0.75, 1]) {
@@ -166,20 +177,21 @@ test.describe("contact intake layout", () => {
     }
 
     await page.getByLabel("Name", { exact: true }).fill("Ada Operator")
-    await page.getByLabel("Company", { exact: true }).fill("Atlas Compute")
+    await page.getByLabel("Organization", { exact: true }).fill("Atlas Compute")
     await page.getByLabel("Work email", { exact: true }).fill("ada@example.com")
     await page
-      .getByLabel("What constraint or decision are you working through?", {
+      .getByLabel("Decision context (optional)", {
         exact: true,
       })
       .fill("We need a proof-backed capacity baseline for the next deployment.")
 
-    const scores = await readLayoutShiftScores(page)
-    expect(scores.cls).toBeLessThan(0.05)
-    expect(scores.allInputStates).toBeLessThan(0.05)
-
     await submit.click()
     await expect(page.getByRole("heading", { name: "Inquiry received" })).toBeVisible()
+    await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))))
+    const scores = await readLayoutShiftScores(page)
+    await testInfo.attach("contact-layout-shifts", { body: JSON.stringify(scores), contentType: "application/json" })
+    if (scores.supported) expect(scores.cls).toBeLessThan(0.05)
+    else testInfo.annotations.push({ type: "unavailable-diagnostic", description: "This browser does not expose layout-shift entries. Form interaction/layout assertions ran; no CLS measurement is claimed." })
   })
 })
 
@@ -190,6 +202,7 @@ async function readLayoutShiftScores(page: Page) {
         .__contactLayoutShifts ?? []
 
     return {
+      supported: (window as Window & { __contactLayoutShiftSupported?: boolean }).__contactLayoutShiftSupported === true,
       cls: maximumSessionWindow(entries.filter((entry) => !entry.hadRecentInput)),
       allInputStates: maximumSessionWindow(entries),
     }

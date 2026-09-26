@@ -1,5 +1,7 @@
 import { seoResources } from "@/content/seo-resources"
 import { PRODUCTION_ORIGIN } from "@/seo/policy"
+import { isPublicationPromotable } from "@/seo/publication-eligibility"
+import assessmentRegistry from "@/content/assessment-publications/registry.json"
 
 export type IsoDate = `${number}-${number}-${number}`
 export type SchemaType =
@@ -49,8 +51,8 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "GridNinja | Capacity Decisions with Confidence",
-    description: "Make your next capacity commitment with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief.",
-    h1: "Make your next capacity commitment with confidence.",
+    description: "Make your next capacity decision with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief.",
+    h1: "Make your next capacity decision with confidence.",
     topicCluster: "virtual-capacity-control-plane",
     searchIntent: "brand",
     schemaTypes: ["WebPage"],
@@ -361,7 +363,7 @@ function makeResourceRoutes(): SeoRoute[] {
     tier: 2,
     indexable: false,
     title: resource.title,
-    description: resource.publicationStatus === "published" ? resource.description : `Publication of this GridNinja technical resource awaits named ownership, evidence review, and permission. Inspect the synthetic decision brief meanwhile.`,
+    description: resource.publicationStatus === "published" ? resource.description : `This GridNinja resource is not yet published. Read the available synthetic decision briefs and inspect their assumptions, results, and limitations.`,
     h1: resource.h1,
     topicCluster: resource.kind,
     searchIntent: resource.kind === "evidence" ? "evidence" : "definition",
@@ -389,6 +391,8 @@ function hubPathFor(kind: "insight" | "evidence" | "methodology"): string {
 export type PublicPath = (typeof seoRoutes)[number]["path"]
 
 const routeMap = new Map<string, SeoRoute>(seoRoutes.map((route) => [route.path, route]))
+const resourceMap = new Map<string, (typeof seoResources)[number]>(seoResources.map(resource => [resource.path, resource]))
+const publishedAssessmentPaths = new Set(assessmentRegistry.filter(entry => entry.status === "available").map(entry => `/evidence/assessments/${entry.publicationId}/${entry.version}`))
 
 export const indexableSeoRoutes = seoRoutes.filter((route) => route.indexable)
 
@@ -399,7 +403,11 @@ export function getSeoRoute(path: string): SeoRoute {
 }
 
 export function getRelatedSeoRoutes(path: string): SeoRoute[] {
-  return getSeoRoute(path).relatedPaths.map((relatedPath) => getSeoRoute(relatedPath))
+  return getSeoRoute(path).relatedPaths.filter(relatedPath => {
+    const resource = resourceMap.get(relatedPath)
+    if (getSeoRoute(relatedPath).presentation === "publication") return publishedAssessmentPaths.has(relatedPath)
+    return !resource || isPublicationPromotable(resource.publicationStatus)
+  }).map((relatedPath) => getSeoRoute(relatedPath))
 }
 
 export function collectSeoCopyReviewWarnings(): string[] {

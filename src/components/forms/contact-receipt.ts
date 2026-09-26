@@ -1,3 +1,4 @@
+import { isPublicTopic, type PublicTopic } from "@/lib/public-topic"
 import { contactSubmissionStorageKey } from "@/components/forms/contact-attribution"
 import { leadIntents } from "@/lib/constants"
 import { isLeadSource, type LeadSource } from "@/lib/lead"
@@ -13,7 +14,7 @@ export type ContactReceipt = {
 }
 export type ContactAttempt = {
   version: 1; clientSubmissionId: string; fingerprint: string; intent: LeadIntent;
-  source: LeadSource; startedAt: number; expiresAt: number
+  source: LeadSource; topic?: PublicTopic; startedAt: number; expiresAt: number
 }
 
 // Keep this small protocol validator independent of the full form schema. Its
@@ -54,10 +55,11 @@ export function parseStoredAttempt(value: string | null, now = Date.now()): Cont
   const parsed = parseStored(value)
   if (!parsed || parsed.version !== 1 || !isUuid(parsed.clientSubmissionId) || !isIntent(parsed.intent)
     || typeof parsed.fingerprint !== "string" || !/^[a-f0-9]{64}$/.test(parsed.fingerprint)
+    || (parsed.topic !== undefined && !isPublicTopic(parsed.topic))
     || typeof parsed.source !== "string" || !isLeadSource(parsed.source)
     || !isTimestamp(parsed.startedAt) || !isTimestamp(parsed.expiresAt)
     || !validLifetime(parsed.startedAt, parsed.expiresAt, now)) return null
-  return { version: 1, clientSubmissionId: parsed.clientSubmissionId, fingerprint: parsed.fingerprint, intent: parsed.intent, source: parsed.source, startedAt: parsed.startedAt, expiresAt: parsed.expiresAt }
+  return { version: 1, clientSubmissionId: parsed.clientSubmissionId, fingerprint: parsed.fingerprint, intent: parsed.intent, source: parsed.source, ...(isPublicTopic(parsed.topic) ? { topic: parsed.topic } : {}), startedAt: parsed.startedAt, expiresAt: parsed.expiresAt }
 }
 
 function validLifetime(start: number, expires: number, now: number) {

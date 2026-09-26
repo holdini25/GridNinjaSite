@@ -1,0 +1,239 @@
+{
+  "camera": [
+    12.48401,
+    12.75822,
+    13.8649
+  ],
+  "target": [
+    0,
+    1.1,
+    0
+  ],
+  "padding": 1.12,
+  "framing": "projected-geometry",
+  "background": "#080808",
+  "exposure": 1.18,
+  "colorSpace": "srgb",
+  "toneMapping": "aces-filmic",
+  "inspection": {
+    "version": 1,
+    "fitSubjects": {
+      "overview": {
+        "min": [
+          -5.43,
+          0.0,
+          -3.83
+        ],
+        "max": [
+          5.43,
+          3.592,
+          3.83
+        ]
+      },
+      "air-path": {
+        "min": [
+          -2.779,
+          1.006,
+          -2.79
+        ],
+        "max": [
+          3.821,
+          3.592,
+          1.204
+        ]
+      }
+    },
+    "mobile": {
+      "camera": [
+        12.48401,
+        12.75822,
+        13.8649
+      ],
+      "target": [
+        0,
+        1.1,
+        0
+      ],
+      "padding": 1.12,
+      "projection": "orthographic"
+    },
+    "details": {
+      "rack": {
+        "camera": [
+          2.8,
+          2.4,
+          5
+        ],
+        "target": [
+          0,
+          1.55,
+          0
+        ],
+        "padding": 1.12,
+        "projection": "perspective",
+        "fov": 32
+      },
+      "air-path": {
+        "camera": [
+          5.874045,
+          13.724184,
+          5.152159
+        ],
+        "target": [
+          0.521,
+          2.299,
+          -0.793
+        ],
+        "padding": 1.12,
+        "projection": "perspective",
+        "fov": 32
+      }
+    },
+    "mobileRackAspect": 0.85
+  },
+  "surfaces": {
+    "version": 1,
+    "pipeline": "pbr-semantic-v2",
+    "uvSet": 0,
+    "maxTextureBytes": 3145728,
+    "equipmentEdge": {
+      "version": 1,
+      "viewDirection": "projection-correct",
+      "exponent": 5,
+      "intensity": 0.02
+    }
+  },
+  "ecosystem": {
+    "version": 1,
+    "seed": 61427,
+    "ambientIntervalSeconds": [
+      12,
+      18
+    ],
+    "sequenceSeconds": 8,
+    "chapterSeconds": [
+      4,
+      4,
+      5,
+      4,
+      4,
+      3
+    ],
+    "colors": {
+      "electrical": "#e3e7e4",
+      "cooling": "#76abb4",
+      "heat": "#c98554"
+    },
+    "fanModulation": 0.1,
+    "maxEquipment": 96,
+    "maxRoutes": 128,
+    "maxTraces": 2
+  },
+  "lighting": {
+    "hemisphere": {
+      "sky": "#eeeeee",
+      "ground": "#292929",
+      "intensity": 0.32
+    },
+    "directional": [
+      {
+        "position": [
+          -8,
+          15,
+          8
+        ],
+        "color": "#f5f5f3",
+        "intensity": 2.25
+      },
+      {
+        "position": [
+          7,
+          8,
+          -7
+        ],
+        "color": "#e6edef",
+        "intensity": 0.75
+      }
+    ],
+    "environment": {
+      "preset": "industrial-night-v3",
+      "resolution": 128,
+      "intensity": 1.08,
+      "rotationY": 0
+    },
+    "finite": {
+      "version": 1,
+      "type": "point",
+      "position": [
+        -2.8,
+        6,
+        -3.4
+      ],
+      "color": "#f5f5f3",
+      "intensity": 36,
+      "decay": 2,
+      "distance": 0
+    }
+  },
+  "motion": {
+    "fanRadiansPerSecond": 1.6,
+    "fanPhaseOffsets": [
+      0,
+      1.57,
+      3.14,
+      4.71
+    ],
+    "ledPulseRadiansPerSecond": 1.8,
+    "ledPulseAmplitude": 0.14
+  },
+  "led": {
+    "color": "#ffc079",
+    "steadyIntensity": 0.82,
+    "size": [
+      0.038,
+      0.025,
+      0.018
+    ]
+  },
+  "engineering": {
+    "version": 1,
+    "seed": 41727,
+    "accent": {
+      "resting": "#9d632f",
+      "hover": "#ffbe63",
+      "selected": "#ffd18a",
+      "previewWeight": 0.85,
+      "baseEmission": 0.035,
+      "activeEmission": 1,
+      "transitionMs": 150
+    },
+    "activity": {
+      "resting": 0.12,
+      "peak": 1,
+      "steady": 0.5,
+      "pulseMs": [
+        120,
+        180
+      ],
+      "eventMs": [
+        80,
+        180
+      ],
+      "maxPulses": 3,
+      "ambientTraceSeconds": [
+        8,
+        12
+      ],
+      "selectedTraceQuietSeconds": 2.8
+    },
+    "cameraTransitionMs": 420,
+    "poseTransitionMs": 280,
+    "rendering": {
+      "ambientFps": 30,
+      "interactionFps": 60,
+      "mobilePixels": 650000,
+      "desktopPixels": 1500000,
+      "probeSeconds": 2
+    }
+  }
+}

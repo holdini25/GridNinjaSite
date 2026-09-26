@@ -18,14 +18,14 @@ export function TopologyMap({
                 width="140"
                 height="84"
                 rx="22"
-                fill="rgba(19,32,43,0.92)"
+                fill="rgba(34,34,34,0.92)"
                 stroke="rgba(255,184,74,0.18)"
               />
               <text
                 x={x + 70}
                 y="92"
                 textAnchor="middle"
-                fill="#F5F7FA"
+                fill="#F4F4F4"
                 fontSize="17"
                 fontFamily="Geist, sans-serif"
               >

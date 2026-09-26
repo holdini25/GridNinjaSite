@@ -62,6 +62,7 @@ export function buildContactLeadCandidate(
 ) {
   return {
     ...buildBaseLeadCandidate(formData, attribution),
+    topic: getOptionalString(formData, "topic"),
     role: getOptionalString(formData, "role"),
     siteType: getOptionalString(formData, "siteType"),
     timeline: getOptionalString(formData, "timeline"),

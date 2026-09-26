@@ -109,8 +109,8 @@ const styles = {
     display: "flex",
     overflow: "hidden",
     background:
-      "linear-gradient(135deg, #09131c 0%, #07111a 48%, #0d1720 100%)",
-    color: "#f5f7fa",
+      "linear-gradient(135deg, #111111 0%, #080808 48%, #111111 100%)",
+    color: "#F4F4F4",
     fontFamily,
   },
   grid: {
@@ -118,7 +118,7 @@ const styles = {
     inset: 0,
     opacity: 0.35,
     backgroundImage:
-      "linear-gradient(rgba(159,176,191,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(159,176,191,0.08) 1px, transparent 1px)",
+      "linear-gradient(rgba(184,184,184,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(184,184,184,0.08) 1px, transparent 1px)",
     backgroundSize: "44px 44px",
   },
   orbitLarge: {
@@ -130,7 +130,7 @@ const styles = {
     borderRadius: 999,
     border: "1px solid rgba(255,184,74,0.14)",
     background:
-      "radial-gradient(circle at center, rgba(255,159,26,0.09), rgba(13,23,32,0.18) 55%, transparent 72%)",
+      "radial-gradient(circle at center, rgba(255,159,26,0.09), rgba(17,17,17,0.18) 55%, transparent 72%)",
   },
   orbitSmall: {
     position: "absolute",
@@ -139,7 +139,7 @@ const styles = {
     width: 340,
     height: 340,
     borderRadius: 999,
-    border: "1px solid rgba(159,176,191,0.12)",
+    border: "1px solid rgba(184,184,184,0.12)",
   },
   content: {
     display: "flex",
@@ -165,7 +165,7 @@ const styles = {
     fontSize: 14,
     lineHeight: 1.45,
     letterSpacing: "0.18em",
-    color: "#9fb0bf",
+    color: "#B8B8B8",
     textTransform: "uppercase",
   },
   brandLockup: {
@@ -183,11 +183,11 @@ const styles = {
     display: "flex",
     borderRadius: 999,
     border: "1px solid rgba(255,184,74,0.16)",
-    background: "rgba(13,23,32,0.76)",
+    background: "rgba(17,17,17,0.76)",
     padding: "8px 14px",
     fontSize: 12,
     letterSpacing: "0.18em",
-    color: "#9fb0bf",
+    color: "#B8B8B8",
     textTransform: "uppercase",
   },
   titleGroup: {
@@ -199,7 +199,7 @@ const styles = {
     fontSize: 36,
     fontWeight: 650,
     letterSpacing: "0.02em",
-    color: "#f5f7fa",
+    color: "#F4F4F4",
   },
   headline: {
     marginTop: 18,
@@ -213,7 +213,7 @@ const styles = {
     maxWidth: 560,
     fontSize: 24,
     lineHeight: 1.35,
-    color: "#9fb0bf",
+    color: "#B8B8B8",
   },
   pillRow: {
     display: "flex",
@@ -225,10 +225,10 @@ const styles = {
     display: "flex",
     borderRadius: 999,
     border: "1px solid rgba(255,184,74,0.16)",
-    background: "rgba(19,32,43,0.84)",
+    background: "rgba(34,34,34,0.84)",
     padding: "10px 14px",
     fontSize: 14,
-    color: "#f5f7fa",
+    color: "#F4F4F4",
   },
   panelColumn: {
     width: 390,
@@ -244,7 +244,7 @@ const styles = {
     gap: 12,
     fontSize: 14,
     letterSpacing: "0.16em",
-    color: "#9fb0bf",
+    color: "#B8B8B8",
     textTransform: "uppercase",
   },
   panel: {
@@ -252,7 +252,7 @@ const styles = {
     borderRadius: 28,
     border: "1px solid rgba(255,184,74,0.16)",
     background:
-      "linear-gradient(180deg, rgba(13,23,32,0.96) 0%, rgba(7,17,26,0.96) 100%)",
+      "linear-gradient(180deg, rgba(17,17,17,0.96) 0%, rgba(8,8,8,0.96) 100%)",
     padding: 24,
     height: 376,
     display: "flex",
@@ -270,7 +270,7 @@ const styles = {
     width: 154,
     borderRadius: 18,
     border: "1px solid rgba(255,184,74,0.16)",
-    background: "rgba(19,32,43,0.9)",
+    background: "rgba(34,34,34,0.9)",
     padding: "16px 16px 15px",
   },
   tileLabel: {
@@ -282,7 +282,7 @@ const styles = {
   tileValue: {
     marginTop: 9,
     fontSize: 16,
-    color: "#f5f7fa",
+    color: "#F4F4F4",
     lineHeight: 1.35,
   },
   dispatchEnvelope: {
@@ -303,16 +303,16 @@ const styles = {
   dispatchTitle: {
     fontSize: 24,
     fontWeight: 600,
-    color: "#f5f7fa",
+    color: "#F4F4F4",
   },
   dispatchText: {
     marginTop: 6,
     fontSize: 14,
-    color: "#9fb0bf",
+    color: "#B8B8B8",
   },
   footer: {
     fontSize: 14,
     lineHeight: 1.45,
-    color: "#9fb0bf",
+    color: "#B8B8B8",
   },
 } satisfies Record<string, CSSProperties>

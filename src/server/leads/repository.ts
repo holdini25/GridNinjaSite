@@ -7,12 +7,12 @@ import {
   asc,
   eq,
   inArray,
-  isNull,
   lte,
   or,
   sql,
 } from "drizzle-orm"
 
+import { beginProviderAttemptQuery, redactExpiredLeadsQuery } from "@/lib/contact/delivery-query"
 import { getDatabase, type LeadDatabase } from "@/db/client"
 import {
   leadDeliveryOutbox,
@@ -46,6 +46,7 @@ export type AcceptLeadInput = {
   siteType?: string | null
   timeline?: string | null
   capacityRange?: string | null
+  topic?: string | null
   constraints?: string[] | null
   message?: string | null
   source: string
@@ -90,6 +91,7 @@ export type RetryOutboxInput = {
 }
 
 export type DeadLetterOutboxInput = {
+  reviewRequiredAt?: Date
   errorCode: string
 }
 
@@ -190,6 +192,7 @@ export function createLeadRepository(database: LeadDatabase) {
         siteType: input.siteType ?? null,
         timeline: input.timeline ?? null,
         capacityRange: input.capacityRange ?? null,
+        topic: input.topic ?? null,
         constraints: input.constraints ?? null,
         message: input.message ?? null,
         source: input.source,
@@ -345,7 +348,12 @@ export function createLeadRepository(database: LeadDatabase) {
 
     const leaseToken = randomUUID()
     const leaseExpiresAt = new Date(now.getTime() + leaseMs)
-    const eligibility = dueOrLeaseExpired(now)
+    const eligibility = and(dueOrLeaseExpired(now), sql`EXISTS (
+      SELECT 1 FROM ${leadSubmissions} WHERE ${leadSubmissions.id} = ${leadDeliveryOutbox.leadId}
+        AND ${leadSubmissions.redactedAt} IS NULL
+        AND ${leadSubmissions.redactAfter} > clock_timestamp()
+        AND ${leadSubmissions.deleteAfter} > clock_timestamp()
+    )`)
     const candidate = database
       .select({ id: leadDeliveryOutbox.id })
       .from(leadDeliveryOutbox)
@@ -392,6 +400,7 @@ export function createLeadRepository(database: LeadDatabase) {
       throw new Error("Claimed outbox delivery has no associated lead.")
     }
 
+    if (lead.redactedAt || lead.redactAfter.getTime() <= Date.now() || lead.deleteAfter.getTime() <= Date.now()) return null
     return { delivery, lead }
   }
 
@@ -405,6 +414,15 @@ export function createLeadRepository(database: LeadDatabase) {
     leaseMs: number
   ) {
     return claimOutbox(now, leaseMs, outboxId)
+  }
+
+  async function beginProviderAttempt(outboxId: string, leaseToken: string,
+    request: { body: string; targetUrl: string }, now: Date) {
+    const result = await database.execute(beginProviderAttemptQuery(outboxId, leaseToken, request, now))
+    const row = result.rows[0] as { first_provider_attempt_at: string | Date; provider_request_body: string; provider_target_url: string } | undefined
+    if (!row?.first_provider_attempt_at || !row.provider_request_body || !row.provider_target_url) return null
+    return { firstProviderAttemptAt: new Date(row.first_provider_attempt_at),
+      frozenRequest: { body: row.provider_request_body, targetUrl: row.provider_target_url } }
   }
 
   async function markOutboxDelivered(
@@ -498,6 +516,7 @@ export function createLeadRepository(database: LeadDatabase) {
         .set({
           status: "dead_letter",
           deadLetteredAt: now,
+          reviewRequiredAt: input.reviewRequiredAt ?? null,
           lastErrorCode: input.errorCode,
           leaseToken: null,
           leaseExpiresAt: null,
@@ -629,46 +648,8 @@ export function createLeadRepository(database: LeadDatabase) {
     cutoff: Date,
     limit = DEFAULT_RETENTION_BATCH_SIZE
   ): Promise<string[]> {
-    const candidates = database
-      .select({ id: leadSubmissions.id })
-      .from(leadSubmissions)
-      .where(
-        and(
-          isNull(leadSubmissions.redactedAt),
-          lte(leadSubmissions.redactAfter, cutoff)
-        )
-      )
-      .orderBy(asc(leadSubmissions.redactAfter))
-      .limit(Math.max(1, Math.min(limit, 5_000)))
-      .for("update", { skipLocked: true })
-
-    const redacted = await database
-      .update(leadSubmissions)
-      .set({
-        requestFingerprint: null,
-        name: null,
-        company: null,
-        email: null,
-        normalizedEmail: null,
-        role: null,
-        buyerType: null,
-        siteType: null,
-        timeline: null,
-        capacityRange: null,
-        constraints: null,
-        message: null,
-        source: null,
-        ipHash: null,
-        turnstileHostname: null,
-        turnstileAction: null,
-        turnstileChallengeAt: null,
-        redactedAt: sql`now()`,
-        updatedAt: sql`now()`,
-      })
-      .where(sql`${leadSubmissions.id} IN (${candidates})`)
-      .returning({ id: leadSubmissions.id })
-
-    return redacted.map(({ id }) => id)
+    const result = await database.execute(redactExpiredLeadsQuery(cutoff, limit))
+    return result.rows.map((row) => String(row.id))
   }
 
   async function deleteExpiredLeads(
@@ -697,6 +678,7 @@ export function createLeadRepository(database: LeadDatabase) {
     getLeadDeliveryContext,
     claimNextDueOutbox,
     claimOutboxById,
+    beginProviderAttempt,
     markOutboxDelivered,
     rescheduleOutbox,
     markOutboxDeadLetter,
@@ -767,3 +749,7 @@ export const redactExpiredLeads = (cutoff: Date, limit?: number) =>
 
 export const deleteExpiredLeads = (cutoff: Date, limit?: number) =>
   repository().deleteExpiredLeads(cutoff, limit)
+
+export const beginProviderAttempt = (id: string, leaseToken: string,
+  request: { body: string; targetUrl: string }, now: Date) =>
+  repository().beginProviderAttempt(id, leaseToken, request, now)

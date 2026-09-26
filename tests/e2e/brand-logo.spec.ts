@@ -8,23 +8,32 @@ test.describe("GridNinja brand placements", () => {
     clientHealth,
   }) => {
     await page.goto("/")
+    await expect(page.locator("header").getByRole("link", { name: "GridNinja home", exact: true })
+      .filter({ visible: true }).getByText("GridNinja", { exact: true })).toBeVisible()
 
     for (const width of widths) {
       await page.setViewportSize({ width, height: 900 })
 
       const header = page.locator("header")
-      const home = header.locator("[data-gn-logo-trigger]")
-      const mark = header.locator('[data-logo-motion="micro-response"] svg')
-      const wordmark = header.getByText("GridNinja", { exact: true })
+      const home = header.getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
+      const mark = home.locator('[data-logo-motion="micro-response"] svg')
+      const wordmark = home.getByText("GridNinja", { exact: true })
 
       expect((await header.boundingBox())?.height).toBeCloseTo(70, 2)
       expect((await home.boundingBox())?.height).toBeGreaterThanOrEqual(44)
       await expect(mark).toBeVisible()
       expect((await mark.boundingBox())?.height).toBeCloseTo(34, 2)
-      if (width < 380) {
-        await expect(wordmark).toBeHidden()
-      } else {
-        await expect(wordmark).toBeVisible()
+      const homeBox = (await home.boundingBox())!
+      const ctaBox = (await header.getByRole("link", { name: "Contact Us", exact: true })
+        .filter({ visible: true }).boundingBox())!
+      expect(homeBox.x + homeBox.width, `brand avoids CTA at ${width}px`).toBeLessThanOrEqual(ctaBox.x + 1)
+      // The optional wordmark follows available container space, including
+      // enlarged text. Validate its actual fit instead of a device breakpoint.
+      if (await wordmark.isVisible()) {
+        const wordmarkBox = (await wordmark.boundingBox())!
+        const markBox = (await mark.boundingBox())!
+        expect(wordmarkBox.x, `wordmark clears emblem at ${width}px`).toBeGreaterThanOrEqual(markBox.x + markBox.width)
+        expect(wordmarkBox.x + wordmarkBox.width, `wordmark fits brand at ${width}px`).toBeLessThanOrEqual(homeBox.x + homeBox.width + 1)
       }
       await clientHealth.expectNoHorizontalOverflow()
     }
@@ -55,7 +64,7 @@ test.describe("GridNinja brand placements", () => {
   test("links the 36px micro identity in the mobile drawer", async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 720 })
     await page.goto("/")
-    await page.getByRole("button", { name: "Open navigation" }).click()
+    await page.locator("[data-mobile-menu] > summary").click()
 
     const drawer = page.getByRole("dialog")
     const home = drawer.getByRole("link", { name: "GridNinja home" })
@@ -74,7 +83,7 @@ test.describe("GridNinja brand placements", () => {
     await expect(page.locator("main")).toContainText("synthetic")
   })
 
-  test("keeps the footer brand signature on one line without overflow", async ({
+  test("keeps the footer brand signature readable without overflow", async ({
     page,
     clientHealth,
   }) => {
@@ -88,14 +97,23 @@ test.describe("GridNinja brand placements", () => {
         .getByText("Infrastructure · Intelligence · Control", { exact: true })
 
       await signature.scrollIntoViewIfNeeded()
-      await expect(signature).toHaveCSS("white-space", "nowrap")
+      await expect(signature).toBeVisible()
+      // Compact footer columns may use two lines. Check the rendered text
+      // bounds so responsive wrapping cannot conceal clipped characters.
       const metrics = await signature.evaluate((element) => {
         const bounds = element.getBoundingClientRect()
         const lineHeight = Number.parseFloat(getComputedStyle(element).lineHeight)
+        const range = document.createRange()
+        range.selectNodeContents(element)
+        const textFits = [...range.getClientRects()].every(rect =>
+          rect.left >= bounds.left - 1 && rect.right <= bounds.right + 1 &&
+          rect.top >= bounds.top - 2 && rect.bottom <= bounds.bottom + 2)
 
-        return { height: bounds.height, lineHeight }
+        return { height: bounds.height, lineHeight, textFits, clipped: element.scrollWidth > element.clientWidth + 1 || element.scrollHeight > element.clientHeight + 1 }
       })
-      expect(metrics.height).toBeLessThanOrEqual(metrics.lineHeight + 1)
+      expect(metrics.height, `signature length at ${width}px`).toBeLessThanOrEqual(metrics.lineHeight * 2 + 1)
+      expect(metrics.textFits, `signature glyph bounds at ${width}px`).toBe(true)
+      expect(metrics.clipped, `signature clipping at ${width}px`).toBe(false)
       await clientHealth.expectNoHorizontalOverflow()
     }
   })
@@ -103,7 +121,7 @@ test.describe("GridNinja brand placements", () => {
   test("navigates functionally from the header logo", async ({ page }) => {
     await page.goto("/about")
 
-    const home = page.locator("header [data-gn-logo-trigger]")
+    const home = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     await home.click()
 
     await expect(page).toHaveURL(/\/$/)
@@ -115,7 +133,7 @@ test.describe("GridNinja brand placements", () => {
   }) => {
     await page.goto("/")
 
-    const trigger = page.locator("header [data-gn-logo-trigger]")
+    const trigger = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     const core = trigger.locator('[data-part="proof-core"]')
     const glow = trigger.locator('[data-part="proof-glow"]')
     const sweep = trigger.locator('[data-part="proof-sweep"]')
@@ -149,7 +167,7 @@ test.describe("GridNinja brand placements", () => {
   }) => {
     await page.goto("/")
 
-    const trigger = page.locator("header [data-gn-logo-trigger]")
+    const trigger = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     const logo = trigger.locator('[data-logo-motion="micro-response"]')
     const parts = logo.locator("[data-part]")
     const guardians = logo.locator(
@@ -192,7 +210,7 @@ test.describe("GridNinja brand placements", () => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.goto("/")
 
-    const trigger = page.locator("header [data-gn-logo-trigger]")
+    const trigger = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     const microParts = trigger.locator("[data-part]")
     await trigger.hover()
     await trigger.focus()

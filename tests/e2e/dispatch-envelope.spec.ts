@@ -104,26 +104,23 @@ test.describe("dispatch envelope page", () => {
         name: /How much virtual capacity is safe/i,
       })
     ).toBeVisible()
-    await expect(
-      page.getByRole("link", { name: "Scope an assessment" }).first()
-    ).toBeVisible()
+    const headerCta = page.getByRole("banner").locator('a[data-gn-event="header-capacity-audit"]:visible')
+    await expect(headerCta).toHaveText("Contact Us")
+    await expect(headerCta).toHaveAttribute("href", "/assessment?source=header#scope")
     await expect(page.getByTestId("dispatch-envelope-visual")).toBeVisible()
     if (testInfo.project.name.includes("mobile")) {
-      await page.getByRole("button", { name: "Open navigation" }).click()
+      await page.locator("[data-mobile-menu] > summary").click()
       const dialog = page.getByRole("dialog")
 
       await expect(
-        dialog.getByRole("button", { name: "Platform", exact: true })
-      ).toHaveAttribute("aria-expanded", "true")
+        dialog.locator("details > summary").filter({ hasText: "How it works" }).locator("..")
+      ).toHaveAttribute("open", "")
       await expect(
         dialog.getByRole("link", { name: "Dispatch Envelope", exact: true })
       ).toHaveAttribute("aria-current", "page")
     } else {
-      const header = page.locator("header")
-      const platformMenu = header.getByRole("button", {
-        name: "Platform",
-        exact: true,
-      })
+      const header = page.getByRole("navigation", { name: "Primary" })
+      const platformMenu = header.locator("details > summary").filter({ hasText: "How it works" })
       const dispatchLink = header.getByRole("link", {
         name: "Dispatch Envelope",
         exact: true,
@@ -136,10 +133,7 @@ test.describe("dispatch envelope page", () => {
       await dispatchLink.hover()
       await expect(dispatchLink).toBeVisible()
 
-      const solutionsMenu = header.getByRole("button", {
-        name: "Solutions",
-        exact: true,
-      })
+      const solutionsMenu = header.locator("details > summary").filter({ hasText: "Solutions" })
 
       await solutionsMenu.hover()
       await expect(dispatchLink).toBeHidden()
@@ -149,7 +143,7 @@ test.describe("dispatch envelope page", () => {
 
       await platformMenu.click()
       await expect(dispatchLink).toBeVisible()
-      await header.getByRole("link", { name: "Why GridNinja" }).focus()
+      await header.getByRole("link", { name: "Sample brief" }).focus()
       await expect(dispatchLink).toBeHidden()
     }
     expect(errors).toEqual([])

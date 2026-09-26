@@ -10,8 +10,8 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: "/",
     display: "standalone",
-    background_color: "#070a0d",
-    theme_color: "#070a0d",
+    background_color: "#080808",
+    theme_color: "#080808",
     icons: [
       {
         src: "/gridninja-icon-192.png",

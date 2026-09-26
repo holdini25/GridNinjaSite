@@ -27,7 +27,7 @@ export function PowerEnvelopeDiagram() {
   ]
 
   return (
-    <div className="rounded-[1.7rem] border border-border/70 bg-surface/94 p-6 shadow-[0_18px_48px_-36px_rgba(7,17,26,0.82)]">
+    <div className="rounded-[1.7rem] border border-border/70 bg-surface/94 p-6 shadow-[0_18px_48px_-36px_rgba(8,8,8,0.82)]">
       <svg viewBox="0 0 620 390" className="h-auto w-full">
         <defs>
           <linearGradient id="envelope" x1="0%" x2="100%" y1="0%" y2="0%">
@@ -42,7 +42,7 @@ export function PowerEnvelopeDiagram() {
           width="552"
           height="310"
           rx="22"
-          fill="#09131C"
+          fill="#111111"
           stroke="rgba(255,184,74,0.18)"
         />
         <rect
@@ -52,7 +52,7 @@ export function PowerEnvelopeDiagram() {
           height="266"
           rx="18"
           fill="none"
-          stroke="rgba(159,176,191,0.12)"
+          stroke="rgba(184,184,184,0.12)"
         />
         <motion.rect
           x="196"
@@ -91,7 +91,7 @@ export function PowerEnvelopeDiagram() {
               cx={node.x}
               cy={node.y}
               r="15"
-              fill="#0D1720"
+              fill="#111111"
               stroke="rgba(255,159,26,0.75)"
               strokeWidth="2"
             />
@@ -99,7 +99,7 @@ export function PowerEnvelopeDiagram() {
               x={node.x}
               y={node.y + 36}
               textAnchor="middle"
-              fill="#F5F7FA"
+              fill="#F4F4F4"
               fontSize="15"
               fontFamily="Geist Mono, monospace"
             >
@@ -121,14 +121,14 @@ export function PowerEnvelopeDiagram() {
               width="60"
               height="26"
               rx="13"
-              fill="#13202B"
+              fill="#222222"
               stroke="rgba(255,184,74,0.16)"
             />
             <text
               x={badge.x}
               y="252"
               textAnchor="middle"
-              fill="#9FB0BF"
+              fill="#B8B8B8"
               fontSize="12.5"
               fontFamily="Geist Mono, monospace"
             >
@@ -140,7 +140,7 @@ export function PowerEnvelopeDiagram() {
         <text
           x="220"
           y="158"
-          fill="#F5F7FA"
+          fill="#F4F4F4"
           fontSize="26"
           fontFamily="Geist, sans-serif"
         >
@@ -149,7 +149,7 @@ export function PowerEnvelopeDiagram() {
         <text
           x="220"
           y="186"
-          fill="#9FB0BF"
+          fill="#B8B8B8"
           fontSize="15"
           fontFamily="Geist, sans-serif"
         >

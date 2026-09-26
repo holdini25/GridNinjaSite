@@ -50,7 +50,7 @@ describe("structured identity and safe serialization", () => {
       "@id": "https://gridninja.ai/#webpage",
       name: "GridNinja | Capacity Decisions with Confidence",
       description:
-        "Make your next capacity commitment with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief.",
+        "Make your next capacity decision with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief.",
       primaryImageOfPage: {
         "@type": "ImageObject",
         "@id": "https://gridninja.ai/#primaryimage",

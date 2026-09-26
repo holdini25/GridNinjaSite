@@ -85,7 +85,7 @@ describe("SEO route manifest", () => {
 
   it("locks the concise homepage search summary", () => {
     expect(getSeoRoute("/").description).toBe(
-      "Make your next capacity commitment with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief."
+      "Make your next capacity decision with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief."
     )
   })
 

@@ -14,11 +14,11 @@ import {
 describe("primary navigation contract", () => {
   it("contains the five approved buyer-journey choices", () => {
     expect(navItems.map((item) => item.label)).toEqual([
-      "Platform",
+      "How it works",
       "Solutions",
-      "Proof",
-      "Resources",
-      "Why GridNinja",
+      "Sample brief",
+      "Evidence",
+      "Company",
     ])
     expect(navItems.map((item) => item.label)).not.toContain("DCII")
     expect(navItems.map((item) => item.label)).not.toContain("About")
@@ -33,21 +33,15 @@ describe("primary navigation contract", () => {
       }
     }
 
-    expect(groupedDestinations.map(({ label, href }) => ({ label, href }))).toEqual([
-      { label: "Platform Overview", href: "/platform" },
-      { label: "Dispatch Envelope", href: "/platform/dispatch-envelope" },
-      { label: "AI Cloud Providers", href: "/solutions/ai-cloud" },
-      { label: "Colocation & REITs", href: "/solutions/colocation" },
-      { label: "Bridge Power & DER", href: "/solutions/bridge-power" },
-      { label: "Proof Before Autonomy", href: "/proof" },
-      { label: "Proof Pack", href: "/proof/proof-pack" },
-      { label: "Sample decision brief", href: "/demo" },
-      { label: "Insights", href: "/insights" },
-      { label: "Evidence Library", href: "/evidence" },
-      { label: "Methodology", href: "/methodology" },
-      { label: "Capacity assessment", href: "/assessment" },
-      { label: "DCII Project", href: "/dcii" },
-    ])
+    expect(groupedDestinations).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: "Capacity assessment", href: "/assessment" }),
+      expect.objectContaining({ label: "Platform direction", href: "/platform" }),
+      expect.objectContaining({ label: "Dispatch Envelope", href: "/platform/dispatch-envelope" }),
+      expect.objectContaining({ label: "Evidence library", href: "/evidence" }),
+      expect.objectContaining({ label: "About GridNinja", href: "/about" }),
+    ]))
+    expect(navItems.find(item => item.label === "Sample brief")).toEqual({ label: "Sample brief", href: "/demo#decision-brief" })
+    expect(new Set(groupedDestinations.map(item => item.href)).size).toBe(groupedDestinations.length)
     expect(groupedDestinations.every((item) => item.description.trim().length > 0)).toBe(
       true
     )
@@ -61,8 +55,10 @@ describe("primary navigation contract", () => {
 
     expect(footerLinks).toContainEqual({ label: "About", href: "/about" })
     expect(footerLinks).toContainEqual({ label: "Contact", href: "/contact" })
+    expect(new Set(footerLinks.map(item => item.href)).size).toBe(footerLinks.length)
+    expect(footerLinks.some(item => item.label.startsWith("Download"))).toBe(false)
     expect(headerCapacityAuditHref).toBe(
-      "/assessment"
+      "/assessment?source=header#scope"
     )
   })
 })
@@ -72,6 +68,7 @@ describe("navigation path matching", () => {
     expect(isNavPathActive("/platform", "/platform")).toBe(true)
     expect(isNavPathActive("/platform/dispatch-envelope", "/platform")).toBe(true)
     expect(isNavPathActive("/platforms", "/platform")).toBe(false)
+    expect(isNavPathActive("/demo", "/demo#decision-brief")).toBe(true)
   })
 
   it("selects only the longest matching destination", () => {

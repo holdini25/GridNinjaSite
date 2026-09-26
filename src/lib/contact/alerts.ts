@@ -13,6 +13,8 @@ export type OperatorAlert = {
     | "queue_age"
     | "database_failure"
     | "configuration_failure"
+    | "monitor_incident"
+    | "monitor_recovery"
   occurredAt: string
   outboxId?: string
   submissionId?: string
@@ -45,6 +47,8 @@ export function parseOperatorAlert(value: unknown): OperatorAlert | null {
     "queue_age",
     "database_failure",
     "configuration_failure",
+    "monitor_incident",
+    "monitor_recovery",
   ].includes(alert.type ?? "")
   const validOptionalString = (candidate: unknown, maxLength: number) =>
     candidate === undefined ||
@@ -95,7 +99,7 @@ export async function publishOperatorAlert(
 }
 
 export async function sendOperatorAlert(
-  config: ContactRuntimeConfig,
+  config: Pick<ContactRuntimeConfig, "alertWebhookUrl" | "alertWebhookToken">,
   alert: OperatorAlert,
   fetcher: typeof fetch = fetch
 ) {
@@ -108,6 +112,7 @@ export async function sendOperatorAlert(
   const timestamp = Math.floor(Date.now() / 1000).toString()
   const response = await fetcher(config.alertWebhookUrl, {
     method: "POST",
+    redirect: "error",
     headers: {
       "Content-Type": "application/json",
       "Idempotency-Key": alert.eventId,

@@ -59,6 +59,7 @@ export const leadSubmissions = pgTable(
     siteType: varchar("site_type", { length: 120 }),
     timeline: varchar("timeline", { length: 120 }),
     capacityRange: varchar("capacity_range", { length: 80 }),
+    topic: varchar("topic", { length: 32 }),
     constraints: jsonb("constraints").$type<string[]>(),
     message: text("message"),
     source: varchar("source", { length: 120 }),
@@ -127,6 +128,16 @@ export const leadDeliveryOutbox = pgTable(
       withTimezone: true,
       mode: "date",
     }),
+    // Exact request bytes/target are frozen before the first provider attempt.
+    // They contain inquiry PII and are erased by the same retention job.
+    providerRequestBody: text("provider_request_body"),
+    providerTargetUrl: text("provider_target_url"),
+    firstProviderAttemptAt: timestamp("first_provider_attempt_at", { withTimezone: true, mode: "date" }),
+    reviewRequiredAt: timestamp("review_required_at", { withTimezone: true, mode: "date" }),
+    operatorAcknowledgedAt: timestamp("operator_acknowledged_at", { withTimezone: true, mode: "date" }),
+    operatorReviewedThrough: timestamp("operator_reviewed_through", { withTimezone: true, mode: "date" }),
+    operatorReference: varchar("operator_reference", { length: 64 }),
+    // Legacy transport field: provider acceptance, not recipient delivery.
     deliveredAt: timestamp("delivered_at", {
       withTimezone: true,
       mode: "date",
@@ -152,6 +163,8 @@ export const leadDeliveryOutbox = pgTable(
     uniqueIndex("lead_delivery_outbox_idempotency_key_uidx").on(
       table.idempotencyKey
     ),
+    index("lead_delivery_outbox_provider_message_idx").on(table.providerMessageId),
+    index("lead_delivery_outbox_review_idx").on(table.reviewRequiredAt),
     index("lead_delivery_outbox_due_idx").on(
       table.status,
       table.nextAttemptAt
@@ -172,3 +185,24 @@ export type LeadStatus = (typeof leadStatus.enumValues)[number]
 export type LeadDeliveryChannel =
   (typeof leadDeliveryChannel.enumValues)[number]
 export type LeadDeliveryStatus = (typeof leadDeliveryStatus.enumValues)[number]
+
+
+// Store only allowlisted delivery events. No recipient, subject, body, click or open data.
+export const leadProviderEvents = pgTable("lead_provider_events", {
+  eventId: varchar("event_id", { length: 200 }).primaryKey(),
+  providerMessageId: varchar("provider_message_id", { length: 128 }).notNull(),
+  outboxId: uuid("outbox_id").references(() => leadDeliveryOutbox.id, { onDelete: "cascade" }),
+  eventType: varchar("event_type", { length: 40 }).notNull(),
+  occurredAt: timestamp("occurred_at", { withTimezone: true, mode: "date" }).notNull(),
+  receivedAt: timestamp("received_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+}, (table) => [
+  index("lead_provider_events_message_idx").on(table.providerMessageId),
+  index("lead_provider_events_outbox_idx").on(table.outboxId),
+  index("lead_provider_events_received_idx").on(table.receivedAt),
+  index("lead_provider_events_type_idx").on(table.eventType),
+])
+
+export const leadOperationHeartbeats = pgTable("lead_operation_heartbeats", {
+  operation: varchar("operation", { length: 32 }).primaryKey(),
+  completedAt: timestamp("completed_at", { withTimezone: true, mode: "date" }).notNull(),
+})
