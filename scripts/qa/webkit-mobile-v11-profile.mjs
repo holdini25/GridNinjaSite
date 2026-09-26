@@ -86,7 +86,7 @@ async function audit(directory) {
       const expectedSkips = [...enterpriseFunctionalPolicy(project).allowedSkips, ...additionalSkips.map(([title, reason]) => ({ title, project, reason }))]
       assert.deepEqual(policy.allowedSkips, expectedSkips, "Reviewed skip policy changed after preparation")
       assert.deepEqual(policy.requiredTitles, declarations.filter(item => !expectedSkips.some(skip => skip.title === item.title)).map(({ title }) => ({ title, project })), "Required declaration set changed after preparation")
-      assert.equal(browserExitCode, "0", "Browser process did not exit successfully")
+      if (browserExitCode !== "0") failures.push(`Browser process did not exit successfully: ${browserExitCode ?? "missing"}`)
       const declaredKeys = declarations.map(item => item.title).sort()
       cases = casesIn(browser)
       assert.deepEqual(cases.map(item => item.title).sort(), declaredKeys, "Executed cases differ from the predeclared full profile")
@@ -94,11 +94,11 @@ async function audit(directory) {
       assert(cases.every(item => item.attempts.length === 1 && item.attempts[0].retry === 0), "Missing or retried test attempt")
       const result = auditPlaywrightReport(browser, policy)
       failures.push(...result.failures)
-      assert.equal(browser.stats?.expected, expectedPasses, "Required pass count differs")
-      assert.equal(browser.stats?.skipped, 12, "Reviewed skip count differs")
-      assert.equal(browser.stats?.flaky, 0, "Flaky result is disallowed")
-      assert.equal(browser.stats?.unexpected, 0, "Unexpected result is disallowed")
-      assert(cases.some(item => item.title === deepLinkTitle && item.attempts[0].status === "passed"), "Deep-link case did not pass")
+      if (browser.stats?.expected !== expectedPasses) failures.push(`Required pass count differs: ${browser.stats?.expected ?? "missing"}`)
+      if (browser.stats?.skipped !== 12) failures.push(`Reviewed skip count differs: ${browser.stats?.skipped ?? "missing"}`)
+      if (browser.stats?.flaky !== 0) failures.push(`Flaky result is disallowed: ${browser.stats?.flaky ?? "missing"}`)
+      if (browser.stats?.unexpected !== 0) failures.push(`Unexpected result is disallowed: ${browser.stats?.unexpected ?? "missing"}`)
+      if (!cases.some(item => item.title === deepLinkTitle && item.attempts[0].status === "passed")) failures.push("Deep-link case did not pass")
     } catch (error) { failures.push(String(error)) }
   }
   const result = { status: failures.length ? "fail" : "pass", project, candidateIdentity: candidate?.identity ?? null, inventorySha256: inventory ? hash(inventory) : null, reportSha256: browser ? hash(await readFile(join(directory, "browser.json"))) : null, expected: { declared: expectedCases, passed: expectedPasses, reviewedSkips: 12, retries: 0 }, observed: { cases: cases.length, stats: browser?.stats ?? null, browserExitCode: browserExitCode ?? null }, failures }
