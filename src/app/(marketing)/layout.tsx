@@ -1,4 +1,5 @@
 import { SiteFooter } from "@/components/layout/site-footer"
+import { HeaderLogo } from "@/components/brand/header-logo"
 import { SiteHeader } from "@/components/layout/site-header"
 
 export default function MarketingLayout({
@@ -14,7 +15,7 @@ export default function MarketingLayout({
       >
         Skip to content
       </a>
-      <SiteHeader />
+      <SiteHeader logo={<HeaderLogo />} />
       <main id="main-content" className="relative min-w-0">
         {children}
       </main>

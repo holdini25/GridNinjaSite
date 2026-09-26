@@ -1,0 +1,1291 @@
+{
+  "schemaVersion": "facility.v1",
+  "release": "facility-v11",
+  "environment": "synthetic",
+  "profile": {
+    "camera": [
+      12.48401,
+      12.75822,
+      13.8649
+    ],
+    "target": [
+      0,
+      1.1,
+      0
+    ],
+    "padding": 1.12,
+    "framing": "projected-geometry",
+    "background": "#080808",
+    "exposure": 1.18,
+    "colorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "inspection": {
+      "version": 1,
+      "fitSubjects": {
+        "overview": {
+          "min": [
+            -5.43,
+            0,
+            -3.83
+          ],
+          "max": [
+            5.43,
+            3.592,
+            3.83
+          ]
+        },
+        "air-path": {
+          "min": [
+            -2.779,
+            1.006,
+            -2.79
+          ],
+          "max": [
+            3.821,
+            3.592,
+            1.204
+          ]
+        }
+      },
+      "mobile": {
+        "camera": [
+          12.48401,
+          12.75822,
+          13.8649
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12,
+        "projection": "orthographic"
+      },
+      "mobileRackAspect": 0.85,
+      "details": {
+        "rack": {
+          "camera": [
+            2.8,
+            2.4,
+            5
+          ],
+          "target": [
+            0,
+            1.55,
+            0
+          ],
+          "padding": 1.12,
+          "projection": "perspective",
+          "fov": 32
+        },
+        "air-path": {
+          "camera": [
+            5.874045,
+            13.724184,
+            5.152159
+          ],
+          "target": [
+            0.521,
+            2.299,
+            -0.793
+          ],
+          "padding": 1.12,
+          "projection": "perspective",
+          "fov": 32
+        }
+      }
+    },
+    "surfaces": {
+      "version": 1,
+      "pipeline": "pbr-semantic-v2",
+      "uvSet": 0,
+      "maxTextureBytes": 3145728,
+      "equipmentEdge": {
+        "version": 1,
+        "viewDirection": "projection-correct",
+        "exponent": 5,
+        "intensity": 0.02
+      }
+    },
+    "ecosystem": {
+      "version": 1,
+      "seed": 61427,
+      "ambientIntervalSeconds": [
+        12,
+        18
+      ],
+      "sequenceSeconds": 8,
+      "chapterSeconds": [
+        4,
+        4,
+        5,
+        4,
+        4,
+        3
+      ],
+      "colors": {
+        "electrical": "#e3e7e4",
+        "cooling": "#76abb4",
+        "heat": "#c98554"
+      },
+      "fanModulation": 0.1,
+      "maxEquipment": 96,
+      "maxRoutes": 128,
+      "maxTraces": 2
+    },
+    "lighting": {
+      "hemisphere": {
+        "sky": "#eeeeee",
+        "ground": "#292929",
+        "intensity": 0.32
+      },
+      "directional": [
+        {
+          "position": [
+            -8,
+            15,
+            8
+          ],
+          "color": "#f5f5f3",
+          "intensity": 2.25
+        },
+        {
+          "position": [
+            7,
+            8,
+            -7
+          ],
+          "color": "#e6edef",
+          "intensity": 0.75
+        }
+      ],
+      "finite": {
+        "version": 1,
+        "type": "point",
+        "position": [
+          -2.8,
+          6,
+          -3.4
+        ],
+        "color": "#f5f5f3",
+        "intensity": 36,
+        "decay": 2,
+        "distance": 0
+      },
+      "environment": {
+        "preset": "industrial-night-v3",
+        "resolution": 128,
+        "intensity": 1.08,
+        "rotationY": 0
+      }
+    },
+    "motion": {
+      "fanRadiansPerSecond": 1.6,
+      "fanPhaseOffsets": [
+        0,
+        1.57,
+        3.14,
+        4.71
+      ],
+      "ledPulseRadiansPerSecond": 1.8,
+      "ledPulseAmplitude": 0.14
+    },
+    "led": {
+      "color": "#ffc079",
+      "steadyIntensity": 0.82,
+      "size": [
+        0.038,
+        0.025,
+        0.018
+      ]
+    },
+    "engineering": {
+      "version": 1,
+      "seed": 41727,
+      "accent": {
+        "resting": "#9d632f",
+        "hover": "#ffbe63",
+        "selected": "#ffd18a",
+        "previewWeight": 0.85,
+        "baseEmission": 0.035,
+        "activeEmission": 1,
+        "transitionMs": 150
+      },
+      "activity": {
+        "resting": 0.12,
+        "peak": 1,
+        "steady": 0.5,
+        "pulseMs": [
+          120,
+          180
+        ],
+        "eventMs": [
+          80,
+          180
+        ],
+        "maxPulses": 3,
+        "ambientTraceSeconds": [
+          8,
+          12
+        ],
+        "selectedTraceQuietSeconds": 2.8
+      },
+      "cameraTransitionMs": 420,
+      "poseTransitionMs": 280,
+      "rendering": {
+        "ambientFps": 30,
+        "interactionFps": 60,
+        "mobilePixels": 650000,
+        "desktopPixels": 1500000,
+        "probeSeconds": 2
+      }
+    }
+  },
+  "systems": {
+    "power": {
+      "root": "GN_POWER",
+      "accent": "GN_ACCENT_POWER",
+      "pick": "GN_PICK_POWER"
+    },
+    "cooling": {
+      "root": "GN_COOLING",
+      "accent": "GN_ACCENT_COOLING",
+      "pick": "GN_PICK_COOLING"
+    },
+    "storage": {
+      "root": "GN_STORAGE",
+      "accent": "GN_ACCENT_STORAGE",
+      "pick": "GN_PICK_STORAGE"
+    },
+    "workloads": {
+      "root": "GN_WORKLOADS",
+      "accent": "GN_ACCENT_WORKLOADS",
+      "pick": "GN_PICK_WORKLOADS"
+    }
+  },
+  "equipment": {
+    "rotors": [
+      {
+        "id": "GN_FAN_ROTOR_00",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_01",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_02",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_03",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "leds": [
+      "GN_LED_00",
+      "GN_LED_01",
+      "GN_LED_02",
+      "GN_LED_03",
+      "GN_LED_04",
+      "GN_LED_05",
+      "GN_LED_06",
+      "GN_LED_07",
+      "GN_LED_08",
+      "GN_LED_09",
+      "GN_LED_10",
+      "GN_LED_11",
+      "GN_LED_12",
+      "GN_LED_13",
+      "GN_LED_14",
+      "GN_LED_15",
+      "GN_LED_16",
+      "GN_LED_17",
+      "GN_LED_18",
+      "GN_LED_19",
+      "GN_LED_20",
+      "GN_LED_21",
+      "GN_LED_22",
+      "GN_LED_23",
+      "GN_LED_24",
+      "GN_LED_25",
+      "GN_LED_26",
+      "GN_LED_27",
+      "GN_LED_28",
+      "GN_LED_29",
+      "GN_LED_30",
+      "GN_LED_31",
+      "GN_LED_32",
+      "GN_LED_33",
+      "GN_LED_34",
+      "GN_LED_35",
+      "GN_LED_36",
+      "GN_LED_37",
+      "GN_LED_38",
+      "GN_LED_39",
+      "GN_LED_40",
+      "GN_LED_41",
+      "GN_LED_42",
+      "GN_LED_43",
+      "GN_LED_44",
+      "GN_LED_45",
+      "GN_LED_46",
+      "GN_LED_47"
+    ]
+  },
+  "equipmentIndex": {
+    "schemaVersion": "facility-equipment-index.v1",
+    "equipment": [
+      {
+        "id": "air-cooling-plenum",
+        "label": "Cooling return plenum",
+        "system": "cooling",
+        "role": "air_return_plenum",
+        "bounds": {
+          "min": [
+            -2.779,
+            1.006,
+            -1.8375
+          ],
+          "max": [
+            3.819,
+            3.144,
+            -1.549
+          ]
+        }
+      },
+      {
+        "id": "air-return-trunk",
+        "label": "Right-side return trunk",
+        "system": "cooling",
+        "role": "air_return_trunk",
+        "bounds": {
+          "min": [
+            3.161,
+            2.35,
+            -1.959
+          ],
+          "max": [
+            3.821,
+            3.584,
+            1.199
+          ]
+        }
+      },
+      {
+        "id": "air-row-0",
+        "label": "Row 1 exhaust collector",
+        "system": "cooling",
+        "role": "air_return_collector",
+        "bounds": {
+          "min": [
+            -2.669,
+            2.932,
+            0.536
+          ],
+          "max": [
+            3.49,
+            3.472,
+            1.204
+          ]
+        }
+      },
+      {
+        "id": "air-row-1",
+        "label": "Row 2 exhaust collector",
+        "system": "cooling",
+        "role": "air_return_collector",
+        "bounds": {
+          "min": [
+            -2.669,
+            3.052,
+            -1.714
+          ],
+          "max": [
+            3.49,
+            3.592,
+            -1.046
+          ]
+        }
+      },
+      {
+        "id": "cooler-0",
+        "label": "Cooling unit 1",
+        "system": "cooling",
+        "role": "heat_exchanger",
+        "bounds": {
+          "min": [
+            -2.775,
+            0.235,
+            -3.016
+          ],
+          "max": [
+            -1.4875,
+            3.51,
+            -1.63
+          ]
+        }
+      },
+      {
+        "id": "cooler-1",
+        "label": "Cooling unit 2",
+        "system": "cooling",
+        "role": "heat_exchanger",
+        "bounds": {
+          "min": [
+            -1.345,
+            0.235,
+            -3.016
+          ],
+          "max": [
+            -0.0575,
+            3.51,
+            -1.63
+          ]
+        }
+      },
+      {
+        "id": "cooler-2",
+        "label": "Cooling unit 3",
+        "system": "cooling",
+        "role": "heat_exchanger",
+        "bounds": {
+          "min": [
+            0.085,
+            0.235,
+            -3.016
+          ],
+          "max": [
+            1.3725,
+            3.51,
+            -1.63
+          ]
+        }
+      },
+      {
+        "id": "cooler-3",
+        "label": "Cooling unit 4",
+        "system": "cooling",
+        "role": "heat_exchanger",
+        "bounds": {
+          "min": [
+            1.515,
+            0.235,
+            -3.016
+          ],
+          "max": [
+            2.8025,
+            3.51,
+            -1.63
+          ]
+        }
+      },
+      {
+        "id": "cooling-collector-return",
+        "label": "Return collector",
+        "system": "cooling",
+        "role": "service_junction",
+        "bounds": {
+          "min": [
+            3.055,
+            0.26,
+            -3.385
+          ],
+          "max": [
+            3.285,
+            1.32,
+            -3.075
+          ]
+        }
+      },
+      {
+        "id": "cooling-collector-supply",
+        "label": "Supply collector",
+        "system": "cooling",
+        "role": "service_junction",
+        "bounds": {
+          "min": [
+            2.905,
+            0.26,
+            -3.385
+          ],
+          "max": [
+            3.135,
+            1.32,
+            -3.075
+          ]
+        }
+      },
+      {
+        "id": "cooling-header-return",
+        "label": "Return header",
+        "system": "cooling",
+        "role": "service_junction",
+        "bounds": {
+          "min": [
+            -2.04,
+            3.077202,
+            -3.395
+          ],
+          "max": [
+            2.34,
+            3.162797,
+            -3.305
+          ]
+        }
+      },
+      {
+        "id": "cooling-header-supply",
+        "label": "Supply header",
+        "system": "cooling",
+        "role": "service_junction",
+        "bounds": {
+          "min": [
+            -2.34,
+            3.077202,
+            -3.095
+          ],
+          "max": [
+            2.04,
+            3.162797,
+            -3.005
+          ]
+        }
+      },
+      {
+        "id": "rack-00",
+        "label": "Rack 01",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            -2.6655,
+            0.2545,
+            0.728
+          ],
+          "max": [
+            -1.885,
+            3.31,
+            2.0145
+          ]
+        }
+      },
+      {
+        "id": "rack-01",
+        "label": "Rack 02",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            -1.7555,
+            0.2545,
+            0.728
+          ],
+          "max": [
+            -0.975,
+            3.31,
+            2.0145
+          ]
+        }
+      },
+      {
+        "id": "rack-02",
+        "label": "Rack 03",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            -0.8455,
+            0.2545,
+            0.728
+          ],
+          "max": [
+            -0.065,
+            3.31,
+            2.0145
+          ]
+        }
+      },
+      {
+        "id": "rack-03",
+        "label": "Rack 04",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            0.0645,
+            0.2545,
+            0.728
+          ],
+          "max": [
+            0.845,
+            3.31,
+            2.0145
+          ]
+        }
+      },
+      {
+        "id": "rack-04",
+        "label": "Rack 05",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            0.9745,
+            0.2545,
+            0.728
+          ],
+          "max": [
+            1.755,
+            3.31,
+            2.0145
+          ]
+        }
+      },
+      {
+        "id": "rack-05",
+        "label": "Rack 06",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            1.8845,
+            0.2545,
+            0.728
+          ],
+          "max": [
+            2.665,
+            3.31,
+            2.0145
+          ]
+        }
+      },
+      {
+        "id": "rack-06",
+        "label": "Rack 07",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            -2.6655,
+            0.3745,
+            -1.522
+          ],
+          "max": [
+            -1.885,
+            3.43,
+            -0.2355
+          ]
+        }
+      },
+      {
+        "id": "rack-07",
+        "label": "Rack 08",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            -1.7555,
+            0.3745,
+            -1.522
+          ],
+          "max": [
+            -0.975,
+            3.43,
+            -0.2355
+          ]
+        }
+      },
+      {
+        "id": "rack-08",
+        "label": "Rack 09",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            -0.8455,
+            0.3745,
+            -1.522
+          ],
+          "max": [
+            -0.065,
+            3.43,
+            -0.2355
+          ]
+        }
+      },
+      {
+        "id": "rack-09",
+        "label": "Rack 10",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            0.0645,
+            0.3745,
+            -1.522
+          ],
+          "max": [
+            0.845,
+            3.43,
+            -0.2355
+          ]
+        }
+      },
+      {
+        "id": "rack-10",
+        "label": "Rack 11",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            0.9745,
+            0.3745,
+            -1.522
+          ],
+          "max": [
+            1.755,
+            3.43,
+            -0.2355
+          ]
+        }
+      },
+      {
+        "id": "rack-11",
+        "label": "Rack 12",
+        "system": "workloads",
+        "role": "server_rack",
+        "bounds": {
+          "min": [
+            1.8845,
+            0.3745,
+            -1.522
+          ],
+          "max": [
+            2.665,
+            3.43,
+            -0.2355
+          ]
+        }
+      },
+      {
+        "id": "reserve-0",
+        "label": "Reserve cabinet 1",
+        "system": "storage",
+        "role": "illustrative_reserve",
+        "bounds": {
+          "min": [
+            3.045,
+            0.243,
+            1.449
+          ],
+          "max": [
+            3.763,
+            2.285,
+            2.9705
+          ]
+        }
+      },
+      {
+        "id": "reserve-1",
+        "label": "Reserve cabinet 2",
+        "system": "storage",
+        "role": "illustrative_reserve",
+        "bounds": {
+          "min": [
+            3.925,
+            0.243,
+            0.819
+          ],
+          "max": [
+            4.643,
+            2.285,
+            2.3405
+          ]
+        }
+      },
+      {
+        "id": "row-0-bus",
+        "label": "Row 1 busway",
+        "system": "power",
+        "role": "service_junction",
+        "bounds": {
+          "min": [
+            -2.33,
+            3.11,
+            1.26
+          ],
+          "max": [
+            2.365,
+            3.21,
+            1.44
+          ]
+        }
+      },
+      {
+        "id": "row-1-bus",
+        "label": "Row 2 busway",
+        "system": "power",
+        "role": "service_junction",
+        "bounds": {
+          "min": [
+            -2.33,
+            3.23,
+            -0.99
+          ],
+          "max": [
+            2.365,
+            3.33,
+            -0.81
+          ]
+        }
+      },
+      {
+        "id": "switchgear-0",
+        "label": "Electrical cabinet 1",
+        "system": "power",
+        "role": "electrical_distribution",
+        "bounds": {
+          "min": [
+            -4.43,
+            0.247,
+            -0.23
+          ],
+          "max": [
+            -3.79,
+            2.7475,
+            0.94
+          ]
+        }
+      },
+      {
+        "id": "switchgear-1",
+        "label": "Electrical cabinet 2",
+        "system": "power",
+        "role": "electrical_distribution",
+        "bounds": {
+          "min": [
+            -3.76,
+            0.247,
+            -0.23
+          ],
+          "max": [
+            -3.12,
+            2.8,
+            0.94
+          ]
+        }
+      },
+      {
+        "id": "switchgear-2",
+        "label": "Electrical cabinet 3",
+        "system": "power",
+        "role": "electrical_distribution",
+        "bounds": {
+          "min": [
+            -3.09,
+            0.247,
+            -0.23
+          ],
+          "max": [
+            -2.45,
+            2.8,
+            0.94
+          ]
+        }
+      }
+    ]
+  },
+  "specimens": {
+    "rack": {
+      "kind": "rack",
+      "label": "Representative rack construction",
+      "system": "workloads",
+      "profile": {
+        "camera": [
+          3.2,
+          2.7,
+          4
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12,
+        "framing": "projected-geometry",
+        "background": "#080808",
+        "exposure": 1.18,
+        "colorSpace": "srgb",
+        "toneMapping": "aces-filmic",
+        "surfaces": {
+          "version": 1,
+          "pipeline": "pbr-semantic-v2",
+          "uvSet": 0,
+          "maxTextureBytes": 3145728,
+          "equipmentEdge": {
+            "version": 1,
+            "viewDirection": "projection-correct",
+            "exponent": 5,
+            "intensity": 0.02
+          }
+        },
+        "lighting": {
+          "hemisphere": {
+            "sky": "#eeeeee",
+            "ground": "#292929",
+            "intensity": 0.32
+          },
+          "directional": [
+            {
+              "position": [
+                -8,
+                15,
+                8
+              ],
+              "color": "#f5f5f3",
+              "intensity": 2.25
+            },
+            {
+              "position": [
+                7,
+                8,
+                -7
+              ],
+              "color": "#e6edef",
+              "intensity": 0.75
+            }
+          ],
+          "finite": {
+            "version": 1,
+            "type": "point",
+            "position": [
+              2.4,
+              0.45,
+              -1.7
+            ],
+            "color": "#f5f5f3",
+            "intensity": 3,
+            "decay": 2,
+            "distance": 0
+          },
+          "environment": {
+            "preset": "industrial-night-v3",
+            "resolution": 128,
+            "intensity": 1.08,
+            "rotationY": 0
+          }
+        },
+        "motion": {
+          "fanRadiansPerSecond": 1.6,
+          "fanPhaseOffsets": [
+            0,
+            1.57,
+            3.14,
+            4.71
+          ],
+          "ledPulseRadiansPerSecond": 1.8,
+          "ledPulseAmplitude": 0.14
+        },
+        "led": {
+          "color": "#ffc079",
+          "steadyIntensity": 0.82,
+          "size": [
+            0.018,
+            0.012,
+            0.012
+          ]
+        },
+        "engineering": {
+          "version": 1,
+          "seed": 41727,
+          "accent": {
+            "resting": "#9d632f",
+            "hover": "#ffbe63",
+            "selected": "#ffd18a",
+            "previewWeight": 0.85,
+            "baseEmission": 0.035,
+            "activeEmission": 1,
+            "transitionMs": 150
+          },
+          "activity": {
+            "resting": 0.12,
+            "peak": 1,
+            "steady": 0.5,
+            "pulseMs": [
+              120,
+              180
+            ],
+            "eventMs": [
+              80,
+              180
+            ],
+            "maxPulses": 3,
+            "ambientTraceSeconds": [
+              8,
+              12
+            ],
+            "selectedTraceQuietSeconds": 2.8
+          },
+          "cameraTransitionMs": 420,
+          "poseTransitionMs": 280,
+          "rendering": {
+            "ambientFps": 30,
+            "interactionFps": 60,
+            "mobilePixels": 650000,
+            "desktopPixels": 1500000,
+            "probeSeconds": 2
+          }
+        }
+      },
+      "requiredIds": [
+        "GN_SPECIMEN_ROOT",
+        "GN_RACK_FRAME",
+        "GN_RACK_PANEL",
+        "GN_RACK_DOOR",
+        "GN_RACK_SERVERS",
+        "GN_RACK_TRAY",
+        "GN_RACK_POWER"
+      ]
+    },
+    "cooling": {
+      "kind": "cooling",
+      "label": "Illustrative cooling assembly",
+      "system": "cooling",
+      "profile": {
+        "camera": [
+          3.4,
+          2.7,
+          4
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12,
+        "framing": "projected-geometry",
+        "background": "#080808",
+        "exposure": 1.18,
+        "colorSpace": "srgb",
+        "toneMapping": "aces-filmic",
+        "surfaces": {
+          "version": 1,
+          "pipeline": "pbr-semantic-v2",
+          "uvSet": 0,
+          "maxTextureBytes": 3145728,
+          "equipmentEdge": {
+            "version": 1,
+            "viewDirection": "projection-correct",
+            "exponent": 5,
+            "intensity": 0.02
+          }
+        },
+        "lighting": {
+          "hemisphere": {
+            "sky": "#eeeeee",
+            "ground": "#292929",
+            "intensity": 0.32
+          },
+          "directional": [
+            {
+              "position": [
+                -8,
+                15,
+                8
+              ],
+              "color": "#f5f5f3",
+              "intensity": 2.25
+            },
+            {
+              "position": [
+                7,
+                8,
+                -7
+              ],
+              "color": "#e6edef",
+              "intensity": 0.75
+            }
+          ],
+          "finite": {
+            "version": 1,
+            "type": "point",
+            "position": [
+              2.4,
+              1.5,
+              -2
+            ],
+            "color": "#f5f5f3",
+            "intensity": 6,
+            "decay": 2,
+            "distance": 0
+          },
+          "environment": {
+            "preset": "industrial-night-v3",
+            "resolution": 128,
+            "intensity": 1.08,
+            "rotationY": 0
+          }
+        },
+        "motion": {
+          "fanRadiansPerSecond": 1.6,
+          "fanPhaseOffsets": [
+            0,
+            1.57,
+            3.14,
+            4.71
+          ],
+          "ledPulseRadiansPerSecond": 1.8,
+          "ledPulseAmplitude": 0.14
+        },
+        "led": {
+          "color": "#ffc079",
+          "steadyIntensity": 0.82,
+          "size": [
+            0.018,
+            0.012,
+            0.012
+          ]
+        },
+        "engineering": {
+          "version": 1,
+          "seed": 41727,
+          "accent": {
+            "resting": "#9d632f",
+            "hover": "#ffbe63",
+            "selected": "#ffd18a",
+            "previewWeight": 0.85,
+            "baseEmission": 0.035,
+            "activeEmission": 1,
+            "transitionMs": 150
+          },
+          "activity": {
+            "resting": 0.12,
+            "peak": 1,
+            "steady": 0.5,
+            "pulseMs": [
+              120,
+              180
+            ],
+            "eventMs": [
+              80,
+              180
+            ],
+            "maxPulses": 3,
+            "ambientTraceSeconds": [
+              8,
+              12
+            ],
+            "selectedTraceQuietSeconds": 2.8
+          },
+          "cameraTransitionMs": 420,
+          "poseTransitionMs": 280,
+          "rendering": {
+            "ambientFps": 30,
+            "interactionFps": 60,
+            "mobilePixels": 650000,
+            "desktopPixels": 1500000,
+            "probeSeconds": 2
+          }
+        }
+      },
+      "requiredIds": [
+        "GN_SPECIMEN_ROOT",
+        "GN_COOLER_FRAME",
+        "GN_COOLER_PANEL",
+        "GN_COOLER_COIL",
+        "GN_COOLER_MANIFOLD",
+        "GN_COOLER_FAN",
+        "GN_COOLER_GUARD"
+      ]
+    }
+  },
+  "files": [
+    {
+      "file": "facility.glb",
+      "bytes": 2371596,
+      "sha256": "6e5085d902572d9197b900af6f03299d2d2bcf115709ca890b4c408061275138"
+    },
+    {
+      "file": "poster-desktop.webp",
+      "bytes": 42364,
+      "sha256": "4e63332e3c87f081faab14d1464f6d8b459df882259fb54904ecb61bfd1813f5"
+    },
+    {
+      "file": "poster-mobile.webp",
+      "bytes": 10870,
+      "sha256": "74032eb979aa762236c1a99d46fce8a88f4f1bed624c0fc20bdbf8975785ff03"
+    },
+    {
+      "file": "rack.glb",
+      "bytes": 760144,
+      "sha256": "cce824422a94a8817ce7e41142a23c7913f696fa4e515e30f4e5202af42d5b9a"
+    },
+    {
+      "file": "rack-closed.webp",
+      "bytes": 6132,
+      "sha256": "b501f892c56844606973a1ad25074ba94fa95e5d5dc730fb93eb3bd4589b38ed"
+    },
+    {
+      "file": "rack-cutaway.webp",
+      "bytes": 10404,
+      "sha256": "f60eb9c715aae4b6c45113301d1016770ea691b4737035be34c45a6c5a3137a7"
+    },
+    {
+      "file": "cooling.glb",
+      "bytes": 353348,
+      "sha256": "1b5398a8e7e7e887e82c7519c0748977ba5908ed6f38e35a8cd8881f58ec80db"
+    },
+    {
+      "file": "cooling-closed.webp",
+      "bytes": 12154,
+      "sha256": "07913f2b3df5f7a8bbd4800186c850116318851d279bd383e0f32d02f6d913f4"
+    },
+    {
+      "file": "cooling-cutaway.webp",
+      "bytes": 16212,
+      "sha256": "7879464d29d1d9663686dc20059613d3f86511c0b096ec362d91a4ebb8e1c30a"
+    }
+  ],
+  "source": {
+    "blender": "5.2.2 LTS",
+    "masterSha256": "20374a670fd03fcb118401b1ed569f8f24e941d2828bdce98d547130d55f8de7",
+    "generatorSha256": "83ce66adb2cfa5ae9ae9c579f979af288b2d6848edf99b7b2719a807a8b174b0",
+    "modules": {
+      "air_circuit.py": "5cc25a0c422cde650cc85def344bb232f786503d3355b2efa3c639c66be9604c",
+      "bake_job.py": "4d716cb4b97ce8c826d862c4c2b092a32557e378bdd58b0a25e9d21f2af7cc7f",
+      "compute.py": "242ce24159ed8f02f4ac8ce3cabf8ada74d47261de0a32dd2ebf98b55c1a4b48",
+      "engineering_metadata.py": "555a4f2b4778408379f9069f4cac716f7f09e1866d699339bca3b2b8381328fc",
+      "export.py": "bac1d9af9ad28fc2d694ca4ce8777fc82f29f0e2720c0a1a0e05032e4ad64a96",
+      "generate.py": "83ce66adb2cfa5ae9ae9c579f979af288b2d6848edf99b7b2719a807a8b174b0",
+      "rack_kit.py": "45fec31ae048a0324aaa017131f58c177ea47f064bd60e28332ed15a7e5906ef",
+      "rack_motion.py": "5a513e91499f7005340942b2dcfd46ab2a8550119f46e47e4d592ba80e170aeb",
+      "scene.json": "ee7992679c7ef08acf394d69f80c593ab5cec07cc9b7aed8160f14636793ce43",
+      "service_routes.py": "126a0d401b8778f145a6a5b37cc894c7a962256aa590518c8ac1856adbe70efa",
+      "spatial_bake.py": "f9fa153b9d4863aa30f672a1ddb59a85f089e5381b58e1fff1af6fb93e52e2c5",
+      "specimens.py": "c6655b79ebae48092ecdc803ebe0500a92d94be853d89e5ea386e87926ee6a5d",
+      "surface_bake.py": "44116a5e6321cd8c96aed8f98e837a46e6effaa7c98be0394646467be2eba5a0",
+      "surface_contract.py": "596febb21922823703a90d24d2bf32f7ff392e83d821d9e00f37a81b47fbbf0d"
+    },
+    "masters": {
+      "cooling-specimen.blend": "6f1765fcfea61e7e8cbbf8894ec9f4743d261b61ebd1bffe7f8df2a918946334",
+      "rack-specimen.blend": "be44f2e760a6a21155faddad266608e55f254332c158bd1a90a31806e04237c8"
+    }
+  }
+}

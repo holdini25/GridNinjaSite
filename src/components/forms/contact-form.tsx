@@ -16,6 +16,7 @@ import {
   siteTypes,
   timelineOptions,
 } from "@/lib/constants"
+import { PUBLIC_TOPICS, PUBLIC_TOPIC_LABELS, resolvePublicTopic, type PublicTopic } from "@/lib/public-topic"
 import type { ContactLeadInput } from "@/lib/validators"
 import { loadContactValidation } from "@/components/forms/contact-validation-loader"
 import { isLeadSource } from "@/lib/lead"
@@ -35,14 +36,11 @@ import {
   resolveContactAttribution,
 } from "@/components/forms/contact-attribution"
 import { buildContactLeadCandidate } from "@/components/forms/lead-form-data"
-import { NativeSelect } from "@/components/forms/native-select"
+import { FormButton as Button, FormInput as Input, FormTextarea as Textarea, FormSelect as NativeSelect } from "@/components/forms/form-primitives"
 import {
   TurnstileField,
   type TurnstileFieldHandle,
 } from "@/components/forms/turnstile-field"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import {
   trackGridNinjaEvent,
   type AnalyticsErrorCategory,
@@ -75,7 +73,9 @@ const subscribeToHydration = () => () => undefined
 export function ContactForm({
   source: defaultSource = "contact-page",
   initialIntent = "capacity-audit",
-}: { source?: string; initialIntent?: LeadIntent } = {}) {
+  initialTopic,
+  variant = "contact",
+}: { source?: string; initialIntent?: LeadIntent; initialTopic?: PublicTopic; variant?: "assessment" | "contact" } = {}) {
   const hydrated = useSyncExternalStore(subscribeToHydration, () => true, () => false)
   const startedAt = useRef(Date.now())
   const inFlight = useRef(false)
@@ -84,11 +84,13 @@ export function ContactForm({
   const formStarted = useRef(false)
   const errorSummaryRef = useRef<HTMLDivElement>(null)
   const receiptRef = useRef<HTMLDivElement>(null)
+  const optionalDetailsRef = useRef<HTMLDetailsElement>(null)
   const turnstileRef = useRef<TurnstileFieldHandle>(null)
   const [clientSubmissionId, setClientSubmissionId] = useState(() => crypto.randomUUID())
-  const [intent, setIntent] = useState<LeadIntent>(initialIntent)
-  const [conversationType, setConversationType] = useState<ContactConversationType>(() => conversationTypeForIntent(initialIntent))
+  const [intent, setIntent] = useState<LeadIntent>(variant === "assessment" ? "capacity-audit" : initialIntent)
+  const [conversationType, setConversationType] = useState<ContactConversationType>(() => conversationTypeForIntent(variant === "assessment" ? "capacity-audit" : initialIntent))
   const [source, setSource] = useState(defaultSource)
+  const [topic, setTopic] = useState<PublicTopic | undefined>(initialTopic)
   const [turnstileToken, setTurnstileToken] = useState("")
   const [verificationEnabled, setVerificationEnabled] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -108,11 +110,15 @@ export function ContactForm({
     const stored = readContactStorage(contactAttemptStorageKey)
     const attempt = parseStoredAttempt(stored)
     const attribution = resolveContactAttribution(window.location.search, {
-      intent: attempt?.intent ?? initialIntent, source: attempt?.source ?? defaultSource,
+      intent: attempt?.intent ?? initialIntent, source: attempt?.source ?? defaultSource, topic: attempt?.topic ?? initialTopic,
     })
-    setIntent(attempt?.intent ?? attribution.intent)
-    setConversationType(attempt ? conversationTypeForIntent(attempt.intent) : attribution.conversationType)
+    // A recovered reference must keep its original business payload. New
+    // assessment inquiries cannot silently inherit another URL intent.
+    const resolvedIntent = attempt?.intent ?? (variant === "assessment" ? "capacity-audit" : attribution.intent)
+    setIntent(resolvedIntent)
+    setConversationType(conversationTypeForIntent(resolvedIntent))
     setSource(attempt?.source ?? attribution.source)
+    setTopic(attempt ? attempt.topic : attribution.topic)
     if (attempt) {
       attemptRef.current = attempt
       setClientSubmissionId(attempt.clientSubmissionId)
@@ -123,9 +129,14 @@ export function ContactForm({
       setExpiredAttempt(true)
       setServerMessage("The previous inquiry reference has expired or cannot be recovered. That does not prove nonreceipt. Starting another inquiry may create a duplicate.")
     }
-  }, [defaultSource, initialIntent])
+  }, [defaultSource, initialIntent, initialTopic, variant])
 
-  useEffect(() => { if (errorFocusVersion > 0) errorSummaryRef.current?.focus() }, [errorFocusVersion])
+  useEffect(() => {
+    if (Object.keys(errors).some(key => ["siteType", "timeline", "role", "capacityRange", "constraints"].includes(key)) && optionalDetailsRef.current) optionalDetailsRef.current.open = true
+  }, [errors])
+  useEffect(() => {
+    if (errorFocusVersion > 0) errorSummaryRef.current?.focus()
+  }, [errorFocusVersion])
   useEffect(() => { if (receipt) receiptRef.current?.focus() }, [receipt])
 
   function startForm() {
@@ -187,6 +198,10 @@ export function ContactForm({
     startedAt.current = Date.now()
     setUncertain(false)
     setExpiredAttempt(false)
+    if (variant === "assessment") {
+      setIntent("capacity-audit")
+      setConversationType("capacity-audit")
+    }
     setErrors({})
     setServerMessage("A new inquiry reference is ready. Your previous inquiry may still have been received.")
     turnstileRef.current?.reset()
@@ -210,7 +225,7 @@ export function ContactForm({
       if (!isLeadSource(candidate.source)) throw new Error("Invalid source")
       const attempt: ContactAttempt = attemptRef.current ?? {
         version: 1, clientSubmissionId: candidate.clientSubmissionId, fingerprint,
-        intent: candidate.intent, source: candidate.source, startedAt: candidate.startedAt,
+        intent: candidate.intent, source: candidate.source, ...(candidate.topic ? { topic: candidate.topic } : {}), startedAt: candidate.startedAt,
         expiresAt: candidate.startedAt + CONTACT_REFERENCE_LIFETIME_MS,
       }
       if (attempt.expiresAt <= Date.now()) {
@@ -322,6 +337,13 @@ export function ContactForm({
       ? "Review the highlighted fields before submitting your request again."
       : null)
 
+  const assessmentInquiry = conversationType === "capacity-audit"
+  const inquiryHeading = assessmentInquiry ? "Start with the decision in front of your team" : conversationType === "partnership" ? "Discuss a partnership" : conversationType === "shadow-mode" ? "Discuss Shadow Mode" : "Start a conversation"
+  const submitLabel = assessmentInquiry ? "Scope an assessment" : "Send inquiry"
+  const errorControls: Record<string, { id: string; label: string }> = {
+    name: { id: "contact-name", label: "Name" }, email: { id: "contact-email", label: "Work email" }, company: { id: "contact-company", label: "Organization" }, topic: { id: "contact-topic", label: "Topic" }, message: { id: "contact-message", label: "Decision context" },
+    siteType: { id: "contact-site-type", label: "Site type" }, timeline: { id: "contact-timeline", label: "Timeline" }, role: { id: "contact-role", label: "Role" }, capacityRange: { id: "contact-capacity-range", label: "Capacity range" }, constraints: { id: "contact-constraint-0", label: "Constraints" },
+  }
   return (
     <form
       onSubmit={handleSubmit}
@@ -333,22 +355,22 @@ export function ContactForm({
       encType="application/x-www-form-urlencoded"
       noValidate
       aria-busy={isBusy}
-      className="gn-lead-form rounded-2xl border border-white/10 bg-[#0D151C] p-5 [--ring:#22D3EE] sm:p-7"
+      className="gn-lead-form min-w-0 rounded-2xl border border-border bg-surface p-5 [overflow-wrap:anywhere] sm:p-7"
     >
       <noscript><p className="mb-5 leading-7">This form needs JavaScript and security verification to submit safely. Enable JavaScript and reload this page. No inquiry has been sent by opening this page.</p></noscript>
       <fieldset disabled={!hydrated || isBusy || (uncertain && Boolean(originalPayloadRef.current)) || expiredAttempt} className="min-w-0">
-      <legend className="sr-only">Assessment inquiry details</legend>
+      <legend className="sr-only">Inquiry details</legend>
       <div className="hidden" aria-hidden="true">
         <label htmlFor="contact-website">Website</label>
         <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <p className="gn-eyebrow">Scope an assessment</p>
-      <h2 className="mt-3 text-[1.75rem] leading-tight font-medium text-foreground">
-        Start with the decision in front of your team
+      {variant === "contact" && <p className="gn-eyebrow">{assessmentInquiry ? "Scope an assessment" : "Contact GridNinja"}</p>}
+      <h2 id={variant === "assessment" ? "scope" : undefined} tabIndex={variant === "assessment" ? -1 : undefined} className={`${variant === "contact" ? "mt-3 " : ""}scroll-mt-[86px] text-[1.75rem] leading-tight font-medium text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring`}>
+        {inquiryHeading}
       </h2>
 
-      <fieldset className="mt-6">
+      {variant === "contact" && <fieldset className="mt-6 min-w-0">
         <legend className="text-sm font-medium text-foreground">
           Conversation type
         </legend>
@@ -356,7 +378,7 @@ export function ContactForm({
           {conversationOptions.map((option) => (
             <label
               key={option.value}
-              className="relative flex min-h-11 cursor-pointer items-center rounded-xl border border-white/10 bg-background/45 px-3 py-2.5 text-sm text-muted-foreground transition-[border-color,background-color,color,transform] duration-150 has-checked:border-primary/70 has-checked:bg-primary/10 has-checked:text-foreground focus-within:border-[#22D3EE] focus-within:ring-2 focus-within:ring-[#22D3EE]/25 active:translate-y-px motion-reduce:transition-none"
+              className="relative flex min-h-11 min-w-0 cursor-pointer items-center rounded-lg border border-input bg-surface-2 px-3 py-2.5 text-sm text-muted-foreground transition-[border-color,background-color,color,transform] duration-150 has-checked:border-primary/70 has-checked:bg-primary/10 has-checked:text-foreground focus-within:border-ring focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring active:translate-y-px motion-reduce:transition-none"
             >
               <input
                 type="radio"
@@ -368,20 +390,20 @@ export function ContactForm({
                 }
                 className="sr-only"
               />
-              <span>{option.label}</span>
+              <span className="min-w-0">{option.label}</span>
             </label>
           ))}
         </div>
-      </fieldset>
+      </fieldset>}
 
-      <div className="mt-6 grid gap-x-4 sm:grid-cols-2">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-x-4 gap-y-5 sm:grid-cols-2">
         <ContactField label="Name" name="name" error={errors.name}>
           <Input
             id="contact-name"
             name="name"
             required
             autoComplete="name"
-            className="min-h-12 bg-background/35"
+            className="min-h-12 bg-surface-2"
             aria-invalid={Boolean(errors.name)}
             aria-describedby="contact-name-error"
           />
@@ -396,13 +418,13 @@ export function ContactForm({
             inputMode="email"
             autoCapitalize="none"
             spellCheck={false}
-            className="min-h-12 bg-background/35"
+            className="min-h-12 bg-surface-2"
             aria-invalid={Boolean(errors.email)}
             aria-describedby="contact-email-error"
           />
         </ContactField>
         <ContactField
-          label="Company"
+          label="Organization"
           name="company"
           error={errors.company}
           className="sm:col-span-2"
@@ -412,13 +434,21 @@ export function ContactForm({
             name="company"
             required
             autoComplete="organization"
-            className="min-h-12 bg-background/35"
+            className="min-h-12 bg-surface-2"
             aria-invalid={Boolean(errors.company)}
             aria-describedby="contact-company-error"
           />
         </ContactField>
+      <div className="min-w-0 sm:col-span-2">
+        <label htmlFor="contact-topic" className="mb-2 block text-sm font-medium">Topic (optional)</label>
+        <NativeSelect id="contact-topic" name="topic" value={topic ?? ""} onChange={event => setTopic(resolvePublicTopic(event.target.value))} className="min-h-12 bg-surface-2" aria-describedby="contact-topic-helper contact-topic-error" aria-invalid={Boolean(errors.topic)}>
+          <option value="">No topic selected</option>{PUBLIC_TOPICS.map(value => <option value={value} key={value}>{PUBLIC_TOPIC_LABELS[value]}</option>)}
+        </NativeSelect>
+        <p id="contact-topic-helper" className="mt-2 text-sm leading-6 text-muted-foreground">You can change this topic. It provides context for the inquiry.</p>
+        <ErrorSlot id="contact-topic-error" message={errors.topic} />
+      </div>
         <ContactField
-          label="What constraint or decision are you working through?"
+          label="Decision context (optional)"
           name="message"
           error={errors.message}
           className="sm:col-span-2"
@@ -427,7 +457,7 @@ export function ContactForm({
             id="contact-message"
             name="message"
             autoComplete="off"
-            className="min-h-36 resize-y bg-background/35"
+            className="min-h-28 resize-y bg-surface-2"
             aria-invalid={Boolean(errors.message)}
             aria-describedby="contact-message-helper contact-message-error"
           />
@@ -442,12 +472,12 @@ export function ContactForm({
         </ContactField>
       </div>
 
-      <details className="mt-2 rounded-xl border border-white/10 bg-background/25">
-        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-sm font-medium text-foreground marker:content-none">
-          Add optional site details
-          <span aria-hidden="true" className="text-primary">+</span>
+      <details ref={optionalDetailsRef} className="mt-5 rounded-xl border border-border bg-surface">
+        <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 px-4 py-3 text-sm font-medium text-foreground marker:content-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+          <span className="min-w-0">Add optional site details</span>
+          <span aria-hidden="true" className="shrink-0 text-primary">+</span>
         </summary>
-        <div className="grid gap-x-4 border-t border-white/10 px-4 pt-4 sm:grid-cols-2">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-x-4 gap-y-5 border-t border-divider px-4 pt-4 sm:grid-cols-2">
           <OptionalSelect
             id="contact-site-type"
             label="Site type"
@@ -467,7 +497,7 @@ export function ContactForm({
               id="contact-role"
               name="role"
               autoComplete="organization-title"
-              className="min-h-12 bg-background/35"
+              className="min-h-12 bg-surface-2"
               aria-invalid={Boolean(errors.role)}
               aria-describedby="contact-role-error"
             />
@@ -484,7 +514,7 @@ export function ContactForm({
               maxLength={80}
               autoComplete="off"
               placeholder="For example, 5–20 MW"
-              className="min-h-12 bg-background/35"
+              className="min-h-12 bg-surface-2"
               aria-invalid={Boolean(errors.capacityRange)}
               aria-describedby="contact-capacityRange-error"
             />
@@ -498,7 +528,7 @@ export function ContactForm({
                 <label
                   key={option}
                   htmlFor={`contact-constraint-${index}`}
-                  className="flex min-h-11 items-start gap-3 rounded-lg border border-white/10 bg-background/30 px-3 py-3 text-sm text-muted-foreground"
+                  className="flex min-h-11 items-start gap-3 rounded-lg border border-border bg-surface-2 px-3 py-3 text-sm text-muted-foreground"
                 >
                   <input
                     id={`contact-constraint-${index}`}
@@ -506,7 +536,7 @@ export function ContactForm({
                     name="constraints"
                     value={option}
                     autoComplete="off"
-                    className="mt-0.5 size-4 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#22D3EE]"
+                    className="mt-0.5 size-4 shrink-0 accent-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                   />
                   <span>{option}</span>
                 </label>
@@ -519,22 +549,21 @@ export function ContactForm({
 
       </fieldset>
 
-      <div className="mt-5 min-h-24">
-        {summaryMessage ? (
+      {summaryMessage && <div className="mt-5">
           <div
             ref={errorSummaryRef}
             tabIndex={-1}
             role="alert"
             aria-labelledby="contact-error-summary-title"
-            className="flex min-h-24 flex-col justify-center rounded-xl border border-danger/50 bg-danger/8 px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-[#22D3EE]"
+            className="flex flex-col justify-center rounded-xl border border-danger/50 bg-danger/8 px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <p id="contact-error-summary-title" className="font-medium text-foreground">
               Review this request
             </p>
             <p className="mt-1 text-sm leading-5 text-danger">{summaryMessage}</p>
+            <ul className="mt-2 space-y-1 text-sm">{Object.keys(errors).filter(key => errorControls[key]).map(key => <li key={key}><a className="inline-flex min-h-11 items-center text-primary underline underline-offset-4" href={`#${errorControls[key].id}`} onClick={event => { event.preventDefault(); const control = document.getElementById(errorControls[key].id); const details = control?.closest("details"); if (details) details.open = true; control?.focus(); control?.scrollIntoView({ block: "center", behavior: "instant" }) }}>{errorControls[key].label}: {errors[key]}</a></li>)}</ul>
           </div>
-        ) : null}
-      </div>
+      </div>}
 
       {(uncertain || expiredAttempt) ? <div className="mt-4 flex flex-wrap gap-3">
         {originalPayloadRef.current && !expiredAttempt ? <Button type="button" disabled={isBusy || !turnstileToken} onClick={() => {
@@ -560,7 +589,7 @@ export function ContactForm({
         disabled={!hydrated || isBusy || expiredAttempt || (uncertain && Boolean(originalPayloadRef.current))}
         aria-busy={isBusy}
         data-gn-event="contact-submit"
-        className="mt-5 min-h-12 w-full rounded-[10px]"
+        className="mt-5 min-h-12 w-full rounded-lg"
       >
         {isPending ? (
           <>
@@ -571,12 +600,13 @@ export function ContactForm({
             Submitting request…
           </>
         ) : (
-          isValidating ? "Checking details…" : uncertain ? "Retry original details" : "Scope an assessment"
+          isValidating ? "Checking details…" : uncertain ? "Retry original details" : submitLabel
         )}
       </Button>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">
         Do not include security-sensitive or confidential information.
       </p>
+      {variant === "assessment" && <a className="mt-2 inline-flex min-h-11 items-center text-sm text-primary underline underline-offset-4" href="/contact?intent=other&source=assessment-page">Contact us about something else</a>}
     </form>
   )
 }
@@ -597,10 +627,11 @@ function ContactField({
   children: ReactNode
 }) {
   return (
-    <div className={`flex flex-col ${className}`}>
-      <label htmlFor={controlId ?? `contact-${name}`} className="mb-2 text-sm font-medium text-foreground">
-        {label}
-      </label>
+    <div className={`flex min-w-0 flex-col ${className}`}>
+      <div className="mb-2 text-sm font-medium text-foreground">
+        <label htmlFor={controlId ?? `contact-${name}`}>{label}</label>
+        {["name", "email", "company"].includes(name) && <span aria-hidden="true" className="ml-1 text-muted-foreground">(required)</span>}
+      </div>
       {children}
       <ErrorSlot id={`contact-${name}-error`} message={error} />
     </div>
@@ -627,7 +658,7 @@ function OptionalSelect({
         name={name}
         autoComplete="off"
         defaultValue=""
-        className="min-h-12 bg-background/35"
+        className="min-h-12 bg-surface-2"
         aria-invalid={Boolean(error)}
         aria-describedby={`contact-${name}-error`}
       >
@@ -644,10 +675,10 @@ function OptionalSelect({
 
 function ErrorSlot({ id, message }: { id: string; message?: string }) {
   return (
-    <div className="h-12 overflow-y-auto pt-1 sm:h-7">
+    <div className={message ? "pt-1" : "hidden"}>
       <p
         id={id}
-        className="text-sm text-danger"
+        className="text-sm leading-6 text-danger"
         role={message ? "alert" : undefined}
       >
         {message ?? ""}

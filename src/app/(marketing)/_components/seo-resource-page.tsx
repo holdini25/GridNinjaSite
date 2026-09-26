@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { assessmentScopeHref } from "@/lib/marketing-journeys"
 
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
@@ -105,7 +106,7 @@ function EvidenceRecord({ evidence }: { evidence: SeoEvidenceRecord }) {
 
 export function SeoResourcePage({ resource }: { resource: SeoResource }) {
   if (resource.publicationStatus !== "published") {
-    return <div className="space-y-12 py-12"><SeoPageJsonLd path={resource.path} /><SectionShell deferRendering={false}><p className="gn-eyebrow">Publication pending</p><h1 className="mt-5 max-w-3xl text-4xl leading-tight font-medium">{resource.h1}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">This technical resource is withheld pending named ownership, evidence review, and publication permission. Candidate text and artifacts are not public evidence. No customer, site-validation, or operational capability claim is established by this page.</p><div className="mt-8 flex flex-wrap gap-6"><Link href="/demo#decision-brief" className="text-primary underline underline-offset-4">See the approved synthetic decision brief</Link><Link href="/assessment" className="text-primary underline underline-offset-4">Scope an assessment</Link></div></SectionShell><RelatedSeoLinks path={resource.path} /></div>
+    return <div className="space-y-12 py-12"><SeoPageJsonLd path={resource.path} /><SectionShell deferRendering={false}><p className="gn-eyebrow">Publication pending</p><h1 className="mt-5 max-w-3xl text-4xl leading-tight font-medium">{resource.h1}</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">This resource is not yet available. Start with the published synthetic decision brief to inspect the current assessment method and its limits. This status page establishes no customer result, site validation, or operating capability.</p><div className="mt-8 flex flex-wrap gap-6"><Link href="/demo#decision-brief" className="text-primary underline underline-offset-4">See the approved synthetic decision brief</Link><Link href={assessmentScopeHref("evidence-resource")} className="text-primary underline underline-offset-4">Scope an assessment</Link></div></SectionShell><RelatedSeoLinks path={resource.path} /></div>
   }
   const hubPath =
     resource.kind === "methodology"
@@ -311,8 +312,8 @@ export function SeoResourcePage({ resource }: { resource: SeoResource }) {
           </div>
           <div className="mt-8 flex flex-wrap gap-4 lg:mt-0">
             <Button asChild size="lg">
-              <Link href="/assessment" prefetch={false}>
-                Scope an assessment
+              <Link href={assessmentScopeHref("evidence-resource")} prefetch={false}>
+                Contact Us
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-border/80 bg-background/45">

@@ -7,19 +7,26 @@ import {
   getContactRuntimeConfig,
 } from "@/lib/contact/config"
 import { classifyContactError, logContactEvent } from "@/lib/contact/log"
+import { ContactPayloadTooLargeError, ContactPayloadTimeoutError, readBodyLimited } from "@/lib/contact/request"
+
+const rejected = (status: number) => Response.json({ ok: false }, { status, headers: { "Cache-Control": "no-store" } })
 
 type SignedHandler = (request: Request, body: unknown) => Promise<Response>
 
 export function withVerifiedQstashSignature(handler: SignedHandler) {
   return async function verifiedQstashHandler(request: Request) {
     try {
-      const config = getContactRuntimeConfig()
-      const rawBody = await request.text()
       const signature = request.headers.get("upstash-signature")
 
       if (!signature) {
-        return Response.json({ ok: false }, { status: 401 })
+        return rejected(401)
       }
+
+      const config = getContactRuntimeConfig()
+      // Internal messages contain identifiers/alerts, never unbounded lead data.
+      // Reject unauthenticated requests before reading, then enforce the same
+      // byte bound as intake before signature verification or JSON parsing.
+      const rawBody = await readBodyLimited(request)
 
       const receiver = new Receiver({
         currentSigningKey: config.qstashCurrentSigningKey,
@@ -33,7 +40,7 @@ export function withVerifiedQstashSignature(handler: SignedHandler) {
       })
 
       if (!valid) {
-        return Response.json({ ok: false }, { status: 401 })
+        return rejected(401)
       }
 
       let body: unknown = {}
@@ -42,12 +49,16 @@ export function withVerifiedQstashSignature(handler: SignedHandler) {
         try {
           body = JSON.parse(rawBody)
         } catch {
-          return Response.json({ ok: false }, { status: 400 })
+          return rejected(400)
         }
       }
 
       return handler(request, body)
     } catch (error) {
+      if (error instanceof ContactPayloadTimeoutError) return rejected(408)
+      if (error instanceof ContactPayloadTooLargeError) {
+        return rejected(413)
+      }
       const configurationFailure = error instanceof ContactConfigurationError
 
       logContactEvent("error", "internal_handler_rejected", {
@@ -57,10 +68,7 @@ export function withVerifiedQstashSignature(handler: SignedHandler) {
           : "verification_failure",
       })
 
-      return Response.json(
-        { ok: false },
-        { status: configurationFailure ? 503 : 401 }
-      )
+      return rejected(configurationFailure ? 503 : 401)
     }
   }
 }

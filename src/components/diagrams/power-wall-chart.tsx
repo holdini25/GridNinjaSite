@@ -26,14 +26,14 @@ export function PowerWallChart() {
           width="588"
           height="326"
           rx="22"
-          fill="#09131C"
+          fill="#111111"
           stroke="rgba(255,184,74,0.18)"
         />
 
         <path
           d="M78 280 V82 M78 280 H566"
           fill="none"
-          stroke="rgba(159,176,191,0.18)"
+          stroke="rgba(184,184,184,0.18)"
           strokeWidth="1.5"
           strokeLinecap="round"
         />
@@ -62,7 +62,7 @@ export function PowerWallChart() {
         <text
           x="486"
           y="74"
-          fill="#F5F7FA"
+          fill="#F4F4F4"
           fontSize="16"
           fontFamily="Geist Mono, monospace"
           textAnchor="start"
@@ -72,7 +72,7 @@ export function PowerWallChart() {
         <text
           x="388"
           y="210"
-          fill="#9FB0BF"
+          fill="#B8B8B8"
           fontSize="14"
           fontFamily="Geist Mono, monospace"
           textAnchor="start"
@@ -85,7 +85,7 @@ export function PowerWallChart() {
           y1="156"
           x2="396"
           y2="182"
-          stroke="rgba(159,176,191,0.42)"
+          stroke="rgba(184,184,184,0.42)"
           strokeWidth="1.5"
           strokeLinecap="round"
         />
@@ -96,13 +96,13 @@ export function PowerWallChart() {
           width="164"
           height="92"
           rx="18"
-          fill="#13202B"
+          fill="#222222"
           stroke="rgba(255,184,74,0.22)"
         />
         <text
           x="438"
           y="128"
-          fill="#F5F7FA"
+          fill="#F4F4F4"
           fontSize="24"
           fontFamily="Geist, sans-serif"
         >
@@ -111,7 +111,7 @@ export function PowerWallChart() {
         <text
           x="438"
           y="153"
-          fill="#9FB0BF"
+          fill="#B8B8B8"
           fontSize="15"
           fontFamily="Geist, sans-serif"
         >
@@ -120,7 +120,7 @@ export function PowerWallChart() {
         <text
           x="438"
           y="173"
-          fill="#9FB0BF"
+          fill="#B8B8B8"
           fontSize="15"
           fontFamily="Geist, sans-serif"
         >

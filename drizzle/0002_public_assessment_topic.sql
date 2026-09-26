@@ -1,0 +1,1 @@
+ALTER TABLE "lead_submissions" ADD COLUMN "topic" varchar(32);

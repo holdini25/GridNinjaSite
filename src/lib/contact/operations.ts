@@ -8,7 +8,9 @@ import {
   MAX_DELIVERY_ATTEMPTS,
 } from "@/lib/contact/delivery-core"
 import { logContactEvent } from "@/lib/contact/log"
-import { deliverToConfiguredProvider } from "@/lib/contact/providers"
+import { deliverToConfiguredProvider, prepareProviderRequest, ProviderConfigurationError, type FrozenProviderRequest } from "@/lib/contact/providers"
+
+export const PROVIDER_RETRY_WINDOW_MS = 23 * 60 * 60_000
 
 const DELIVERY_LEASE_MS = 30_000
 const QUEUE_AGE_ALERT_MS = 5 * 60_000
@@ -22,6 +24,8 @@ export type ClaimedDelivery = {
     attemptCount: number
     leaseToken: string
     idempotencyKey: string
+    firstProviderAttemptAt: Date | null
+    frozenRequest: FrozenProviderRequest | null
   }
   lead: LeadDeliveryPayload
 }
@@ -33,6 +37,9 @@ export type DeliveryOperationsRepository = {
     now: Date,
     leaseMs: number
   ): Promise<ClaimedDelivery | null>
+  beginProviderAttempt(id: string, leaseToken: string, request: FrozenProviderRequest, now: Date): Promise<{ firstProviderAttemptAt: Date; frozenRequest: FrozenProviderRequest } | null>
+  recordHeartbeat(operation: "sweep" | "retention", now: Date): Promise<void>
+  pruneProviderEvents(cutoff: Date): Promise<void>
   markOutboxDelivered(
     id: string,
     leaseToken: string,
@@ -46,7 +53,7 @@ export type DeliveryOperationsRepository = {
   markOutboxDeadLetter(
     id: string,
     leaseToken: string,
-    update: { errorCode: string }
+    update: { errorCode: string; reviewRequiredAt?: Date }
   ): Promise<boolean>
   getOldestDueOutboxAge(now: Date): Promise<number | null>
   listDueOrLeaseExpiredOutbox(
@@ -92,11 +99,57 @@ export async function processOneLeadDelivery(
     state: "processing",
   })
 
+  const stopForReview = async () => {
+    const reviewTime = options.now ?? new Date()
+    const updated = await repository.markOutboxDeadLetter(delivery.id, delivery.leaseToken, {
+      errorCode: "needs_review_idempotency_window", reviewRequiredAt: reviewTime,
+    })
+    // Persist the stop before alerting. The independent monitor observes it even
+    // when QStash is unavailable, and no subsequent worker can resend it.
+    if (updated) await bestEffortAlert(options.publishAlert, {
+      schemaVersion: 1, eventId: `review/${delivery.id}`, type: "dead_letter",
+      occurredAt: reviewTime.toISOString(), outboxId: delivery.id, submissionId: delivery.leadId,
+      channel: delivery.channel, errorCode: "needs_review_idempotency_window",
+    })
+    return { state: updated ? "needs_review" as const : "stale" as const }
+  }
+
+  if (delivery.channel === "internal_email" && delivery.firstProviderAttemptAt &&
+      now.getTime() - delivery.firstProviderAttemptAt.getTime() >= PROVIDER_RETRY_WINDOW_MS) return stopForReview()
+
+  let request: FrozenProviderRequest
+  try {
+    request = delivery.frozenRequest ?? prepareProviderRequest({
+      channel: delivery.channel, eventId: delivery.id, idempotencyKey: delivery.idempotencyKey, lead,
+    })
+  } catch (error) {
+    if (!(error instanceof ProviderConfigurationError)) throw error
+    const updated = await repository.markOutboxDeadLetter(delivery.id, delivery.leaseToken, {
+      errorCode: error.errorCode,
+    })
+    if (updated) await bestEffortAlert(options.publishAlert, {
+      schemaVersion: 1, eventId: `configuration/${delivery.id}`, type: "configuration_failure",
+      occurredAt: now.toISOString(), outboxId: delivery.id, submissionId: delivery.leadId,
+      channel: delivery.channel, errorCode: error.errorCode,
+    })
+    logContactEvent("error", "lead_delivery_configuration_stopped", {
+      outboxId: delivery.id, errorCode: error.errorCode, state: updated ? "configuration_failure" : "stale_lease",
+    })
+    return { state: updated ? "configuration_failure" as const : "stale" as const }
+  }
+  const persisted = await repository.beginProviderAttempt(delivery.id, delivery.leaseToken, request, now)
+  if (!persisted) return { state: "stale" as const }
+  // Recheck the durable value immediately before sending, including database
+  // latency. Injected clocks remain deterministic in tests.
+  const sendTime = options.now?.getTime() ?? Date.now()
+  if (delivery.channel === "internal_email" &&
+      sendTime - persisted.firstProviderAttemptAt.getTime() >= PROVIDER_RETRY_WINDOW_MS) return stopForReview()
   const result = await deliverToConfiguredProvider({
     channel: delivery.channel,
     eventId: delivery.id,
     idempotencyKey: delivery.idempotencyKey,
     lead,
+    frozenRequest: persisted.frozenRequest,
   })
 
   if (result.ok) {
@@ -112,50 +165,25 @@ export async function processOneLeadDelivery(
       channel: delivery.channel,
       attemptCount: delivery.attemptCount,
       latencyMs: Date.now() - startedAt,
-      state: updated ? "delivered" : "stale_lease",
+      state: updated ? "provider_accepted" : "stale_lease",
     })
 
-    return { state: updated ? ("delivered" as const) : ("stale" as const) }
+    return { state: updated ? ("provider_accepted" as const) : ("stale" as const) }
   }
 
   const shouldDeadLetter =
     !result.retryable || delivery.attemptCount >= MAX_DELIVERY_ATTEMPTS
 
   if (shouldDeadLetter) {
-    if (result.errorCode.endsWith("_not_configured")) {
-      await options.publishAlert({
-        schemaVersion: 1,
-        eventId: `configuration/${delivery.id}`,
-        type: "configuration_failure",
-        occurredAt: now.toISOString(),
-        outboxId: delivery.id,
-        submissionId: delivery.leadId,
-        channel: delivery.channel,
-        attemptCount: delivery.attemptCount,
-        errorCode: result.errorCode,
-      })
-    }
-
-    // Queue the alert before persisting terminal state. If QStash is unavailable,
-    // the lease expires and a later sweep can retry without silently losing the
-    // required dead-letter notification.
-    await options.publishAlert({
-      schemaVersion: 1,
-      eventId: `dead-letter/${delivery.id}`,
-      type: "dead_letter",
-      occurredAt: now.toISOString(),
-      outboxId: delivery.id,
-      submissionId: delivery.leadId,
-      channel: delivery.channel,
-      attemptCount: delivery.attemptCount,
-      errorCode: result.errorCode,
-    })
-
     const updated = await repository.markOutboxDeadLetter(
-      delivery.id,
-      delivery.leaseToken,
-      { errorCode: result.errorCode }
+      delivery.id, delivery.leaseToken, { errorCode: result.errorCode }
     )
+    if (updated) await bestEffortAlert(options.publishAlert, {
+      schemaVersion: 1, eventId: `dead-letter/${delivery.id}`,
+      type: result.errorCode.endsWith("_not_configured") ? "configuration_failure" : "dead_letter",
+      occurredAt: now.toISOString(), outboxId: delivery.id, submissionId: delivery.leadId,
+      channel: delivery.channel, attemptCount: delivery.attemptCount, errorCode: result.errorCode,
+    })
 
     logContactEvent("error", "lead_delivery_dead_lettered", {
       submissionId: delivery.leadId,
@@ -231,6 +259,8 @@ export async function sweepLeadDeliveryQueue(
     })
   }
 
+  await repository.recordHeartbeat("sweep", now)
+
   logContactEvent("info", "lead_delivery_sweep_completed", {
     count: due.length,
     queueAgeMs: queueAgeMs ?? undefined,
@@ -253,10 +283,19 @@ export async function enforceLeadRetention(
     RETENTION_BATCH_SIZE
   )
 
+  await repository.pruneProviderEvents(now)
+  await repository.recordHeartbeat("retention", now)
+
   logContactEvent("info", "lead_retention_completed", {
     count: redacted + deleted,
     state: "completed",
   })
 
   return { redacted, deleted }
+}
+
+async function bestEffortAlert(publish: PublishAlert, alert: OperatorAlert) {
+  try { await publish(alert) } catch {
+    logContactEvent("error", "lead_alert_publish_failed", { state: "independent_monitor_required", errorCode: "alert_unavailable" })
+  }
 }

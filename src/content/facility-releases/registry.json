@@ -1,0 +1,57 @@
+[
+  {
+    "release": "facility-v1",
+    "status": "available",
+    "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+  },
+  {
+    "release": "facility-v2",
+    "status": "available",
+    "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+  },
+  {
+    "release": "facility-v3",
+    "status": "available",
+    "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+  },
+  {
+    "release": "facility-v4",
+    "status": "available",
+    "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+  },
+  {
+    "release": "facility-v5",
+    "status": "available",
+    "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+  },
+  {
+    "release": "facility-v6",
+    "status": "available",
+    "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+  },
+  {
+    "release": "facility-v7",
+    "status": "available",
+    "manifestSha256": "c6ccfae472adebef0af6a8a85104be2db9f0879019babec2e297d82a9f71ce37"
+  },
+  {
+    "release": "facility-v8",
+    "status": "available",
+    "manifestSha256": "4b652220b7d2282d97b1782a72dce7d97ebccf84c4d76866dc660fe8cc2bfa8e"
+  },
+  {
+    "release": "facility-v9",
+    "status": "available",
+    "manifestSha256": "5f5d0e7d6b0ebec2463aa09a40bf886548e09b143e16af62c238ea0e0a3d8269"
+  },
+  {
+    "release": "facility-v10",
+    "status": "available",
+    "manifestSha256": "7a95fe6a859f11d074a7d4a38fb6d7de9ecefc956b19d899486d294f32a11712"
+  },
+  {
+    "release": "facility-v11",
+    "status": "available",
+    "manifestSha256": "120739ab68bea9cda196af77ca0adb972552147bfd47d22b3241cd43f31f7f0d"
+  }
+]
