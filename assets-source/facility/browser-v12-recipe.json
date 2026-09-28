@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "facility-browser-surface-recipe.v1",
+  "release": "facility-v12",
+  "parentRelease": "facility-v11",
+  "parentManifestSha256": "3cb7f51d01363f11d91d694dc3b27906210b3d7d02300be76f2d18f7b8773ea3",
+  "palette": { "Graphite": "#282d31", "Steel": "#626d75", "Trim": "#879199", "Dark": "#101417", "Copper": "#d99a58", "Amber": "#ffb35b", "Platform": "#22282d", "Grille": "#323b41" },
+  "environmentPreset": "industrial-night-v4",
+  "overviewPadding": 1.08,
+  "finishes": [
+    { "region": "collector", "tile": [256, 128, 128, 64], "roughness": 0.54, "metalness": 0 },
+    { "region": "collector_top", "tile": [384, 320, 128, 64], "roughness": 0.54, "metalness": 0 },
+    { "region": "copper", "tile": [480, 448, 32, 32], "roughness": 0.36, "metalness": 0.65 }
+  ],
+  "louvers": [
+    { "region": "face_a", "tile": [128, 256, 128, 128], "metres": [0.30, 0.20], "ventMetres": [0.21715, 0.15042], "count": 5 },
+    { "region": "face_b", "tile": [128, 384, 128, 128], "metres": [0.20, 0.20], "ventMetres": [0.1453333333, 0.11554], "count": 3 }
+  ],
+  "louverDepthMetres": 0.007,
+  "louverBevelMetres": 0.0012,
+  "louverWidthFraction": 0.064,
+  "louverHeightFraction": 0.9,
+  "louverPerforationNormalStrength": 0.1,
+  "normalSamplesPerAxis": 4,
+  "notes": [
+    "Private preview derivative; no published facility release is changed.",
+    "Five and three coarse vertical formed vents match the cinematic construction recipe.",
+    "Normal and roughness derivatives are analytic texture authoring, not a claim of a Cycles bake.",
+    "Preserve every geometry/accessor/semantic/mechanical buffer; retain the three existing atlases and all material batches.",
+    "Existing posters are provisional until replaced by manifest-bound native browser captures."
+  ]
+}

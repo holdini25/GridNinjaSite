@@ -214,7 +214,7 @@ function MobileNavigation() {
               <span className={`gn-header-root size-[36px] shrink-0`} data-logo-motion="micro-response" data-logo-reveal="none" data-logo-revealed="true" data-logo-reveal-stage="settled">
                 <MicroMark ids={{ copper: "mobile-header-mark-copper", guardian: "mobile-header-mark-guardian" }} className={"gn-header-mark"} />
               </span>
-              <span className="text-sm font-medium tracking-[0.18em] uppercase">GridNinja</span>
+              <span className="text-[22px] font-semibold tracking-[-0.045em]">GridNinja</span>
             </span>
           </a>
           <p className="mt-1 text-sm text-muted-foreground">Capacity decisions supported by explicit evidence.</p>
@@ -277,7 +277,7 @@ function MobileNavigation() {
             data-analytics-source="header"
             className="inline-flex h-11 w-full items-center justify-center rounded-[9px] bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            Contact Us
+            Scope an assessment
           </a>
         </div>
       </div>
@@ -297,18 +297,18 @@ export function SiteHeader({ logo }: { logo: ReactNode }) {
             data-gn-event="header-capacity-audit"
             data-analytics-event="assessment_cta_selected"
             data-analytics-source="header"
-            className="inline-flex h-11 items-center justify-center whitespace-nowrap rounded-[9px] bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring min-[1120px]:hidden"
+            className="hidden h-11 items-center justify-center whitespace-nowrap rounded-[5px] border border-primary/75 px-3 text-[13px] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring min-[480px]:inline-flex min-[1120px]:hidden"
           >
-            Contact Us
+            Scope an assessment
           </a>
           <a
             href={headerCapacityAuditHref}
             data-gn-event="header-capacity-audit"
             data-analytics-event="assessment_cta_selected"
             data-analytics-source="header"
-            className="hidden h-11 items-center justify-center whitespace-nowrap rounded-[9px] bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring min-[1120px]:inline-flex"
+            className="hidden h-11 items-center justify-center whitespace-nowrap rounded-[5px] border border-primary/75 px-4 text-[13px] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring min-[1120px]:inline-flex"
           >
-            Contact Us
+            Scope an assessment
           </a>
           <MobileNavigation />
         </div>

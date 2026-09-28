@@ -83,6 +83,7 @@ jobs:
       - run: npm run build
 
   browser:
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -112,11 +113,24 @@ jobs:
         with: { node-version: "22.23.2", cache: npm }
       - run: npm ci
       - run: npx playwright install --with-deps ${{ matrix.engine }}
-      - run: >-
-          npx playwright test --project=${{ matrix.project }}
-          --workers=${{ matrix.workers }}
+      # Firefox headless on this Linux runner rejects WebGL2 (AllowWebgl2:false).
+      # Use its normal headed X11 path and fail explicitly if graphics is absent.
+      - name: Run browser functionality with verified WebGL2
+        shell: bash
+        run: |
+          if [ "$BROWSER_ENGINE" = firefox ]; then
+            export BROWSER_HEADED=1
+            xvfb-run --auto-servernum --server-args="-screen 0 1440x1100x24" bash -c 'node scripts/qa/browser-graphics-preflight.mjs && npx playwright test --project="$BROWSER_PROJECT" --workers="$BROWSER_WORKERS" --headed'
+          else
+            node scripts/qa/browser-graphics-preflight.mjs
+            npx playwright test --project="$BROWSER_PROJECT" --workers="$BROWSER_WORKERS"
+          fi
         env:
           CI: 1
+          CINEMATIC_E2E: 1
+          BROWSER_ENGINE: ${{ matrix.engine }}
+          BROWSER_PROJECT: ${{ matrix.project }}
+          BROWSER_WORKERS: ${{ matrix.workers }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

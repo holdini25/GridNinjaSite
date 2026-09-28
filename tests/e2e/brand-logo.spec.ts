@@ -24,8 +24,7 @@ test.describe("GridNinja brand placements", () => {
       await expect(mark).toBeVisible()
       expect((await mark.boundingBox())?.height).toBeCloseTo(34, 2)
       const homeBox = (await home.boundingBox())!
-      const ctaBox = (await header.getByRole("link", { name: "Contact Us", exact: true })
-        .filter({ visible: true }).boundingBox())!
+      const ctaBox = (await (width < 480 ? header.locator("[data-mobile-menu] > summary") : header.getByRole("link", { name: "Scope an assessment", exact: true }).filter({ visible: true })).boundingBox())!
       expect(homeBox.x + homeBox.width, `brand avoids CTA at ${width}px`).toBeLessThanOrEqual(ctaBox.x + 1)
       // The optional wordmark follows available container space, including
       // enlarged text. Validate its actual fit instead of a device breakpoint.

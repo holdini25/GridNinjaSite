@@ -1,0 +1,43 @@
+{
+  "version": "cinematic-authoring.v1",
+  "release": "cinematic-v1",
+  "durationSeconds": 10,
+  "fps": 30,
+  "frameCount": 300,
+  "seed": 192809,
+  "samples": 128,
+  "adaptiveThreshold": 0.005,
+  "shutterFrames": 0.5,
+  "camera": {
+    "azimuthDegrees": 42,
+    "elevationDegrees": 28,
+    "padding": 1.075
+  },
+  "compositions": {
+    "desktop": {
+      "width": 1600,
+      "height": 1000,
+      "deliveryWidth": 1280,
+      "deliveryHeight": 800
+    },
+    "mobile": {
+      "width": 960,
+      "height": 720,
+      "deliveryWidth": 768,
+      "deliveryHeight": 576
+    }
+  },
+  "rotorTurns": [
+    17,
+    19,
+    21,
+    23
+  ],
+  "rotorPhase": [
+    0.0,
+    1.57,
+    3.14,
+    4.71
+  ],
+  "notes": "Synthetic visual animation. Rotor speed is an illustrative animation parameter, not a measured equipment rating. No capacity calculation or site control."
+}

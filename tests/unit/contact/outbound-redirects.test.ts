@@ -26,14 +26,16 @@ describe("sensitive outbound redirect containment", () => {
     const fetcher = vi.fn<typeof fetch>((_url, init) => nativeFetch(origin, init))
     try {
       vi.stubEnv("RESEND_API_KEY", "fixture-api-secret")
+      vi.stubEnv("LEAD_EMAIL_FROM", "GridNinja <no-reply@gridninja.ai>")
+      vi.stubEnv("LEAD_EMAIL_TO", "leads@example.test")
       vi.stubEnv("LEAD_WEBHOOK_URL", "https://crm.example.test")
       vi.stubEnv("LEAD_WEBHOOK_SIGNING_SECRET", "fixture-signing-secret")
       if (channel === "resend" || channel === "crm") {
-        const result = await deliverToConfiguredProvider({ ...request, channel: channel === "resend" ? "internal_email" : "crm_webhook", frozenRequest: { body: '{"synthetic":"private"}', targetUrl: channel === "resend" ? "https://api.resend.com/emails" : "https://crm.example.test" } }, fetcher)
+        const result = await deliverToConfiguredProvider({ ...request, channel: channel === "resend" ? "internal_email" : "crm_webhook" }, fetcher)
         expect(result).toMatchObject({ ok: false, retryable: true })
         if (channel === "crm") expect(fetcher.mock.calls[0][1]?.headers).toEqual(expect.objectContaining({ "X-GridNinja-Signature": expect.stringMatching(/^v1=[a-f0-9]{64}$/) }))
       } else if (channel === "alert") {
-        await expect(sendOperatorAlert({ alertWebhookUrl: "https://alerts.example.test", alertWebhookToken: "fixture-alert-secret" }, { schemaVersion: 1, eventId: "incident", type: "monitor_incident", occurredAt: new Date().toISOString() }, fetcher)).rejects.toThrow()
+        await expect(sendOperatorAlert({ alertWebhookUrl: "https://alerts.example.test", alertWebhookToken: "fixture-alert-secret" }, { schemaVersion: 1, eventId: "incident", type: "dead_letter", occurredAt: new Date().toISOString() }, fetcher)).rejects.toThrow()
       } else {
         vi.stubGlobal("fetch", fetcher)
         expect(await verifyTurnstile({ token: "fixture-token", remoteIp: "127.0.0.1", requestId: "fixture-request", expectedAction: "contact", secretKey: "fixture-verification-secret", allowedHostnames: new Set(["gridninja.test"]) })).toEqual({ status: "unavailable", errorCode: "request_failed" })

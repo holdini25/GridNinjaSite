@@ -2,6 +2,7 @@ import { readdir, readFile } from "node:fs/promises"
 import { createRequire } from "node:module"
 import { resolve } from "node:path"
 import { pathToFileURL } from "node:url"
+import { routeTransferBudget } from "../../src/lib/cinematic/performance.mjs"
 
 const require = createRequire(import.meta.url)
 
@@ -22,7 +23,7 @@ export function validateLighthouseReport(report) {
     enforceSummaryBudget(
       summary,
       "total",
-      LIGHTHOUSE_RESOURCE_BUDGETS.totalBytes,
+      routeTransferBudget(route, report.configSettings?.formFactor, report.facilityEvidence?.provenance?.buildSettings),
       route,
       violations
     )

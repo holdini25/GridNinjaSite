@@ -62,6 +62,33 @@ describe("internal-link normalization", () => {
     expect(classify("")).toMatchObject({ kind: "malformed" })
     expect(classify("http://[")).toMatchObject({ kind: "malformed" })
   })
+
+  it.each([
+    ["/assets/facility/facility-v10/poster-desktop.webp", "/assets/facility/facility-v10/poster-desktop.webp", "", ""],
+    [`${origin}/assets/facility/facility-v12/facility.glb?download=1#model`, "/assets/facility/facility-v12/facility.glb", "?download=1", "#model"],
+    [`${previewOrigin}/assets/cinematic/cinematic-v1/desktop.mp4`, "/assets/cinematic/cinematic-v1/desktop.mp4", "", ""],
+  ])("keeps release artifact %s outside the navigational graph", (href, path, search, hash) => {
+    expect(classifyInternalHref(href, {
+      sourcePath: "/demo",
+      deploymentOrigin: previewOrigin,
+      productionOrigin: origin,
+      knownPaths,
+    })).toMatchObject({ kind: "excluded", path, search, hash })
+  })
+
+  it.each([
+    "/assets/facility-guide",
+    "/assets/cinematic-guide",
+    "/assets/other/poster.webp",
+    "/unregistered.pdf",
+  ])("still reports unregistered navigational path %s", href => {
+    expect(classifyInternalHref(href, {
+      sourcePath: "/demo",
+      deploymentOrigin: previewOrigin,
+      productionOrigin: origin,
+      knownPaths,
+    })).toMatchObject({ kind: "unknown", path: href })
+  })
 })
 
 describe("directed internal-link graph", () => {

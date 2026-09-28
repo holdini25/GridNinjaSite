@@ -13,8 +13,6 @@ export type OperatorAlert = {
     | "queue_age"
     | "database_failure"
     | "configuration_failure"
-    | "monitor_incident"
-    | "monitor_recovery"
   occurredAt: string
   outboxId?: string
   submissionId?: string
@@ -47,8 +45,6 @@ export function parseOperatorAlert(value: unknown): OperatorAlert | null {
     "queue_age",
     "database_failure",
     "configuration_failure",
-    "monitor_incident",
-    "monitor_recovery",
   ].includes(alert.type ?? "")
   const validOptionalString = (candidate: unknown, maxLength: number) =>
     candidate === undefined ||

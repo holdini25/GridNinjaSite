@@ -3,14 +3,19 @@ import { createHash } from "node:crypto"
 import { readdir, readFile, stat } from "node:fs/promises"
 import { join } from "node:path"
 import { readApprovedManifest, readFacilityRegistry, validateSelectedFacility } from "./build-selection.mjs"
+import { selectedCinematicIdentity } from "../../src/lib/cinematic/files.mjs"
+import { BASE_TRANSFER_BUDGET, CINEMATIC_PERFORMANCE_VERSION, routeTransferBudget } from "../../src/lib/cinematic/performance.mjs"
+import { privateCandidateIdentity } from "../qa/private-candidate-contract.mjs"
 
-export const TRANSFER_BUDGET = 1_572_864
+export const TRANSFER_BUDGET = BASE_TRANSFER_BUDGET
+export { routeTransferBudget }
 export const SOURCE_PATHS = ["src", "public", "drizzle", "package.json", "package-lock.json", "next.config.ts", "vercel.json", "tsconfig.json", "postcss.config.mjs"]
 const digest = bytes => createHash("sha256").update(bytes).digest("hex")
 export const canonicalJson = value => JSON.stringify(value, (_, entry) => entry && !Array.isArray(entry) && typeof entry === "object" ? Object.fromEntries(Object.entries(entry).sort(([a], [b]) => a.localeCompare(b))) : entry)
 export const settingsDigest = value => digest(canonicalJson(value))
 
 async function filesAt(path) {
+  if (path.split("/").includes("__pycache__") || /\.(?:pyc|pyo)$/.test(path)) return []
   const entry = await stat(path).catch(() => null)
   if (!entry) return []
   if (entry.isFile()) return [path]
@@ -33,6 +38,9 @@ export async function currentBuildIdentity() {
   const publicSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? ""
   const buildSettings = {
     ...settings,
+    cinematic: await selectedCinematicIdentity(),
+    cinematicPerformanceVersion: CINEMATIC_PERFORMANCE_VERSION,
+    privateCandidate: await privateCandidateIdentity(),
     observability: process.env.VERCEL === "1",
     csp: process.env.GRIDNINJA_CSP_MODE || "enforce",
     httpsPolicy: process.env.VERCEL === "1" || process.env.GRIDNINJA_HTTPS === "1",
@@ -48,7 +56,7 @@ export async function verifiedBuildIdentity() {
   return current
 }
 export async function provenance(browser, settings) {
-  const harnessFiles = await filesAt("scripts/facility")
+  const harnessFiles = (await Promise.all(["scripts/facility", "scripts/cinematic"].map(filesAt))).flat().sort()
   const hash = createHash("sha256")
   for (const path of harnessFiles.sort()) hash.update(path).update(await readFile(path))
   return { schemaVersion: "facility-performance.v2", ...await verifiedBuildIdentity(), harnessRevision: hash.digest("hex"), browser, settings, settingsSha256: settingsDigest(settings) }
@@ -150,10 +158,11 @@ export function assertRendererBudget(snapshot, animated = true) {
     assert(snapshot.triangles <= 40_000, "Ecosystem overview triangle target exceeded")
   }
 }
-export function assertCompleteTransfer(snapshot) {
+export function assertCompleteTransfer(snapshot, { route, profile, buildSettings } = {}) {
   assert(snapshot.complete && snapshot.issues.length === 0, "Transfer evidence is incomplete")
   assert(Number.isFinite(snapshot.bytes) && snapshot.bytes > 0, "Missing transfer bytes")
-  assert(snapshot.bytes <= TRANSFER_BUDGET, `Total automatic transfer ${snapshot.bytes} exceeds ${TRANSFER_BUDGET}`)
+  const budget = routeTransferBudget(route, profile, buildSettings)
+  assert(snapshot.bytes <= budget, `Total automatic transfer ${snapshot.bytes} exceeds ${budget}`)
 }
 
 /** Still describes an inactive policy tier, never a successful user Pause or a

@@ -36,8 +36,8 @@ async function rackFacePoint(canvas: Locator) {
 test("the homepage assessment CTA remains above the fold at 1366 by 768", async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 768 })
   await page.goto("/")
-  const callToAction = page.locator('main a[data-gn-event="hero-primary-cta"]')
-  await expect(callToAction).toHaveText("Contact Us")
+  const callToAction = page.locator('.gn-home-hero a[data-analytics-source="home-hero"]')
+  await expect(callToAction).toHaveText(/Scope an assessment/)
   await expect(callToAction).toHaveAttribute("href", "/assessment?source=home-hero#scope")
   const bounds = await callToAction.boundingBox()
   expect(bounds).not.toBeNull()

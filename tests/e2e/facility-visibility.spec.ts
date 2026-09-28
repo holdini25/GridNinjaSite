@@ -29,7 +29,7 @@ test("real background-tab visibility defers activation and freezes equipment", a
     page.on("request", request => { if (request.url().endsWith("/facility.glb")) modelRequests.push(request.url()) })
     const blocker = await context.newPage()
     await page.bringToFront()
-    await page.goto(baseURL!, { waitUntil: "domcontentloaded" })
+    await page.goto(new URL("/demo?interactive=1", baseURL).href, { waitUntil: "domcontentloaded" })
     const viewer = page.getByTestId("facility-inspection")
     // The server preview has native links and is replaced during enhancement.
     // Wait for the real system controls before scrolling its persistent stage;

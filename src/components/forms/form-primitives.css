@@ -23,3 +23,18 @@
     padding-block: 0.625rem;
   }
 }
+
+/* Contact's primary action keeps its focus ring alongside the restrained halo. */
+.gn-contact-submit:enabled:focus-visible {
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 0 18px rgb(255 174 85 / .18);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gn-contact-submit:enabled:hover {
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 0 18px rgb(255 174 85 / .18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gn-contact-submit { transition: none; }
+}

@@ -9,9 +9,9 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run assessment:validate && npm run seo:validate && npm run facility:validate",
+    "prebuild": "npm run assessment:validate && npm run seo:validate && npm run facility:validate && npm run cinematic:validate",
     "build": "next build",
-    "postbuild": "node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build && node scripts/facility/record-build.mjs",
+    "postbuild": "node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build && node scripts/cinematic/validate.mjs --build && node scripts/facility/record-build.mjs",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -46,7 +46,8 @@
     "facility:verify-browser": "node scripts/facility/verify-browser.mjs",
     "facility:measure": "node scripts/facility/measure-page.mjs",
     "facility:lighthouse": "node scripts/facility/collect-lighthouse.mjs",
-    "facility:performance:validate": "node scripts/facility/summarize-performance.mjs"
+    "facility:performance:validate": "node scripts/facility/summarize-performance.mjs",
+    "cinematic:validate": "node scripts/cinematic/validate.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

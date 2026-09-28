@@ -589,7 +589,7 @@ export function ContactForm({
         disabled={!hydrated || isBusy || expiredAttempt || (uncertain && Boolean(originalPayloadRef.current))}
         aria-busy={isBusy}
         data-gn-event="contact-submit"
-        className="mt-5 min-h-12 w-full rounded-lg"
+        className={`mt-5 min-h-12 w-full rounded-lg${variant === "contact" ? " gn-contact-submit" : ""}`}
       >
         {isPending ? (
           <>

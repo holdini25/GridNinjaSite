@@ -6,7 +6,7 @@ test("neutral surfaces and inspector controls remain readable at narrow widths",
   await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
   for (const width of [320, 640, 1440]) {
     await page.setViewportSize({ width, height: 1000 })
-    await page.goto("/")
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
     await expect(inspector.locator(".facility-systems").getByRole("button", { name: "Workloads", exact: true })).toBeVisible()
@@ -15,7 +15,9 @@ test("neutral surfaces and inspector controls remain readable at narrow widths",
         const channels = color.match(/[\d.]+/g)?.slice(0, 3).map(Number)
         return channels?.length === 3 && Math.max(...channels) - Math.min(...channels) <= 2
       }
-      const controls = [...element.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")]
+      // The demo owns collapsed equipment/construction disclosures. Their
+      // non-rendered descendants are not visible touch targets until opened.
+      const controls = [...element.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")].filter(control => control.checkVisibility())
       return {
         controlCount: controls.length,
         neutralPage: neutral(getComputedStyle(document.body).backgroundColor),

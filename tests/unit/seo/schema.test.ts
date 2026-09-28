@@ -48,9 +48,9 @@ describe("structured identity and safe serialization", () => {
     expect(buildWebPageSchema(getSeoRoute("/"))).toMatchObject({
       "@type": "WebPage",
       "@id": "https://gridninja.ai/#webpage",
-      name: "GridNinja | Capacity Decisions with Confidence",
+      name: "GridNinja | Understand Your Capacity. Know the Limits.",
       description:
-        "Make your next capacity decision with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief.",
+        "Scope a paid, bounded capacity decision assessment using authorized historical inputs. Review the modeled result, its conditions, and the evidence still needed.",
       primaryImageOfPage: {
         "@type": "ImageObject",
         "@id": "https://gridninja.ai/#primaryimage",

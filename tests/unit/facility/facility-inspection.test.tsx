@@ -1060,6 +1060,7 @@ it("reuses the sequential attribution and authored system inventory without manu
 })
 
 it("retains a selected rack part across guided commands, commits detail history only when ready, and restores inspection focus", async () => {
+  const scroll = vi.spyOn(window, "scrollTo").mockImplementation(() => {})
   const modern = { ...engineeringRelease, profile: { ...engineeringRelease.profile, inspection: {} } } as FacilityVisualRelease
   const rackMetadata = structuredClone(specimenMetadata)
   rackMetadata.specimen!.rackMotion = { serviceDetail: { version: 1, partIds: ["part-0"], requiresCutaway: true } } as NonNullable<typeof rackMetadata.specimen>["rackMotion"]
@@ -1079,6 +1080,7 @@ it("retains a selected rack part across guided commands, commits detail history 
   commit(); expect(primary()).toHaveTextContent("Return to whole assembly")
   primary().focus(); fireEvent.click(primary()); commit()
   await waitFor(() => expect(screen.getByRole("button", { name: "Inspect service connection again" })).toHaveFocus())
+  expect(scroll).toHaveBeenCalledWith(expect.objectContaining({ behavior: "instant" }))
   expect(primary()).toHaveTextContent("Retract server tray")
   expect(currentCanvas().view).toMatchObject({ rack: { door: "open", tray: "extended", cutaway: true } })
   expect(currentCanvas().target?.partId).toBe("part-0")

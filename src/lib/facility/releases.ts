@@ -104,7 +104,7 @@ export async function readFacilityRelease(id: string) {
 
 /** Only a reviewed registry entry may become a public URL. Candidate work is never traced. */
 export async function getFacilityRelease(): Promise<FacilityVisualRelease | null> {
-  const id = process.env.FACILITY_ASSET_RELEASE ?? "facility-v10"
+  const id = process.env.FACILITY_ASSET_RELEASE ?? "facility-v12"
   try {
     const result = await readFacilityRelease(id)
     return result.status === 200 ? result.release : null

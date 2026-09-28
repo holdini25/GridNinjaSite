@@ -25,6 +25,7 @@
 /assets-source/facility/previews/
 /assets-source/facility/*.blend1
 /assets-source/facility/__pycache__/
+/scripts/cinematic/__pycache__/
 
 # misc
 .DS_Store

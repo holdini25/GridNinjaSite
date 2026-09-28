@@ -39,7 +39,7 @@ export const profileSchema = z.object({
     hemisphere: z.object({ sky: color, ground: color, intensity }).strict(),
     directional: z.array(z.object({ position: tuple, color, intensity }).strict()).min(1).max(4),
     finite: z.object({ version: z.literal(1), type: z.literal("point"), position: tuple, color, intensity: z.number().min(0).max(128), decay: z.literal(2), distance: z.literal(0) }).strict().optional(),
-    environment: z.object({ preset: z.enum(["industrial-softbox-v1", "industrial-softbox-v2", "industrial-night-v1", "industrial-night-v2", "industrial-night-v3"]), resolution: z.literal(128), intensity: z.number().min(0).max(4), rotationY: z.number().min(-Math.PI).max(Math.PI) }).strict().optional(),
+    environment: z.object({ preset: z.enum(["industrial-softbox-v1", "industrial-softbox-v2", "industrial-night-v1", "industrial-night-v2", "industrial-night-v3", "industrial-night-v4"]), resolution: z.literal(128), intensity: z.number().min(0).max(4), rotationY: z.number().min(-Math.PI).max(Math.PI) }).strict().optional(),
   }).strict(),
   motion: z.object({
     fanRadiansPerSecond: z.number().min(0).max(3),
@@ -72,7 +72,7 @@ export const manifestSchema = z.object({
   equipmentIndex: equipmentIndexSchema.optional(),
   specimens: z.object({ rack: descriptor.optional(), cooling: descriptor.optional() }).strict().optional(),
   files: z.array(z.object({ file: z.enum(allowedFiles), bytes: z.number().int().positive(), sha256: digest }).strict()).min(3).max(9),
-  source: z.object({ blender: z.string(), masterSha256: digest, generatorSha256: digest, modules: z.record(z.string().regex(/^[a-z][a-z0-9_-]*\.(?:py|json)$/), digest).optional(), masters: z.record(z.string().regex(/^[a-z][a-z0-9_-]*\.blend$/), digest).optional() }).strict(),
+  source: z.object({ blender: z.string(), masterSha256: digest, generatorSha256: digest, modules: z.record(z.string().regex(/^[a-z][a-z0-9_-]*\.(?:py|json)$/), digest).optional(), masters: z.record(z.string().regex(/^[a-z][a-z0-9_-]*\.blend$/), digest).optional(), derivation: z.object({ kind: z.literal("gltf-surface-derivative.v1"), parentRelease: z.string().regex(releasePattern), parentManifestSha256: digest, recipeSha256: digest, toolSha256: digest }).strict().optional() }).strict(),
 }).strict().superRefine((manifest, context) => {
   const problem = message => context.addIssue({ code: "custom", message })
   if (manifest.profile.inspection && !manifest.equipmentIndex) problem("Inspection requires the authored public equipment index")

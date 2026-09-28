@@ -9,7 +9,7 @@ import {
 import { expectUnique, expectValidatorToPass } from "../../support/seo-contracts"
 
 const requiredTitles = new Map([
-  ["/", "GridNinja | Capacity Decisions with Confidence"],
+  ["/", "GridNinja | Understand Your Capacity. Know the Limits."],
   ["/platform", "Virtual Capacity Control Plane Platform | GridNinja"],
   [
     "/platform/dispatch-envelope",
@@ -85,7 +85,7 @@ describe("SEO route manifest", () => {
 
   it("locks the concise homepage search summary", () => {
     expect(getSeoRoute("/").description).toBe(
-      "Make your next capacity decision with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief."
+      "Scope a paid, bounded capacity decision assessment using authorized historical inputs. Review the modeled result, its conditions, and the evidence still needed."
     )
   })
 

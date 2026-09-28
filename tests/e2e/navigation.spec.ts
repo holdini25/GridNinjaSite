@@ -176,8 +176,8 @@ test.describe("responsive navigation boundaries", () => {
       await expect(headerCtas).toHaveCount(2)
       const compactCta = headerCtas.nth(0)
       const desktopCta = headerCtas.nth(1)
-      await expect(compactCta).toHaveText("Contact Us")
-      await expect(desktopCta).toHaveText("Contact Us")
+      await expect(compactCta).toHaveText("Scope an assessment")
+      await expect(desktopCta).toHaveText("Scope an assessment")
 
       if (width >= 1120) {
         await expect(primary, `desktop navigation at ${width}px`).toBeVisible()
@@ -210,7 +210,8 @@ test.describe("responsive navigation boundaries", () => {
       } else {
         await expect(primary, `desktop navigation hidden at ${width}px`).toBeHidden()
         await expect(drawerTrigger, `drawer available at ${width}px`).toBeVisible()
-        await expect(compactCta, `compact CTA at ${width}px`).toBeVisible()
+        if (width >= 480) await expect(compactCta, `compact CTA at ${width}px`).toBeVisible()
+        else await expect(compactCta, `CTA moves into drawer at ${width}px`).toBeHidden()
         await expect(desktopCta, `desktop CTA hidden at ${width}px`).toBeHidden()
       }
 
@@ -260,10 +261,8 @@ test.describe("responsive navigation boundaries", () => {
     await page.setViewportSize({ width: 390, height: 420 })
     await page.goto("/platform/dispatch-envelope")
 
-    const compactCta = page.getByRole("banner").getByRole("link", {
-      name: "Contact Us",
-      exact: true,
-    })
+    const compactCta = page.getByRole("banner").locator('a[data-gn-event="header-capacity-audit"]').first()
+    await expect(compactCta).toBeHidden()
     await expect(compactCta).toHaveAttribute("href", headerCtaHref)
     await page.locator("[data-mobile-menu] > summary").click()
 
@@ -272,7 +271,7 @@ test.describe("responsive navigation boundaries", () => {
     const platform = disclosure(dialog, "How it works")
     const footer = dialog.locator("[data-mobile-nav-footer]")
     const drawerCta = footer.getByRole("link", {
-      name: "Contact Us",
+      name: "Scope an assessment",
       exact: true,
     })
 

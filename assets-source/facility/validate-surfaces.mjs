@@ -9,6 +9,7 @@ const PALETTES = {
   'industrial-night-v1': { Graphite:'#292929', Steel:'#616161', Trim:'#7b7b7b', Dark:'#101010', Copper:'#d99a58', Amber:'#ffb35b', Platform:'#292929', Grille:'#383838' },
   'industrial-night-v2': { Graphite:'#292929', Steel:'#616161', Trim:'#7b7b7b', Dark:'#101010', Copper:'#d99a58', Amber:'#ffb35b', Platform:'#292929', Grille:'#383838' },
   'industrial-night-v3': { Graphite:'#292929', Steel:'#616161', Trim:'#7b7b7b', Dark:'#101010', Copper:'#d99a58', Amber:'#ffb35b', Platform:'#292929', Grille:'#383838' },
+  'industrial-night-v4': { Graphite:'#282d31', Steel:'#626d75', Trim:'#879199', Dark:'#101417', Copper:'#d99a58', Amber:'#ffb35b', Platform:'#22282d', Grille:'#323b41' },
 };
 
 export function authoredSurfacePalette(assetPath, bytes) {

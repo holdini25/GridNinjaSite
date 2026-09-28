@@ -16,6 +16,7 @@ export function selectAssessment(record: AssessmentRecord) {
     minimumViable: record.minimumViableIncrementKW === null ? "Not specified" : formatKWAsMW(record.minimumViableIncrementKW),
     operatorAccepted: formatAssessmentQuantity(record.operatorAccepted), delivered: formatAssessmentQuantity(record.observedDelivered),
     reference: formatKWAsMW(record.basis.referenceLoadKW), interval: formatAssessmentInterval(record.basis.startUTC, record.basis.endUTC), links: assessmentLinks(record),
+    durationHours: (Date.parse(record.basis.endUTC) - Date.parse(record.basis.startUTC)) / 3_600_000,
   }
 }
 

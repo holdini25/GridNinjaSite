@@ -12,6 +12,7 @@ import { FACILITY_LABELS, facilityEquipmentIdentification, facilitySystemDescrip
 import { facilityPreview, facilityPreviewTarget, facilityReducer, initialFacilityPresentation } from "@/lib/facility/interaction"
 import { commitRackJourney, INITIAL_RACK_JOURNEY } from "@/lib/facility/rack-service-journey"
 import { isRackServiceDetail } from "@/lib/facility/rack-service-view"
+import { serviceReturnScroll } from "@/lib/facility/service-return-scroll"
 import { eligibleForAutomaticFacility, facilityConnection } from "@/lib/facility/loading-policy"
 import { createPosterDecoder } from "@/lib/facility/poster-decode"
 import { readFacilityPreferences, subscribeFacilityPreferences, writeFacilityPreferences } from "@/lib/facility/preferences"
@@ -391,8 +392,16 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
             for (let parent = action.parentElement; parent && parent !== container.current; parent = parent.parentElement) if (parent instanceof HTMLDetailsElement) parent.open = true
             action.focus({ preventScroll: true })
             const bounds = action.getBoundingClientRect(), viewport = window.visualViewport
-            const top = viewport?.offsetTop ?? 0, bottom = top + (viewport?.height ?? window.innerHeight)
-            if (bounds.top < top + 86 || bounds.bottom > bottom) action.scrollIntoView?.({ block: "nearest", inline: "nearest", behavior: "instant" })
+            const viewportTop = viewport?.offsetTop ?? 0
+            const headerBottom = document.querySelector("header")?.getBoundingClientRect().bottom ?? viewportTop
+            const rail = container.current?.querySelector(".facility-rack-handle-controls")?.getBoundingClientRect()
+            const scene = stage.current?.getBoundingClientRect() ?? bounds
+            const top = serviceReturnScroll(window.scrollY,
+              { top: Math.max(viewportTop, headerBottom) + 12, bottom: viewportTop + (viewport?.height ?? window.innerHeight) - 12 },
+              { top: rail?.top ?? scene.top, bottom: scene.bottom }, bounds)
+            // One explicit instant scroll also cancels any native focus scroll.
+            // Later keyboard/touch intent still cancels this restoration ticket.
+            window.scrollTo({ top, left: window.scrollX, behavior: "instant" })
           }
         } else {
           revealStage()

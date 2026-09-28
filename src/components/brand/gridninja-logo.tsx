@@ -1,5 +1,5 @@
 import Image from "next/image"
-import type { ComponentPropsWithoutRef, CSSProperties } from "react"
+import type { ComponentPropsWithoutRef } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -8,55 +8,14 @@ import {
   type GridNinjaLogoMotion as AnimatedGridNinjaLogoMotion,
 } from "./animated-gridninja-mark"
 
-export type GridNinjaLogoVariant =
-  | "proof-core"
-  | "micro"
-  | "detailed"
-  | "ceremonial"
-  | "monochrome"
-  | "light"
-  | "watermark"
+import {
+  gridNinjaLogoAssets as logoAssets,
+  GridNinjaMonochromeMark,
+  type GridNinjaLogoVariant,
+  type GridNinjaMonochromeMarkProps,
+} from "./gridninja-mark"
 
-const logoAssets: Record<
-  GridNinjaLogoVariant,
-  { src: string; width: number; height: number }
-> = {
-  "proof-core": {
-    src: "/brand/gridninja-favicon-proof-core.svg",
-    width: 64,
-    height: 64,
-  },
-  micro: {
-    src: "/brand/gridninja-mark-micro.svg",
-    width: 256,
-    height: 256,
-  },
-  detailed: {
-    src: "/brand/gridninja-emblem-detailed-dark.svg",
-    width: 512,
-    height: 512,
-  },
-  ceremonial: {
-    src: "/brand/gridninja-emblem-ceremonial.svg",
-    width: 640,
-    height: 560,
-  },
-  monochrome: {
-    src: "/brand/gridninja-emblem-monochrome.svg",
-    width: 512,
-    height: 512,
-  },
-  light: {
-    src: "/brand/gridninja-badge-light.svg",
-    width: 512,
-    height: 512,
-  },
-  watermark: {
-    src: "/brand/gridninja-watermark.svg",
-    width: 512,
-    height: 512,
-  },
-}
+export type { GridNinjaLogoVariant } from "./gridninja-mark"
 
 type GridNinjaImageVariant = Exclude<GridNinjaLogoVariant, "monochrome">
 
@@ -94,45 +53,9 @@ type GridNinjaImageMarkProps = Omit<
   variant?: GridNinjaImageVariant
 }
 
-type GridNinjaMonochromeMarkProps = {
-  variant: "monochrome"
-  className?: string
-  style?: CSSProperties
-}
-
 export type GridNinjaMarkProps =
   | GridNinjaImageMarkProps
   | GridNinjaMonochromeMarkProps
-
-function GridNinjaMonochromeMark({
-  className,
-  style,
-}: Omit<GridNinjaMonochromeMarkProps, "variant">) {
-  const maskImage = `url("${logoAssets.monochrome.src}")`
-
-  return (
-    <span
-      aria-hidden="true"
-      data-gridninja-mark="monochrome"
-      className={cn(
-        "inline-block aspect-square w-[512px] max-w-full shrink-0 bg-current",
-        className
-      )}
-      style={{
-        ...style,
-        backgroundColor: "currentColor",
-        maskImage,
-        maskPosition: "center",
-        maskRepeat: "no-repeat",
-        maskSize: "contain",
-        WebkitMaskImage: maskImage,
-        WebkitMaskPosition: "center",
-        WebkitMaskRepeat: "no-repeat",
-        WebkitMaskSize: "contain",
-      }}
-    />
-  )
-}
 
 /**
  * Compatibility export for mark-only placements. New brand compositions should

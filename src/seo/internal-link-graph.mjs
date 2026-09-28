@@ -3,6 +3,8 @@ const DEFAULT_EXCLUDED_PATH_PREFIXES = [
   "/api/",
   "/downloads/",
   "/evidence/releases/",
+  "/assets/facility/",
+  "/assets/cinematic/",
 ]
 
 export const DEFAULT_DESTINATION_PATHS = [

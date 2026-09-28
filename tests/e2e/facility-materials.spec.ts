@@ -25,7 +25,11 @@ test("material highlights and assembly poses render without changing assessment 
   await page.emulateMedia({ reducedMotion: "reduce" })
   await page.goto("/demo?scenario=d&perspective=engineering")
   const inspector = page.getByTestId("facility-inspection")
-  const release = process.env.FACILITY_ASSET_RELEASE ?? "facility-v8"
+  // Match the actual production build, including a default release selected by
+  // the server. A stale test fallback must not assert an unrelated old asset.
+  const build = JSON.parse(await readFile(".next/facility-build.json", "utf8"))
+  const release = build.identity.buildSettings.selectedRelease as string
+  expect(release).toMatch(/^facility-v\d+$/)
   await expect(inspector).toHaveAttribute("data-release", release)
   await expect(inspector).toHaveAttribute("data-scenario", "d")
   await expect(page.getByRole("combobox", { name: "Scenario", exact: true })).toHaveValue("d")

@@ -41,7 +41,7 @@ const show=async(kind,pose="closed")=>{
   await viewer.locator(".facility-stage").scrollIntoViewIfNeeded()
 }
 try{
-  await page.goto(baseURL,{waitUntil:"load"})
+  await page.goto(baseURL+"/demo?interactive=1",{waitUntil:"load"})
   await revealEnhancedStage();await ready()
   report.graphics=await canvas.evaluate(el=>{const gl=el.getContext("webgl2"),ext=gl.getExtension("WEBGL_debug_renderer_info");return {renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):"unavailable",devicePixelRatio:devicePixelRatio}})
   const hardware=!/SwiftShader|llvmpipe|software|unavailable/i.test(report.graphics.renderer)
