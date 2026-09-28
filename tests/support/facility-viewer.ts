@@ -20,6 +20,15 @@ export async function chooseFacilityStillImage(inspector: Locator) {
   await inspector.getByRole("button", { name: "Use still image", exact: true }).click()
 }
 
+type EngineeringSettlementSnapshot = ReturnType<NonNullable<HTMLCanvasElement["__gnFacilitySnapshot"]>> & {
+  schedulerPending: number; transitionRemaining: number; clockSeconds: number; interactionUntil: number
+}
+
+// These fields are emitted by EngineeringSession. The global snapshot also
+// describes older non-engineering releases, which do not expose this scheduler.
+const engineeringSnapshot = (canvas: Locator, includeEquipment = false) => canvas.evaluate((element, equipment) =>
+  (element as HTMLCanvasElement).__gnFacilitySnapshot!(equipment) as EngineeringSettlementSnapshot, includeEquipment)
+
 /** Verify the actual policy path without forcing a renderer tier. */
 export async function settleFacilityActivity(page: Page, inspector: Locator, testInfo: TestInfo) {
   const pause = inspector.getByRole("button", { name: "Pause", exact: true })
@@ -41,13 +50,13 @@ export async function settleFacilityActivity(page: Page, inspector: Locator, tes
   } else await expect(inspector.getByRole("button", { name: "Resume", exact: true })).toHaveAttribute("aria-pressed", "true")
   await page.mouse.move(0, 0)
   const canvas = inspector.locator("canvas[data-ready=true]")
-  await expect.poll(() => canvas.evaluate(element => {
-    const state = (element as HTMLCanvasElement).__gnFacilitySnapshot!()
+  await expect.poll(async () => {
+    const state = await engineeringSnapshot(canvas)
     return state.schedulerPending === 0 && state.transitionRemaining === 0 && state.clockSeconds >= state.interactionUntil
-  }), { timeout: 2_000 }).toBe(true)
-  const before = await canvas.evaluate(element => (element as HTMLCanvasElement).__gnFacilitySnapshot!(true))
+  }, { timeout: 2_000 }).toBe(true)
+  const before = await engineeringSnapshot(canvas, true)
   await page.waitForTimeout(350)
-  const after = await canvas.evaluate(element => (element as HTMLCanvasElement).__gnFacilitySnapshot!(true))
+  const after = await engineeringSnapshot(canvas, true)
   expect(after.frames).toBe(before.frames)
   expect(after.equipment).toEqual(before.equipment)
   expect(after.schedulerPending).toBe(0)

@@ -17,7 +17,7 @@ permissions:
 jobs:
   software-functional-and-transfer:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -25,7 +25,7 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chrome chromium
       - run: npm run build
-      - name: Measure five fresh profiles and enforce functional and transfer evidence
+      - name: Enforce functional, transfer and all 30 Lighthouse measurements
         env:
           FACILITY_BASE_URL: http://localhost:3000
           FACILITY_RUNS: 5
@@ -45,6 +45,8 @@ jobs:
           failed=0
           npm run facility:measure || failed=1
           node scripts/facility/validate-ci-functional.mjs || failed=1
+          npm run facility:lighthouse || failed=1
+          npm run facility:performance:validate || failed=1
           exit "$failed"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()

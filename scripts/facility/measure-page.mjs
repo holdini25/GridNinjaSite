@@ -182,8 +182,10 @@ try {
       result.allocationTargetMet = result.renderer.peakEstimatedBytes <= 16 * 1024 * 1024
       result.ambientDiagnostics = await page.evaluate(() => window.__facilityAmbientDiagnostics)
       result.ambientCadence = result.renderer.quality === "still"
-        ? { status: "not-applicable", reason: "Interactive Still requests no continuing ambient cadence; this is not a successful 30fps measurement. Static settlement and independent fixed-cadence capability remain required." }
-        : { status: "measured", reason: "Active-tier cadence is checked against requested slots." }
+        ? { status: "not-applicable", reason: "Interactive Still requests no continuing ambient cadence; this is not a successful 30fps measurement. Static settlement is verified separately; hardware qualification additionally requires fixed-cadence capability." }
+        : scope.functional
+          ? { status: "observed-not-qualified", reason: "Observed active-tier cadence in functional CI; no device performance or cadence budget qualification is claimed." }
+          : { status: "measured", reason: "Active-tier cadence is checked against requested slots." }
       // Keep any complete active-tier violation observed before a later fallback.
       if (!scope.functional && result.renderingClass === "hardware") for (const sample of result.ambientDiagnostics) if (sample.quality !== "still" && sample.sampleCount >= 120) checkBudget(() => assertCadenceBudget(sample))
       if (adaptive) {

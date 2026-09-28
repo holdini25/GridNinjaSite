@@ -1,15 +1,22 @@
 import assert from "node:assert/strict"
 import { assertCinematicMotion } from "../cinematic/motion-evidence.mjs"
-import { assertQualificationScope } from "./measurement-scope.mjs"
+import { assertQualificationScope, measurementScope } from "./measurement-scope.mjs"
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises"
 import { validateLighthouseReport } from "../seo/validate-lighthouse-budgets.mjs"
 import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertLighthouseProfile, assertSameBuild, canonicalJson, provenance, routeTransferBudget } from "./performance-contract.mjs"
 
+const scope = measurementScope(process.env.FACILITY_MEASUREMENT_SCOPE)
 const median = values => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
-const summary = { measuredAt: new Date().toISOString(), result: "incomplete", profiles: [], failures: [], mobileEvidence: "Browser device emulation; physical mobile validation remains separate" }
+const summary = { scope: scope.name, hardwareQualification: scope.hardwareQualification, measuredAt: new Date().toISOString(), result: "incomplete", profiles: [], failures: [], mobileEvidence: "Browser device emulation; physical mobile validation remains separate" }
 try {
-  const pages = JSON.parse(await readFile("build/facility/page-measurements.json", "utf8"))
-  assertQualificationScope(pages.provenance?.settings)
+  const pages = JSON.parse(await readFile(scope.output, "utf8"))
+  if (scope.functional) {
+    assert.equal(pages.provenance?.settings?.measurementScope, "ci-functional")
+    assert.equal(pages.hardwareQualification, "not-performed")
+    const functional = JSON.parse(await readFile("build/facility/ci-functional-summary.json", "utf8"))
+    assert.equal(functional.result, "pass", "Functional evidence must pass its full contract")
+    assert.deepEqual(functional.provenance, pages.provenance, "Functional validation belongs to another measurement")
+  } else assertQualificationScope(pages.provenance?.settings)
   const expected = await provenance(pages.provenance?.browser, pages.provenance?.settings)
   assertSameBuild(pages.provenance, expected)
   if(pages.result!=="pass")summary.failures.push(`Page measurements failed: ${pages.failure ?? "incomplete measurement"}`)
@@ -87,6 +94,12 @@ try {
           assertSettlementEvidence(result.settlement, pages.provenance.settings)
           if (result.settlement.mode === "adaptive-still") assert.equal(pages.provenance.buildSettings.mode, "auto-adaptive")
         } else assertRendererBudget(result.pausedRenderer, false) // Historical explicit-pause reports.
+        if (scope.functional) {
+          assert.equal(result.capability, null, "Functional CI must not imply device cadence")
+          assert.equal(result.frameBudgetMet, null)
+          assert.equal(result.capabilityEvidence?.status, "not-measured")
+          continue
+        }
         assert(Number.isFinite(result.capability?.frameP95 ?? result.renderer?.frameP95) && (result.capability?.sampleCount ?? result.renderer?.sampleCount) >= 120, "Missing fixed-cadence capability evidence")
         assert.equal(result.renderingClass, "hardware", "Device performance qualification requires actual hardware rendering")
         if (result.renderingClass === "hardware") {
@@ -110,9 +123,9 @@ try {
   summary.failures.push(error instanceof Error ? error.message : String(error))
 }
 await mkdir("build/facility", { recursive: true })
-await writeFile("build/facility/performance-summary.json", `${JSON.stringify(summary, null, 2)}\n`)
+await writeFile(`build/facility/${scope.functional ? "ci-performance-summary" : "performance-summary"}.json`, `${JSON.stringify(summary, null, 2)}\n`)
 const activeRelease = summary.provenance?.buildSettings?.selectedRelease ?? "facility-v3"
-const evidenceDirectory = process.env.FACILITY_REPORT_DIR ?? `docs/website-upgrade/facility-validation-${activeRelease.replace(/^facility-/, "")}`
+const evidenceDirectory = process.env.FACILITY_REPORT_DIR ?? (scope.functional ? "build/facility/ci-evidence" : `docs/website-upgrade/facility-validation-${activeRelease.replace(/^facility-/, "")}`)
 await mkdir(evidenceDirectory, { recursive: true })
 await writeFile(`${evidenceDirectory}/lighthouse.json`, `${JSON.stringify(summary, null, 2)}\n`)
 console.log(JSON.stringify({ result: summary.result, profiles: summary.profiles.map(({ profile, route, medians }) => ({ profile, route, medians })), failures: summary.failures }, null, 2))
