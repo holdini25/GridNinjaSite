@@ -1,14 +1,23 @@
-import { expect, test } from "@playwright/test"
+import { readFile } from "node:fs/promises"
+import { expect, test, type Download } from "@playwright/test"
+import publishedRecordC from "../../src/content/assessment-publications/demo-01-c/v1.0.0/snapshot.json"
 
 test("native evidence activation survives a press begun before hydration and enhancement", async ({ page, browserName }) => {
   await page.setViewportSize({ width: 390, height: 844 })
+  const selectionPath = "/demo?scenario=c&version=1.0.0"
+  const downloadPath = "/downloads/assessment/demo-01-c/v1.0.0/json"
+  let nativeDownload: Download | undefined
+  const captureDownload = (download: Download) => { nativeDownload = download }
+  page.on("download", captureDownload)
   let release = () => {}
   const gate = new Promise<void>(resolve => { release = resolve })
   await page.route("**/_next/static/**/*.js", async route => { await gate; await route.continue().catch(() => {}) })
   try {
-    await page.goto("/demo?scenario=c&version=1.0.0", { waitUntil: "commit" })
+    await page.goto(selectionPath, { waitUntil: "commit" })
+    const selectionUrl = page.url()
+    const downloadUrl = new URL(downloadPath, selectionUrl).href
     const link = page.getByRole("link", { name: "Download this technical record", exact: true })
-    await expect(link).toHaveAttribute("href", "/downloads/assessment/demo-01-c/v1.0.0/json")
+    await expect(link).toHaveAttribute("href", downloadPath)
     await link.scrollIntoViewIfNeeded()
     const box = await link.boundingBox()
     await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2)
@@ -20,13 +29,32 @@ test("native evidence activation survives a press begun before hydration and enh
     await expect(page.getByText("Preparing interactive inspection.", { exact: false })).toHaveCount(0)
     await expect(page.locator(".facility-systems")).toHaveCount(0)
     await expect.poll(() => link.evaluate(node => node.matches(":active"))).toBe(true)
-    const responsePromise = page.waitForResponse(response => new URL(response.url()).pathname === "/downloads/assessment/demo-01-c/v1.0.0/json")
-    const downloadPromise = browserName === "webkit" && process.platform === "linux" ? null : page.waitForEvent("download")
+    const responsePromise = page.waitForResponse(response => response.url() === downloadUrl)
     await page.mouse.up()
     const response = await responsePromise
     expect(response.status()).toBe(200)
     expect(response.headers()["content-disposition"]).toBe('attachment; filename="gridninja-demo-01-c-v1.0.0.json"')
-    if (downloadPromise) expect((await downloadPromise).suggestedFilename()).toBe("gridninja-demo-01-c-v1.0.0.json")
+    await expect.poll(() => nativeDownload ? "download" : page.url() === downloadUrl ? "document" : "pending").not.toBe("pending")
+    if (nativeDownload) {
+      expect(nativeDownload.suggestedFilename()).toBe("gridninja-demo-01-c-v1.0.0.json")
+      const downloadedPath = await nativeDownload.path()
+      expect(downloadedPath).not.toBeNull()
+      expect(JSON.parse(await readFile(downloadedPath!, "utf8"))).toEqual(publishedRecordC)
+      await expect(page).toHaveURL(selectionUrl)
+    } else {
+      // Linux WebKit can render an attachment response as a document. Verify
+      // that real outcome and its exact immutable record before returning.
+      expect(browserName).toBe("webkit")
+      expect(process.platform).toBe("linux")
+      test.info().annotations.push({ type: "native-attachment", description: "Linux WebKit rendered the attachment; exact published JSON and native Back recovery were verified." })
+      await page.waitForLoadState("domcontentloaded")
+      await expect(page).toHaveURL(downloadUrl)
+      expect(JSON.parse(await page.locator("body").innerText())).toEqual(publishedRecordC)
+      await page.goBack({ waitUntil: "domcontentloaded" })
+      await expect(page).toHaveURL(selectionUrl)
+      await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "c")
+      await expect(page.getByRole("link", { name: "Download this technical record", exact: true })).toHaveAttribute("href", downloadPath)
+    }
     // Engines that focus links retain that native node until focus leaves it.
     const outside = page.getByRole("link", { name: "GridNinja home", exact: true }).first()
     await outside.focus()
@@ -35,8 +63,11 @@ test("native evidence activation survives a press begun before hydration and enh
     await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "c")
   } finally {
     release()
-    await page.mouse.up().catch(() => {})
-    await page.unroute("**/_next/static/**/*.js")
+    page.off("download", captureDownload)
+    if (!page.isClosed()) {
+      await page.mouse.up().catch(() => {})
+      await page.unroute("**/_next/static/**/*.js").catch(() => {})
+    }
   }
 })
 

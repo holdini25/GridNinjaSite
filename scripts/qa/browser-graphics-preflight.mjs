@@ -29,7 +29,7 @@ try {
   assert(report.graphics.webgl2, "Browser runtime cannot create WebGL2; repair the runner before running facility tests")
   assert.equal(report.graphics.error, 0, "WebGL2 readback error")
   assert(report.graphics.pixel.every((v, i) => Math.abs(v - [64,128,191,255][i]) <= 1), "WebGL2 did not render the expected pixel")
-  report.renderingClass = /SwiftShader|llvmpipe|software/i.test(report.graphics.renderer) ? "software-emulation" : "unclassified"
+  report.renderingClass = /SwiftShader|llvmpipe|softpipe|software|Microsoft Basic Render|GDI Generic/i.test(report.graphics.renderer) ? "software-emulation" : "unclassified"
   report.note = "Browser functionality only. This preflight does not qualify hardware performance."
   report.result = "pass"
 } catch (error) {

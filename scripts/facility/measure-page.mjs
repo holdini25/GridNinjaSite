@@ -183,7 +183,7 @@ try {
         const gl = canvas.getContext("webgl2"), debug = gl?.getExtension("WEBGL_debug_renderer_info")
         return { renderer: debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : "unavailable", vendor: debug ? gl.getParameter(debug.UNMASKED_VENDOR_WEBGL) : "unavailable" }
       })
-      result.renderingClass = /SwiftShader|llvmpipe|software/i.test(result.graphics.renderer) ? "software-emulation" : result.graphics.renderer === "unavailable" ? "unknown" : "hardware"
+      result.renderingClass = /SwiftShader|llvmpipe|softpipe|software|Microsoft Basic Render|GDI Generic/i.test(result.graphics.renderer) ? "software-emulation" : result.graphics.renderer === "unavailable" ? "unknown" : "hardware"
       if (softwareFallback) assert.equal(result.renderingClass, "software-emulation", "The reported software fallback disagrees with the actual manually loaded renderer")
       if (!scope.functional) assert.equal(result.renderingClass, "hardware", "Device qualification requires an actual hardware renderer; use the separately labelled CI functional scope on software runners")
       if(adaptive){

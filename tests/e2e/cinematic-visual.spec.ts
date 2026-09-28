@@ -1,7 +1,7 @@
 import {expect,test} from "@playwright/test"
 import sharp from "sharp"
 
-test.skip(process.env.CINEMATIC_E2E !== "1", "Requires the selected private cinematic candidate")
+test.skip(process.env.CINEMATIC_E2E !== "1", "Requires the selected cinematic release")
 
 for (const size of [{width:1366,height:768},{width:390,height:844}]) {
   test(`cinematic composition and native poster/video correspondence at ${size.width}px`, async ({page},testInfo) => {

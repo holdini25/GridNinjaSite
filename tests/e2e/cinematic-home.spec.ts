@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
 
-// Ordinary CI does not publish or select unreviewed cinematic media. Explicit
-// candidate qualification must opt in; a skipped run is not animation evidence.
-test.skip(process.env.CINEMATIC_E2E !== "1", "Requires an explicitly selected cinematic candidate")
+// CI explicitly enables this suite against the registered cinematic release.
+// Other runs must opt in; a skipped run is not animation evidence.
+test.skip(process.env.CINEMATIC_E2E !== "1", "Requires an explicitly selected cinematic release")
 
 test("cinematic home preserves the offer and evidence without loading a Three viewer", async ({ page }) => {
   const models: string[] = []
