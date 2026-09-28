@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { fingerprintContactSubmission } from "@/lib/contact/request"
-import { stripLeadSecurityFields } from "@/lib/validators"
+import { stripLeadSecurityFields, contactLeadSchema } from "@/lib/validators"
 
 const mocks = vi.hoisted(() => ({
   acceptLead: vi.fn(),
@@ -97,6 +97,20 @@ describe("POST /api/contact", () => {
     })
   })
 
+  it("returns a non-cacheable body timeout without verification or persistence", async () => {
+    const { POST } = await import("@/app/api/contact/route")
+    vi.useFakeTimers()
+    try {
+      const cancel = vi.fn()
+      const req = new Request("https://www.gridninja.ai/api/contact", Object.assign({ method: "POST", headers: { origin: "https://www.gridninja.ai", "content-type": "application/json", "x-vercel-forwarded-for": "203.0.113.10" }, body: new ReadableStream({ cancel }) }, { duplex: "half" }))
+      const result = POST(req)
+      await vi.advanceTimersByTimeAsync(5001)
+      const response = await result
+      expect(response.status).toBe(408); expect(response.headers.get("cache-control")).toBe("no-store")
+      expect(cancel).toHaveBeenCalledOnce(); expect(mocks.verifyTurnstile).not.toHaveBeenCalled(); expect(mocks.acceptLead).not.toHaveBeenCalled()
+    } finally { vi.useRealTimers() }
+  })
+
   it("durably accepts an explicit capacity-audit request", async () => {
     const response = await post(payload)
 
@@ -157,6 +171,16 @@ describe("POST /api/contact", () => {
     })
     expect(response.status).toBe(202)
     expect(mocks.acceptLead).toHaveBeenCalledWith(expect.objectContaining({ schemaVersion: 2, message: null }))
+  })
+
+  it("persists a public topic separately and protects retry identity", async () => {
+    const candidate = { ...payload, schemaVersion: 2 as const, formType: "contact" as const, topic: "cooling" as const, constraints: [], source: "demo-inspection-room" }
+    expect((await post(candidate)).status).toBe(202)
+    expect(mocks.acceptLead).toHaveBeenCalledWith(expect.objectContaining({ topic: "cooling", message: null, source: "demo-inspection-room" }))
+    mocks.findLead.mockResolvedValue({ id: "lead-existing", formType: "contact", requestFingerprint: fingerprintContactSubmission({ ...stripLeadSecurityFields(contactLeadSchema.parse(candidate)), email: candidate.email.toLowerCase() }, runtimeConfig.pseudonymSecret) })
+    expect((await post(candidate)).status).toBe(200)
+    expect((await post({ ...candidate, topic: "power" })).status).toBe(409)
+    expect((await post({ ...candidate, topic: "private@example.com" })).status).toBe(400)
   })
 
   it("returns the original submission without spending another Turnstile token", async () => {

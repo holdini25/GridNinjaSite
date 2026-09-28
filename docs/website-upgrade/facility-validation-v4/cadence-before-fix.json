@@ -1,0 +1,4919 @@
+{
+  "measuredAt": "2026-09-23T04:12:58.988Z",
+  "provenance": {
+    "schemaVersion": "facility-performance.v2",
+    "sourceRevision": "91a299d81b2e1791603e9d3a6d3e23dc0f12d36e13cf131cfbe14bc9580385e6",
+    "buildId": "0zyP5wW77GORKAoccxMGQ",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v4",
+      "mode": "auto-adaptive"
+    },
+    "harnessRevision": "2dadc39f64269c725a17741d35be039ef9fd83174f974dbc9ea39be7695a63fc",
+    "browser": "154.0.8037.58",
+    "settings": {
+      "baseURL": "http://127.0.0.1:3000",
+      "runCount": 5,
+      "freshContextEveryRun": true,
+      "cacheDisabled": true,
+      "settleQuietMs": 750,
+      "settleTimeoutMs": 15000,
+      "readinessTimeoutMs": 12000,
+      "desktopViewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "mobileDevice": "Pixel 5",
+      "launch": {
+        "headless": false,
+        "channel": "chrome",
+        "args": [
+          "--use-angle=metal",
+          "--use-gl=angle"
+        ],
+        "ignoreDefaultArgs": [
+          "--use-angle=swiftshader",
+          "--disable-gpu"
+        ]
+      }
+    },
+    "settingsSha256": "7a6525578cef0c09fb8625cd15b8eedd154440e0504b3e486659c29d9bea7cb9"
+  },
+  "results": [
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 1,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "7628D23AAD37BD8C513C3F954474C1BD",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10384,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-desktop.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 47196,
+            "bytes": 47827,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55943.38",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1077442,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 80,
+        "cls": 0.003963961110398692
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 203,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 40.70000076293945,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 124,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 4.291799999999997,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 203,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 4.291799999999997,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          703,
+          413
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 339,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 16.799999237060547,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 136,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "activeSeconds": 5.841700000000012,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 339,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.841700000000012,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 342,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 5.866600000000012,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 342,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 5.866600000000012,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 2,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "8DDD180240A5009E3E3BAC1E4282E138",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1121,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10379,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-desktop.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 47196,
+            "bytes": 47827,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55951.38",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1077442,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 88,
+        "cls": 0.003963961110398692
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 198,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 34,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 128,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 4.291699999999999,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 198,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 4.291699999999999,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          703,
+          413
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 319,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 16.799999237060547,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 121,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "activeSeconds": 5.599300000000007,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 319,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.599300000000007,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 322,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 5.616600000000006,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 322,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 5.616600000000006,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 3,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "463D60EB8AB39953591B1CEBD7C5B86E",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1121,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71392,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2897,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10384,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-desktop.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 47196,
+            "bytes": 47827,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55960.38",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1077442,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 96,
+        "cls": 0.003963961110398692
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 198,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.400001525878906,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 121,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 4.049999999999996,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 198,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 4.049999999999996,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          703,
+          413
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 326,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 16.799999237060547,
+        "cpuP95": 0.6000000238418579,
+        "sampleCount": 128,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "activeSeconds": 5.34990000000001,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 326,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.34990000000001,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 329,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 5.37500000000001,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 329,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 5.37500000000001,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 4,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "41331BC54E6EBC7648E00BFDAF212908",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10379,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-desktop.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 47196,
+            "bytes": 47827,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55984.38",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1077442,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 84,
+        "cls": 0.003963961110398692
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 218,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.900001525878906,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 128,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 4.541699999999998,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 218,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 4.541699999999998,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          703,
+          413
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 340,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 17.200000762939453,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 122,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "activeSeconds": 5.825000000000014,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 340,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.825000000000014,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 343,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 5.841600000000014,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 343,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 5.841600000000014,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 5,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "FEBBE33A581B8DFBEF01667A9B5A8F9C",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23452,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2942,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2363,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3674,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4721,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2897,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10384,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-desktop.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 47196,
+            "bytes": 47827,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "55990.38",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1077442,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 96,
+        "cls": 0.003963961110398692
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 208,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 41.599998474121094,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 127,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 4.324899999999999,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 208,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 4.324899999999999,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          703,
+          413
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 331,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 16.899999618530273,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 123,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "activeSeconds": 5.60820000000001,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 332,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.60820000000001,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 334,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 5.63310000000001,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 334,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994290226427825,
+          7.994290226427827,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          703.6015625,
+          413.8828125
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 5.63310000000001,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 1,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "0AE53D2455B1CD47D7A11085BD8EC170",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8729,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4315,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10384,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-mobile.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 15294,
+            "bytes": 15925,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.35",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56000.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1045540,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 76,
+        "cls": 0
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 193,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 34.20000076293945,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 122,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 3.5840999999999967,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 193,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.609000000000001,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          356,
+          209
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 319,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.599998474121094,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 126,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.384200000000011,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 319,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 9.409100000000013,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 321,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.39240000000001,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 321,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 9.417300000000012,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 2,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "5FE45551C8D1CCEAE47D42E7E2DE3E1E",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10384,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-mobile.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 15294,
+            "bytes": 15925,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.35",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56035.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1045540,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 68,
+        "cls": 0
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 189,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.900001525878906,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 123,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 3.8415999999999992,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 189,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.850000000000005,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          356,
+          209
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 309,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.79999923706055,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 120,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.632100000000011,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 309,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 9.640500000000014,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 311,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.650000000000011,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 311,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 9.658400000000013,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 3,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "003C88DD7B39FCA590FFCF6DE5CCFA8D",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23452,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4315,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3674,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2897,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10379,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-mobile.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 15294,
+            "bytes": 15925,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.35",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270784,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56042.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1045540,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 68,
+        "cls": 0
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 188,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.70000076293945,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 124,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 3.7916999999999983,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 188,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.808600000000003,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          356,
+          209
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 315,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.400001525878906,
+        "cpuP95": 0.6000000238418579,
+        "sampleCount": 127,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.608400000000012,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 315,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 9.625300000000005,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 317,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.63350000000001,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 317,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 9.650400000000003,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 4,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "F84C9C7759BA997013B15C7D556C8186",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2942,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13901,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10379,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-mobile.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 15294,
+            "bytes": 15925,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.35",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56047.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1045540,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 64,
+        "cls": 0
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 189,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.400001525878906,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 124,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 3.7998999999999983,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 189,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 5.809300000000002,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          356,
+          209
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 315,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.400001525878906,
+        "cpuP95": 0.6000000238418579,
+        "sampleCount": 126,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.591600000000008,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 315,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 9.601000000000004,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 317,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.616600000000008,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 317,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 9.626000000000005,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 5,
+      "freshContext": true,
+      "complete": true,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "00D54065D49C427664F8A29DF63FA463",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 694,
+            "dataBytes": 0,
+            "bytes": 21690,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.5",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.6",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8729,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.7",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43861,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4320,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13901,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10384,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ribg-6kt_d5v.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 9659,
+            "bytes": 10259,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-mobile.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 15294,
+            "bytes": 15925,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.35",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.36",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56053.37",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1045540,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 64,
+        "cls": 0
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 198,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.400001525878906,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 125,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 4.024999999999996,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 198,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 6.042900000000005,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          356,
+          209
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 322,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 33.5,
+        "cpuP95": 0.6000000238418579,
+        "sampleCount": 124,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.858400000000012,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 322,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 9.87630000000001,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      },
+      "frameBudgetMet": true,
+      "pausedRenderer": {
+        "frames": 324,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": null,
+        "cpuP95": null,
+        "sampleCount": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "activeSeconds": 7.866700000000013,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 324,
+        "schedulerPending": 0,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "economy"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.9943338704881155,
+          7.994333870488117,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          356.75,
+          209.8515625
+        ],
+        "interactionUntil": 0,
+        "clockSeconds": 9.884600000000011,
+        "transitionRemaining": 0,
+        "missedRatio": 0
+      }
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 1,
+      "freshContext": true,
+      "complete": false,
+      "transfer": {
+        "requests": [
+          {
+            "requestId": "AC0E7E9C2550DF34BFA6947941B1EB8D",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/demo",
+            "type": "Document",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 822,
+            "dataBytes": 0,
+            "bytes": 19797,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.2",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0_ew1sgb0osk2.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 587,
+            "dataBytes": 23457,
+            "bytes": 24044,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.3",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3u_6u0xh88rke.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 1126,
+            "bytes": 1712,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.4",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1mzkpbssr0c3f.css",
+            "type": "Stylesheet",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 586,
+            "dataBytes": 2947,
+            "bytes": 3533,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.8",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0jvhpaew_uadu.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2368,
+            "bytes": 2968,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.9",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 8734,
+            "bytes": 9334,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.10",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 71397,
+            "bytes": 71998,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.11",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1t2a6qluwgklf.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 43866,
+            "bytes": 44467,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.12",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4315,
+            "bytes": 4920,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.13",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3679,
+            "bytes": 4279,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.14",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/02mxei6ovqb9g.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 4726,
+            "bytes": 5326,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.15",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_dnt4b5io9m.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 2902,
+            "bytes": 3502,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.16",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/20xfjz-f8x9ga.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13906,
+            "bytes": 14506,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.17",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/3q_pnvl388pv5.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 10384,
+            "bytes": 10984,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.18",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0zi08mshia-80.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 568,
+            "dataBytes": 315,
+            "bytes": 883,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.19",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/0ii8vgl2uv5q2.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 13317,
+            "bytes": 13917,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.20",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/poster-desktop.webp",
+            "type": "Image",
+            "status": 200,
+            "encoding": "identity",
+            "headerBytes": 631,
+            "dataBytes": 47196,
+            "bytes": 47827,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.41",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/favicon.ico",
+            "type": "Other",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 557,
+            "dataBytes": 3390,
+            "bytes": 3947,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.42",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/1ni0mmn7e3n3x.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 601,
+            "dataBytes": 270789,
+            "bytes": 271390,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.43",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+            "type": "Fetch",
+            "status": 200,
+            "encoding": "br",
+            "headerBytes": 661,
+            "dataBytes": 520095,
+            "bytes": 520756,
+            "terminal": "finished",
+            "error": null
+          },
+          {
+            "requestId": "56057.46",
+            "hop": 0,
+            "url": "http://127.0.0.1:3000/_next/static/chunks/25d-8_j6817xb.js",
+            "type": "Script",
+            "status": 200,
+            "encoding": "gzip",
+            "headerBytes": 600,
+            "dataBytes": 3137,
+            "bytes": 3737,
+            "terminal": "finished",
+            "error": null
+          }
+        ],
+        "bytes": 1083827,
+        "complete": true,
+        "issues": []
+      },
+      "throughReady": true,
+      "release": "facility-v4",
+      "vitals": {
+        "lcp": 96,
+        "cls": 0
+      },
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "renderingClass": "hardware",
+      "renderer": {
+        "frames": 190,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 34.70000076293945,
+        "cpuP95": 0.699999988079071,
+        "sampleCount": 124,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "activeSeconds": 4.608399999999998,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 190,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994403588486423,
+          7.994403588486425,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          664.21875,
+          390.7109375
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 4.608399999999998,
+        "transitionRemaining": 0,
+        "missedRatio": 0,
+        "buffer": [
+          664,
+          390
+        ]
+      },
+      "allocationTargetMet": true,
+      "ambientFallback": null,
+      "capability": {
+        "frames": 327,
+        "drawCalls": 39,
+        "triangles": 33310,
+        "geometries": 39,
+        "textures": 4,
+        "materials": 10,
+        "estimatedBytes": 7412735,
+        "peakEstimatedBytes": 9051135,
+        "environmentBytes": 2359296,
+        "frameP95": 24.899999618530273,
+        "cpuP95": 0.6000000238418579,
+        "sampleCount": 137,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "activeSeconds": 6.399300000000006,
+        "view": {
+          "kind": "overview"
+        },
+        "qualityProbe": false,
+        "assetError": null,
+        "requestedView": {
+          "kind": "overview"
+        },
+        "sceneKind": "overview",
+        "probeName": "GN_PLATFORM_Dark",
+        "probeVisible": true,
+        "probeRendered": true,
+        "schedulerRequestCount": 328,
+        "schedulerPending": 1,
+        "tierHistory": [
+          {
+            "activeSeconds": 0,
+            "reason": "conservative-startup",
+            "from": null,
+            "to": "balanced"
+          }
+        ],
+        "hiddenFrameCount": 0,
+        "cameraFrustum": [
+          -7.994403588486423,
+          7.994403588486425,
+          4.586301653882515,
+          -4.818735228352125
+        ],
+        "rendererCssSize": [
+          664.21875,
+          390.7109375
+        ],
+        "interactionUntil": 0.75,
+        "clockSeconds": 6.399300000000006,
+        "transitionRemaining": 0,
+        "missedRatio": 0.016666666666666666
+      },
+      "frameBudgetMet": false,
+      "failure": "Frame p95 24.899999618530273ms exceeds 20ms"
+    }
+  ],
+  "result": "fail",
+  "failure": "Frame p95 24.899999618530273ms exceeds 20ms"
+}

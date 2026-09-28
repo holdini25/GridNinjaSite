@@ -1,0 +1,910 @@
+{
+  "measuredAt": "2026-09-24T04:10:32.144Z",
+  "result": "pass",
+  "provenance": {
+    "schemaVersion": "facility-performance.v2",
+    "sourceRevision": "5f992255ff902320e66ddbed2952f40f616503a451fe6ef61424f51a2bc901b3",
+    "buildId": "_w__MHXkJOi-3cijqiI_I",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      },
+      {
+        "release": "facility-v7",
+        "manifestSha256": "c6ccfae472adebef0af6a8a85104be2db9f0879019babec2e297d82a9f71ce37"
+      },
+      {
+        "release": "facility-v8",
+        "manifestSha256": "4b652220b7d2282d97b1782a72dce7d97ebccf84c4d76866dc660fe8cc2bfa8e"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v8",
+      "mode": "auto-adaptive"
+    },
+    "harnessRevision": "4bb902409625b12907060c868ea01d589a10c65033f21746a47a541c370bc54f",
+    "browser": "154.0.8037.58",
+    "settings": {
+      "baseURL": "http://127.0.0.1:3000",
+      "runCount": 5,
+      "freshContextEveryRun": true,
+      "cacheDisabled": true,
+      "settleQuietMs": 750,
+      "settleTimeoutMs": 15000,
+      "readinessTimeoutMs": 12000,
+      "pauseSettleTimeoutMs": 1000,
+      "pauseIdleQuietMs": 250,
+      "pauseObservationMs": 500,
+      "desktopViewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "mobileDevice": "Pixel 5",
+      "capabilityFps": 60,
+      "ambientFps": 30,
+      "capabilityFrameLimitsMs": {
+        "desktop": 20,
+        "mobile": 34
+      },
+      "launch": {
+        "headless": false,
+        "channel": "chrome",
+        "args": [
+          "--use-angle=metal",
+          "--use-gl=angle"
+        ],
+        "ignoreDefaultArgs": [
+          "--use-angle=swiftshader",
+          "--disable-gpu"
+        ]
+      }
+    },
+    "settingsSha256": "cadc73b9b0a00e073bd292f922a0c84d8eb5fce5093137b85e56c0388d4eb9d3"
+  },
+  "rawReport": "build/facility/page-measurements.json",
+  "rawSha256": "f283eaec8f429a0988ff4da49f72329567f58aa698490a1fb1791d0cdf99f619",
+  "results": [
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 1,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 972694,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.599998474121094,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.200000762939453,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 295,
+      "pauseFramesAfter": 295
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 2,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 972694,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.400001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.8999999761581421,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.200000762939453,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.6000000238418579
+      },
+      "pauseFramesBefore": 294,
+      "pauseFramesAfter": 294
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 3,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 972694,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.100000381469727,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 295,
+      "pauseFramesAfter": 295
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 4,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 972694,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 35,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.299999237060547,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 295,
+      "pauseFramesAfter": 295
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 5,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 972694,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.79999923706055,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.200000762939453,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.6000000238418579
+      },
+      "pauseFramesBefore": 295,
+      "pauseFramesAfter": 295
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 1,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 943576,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.70000076293945,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.299999237060547,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 309,
+      "pauseFramesAfter": 309
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 2,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 943576,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.8999999761581421,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.299999237060547,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 308,
+      "pauseFramesAfter": 308
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 3,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 943576,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 17.799999237060547,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 307,
+      "pauseFramesAfter": 307
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 4,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 943576,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.100000381469727,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929
+      },
+      "pauseFramesBefore": 308,
+      "pauseFramesAfter": 308
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 5,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 943576,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.200000762939453,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 309,
+      "pauseFramesAfter": 309
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 1,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 982508,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 17.5,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.6000000238418579
+      },
+      "pauseFramesBefore": 293,
+      "pauseFramesAfter": 293
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 2,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 982508,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.5,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 17,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 295,
+      "pauseFramesAfter": 295
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 3,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 982508,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.299999237060547,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 296,
+      "pauseFramesAfter": 296
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 4,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 982508,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.200000762939453,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 295,
+      "pauseFramesAfter": 295
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 5,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 982508,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.599998474121094,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "balanced",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.100000381469727,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 294,
+      "pauseFramesAfter": 294
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 1,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 953390,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 33.70000076293945,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.200000762939453,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 308,
+      "pauseFramesAfter": 308
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 2,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 953390,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 33.70000076293945,
+        "missedRatio": 0,
+        "cpuP95": 0.8999999761581421,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 309,
+      "pauseFramesAfter": 309
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 3,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 953390,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 33.70000076293945,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.299999237060547,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 310,
+      "pauseFramesAfter": 310
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 4,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 953390,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.900001525878906,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.399999618530273,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.6000000238418579
+      },
+      "pauseFramesBefore": 309,
+      "pauseFramesAfter": 309
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 5,
+      "complete": true,
+      "throughReady": true,
+      "renderingClass": "hardware",
+      "graphics": {
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+        "vendor": "Google Inc. (Apple)"
+      },
+      "frameBudgetMet": true,
+      "allocationTargetMet": true,
+      "budgetFailures": [],
+      "pageErrors": [],
+      "ambientFallback": null,
+      "transferBytes": 953390,
+      "transferComplete": true,
+      "specimenDownloads": 0,
+      "ambient": {
+        "targetFps": 30,
+        "frameP95": 34.099998474121094,
+        "missedRatio": 0,
+        "cpuP95": 0.800000011920929,
+        "quality": "economy",
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862
+      },
+      "capability": {
+        "targetFps": 60,
+        "frameP95": 18.100000381469727,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "cpuP95": 0.699999988079071
+      },
+      "pauseFramesBefore": 310,
+      "pauseFramesAfter": 310
+    }
+  ],
+  "failures": []
+}

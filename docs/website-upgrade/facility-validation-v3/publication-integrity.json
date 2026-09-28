@@ -1,0 +1,151 @@
+{
+  "measuredAt": "2026-09-23T01:57:40.971Z",
+  "result": "pass",
+  "checks": [
+    {
+      "file": "src/content/assessment-publications/demo-01-a/v1.0.0/brief.html",
+      "sha256": "fe96afbd39389a1a00827247fd95804c7df0a864403371acbd905f1da7ccc1b9",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-a/v1.0.0/brief.pdf",
+      "sha256": "76ea5c19c8ccfecf9df513e9081f254cc88ddafc6f43baf1263252463cd3ecca",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-a/v1.0.0/manifest.json",
+      "sha256": "d281ac1ca296521bf5f5a4414fb1cb8b15ded1ea43ce905d15506a4f67ef8b50",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-a/v1.0.0/narrative.json",
+      "sha256": "150e18393da170d66797e16f2fc26f1ce4df0d69d96e784bb42706c296e7181f",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-a/v1.0.0/snapshot.json",
+      "sha256": "6879b9aeebe2b11162409dffc717ae916cdf67c40e725127ec0e0d3e3080b5d7",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-b/v1.0.0/brief.html",
+      "sha256": "58c9de6480fb14a4dd91f463a39a965df25845ff9ae6f4a4384020b0e50a68a6",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-b/v1.0.0/brief.pdf",
+      "sha256": "e4440b059caa8747f6b89fab994dc8912ade2e23bd9aabef890dc98dfa12b322",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-b/v1.0.0/manifest.json",
+      "sha256": "27186e35caf97f0fe0e095bed864ee3cbc943c37efbfd7d7227a9b09c4adab3a",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-b/v1.0.0/narrative.json",
+      "sha256": "bc66d64c74b2e726fab71b417d6517fb2489829d0f13347437a5d040bac801d0",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-b/v1.0.0/snapshot.json",
+      "sha256": "9567f23ae85d59c991309ddfe9d0b42fe6f64323a84e0a2ea178c2363f3db2d4",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-c/v1.0.0/brief.html",
+      "sha256": "bdb95aaa836f8bbd9587fbc0edfb591e4b8a0f1baf6be53f429bb14b53f3dcee",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-c/v1.0.0/brief.pdf",
+      "sha256": "5d52825c563dbed8046e4532743de71dc2888cc9b49433604775d46c6268fc0e",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-c/v1.0.0/manifest.json",
+      "sha256": "c93fca98a6bc9c0155423b80b2a7258c97ae1736652b611e9f6962ae30746823",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-c/v1.0.0/narrative.json",
+      "sha256": "7b4e5865779fbdc5233889777fdf17a1d3081f33f079e73e878f5f13e0df134b",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-c/v1.0.0/snapshot.json",
+      "sha256": "e70f1d911e779b671d9d30f390664120d5a073132d99ddf35185f536e9d70151",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-d/v1.0.0/brief.html",
+      "sha256": "6af04b7f3d2f9f30555673df74aa09f707f36e8b693437b7c60d55c0a42ad262",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-d/v1.0.0/brief.pdf",
+      "sha256": "8034cd033675386964a4d0192b2d92b88c274cc6e4a72026953da8e2c4588dd5",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-d/v1.0.0/manifest.json",
+      "sha256": "db3cf5cbe10513f79fdfd88d28dc09bcbe884a72c572d1c0f573258294a95315",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-d/v1.0.0/narrative.json",
+      "sha256": "0e646d1f749bf679429c997445c417edc7748c37078949f60ab77b54fd348de0",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/demo-01-d/v1.0.0/snapshot.json",
+      "sha256": "ac9dd6f67724b9bede7774618123054219c9ee72492e9370e40ce3b45d2c7cda",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/assessment-publications/registry.json",
+      "sha256": "666e58728975e1193f4114fca060ecc285b58c36ab98a232732e1c510ded3539",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v1/facility.glb",
+      "sha256": "a4fe6e2264b13772c720181db0bf7b0fe689160d4cff1e66a526593eb2109016",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v1/manifest.json",
+      "sha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v1/poster-desktop.webp",
+      "sha256": "a4c488498df4f255268e9debadd99c392b11d423d6dcab838dc8cc69224d6b72",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v1/poster-mobile.webp",
+      "sha256": "9d43a03ed3cdbbf89319fc4db184a09a8e5fa51c9e723e52d885c94fca73aa2c",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v2/facility.glb",
+      "sha256": "80bc6c4404047ab4e0c260e7003d0a8b7f2e70a4048cd3aab901f96fdbe6848d",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v2/manifest.json",
+      "sha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v2/poster-desktop.webp",
+      "sha256": "87c364b09d9e6c9fd34d7e32e3c533319f0e54380dd061df61c910e976407f29",
+      "unchanged": true
+    },
+    {
+      "file": "src/content/facility-releases/facility-v2/poster-mobile.webp",
+      "sha256": "ae703beee328a5650450946b67c7d16201d23021889354a8c79b78d561224130",
+      "unchanged": true
+    }
+  ]
+}

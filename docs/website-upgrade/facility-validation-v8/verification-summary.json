@@ -1,0 +1,176 @@
+{
+  "buildId": "_w__MHXkJOi-3cijqiI_I",
+  "unit": {
+    "passed": 613,
+    "files": 63,
+    "log": "build/experience-v8/unit-complete.log"
+  },
+  "lint": "pass",
+  "typecheck": "pass",
+  "build": "pass",
+  "functional": {
+    "chromeFacility": {
+      "passed": 29,
+      "skipped": 1,
+      "log": "build/experience-v8/e2e-facility-final.log"
+    },
+    "chromeExperience": {
+      "passed": 30,
+      "skipped": 2,
+      "note": "Initial plus exact reset rerun; unchanged UI source before final nonvisual buffer optimization"
+    },
+    "webkitMobileExperience": {
+      "passed": 16,
+      "note": "Initial plus exact receipt rerun; unsupported CLS API recorded unavailable"
+    },
+    "chromeRuntime": {
+      "passed": 11,
+      "skipped": 2,
+      "log": "build/experience-v8/runtime-final-production-e2e.log"
+    },
+    "finalBuildRegression": {
+      "webkitMaterialAllSpecimenPoses": {
+        "passed": 1,
+        "log": "build/experience-v8/runtime-webkit-complete-e2e.log"
+      },
+      "chromeMechanicalIntermediateFrames": {
+        "passed": 2,
+        "log": "build/experience-v8/runtime-motion-complete-e2e.log"
+      },
+      "mobileJointControlsAndRetry": {
+        "passed": 2,
+        "log": "build/experience-v8/runtime-webkit-final-e2e.log",
+        "note": "Passed before final assembly-to-assembly reveal fix; material case in that attempt failed and is retained. Exact material case passed on final build."
+      }
+    }
+  },
+  "initialJavaScriptBrotliKiB": {
+    "home": 154.7,
+    "demo": 157.7,
+    "assessment": 148.2
+  },
+  "publicDeployment": "not performed",
+  "externalGates": [
+    "physical phone checks",
+    "manual Safari/VoiceOver",
+    "two rounds of six representative visitors",
+    "production verification and delivery configuration"
+  ],
+  "performance": {
+    "result": "fail",
+    "freshLighthouseRuns": 30,
+    "freshAutomatic3DRuns": 20,
+    "automatic3D": "pass",
+    "maxThroughReadyTransferBytes": 982508,
+    "maxFixedCadenceP95Ms": 18.4,
+    "lighthouseProfiles": [
+      {
+        "profile": "desktop",
+        "route": "/",
+        "medians": {
+          "performance": 100,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "lcp": 617.5614999999999,
+          "fcp": 285.041,
+          "tbt": 0,
+          "cls": 0,
+          "transferBytes": 981218
+        }
+      },
+      {
+        "profile": "desktop",
+        "route": "/demo",
+        "medians": {
+          "performance": 100,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "lcp": 619.2619000000001,
+          "fcp": 284.7105,
+          "tbt": 0,
+          "cls": 0,
+          "transferBytes": 991032
+        }
+      },
+      {
+        "profile": "desktop",
+        "route": "/assessment",
+        "medians": {
+          "performance": 100,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "lcp": 576.3213,
+          "fcp": 283.3797,
+          "tbt": 0,
+          "cls": 0,
+          "transferBytes": 239482
+        }
+      },
+      {
+        "profile": "mobile",
+        "route": "/",
+        "medians": {
+          "performance": 95,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "lcp": 2604.58875,
+          "fcp": 1204.0627,
+          "tbt": 158.5,
+          "cls": 0,
+          "transferBytes": 952100
+        }
+      },
+      {
+        "profile": "mobile",
+        "route": "/demo",
+        "medians": {
+          "performance": 96,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "lcp": 2746.7520499999996,
+          "fcp": 1203.8077,
+          "tbt": 0,
+          "cls": 0,
+          "transferBytes": 261213
+        }
+      },
+      {
+        "profile": "mobile",
+        "route": "/assessment",
+        "medians": {
+          "performance": 97,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "lcp": 2595.8963,
+          "fcp": 1053.2238,
+          "tbt": 0,
+          "cls": 0,
+          "transferBytes": 239482
+        }
+      }
+    ],
+    "failures": [
+      "mobile /: lcp 2604.58875 exceeds 2500",
+      "mobile /demo: lcp 2746.7520499999996 exceeds 2500",
+      "mobile /assessment: lcp 2595.8963 exceeds 2500"
+    ],
+    "report": "docs/website-upgrade/facility-validation-v8/lighthouse.json",
+    "rawReportsAndTraces": "build/facility/lighthouse-desktop and build/facility/lighthouse-mobile"
+  },
+  "sourceRevision": "5f992255ff902320e66ddbed2952f40f616503a451fe6ef61424f51a2bc901b3",
+  "latestBuildChecks": {
+    "lint": "build/experience-v8/lint-assembly-entry.log",
+    "typecheck": "build/experience-v8/typecheck-assembly-entry.log",
+    "build": "build/experience-v8/build-assembly-entry.log"
+  },
+  "verificationScope": "Full suites cover the implementation; exact regressions and native lifecycle were repeated after the final two mobile presentation fixes. Earlier suite provenance is retained in the logs; not every full suite was repeated against the final build.",
+  "lifecycle": {
+    "result": "pass",
+    "openCloseCycles": 10,
+    "assetCycles": 10,
+    "rackEstimatedBytesIncludingEnvironment": 6232181,
+    "peakStagingEstimatedBytes": 12102491,
+    "report": "docs/website-upgrade/facility-validation-v8/runtime-lifecycle.json"
+  },
+  "publicRelease": "blocked: unchanged mobile LCP gate and external device/manual/evaluation requirements remain open"
+}

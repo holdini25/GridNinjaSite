@@ -1,0 +1,83 @@
+{
+  "description": "Archived v7 and production v8 visual comparisons. Before desktop is 1440x1100; after desktop is 1366x768. Mobile 390x844. Different original capture conditions are preserved in adjacent reports; these are qualitative comparisons, not matched performance measurements. No valid assessment before capture exists. After captures precede final mobile assembly-control fixes; overview and form layout remain unchanged.",
+  "files": [
+    {
+      "file": "before/home-desktop-dpr1-page.png",
+      "source": "build/experience-v8/before/archived-v7/home-desktop-dpr1-page.png",
+      "bytes": 870917,
+      "sha256": "58c2b17c38781dfacd9b608b20342be93c4e35db7039eec6acd27f5a0cdded34"
+    },
+    {
+      "file": "before/demo-desktop-dpr1-page.png",
+      "source": "build/experience-v8/before/archived-v7/demo-desktop-dpr1-page.png",
+      "bytes": 552675,
+      "sha256": "03c23122bfd0217153ce677c68242c2ac3a8dc36a64caa8871852aaf122dc1f8"
+    },
+    {
+      "file": "before/home-mobile-dpr1-page.png",
+      "source": "build/experience-v8/before/archived-v7/home-mobile-dpr1-page.png",
+      "bytes": 771572,
+      "sha256": "d07db7cd77f3741027642cc4e5bc93d2f99b8de2ee78a32378fb5e0acee9699c"
+    },
+    {
+      "file": "before/demo-mobile-dpr1-page.png",
+      "source": "build/experience-v8/before/archived-v7/demo-mobile-dpr1-page.png",
+      "bytes": 351345,
+      "sha256": "55b38ede5aa4d93d441c4a0d825cd233d21c436cb37af5845105446097830453"
+    },
+    {
+      "file": "before/provenance.json",
+      "source": "build/experience-v8/before/archived-v7/provenance.json",
+      "bytes": 2704,
+      "sha256": "eaa3bbd8ad5b26545a0c58205b8439c36ef5224f588d467c6d2b710ebc22c206"
+    },
+    {
+      "file": "before/original-review-capture.json",
+      "source": "build/experience-v8/before/archived-v7/original-review-capture.json",
+      "bytes": 364171,
+      "sha256": "cae0e45a698839f7522629d4d36a700fc7cd1f819c416d2e58ae857a723b6ef4"
+    },
+    {
+      "file": "after/home-1366x768.png",
+      "source": "build/experience-v8/after/home-1366x768.png",
+      "bytes": 248021,
+      "sha256": "197f18558ee7abbfc744ee8cf62432592ea22ec39363086457426d87e09ba103"
+    },
+    {
+      "file": "after/demo-1366x768.png",
+      "source": "build/experience-v8/after/demo-1366x768.png",
+      "bytes": 81922,
+      "sha256": "a7df20b5d645440a3b8f3af859f3591168f05a16359f72ba39f822ca9ed2eb35"
+    },
+    {
+      "file": "after/assessment-1366x768.png",
+      "source": "build/experience-v8/after/assessment-1366x768.png",
+      "bytes": 76679,
+      "sha256": "b5a47b92dce32689b133c880fe13e9d8765026efac548c5154faf69d4b165f4f"
+    },
+    {
+      "file": "after/home-390x844.png",
+      "source": "build/experience-v8/after/home-390x844.png",
+      "bytes": 70830,
+      "sha256": "4e8a11eb5cd25b1c2c7ee79cc237d301fc42948d826c96a5986ebe801eb06b70"
+    },
+    {
+      "file": "after/demo-390x844.png",
+      "source": "build/experience-v8/after/demo-390x844.png",
+      "bytes": 54236,
+      "sha256": "897529c9f1bbff773e6a503f4c5fa41f3c14de466c8660359dec41a07b89d461"
+    },
+    {
+      "file": "after/assessment-390x844-scope.png",
+      "source": "build/experience-v8/after/assessment-390x844-scope.png",
+      "bytes": 57504,
+      "sha256": "70ac5af2fb00d875a81f017f00b367e6000f53ff804b182db1bfd99e087ec5b3"
+    },
+    {
+      "file": "after/report.json",
+      "source": "build/experience-v8/after/report.json",
+      "bytes": 1804,
+      "sha256": "937904e72420ad757646ef761c6093eabd59870f86e309577084af95ea66f97e"
+    }
+  ]
+}

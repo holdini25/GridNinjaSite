@@ -15,9 +15,9 @@ export function RelatedSeoLinks({ path }: { path: PublicPath }) {
     <SectionShell>
       <section
         aria-labelledby={`related-seo-${route.key}`}
-        className="rounded-[1.8rem] border border-border/70 bg-surface px-6 py-7"
+        className="rounded-xl border border-border/70 bg-surface px-6 py-7"
         data-seo-related-source={route.path}
-        data-seo-related-paths={JSON.stringify(route.relatedPaths)}
+        data-seo-related-paths={JSON.stringify(relatedRoutes.map(related => related.path))}
         data-seo-route-tier={route.tier}
       >
         <p className="gn-eyebrow">Related operator resources</p>
@@ -33,7 +33,7 @@ export function RelatedSeoLinks({ path }: { path: PublicPath }) {
               <Link
                 href={relatedRoute.path}
                 prefetch={false}
-                className="block h-full rounded-[1.15rem] border border-border/70 bg-background/35 px-5 py-5 transition-colors hover:border-primary/45 hover:bg-primary/5"
+                className="block h-full rounded-xl border border-border/70 bg-background/35 px-5 py-5 transition-colors hover:border-primary/45 hover:bg-primary/5"
                 data-seo-related-target={relatedRoute.path}
               >
                 <span className="font-medium text-foreground">

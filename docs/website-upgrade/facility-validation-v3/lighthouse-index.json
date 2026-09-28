@@ -1,0 +1,146 @@
+{
+  "measuredAt": "2026-09-23T02:05:51.809Z",
+  "result": "pass",
+  "runs": [
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 1,
+      "output": "build/facility/lighthouse-desktop/home-1.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 2,
+      "output": "build/facility/lighthouse-desktop/home-2.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 3,
+      "output": "build/facility/lighthouse-desktop/home-3.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 4,
+      "output": "build/facility/lighthouse-desktop/home-4.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 5,
+      "output": "build/facility/lighthouse-desktop/home-5.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 1,
+      "output": "build/facility/lighthouse-desktop/demo-1.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 2,
+      "output": "build/facility/lighthouse-desktop/demo-2.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 3,
+      "output": "build/facility/lighthouse-desktop/demo-3.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 4,
+      "output": "build/facility/lighthouse-desktop/demo-4.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 5,
+      "output": "build/facility/lighthouse-desktop/demo-5.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "mobile",
+      "run": 1,
+      "output": "build/facility/lighthouse-mobile/home-1.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "mobile",
+      "run": 2,
+      "output": "build/facility/lighthouse-mobile/home-2.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "mobile",
+      "run": 3,
+      "output": "build/facility/lighthouse-mobile/home-3.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "mobile",
+      "run": 4,
+      "output": "build/facility/lighthouse-mobile/home-4.json",
+      "complete": true
+    },
+    {
+      "route": "/",
+      "profile": "mobile",
+      "run": 5,
+      "output": "build/facility/lighthouse-mobile/home-5.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile",
+      "run": 1,
+      "output": "build/facility/lighthouse-mobile/demo-1.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile",
+      "run": 2,
+      "output": "build/facility/lighthouse-mobile/demo-2.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile",
+      "run": 3,
+      "output": "build/facility/lighthouse-mobile/demo-3.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile",
+      "run": 4,
+      "output": "build/facility/lighthouse-mobile/demo-4.json",
+      "complete": true
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile",
+      "run": 5,
+      "output": "build/facility/lighthouse-mobile/demo-5.json",
+      "complete": true
+    }
+  ]
+}

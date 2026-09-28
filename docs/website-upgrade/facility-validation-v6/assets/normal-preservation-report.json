@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "method": "Evaluated modifier corner normals transformed with inverse-transpose, quantized to six decimals, copied into batch custom normals; UV corners retained independently",
+  "batches": [
+    {
+      "batch": "GN_PLATFORM_Platform",
+      "corners": 96,
+      "maxNormalVectorError": 3.9085379387748244e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 4
+    },
+    {
+      "batch": "GN_PLATFORM_Dark",
+      "corners": 480,
+      "maxNormalVectorError": 2.5288109106536417e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_PLATFORM_Graphite",
+      "corners": 576,
+      "maxNormalVectorError": 0.0003096534976355686,
+      "customNormals": true,
+      "verticesWithUVSeams": 94
+    },
+    {
+      "batch": "GN_PLATFORM_Steel",
+      "corners": 1608,
+      "maxNormalVectorError": 7.257339752844525e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_PLATFORM_Trim",
+      "corners": 96,
+      "maxNormalVectorError": 0.0,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_WORKLOADS_Graphite",
+      "corners": 14400,
+      "maxNormalVectorError": 0.00011030385059433605,
+      "customNormals": true,
+      "verticesWithUVSeams": 3192
+    },
+    {
+      "batch": "GN_WORKLOADS_Steel",
+      "corners": 9792,
+      "maxNormalVectorError": 9.86236615384329e-05,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_WORKLOADS_Dark",
+      "corners": 5808,
+      "maxNormalVectorError": 0.00011037673029566304,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_WORKLOADS_Grille",
+      "corners": 960,
+      "maxNormalVectorError": 5.960464477539063e-08,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_COOLING_Graphite",
+      "corners": 4728,
+      "maxNormalVectorError": 6.848052318737541e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 1163
+    },
+    {
+      "batch": "GN_COOLING_Steel",
+      "corners": 12288,
+      "maxNormalVectorError": 7.861181980560259e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_COOLING_Grille",
+      "corners": 64,
+      "maxNormalVectorError": 0.0,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_COOLING_Copper",
+      "corners": 2496,
+      "maxNormalVectorError": 7.586432731960926e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_COOLING_Trim",
+      "corners": 384,
+      "maxNormalVectorError": 6.447228089804631e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_COOLING_Dark",
+      "corners": 1536,
+      "maxNormalVectorError": 6.745141922090218e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_POWER_Graphite",
+      "corners": 1032,
+      "maxNormalVectorError": 6.899736465686694e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 193
+    },
+    {
+      "batch": "GN_POWER_Steel",
+      "corners": 720,
+      "maxNormalVectorError": 3.476928529273386e-05,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_POWER_Dark",
+      "corners": 1032,
+      "maxNormalVectorError": 6.8739429680531e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_POWER_Amber",
+      "corners": 72,
+      "maxNormalVectorError": 5.960464477539063e-08,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_POWER_Trim",
+      "corners": 216,
+      "maxNormalVectorError": 5.960464477539063e-08,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_POWER_Grille",
+      "corners": 24,
+      "maxNormalVectorError": 0.0,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_STORAGE_Graphite",
+      "corners": 960,
+      "maxNormalVectorError": 6.848052318737541e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 208
+    },
+    {
+      "batch": "GN_STORAGE_Dark",
+      "corners": 1008,
+      "maxNormalVectorError": 7.727081872501477e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_STORAGE_Grille",
+      "corners": 96,
+      "maxNormalVectorError": 5.960464477539063e-08,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_STORAGE_Trim",
+      "corners": 288,
+      "maxNormalVectorError": 5.960464477539063e-08,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_STORAGE_Amber",
+      "corners": 288,
+      "maxNormalVectorError": 0.0,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_POWER_Copper",
+      "corners": 240,
+      "maxNormalVectorError": 6.58354819845394e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_ACCENT_POWER_Copper",
+      "corners": 144,
+      "maxNormalVectorError": 2.6087755425510934e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_ACCENT_WORKLOADS_Copper",
+      "corners": 288,
+      "maxNormalVectorError": 4.0847538649207305e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_ACCENT_COOLING_Copper",
+      "corners": 2200,
+      "maxNormalVectorError": 8.397700073483808e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_STORAGE_Copper",
+      "corners": 240,
+      "maxNormalVectorError": 5.924197750801114e-07,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_STORAGE_Steel",
+      "corners": 984,
+      "maxNormalVectorError": 7.850861711526315e-05,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_ACCENT_STORAGE_Copper",
+      "corners": 336,
+      "maxNormalVectorError": 3.880485542533528e-05,
+      "customNormals": true,
+      "verticesWithUVSeams": 0
+    },
+    {
+      "batch": "GN_AIR_SECTION_COVERS_Graphite",
+      "corners": 432,
+      "maxNormalVectorError": 5.960464477539063e-08,
+      "customNormals": true,
+      "verticesWithUVSeams": 126
+    }
+  ],
+  "maxNormalVectorError": 0.0003096534976355686,
+  "verticesWithUVSeams": 4980,
+  "result": "passed"
+}

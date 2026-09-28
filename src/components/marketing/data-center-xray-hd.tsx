@@ -77,7 +77,7 @@ export function DataCenterXrayHD({
         </div>
 
         <div className="relative min-h-[31rem] overflow-hidden rounded-[1.3rem] border border-border/70 bg-background/55 p-5">
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(159,176,191,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(159,176,191,0.06)_1px,transparent_1px)] bg-[size:34px_34px]" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(184,184,184,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(184,184,184,0.06)_1px,transparent_1px)] bg-[size:34px_34px]" />
           <div className="relative grid h-full place-items-center">
             <div className="relative h-72 w-full max-w-lg">
               <div

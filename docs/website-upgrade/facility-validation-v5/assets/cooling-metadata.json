@@ -1,0 +1,357 @@
+{
+  "schemaVersion": "facility-specimen.v1",
+  "kind": "cooling",
+  "system": "cooling",
+  "parts": [
+    {
+      "id": "GN_COOLER_FRAME",
+      "index": 0,
+      "label": "Hollow structural casing and plenum",
+      "role": "structural_frame",
+      "objectId": "GN_COOLER_FRAME",
+      "connections": [
+        "GN_COOLER_PANEL",
+        "GN_COOLER_COIL",
+        "GN_COOLER_FAN"
+      ],
+      "bounds": {
+        "min": [
+          -0.66,
+          0.0,
+          -0.655
+        ],
+        "max": [
+          0.66,
+          2.05,
+          0.655
+        ]
+      }
+    },
+    {
+      "id": "GN_COOLER_PANEL",
+      "index": 1,
+      "label": "Removable service panels",
+      "role": "removable_panel",
+      "objectId": "GN_COOLER_PANEL",
+      "connections": [
+        "GN_COOLER_FRAME"
+      ],
+      "bounds": {
+        "min": [
+          -0.5375,
+          0.15,
+          -0.475
+        ],
+        "max": [
+          0.562,
+          1.9575,
+          0.493
+        ]
+      }
+    },
+    {
+      "id": "GN_COOLER_COIL",
+      "index": 2,
+      "label": "Illustrative fin-and-tube heat exchanger",
+      "role": "heat_exchanger",
+      "objectId": "GN_COOLER_COIL",
+      "connections": [
+        "GN_COOLER_MANIFOLD"
+      ],
+      "bounds": {
+        "min": [
+          -0.465,
+          0.2725,
+          -0.235
+        ],
+        "max": [
+          0.465,
+          1.6175,
+          0.375
+        ]
+      }
+    },
+    {
+      "id": "GN_COOLER_MANIFOLD",
+      "index": 3,
+      "label": "Paired liquid service headers",
+      "role": "illustrative_liquid_circuit",
+      "objectId": "GN_COOLER_MANIFOLD",
+      "connections": [
+        "GN_COOLER_COIL"
+      ],
+      "bounds": {
+        "min": [
+          -0.504122,
+          0.12,
+          0.080028
+        ],
+        "max": [
+          0.53,
+          1.535,
+          0.462
+        ]
+      }
+    },
+    {
+      "id": "GN_COOLER_FAN",
+      "index": 4,
+      "label": "Axial fan and motor support",
+      "role": "fan_assembly",
+      "objectId": "GN_COOLER_FAN",
+      "connections": [
+        "GN_COOLER_FRAME",
+        "GN_COOLER_GUARD"
+      ],
+      "bounds": {
+        "min": [
+          -0.449,
+          1.9,
+          -0.449
+        ],
+        "max": [
+          0.449,
+          2.056,
+          0.449
+        ]
+      }
+    },
+    {
+      "id": "GN_COOLER_GUARD",
+      "index": 5,
+      "label": "Stationary fan guard",
+      "role": "stationary_guard",
+      "objectId": "GN_COOLER_GUARD",
+      "connections": [
+        "GN_COOLER_FAN"
+      ],
+      "bounds": {
+        "min": [
+          -0.426,
+          2.077,
+          -0.426
+        ],
+        "max": [
+          0.426,
+          2.093,
+          0.426
+        ]
+      }
+    }
+  ],
+  "poses": {
+    "closed": {
+      "camera": {
+        "camera": [
+          3.4,
+          2.7,
+          4.0
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12
+      },
+      "transforms": [
+        {
+          "id": "GN_COOLER_FRAME",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_PANEL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_COIL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_MANIFOLD",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_FAN",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_GUARD",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        }
+      ]
+    },
+    "cutaway": {
+      "camera": {
+        "camera": [
+          3.4,
+          2.5,
+          4.0
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12
+      },
+      "transforms": [
+        {
+          "id": "GN_COOLER_FRAME",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_PANEL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": false
+        },
+        {
+          "id": "GN_COOLER_COIL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_MANIFOLD",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_FAN",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_GUARD",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        }
+      ]
+    },
+    "service": {
+      "camera": {
+        "camera": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "target": [
+          0.06,
+          1.0,
+          0.04
+        ],
+        "padding": 1.12
+      },
+      "transforms": [
+        {
+          "id": "GN_COOLER_FRAME",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_PANEL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": false
+        },
+        {
+          "id": "GN_COOLER_COIL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_MANIFOLD",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_FAN",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_COOLER_GUARD",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        }
+      ]
+    }
+  }
+}

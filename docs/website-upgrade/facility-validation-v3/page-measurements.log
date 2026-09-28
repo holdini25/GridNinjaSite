@@ -1,0 +1,24 @@
+
+> nextjs@0.1.0 facility:measure
+> node scripts/facility/measure-page.mjs
+
+{"route":"/","profile":"desktop","run":1,"transferBytes":1056331,"renderer":"hardware","frameP95":17}
+{"route":"/","profile":"desktop","run":2,"transferBytes":1056331,"renderer":"hardware","frameP95":17.100000381469727}
+{"route":"/","profile":"desktop","run":3,"transferBytes":1056331,"renderer":"hardware","frameP95":18.399999618530273}
+{"route":"/","profile":"desktop","run":4,"transferBytes":1056331,"renderer":"hardware","frameP95":16.799999237060547}
+{"route":"/","profile":"desktop","run":5,"transferBytes":1056331,"renderer":"hardware","frameP95":16.899999618530273}
+{"route":"/","profile":"mobile-emulation","run":1,"transferBytes":247849,"renderer":"hardware","frameP95":16.799999237060547}
+{"route":"/","profile":"mobile-emulation","run":2,"transferBytes":247849,"renderer":"hardware","frameP95":18.299999237060547}
+{"route":"/","profile":"mobile-emulation","run":3,"transferBytes":247849,"renderer":"hardware","frameP95":17.5}
+{"route":"/","profile":"mobile-emulation","run":4,"transferBytes":247849,"renderer":"hardware","frameP95":18.100000381469727}
+{"route":"/","profile":"mobile-emulation","run":5,"transferBytes":247849,"renderer":"hardware","frameP95":17}
+{"route":"/demo","profile":"desktop","run":1,"transferBytes":1058816,"renderer":"hardware","frameP95":18.200000762939453}
+{"route":"/demo","profile":"desktop","run":2,"transferBytes":1058816,"renderer":"hardware","frameP95":18.200000762939453}
+{"route":"/demo","profile":"desktop","run":3,"transferBytes":1058816,"renderer":"hardware","frameP95":17.5}
+{"route":"/demo","profile":"desktop","run":4,"transferBytes":1058816,"renderer":"hardware","frameP95":17.799999237060547}
+{"route":"/demo","profile":"desktop","run":5,"transferBytes":1058816,"renderer":"hardware","frameP95":18.100000381469727}
+{"route":"/demo","profile":"mobile-emulation","run":1,"transferBytes":250334,"renderer":"hardware","frameP95":17.600000381469727}
+{"route":"/demo","profile":"mobile-emulation","run":2,"transferBytes":250334,"renderer":"hardware","frameP95":16.899999618530273}
+{"route":"/demo","profile":"mobile-emulation","run":3,"transferBytes":250334,"renderer":"hardware","frameP95":16.899999618530273}
+{"route":"/demo","profile":"mobile-emulation","run":4,"transferBytes":250334,"renderer":"hardware","frameP95":18}
+{"route":"/demo","profile":"mobile-emulation","run":5,"transferBytes":250334,"renderer":"hardware","frameP95":16.799999237060547}

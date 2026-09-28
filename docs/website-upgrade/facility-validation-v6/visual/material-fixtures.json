@@ -1,0 +1,610 @@
+{
+  "schemaVersion": "facility-material-benchmark.v1",
+  "measuredAt": "2026-09-23T22:53:39.238Z",
+  "browser": "154.0.8037.58",
+  "sourceDigests": {
+    "src/lib/facility/engineering-materials.ts": "68259a7622dd0b6099b7e67a3bf9a59f163cbef6bd8aa9cf8087c05f43aca874",
+    "tests/support/facility-material-fixtures.mjs": "94f639d8be45d8653424425f26cb3be3bbe4e8bed23cdcc66d9e5fb0dc75f355",
+    "scripts/facility/verify-materials.mjs": "8ee1f8dbae96f86df8698fa5dccf6bf526b9253a51cfa80947db0ef82e14cf11",
+    "tests/unit/facility/fixtures/ecosystem-topology.json": "43e8276403674fa20bb63af6cceb2bee0cbc143020d9bc0c1c1bb31b21bf653e"
+  },
+  "result": "pass",
+  "runs": [
+    {
+      "dpr": 1,
+      "checks": [
+        {
+          "name": "Neutral composition preserves the stock normal/ORM/albedo response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Asymmetric tangent normal fixture changes lighting",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteSurfaceRGBDifference": 4.6484375
+          }
+        },
+        {
+          "name": "Mirrored UVs preserve the derivative tangent response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Hover and selected accents render distinct responses",
+          "pass": true,
+          "evidence": {
+            "restToHover": 6.778188705444336,
+            "hoverToSelected": 2.9284591674804688
+          }
+        },
+        {
+          "name": "Selected routes retain albedo modulation",
+          "pass": true,
+          "evidence": {
+            "bright": [
+              196,
+              178,
+              149
+            ],
+            "dark": [
+              63,
+              50,
+              34
+            ]
+          }
+        },
+        {
+          "name": "Same semantic counts use independent profile uniforms",
+          "pass": true,
+          "evidence": {
+            "betweenProfiles": 11.713309288024902,
+            "originalAfterReuse": 0,
+            "originalKey": "gridninja-pbr-semantic-v2-1-1-opaque",
+            "alternateKey": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "Equipment edge emphasis uses the unperturbed surface normal",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "High sampling remains within the two-sample anisotropy ceiling",
+          "pass": true,
+          "evidence": {
+            "anisotropy": 2
+          }
+        },
+        {
+          "name": "Coverage responds to actual multisample context support",
+          "pass": true,
+          "evidence": {
+            "samples": 4,
+            "alphaToCoverage": true
+          }
+        },
+        {
+          "name": "Single-sample contexts retain alpha testing without alpha-to-coverage",
+          "pass": true,
+          "evidence": {
+            "samples": 0,
+            "alphaToCoverage": false,
+            "anisotropy": 1
+          }
+        },
+        {
+          "name": "Resolved MASK apertures reveal the background",
+          "pass": true,
+          "evidence": {
+            "darkPixels": 20376
+          }
+        },
+        {
+          "name": "Subpixel MASK detail converges to the opaque grille",
+          "pass": true,
+          "evidence": [
+            {
+              "repeat": 1,
+              "darkPixels": 20376,
+              "mean": [
+                95.434853515625,
+                95.434853515625,
+                95.434853515625
+              ]
+            },
+            {
+              "repeat": 2,
+              "darkPixels": 20592,
+              "mean": [
+                88.465048828125,
+                88.465048828125,
+                88.465048828125
+              ]
+            },
+            {
+              "repeat": 4,
+              "darkPixels": 20736,
+              "mean": [
+                85.8644140625,
+                85.8644140625,
+                85.8644140625
+              ]
+            },
+            {
+              "repeat": 8,
+              "darkPixels": 9216,
+              "mean": [
+                91.497255859375,
+                91.497255859375,
+                91.497255859375
+              ]
+            },
+            {
+              "repeat": 16,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            },
+            {
+              "repeat": 32,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cutout and opaque materials have distinct program features",
+          "pass": true,
+          "evidence": {
+            "mask": "gridninja-pbr-semantic-v2-1-1-mask",
+            "opaque": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "V6 static route emphasis stops at the selected branch",
+          "pass": true,
+          "evidence": {
+            "insideTap": 129.49019607843138,
+            "beyondTap": 0,
+            "counts": [
+              31,
+              46
+            ]
+          }
+        },
+        {
+          "name": "V6 forward and reverse trace slots stay on their authored intervals",
+          "pass": true,
+          "evidence": {
+            "forwardInside": 103.94320645905421,
+            "forwardOutside": 0,
+            "reverseInside": 91.75772058823529,
+            "reverseOutside": 0
+          }
+        },
+        {
+          "name": "V6 trace identity never leaks to a sibling route",
+          "pass": true,
+          "evidence": {
+            "difference": 0
+          }
+        },
+        {
+          "name": "V6 electrical, cooling and heat cues retain distinct restrained hues",
+          "pass": true,
+          "evidence": [
+            [
+              172.353603515625,
+              170.1019921875,
+              166.117490234375
+            ],
+            [
+              104.971064453125,
+              128.42091796875,
+              130.908408203125
+            ],
+            [
+              154.900419921875,
+              101.700849609375,
+              65.240224609375
+            ]
+          ]
+        },
+        {
+          "name": "V6 equal-count programs retain independent ecosystem palette uniforms",
+          "pass": true,
+          "evidence": {
+            "changed": 15.345617294311523,
+            "restored": 0,
+            "key": "gridninja-ecosystem-v1-31-46-opaque"
+          }
+        },
+        {
+          "name": "V6 compiles and renders the full96equipment/128route contract",
+          "pass": true,
+          "evidence": {
+            "uniformVectors": 254,
+            "maximumFragmentVectors": 1024,
+            "means": [
+              172.353603515625,
+              170.1019921875,
+              166.117490234375
+            ],
+            "key": "gridninja-ecosystem-v1-96-128-opaque"
+          }
+        },
+        {
+          "name": "WebGL remains error free after material reuse",
+          "pass": true,
+          "evidence": {
+            "programs": 11
+          }
+        }
+      ],
+      "captures": [
+        "stock-asymmetric-normal-orm",
+        "composed-neutral-normal-orm",
+        "flat-normal-comparison",
+        "mirrored-uv-stock",
+        "mirrored-uv-composed",
+        "normal-diagnostic",
+        "roughness-diagnostic",
+        "route-resting",
+        "route-hover",
+        "route-selected",
+        "same-counts-alternate-profile",
+        "same-counts-original-restored",
+        "equipment-edge-perturbed-normal",
+        "equipment-edge-geometric-normal",
+        "grille-resolved-holes",
+        "grille-minification-1",
+        "grille-minification-2",
+        "grille-minification-4",
+        "grille-minification-8",
+        "grille-minification-16",
+        "grille-minification-32",
+        "v6-authored-counts-rest",
+        "v6-static-selected-tap",
+        "v6-forward-signed-subrange",
+        "v6-reverse-signed-subrange",
+        "v6-sibling-route-isolation",
+        "v6-service-electrical",
+        "v6-service-cooling",
+        "v6-service-heat",
+        "v6-original-cooling-palette",
+        "v6-same-counts-alternate-palette",
+        "v6-original-palette-restored",
+        "v6-maximum-packed-identity-capacity"
+      ],
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "threeRevision": "186",
+      "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "msaaSamples": 4,
+      "drawingBuffer": [
+        512,
+        512
+      ],
+      "devicePixelRatio": 1,
+      "note": "Synthetic shader correctness benchmark; not a performance or asset-quality measurement.",
+      "sourceDigests": {
+        "src/lib/facility/engineering-materials.ts": "68259a7622dd0b6099b7e67a3bf9a59f163cbef6bd8aa9cf8087c05f43aca874",
+        "tests/support/facility-material-fixtures.mjs": "94f639d8be45d8653424425f26cb3be3bbe4e8bed23cdcc66d9e5fb0dc75f355",
+        "scripts/facility/verify-materials.mjs": "8ee1f8dbae96f86df8698fa5dccf6bf526b9253a51cfa80947db0ef82e14cf11",
+        "tests/unit/facility/fixtures/ecosystem-topology.json": "43e8276403674fa20bb63af6cceb2bee0cbc143020d9bc0c1c1bb31b21bf653e"
+      },
+      "errors": []
+    },
+    {
+      "dpr": 1.5,
+      "checks": [
+        {
+          "name": "Neutral composition preserves the stock normal/ORM/albedo response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Asymmetric tangent normal fixture changes lighting",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteSurfaceRGBDifference": 4.6484375
+          }
+        },
+        {
+          "name": "Mirrored UVs preserve the derivative tangent response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Hover and selected accents render distinct responses",
+          "pass": true,
+          "evidence": {
+            "restToHover": 6.778188705444336,
+            "hoverToSelected": 2.9284591674804688
+          }
+        },
+        {
+          "name": "Selected routes retain albedo modulation",
+          "pass": true,
+          "evidence": {
+            "bright": [
+              196,
+              178,
+              149
+            ],
+            "dark": [
+              63,
+              50,
+              34
+            ]
+          }
+        },
+        {
+          "name": "Same semantic counts use independent profile uniforms",
+          "pass": true,
+          "evidence": {
+            "betweenProfiles": 11.713309288024902,
+            "originalAfterReuse": 0,
+            "originalKey": "gridninja-pbr-semantic-v2-1-1-opaque",
+            "alternateKey": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "Equipment edge emphasis uses the unperturbed surface normal",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "High sampling remains within the two-sample anisotropy ceiling",
+          "pass": true,
+          "evidence": {
+            "anisotropy": 2
+          }
+        },
+        {
+          "name": "Coverage responds to actual multisample context support",
+          "pass": true,
+          "evidence": {
+            "samples": 4,
+            "alphaToCoverage": true
+          }
+        },
+        {
+          "name": "Single-sample contexts retain alpha testing without alpha-to-coverage",
+          "pass": true,
+          "evidence": {
+            "samples": 0,
+            "alphaToCoverage": false,
+            "anisotropy": 1
+          }
+        },
+        {
+          "name": "Resolved MASK apertures reveal the background",
+          "pass": true,
+          "evidence": {
+            "darkPixels": 20376
+          }
+        },
+        {
+          "name": "Subpixel MASK detail converges to the opaque grille",
+          "pass": true,
+          "evidence": [
+            {
+              "repeat": 1,
+              "darkPixels": 20376,
+              "mean": [
+                95.434853515625,
+                95.434853515625,
+                95.434853515625
+              ]
+            },
+            {
+              "repeat": 2,
+              "darkPixels": 20592,
+              "mean": [
+                88.465048828125,
+                88.465048828125,
+                88.465048828125
+              ]
+            },
+            {
+              "repeat": 4,
+              "darkPixels": 20736,
+              "mean": [
+                85.8644140625,
+                85.8644140625,
+                85.8644140625
+              ]
+            },
+            {
+              "repeat": 8,
+              "darkPixels": 9216,
+              "mean": [
+                91.497255859375,
+                91.497255859375,
+                91.497255859375
+              ]
+            },
+            {
+              "repeat": 16,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            },
+            {
+              "repeat": 32,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cutout and opaque materials have distinct program features",
+          "pass": true,
+          "evidence": {
+            "mask": "gridninja-pbr-semantic-v2-1-1-mask",
+            "opaque": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "V6 static route emphasis stops at the selected branch",
+          "pass": true,
+          "evidence": {
+            "insideTap": 129.49019607843138,
+            "beyondTap": 0,
+            "counts": [
+              31,
+              46
+            ]
+          }
+        },
+        {
+          "name": "V6 forward and reverse trace slots stay on their authored intervals",
+          "pass": true,
+          "evidence": {
+            "forwardInside": 103.94320645905421,
+            "forwardOutside": 0,
+            "reverseInside": 91.75772058823529,
+            "reverseOutside": 0
+          }
+        },
+        {
+          "name": "V6 trace identity never leaks to a sibling route",
+          "pass": true,
+          "evidence": {
+            "difference": 0
+          }
+        },
+        {
+          "name": "V6 electrical, cooling and heat cues retain distinct restrained hues",
+          "pass": true,
+          "evidence": [
+            [
+              172.353603515625,
+              170.1019921875,
+              166.117490234375
+            ],
+            [
+              104.971064453125,
+              128.42091796875,
+              130.908408203125
+            ],
+            [
+              154.900419921875,
+              101.700849609375,
+              65.240224609375
+            ]
+          ]
+        },
+        {
+          "name": "V6 equal-count programs retain independent ecosystem palette uniforms",
+          "pass": true,
+          "evidence": {
+            "changed": 15.345617294311523,
+            "restored": 0,
+            "key": "gridninja-ecosystem-v1-31-46-opaque"
+          }
+        },
+        {
+          "name": "V6 compiles and renders the full96equipment/128route contract",
+          "pass": true,
+          "evidence": {
+            "uniformVectors": 254,
+            "maximumFragmentVectors": 1024,
+            "means": [
+              172.353603515625,
+              170.1019921875,
+              166.117490234375
+            ],
+            "key": "gridninja-ecosystem-v1-96-128-opaque"
+          }
+        },
+        {
+          "name": "WebGL remains error free after material reuse",
+          "pass": true,
+          "evidence": {
+            "programs": 11
+          }
+        }
+      ],
+      "captures": [
+        "stock-asymmetric-normal-orm",
+        "composed-neutral-normal-orm",
+        "flat-normal-comparison",
+        "mirrored-uv-stock",
+        "mirrored-uv-composed",
+        "normal-diagnostic",
+        "roughness-diagnostic",
+        "route-resting",
+        "route-hover",
+        "route-selected",
+        "same-counts-alternate-profile",
+        "same-counts-original-restored",
+        "equipment-edge-perturbed-normal",
+        "equipment-edge-geometric-normal",
+        "grille-resolved-holes",
+        "grille-minification-1",
+        "grille-minification-2",
+        "grille-minification-4",
+        "grille-minification-8",
+        "grille-minification-16",
+        "grille-minification-32",
+        "v6-authored-counts-rest",
+        "v6-static-selected-tap",
+        "v6-forward-signed-subrange",
+        "v6-reverse-signed-subrange",
+        "v6-sibling-route-isolation",
+        "v6-service-electrical",
+        "v6-service-cooling",
+        "v6-service-heat",
+        "v6-original-cooling-palette",
+        "v6-same-counts-alternate-palette",
+        "v6-original-palette-restored",
+        "v6-maximum-packed-identity-capacity"
+      ],
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "threeRevision": "186",
+      "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "msaaSamples": 4,
+      "drawingBuffer": [
+        512,
+        512
+      ],
+      "devicePixelRatio": 1.5,
+      "note": "Synthetic shader correctness benchmark; not a performance or asset-quality measurement.",
+      "sourceDigests": {
+        "src/lib/facility/engineering-materials.ts": "68259a7622dd0b6099b7e67a3bf9a59f163cbef6bd8aa9cf8087c05f43aca874",
+        "tests/support/facility-material-fixtures.mjs": "94f639d8be45d8653424425f26cb3be3bbe4e8bed23cdcc66d9e5fb0dc75f355",
+        "scripts/facility/verify-materials.mjs": "8ee1f8dbae96f86df8698fa5dccf6bf526b9253a51cfa80947db0ef82e14cf11",
+        "tests/unit/facility/fixtures/ecosystem-topology.json": "43e8276403674fa20bb63af6cceb2bee0cbc143020d9bc0c1c1bb31b21bf653e"
+      },
+      "errors": []
+    }
+  ]
+}

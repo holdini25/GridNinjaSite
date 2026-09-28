@@ -1,0 +1,73 @@
+{
+  "recordedAt": "2026-09-23T01:05:09.447982+00:00",
+  "provenance": {
+    "schemaVersion": "facility-performance.v2",
+    "sourceRevision": "7454c092dcb82834efbe87ac41983b913b3233e44eca311125b051dae140caee",
+    "buildId": "XAXezoqUa4q4e7M5uGy38",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v2",
+      "mode": "auto-desktop"
+    },
+    "harnessRevision": "c8db5da2d6b5f98cf4353e98046c931be353085391b18db35100177f61d9573b",
+    "browser": "149.0.7827.55",
+    "settings": {
+      "headed": true,
+      "angle": "metal",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "deviceScaleFactor": 2,
+      "closeCycles": 10,
+      "routePairs": 3
+    },
+    "settingsSha256": "7086579987215339f1cfbc2333a4a2a69b2abf663fcbf4d556149f1cf45485c2"
+  },
+  "scope": "Native Apple M5 Pro Metal equipment and pause inspection",
+  "observations": [
+    {
+      "case": "Initial full verification attempt",
+      "result": "One assertion failed: paused render counter advanced once from 435 to 436 after a 250 ms settling delay and during a 350 ms observation window. Native active p95 was 9.30 ms. The failed full report was superseded by the rerun; this note preserves the observation."
+    },
+    {
+      "case": "Targeted pause trace",
+      "result": "Sixteen samples over approximately 1.6 seconds all reported frame counter 254 and sampleCount 0. Continuous rendering was not reproduced."
+    },
+    {
+      "case": "Unchanged full verification rerun",
+      "result": "Passed. Paused counter 457 to 457; offscreen counter 478 to 478; fan and LED animation freezes passed for Pause, equipment disabled, and reduced motion. Actual fan phases and LED colors changed while active."
+    }
+  ],
+  "interpretation": "The first attempt observed a single late demand frame. Its cause was not established. A layout or other one-off invalidation is plausible, but not proven. No renderer change was made to conceal the observation. The targeted trace and unchanged complete rerun passed.",
+  "visualReview": "Before/after canvas captures show different fan-blade orientations and visible small amber rack LEDs. LED changes are deliberately subtle. Model surfaces remain readable on the black background.",
+  "captures": [
+    "build/facility/equipment-before.png",
+    "build/facility/equipment-after.png"
+  ],
+  "currentReport": "build/facility/browser-validation-native.json",
+  "retentionObservation": {
+    "closeCycles": {
+      "firstBytes": 9688812,
+      "lastBytes": 10593368,
+      "growthBytes": 904556
+    },
+    "spaWarmRoutePairs": {
+      "warmHomeBytes": 11320508,
+      "lastHomeBytes": 11925900,
+      "growthBytes": 605392
+    },
+    "graphics": "Every observed session reported the same geometry, texture, and estimated asset allocation counts. This does not measure total driver memory.",
+    "interpretation": "The 8 MiB smoke-test ceiling passed, with nonzero observed JS heap growth. This is bounded short-run evidence, not proof of zero retention or a long-duration leak test. Framework/router/compiler caches and cleanup timing can contribute; no heap-retaining path was proven.",
+    "staticReview": "Session cleanup aborts work and disposes its owned model; asset ownership releases geometries, materials, textures, ImageBitmaps and InstancedMesh resources once. Event listeners and the opt-in snapshot closure are removed. R3F 9.8 tears down after its reconciler cleanup commits and loses the old GL context. No application-global mutable scene cache or explicit per-session retention collection was found. Resource-owner identity Sets intentionally survive until late parsing callbacks settle and then become collectible with their session."
+  }
+}

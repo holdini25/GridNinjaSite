@@ -1,0 +1,164 @@
+{
+  "schemaVersion": 1,
+  "kind": "cooling",
+  "blenderVersion": "5.2.2 LTS",
+  "blenderBuildHash": "d13f752e3b9c",
+  "source": "assets-source/facility/cooling-specimen.blend",
+  "sourceSha256": "7924ec64c39a42ac65abe062cc8802f2f08cb62e3fc38e50f8dd6fff60abccd2",
+  "generatorSha256": "5a14e47ffb8165b62361c2ebd5780de92481553ac5aeabb52286e6bc75026c67",
+  "sourceModules": {
+    "generate.py": "5a14e47ffb8165b62361c2ebd5780de92481553ac5aeabb52286e6bc75026c67",
+    "export.py": "1c1c38961af5ea202f9e7953adc652a1402eec54a3d6fbc6c6a161d624af8f7f",
+    "surface_bake.py": "414735d153f452ad3fd695fb8e7da968559886a33327790d35caa42369a23485",
+    "service_routes.py": "98471c4feea0ed1733943a7a3f0aeb000fedec907e24d89fefa6e5886980aa78",
+    "engineering_metadata.py": "9a123cd1155bf73979ffedcd8d46e4477f5f95aa511a83eaa64b521393a6fd59",
+    "specimens.py": "71e9a76eab92b5d61c43dff2a1d635d201ee0d2802e519bd39c2ce86060abaa3",
+    "scene.json": "2266049789043c59275963612480994204f65dd002a385dbff0d229fd68431bb"
+  },
+  "exportBytes": 546792,
+  "gzipBytes": 378326,
+  "gzipLevel": 9,
+  "sha256": "3a6f828ce8a0d390f22e3a4d40dcafbc150aecad6ce023224f3a3d3d3c84f019",
+  "renderedTriangles": 4194,
+  "meshDrawCalls": 17,
+  "drawCallsWithLedInstances": 17,
+  "materialCount": 7,
+  "semanticIds": [
+    "GN_COOLER_COIL",
+    "GN_COOLER_FAN",
+    "GN_COOLER_FRAME",
+    "GN_COOLER_GUARD",
+    "GN_COOLER_MANIFOLD",
+    "GN_COOLER_PANEL",
+    "GN_SPECIMEN_FAN_ROTOR",
+    "GN_SPECIMEN_ROOT"
+  ],
+  "profile": {
+    "camera": [
+      3.4,
+      2.7,
+      4.0
+    ],
+    "target": [
+      0,
+      1.1,
+      0
+    ],
+    "padding": 1.12,
+    "background": "#080808",
+    "exposure": 1.15,
+    "colorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "lighting": {
+      "hemisphere": {
+        "sky": "#eeeeee",
+        "ground": "#3b3b3b",
+        "intensity": 0.65
+      },
+      "directional": [
+        {
+          "position": [
+            -8,
+            15,
+            8
+          ],
+          "color": "#fff0dd",
+          "intensity": 2.3
+        },
+        {
+          "position": [
+            7,
+            8,
+            -7
+          ],
+          "color": "#e0e0e0",
+          "intensity": 1
+        },
+        {
+          "position": [
+            0,
+            5,
+            12
+          ],
+          "color": "#e8e8e8",
+          "intensity": 0.5
+        }
+      ],
+      "environment": {
+        "preset": "industrial-softbox-v1",
+        "resolution": 128,
+        "intensity": 0.9,
+        "rotationY": 0
+      }
+    },
+    "motion": {
+      "fanRadiansPerSecond": 1.6,
+      "fanPhaseOffsets": [
+        0,
+        1.57,
+        3.14,
+        4.71
+      ],
+      "ledPulseRadiansPerSecond": 1.8,
+      "ledPulseAmplitude": 0.14
+    },
+    "led": {
+      "color": "#ffc079",
+      "steadyIntensity": 0.82,
+      "size": [
+        0.018,
+        0.012,
+        0.012
+      ]
+    },
+    "framing": "projected-geometry",
+    "engineering": {
+      "version": 1,
+      "seed": 41727,
+      "accent": {
+        "resting": "#9d632f",
+        "hover": "#ffbe63",
+        "selected": "#ffd18a",
+        "previewWeight": 0.85,
+        "baseEmission": 0.035,
+        "activeEmission": 1.0,
+        "transitionMs": 150
+      },
+      "activity": {
+        "resting": 0.12,
+        "peak": 1.0,
+        "steady": 0.5,
+        "pulseMs": [
+          120,
+          180
+        ],
+        "eventMs": [
+          80,
+          180
+        ],
+        "maxPulses": 3,
+        "ambientTraceSeconds": [
+          8,
+          12
+        ],
+        "selectedTraceQuietSeconds": 2.8
+      },
+      "cameraTransitionMs": 420,
+      "poseTransitionMs": 280,
+      "rendering": {
+        "ambientFps": 30,
+        "interactionFps": 60,
+        "mobilePixels": 650000,
+        "desktopPixels": 1500000,
+        "probeSeconds": 2
+      }
+    }
+  },
+  "constructionChecks": {
+    "hollowCasing": true,
+    "independentPanelThicknessMetres": 0.024,
+    "independentPartRoots": 6,
+    "serviceTrayTravelMetres": 0,
+    "ratingsOrTelemetry": false
+  }
+}

@@ -1,0 +1,3082 @@
+{
+  "measuredAt": "2026-09-23T12:36:31.269Z",
+  "provenance": {
+    "schemaVersion": "facility-performance.v2",
+    "sourceRevision": "848fbad3eec29dbf7dae0e243f8823964e64667513e24c5c4e86877b665ae3ba",
+    "buildId": "1y6XqMtrfOSt3lMsia_W5",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v4",
+      "mode": "auto-adaptive"
+    },
+    "harnessRevision": "b187496267bebe7395af7c8ebf028735c3c119797979ae602fc50dfd1fa83aed",
+    "browser": "154.0.8037.58",
+    "settings": {
+      "duration": 900,
+      "baseURL": "http://127.0.0.1:3000",
+      "native": true
+    },
+    "settingsSha256": "8b4747ab4ab3cd62b23590305d21ea6a13cd8ac3f4d3f1769078d238d36e28cb"
+  },
+  "result": "fail",
+  "samples": [
+    {
+      "elapsedSeconds": 1.006530916,
+      "frames": 66,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": null,
+      "cpuP95": null,
+      "sampleCount": 65,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 1.3750999999999998,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 169,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 1.3750999999999998,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 2.0154829160000003,
+      "frames": 97,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": null,
+      "cpuP95": null,
+      "sampleCount": 96,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 2.408099999999998,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 290,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 2.408099999999998,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 3.0239130409999997,
+      "frames": 127,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.800000011920929,
+      "sampleCount": 126,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 3.408199999999995,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 411,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 3.408199999999995,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 4.031447208,
+      "frames": 157,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.800000011920929,
+      "sampleCount": 156,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 4.408299999999995,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 532,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 4.408299999999995,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 5.0389922910000005,
+      "frames": 187,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.5,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 186,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 5.408199999999999,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 653,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 5.408199999999999,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 6.049607208,
+      "frames": 218,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.5,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 217,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 6.441600000000004,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 774,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 6.441600000000004,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 7.059768125,
+      "frames": 248,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.5,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 247,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 7.441700000000007,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 895,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 7.441700000000007,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 8.066789833,
+      "frames": 278,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.5,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 277,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 8.44160000000001,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1016,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 8.44160000000001,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 9.07334125,
+      "frames": 308,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.5,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 307,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 9.441600000000008,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1137,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 9.441600000000008,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 10.081925791,
+      "frames": 339,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 338,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 10.474900000000005,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1258,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 10.474900000000005,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 11.088794333,
+      "frames": 369,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 368,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 11.475000000000009,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1379,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 11.475000000000009,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 12.095541416,
+      "frames": 399,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.5,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 398,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 12.47490000000001,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1500,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 12.47490000000001,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 13.101425333,
+      "frames": 429,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 428,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 13.475000000000012,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1620,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 13.475000000000012,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 14.105535291,
+      "frames": 459,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.5,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 458,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 14.475000000000014,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1741,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 14.475000000000014,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 15.1153555,
+      "frames": 490,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.70000076293945,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 489,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 15.50830000000001,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1862,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 15.50830000000001,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 16.122856458,
+      "frames": 520,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 519,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 16.508200000000016,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 1983,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 16.508200000000016,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 17.131494625,
+      "frames": 550,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 549,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 17.50820000000003,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2104,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 17.50820000000003,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 18.137869666000004,
+      "frames": 580,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 579,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 18.50830000000004,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2224,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 18.50830000000004,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 19.145408333,
+      "frames": 610,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 609,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 19.50830000000005,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2345,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 19.50830000000005,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 20.153016916000002,
+      "frames": 641,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 640,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 20.541400000000067,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2466,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 20.541400000000067,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 21.159140291,
+      "frames": 671,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 670,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 21.541600000000074,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2587,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 21.541600000000074,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 22.167049000000002,
+      "frames": 701,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 700,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 22.54150000000009,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2708,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 22.54150000000009,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 23.174996958,
+      "frames": 731,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 730,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 23.54160000000009,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2829,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 23.54160000000009,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 24.179107541,
+      "frames": 762,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 761,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 24.574300000000097,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 2950,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 24.574300000000097,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 25.187724375000002,
+      "frames": 792,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 791,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 25.57490000000011,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3071,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 25.57490000000011,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 26.194190916,
+      "frames": 822,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 821,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 26.57490000000011,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3191,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 26.57490000000011,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 27.202275,
+      "frames": 852,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 851,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 27.574900000000113,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3312,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 27.574900000000113,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 28.210124458000003,
+      "frames": 882,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 881,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 28.574900000000117,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3433,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 28.574900000000117,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 29.2169065,
+      "frames": 913,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.099998474121094,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 912,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 29.60820000000012,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3554,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 29.60820000000012,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 30.221873125000002,
+      "frames": 938,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 937,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 30.599900000000126,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3653,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 30.599900000000126,
+      "transitionRemaining": 0,
+      "missedRatio": 0.04
+    },
+    {
+      "elapsedSeconds": 31.22921725,
+      "frames": 968,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 967,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 31.599900000000137,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3773,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 0.75,
+      "clockSeconds": 31.599900000000137,
+      "transitionRemaining": 0,
+      "missedRatio": 0.04
+    },
+    {
+      "elapsedSeconds": 32.235850541,
+      "frames": 1003,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.5,
+      "sampleCount": 1002,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 60,
+      "activeSeconds": 32.62490000000015,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 3895,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 33.25830000000015,
+      "clockSeconds": 32.62490000000015,
+      "transitionRemaining": 0,
+      "missedRatio": 0.047619047619047616
+    },
+    {
+      "elapsedSeconds": 33.241125416,
+      "frames": 1063,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.4000000059604645,
+      "sampleCount": 1062,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 60,
+      "activeSeconds": 33.6249000000002,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4016,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 34.3749000000002,
+      "clockSeconds": 33.6249000000002,
+      "transitionRemaining": 0,
+      "missedRatio": 0.008264462809917356
+    },
+    {
+      "elapsedSeconds": 34.247043375000004,
+      "frames": 1119,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 17.600000381469727,
+      "cpuP95": 0.4000000059604645,
+      "sampleCount": 1118,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 60,
+      "activeSeconds": 34.641500000000235,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4138,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 35.37490000000024,
+      "clockSeconds": 34.641500000000235,
+      "transitionRemaining": 0,
+      "missedRatio": 0.008264462809917356
+    },
+    {
+      "elapsedSeconds": 35.25065575,
+      "frames": 1179,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 17.600000381469727,
+      "cpuP95": 0.30000001192092896,
+      "sampleCount": 1178,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 60,
+      "activeSeconds": 35.641600000000295,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4258,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 36.19150000000028,
+      "clockSeconds": 35.641600000000295,
+      "transitionRemaining": 0,
+      "missedRatio": 0.008264462809917356
+    },
+    {
+      "elapsedSeconds": 36.256327875000004,
+      "frames": 1239,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 17.299999237060547,
+      "cpuP95": 0.30000001192092896,
+      "sampleCount": 1238,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 60,
+      "activeSeconds": 36.64150000000036,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4379,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 37.39150000000036,
+      "clockSeconds": 36.64150000000036,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 37.263364625,
+      "frames": 1297,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 16.799999237060547,
+      "cpuP95": 0.5,
+      "sampleCount": 1296,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 37.63320000000043,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4500,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 37.558200000000376,
+      "clockSeconds": 37.63320000000043,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 38.270702625,
+      "frames": 1327,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 1326,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 38.63330000000043,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4620,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 37.558200000000376,
+      "clockSeconds": 38.63330000000043,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 39.274681333000004,
+      "frames": 1363,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.099998474121094,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 1362,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 60,
+      "activeSeconds": 39.670200000000435,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4745,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.38650000000044,
+      "clockSeconds": 39.670200000000435,
+      "transitionRemaining": 0,
+      "missedRatio": 0.008264462809917356
+    },
+    {
+      "elapsedSeconds": 40.281935791,
+      "frames": 1420,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.099998474121094,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 1419,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 40.64560000000048,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4865,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 40.64560000000048,
+      "transitionRemaining": 0,
+      "missedRatio": 0.008264462809917356
+    },
+    {
+      "elapsedSeconds": 41.288719916000005,
+      "frames": 1451,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.099998474121094,
+      "cpuP95": 0.6000000238418579,
+      "sampleCount": 1450,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 41.67810000000048,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 4986,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 41.67810000000048,
+      "transitionRemaining": 0,
+      "missedRatio": 0.008264462809917356
+    },
+    {
+      "elapsedSeconds": 42.295417833,
+      "frames": 1481,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.79999923706055,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 1480,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 42.67900000000049,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5107,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 42.67900000000049,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 43.302316708,
+      "frames": 1511,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.900001525878906,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 1510,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 43.67900000000049,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5228,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 43.67900000000049,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 44.309903375000005,
+      "frames": 1541,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 1540,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 44.67810000000049,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5349,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 44.67810000000049,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 45.31827375,
+      "frames": 1572,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 1571,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 45.71190000000049,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5470,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 45.71190000000049,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 46.325600666,
+      "frames": 1602,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.800000011920929,
+      "sampleCount": 1601,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 46.7123000000005,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5591,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 46.7123000000005,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 47.329935625,
+      "frames": 1632,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.800000011920929,
+      "sampleCount": 1631,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 47.71230000000049,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5711,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 47.71230000000049,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 48.335309957999996,
+      "frames": 1662,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.099998474121094,
+      "cpuP95": 0.800000011920929,
+      "sampleCount": 1661,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 48.7124000000005,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5832,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 48.7124000000005,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 49.342807083,
+      "frames": 1692,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.79999923706055,
+      "cpuP95": 0.800000011920929,
+      "sampleCount": 1691,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 49.7124000000005,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 5953,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 49.7124000000005,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 50.34959325,
+      "frames": 1722,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.70000076293945,
+      "cpuP95": 0.800000011920929,
+      "sampleCount": 1721,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 50.71230000000052,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 6073,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 50.71230000000052,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 51.354254125,
+      "frames": 1751,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 33.599998474121094,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 1750,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 51.67910000000049,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 6188,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 51.67910000000049,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 52.360719458,
+      "frames": 1776,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": 34.20000076293945,
+      "cpuP95": 0.699999988079071,
+      "sampleCount": 1775,
+      "dpr": 1.25,
+      "quality": "balanced",
+      "targetFps": 30,
+      "activeSeconds": 52.73520000000048,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 6288,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -7.994290226427825,
+        7.994290226427827,
+        4.586301653882515,
+        -4.818735228352125
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 52.73520000000048,
+      "transitionRemaining": 0,
+      "missedRatio": 0.05511811023622047
+    },
+    {
+      "elapsedSeconds": 53.368618166,
+      "frames": 1806,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": null,
+      "cpuP95": null,
+      "sampleCount": 5,
+      "dpr": 1,
+      "quality": "economy",
+      "targetFps": 30,
+      "activeSeconds": 53.73720000000048,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 6411,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        },
+        {
+          "activeSeconds": 53.57050000000049,
+          "reason": "missed-frame-deadlines",
+          "from": "balanced",
+          "to": "economy"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -351.80078125,
+        351.80078125,
+        206.94140625,
+        -206.94140625
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 53.73720000000048,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    },
+    {
+      "elapsedSeconds": 54.376627666,
+      "frames": 1837,
+      "drawCalls": 39,
+      "triangles": 33310,
+      "geometries": 39,
+      "textures": 4,
+      "materials": 10,
+      "estimatedBytes": 7412735,
+      "peakEstimatedBytes": 9051135,
+      "environmentBytes": 2359296,
+      "frameP95": null,
+      "cpuP95": null,
+      "sampleCount": 36,
+      "dpr": 1,
+      "quality": "economy",
+      "targetFps": 30,
+      "activeSeconds": 54.769700000000455,
+      "view": {
+        "kind": "overview"
+      },
+      "qualityProbe": false,
+      "assetError": null,
+      "requestedView": {
+        "kind": "overview"
+      },
+      "sceneKind": "overview",
+      "probeName": "GN_PLATFORM_Dark",
+      "probeVisible": true,
+      "probeRendered": true,
+      "schedulerRequestCount": 6533,
+      "schedulerPending": 1,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        },
+        {
+          "activeSeconds": 53.57050000000049,
+          "reason": "missed-frame-deadlines",
+          "from": "balanced",
+          "to": "economy"
+        }
+      ],
+      "hiddenFrameCount": 0,
+      "cameraFrustum": [
+        -351.80078125,
+        351.80078125,
+        206.94140625,
+        -206.94140625
+      ],
+      "rendererCssSize": [
+        703.6015625,
+        413.8828125
+      ],
+      "interactionUntil": 40.56980000000045,
+      "clockSeconds": 54.769700000000455,
+      "transitionRemaining": 0,
+      "missedRatio": 0
+    }
+  ],
+  "interactions": [],
+  "errors": [],
+  "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+  "thermalBefore": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "failure": "page.waitForTimeout: Target page, context or browser has been closed"
+}

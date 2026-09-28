@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@/lib/browser-zod"
 import { ASSESSMENT_PERSPECTIVES, ASSESSMENT_SCENARIOS } from "@/content/assessments/constants"
 
 export const assessmentScenarioSchema = z.enum(ASSESSMENT_SCENARIOS)

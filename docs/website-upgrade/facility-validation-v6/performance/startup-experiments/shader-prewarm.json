@@ -1,0 +1,139 @@
+{
+  "label": "shader-prewarm",
+  "measuredAt": "2026-09-23T23:12:13.381Z",
+  "identity": {
+    "sourceRevision": "89560de522bbe8c6be56aba099593163977717ad26047539c84d2fa19777d706",
+    "buildId": "5xZk9ag9vdBq2yAaAciWp",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v6",
+      "mode": "auto-adaptive"
+    }
+  },
+  "settings": {
+    "formFactor": "mobile",
+    "maxWaitForLoad": 45000
+  },
+  "runs": [
+    {
+      "route": "/",
+      "run": 1,
+      "lcp": 2764.2375999999995,
+      "tbt": 163,
+      "cls": 0,
+      "bytes": 943227
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "lcp": 2757.6573499999995,
+      "tbt": 171,
+      "cls": 0,
+      "bytes": 943227
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "lcp": 2759.1578500000005,
+      "tbt": 184,
+      "cls": 0,
+      "bytes": 943227
+    },
+    {
+      "route": "/",
+      "run": 4,
+      "lcp": 2755.8799000000004,
+      "tbt": 190,
+      "cls": 0,
+      "bytes": 943227
+    },
+    {
+      "route": "/",
+      "run": 5,
+      "lcp": 2756.84045,
+      "tbt": 125,
+      "cls": 0,
+      "bytes": 943227
+    },
+    {
+      "route": "/demo",
+      "run": 1,
+      "lcp": 2758.7196000000004,
+      "tbt": 0.5,
+      "cls": 0,
+      "bytes": 269120
+    },
+    {
+      "route": "/demo",
+      "run": 2,
+      "lcp": 2757.68555,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 269120
+    },
+    {
+      "route": "/demo",
+      "run": 3,
+      "lcp": 2756.1656000000003,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 269120
+    },
+    {
+      "route": "/demo",
+      "run": 4,
+      "lcp": 2757.6607999999997,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 269120
+    },
+    {
+      "route": "/demo",
+      "run": 5,
+      "lcp": 2707.0648500000007,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 269120
+    }
+  ],
+  "result": "pass",
+  "medians": {
+    "/": {
+      "lcp": 2757.6573499999995,
+      "tbt": 171,
+      "cls": 0,
+      "bytes": 943227
+    },
+    "/demo": {
+      "lcp": 2757.6607999999997,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 269120
+    }
+  }
+}

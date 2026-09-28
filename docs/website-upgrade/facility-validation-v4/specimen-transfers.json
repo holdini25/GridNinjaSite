@@ -1,0 +1,131 @@
+{
+  "measuredAt": "2026-09-23T15:16:51.375Z",
+  "provenance": {
+    "schemaVersion": "facility-performance.v2",
+    "sourceRevision": "69001f26ca42e03f2116576a9bf7c124f048c5c8a60115fafbc483612520dcaa",
+    "buildId": "M9e7UvRUEZ9rRvSIsWO2g",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v4",
+      "mode": "auto-adaptive"
+    },
+    "harnessRevision": "fa3124697e1efc3f69929a2c32f887018f588767fb4972078767c5e3e851eebc",
+    "browser": "154.0.8037.58",
+    "settings": {
+      "baseURL": "http://127.0.0.1:3000",
+      "freshContext": true,
+      "cacheEnabled": true,
+      "supplementalHarnessSha256": "567453601dd49c8593c939773dcb53380faeb716fdf52aa82990b0e3be209691"
+    },
+    "settingsSha256": "1b795f883a1b35564e607c23533324ed705adfc9322d4794a40802a343e7a908"
+  },
+  "steps": [
+    {
+      "kind": "rack",
+      "explicit": true,
+      "readyMs": 827.3094169999999,
+      "bytes": 395857,
+      "requests": [
+        {
+          "requestId": "60488.47",
+          "hop": 0,
+          "url": "http://127.0.0.1:3000/assets/facility/facility-v4/rack.glb",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "br",
+          "headerBytes": 661,
+          "dataBytes": 395196,
+          "bytes": 395857,
+          "terminal": "finished",
+          "error": null
+        }
+      ]
+    },
+    {
+      "kind": "overview",
+      "explicit": true,
+      "readyMs": 824.8957499999997,
+      "bytes": 0,
+      "requests": [
+        {
+          "requestId": "60488.50",
+          "hop": 0,
+          "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "br",
+          "headerBytes": 0,
+          "dataBytes": 0,
+          "bytes": 0,
+          "terminal": "finished",
+          "error": null
+        }
+      ]
+    },
+    {
+      "kind": "cooling",
+      "explicit": true,
+      "readyMs": 814.0167499999998,
+      "bytes": 370272,
+      "requests": [
+        {
+          "requestId": "60488.53",
+          "hop": 0,
+          "url": "http://127.0.0.1:3000/assets/facility/facility-v4/cooling.glb",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "br",
+          "headerBytes": 661,
+          "dataBytes": 369611,
+          "bytes": 370272,
+          "terminal": "finished",
+          "error": null
+        }
+      ]
+    },
+    {
+      "kind": "overview",
+      "explicit": true,
+      "readyMs": 821.7582499999999,
+      "bytes": 0,
+      "requests": [
+        {
+          "requestId": "60488.56",
+          "hop": 0,
+          "url": "http://127.0.0.1:3000/assets/facility/facility-v4/facility.glb",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "br",
+          "headerBytes": 0,
+          "dataBytes": 0,
+          "bytes": 0,
+          "terminal": "finished",
+          "error": null
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "result": "pass",
+  "automatic": {
+    "bytes": 1083936,
+    "specimenRequests": []
+  }
+}

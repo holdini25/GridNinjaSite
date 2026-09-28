@@ -1,0 +1,139 @@
+{
+  "label": "inline-css",
+  "measuredAt": "2026-09-23T23:02:03.697Z",
+  "identity": {
+    "sourceRevision": "34536e472bee1141d69e07562637c1d77bd0377c91fc10a6f41a51d072ca9b83",
+    "buildId": "J6pbWyBlDRlHCQNvktLM5",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v6",
+      "mode": "auto-adaptive"
+    }
+  },
+  "settings": {
+    "formFactor": "mobile",
+    "maxWaitForLoad": 45000
+  },
+  "runs": [
+    {
+      "route": "/",
+      "run": 1,
+      "lcp": 1969.694,
+      "tbt": 177.5,
+      "cls": 0,
+      "bytes": 992184
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "lcp": 2905.8107,
+      "tbt": 201.797325,
+      "cls": 0,
+      "bytes": 992184
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "lcp": 2906.8409,
+      "tbt": 191.5,
+      "cls": 0,
+      "bytes": 992184
+    },
+    {
+      "route": "/",
+      "run": 4,
+      "lcp": 2905.9040999999997,
+      "tbt": 200.77397500000006,
+      "cls": 0,
+      "bytes": 992184
+    },
+    {
+      "route": "/",
+      "run": 5,
+      "lcp": 2903.078,
+      "tbt": 188,
+      "cls": 0,
+      "bytes": 992184
+    },
+    {
+      "route": "/demo",
+      "run": 1,
+      "lcp": 2905.0243,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 317429
+    },
+    {
+      "route": "/demo",
+      "run": 2,
+      "lcp": 2903.1921,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 317429
+    },
+    {
+      "route": "/demo",
+      "run": 3,
+      "lcp": 2903.9557999999997,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 317429
+    },
+    {
+      "route": "/demo",
+      "run": 4,
+      "lcp": 2904.5052,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 317429
+    },
+    {
+      "route": "/demo",
+      "run": 5,
+      "lcp": 2903.4323999999992,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 317429
+    }
+  ],
+  "result": "pass",
+  "medians": {
+    "/": {
+      "lcp": 2905.8107,
+      "tbt": 191.5,
+      "cls": 0,
+      "bytes": 992184
+    },
+    "/demo": {
+      "lcp": 2903.9557999999997,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 317429
+    }
+  }
+}

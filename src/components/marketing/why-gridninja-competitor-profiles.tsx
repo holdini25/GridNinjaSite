@@ -138,10 +138,10 @@ export function WhyGridNinjaCompetitorProfiles({
                 aria-controls={`competitor-panel-${profile.id}`}
                 tabIndex={selected ? 0 : -1}
                 className={cn(
-                  "grid min-h-24 min-w-[17rem] snap-start grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-3 rounded-[1rem] border px-4 py-4 text-left transition-colors motion-reduce:transition-none lg:min-w-0",
+                  "grid min-h-24 min-w-[17rem] snap-start grid-cols-[2rem_minmax(0,1fr)_auto] items-start gap-3 rounded-[1rem] border px-4 py-4 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none lg:min-w-0",
                   selected
                     ? "border-primary/55 bg-primary/10 shadow-[0_18px_42px_-32px_rgba(255,159,26,0.88)]"
-                    : "border-border/70 bg-surface/70 hover:border-proof-cyan/30 hover:bg-surface-2/85"
+                    : "border-border bg-surface hover:border-primary/50 hover:bg-surface-hover"
                 )}
                 onClick={() => selectProfile(profile.id)}
                 onKeyDown={(event) => handleTabKeyDown(event, index)}
@@ -178,9 +178,9 @@ export function WhyGridNinjaCompetitorProfiles({
           aria-labelledby={`competitor-tab-${activeProfile.id}`}
           tabIndex={0}
           data-testid="competitor-panel"
-          className="animate-in fade-in slide-in-from-bottom-1 min-w-0 rounded-[1.45rem] border border-border/70 bg-[radial-gradient(circle_at_90%_8%,rgba(97,228,255,0.07),transparent_23rem),linear-gradient(145deg,rgba(19,30,41,0.96),rgba(8,13,18,0.96))] p-5 shadow-[0_30px_90px_-48px_rgba(0,0,0,0.9)] duration-[180ms] motion-reduce:animate-none sm:p-6"
+          className="animate-in fade-in slide-in-from-bottom-1 min-w-0 rounded-[1.45rem] border border-border bg-surface p-5 shadow-[0_30px_90px_-48px_rgba(0,0,0,0.9)] duration-[180ms] motion-reduce:animate-none sm:p-6"
         >
-          <div className="flex flex-col gap-5 border-b border-border/65 pb-5 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex flex-col gap-5 border-b border-divider pb-5 sm:flex-row sm:items-start sm:justify-between">
             <div className="min-w-0">
               <p className="font-mono text-xs tracking-[0.15em] text-primary uppercase">
                 Active profile
@@ -197,7 +197,7 @@ export function WhyGridNinjaCompetitorProfiles({
               aria-expanded={sourcesOpen}
               aria-controls={`competitor-sources-${activeProfile.id}`}
               onClick={() => setSourcesOpen((open) => !open)}
-              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-full border border-proof-cyan/30 bg-proof-cyan/5 px-3.5 py-2 font-mono text-xs tracking-[0.09em] text-proof-cyan uppercase transition-colors hover:bg-proof-cyan/12 focus-visible:ring-3 focus-visible:ring-ring/45 motion-reduce:transition-none"
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-2 self-start rounded-full border border-proof-cyan/30 bg-proof-cyan/5 px-3.5 py-2 font-mono text-xs tracking-[0.09em] text-proof-cyan uppercase transition-colors hover:bg-proof-cyan/12 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none"
             >
               <span
                 aria-hidden="true"
@@ -234,7 +234,7 @@ export function WhyGridNinjaCompetitorProfiles({
             {activeProfile.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-border/70 bg-background/35 px-3 py-1.5 font-mono text-xs tracking-[0.07em] text-muted-foreground uppercase"
+                className="rounded-full border border-border bg-surface px-3 py-1.5 font-mono text-xs tracking-[0.07em] text-muted-foreground uppercase"
               >
                 {tag}
               </span>
@@ -246,9 +246,9 @@ export function WhyGridNinjaCompetitorProfiles({
               id={`competitor-sources-${activeProfile.id}`}
               aria-label={`${activeProfile.name} source notes`}
               data-testid="competitor-sources"
-              className="animate-in fade-in slide-in-from-bottom-1 mt-5 rounded-[1rem] border border-proof-cyan/25 bg-background/55 p-4 duration-[180ms] motion-reduce:animate-none"
+              className="animate-in fade-in slide-in-from-bottom-1 mt-5 rounded-[1rem] border border-proof-cyan/25 bg-surface p-4 duration-[180ms] motion-reduce:animate-none"
             >
-              <div className="flex flex-col gap-2 border-b border-border/65 pb-4 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex flex-col gap-2 border-b border-divider pb-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <p className="font-mono text-xs tracking-[0.15em] text-proof-cyan uppercase">
                     Source discipline
@@ -266,13 +266,13 @@ export function WhyGridNinjaCompetitorProfiles({
                 {activeSources.map((source) => (
                   <li
                     key={source.id}
-                    className="rounded-[0.8rem] border border-border/65 bg-surface/60 p-4"
+                    className="rounded-[0.8rem] border border-border bg-surface p-4"
                   >
                     <a
                       href={source.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-proof-cyan focus-visible:rounded-sm focus-visible:ring-3 focus-visible:ring-ring/45"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-proof-cyan focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                     >
                       {source.title}
                       <ExternalLinkIcon aria-hidden="true" className="size-4" />
@@ -292,7 +292,7 @@ export function WhyGridNinjaCompetitorProfiles({
         </article>
       </div>
 
-      <div className="rounded-[1.1rem] border border-border/70 bg-surface/65 px-5 py-4">
+      <div className="rounded-[1.1rem] border border-border bg-surface px-5 py-4">
         <p className="font-mono text-xs tracking-[0.15em] text-muted-foreground uppercase">
           Category boundary
         </p>
@@ -312,7 +312,7 @@ function ClaimCard({ claim }: { claim: WhyGridNinjaCompetitorClaim }) {
       className={cn(
         "rounded-[0.95rem] border p-4",
         claim.kind === "public-materials" &&
-          "border-border/75 bg-background/35",
+          "border-border bg-surface",
         claim.kind === "shared-terrain" &&
           "border-sky-300/30 bg-sky-400/10",
         (claim.kind === "gridninja-responsibility" ||
@@ -346,7 +346,7 @@ function ResponsibilityMap({
   return (
     <section
       aria-labelledby={`responsibility-map-title-${profile.id}`}
-      className="mt-6 rounded-[1rem] border border-border/70 bg-background/35 p-4"
+      className="mt-6 rounded-[1rem] border border-border bg-surface p-4"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -391,7 +391,7 @@ function ResponsibilityMap({
                   owner === "gridNinja" &&
                     "border-primary/45 bg-primary/12 text-primary",
                   owner === "unassigned" &&
-                    "border-border/65 bg-background/25 text-muted-foreground"
+                    "border-border bg-surface text-muted-foreground"
                 )}
               >
                 <span className="block font-mono text-[0.65rem] tracking-[0.1em] opacity-75">

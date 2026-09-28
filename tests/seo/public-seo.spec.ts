@@ -8,6 +8,7 @@ import {
 } from "../../src/seo/internal-link-graph.mjs"
 import {
   getSeoRoute,
+  getRelatedSeoRoutes,
   indexableSeoRoutes,
   seoRoutes,
 } from "../../src/seo/route-manifest"
@@ -337,7 +338,7 @@ test.describe("manifest-derived search eligibility", () => {
           .map((anchor) => anchor.getAttribute("data-seo-related-target"))
           .filter((target): target is string => Boolean(target))
       )
-      for (const target of route.relatedPaths) {
+      for (const { path: target } of getRelatedSeoRoutes(route.path)) {
         if (!renderedDeclaredTargets.has(target)) {
           missingDeclaredEdges.push({ source: route.path, target })
         }
@@ -449,7 +450,7 @@ test.describe("snippet and raw-content controls", () => {
     expect(response?.status()).toBe(200)
     await expect(page.locator("main h1")).toHaveCount(1)
     await expect(page.locator("main h1")).toBeVisible()
-    await expect(page.locator("main h1 + p")).toContainText("paid, bounded capacity decision assessment")
+    await expect(page.locator("main h1 + p")).toHaveText("Evaluate one capacity commitment through a paid, bounded assessment of authorized historical inputs. Receive a decision brief with the modeled result, its conditions, and what still needs review.")
     await expect(page.locator("main h1 + p")).toBeVisible()
     await expect(
       page.getByText("AI Data Center Virtual Capacity Control Plane", {
@@ -457,7 +458,7 @@ test.describe("snippet and raw-content controls", () => {
       }).first()
     ).toBeVisible()
     await expect(
-      page.getByRole("link", { name: "Scope an assessment", exact: true }).first()
+      page.getByRole("main").getByRole("link", { name: "Contact Us", exact: true }).first()
     ).toBeVisible()
     expect((await page.locator("main section").count())).toBeGreaterThan(0)
     expect((await page.locator("main").innerText()).toLowerCase()).toContain(
@@ -565,7 +566,7 @@ test.describe("snippet and raw-content controls", () => {
     ).toBe(true)
     await expect(page.locator("main h1")).toBeVisible()
     await expect(
-      page.getByRole("link", { name: "Scope an assessment", exact: true }).first()
+      page.getByRole("main").getByRole("link", { name: "Contact Us", exact: true }).first()
     ).toBeVisible()
     expect(await page.locator("main h1").evaluate((node) => getComputedStyle(node).opacity)).toBe(
       "1"

@@ -1,0 +1,121 @@
+name: Enterprise functional checks (not production release approval)
+on:
+  workflow_dispatch:
+    inputs:
+      visual_release:
+        description: Exact registered visual candidate (must exist and pass validation)
+        type: string
+        required: true
+        default: facility-v11
+      graphics_mode:
+        description: Adaptive candidate required by the complete functional suite (rollback modes use separate smoke checks)
+        type: choice
+        options: [auto-adaptive]
+        default: auto-adaptive
+permissions:
+  contents: read
+concurrency:
+  group: enterprise-candidate-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  FACILITY_ASSET_RELEASE: ${{ inputs.visual_release }}
+  FACILITY_3D_MODE: ${{ inputs.graphics_mode }}
+  GRIDNINJA_CSP_MODE: enforce
+  # This portable artifact deliberately uses no Vercel telemetry branch and a
+  # test verifier. The ledger's production-configured-performance gate remains
+  # not-run until the real HTTPS deployment and production dependencies pass.
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: '22.23.2', cache: npm }
+      - run: npm ci
+      - name: Require the activation policy exercised by this suite
+        run: test "$FACILITY_3D_MODE" = auto-adaptive
+      - run: mkdir -p build/qa/enterprise-ci
+      - run: npm run brand:check && npm run lint && npm run typecheck
+      - run: npm run test:unit -- --reporter=default --reporter=json --outputFile=build/qa/enterprise-ci/unit.json
+      - run: npm run build
+      - run: node scripts/qa/candidate.mjs init --ledger build/qa/enterprise-ci/candidate.json
+      - run: npm sbom --omit=dev --sbom-format=cyclonedx > build/qa/enterprise-ci/sbom.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: enterprise-build-${{ github.sha }}
+          include-hidden-files: true
+          path: |
+            .next
+            !.next/cache/**
+            build/qa/enterprise-ci
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: enterprise-source-checks-${{ github.sha }}
+          path: |
+            build/qa/enterprise-ci
+            coverage
+          if-no-files-found: warn
+          retention-days: 30
+      - name: State qualification boundary
+        if: always()
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" <<'SUMMARY'
+          ## Functional checks only
+          This job does not approve a production release. Its build has production observability disabled, test verification, and local HTTP browser delivery. Native/physical-device performance, real HTTPS/telemetry/verification, independent accessibility, visual approval, delivery/recovery, and the candidate go/no-go remain separate required gates. The candidate ledger starts with no passing gates; do not infer release readiness from this workflow's status.
+          SUMMARY
+  browser:
+    needs: candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { project: chromium-desktop, engine: chromium }
+          - { project: chromium-mobile, engine: chromium }
+          - { project: firefox-desktop, engine: firefox }
+          - { project: webkit-desktop, engine: webkit }
+          - { project: webkit-mobile, engine: webkit }
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: '22.23.2', cache: npm }
+      - run: npm ci
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: enterprise-build-${{ github.sha }}
+      - run: npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Verify the same build and execute journeys
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
+          PLAYWRIGHT_JSON_OUTPUT_FILE: build/qa/enterprise-ci/browser-${{ matrix.project }}.json
+        run: |
+          node --input-type=module -e 'import { verifiedBuildIdentity } from "./scripts/facility/performance-contract.mjs"; await verifiedBuildIdentity()'
+          npm run start -- --hostname 127.0.0.1 --port 3000 > build/qa/enterprise-ci/server-${{ matrix.project }}.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:3000/ >/dev/null; then break; fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then exit 1; fi
+            sleep 1
+          done
+          npx playwright test tests/e2e/assessment.spec.ts tests/e2e/navigation.spec.ts tests/e2e/facility-navigation-v7.spec.ts tests/e2e/enterprise-*.spec.ts --project=${{ matrix.project }} --workers=1 --retries=0 --reporter=list,json
+      - name: Reject absent execution and unexplained skips
+        if: always()
+        run: |
+          node scripts/qa/enterprise-functional-policy.mjs '${{ matrix.project }}' build/qa/enterprise-ci/policy-${{ matrix.project }}.json
+          node scripts/qa/candidate.mjs skips --report build/qa/enterprise-ci/browser-${{ matrix.project }}.json --policy build/qa/enterprise-ci/policy-${{ matrix.project }}.json --out build/qa/enterprise-ci/skips-${{ matrix.project }}.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: enterprise-${{ matrix.project }}-${{ github.sha }}
+          path: |
+            build/qa/enterprise-ci
+            test-results
+          if-no-files-found: error
+          retention-days: 30

@@ -46,8 +46,8 @@ test.describe("production brand metadata routes", () => {
       start_url: "/",
       scope: "/",
       display: "standalone",
-      background_color: "#070a0d",
-      theme_color: "#070a0d",
+      background_color: "#080808",
+      theme_color: "#080808",
       icons: [
         {
           src: "/gridninja-icon-192.png",
@@ -128,7 +128,7 @@ test.describe("production brand metadata routes", () => {
     )
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute(
       "content",
-      "#070a0d"
+      "#080808"
     )
     await expect(page).toHaveTitle(homepageRoute.title)
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(

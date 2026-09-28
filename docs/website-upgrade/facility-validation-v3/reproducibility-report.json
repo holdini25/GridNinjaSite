@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "method": "Standalone export from saved editable master using pinned native Blender 5.2.2 LTS d13f752e3b9c",
+  "candidateSha256": "43ff2688b2a7765b38ea59e8918734b20da9fe3beaaaf65f3185bd87d5c6b5ac",
+  "reexportSha256": "43ff2688b2a7765b38ea59e8918734b20da9fe3beaaaf65f3185bd87d5c6b5ac",
+  "byteIdentical": true,
+  "bytes": 2080304,
+  "sourceSha256": "945e25862ba190bf150c938728937ad6424b05d0405903a9c2d09ab57dedbe28",
+  "sourceModules": {
+    "generate.py": "cc93fac11d34a13b1f8a46eb8a18647bab4a344215f0d80b4a9a93624429d1f7",
+    "export.py": "7baec2777ca90723aa1706fcef94d54f77558748f4ca70699a74dfe50b04ee43",
+    "surface_bake.py": "414735d153f452ad3fd695fb8e7da968559886a33327790d35caa42369a23485",
+    "service_routes.py": "12bc03519fc3544a04080656121a6252e9e35438076a5e5a0fa027328fd92136",
+    "scene.json": "2266049789043c59275963612480994204f65dd002a385dbff0d229fd68431bb"
+  },
+  "result": "passed"
+}

@@ -1,0 +1,24 @@
+
+> nextjs@0.1.0 facility:measure
+> node scripts/facility/measure-page.mjs
+
+{"route":"/","profile":"desktop","run":1,"transferBytes":953191,"renderer":"hardware","frameP95":33.900001525878906,"capabilityP95":17.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":2,"transferBytes":953191,"renderer":"hardware","frameP95":34.099998474121094,"capabilityP95":17.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":3,"transferBytes":953191,"renderer":"hardware","frameP95":34.20000076293945,"capabilityP95":17.600000381469727,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":4,"transferBytes":953191,"renderer":"hardware","frameP95":34.20000076293945,"capabilityP95":17.600000381469727,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":5,"transferBytes":953191,"renderer":"hardware","frameP95":34.400001525878906,"capabilityP95":18,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":1,"transferBytes":920317,"renderer":"hardware","frameP95":33.900001525878906,"capabilityP95":17.5,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":2,"transferBytes":920317,"renderer":"hardware","frameP95":33.5,"capabilityP95":16.899999618530273,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":3,"transferBytes":920317,"renderer":"hardware","frameP95":34.20000076293945,"capabilityP95":17.899999618530273,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":4,"transferBytes":920317,"renderer":"hardware","frameP95":33.5,"capabilityP95":17,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":5,"transferBytes":920317,"renderer":"hardware","frameP95":33.79999923706055,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":1,"transferBytes":959581,"renderer":"hardware","frameP95":34.20000076293945,"capabilityP95":18.100000381469727,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":2,"transferBytes":959581,"renderer":"hardware","frameP95":34.29999923706055,"capabilityP95":18.100000381469727,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":3,"transferBytes":959581,"renderer":"hardware","frameP95":34.29999923706055,"capabilityP95":17.5,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":4,"transferBytes":959581,"renderer":"hardware","frameP95":33.70000076293945,"capabilityP95":17.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":5,"transferBytes":959581,"renderer":"hardware","frameP95":33.79999923706055,"capabilityP95":18,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":1,"transferBytes":926707,"renderer":"hardware","frameP95":33.70000076293945,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":2,"transferBytes":926707,"renderer":"hardware","frameP95":33.599998474121094,"capabilityP95":17.100000381469727,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":3,"transferBytes":926707,"renderer":"hardware","frameP95":33.5,"capabilityP95":17,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":4,"transferBytes":926707,"renderer":"hardware","frameP95":33.5,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":5,"transferBytes":926707,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":17,"budgetFailures":[]}

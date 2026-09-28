@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "design": "Synthetic modular data-center capacity assessment illustration",
+  "units": "metres",
+  "platform": {
+    "width": 10.8,
+    "depth": 7.6,
+    "height": 0.26
+  },
+  "racks": {
+    "rows": 2,
+    "perRow": 6,
+    "pitch": 0.91,
+    "width": 0.78,
+    "depth": 1.24,
+    "height": 2.55,
+    "rowY": [
+      -1.35,
+      0.9
+    ],
+    "rearLift": 0.12
+  },
+  "cooling": {
+    "count": 4,
+    "pitch": 1.43,
+    "height": 3.04
+  },
+  "equipment": {
+    "fanCount": 4,
+    "ledCount": 48
+  },
+  "camera": {
+    "position": [
+      12.48401,
+      12.75822,
+      13.8649
+    ],
+    "target": [
+      0,
+      1.1,
+      0
+    ],
+    "padding": 1.12,
+    "azimuthDegrees": 42,
+    "elevationDegrees": 32
+  },
+  "palette": {
+    "Graphite": "#292929",
+    "Steel": "#616161",
+    "Trim": "#7b7b7b",
+    "Dark": "#101010",
+    "Copper": "#d99a58",
+    "Amber": "#ffb35b",
+    "Platform": "#292929",
+    "Grille": "#383838"
+  },
+  "surfaceBake": {
+    "resolution": 512,
+    "paintRoughness": 0.45,
+    "samples": 64,
+    "engine": "CYCLES",
+    "aoReceivers": [
+      "foundation",
+      "rack-plinth"
+    ],
+    "excludeRoles": [
+      "fan_rotor",
+      "picking_proxy"
+    ],
+    "spatialDirectLighting": false
+  },
+  "storage": {
+    "positions": [
+      [
+        3.4,
+        -2.18
+      ],
+      [
+        4.28,
+        -1.55
+      ]
+    ]
+  }
+}

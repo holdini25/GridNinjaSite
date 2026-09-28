@@ -1,0 +1,35 @@
+
+> nextjs@0.1.0 test:unit
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/holdenchung/repos/GridNinjaSite
+      Coverage enabled with v8
+
+
+ Test Files  34 passed (34)
+      Tests  369 passed (369)
+   Start at  19:28:15
+   Duration  14.17s (transform 273ms, setup 656ms, import 1.05s, tests 4.70s, environment 5.57s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   94.13 |    86.11 |   98.23 |   97.82 |                   
+ ...patch-envelope |   94.24 |    85.34 |   98.13 |   97.56 |                   
+  ...o-envelope.ts |   96.22 |    97.61 |   95.83 |   96.15 | 94-99             
+  export.ts        |     100 |     87.5 |     100 |     100 | 14                
+  geometry.ts      |   98.75 |    73.77 |     100 |   98.52 | 175               
+  invariants.ts    |   88.15 |    91.66 |   94.73 |     100 | ...28,34,51,53-54 
+  normalize.ts     |   93.47 |    79.54 |     100 |   96.25 | 137,157,178       
+ schemas           |   93.33 |     91.3 |     100 |     100 |                   
+  ...ope.schema.ts |   93.33 |     91.3 |     100 |     100 | 29,84-85,146      
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 94.13% ( 337/358 )
+Branches     : 86.11% ( 304/353 )
+Functions    : 98.23% ( 111/113 )
+Lines        : 97.82% ( 270/276 )
+================================================================================

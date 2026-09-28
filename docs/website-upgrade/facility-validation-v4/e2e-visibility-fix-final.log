@@ -1,0 +1,27 @@
+
+Running 4 tests using 1 worker
+
+(node:55526) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium-mobile] › tests/e2e/facility-engineering.spec.ts:16:7 › facility engineering inspection › mobile inspection controls reveal a paused model without post-click scroll assistance (3.1s)
+  ✓  2 [chromium-mobile] › tests/e2e/facility-engineering.spec.ts:52:7 › facility engineering inspection › mobile explicit assembly retry reveals the retained model before staging (1.5s)
+(node:55538) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [webkit-mobile] › tests/e2e/facility-engineering.spec.ts:16:7 › facility engineering inspection › mobile inspection controls reveal a paused model without post-click scroll assistance (3.8s)
+  ✓  4 [webkit-mobile] › tests/e2e/facility-engineering.spec.ts:52:7 › facility engineering inspection › mobile explicit assembly retry reveals the retained model before staging (3.0s)
+
+  4 passed (12.0s)
+
+Running 6 tests using 1 worker
+
+(node:55576) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  -  1 [chrome-stable] › tests/e2e/facility-engineering.spec.ts:16:7 › facility engineering inspection › mobile inspection controls reveal a paused model without post-click scroll assistance
+  -  2 [chrome-stable] › tests/e2e/facility-engineering.spec.ts:52:7 › facility engineering inspection › mobile explicit assembly retry reveals the retained model before staging
+  ✓  3 [chrome-stable] › tests/e2e/facility-engineering.spec.ts:68:7 › facility engineering inspection › viewpoints, expansion and assembly poses reuse the canvas and preserve assessment quantities (1.9s)
+  ✓  4 [chrome-stable] › tests/e2e/facility-engineering.spec.ts:100:7 › facility engineering inspection › failed assembly transfer keeps the overview usable and retries explicitly (1.2s)
+  ✓  5 [chrome-stable] › tests/e2e/facility-engineering.spec.ts:122:7 › facility engineering inspection › authored connections and manual walkthrough keep fixture D unknown and accessible (1.7s)
+  ✓  6 [chrome-stable] › tests/e2e/facility-engineering.spec.ts:164:7 › facility engineering inspection › Close and explicit motion preferences persist for this tab across navigation (3.9s)
+
+  2 skipped
+  4 passed (9.4s)

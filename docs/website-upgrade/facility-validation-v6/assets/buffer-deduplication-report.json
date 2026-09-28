@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "method": "Canonicalized glTF compares every accessor/mesh/node/material/topology/image field, effective strides, and referenced view payload exactly. Only byte-identical bufferView storage and IDs change; shared views receive explicit byteStride. Four-byte view alignment is retained.",
+  "checks": [
+    {
+      "asset": "facility.glb",
+      "beforeBytes": 2361376,
+      "afterBytes": 2333504,
+      "savedBytes": 27872,
+      "sha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+      "decodedStructureAndAllViewPayloadsIdentical": true,
+      "khronosErrors": 0,
+      "khronosWarnings": 0
+    },
+    {
+      "asset": "rack.glb",
+      "beforeBytes": 764340,
+      "afterBytes": 762700,
+      "savedBytes": 1640,
+      "sha256": "f2d2b2ce3ead78dbcbe332e351b9b8af7c2a0dd04080917c37c53b85a00cfb1e",
+      "decodedStructureAndAllViewPayloadsIdentical": true,
+      "khronosErrors": 0,
+      "khronosWarnings": 0
+    },
+    {
+      "asset": "cooling.glb",
+      "beforeBytes": 380856,
+      "afterBytes": 379796,
+      "savedBytes": 1060,
+      "sha256": "36d432e515da3aab8a4de67dab83424c5c2995b154f4792753e2fe8f6e338d69",
+      "decodedStructureAndAllViewPayloadsIdentical": true,
+      "khronosErrors": 0,
+      "khronosWarnings": 0
+    }
+  ],
+  "result": "passed"
+}

@@ -18,15 +18,17 @@ test.describe("GridNinja assessment positioning and evidence boundaries", () => 
   test("offers an ungated example and a scoped inquiry on narrow screens", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 })
     await page.goto("/why-gridninja")
-    await expect(page.getByRole("link", { name: "See a sample decision brief", exact: true })).toHaveAttribute("href", "/demo#decision-brief")
-    await expect(page.locator('main a[href="/assessment"]').first()).toBeVisible()
+    await expect(page.getByRole("link", { name: "See a sample decision brief", exact: true })).toHaveAttribute("href", "/demo?scenario=b&version=1.0.0&perspective=business#decision-brief")
+    await expect(page.locator('main a[href="/assessment?source=why-gridninja-contextual#scope"]').first()).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true)
   })
 
   test("withholds candidate evidence instead of exposing a noindex download", async ({ page }) => {
     await page.goto("/evidence/sample-rta-trace")
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/)
-    await expect(page.locator("main")).toContainText("Candidate text and artifacts are not public evidence")
+    await expect(page.getByText("Publication pending", { exact: true })).toBeVisible()
+    await expect(page.locator("main")).toContainText("This resource is not yet available")
+    await expect(page.locator("main")).toContainText("establishes no customer result, site validation, or operating capability")
     await expect(page.locator('main a[href^="/downloads/"]')).toHaveCount(0)
     await expect(page.locator('main a[href="/demo#decision-brief"]')).toBeVisible()
   })

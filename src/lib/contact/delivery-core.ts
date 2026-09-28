@@ -1,3 +1,4 @@
+import { PUBLIC_TOPIC_LABELS, isPublicTopic, type PublicTopic } from "@/lib/public-topic"
 import { createHmac } from "node:crypto"
 
 export const MAX_DELIVERY_ATTEMPTS = 6
@@ -27,6 +28,7 @@ export type LeadDeliveryPayload = {
   siteType: string | null
   timeline: string | null
   capacityRange: string | null
+  topic?: PublicTopic | string | null
   intent: string
   source: string
   role: string | null
@@ -96,6 +98,7 @@ export type LeadAcceptedEventV2 = {
       siteType: string | null
       timeline: string | null
       capacityRange: string | null
+      topic?: PublicTopic
       intent: string
       constraints: string[]
       message: string | null
@@ -159,6 +162,7 @@ export function buildLeadAcceptedEvent(
           siteType: lead.siteType,
           timeline: lead.timeline,
           capacityRange: lead.capacityRange,
+          ...(isPublicTopic(lead.topic) ? { topic: lead.topic } : {}),
           intent: lead.intent,
           constraints: lead.constraints,
           message: lead.message,
@@ -234,6 +238,7 @@ export function buildLeadEmailText(lead: LeadDeliveryPayload) {
   if (lead.buyerType) lines.push(`Buyer type: ${lead.buyerType}`)
   if (lead.siteType) lines.push(`Site type: ${lead.siteType}`)
   if (lead.timeline) lines.push(`Timeline: ${lead.timeline}`)
+  if (isPublicTopic(lead.topic)) lines.push(`Public assessment topic: ${PUBLIC_TOPIC_LABELS[lead.topic]}`)
   if (lead.capacityRange) lines.push(`Capacity range: ${lead.capacityRange}`)
 
   if (lead.role) {
@@ -266,6 +271,7 @@ export function buildLeadEmailHtml(lead: LeadDeliveryPayload) {
   if (lead.buyerType) rows.push(["Buyer type", lead.buyerType])
   if (lead.siteType) rows.push(["Site type", lead.siteType])
   if (lead.timeline) rows.push(["Timeline", lead.timeline])
+  if (isPublicTopic(lead.topic)) rows.push(["Public assessment topic", PUBLIC_TOPIC_LABELS[lead.topic]])
   if (lead.capacityRange) rows.push(["Capacity range", lead.capacityRange])
 
   if (lead.role) {

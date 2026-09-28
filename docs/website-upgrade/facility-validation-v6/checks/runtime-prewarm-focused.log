@@ -1,0 +1,9 @@
+
+ RUN  v4.1.10 /Users/holdenchung/repos/GridNinjaSite
+
+
+ Test Files  2 passed (2)
+      Tests  11 passed (11)
+   Start at  19:08:18
+   Duration  631ms (transform 56ms, setup 43ms, import 106ms, tests 25ms, environment 377ms)
+

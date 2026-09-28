@@ -1,0 +1,139 @@
+{
+  "label": "baseline",
+  "measuredAt": "2026-09-23T22:56:33.264Z",
+  "identity": {
+    "sourceRevision": "7599a3458b696fa90d334d802d446a4d7ed08b7fae097beed2c756dd83589f9f",
+    "buildId": "zvB_EQvOG6nfpCHR1tPit",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v6",
+      "mode": "auto-adaptive"
+    }
+  },
+  "settings": {
+    "formFactor": "mobile",
+    "maxWaitForLoad": 45000
+  },
+  "runs": [
+    {
+      "route": "/",
+      "run": 1,
+      "lcp": 2765.3741000000005,
+      "tbt": 1078.9999999999995,
+      "cls": 0,
+      "bytes": 942772
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "lcp": 2759.8758999999995,
+      "tbt": 186,
+      "cls": 0,
+      "bytes": 942772
+    },
+    {
+      "route": "/",
+      "run": 3,
+      "lcp": 2755.47625,
+      "tbt": 232,
+      "cls": 0,
+      "bytes": 942772
+    },
+    {
+      "route": "/",
+      "run": 4,
+      "lcp": 2756.3983,
+      "tbt": 230,
+      "cls": 0,
+      "bytes": 942772
+    },
+    {
+      "route": "/",
+      "run": 5,
+      "lcp": 2755.99535,
+      "tbt": 242,
+      "cls": 0,
+      "bytes": 942772
+    },
+    {
+      "route": "/demo",
+      "run": 1,
+      "lcp": 2706.78375,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 269121
+    },
+    {
+      "route": "/demo",
+      "run": 2,
+      "lcp": 2757.0243,
+      "tbt": 0.5,
+      "cls": 0,
+      "bytes": 269121
+    },
+    {
+      "route": "/demo",
+      "run": 3,
+      "lcp": 2758.7639999999997,
+      "tbt": 0.5,
+      "cls": 0,
+      "bytes": 269121
+    },
+    {
+      "route": "/demo",
+      "run": 4,
+      "lcp": 2759.7763000000004,
+      "tbt": 1,
+      "cls": 0,
+      "bytes": 269121
+    },
+    {
+      "route": "/demo",
+      "run": 5,
+      "lcp": 2758.3471499999996,
+      "tbt": 0.5,
+      "cls": 0,
+      "bytes": 269121
+    }
+  ],
+  "result": "pass",
+  "medians": {
+    "/": {
+      "lcp": 2756.3983,
+      "tbt": 232,
+      "cls": 0,
+      "bytes": 942772
+    },
+    "/demo": {
+      "lcp": 2758.3471499999996,
+      "tbt": 0.5,
+      "cls": 0,
+      "bytes": 269121
+    }
+  }
+}

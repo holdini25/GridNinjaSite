@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "facility.v1",
+  "release": "facility-v2",
+  "environment": "synthetic",
+  "profile": {
+    "camera": [
+      12,
+      10.5,
+      15
+    ],
+    "target": [
+      0,
+      1.1,
+      0
+    ],
+    "padding": 1.12,
+    "background": "#080808",
+    "exposure": 1.15,
+    "colorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "lighting": {
+      "hemisphere": {
+        "sky": "#eeeeee",
+        "ground": "#3b3b3b",
+        "intensity": 2.1
+      },
+      "directional": [
+        {
+          "position": [
+            -8,
+            15,
+            8
+          ],
+          "color": "#fff0dd",
+          "intensity": 3.3
+        },
+        {
+          "position": [
+            7,
+            8,
+            -7
+          ],
+          "color": "#e0e0e0",
+          "intensity": 2.4
+        },
+        {
+          "position": [
+            0,
+            5,
+            12
+          ],
+          "color": "#e8e8e8",
+          "intensity": 1.2
+        }
+      ]
+    }
+  },
+  "systems": {
+    "power": {
+      "root": "GN_POWER",
+      "accent": "GN_ACCENT_POWER",
+      "pick": "GN_PICK_POWER"
+    },
+    "cooling": {
+      "root": "GN_COOLING",
+      "accent": "GN_ACCENT_COOLING",
+      "pick": "GN_PICK_COOLING"
+    },
+    "storage": {
+      "root": "GN_STORAGE",
+      "accent": "GN_ACCENT_STORAGE",
+      "pick": "GN_PICK_STORAGE"
+    },
+    "workloads": {
+      "root": "GN_WORKLOADS",
+      "accent": "GN_ACCENT_WORKLOADS",
+      "pick": "GN_PICK_WORKLOADS"
+    }
+  },
+  "equipment": {
+    "rotors": [
+      {
+        "id": "GN_FAN_ROTOR_00",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_01",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_02",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_03",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "leds": [
+      "GN_LED_00",
+      "GN_LED_01",
+      "GN_LED_02",
+      "GN_LED_03",
+      "GN_LED_04",
+      "GN_LED_05",
+      "GN_LED_06",
+      "GN_LED_07",
+      "GN_LED_08",
+      "GN_LED_09",
+      "GN_LED_10",
+      "GN_LED_11",
+      "GN_LED_12",
+      "GN_LED_13",
+      "GN_LED_14",
+      "GN_LED_15",
+      "GN_LED_16",
+      "GN_LED_17",
+      "GN_LED_18",
+      "GN_LED_19",
+      "GN_LED_20",
+      "GN_LED_21",
+      "GN_LED_22",
+      "GN_LED_23",
+      "GN_LED_24",
+      "GN_LED_25",
+      "GN_LED_26",
+      "GN_LED_27",
+      "GN_LED_28",
+      "GN_LED_29",
+      "GN_LED_30",
+      "GN_LED_31",
+      "GN_LED_32",
+      "GN_LED_33",
+      "GN_LED_34",
+      "GN_LED_35",
+      "GN_LED_36",
+      "GN_LED_37",
+      "GN_LED_38",
+      "GN_LED_39",
+      "GN_LED_40",
+      "GN_LED_41",
+      "GN_LED_42",
+      "GN_LED_43",
+      "GN_LED_44",
+      "GN_LED_45",
+      "GN_LED_46",
+      "GN_LED_47"
+    ]
+  },
+  "files": [
+    {
+      "file": "facility.glb",
+      "bytes": 1380616,
+      "sha256": "80bc6c4404047ab4e0c260e7003d0a8b7f2e70a4048cd3aab901f96fdbe6848d"
+    },
+    {
+      "file": "poster-desktop.webp",
+      "bytes": 62946,
+      "sha256": "87c364b09d9e6c9fd34d7e32e3c533319f0e54380dd061df61c910e976407f29"
+    },
+    {
+      "file": "poster-mobile.webp",
+      "bytes": 21982,
+      "sha256": "ae703beee328a5650450946b67c7d16201d23021889354a8c79b78d561224130"
+    }
+  ],
+  "source": {
+    "blender": "5.2.2 LTS",
+    "masterSha256": "df270dc679cf81ad6b9b67840b50ddb73b41e5cecde735b0f830fe7da97cfc5a",
+    "generatorSha256": "fc64837e64b4fb53768743d3f4329bca5cebc37c5492531834c9428a561117bd"
+  }
+}

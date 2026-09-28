@@ -1,0 +1,51 @@
+00:00.227  blend            | Read blend: "/Users/holdenchung/repos/GridNinjaSite/assets-source/facility/cooling-specimen.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+23:24:21 | INFO: Starting glTF 2.0 export
+23:24:21 | INFO: Extracting primitive: GN_COOLER_COIL_Copper
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_COIL_Graphite
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_COIL_Steel
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_FAN_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_FAN_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_SPECIMEN_FAN_ROTOR.001
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_FRAME_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_FRAME_Platform
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_FRAME_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_GUARD_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_MANIFOLD_Copper
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_MANIFOLD_Dark
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_MANIFOLD_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_MANIFOLD_Trim
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_PANEL_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_PANEL_Grille
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLER_PANEL_Trim
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Finished glTF 2.0 export in 0.04181718826293945 s
+
+SPECIMEN_EXPORT {"kind": "cooling", "exportBytes": 364456, "renderedTriangles": 4162, "drawCallsWithLedInstances": 17, "materialCount": 7, "sha256": "f2ff6b526ff7825a683bbd201ed24ec60e9ac6895e9bfcd39b2bf31f13fc9d75"}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

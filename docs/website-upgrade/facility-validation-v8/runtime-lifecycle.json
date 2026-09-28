@@ -1,0 +1,499 @@
+{
+  "schemaVersion": "facility-v8-runtime-validation.v1",
+  "measuredAt": "2026-09-24T04:09:09.679Z",
+  "result": "pass",
+  "provenance": {
+    "schemaVersion": "facility-performance.v2",
+    "sourceRevision": "5f992255ff902320e66ddbed2952f40f616503a451fe6ef61424f51a2bc901b3",
+    "buildId": "_w__MHXkJOi-3cijqiI_I",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      },
+      {
+        "release": "facility-v7",
+        "manifestSha256": "c6ccfae472adebef0af6a8a85104be2db9f0879019babec2e297d82a9f71ce37"
+      },
+      {
+        "release": "facility-v8",
+        "manifestSha256": "4b652220b7d2282d97b1782a72dce7d97ebccf84c4d76866dc660fe8cc2bfa8e"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v8",
+      "mode": "auto-adaptive"
+    },
+    "harnessRevision": "4bb902409625b12907060c868ea01d589a10c65033f21746a47a541c370bc54f",
+    "browser": "154.0.8037.58",
+    "settings": {
+      "baseURL": "http://127.0.0.1:3000",
+      "headed": false,
+      "metal": true,
+      "closeCycles": 10,
+      "assetCycles": 10
+    },
+    "settingsSha256": "ff5929b1419448b8271a275c3c760d9f42c1aec238d0a1edaadaafa130df6c15"
+  },
+  "graphics": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+    "devicePixelRatio": 2
+  },
+  "measurementScope": "Lifecycle and bounded allocation verification. Cadence samples are diagnostics; the integration lead runs the final isolated route performance gates separately.",
+  "errors": [],
+  "budgetFailures": [],
+  "overview": {
+    "drawCalls": 39,
+    "triangles": 35472,
+    "geometries": 39,
+    "textures": 5,
+    "materials": 9,
+    "estimatedBytes": 7967462,
+    "peakEstimatedBytes": 9605862,
+    "environmentBytes": 2359296,
+    "hiddenFrameCount": 0
+  },
+  "cadenceDiagnostics": {
+    "ambient": {
+      "targetFps": 30,
+      "frameP95": 33.400001525878906,
+      "cpuP95": 0.30000001192092896,
+      "missedRatio": 0
+    },
+    "fixedCapability": {
+      "targetFps": 60,
+      "frameP95": 16.700000762939453,
+      "cpuP95": 0.20000000298023224,
+      "missedRatio": 0
+    }
+  },
+  "activity": {
+    "steadyStatusLamps": 12,
+    "maxConcurrentActivity": 2,
+    "independentRotors": 4
+  },
+  "openClose": {
+    "cycles": 10,
+    "firstUsedJSHeapBytes": 10689540,
+    "lastUsedJSHeapBytes": 12357268,
+    "retainedDeltaBytes": 1667728,
+    "final": {
+      "drawCalls": 39,
+      "triangles": 35472,
+      "geometries": 39,
+      "textures": 5,
+      "materials": 9,
+      "estimatedBytes": 7967462,
+      "peakEstimatedBytes": 9605862,
+      "environmentBytes": 2359296,
+      "hiddenFrameCount": 0
+    }
+  },
+  "assetSwitching": {
+    "cycles": 10,
+    "warmUsedJSHeapBytes": 11892316,
+    "lastUsedJSHeapBytes": 12879288,
+    "retainedDeltaBytes": 986972,
+    "samples": [
+      {
+        "cycle": 1,
+        "kind": "rack",
+        "specimen": {
+          "drawCalls": 24,
+          "triangles": 10198,
+          "geometries": 26,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6232181,
+          "peakEstimatedBytes": 12102491,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11840347,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 0.4498779999999999,
+          "interactionUntil": 1.133278,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": {
+            "door": 0,
+            "tray": 0,
+            "cutaway": true,
+            "targetDoor": 0,
+            "targetTray": 0,
+            "moving": false
+          }
+        }
+      },
+      {
+        "cycle": 2,
+        "kind": "cooling",
+        "specimen": {
+          "drawCalls": 14,
+          "triangles": 3884,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5718340,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 2.9165259999999984,
+          "interactionUntil": 3.333225999999999,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": null
+        }
+      },
+      {
+        "cycle": 3,
+        "kind": "rack",
+        "specimen": {
+          "drawCalls": 24,
+          "triangles": 10198,
+          "geometries": 26,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6232181,
+          "peakEstimatedBytes": 12102491,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11840347,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 4.682960000000001,
+          "interactionUntil": 5.366360000000001,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": {
+            "door": 0,
+            "tray": 0,
+            "cutaway": true,
+            "targetDoor": 0,
+            "targetTray": 0,
+            "moving": false
+          }
+        }
+      },
+      {
+        "cycle": 4,
+        "kind": "cooling",
+        "specimen": {
+          "drawCalls": 14,
+          "triangles": 3884,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5718340,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 7.116308000000029,
+          "interactionUntil": 7.533008000000025,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": null
+        }
+      },
+      {
+        "cycle": 5,
+        "kind": "rack",
+        "specimen": {
+          "drawCalls": 24,
+          "triangles": 10198,
+          "geometries": 26,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6232181,
+          "peakEstimatedBytes": 12102491,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11840347,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 8.882808000000024,
+          "interactionUntil": 9.566208000000023,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": {
+            "door": 0,
+            "tray": 0,
+            "cutaway": true,
+            "targetDoor": 0,
+            "targetTray": 0,
+            "moving": false
+          }
+        }
+      },
+      {
+        "cycle": 6,
+        "kind": "cooling",
+        "specimen": {
+          "drawCalls": 14,
+          "triangles": 3884,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5718340,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 11.332807999999988,
+          "interactionUntil": 11.749507999999992,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": null
+        }
+      },
+      {
+        "cycle": 7,
+        "kind": "rack",
+        "specimen": {
+          "drawCalls": 24,
+          "triangles": 10198,
+          "geometries": 26,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6232181,
+          "peakEstimatedBytes": 12102491,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11840347,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 13.099341999999956,
+          "interactionUntil": 13.782741999999958,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": {
+            "door": 0,
+            "tray": 0,
+            "cutaway": true,
+            "targetDoor": 0,
+            "targetTray": 0,
+            "moving": false
+          }
+        }
+      },
+      {
+        "cycle": 8,
+        "kind": "cooling",
+        "specimen": {
+          "drawCalls": 14,
+          "triangles": 3884,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5718340,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 15.549341999999916,
+          "interactionUntil": 15.966041999999923,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": null
+        }
+      },
+      {
+        "cycle": 9,
+        "kind": "rack",
+        "specimen": {
+          "drawCalls": 24,
+          "triangles": 10198,
+          "geometries": 26,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6232181,
+          "peakEstimatedBytes": 12102491,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11840347,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 17.31572399999985,
+          "interactionUntil": 17.99902399999985,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": {
+            "door": 0,
+            "tray": 0,
+            "cutaway": true,
+            "targetDoor": 0,
+            "targetTray": 0,
+            "moving": false
+          }
+        }
+      },
+      {
+        "cycle": 10,
+        "kind": "cooling",
+        "specimen": {
+          "drawCalls": 14,
+          "triangles": 3884,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5718340,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "overview": {
+          "drawCalls": 39,
+          "triangles": 35472,
+          "geometries": 39,
+          "textures": 5,
+          "materials": 9,
+          "estimatedBytes": 7967462,
+          "peakEstimatedBytes": 11326506,
+          "environmentBytes": 2359296,
+          "hiddenFrameCount": 0
+        },
+        "settlingBefore": {
+          "clockSeconds": 19.76540599999979,
+          "interactionUntil": 20.182005999999806,
+          "transitionRemaining": 0,
+          "schedulerPending": 1,
+          "rackMotion": null
+        }
+      }
+    ]
+  },
+  "motionSuppression": {
+    "pause": "passed zero-frame/equipment-state checks",
+    "offscreen": "passed zero-frame check",
+    "reducedMotion": "passed zero-frame check"
+  },
+  "rackAllocationFix": {
+    "priorSessionBytes": 6322949,
+    "currentSessionBytes": 6232181,
+    "savedBytes": 90768,
+    "unchangedCeilingBytes": 6291456,
+    "mechanism": "Unnormalized Int8 -1 sentinels for missing mechanical-rack route attributes; authored geometry/maps/material shaders unchanged."
+  },
+  "fullReport": "build/facility/facility-v8/browser-validation-native.json",
+  "preservedFailedTimingAttempt": "build/experience-v8/browser-validation-native-before-settle.json"
+}

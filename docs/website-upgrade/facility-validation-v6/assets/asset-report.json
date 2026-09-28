@@ -1,0 +1,544 @@
+{
+  "schemaVersion": 1,
+  "blenderVersion": "5.2.2 LTS",
+  "blenderBuildHash": "d13f752e3b9c",
+  "source": "assets-source/facility/facility-master.blend",
+  "sourceSha256": "a2d08c23a705ba72992c755cb42c1437187c047a4de15e8c8ab51d954d7eef39",
+  "generatorSha256": "c43ce03b28af5568bedf648f65dec05e6ba5b862a89211e583ebbcc8998382f2",
+  "exportBytes": 2333504,
+  "gzipBytes": 461063,
+  "gzipLevel": 9,
+  "sha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+  "renderedTriangles": 34672,
+  "meshDrawCalls": 38,
+  "drawCallsWithLedInstances": 39,
+  "materials": [
+    "Amber",
+    "Copper",
+    "Dark",
+    "Graphite",
+    "Grille",
+    "Platform",
+    "Steel",
+    "Trim"
+  ],
+  "materialCount": 8,
+  "meshCount": 42,
+  "bounds": {
+    "min": [
+      -5.429999828338623,
+      0.0,
+      -3.8299999237060547
+    ],
+    "max": [
+      5.429999828338623,
+      3.5920000076293945,
+      3.8299999237060547
+    ]
+  },
+  "textureDescriptorCount": 3,
+  "embeddedImages": [
+    {
+      "name": "surface-orm",
+      "bytes": 91941,
+      "sha256": "a887bb2bc4a9a173d9675047a8e2b716c60f04c42924ce9a319b17b7f3078d16"
+    },
+    {
+      "name": "surface-color",
+      "bytes": 1638,
+      "sha256": "3c92356970b94c1523c6aeb92c4a1b110ae013471cf697ecb4ad796ad765438a"
+    },
+    {
+      "name": "surface-normal",
+      "bytes": 81825,
+      "sha256": "fb614bfeb9027e8161993e2e303e46579452164d431c8a7f75fc13579b824a9f"
+    }
+  ],
+  "expectedRuntimeMaterials": 9,
+  "rackKit": {
+    "envelopeMetres": [
+      0.78,
+      1.24,
+      2.55
+    ],
+    "overviewDoorSkin": "omitted for readable recessed module construction",
+    "specimenDoorSkin": "MASK over a real recessed module bank",
+    "branding": "GN only; inventory identity belongs to semantic metadata"
+  },
+  "sourceModules": {
+    "generate.py": "c43ce03b28af5568bedf648f65dec05e6ba5b862a89211e583ebbcc8998382f2",
+    "export.py": "21ccebe818e2c4b7a540466c382554890e10af4c22234c62e028a1254b620c0b",
+    "surface_bake.py": "7717bc8e95fa01db16e7eec82adf8509ea82c7b73e51a2857e0723b2756fd19b",
+    "service_routes.py": "126a0d401b8778f145a6a5b37cc894c7a962256aa590518c8ac1856adbe70efa",
+    "engineering_metadata.py": "191f3c77a5cd2b267ff591cd179865a5cad6bf3a808bb40c6d8299bb39352ab8",
+    "specimens.py": "09d92a6249eca5202b13bc4055c978b9b55544388b65e48bd9215efd1d78faf7",
+    "rack_kit.py": "bb5a7c8dda30ddde24a1854e14620f43722f07d919f33088ec350c21279814fb",
+    "air_circuit.py": "cc0b9ab35cc4d0ae93374146c4efcb1897741a89a3021baffda58a31ef89586a",
+    "scene.json": "2266049789043c59275963612480994204f65dd002a385dbff0d229fd68431bb"
+  },
+  "semanticIds": [
+    "GN_ACCENT_COOLING",
+    "GN_ACCENT_POWER",
+    "GN_ACCENT_STORAGE",
+    "GN_ACCENT_WORKLOADS",
+    "GN_AIR_SECTION_COVERS",
+    "GN_COOLING",
+    "GN_EXPORT",
+    "GN_FAN_ROTOR_00",
+    "GN_FAN_ROTOR_01",
+    "GN_FAN_ROTOR_02",
+    "GN_FAN_ROTOR_03",
+    "GN_LED_00",
+    "GN_LED_01",
+    "GN_LED_02",
+    "GN_LED_03",
+    "GN_LED_04",
+    "GN_LED_05",
+    "GN_LED_06",
+    "GN_LED_07",
+    "GN_LED_08",
+    "GN_LED_09",
+    "GN_LED_10",
+    "GN_LED_11",
+    "GN_LED_12",
+    "GN_LED_13",
+    "GN_LED_14",
+    "GN_LED_15",
+    "GN_LED_16",
+    "GN_LED_17",
+    "GN_LED_18",
+    "GN_LED_19",
+    "GN_LED_20",
+    "GN_LED_21",
+    "GN_LED_22",
+    "GN_LED_23",
+    "GN_LED_24",
+    "GN_LED_25",
+    "GN_LED_26",
+    "GN_LED_27",
+    "GN_LED_28",
+    "GN_LED_29",
+    "GN_LED_30",
+    "GN_LED_31",
+    "GN_LED_32",
+    "GN_LED_33",
+    "GN_LED_34",
+    "GN_LED_35",
+    "GN_LED_36",
+    "GN_LED_37",
+    "GN_LED_38",
+    "GN_LED_39",
+    "GN_LED_40",
+    "GN_LED_41",
+    "GN_LED_42",
+    "GN_LED_43",
+    "GN_LED_44",
+    "GN_LED_45",
+    "GN_LED_46",
+    "GN_LED_47",
+    "GN_PICK_COOLING",
+    "GN_PICK_POWER",
+    "GN_PICK_STORAGE",
+    "GN_PICK_WORKLOADS",
+    "GN_PLATFORM",
+    "GN_POWER",
+    "GN_STORAGE",
+    "GN_WORKLOADS"
+  ],
+  "fanBindings": [
+    {
+      "gnId": "GN_FAN_ROTOR_00",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "visualRadiansPerSecond": 1.6,
+      "phaseOffsetRadians": 0
+    },
+    {
+      "gnId": "GN_FAN_ROTOR_01",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "visualRadiansPerSecond": 1.6,
+      "phaseOffsetRadians": 1.57
+    },
+    {
+      "gnId": "GN_FAN_ROTOR_02",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "visualRadiansPerSecond": 1.6,
+      "phaseOffsetRadians": 3.14
+    },
+    {
+      "gnId": "GN_FAN_ROTOR_03",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "visualRadiansPerSecond": 1.6,
+      "phaseOffsetRadians": 4.71
+    }
+  ],
+  "ledBindings": [
+    {
+      "gnId": "GN_LED_00",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_01",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_02",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_03",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_04",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_05",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_06",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_07",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_08",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_09",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_10",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_11",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_12",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_13",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_14",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_15",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_16",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_17",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_18",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_19",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_20",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_21",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_22",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_23",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_24",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_25",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_26",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_27",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_28",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_29",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_30",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_31",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_32",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_33",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_34",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_35",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_36",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_37",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_38",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_39",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_40",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_41",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_42",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_43",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_44",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_45",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_46",
+      "domain": "workloads"
+    },
+    {
+      "gnId": "GN_LED_47",
+      "domain": "workloads"
+    }
+  ],
+  "profile": {
+    "camera": [
+      12.48401,
+      12.75822,
+      13.8649
+    ],
+    "target": [
+      0.0,
+      1.1,
+      0.0
+    ],
+    "padding": 1.12,
+    "background": "#080808",
+    "exposure": 1.15,
+    "colorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "lighting": {
+      "hemisphere": {
+        "sky": "#eeeeee",
+        "ground": "#292929",
+        "intensity": 0.4
+      },
+      "directional": [
+        {
+          "position": [
+            -8,
+            15,
+            8
+          ],
+          "color": "#fffaf3",
+          "intensity": 2.0
+        },
+        {
+          "position": [
+            7,
+            8,
+            -7
+          ],
+          "color": "#f1f1f1",
+          "intensity": 0.9
+        },
+        {
+          "position": [
+            0,
+            5,
+            12
+          ],
+          "color": "#ededed",
+          "intensity": 0.35
+        }
+      ],
+      "environment": {
+        "preset": "industrial-softbox-v2",
+        "resolution": 128,
+        "intensity": 1.0,
+        "rotationY": 0
+      }
+    },
+    "motion": {
+      "fanRadiansPerSecond": 1.6,
+      "fanPhaseOffsets": [
+        0,
+        1.57,
+        3.14,
+        4.71
+      ],
+      "ledPulseRadiansPerSecond": 1.8,
+      "ledPulseAmplitude": 0.14
+    },
+    "led": {
+      "color": "#ffc079",
+      "steadyIntensity": 0.82,
+      "size": [
+        0.038,
+        0.025,
+        0.018
+      ]
+    },
+    "framing": "projected-geometry",
+    "engineering": {
+      "version": 1,
+      "seed": 41727,
+      "accent": {
+        "resting": "#9d632f",
+        "hover": "#ffbe63",
+        "selected": "#ffd18a",
+        "previewWeight": 0.85,
+        "baseEmission": 0.035,
+        "activeEmission": 1.0,
+        "transitionMs": 150
+      },
+      "activity": {
+        "resting": 0.12,
+        "peak": 1.0,
+        "steady": 0.5,
+        "pulseMs": [
+          120,
+          180
+        ],
+        "eventMs": [
+          80,
+          180
+        ],
+        "maxPulses": 3,
+        "ambientTraceSeconds": [
+          8,
+          12
+        ],
+        "selectedTraceQuietSeconds": 2.8
+      },
+      "cameraTransitionMs": 420,
+      "poseTransitionMs": 280,
+      "rendering": {
+        "ambientFps": 30,
+        "interactionFps": 60,
+        "mobilePixels": 650000,
+        "desktopPixels": 1500000,
+        "probeSeconds": 2
+      }
+    },
+    "surfaces": {
+      "version": 1,
+      "pipeline": "pbr-semantic-v2",
+      "uvSet": 0,
+      "maxTextureBytes": 3145728
+    },
+    "ecosystem": {
+      "version": 1,
+      "seed": 61427,
+      "ambientIntervalSeconds": [
+        12,
+        18
+      ],
+      "sequenceSeconds": 8,
+      "chapterSeconds": [
+        4,
+        4,
+        5,
+        4,
+        4,
+        3
+      ],
+      "colors": {
+        "electrical": "#e3e7e4",
+        "cooling": "#76abb4",
+        "heat": "#c98554"
+      },
+      "fanModulation": 0.1,
+      "maxEquipment": 96,
+      "maxRoutes": 128,
+      "maxTraces": 2
+    }
+  },
+  "notes": [
+    "Synthetic equipment relationships, not an engineering design or capacity model.",
+    "Static meshes are merged per subsystem and material; fans and LED anchors retain independent identities.",
+    "Picking proxies must be excluded from render passes by the browser asset factory.",
+    "No animation, compression extension, external texture, or decoder dependency.",
+    "Khronos and browser-render validation are separate release gates."
+  ]
+}

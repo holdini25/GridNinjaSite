@@ -35,6 +35,15 @@ describe("contact receipt and recovery contracts", () => {
     expect(legacyContactLeadSchema.safeParse(legacy).success).toBe(false)
     expect(legacyContactLeadSchema.safeParse({ ...legacy, message: "Review this capacity decision." }).success).toBe(true)
   })
+  it("accepts only public topics and includes topic changes in retry identity", async () => {
+    vi.stubGlobal("crypto", webcrypto)
+    expect(contactLeadSchema.safeParse({ ...candidate, topic: "cooling" }).success).toBe(true)
+    expect(contactLeadSchema.safeParse({ ...candidate, topic: "private@example.com" }).success).toBe(false)
+    expect(await fingerprintContactCandidate({ ...candidate, topic: "cooling" })).not.toBe(await fingerprintContactCandidate({ ...candidate, topic: "power" }))
+    const attempt = { version: 1, clientSubmissionId: id, fingerprint: "a".repeat(64), intent: "capacity-audit", source: "contact-page", topic: "cooling", startedAt: now, expiresAt: now + CONTACT_REFERENCE_LIFETIME_MS }
+    expect(parseStoredAttempt(JSON.stringify(attempt), now)).toEqual(attempt)
+    expect(parseStoredAttempt(JSON.stringify({ ...attempt, topic: "unlisted" }), now)).toBeNull()
+  })
   it("requires a durable UUID, receipt status and matching HTTP status", () => {
     const receipt = { ok: true, submissionId: id, status: "queued" }
     expect(parseDurableReceipt(202, receipt)?.submissionId).toBe(id)

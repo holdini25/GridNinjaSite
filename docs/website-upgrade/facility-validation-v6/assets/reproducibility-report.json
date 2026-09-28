@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "method": "Independent fresh pinned Blender 5.2.2 LTS processes re-export saved overview/rack/cooling masters through validated lossless bufferView deduplication. Not a claim of two complete procedural regenerations/Cycles bakes.",
+  "checks": [
+    {
+      "asset": "facility.glb",
+      "bytes": 2333504,
+      "sha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+      "master": "assets-source/facility/facility-master.blend",
+      "masterSha256": "a2d08c23a705ba72992c755cb42c1437187c047a4de15e8c8ab51d954d7eef39",
+      "byteIdentical": true
+    },
+    {
+      "asset": "rack.glb",
+      "bytes": 762700,
+      "sha256": "f2d2b2ce3ead78dbcbe332e351b9b8af7c2a0dd04080917c37c53b85a00cfb1e",
+      "master": "assets-source/facility/rack-specimen.blend",
+      "masterSha256": "9b66adc80ed0b8a2b49c503cb7814eab608d8c9ec38cc414725a4b70052b55ec",
+      "byteIdentical": true
+    },
+    {
+      "asset": "cooling.glb",
+      "bytes": 379796,
+      "sha256": "36d432e515da3aab8a4de67dab83424c5c2995b154f4792753e2fe8f6e338d69",
+      "master": "assets-source/facility/cooling-specimen.blend",
+      "masterSha256": "6a4d053c6db29f9e2bce7765a190e34340ca7297d1c76d0e97c7c0bc918fe235",
+      "byteIdentical": true
+    }
+  ],
+  "result": "passed"
+}

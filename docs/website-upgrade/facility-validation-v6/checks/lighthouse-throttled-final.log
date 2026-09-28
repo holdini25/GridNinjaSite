@@ -1,0 +1,14 @@
+
+> nextjs@0.1.0 facility:lighthouse
+> node scripts/facility/collect-lighthouse.mjs
+
+{"route":"/","profile":"mobile","run":1,"lcp":1558.787,"output":"build/facility/lighthouse-mobile-throttled/home-1.json"}
+{"route":"/","profile":"mobile","run":2,"lcp":1564.533,"output":"build/facility/lighthouse-mobile-throttled/home-2.json"}
+{"route":"/","profile":"mobile","run":3,"lcp":1560.885,"output":"build/facility/lighthouse-mobile-throttled/home-3.json"}
+{"route":"/","profile":"mobile","run":4,"lcp":1557.369,"output":"build/facility/lighthouse-mobile-throttled/home-4.json"}
+{"route":"/","profile":"mobile","run":5,"lcp":1555.193,"output":"build/facility/lighthouse-mobile-throttled/home-5.json"}
+{"route":"/demo","profile":"mobile","run":1,"lcp":1579.58,"output":"build/facility/lighthouse-mobile-throttled/demo-1.json"}
+{"route":"/demo","profile":"mobile","run":2,"lcp":1580.331,"output":"build/facility/lighthouse-mobile-throttled/demo-2.json"}
+{"route":"/demo","profile":"mobile","run":3,"lcp":1583.792,"output":"build/facility/lighthouse-mobile-throttled/demo-3.json"}
+{"route":"/demo","profile":"mobile","run":4,"lcp":1595.384,"output":"build/facility/lighthouse-mobile-throttled/demo-4.json"}
+{"route":"/demo","profile":"mobile","run":5,"lcp":1589.802,"output":"build/facility/lighthouse-mobile-throttled/demo-5.json"}

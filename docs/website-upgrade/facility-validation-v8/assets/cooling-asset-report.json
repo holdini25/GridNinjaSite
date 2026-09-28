@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 1,
+  "kind": "cooling",
+  "blenderVersion": "5.2.2 LTS",
+  "blenderBuildHash": "d13f752e3b9c",
+  "source": "assets-source/facility/cooling-specimen.blend",
+  "sourceSha256": "7dfe2b7dd18c511cd6a0831e48fbb4434bb5eb5add26a4c2ee4770137e18ecfd",
+  "generatorSha256": "d894c9c8d032281edd20a7099f3764f2667aef8f2ea6256f9335742b46a80723",
+  "sourceModules": {
+    "generate.py": "d894c9c8d032281edd20a7099f3764f2667aef8f2ea6256f9335742b46a80723",
+    "export.py": "ddb2a4b8cf652bb51ec91ffc2b2a019d3972e3b80f82707e1b1e0e9ddc7b28cf",
+    "surface_bake.py": "dbb7055db8b107aece39b771ceeb27758505cc4c36207098ead45d1aea5b4fc6",
+    "service_routes.py": "126a0d401b8778f145a6a5b37cc894c7a962256aa590518c8ac1856adbe70efa",
+    "engineering_metadata.py": "7669cf6e982703110743b297851a0b9aac8115de2a658a09d8dab5ddffcc8f20",
+    "specimens.py": "6df3255c66f3234398c7a1d5873e50ed0466b8a0e859a47a9a3efe635d8bd82d",
+    "rack_kit.py": "9daa62a20e5f53051564dbf0768eab1fe3c7728ac5c0fa132d83a5f9bc6ba5e2",
+    "rack_motion.py": "91aecd7f1be7d83089cd8d761b032726c68b3bbde17a2420fc9a29ed789b12e4",
+    "air_circuit.py": "cc0b9ab35cc4d0ae93374146c4efcb1897741a89a3021baffda58a31ef89586a",
+    "scene.json": "baf6242b21d17f6f5256c9f5eb11aac6580041d4a32f10303b86a78ebb27c4fb"
+  },
+  "exportBytes": 364456,
+  "gzipBytes": 218687,
+  "gzipLevel": 9,
+  "sha256": "f2ff6b526ff7825a683bbd201ed24ec60e9ac6895e9bfcd39b2bf31f13fc9d75",
+  "embeddedImages": [
+    {
+      "name": "surface-orm",
+      "bytes": 91844,
+      "sha256": "4f42cfc737a384def5ee1f763322fcfc6dc13b7e9bec5558f63bb333b2391308"
+    },
+    {
+      "name": "surface-color",
+      "bytes": 7198,
+      "sha256": "122234631c7bf7b9289756087656d628c7ede68e274491095271d58527730abd"
+    },
+    {
+      "name": "surface-normal",
+      "bytes": 81825,
+      "sha256": "fb614bfeb9027e8161993e2e303e46579452164d431c8a7f75fc13579b824a9f"
+    }
+  ],
+  "renderedTriangles": 4162,
+  "meshDrawCalls": 17,
+  "drawCallsWithLedInstances": 17,
+  "materialCount": 7,
+  "semanticIds": [
+    "GN_COOLER_COIL",
+    "GN_COOLER_FAN",
+    "GN_COOLER_FRAME",
+    "GN_COOLER_GUARD",
+    "GN_COOLER_MANIFOLD",
+    "GN_COOLER_PANEL",
+    "GN_SPECIMEN_FAN_ROTOR",
+    "GN_SPECIMEN_ROOT"
+  ],
+  "profile": {
+    "camera": [
+      3.4,
+      2.7,
+      4.0
+    ],
+    "target": [
+      0,
+      1.1,
+      0
+    ],
+    "padding": 1.12,
+    "background": "#080808",
+    "exposure": 1.18,
+    "colorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "lighting": {
+      "hemisphere": {
+        "sky": "#eeeeee",
+        "ground": "#292929",
+        "intensity": 0.32
+      },
+      "directional": [
+        {
+          "position": [
+            -8,
+            15,
+            8
+          ],
+          "color": "#fffaf3",
+          "intensity": 2.25
+        },
+        {
+          "position": [
+            7,
+            8,
+            -7
+          ],
+          "color": "#e6edef",
+          "intensity": 0.75
+        },
+        {
+          "position": [
+            0,
+            4,
+            12
+          ],
+          "color": "#fff4e6",
+          "intensity": 0.52
+        }
+      ],
+      "environment": {
+        "preset": "industrial-night-v1",
+        "resolution": 128,
+        "intensity": 1.08,
+        "rotationY": 0
+      }
+    },
+    "motion": {
+      "fanRadiansPerSecond": 1.6,
+      "fanPhaseOffsets": [
+        0,
+        1.57,
+        3.14,
+        4.71
+      ],
+      "ledPulseRadiansPerSecond": 1.8,
+      "ledPulseAmplitude": 0.14
+    },
+    "led": {
+      "color": "#ffc079",
+      "steadyIntensity": 0.82,
+      "size": [
+        0.018,
+        0.012,
+        0.012
+      ]
+    },
+    "framing": "projected-geometry",
+    "engineering": {
+      "version": 1,
+      "seed": 41727,
+      "accent": {
+        "resting": "#9d632f",
+        "hover": "#ffbe63",
+        "selected": "#ffd18a",
+        "previewWeight": 0.85,
+        "baseEmission": 0.035,
+        "activeEmission": 1.0,
+        "transitionMs": 150
+      },
+      "activity": {
+        "resting": 0.12,
+        "peak": 1.0,
+        "steady": 0.5,
+        "pulseMs": [
+          120,
+          180
+        ],
+        "eventMs": [
+          80,
+          180
+        ],
+        "maxPulses": 3,
+        "ambientTraceSeconds": [
+          8,
+          12
+        ],
+        "selectedTraceQuietSeconds": 2.8
+      },
+      "cameraTransitionMs": 420,
+      "poseTransitionMs": 280,
+      "rendering": {
+        "ambientFps": 30,
+        "interactionFps": 60,
+        "mobilePixels": 650000,
+        "desktopPixels": 1500000,
+        "probeSeconds": 2
+      }
+    },
+    "surfaces": {
+      "version": 1,
+      "pipeline": "pbr-semantic-v2",
+      "uvSet": 0,
+      "maxTextureBytes": 3145728
+    }
+  },
+  "constructionChecks": {
+    "hollowCasing": true,
+    "independentPanelThicknessMetres": 0.024,
+    "independentPartRoots": 6,
+    "serviceTrayTravelMetres": 0,
+    "ratingsOrTelemetry": false
+  },
+  "reusedFrom": {
+    "file": "cooling.glb",
+    "sha256": "f2ff6b526ff7825a683bbd201ed24ec60e9ac6895e9bfcd39b2bf31f13fc9d75",
+    "bytes": 364456,
+    "byteIdentical": true,
+    "originRelease": "facility-v7",
+    "originManifestSha256": "c6ccfae472adebef0af6a8a85104be2db9f0879019babec2e297d82a9f71ce37",
+    "method": "Fresh pinned saved-master re-export byte identity; no procedural regeneration claimed"
+  }
+}

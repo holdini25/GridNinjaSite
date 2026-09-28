@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "release": "facility-v6",
+  "assetHashes": {
+    "facility.glb": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+    "rack.glb": "f2d2b2ce3ead78dbcbe332e351b9b8af7c2a0dd04080917c37c53b85a00cfb1e",
+    "cooling.glb": "36d432e515da3aab8a4de67dab83424c5c2995b154f4792753e2fe8f6e338d69"
+  },
+  "checks": {
+    "threeValidationReportsMatchFinalModels": true,
+    "khronosZeroErrorsWarnings": true,
+    "threeSavedMasterReexportsMatch": true,
+    "losslessDedupReportsMatch": true,
+    "topologyMatchesEmbeddedModelMetadata": true,
+    "adversarialReportMatches": true,
+    "captureProfileMatches": true,
+    "allCapturedPosterHashesMatch": true,
+    "visualReviewMatches": true,
+    "materialAssetCaptureMatches": true,
+    "stagedModelFilesMatch": true,
+    "finalMaterialFixturesPassAndMatchSources": true
+  },
+  "result": "passed"
+}

@@ -1,0 +1,18 @@
+{
+  "buildId": "_w__MHXkJOi-3cijqiI_I",
+  "description": "Successful Chrome intermediate-frame sequencing and rapid reversal regression test recordings on final v8 build. These are test clips, not physical-phone evidence.",
+  "clips": [
+    {
+      "file": "door-tray-sequence-chrome.webm",
+      "source": "build/experience-v8/motion-final/door-tray-sequence-chrome.webm",
+      "bytes": 426461,
+      "sha256": "6c79fa7e160bb9c2517213a522d440a6f24413c2c0b0ff2e20d9c269ba436b2a"
+    },
+    {
+      "file": "reversal-cutaway-chrome.webm",
+      "source": "build/experience-v8/motion-final/reversal-cutaway-chrome.webm",
+      "bytes": 330907,
+      "sha256": "3d7962117cdb814dfccec2ee43b98060a2eb171e60ecfe66838e88280f631706"
+    }
+  ]
+}

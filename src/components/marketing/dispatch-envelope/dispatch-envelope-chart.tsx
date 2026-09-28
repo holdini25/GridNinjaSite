@@ -55,8 +55,8 @@ const COLORS = {
   reject: "#ff6b6b",
   proof: "#61e4ff",
   noProof: "#81909d",
-  muted: "#9fb0bf",
-  grid: "rgba(159,176,191,.12)",
+  muted: "#B8B8B8",
+  grid: "rgba(184,184,184,.12)",
 }
 
 type ChartLayout = {
@@ -887,7 +887,7 @@ export function DispatchEnvelopeChart({
             cy={geometry.y(lensSnapshot.requestedMw)}
             r="5"
             fill={COLORS.request}
-            stroke="#071016"
+            stroke="#080808"
             strokeWidth="2"
           />
           {dto.accepted ? (
@@ -896,7 +896,7 @@ export function DispatchEnvelopeChart({
               cy={geometry.y(lensSnapshot.acceptedMw)}
               r="5"
               fill={COLORS.accepted}
-              stroke="#071016"
+              stroke="#080808"
               strokeWidth="2"
             />
           ) : null}

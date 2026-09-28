@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-09-23T01:56:12.763Z",
+  "identity": {
+    "sourceRevision": "d2af80fb26b42de1709d9452204466bb48eff627a49a0eac96800030b80ecba1",
+    "buildId": "ka8svmef4cp9Qti5DQlV8",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v3",
+      "mode": "auto-desktop"
+    }
+  }
+}

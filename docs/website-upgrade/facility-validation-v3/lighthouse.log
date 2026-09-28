@@ -1,0 +1,24 @@
+
+> nextjs@0.1.0 facility:lighthouse
+> node scripts/facility/collect-lighthouse.mjs
+
+{"route":"/","profile":"desktop","run":1,"lcp":619.8773500000001,"output":"build/facility/lighthouse-desktop/home-1.json"}
+{"route":"/","profile":"desktop","run":2,"lcp":619.7425000000001,"output":"build/facility/lighthouse-desktop/home-2.json"}
+{"route":"/","profile":"desktop","run":3,"lcp":620.32735,"output":"build/facility/lighthouse-desktop/home-3.json"}
+{"route":"/","profile":"desktop","run":4,"lcp":616.0193499999999,"output":"build/facility/lighthouse-desktop/home-4.json"}
+{"route":"/","profile":"desktop","run":5,"lcp":619.6802500000001,"output":"build/facility/lighthouse-desktop/home-5.json"}
+{"route":"/demo","profile":"desktop","run":1,"lcp":616.6216,"output":"build/facility/lighthouse-desktop/demo-1.json"}
+{"route":"/demo","profile":"desktop","run":2,"lcp":620.2724499999999,"output":"build/facility/lighthouse-desktop/demo-2.json"}
+{"route":"/demo","profile":"desktop","run":3,"lcp":615.7315,"output":"build/facility/lighthouse-desktop/demo-3.json"}
+{"route":"/demo","profile":"desktop","run":4,"lcp":615.7972000000001,"output":"build/facility/lighthouse-desktop/demo-4.json"}
+{"route":"/demo","profile":"desktop","run":5,"lcp":620.1203499999999,"output":"build/facility/lighthouse-desktop/demo-5.json"}
+{"route":"/","profile":"mobile","run":1,"lcp":2757.0207,"output":"build/facility/lighthouse-mobile/home-1.json"}
+{"route":"/","profile":"mobile","run":2,"lcp":2755.77905,"output":"build/facility/lighthouse-mobile/home-2.json"}
+{"route":"/","profile":"mobile","run":3,"lcp":2608.2645,"output":"build/facility/lighthouse-mobile/home-3.json"}
+{"route":"/","profile":"mobile","run":4,"lcp":2757.62775,"output":"build/facility/lighthouse-mobile/home-4.json"}
+{"route":"/","profile":"mobile","run":5,"lcp":2755.2287,"output":"build/facility/lighthouse-mobile/home-5.json"}
+{"route":"/demo","profile":"mobile","run":1,"lcp":2747.0157499999996,"output":"build/facility/lighthouse-mobile/demo-1.json"}
+{"route":"/demo","profile":"mobile","run":2,"lcp":2757.16425,"output":"build/facility/lighthouse-mobile/demo-2.json"}
+{"route":"/demo","profile":"mobile","run":3,"lcp":2758.56465,"output":"build/facility/lighthouse-mobile/demo-3.json"}
+{"route":"/demo","profile":"mobile","run":4,"lcp":2754.6708499999995,"output":"build/facility/lighthouse-mobile/demo-4.json"}
+{"route":"/demo","profile":"mobile","run":5,"lcp":2756.8290499999994,"output":"build/facility/lighthouse-mobile/demo-5.json"}

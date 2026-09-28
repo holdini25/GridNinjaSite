@@ -37,6 +37,13 @@ describe("contact attribution", () => {
     expect(resolveContactAttribution(`?intent=book-demo&source=${source}`)).toMatchObject({ intent: "book-demo", source })
   })
 
+  it("accepts one public topic and drops unknown or conflicting topics", () => {
+    expect(resolveContactAttribution("?topic=cooling").topic).toBe("cooling")
+    expect(resolveContactAttribution("?topic=private%40example.com").topic).toBeUndefined()
+    expect(resolveContactAttribution("?topic=power&topic=cooling").topic).toBeUndefined()
+    expect(resolveContactAttribution("", { topic: "colocation" }).topic).toBe("colocation")
+  })
+
   it("uses an active card selection as the new submission intent", () => {
     expect(intentAfterConversationSelection("other")).toBe("other")
     expect(intentAfterConversationSelection("shadow-mode")).toBe("shadow-mode")

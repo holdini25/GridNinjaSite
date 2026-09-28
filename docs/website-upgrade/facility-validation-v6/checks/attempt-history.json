@@ -1,0 +1,38 @@
+{
+  "notes": [
+    "All failed candidate/measurement logs and traces remain under build/facility/facility-v6. No result was silently replaced with a pass.",
+    "Raw Lighthouse traces are retained in each experiment directory; curated summaries identify the exact build and settings."
+  ],
+  "attempts": [
+    {
+      "path": "build/facility/facility-v6/dedup-rejected-attempt",
+      "result": "rejected",
+      "reason": "First lossless buffer-dedup export failed 22 Khronos checks because shared vertex views lacked explicit stride. Corrected export passed."
+    },
+    {
+      "path": "build/facility/facility-v6/build-inline-css-attempt1.log",
+      "result": "failed",
+      "reason": "Experiment harness copied next.config.ts into a TypeScript-included evidence folder. Renamed captured configuration to .txt; source build then passed."
+    },
+    {
+      "path": "build/facility/facility-v6/startup-experiments/inline-css",
+      "result": "rejected",
+      "reason": "Matched five-run mobile LCP worsened by approximately 150 ms and transfer by 49 KB; configuration reverted."
+    },
+    {
+      "path": "build/facility/facility-v6/experience-chrome-story.log",
+      "result": "failed then fixed",
+      "reason": "Explicit Play could scroll the model offscreen through browser scroll anchoring. Bounded post-paint stage reveal now keeps playback visible; three regression repeats passed."
+    },
+    {
+      "path": "build/facility/facility-v6/startup-experiments/baseline",
+      "result": "complete; gates missed",
+      "reason": "First fresh-profile homepage TBT 1079 ms and all later samples retained; mobile LCP approximately 2.76 s."
+    },
+    {
+      "path": "build/facility/facility-v6/e2e-production-attempt1",
+      "result": "103 passed, 7 intentionally skipped, 4 failed",
+      "reason": "Three no-JavaScript assertions matched both transcript and summary; scoped to the authoritative summary. Chrome Play retained a pending focus-triggered smooth scroll; replaced with one unconditional instant stage alignment after committed control paint. Final verification is recorded separately."
+    }
+  ]
+}

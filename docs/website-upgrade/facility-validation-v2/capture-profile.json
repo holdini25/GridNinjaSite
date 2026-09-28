@@ -1,0 +1,29 @@
+{
+  "release": "facility-v2",
+  "baseURL": "http://127.0.0.1:3001",
+  "viewport": [
+    1360,
+    800
+  ],
+  "reducedMotion": true,
+  "modelSha256": "80bc6c4404047ab4e0c260e7003d0a8b7f2e70a4048cd3aab901f96fdbe6848d",
+  "profileSha256": "56b997baa9e0c6c61210d86e61c64d8c973fe1483fd234e9ec88c4d9ab82577e",
+  "posters": {
+    "poster-desktop.webp": "87c364b09d9e6c9fd34d7e32e3c533319f0e54380dd061df61c910e976407f29",
+    "poster-mobile.webp": "ae703beee328a5650450946b67c7d16201d23021889354a8c79b78d561224130"
+  },
+  "metadata": {
+    "frames": 7,
+    "drawCalls": 39,
+    "triangles": 27530,
+    "geometries": 39,
+    "textures": 3,
+    "materials": 10,
+    "estimatedBytes": 2108822,
+    "frameP95": null,
+    "sampleCount": 0,
+    "dpr": 1,
+    "width": 1360,
+    "height": 800
+  }
+}

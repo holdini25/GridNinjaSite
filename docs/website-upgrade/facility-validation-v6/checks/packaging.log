@@ -1,0 +1,81 @@
+{
+  "measuredAt": "2026-09-23T22:46:21.746Z",
+  "scope": "Isolated filesystem fixtures built from frozen v1/v2 artifacts. Capture hashes are reconstructed for packaging guard tests; no browser or deployment is run.",
+  "testScriptSha256": "e38c5178701345585396a90f9a664db3bd6152cf80a5373749d79b9da5899f23",
+  "checks": [
+    {
+      "name": "Missing release identity",
+      "result": "passed"
+    },
+    {
+      "name": "Invalid/path release identity",
+      "result": "passed"
+    },
+    {
+      "name": "Registered version cannot stage",
+      "result": "passed"
+    },
+    {
+      "name": "Concurrent writer refuses lease",
+      "result": "passed"
+    },
+    {
+      "name": "Legacy source provenance stages with real GLB and poster validation",
+      "result": "passed"
+    },
+    {
+      "name": "Complete source module provenance is pinned in the staged manifest",
+      "result": "passed"
+    },
+    {
+      "name": "Stale bake module rejects staging",
+      "result": "passed"
+    },
+    {
+      "name": "Changed bake module rejects freezing",
+      "result": "passed"
+    },
+    {
+      "name": "Changed scene input rejects freezing",
+      "result": "passed"
+    },
+    {
+      "name": "Stale generator rejects staging",
+      "result": "passed"
+    },
+    {
+      "name": "Invalid poster rejects staging",
+      "result": "passed"
+    },
+    {
+      "name": "Failed staging preserves prior complete stage",
+      "result": "passed"
+    },
+    {
+      "name": "Missing browser capture rejects freezing",
+      "result": "passed"
+    },
+    {
+      "name": "Stale browser poster provenance rejects freezing",
+      "result": "passed"
+    },
+    {
+      "name": "Changed render profile rejects freezing",
+      "result": "passed"
+    },
+    {
+      "name": "Corrupt staged bytes reject freezing",
+      "result": "passed"
+    },
+    {
+      "name": "Complete validated freeze preserves v1 and exact reviewed v2 bytes",
+      "result": "passed"
+    },
+    {
+      "name": "Frozen identity cannot be reused",
+      "result": "passed"
+    }
+  ],
+  "v1ManifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b",
+  "result": "passed"
+}

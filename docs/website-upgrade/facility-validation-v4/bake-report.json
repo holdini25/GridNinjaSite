@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "engine": "Blender Cycles",
+  "blender": "5.2.2 LTS",
+  "seed": 19,
+  "resolution": [
+    512,
+    512
+  ],
+  "excludedRoles": [
+    "fan_rotor",
+    "picking_proxy"
+  ],
+  "stages": [
+    {
+      "receiver": "floor",
+      "type": "CYCLES_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.75,
+      "filter": "edge-clamped separable 1-2-1",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    {
+      "receiver": "plinth",
+      "type": "CYCLES_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.75,
+      "filter": "edge-clamped separable 1-2-1",
+      "minimum": 0.0,
+      "maximum": 0.9921568632125854
+    },
+    {
+      "receiver": "rack_a",
+      "type": "CYCLES_SELECTED_TO_ACTIVE_NORMAL_AND_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.08,
+      "cageExtrusionMetres": 0.1,
+      "maxRayDistanceMetres": 0.2,
+      "highTriangles": 73728
+    },
+    {
+      "receiver": "rack_b",
+      "type": "CYCLES_SELECTED_TO_ACTIVE_NORMAL_AND_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.08,
+      "cageExtrusionMetres": 0.1,
+      "maxRayDistanceMetres": 0.2,
+      "highTriangles": 73728
+    },
+    {
+      "receiver": "coil",
+      "type": "CYCLES_SELECTED_TO_ACTIVE_NORMAL_AND_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.08,
+      "cageExtrusionMetres": 0.1,
+      "maxRayDistanceMetres": 0.2,
+      "highTriangles": 73728
+    }
+  ],
+  "images": [
+    {
+      "file": "surface-normal.png",
+      "bytes": 178966,
+      "sha256": "aa9c60d7d914c234c45b262e96b817a356c715754a1e355cba111c42d81c813f"
+    },
+    {
+      "file": "surface-orm.png",
+      "bytes": 163898,
+      "sha256": "3ea5701434f89998e634dce5413898de50035a4e4d7124189d00212d1044138f"
+    }
+  ],
+  "sourceSha256": "414735d153f452ad3fd695fb8e7da968559886a33327790d35caa42369a23485",
+  "notes": [
+    "Actual Cycles ray-traced AO and selected-to-active surface normal bakes.",
+    "AO is a visual shading aid, not physical airflow or capacity evidence.",
+    "No rotor pose or rotor shadow is baked into a receiver."
+  ]
+}

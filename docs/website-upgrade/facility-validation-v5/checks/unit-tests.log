@@ -1,0 +1,16 @@
+
+> nextjs@0.1.0 test:unit
+> vitest run --coverage --coverage.enabled=false
+
+
+ RUN  v4.1.10 /Users/holdenchung/repos/GridNinjaSite
+
+(node:6030) [THREE_CJS_DEPRECATED] DeprecationWarning: `require("three")` is deprecated and will be removed.
+Replace `const THREE = require("three")` with `import * as THREE from "three"`.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+ Test Files  47 passed (47)
+      Tests  465 passed (465)
+   Start at  17:32:18
+   Duration  17.89s (transform 391ms, setup 867ms, import 1.39s, tests 5.79s, environment 7.96s)
+

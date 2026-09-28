@@ -1,0 +1,38 @@
+
+> nextjs@0.1.0 test:unit
+> vitest run --coverage
+
+
+ RUN  v4.1.10 /Users/holdenchung/repos/GridNinjaSite
+      Coverage enabled with v8
+
+(node:14869) [THREE_CJS_DEPRECATED] DeprecationWarning: `require("three")` is deprecated and will be removed.
+Replace `const THREE = require("three")` with `import * as THREE from "three"`.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+ Test Files  51 passed (51)
+      Tests  510 passed (510)
+   Start at  19:08:39
+   Duration  22.10s (transform 427ms, setup 974ms, import 1.50s, tests 8.19s, environment 8.21s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   94.13 |    86.11 |   98.23 |   97.82 |                   
+ ...patch-envelope |   94.24 |    85.34 |   98.13 |   97.56 |                   
+  ...o-envelope.ts |   96.22 |    97.61 |   95.83 |   96.15 | 94-99             
+  export.ts        |     100 |     87.5 |     100 |     100 | 14                
+  geometry.ts      |   98.75 |    73.77 |     100 |   98.52 | 175               
+  invariants.ts    |   88.15 |    91.66 |   94.73 |     100 | ...28,34,51,53-54 
+  normalize.ts     |   93.47 |    79.54 |     100 |   96.25 | 137,157,178       
+ schemas           |   93.33 |     91.3 |     100 |     100 |                   
+  ...ope.schema.ts |   93.33 |     91.3 |     100 |     100 | 29,84-85,146      
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 94.13% ( 337/358 )
+Branches     : 86.11% ( 304/353 )
+Functions    : 98.23% ( 111/113 )
+Lines        : 97.82% ( 270/276 )
+================================================================================

@@ -1,0 +1,19 @@
+
+Running 3 tests using 1 worker
+
+
+(node:17017) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[1/3] [chrome-stable] › tests/e2e/facility-ecosystem.spec.ts:80:7 › facility ecosystem narrative › optional playback respects the D evidence stop and mobile adaptive Still fallback
+
+(node:17056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[2/3] [chrome-stable] › tests/e2e/facility-ecosystem.spec.ts:80:7 › facility ecosystem narrative › optional playback respects the D evidence stop and mobile adaptive Still fallback
+
+(node:17075) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[3/3] [chrome-stable] › tests/e2e/facility-ecosystem.spec.ts:80:7 › facility ecosystem narrative › optional playback respects the D evidence stop and mobile adaptive Still fallback
+  3 passed (32.1s)

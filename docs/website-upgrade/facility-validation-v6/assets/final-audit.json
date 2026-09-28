@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "release": "facility-v6",
+  "measuredAt": "2026-09-23T23:20:28.206Z",
+  "result": "passed",
+  "scope": "Read-only audit of frozen local release, registered files, authoring provenance, independent Khronos validation and current Next.js deployment traces. No application/source/frozen-asset changes or browser/Blender invocation.",
+  "manifest": {
+    "sha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b",
+    "registryHashMatches": true,
+    "strictSchemaPass": true,
+    "exactAllowlist": [
+      "cooling-closed.webp",
+      "cooling-cutaway.webp",
+      "cooling.glb",
+      "facility.glb",
+      "manifest.json",
+      "poster-desktop.webp",
+      "poster-mobile.webp",
+      "rack-closed.webp",
+      "rack-cutaway.webp",
+      "rack.glb"
+    ],
+    "files": [
+      {
+        "file": "facility.glb",
+        "bytes": 2333504,
+        "sha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+        "verified": true
+      },
+      {
+        "file": "poster-desktop.webp",
+        "bytes": 42574,
+        "sha256": "3cc5ffa8ac95101b8c8b5d48f649c1fdda9e40cb1915303b0b2456c031e90ad1",
+        "verified": true
+      },
+      {
+        "file": "poster-mobile.webp",
+        "bytes": 14266,
+        "sha256": "4d5f7a23d303613f7c010f0391b8df0e3a91cfb37cc338304ea590a72191e7a6",
+        "verified": true
+      },
+      {
+        "file": "rack.glb",
+        "bytes": 762700,
+        "sha256": "f2d2b2ce3ead78dbcbe332e351b9b8af7c2a0dd04080917c37c53b85a00cfb1e",
+        "verified": true
+      },
+      {
+        "file": "rack-closed.webp",
+        "bytes": 6700,
+        "sha256": "40ee451e4a290285133c6104a476fd7c3702afd9688d630be25652e5fb5bbd0d",
+        "verified": true
+      },
+      {
+        "file": "rack-cutaway.webp",
+        "bytes": 13822,
+        "sha256": "5b8a3b6138cd9bf1d01656ca2e47702b6275ef1125cc56404db7de3bbdb3600b",
+        "verified": true
+      },
+      {
+        "file": "cooling.glb",
+        "bytes": 379796,
+        "sha256": "36d432e515da3aab8a4de67dab83424c5c2995b154f4792753e2fe8f6e338d69",
+        "verified": true
+      },
+      {
+        "file": "cooling-closed.webp",
+        "bytes": 15030,
+        "sha256": "2048e91c7dee70d83093748e5f9d57f804eb7ccca2dd068de8301e46725f9cef",
+        "verified": true
+      },
+      {
+        "file": "cooling-cutaway.webp",
+        "bytes": 16106,
+        "sha256": "039f40bcd6351c411730436adb82bf49b9038473196f06b7b522a195f824aea4",
+        "verified": true
+      }
+    ]
+  },
+  "immutability": {
+    "baseline": "build/facility/facility-v6/baseline/prior-release-hashes.json",
+    "priorFrozenFilesUnchanged": 32,
+    "priorRegistryEntriesUnchanged": 5,
+    "registryAppendOnly": true
+  },
+  "sourceProvenance": {
+    "master": true,
+    "generator": true,
+    "modules": 9,
+    "specimenMasters": 2,
+    "embeddedTopologyMatchesFinalReport": true,
+    "equipment": 31,
+    "routes": 46,
+    "ports": 108,
+    "internalPassages": 20
+  },
+  "khronos": [
+    {
+      "file": "facility.glb",
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 0
+    },
+    {
+      "file": "rack.glb",
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 0
+    },
+    {
+      "file": "cooling.glb",
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 0
+    }
+  ],
+  "deploymentExclusion": {
+    "tracesInspected": 44,
+    "tracesContainingV6": 42,
+    "sourceOrCandidateTraceLeaks": 0,
+    "publicFacilityGlbOrBlendLeaks": 0,
+    "configuredSourceAndCandidateExclusions": true
+  },
+  "geometry": {
+    "method": "Sum indexed triangles in actual frozen GLBs, excluding picking proxies; includes visible independent rotors. Runtime LED geometry excluded.",
+    "authoredTriangles": {
+      "facility-v5": 32904,
+      "facility-v6": 34672
+    },
+    "addedOverviewTriangles": 1768,
+    "overviewBrowserTrianglesIncludingLeds": 35248
+  },
+  "targets": {
+    "overviewBytes": 2333504,
+    "overviewTargetBytes": 2300000,
+    "overviewTargetMissBytes": 33504,
+    "overviewCeilingBytes": 2500000,
+    "overviewCeilingPass": true,
+    "overviewDrawCalls": 39,
+    "drawCallHeadroom": 0
+  },
+  "limits": [
+    "This audit establishes artifact identity, geometric/export checks and current deployment file exclusion; it is not browser performance or full accessibility validation.",
+    "Physical-device, native Safari/VoiceOver, sustained-operation and final route/device performance gates remain recorded separately.",
+    "The overview meets its hard byte ceiling but exceeds the 2.3 MB working target by 33,504 bytes.",
+    "Current trace audit is tied to the files available at measuredAt; rerun the release process checks after any production rebuild."
+  ]
+}

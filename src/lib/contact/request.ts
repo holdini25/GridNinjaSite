@@ -12,9 +12,14 @@ export class ContactPayloadTooLargeError extends Error {
   }
 }
 
+export class ContactPayloadTimeoutError extends Error {
+  constructor() { super("Request body timed out."); this.name = "ContactPayloadTimeoutError" }
+}
+
 export async function readBodyLimited(
   request: Request,
-  maximum = CONTACT_MAX_BODY_BYTES
+  maximum = CONTACT_MAX_BODY_BYTES,
+  timeoutMs = 5_000
 ) {
   const declaredLength = Number(request.headers.get("content-length") ?? "0")
 
@@ -30,10 +35,16 @@ export async function readBodyLimited(
   const decoder = new TextDecoder()
   let size = 0
   let body = ""
+  let timedOut = false
+  const timeout = setTimeout(() => {
+    timedOut = true
+    void reader.cancel().catch(() => {})
+  }, timeoutMs)
 
   try {
     while (true) {
       const { done, value } = await reader.read()
+      if (timedOut) throw new ContactPayloadTimeoutError()
 
       if (done) break
 
@@ -49,6 +60,7 @@ export async function readBodyLimited(
     body += decoder.decode()
     return body
   } finally {
+    clearTimeout(timeout)
     reader.releaseLock()
   }
 }

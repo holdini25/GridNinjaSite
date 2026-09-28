@@ -1,0 +1,7 @@
+{
+  "checkedAt": "2026-09-24T04:08:17.845764+00:00",
+  "result": "pass",
+  "unchangedFiles": 73,
+  "mismatches": [],
+  "registry": "Prior entries preserved; v8 registration appended. Registry is excluded from the immutable-byte comparison."
+}

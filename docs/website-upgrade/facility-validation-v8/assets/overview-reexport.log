@@ -1,0 +1,102 @@
+00:00.227  blend            | Read blend: "/Users/holdenchung/repos/GridNinjaSite/assets-source/facility/facility-master.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+23:24:21 | INFO: Starting glTF 2.0 export
+23:24:21 | INFO: Extracting primitive: GN_ACCENT_COOLING_Copper
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_AIR_SECTION_COVERS_Graphite
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLING_Copper
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLING_Dark
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLING_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLING_Grille
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLING_Steel
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_COOLING_Trim
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_FAN_ROTOR_00.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_FAN_ROTOR_01.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_FAN_ROTOR_02.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_FAN_ROTOR_03.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PICK_COOLING.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PLATFORM_Amber
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PLATFORM_Dark
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PLATFORM_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PLATFORM_Platform
+23:24:21 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PLATFORM_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_ACCENT_POWER_Copper
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PICK_POWER.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_POWER_Amber
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_POWER_Copper
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_POWER_Dark
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_POWER_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_POWER_Grille
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_POWER_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_POWER_Trim
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_ACCENT_STORAGE_Copper
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PICK_STORAGE.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_STORAGE_Amber
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_STORAGE_Copper
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_STORAGE_Dark
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_STORAGE_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_STORAGE_Grille
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_STORAGE_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_STORAGE_Trim
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_ACCENT_WORKLOADS_Copper
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_PICK_WORKLOADS.001
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_WORKLOADS_Dark
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_WORKLOADS_Graphite
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_WORKLOADS_Grille
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Extracting primitive: GN_WORKLOADS_Steel
+23:24:21 | INFO: Primitives created: 1
+23:24:21 | INFO: Finished glTF 2.0 export in 0.08215188980102539 s
+
+FACILITY_EXPORT {"schemaVersion": 1, "blenderVersion": "5.2.2 LTS", "blenderBuildHash": "d13f752e3b9c", "source": "assets-source/facility/facility-master.blend", "sourceSha256": "a948dc23cb906c963852ee654a5e52ea50659a002b3b83298b5b503438463266", "generatorSha256": "d894c9c8d032281edd20a7099f3764f2667aef8f2ea6256f9335742b46a80723", "exportBytes": 2258676, "gzipBytes": 453307, "gzipLevel": 9, "sha256": "130a264488f722f7ba02ef328c1acb78b37638e0c8b08e519fb74927198d40c2", "authoredTriangles": 34944, "renderedTriangles": 34896, "meshDrawCalls": 38, "drawCallsWithLedInstances": 39, "materials": ["Amber", "Copper", "Dark", "Graphite", "Grille", "Platform", "Steel", "Trim"], "materialCount": 8, "meshCount": 42, "bounds": {"min": [-5.429999828338623, 0.0, -3.8299999237060547], "max": [5.429999828338623, 3.5920000076293945, 3.8299999237060547]}, "textureDescriptorCount": 3, "embeddedImages": [{"name": "surface-orm", "bytes": 91844, "sha256": "4f42cfc737a384def5ee1f763322fcfc6dc13b7e9bec5558f63bb333b2391308"}, {"name": "surface-color", "bytes": 7198, "sha256": "122234631c7bf7b9289756087656d628c7ede68e274491095271d58527730abd"}, {"name": "surface-normal", "bytes": 81825, "sha256": "fb614bfeb9027e8161993e2e303e46579452164d431c8a7f75fc13579b824a9f"}], "expectedRuntimeMaterials": 9, "rackKit": {"envelopeMetres": [0.78, 1.24, 2.55], "overviewDoorSkin": "omitted for readable recessed module construction", "specimenDoorSkin": "MASK over a real recessed module bank", "branding": "GN only; inventory identity belongs to semantic metadata"}, "sourceModules": {"generate.py": "d894c9c8d032281edd20a7099f3764f2667aef8f2ea6256f9335742b46a80723", "export.py": "ddb2a4b8cf652bb51ec91ffc2b2a019d3972e3b80f82707e1b1e0e9ddc7b28cf", "surface_bake.py": "dbb7055db8b107aece39b771ceeb27758505cc4c36207098ead45d1aea5b4fc6", "service_routes.py": "126a0d401b8778f145a6a5b37cc894c7a962256aa590518c8ac1856adbe70efa", "engineering_metadata.py": "7669cf6e982703110743b297851a0b9aac8115de2a658a09d8dab5ddffcc8f20", "specimens.py": "6df3255c66f3234398c7a1d5873e50ed0466b8a0e859a47a9a3efe635d8bd82d", "rack_kit.py": "9daa62a20e5f53051564dbf0768eab1fe3c7728ac5c0fa132d83a5f9bc6ba5e2", "rack_motion.py": "91aecd7f1be7d83089cd8d761b032726c68b3bbde17a2420fc9a29ed789b12e4", "air_circuit.py": "cc0b9ab35cc4d0ae93374146c4efcb1897741a89a3021baffda58a31ef89586a", "scene.json": "baf6242b21d17f6f5256c9f5eb11aac6580041d4a32f10303b86a78ebb27c4fb"}, "fanBindings": [{"gnId": "GN_FAN_ROTOR_00", "axisLocal": [0, 1, 0], "visualRadiansPerSecond": 1.6, "phaseOffsetRadians": 0}, {"gnId": "GN_FAN_ROTOR_01", "axisLocal": [0, 1, 0], "visualRadiansPerSecond": 1.6, "phaseOffsetRadians": 1.57}, {"gnId": "GN_FAN_ROTOR_02", "axisLocal": [0, 1, 0], "visualRadiansPerSecond": 1.6, "phaseOffsetRadians": 3.14}, {"gnId": "GN_FAN_ROTOR_03", "axisLocal": [0, 1, 0], "visualRadiansPerSecond": 1.6, "phaseOffsetRadians": 4.71}], "profile": {"camera": [12.48401, 12.75822, 13.8649], "target": [0.0, 1.1, 0.0], "padding": 1.12, "background": "#080808", "exposure": 1.18, "colorSpace": "srgb", "toneMapping": "aces-filmic", "lighting": {"hemisphere": {"sky": "#eeeeee", "ground": "#292929", "intensity": 0.32}, "directional": [{"position": [-8, 15, 8], "color": "#fffaf3", "intensity": 2.25}, {"position": [7, 8, -7], "color": "#e6edef", "intensity": 0.75}, {"position": [0, 4, 12], "color": "#fff4e6", "intensity": 0.52}], "environment": {"preset": "industrial-night-v1", "resolution": 128, "intensity": 1.08, "rotationY": 0}}, "motion": {"fanRadiansPerSecond": 1.6, "fanPhaseOffsets": [0, 1.57, 3.14, 4.71], "ledPulseRadiansPerSecond": 1.8, "ledPulseAmplitude": 0.14}, "led": {"color": "#ffc079", "steadyIntensity": 0.82, "size": [0.038, 0.025, 0.018]}, "framing": "projected-geometry", "engineering": {"version": 1, "seed": 41727, "accent": {"resting": "#9d632f", "hover": "#ffbe63", "selected": "#ffd18a", "previewWeight": 0.85, "baseEmission": 0.035, "activeEmission": 1.0, "transitionMs": 150}, "activity": {"resting": 0.12, "peak": 1.0, "steady": 0.5, "pulseMs": [120, 180], "eventMs": [80, 180], "maxPulses": 3, "ambientTraceSeconds": [8, 12], "selectedTraceQuietSeconds": 2.8}, "cameraTransitionMs": 420, "poseTransitionMs": 280, "rendering": {"ambientFps": 30, "interactionFps": 60, "mobilePixels": 650000, "desktopPixels": 1500000, "probeSeconds": 2}}, "surfaces": {"version": 1, "pipeline": "pbr-semantic-v2", "uvSet": 0, "maxTextureBytes": 3145728}, "ecosystem": {"version": 1, "seed": 61427, "ambientIntervalSeconds": [12, 18], "sequenceSeconds": 8, "chapterSeconds": [4, 4, 5, 4, 4, 3], "colors": {"electrical": "#e3e7e4", "cooling": "#76abb4", "heat": "#c98554"}, "fanModulation": 0.1, "maxEquipment": 96, "maxRoutes": 128, "maxTraces": 2}, "inspection": {"version": 1, "fitSubjects": {"overview": {"min": [-5.43, 0.0, -3.83], "max": [5.43, 3.592, 3.83]}, "air-path": {"min": [-2.779, 1.006, -2.79], "max": [3.821, 3.592, 1.204]}}, "mobile": {"camera": [12.48401, 12.75822, 13.8649], "target": [0.0, 1.1, 0.0], "padding": 1.12, "projection": "orthographic"}, "details": {"rack": {"camera": [2.8, 2.4, 5.0], "target": [0, 1.55, 0], "padding": 1.12, "projection": "perspective", "fov": 32}, "air-path": {"camera": [5.874045, 13.724184, 5.152159], "target": [0.521, 2.299, -0.793], "padding": 1.12, "projection": "perspective", "fov": 32}}}}}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

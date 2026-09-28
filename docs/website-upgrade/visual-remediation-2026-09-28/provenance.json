@@ -1,0 +1,28 @@
+{
+  "reviewDate": "2026-09-28",
+  "scope": "Planning artifact only; no application validation rerun",
+  "missingLocalLinks": [],
+  "images": [
+    {
+      "file": "reference.png",
+      "source": "/var/folders/16/28140qd9571b32dx0t65tl3c0000gn/T/codex-clipboard-e4a151f7-152c-4ec7-be62-159603181ded.png",
+      "sha256": "2e856e1c1f6f39f0a14d4cd65f39074a6dcebe41f3ce15f8f795907e07482e92",
+      "unchangedCopy": true
+    },
+    {
+      "file": "candidate-home-1366.png",
+      "source": "/private/tmp/gridninja-premium-v11-qualification11/build/qa/craft-qualification11/remaining-browser01/layout/home-1366.png",
+      "sha256": "789352176a7faf15464a872d000ede6590331907b00507cfe329e6cab5280466",
+      "unchangedCopy": true
+    },
+    {
+      "file": "candidate-facility.webp",
+      "source": "/private/tmp/gridninja-premium-v11-qualification11/src/content/facility-releases/facility-v11/poster-desktop.webp",
+      "sha256": "d2c4b5eb9fb80affbc6d80da05f867c907c4fc263df1c47980e6a483221038d6",
+      "unchangedCopy": true
+    }
+  ],
+  "selectedDirection": "Cinematic animated 3D homepage; interactive inspection on demo",
+  "technicalCompanion": "blender-gpu-threejs.md",
+  "technicalReviewScope": "Repository code, toolchain and official technical documentation reviewed; no render, GPU benchmark or application validation rerun."
+}

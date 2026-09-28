@@ -1,0 +1,41 @@
+{
+  "note": "Browser renders under each release final camera. Detail crops show corresponding equipment, not an identical camera or pixel registration.",
+  "versions": [
+    {
+      "label": "V2 · PRIOR RELEASE",
+      "file": "build/facility/facility-v2/state-neutral.png",
+      "crops": [
+        [
+          405,
+          310,
+          445,
+          305
+        ],
+        [
+          593,
+          140,
+          425,
+          267
+        ]
+      ]
+    },
+    {
+      "label": "V3 · ENGINEERING MINIATURE",
+      "file": "build/facility/facility-v3/state-neutral.png",
+      "crops": [
+        [
+          395,
+          220,
+          452,
+          330
+        ],
+        [
+          605,
+          42,
+          423,
+          285
+        ]
+      ]
+    }
+  ]
+}

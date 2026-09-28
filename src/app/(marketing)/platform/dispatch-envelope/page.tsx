@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { assessmentScopeHref } from "@/lib/marketing-journeys"
 
 import { ArrowRightIcon, ShieldCheckIcon } from "lucide-react"
 
@@ -59,8 +60,8 @@ export default async function DispatchEnvelopePage({
         headline={dispatchEnvelopeHero.headline}
         body={dispatchEnvelopeHero.body}
         primaryCta={{
-          label: "Scope an assessment",
-          href: "/assessment",
+          label: "Contact Us",
+          href: assessmentScopeHref("dispatch-envelope-hero"),
         }}
         secondaryCta={{
           label: "See Shadow Mode",
@@ -239,8 +240,8 @@ export default async function DispatchEnvelopePage({
         <CtaBand
           headline={dispatchEnvelopeSections.cta.headline}
           body={dispatchEnvelopeSections.cta.body}
-          label="Scope an assessment"
-          href="/assessment"
+          label="Contact Us"
+          href={assessmentScopeHref("dispatch-envelope-final")}
           eventName="dispatch-envelope-final-cta"
         />
       </SectionShell>

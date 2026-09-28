@@ -1,13 +1,15 @@
 import { readFile } from "node:fs/promises"
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
+import { openAssessmentControls } from "../support/facility-viewer"
 
 const scenarios = ["a", "b", "c", "d"] as const
 const outcomes = { a: "ALLOW", b: "REPAIR", c: "REJECT", d: "NO-PROOF" }
 
 test.describe("capacity assessment", () => {
   test("all ordered transitions keep the explanation, quantities, and exact exports synchronized", async ({ page, request }) => {
-    await page.goto("/demo?scenario=b&version=1.0.0&perspective=engineering")
+    await page.goto("/demo?scenario=b&version=1.0.0&perspective=engineering&interactive=1")
+    await openAssessmentControls(page)
     const control = page.getByRole("combobox", { name: "Scenario", exact: true })
     for (const from of scenarios) {
       await control.selectOption(from)
@@ -83,7 +85,8 @@ test.describe("capacity assessment", () => {
   })
 
   test("history and reset restore the same record, perspective, interval, and disclosure state", async ({ page }) => {
-    await page.goto("/demo?scenario=b&version=1.0.0&perspective=engineering")
+    await page.goto("/demo?scenario=b&version=1.0.0&perspective=engineering&interactive=1")
+    await openAssessmentControls(page)
     await page.getByRole("combobox", { name: "Scenario", exact: true }).selectOption("d")
     await page.getByRole("combobox", { name: "Scenario", exact: true }).selectOption("c")
     await page.goBack()
@@ -94,7 +97,8 @@ test.describe("capacity assessment", () => {
     await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "b")
     await expect(page.getByRole("combobox", { name: "Perspective", exact: true })).toHaveValue("business")
     await expect(page.getByTestId("assessment-summary")).toContainText("2026-09-22 · 00:00–01:00 UTC")
-    await expect(page.locator("details").filter({ has: page.getByText("Options to investigate · all unassessed", { exact: true }) })).not.toHaveAttribute("open", "")
+    await expect(page.locator("summary").filter({ hasText: /^Options to investigate · all unassessed$/ }).locator("..")).not.toHaveAttribute("open", "")
+    await expect(page.locator("summary").filter({ hasText: /^Conditions and assessment evidence$/ }).locator("..")).not.toHaveAttribute("open", "")
     await expect(page).toHaveURL(/scenario=b&version=1.0.0&perspective=business/)
   })
 
@@ -111,11 +115,13 @@ test.describe("capacity assessment", () => {
 
   test("keyboard focus and accessible alternatives survive reduced-motion scenario changes", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" })
-    await page.goto("/demo?perspective=engineering")
+    await page.goto("/demo?perspective=engineering&interactive=1")
+    await openAssessmentControls(page)
     const scenario = page.getByRole("combobox", { name: "Scenario", exact: true })
     await scenario.focus()
     await scenario.selectOption("d")
     await expect(scenario).toBeFocused()
+    await page.getByText("Result and assessment limits", { exact: true }).click()
     await expect(page.getByTestId("assessment-summary")).toContainText("Missing cooling evidence prevents assessment")
     const scan = await new AxeBuilder({ page }).include('[data-testid="assessment-explorer"]').withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze()
     expect(scan.violations).toEqual([])
@@ -127,10 +133,25 @@ test.describe("capacity assessment", () => {
       const page = await context.newPage()
       await page.goto("/demo")
       await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "b")
-      await expect(page.getByText("Would the reduced 5.8 MW profile still meet the service and commercial requirement?", { exact: true })).toBeVisible()
+      await expect(page.getByTestId("assessment-summary").getByText("Would the reduced 5.8 MW profile still meet the service and commercial requirement?", { exact: true })).toBeVisible()
+      await page.getByText("Change scenario or perspective", { exact: true }).click()
       await page.getByRole("link", { name: "D", exact: true }).click()
       await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "d")
       await expect(page.getByTestId("assessment-summary")).not.toContainText("5.8 MW")
+      // Native fragment scrolling is finite (~265 ms in the saved RC04 probe).
+      // Sample from Node before asking Playwright's no-JS utility world to
+      // establish actionability; preserve normal pointer activation afterwards.
+      let previousY: number | undefined
+      let stableSamples = 0
+      const nativeControls = page.locator("[data-assessment-controls] > summary")
+      await expect.poll(async () => {
+        const box = await nativeControls.boundingBox()
+        if (!box) return false
+        stableSamples = previousY !== undefined && Math.abs(box.y - previousY) < 0.25 ? stableSamples + 1 : 0
+        previousY = box.y
+        return stableSamples >= 3
+      }, { timeout: 2_000, intervals: [50], message: "Native fragment scroll must settle before disclosure activation" }).toBe(true)
+      await page.getByText("Change scenario or perspective", { exact: true }).click()
       await page.getByRole("link", { name: "Engineering evidence", exact: true }).click()
       await expect(page.getByTestId("assessment-capacity-table")).toContainText("Unknown")
     } finally { await context.close() }

@@ -1,0 +1,12 @@
+
+ RUN  v4.1.10 /Users/holdenchung/repos/GridNinjaSite
+
+(node:16754) [THREE_CJS_DEPRECATED] DeprecationWarning: `require("three")` is deprecated and will be removed.
+Replace `const THREE = require("three")` with `import * as THREE from "three"`.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+ Test Files  51 passed (51)
+      Tests  513 passed (513)
+   Start at  19:24:18
+   Duration  20.11s (transform 447ms, setup 936ms, import 1.54s, tests 6.85s, environment 8.69s)
+

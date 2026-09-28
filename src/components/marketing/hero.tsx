@@ -27,6 +27,7 @@ type HeroProps = SectionCopy & {
   visualClassName?: string
   proofGrid?: boolean
   proofGridLabels?: string[]
+  layout?: "standard" | "facility" | "compact"
 }
 
 export function Hero({
@@ -40,34 +41,39 @@ export function Hero({
   visualClassName,
   proofGrid = false,
   proofGridLabels,
+  layout = "standard",
 }: HeroProps) {
   const hasVisual = Boolean(visual)
-  const containerClassName = hasVisual
-    ? "grid gap-8 pt-4 pb-7 sm:gap-10 sm:pt-6 sm:pb-8 lg:min-h-[34rem] lg:grid-cols-[minmax(0,1fr)_minmax(340px,520px)] lg:items-center lg:gap-14"
+  const compact = layout === "compact" && !hasVisual
+  const containerClassName = layout === "facility"
+    ? "grid grid-cols-[minmax(0,1fr)] gap-8 pt-6 pb-7 sm:gap-10 lg:grid-cols-[minmax(0,.88fr)_minmax(0,1.12fr)] lg:items-start lg:gap-8 lg:pt-8 lg:pb-8"
+    : compact
+    ? "max-w-3xl pt-6 pb-6 sm:pt-8 sm:pb-8 lg:max-w-4xl"
+    : hasVisual
+    ? "grid grid-cols-[minmax(0,1fr)] gap-8 pt-4 pb-7 sm:gap-10 sm:pt-6 sm:pb-8 lg:min-h-[34rem] lg:grid-cols-[minmax(0,1fr)_minmax(340px,520px)] lg:items-center lg:gap-14"
     : "max-w-3xl pt-8 pb-10 sm:pt-12 sm:pb-14 lg:max-w-4xl lg:pt-14 lg:pb-16"
   const headlineClassName = hasVisual
-    ? "max-w-[15ch] text-balance text-[2.2rem] leading-[0.95] font-medium tracking-tight text-foreground sm:text-[3.85rem] lg:text-[3.65rem]"
-    : "max-w-[13ch] text-balance text-[2.2rem] leading-[0.98] font-medium tracking-tight text-foreground sm:text-[3.05rem] lg:text-[3.7rem]"
+    ? "max-w-[17ch] text-balance text-[2.25rem] leading-[1.05] font-medium tracking-tight text-foreground sm:text-[3rem] lg:text-[3.125rem]"
+    : "max-w-[19ch] text-balance text-[2.25rem] leading-[1.05] font-medium tracking-tight text-foreground sm:text-[3rem] lg:text-[3.125rem]"
   const bodyClassName = hasVisual
-    ? "mt-4 max-w-xl text-base leading-7 text-muted-foreground sm:text-[1.16rem] sm:leading-8"
-    : "mt-4 max-w-2xl text-base leading-7 text-muted-foreground sm:text-[1.14rem] sm:leading-8"
+    ? "mt-4 max-w-xl text-base leading-7 text-muted-foreground"
+    : "mt-4 max-w-2xl text-base leading-7 text-muted-foreground"
 
   return (
     <div
       role="region"
       aria-label={eyebrow ?? "Page introduction"}
-      className="relative overflow-hidden border-b border-border/70 pb-6"
+      className={`relative overflow-hidden border-b border-divider ${compact ? "" : "pb-6"}`}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,159,26,0.12),transparent_34%),linear-gradient(180deg,rgba(19,32,43,0.34),transparent_74%)]" />
       {proofGrid ? <ProofGridBackground labels={proofGridLabels} /> : null}
       <SectionShell
         className="relative"
         containerClassName={containerClassName}
         deferRendering={false}
       >
-        <div className={hasVisual ? "max-w-2xl" : "max-w-3xl"}>
+        <div className={hasVisual ? "min-w-0 max-w-2xl [overflow-wrap:anywhere]" : "min-w-0 max-w-3xl [overflow-wrap:anywhere]"}>
           {eyebrow ? (
-            <p className="mb-5 text-sm tracking-[0.28em] text-primary uppercase">
+            <p className="mb-4 text-xs leading-6 tracking-[0.16em] text-primary uppercase">
               {eyebrow}
             </p>
           ) : null}
@@ -78,9 +84,9 @@ export function Hero({
             {body}
           </p>
           {(primaryCta || secondaryCta) && (
-            <div className="mt-7 flex flex-wrap gap-4">
+            <div className={`${compact ? "mt-5" : "mt-7"} flex flex-wrap gap-3`}>
               {primaryCta ? (
-                <Button asChild size="lg">
+                <Button asChild size="lg" className="h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
                   <Link
                     prefetch={false}
                     href={primaryCta.href}
@@ -100,7 +106,7 @@ export function Hero({
                   asChild
                   size="lg"
                   variant="outline"
-                  className="border-border/80 bg-surface/60 text-foreground"
+                  className="h-auto min-h-12 max-w-full whitespace-normal bg-surface py-3 text-center text-foreground"
                 >
                   <Link
                     prefetch={false}
@@ -119,12 +125,12 @@ export function Hero({
             </div>
           )}
           {trustLine ? (
-            <p className="mt-4 max-w-xl font-mono text-sm leading-7 text-proof-cyan">
+            <p className="mt-4 max-w-xl text-sm leading-6 text-muted-foreground">
               {trustLine}
             </p>
           ) : null}
         </div>
-        {visual ? <div className={visualClassName ?? "lg:pl-4"}>{visual}</div> : null}
+        {visual ? <div className={`min-w-0 ${visualClassName ?? "lg:pl-4"}`}>{visual}</div> : null}
       </SectionShell>
     </div>
   )

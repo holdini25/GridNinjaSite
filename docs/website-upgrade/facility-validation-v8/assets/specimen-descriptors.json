@@ -1,0 +1,284 @@
+{
+  "rack": {
+    "kind": "rack",
+    "label": "Representative rack construction",
+    "system": "workloads",
+    "profile": {
+      "camera": [
+        3.2,
+        2.7,
+        4.0
+      ],
+      "target": [
+        0,
+        1.1,
+        0
+      ],
+      "padding": 1.12,
+      "background": "#080808",
+      "exposure": 1.18,
+      "colorSpace": "srgb",
+      "toneMapping": "aces-filmic",
+      "lighting": {
+        "hemisphere": {
+          "sky": "#eeeeee",
+          "ground": "#292929",
+          "intensity": 0.32
+        },
+        "directional": [
+          {
+            "position": [
+              -8,
+              15,
+              8
+            ],
+            "color": "#fffaf3",
+            "intensity": 2.25
+          },
+          {
+            "position": [
+              7,
+              8,
+              -7
+            ],
+            "color": "#e6edef",
+            "intensity": 0.75
+          },
+          {
+            "position": [
+              0,
+              4,
+              12
+            ],
+            "color": "#fff4e6",
+            "intensity": 0.52
+          }
+        ],
+        "environment": {
+          "preset": "industrial-night-v1",
+          "resolution": 128,
+          "intensity": 1.08,
+          "rotationY": 0
+        }
+      },
+      "motion": {
+        "fanRadiansPerSecond": 1.6,
+        "fanPhaseOffsets": [
+          0,
+          1.57,
+          3.14,
+          4.71
+        ],
+        "ledPulseRadiansPerSecond": 1.8,
+        "ledPulseAmplitude": 0.14
+      },
+      "led": {
+        "color": "#ffc079",
+        "steadyIntensity": 0.82,
+        "size": [
+          0.018,
+          0.012,
+          0.012
+        ]
+      },
+      "framing": "projected-geometry",
+      "engineering": {
+        "version": 1,
+        "seed": 41727,
+        "accent": {
+          "resting": "#9d632f",
+          "hover": "#ffbe63",
+          "selected": "#ffd18a",
+          "previewWeight": 0.85,
+          "baseEmission": 0.035,
+          "activeEmission": 1.0,
+          "transitionMs": 150
+        },
+        "activity": {
+          "resting": 0.12,
+          "peak": 1.0,
+          "steady": 0.5,
+          "pulseMs": [
+            120,
+            180
+          ],
+          "eventMs": [
+            80,
+            180
+          ],
+          "maxPulses": 3,
+          "ambientTraceSeconds": [
+            8,
+            12
+          ],
+          "selectedTraceQuietSeconds": 2.8
+        },
+        "cameraTransitionMs": 420,
+        "poseTransitionMs": 280,
+        "rendering": {
+          "ambientFps": 30,
+          "interactionFps": 60,
+          "mobilePixels": 650000,
+          "desktopPixels": 1500000,
+          "probeSeconds": 2
+        }
+      },
+      "surfaces": {
+        "version": 1,
+        "pipeline": "pbr-semantic-v2",
+        "uvSet": 0,
+        "maxTextureBytes": 3145728
+      }
+    },
+    "requiredIds": [
+      "GN_SPECIMEN_ROOT",
+      "GN_RACK_FRAME",
+      "GN_RACK_PANEL",
+      "GN_RACK_DOOR",
+      "GN_RACK_SERVERS",
+      "GN_RACK_TRAY",
+      "GN_RACK_POWER"
+    ]
+  },
+  "cooling": {
+    "kind": "cooling",
+    "label": "Illustrative cooling assembly",
+    "system": "cooling",
+    "profile": {
+      "camera": [
+        3.4,
+        2.7,
+        4.0
+      ],
+      "target": [
+        0,
+        1.1,
+        0
+      ],
+      "padding": 1.12,
+      "background": "#080808",
+      "exposure": 1.18,
+      "colorSpace": "srgb",
+      "toneMapping": "aces-filmic",
+      "lighting": {
+        "hemisphere": {
+          "sky": "#eeeeee",
+          "ground": "#292929",
+          "intensity": 0.32
+        },
+        "directional": [
+          {
+            "position": [
+              -8,
+              15,
+              8
+            ],
+            "color": "#fffaf3",
+            "intensity": 2.25
+          },
+          {
+            "position": [
+              7,
+              8,
+              -7
+            ],
+            "color": "#e6edef",
+            "intensity": 0.75
+          },
+          {
+            "position": [
+              0,
+              4,
+              12
+            ],
+            "color": "#fff4e6",
+            "intensity": 0.52
+          }
+        ],
+        "environment": {
+          "preset": "industrial-night-v1",
+          "resolution": 128,
+          "intensity": 1.08,
+          "rotationY": 0
+        }
+      },
+      "motion": {
+        "fanRadiansPerSecond": 1.6,
+        "fanPhaseOffsets": [
+          0,
+          1.57,
+          3.14,
+          4.71
+        ],
+        "ledPulseRadiansPerSecond": 1.8,
+        "ledPulseAmplitude": 0.14
+      },
+      "led": {
+        "color": "#ffc079",
+        "steadyIntensity": 0.82,
+        "size": [
+          0.018,
+          0.012,
+          0.012
+        ]
+      },
+      "framing": "projected-geometry",
+      "engineering": {
+        "version": 1,
+        "seed": 41727,
+        "accent": {
+          "resting": "#9d632f",
+          "hover": "#ffbe63",
+          "selected": "#ffd18a",
+          "previewWeight": 0.85,
+          "baseEmission": 0.035,
+          "activeEmission": 1.0,
+          "transitionMs": 150
+        },
+        "activity": {
+          "resting": 0.12,
+          "peak": 1.0,
+          "steady": 0.5,
+          "pulseMs": [
+            120,
+            180
+          ],
+          "eventMs": [
+            80,
+            180
+          ],
+          "maxPulses": 3,
+          "ambientTraceSeconds": [
+            8,
+            12
+          ],
+          "selectedTraceQuietSeconds": 2.8
+        },
+        "cameraTransitionMs": 420,
+        "poseTransitionMs": 280,
+        "rendering": {
+          "ambientFps": 30,
+          "interactionFps": 60,
+          "mobilePixels": 650000,
+          "desktopPixels": 1500000,
+          "probeSeconds": 2
+        }
+      },
+      "surfaces": {
+        "version": 1,
+        "pipeline": "pbr-semantic-v2",
+        "uvSet": 0,
+        "maxTextureBytes": 3145728
+      }
+    },
+    "requiredIds": [
+      "GN_SPECIMEN_ROOT",
+      "GN_COOLER_FRAME",
+      "GN_COOLER_PANEL",
+      "GN_COOLER_COIL",
+      "GN_COOLER_MANIFOLD",
+      "GN_COOLER_FAN",
+      "GN_COOLER_GUARD"
+    ]
+  }
+}

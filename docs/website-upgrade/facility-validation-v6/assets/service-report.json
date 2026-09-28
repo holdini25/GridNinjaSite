@@ -1,0 +1,6014 @@
+{
+  "schemaVersion": 1,
+  "scope": "Illustrative geometric connectivity only; no electrical, hydraulic or capacity calculation",
+  "ports": [
+    {
+      "id": "power-top-0",
+      "component": "switchgear-1",
+      "domain": "power",
+      "service": "electrical",
+      "position": [
+        -3.44,
+        -0.29,
+        2.75
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -3.759999990463257,
+          -0.9399999976158142,
+          0.24699999392032623
+        ],
+        [
+          -3.119999885559082,
+          0.23000000417232513,
+          2.747499942779541
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0025000572204589844
+    },
+    {
+      "id": "bus-end-0",
+      "component": "row-0-bus",
+      "domain": "power",
+      "service": "electrical",
+      "position": [
+        2.275,
+        -1.35,
+        3.16
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          2.185,
+          -1.4400000000000002,
+          3.1100000000000003
+        ],
+        [
+          2.3649999999999998,
+          -1.26,
+          3.21
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-0-0",
+      "component": "row-0-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -2.275,
+        -1.35,
+        3.16
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.33,
+          -1.4100000000000001,
+          3.1220000000000003
+        ],
+        [
+          -2.2199999999999998,
+          -1.29,
+          3.198
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-0-0",
+      "component": "rack-00",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -2.275,
+        -1.35,
+        2.97
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6654999256134033,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -1.8849999904632568,
+          -0.7279999852180481,
+          3.0950000286102295
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-0-1",
+      "component": "row-0-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -1.3649999999999998,
+        -1.35,
+        3.16
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -1.4199999999999997,
+          -1.4100000000000001,
+          3.1220000000000003
+        ],
+        [
+          -1.3099999999999998,
+          -1.29,
+          3.198
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-0-1",
+      "component": "rack-01",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -1.3649999999999998,
+        -1.35,
+        2.97
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -1.7554999589920044,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -0.9750000238418579,
+          -0.7279999852180481,
+          3.0950000286102295
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-0-2",
+      "component": "row-0-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -0.45499999999999985,
+        -1.35,
+        3.16
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.5099999999999999,
+          -1.4100000000000001,
+          3.1220000000000003
+        ],
+        [
+          -0.39999999999999986,
+          -1.29,
+          3.198
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-0-2",
+      "component": "rack-02",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -0.45499999999999985,
+        -1.35,
+        2.97
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.8454999923706055,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -0.06499999761581421,
+          -0.7279999852180481,
+          3.0950000286102295
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-0-3",
+      "component": "row-0-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        0.45500000000000007,
+        -1.35,
+        3.16
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          0.4000000000000001,
+          -1.4100000000000001,
+          3.1220000000000003
+        ],
+        [
+          0.5100000000000001,
+          -1.29,
+          3.198
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-0-3",
+      "component": "rack-03",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        0.45500000000000007,
+        -1.35,
+        2.97
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.06449999660253525,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          0.8450000286102295,
+          -0.7279999852180481,
+          3.0950000286102295
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-0-4",
+      "component": "row-0-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        1.3650000000000002,
+        -1.35,
+        3.16
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          1.3100000000000003,
+          -1.4100000000000001,
+          3.1220000000000003
+        ],
+        [
+          1.4200000000000002,
+          -1.29,
+          3.198
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-0-4",
+      "component": "rack-04",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        1.3650000000000002,
+        -1.35,
+        2.97
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.9745000004768372,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          1.7549999952316284,
+          -0.7279999852180481,
+          3.0950000286102295
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-0-5",
+      "component": "row-0-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        2.275,
+        -1.35,
+        3.16
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          2.2199999999999998,
+          -1.4100000000000001,
+          3.1220000000000003
+        ],
+        [
+          2.33,
+          -1.29,
+          3.198
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-0-5",
+      "component": "rack-05",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        2.275,
+        -1.35,
+        2.97
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          1.8845000267028809,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          2.6649999618530273,
+          -0.7279999852180481,
+          3.0950000286102295
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "power-top-1",
+      "component": "switchgear-2",
+      "domain": "power",
+      "service": "electrical",
+      "position": [
+        -2.77,
+        -0.29,
+        2.75
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -3.0899999141693115,
+          -0.9399999976158142,
+          0.24699999392032623
+        ],
+        [
+          -2.450000047683716,
+          0.23000000417232513,
+          2.747499942779541
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0025000572204589844
+    },
+    {
+      "id": "bus-end-1",
+      "component": "row-1-bus",
+      "domain": "power",
+      "service": "electrical",
+      "position": [
+        2.275,
+        0.9,
+        3.2800000000000002
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          2.185,
+          0.81,
+          3.2300000000000004
+        ],
+        [
+          2.3649999999999998,
+          0.99,
+          3.33
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-1-0",
+      "component": "row-1-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -2.275,
+        0.9,
+        3.2800000000000002
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.33,
+          0.8400000000000001,
+          3.2420000000000004
+        ],
+        [
+          -2.2199999999999998,
+          0.96,
+          3.318
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-1-0",
+      "component": "rack-06",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -2.275,
+        0.9,
+        3.0900000000000003
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6654999256134033,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -1.8849999904632568,
+          1.5219999551773071,
+          3.2149999141693115
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-1-1",
+      "component": "row-1-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -1.3649999999999998,
+        0.9,
+        3.2800000000000002
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -1.4199999999999997,
+          0.8400000000000001,
+          3.2420000000000004
+        ],
+        [
+          -1.3099999999999998,
+          0.96,
+          3.318
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-1-1",
+      "component": "rack-07",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -1.3649999999999998,
+        0.9,
+        3.0900000000000003
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -1.7554999589920044,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -0.9750000238418579,
+          1.5219999551773071,
+          3.2149999141693115
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-1-2",
+      "component": "row-1-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -0.45499999999999985,
+        0.9,
+        3.2800000000000002
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.5099999999999999,
+          0.8400000000000001,
+          3.2420000000000004
+        ],
+        [
+          -0.39999999999999986,
+          0.96,
+          3.318
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-1-2",
+      "component": "rack-08",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        -0.45499999999999985,
+        0.9,
+        3.0900000000000003
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.8454999923706055,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -0.06499999761581421,
+          1.5219999551773071,
+          3.2149999141693115
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-1-3",
+      "component": "row-1-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        0.45500000000000007,
+        0.9,
+        3.2800000000000002
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          0.4000000000000001,
+          0.8400000000000001,
+          3.2420000000000004
+        ],
+        [
+          0.5100000000000001,
+          0.96,
+          3.318
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-1-3",
+      "component": "rack-09",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        0.45500000000000007,
+        0.9,
+        3.0900000000000003
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.06449999660253525,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          0.8450000286102295,
+          1.5219999551773071,
+          3.2149999141693115
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-1-4",
+      "component": "row-1-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        1.3650000000000002,
+        0.9,
+        3.2800000000000002
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          1.3100000000000003,
+          0.8400000000000001,
+          3.2420000000000004
+        ],
+        [
+          1.4200000000000002,
+          0.96,
+          3.318
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-1-4",
+      "component": "rack-10",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        1.3650000000000002,
+        0.9,
+        3.0900000000000003
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.9745000004768372,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          1.7549999952316284,
+          1.5219999551773071,
+          3.2149999141693115
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "bus-tap-1-5",
+      "component": "row-1-bus",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        2.275,
+        0.9,
+        3.2800000000000002
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          2.2199999999999998,
+          0.8400000000000001,
+          3.2420000000000004
+        ],
+        [
+          2.33,
+          0.96,
+          3.318
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-in-1-5",
+      "component": "rack-11",
+      "domain": "workloads",
+      "service": "electrical",
+      "position": [
+        2.275,
+        0.9,
+        3.0900000000000003
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          1.8845000267028809,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          2.6649999618530273,
+          1.5219999551773071,
+          3.2149999141693115
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "collector-supply",
+      "component": "cooling-collector-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        3.02,
+        3.23,
+        1.1
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          2.93,
+          3.13,
+          0.8800000000000001
+        ],
+        [
+          3.11,
+          3.33,
+          1.32
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-start-supply",
+      "component": "cooling-header-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        -2.295,
+        3.0500000000000003,
+        3.12
+      ],
+      "normal": [
+        1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.33,
+          3.0100000000000002,
+          3.08
+        ],
+        [
+          -2.26,
+          3.0900000000000003,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-0-supply",
+      "component": "cooler-0",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        -2.295,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7750000953674316,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          -1.4874999523162842,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-0-supply",
+      "component": "cooling-header-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        -2.295,
+        3.0500000000000003,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.33,
+          3.0100000000000002,
+          3.08
+        ],
+        [
+          -2.26,
+          3.0900000000000003,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-1-supply",
+      "component": "cooler-1",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        -0.8650000000000001,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -1.3450000286102295,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          -0.057500001043081284,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-1-supply",
+      "component": "cooling-header-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        -0.8650000000000001,
+        3.0500000000000003,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.9000000000000001,
+          3.0100000000000002,
+          3.08
+        ],
+        [
+          -0.8300000000000001,
+          3.0900000000000003,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-2-supply",
+      "component": "cooler-2",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        0.5649999999999998,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          0.08500000089406967,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          1.372499942779541,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-2-supply",
+      "component": "cooling-header-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        0.5649999999999998,
+        3.0500000000000003,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          0.5299999999999998,
+          3.0100000000000002,
+          3.08
+        ],
+        [
+          0.5999999999999999,
+          3.0900000000000003,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-3-supply",
+      "component": "cooler-3",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        1.995,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          1.5149999856948853,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          2.802500009536743,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-3-supply",
+      "component": "cooling-header-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "position": [
+        1.995,
+        3.0500000000000003,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          1.9600000000000002,
+          3.0100000000000002,
+          3.08
+        ],
+        [
+          2.0300000000000002,
+          3.0900000000000003,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "collector-return",
+      "component": "cooling-collector-return",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        3.17,
+        3.23,
+        1.1
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          3.08,
+          3.13,
+          0.8800000000000001
+        ],
+        [
+          3.26,
+          3.33,
+          1.32
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-start-return",
+      "component": "cooling-header-return",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        -1.995,
+        3.35,
+        3.12
+      ],
+      "normal": [
+        1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.0300000000000002,
+          3.31,
+          3.08
+        ],
+        [
+          -1.9600000000000002,
+          3.39,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-0-return",
+      "component": "cooler-0",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        -1.995,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7750000953674316,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          -1.4874999523162842,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-0-return",
+      "component": "cooling-header-return",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        -1.995,
+        3.35,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.0300000000000002,
+          3.31,
+          3.08
+        ],
+        [
+          -1.9600000000000002,
+          3.39,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-1-return",
+      "component": "cooler-1",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        -0.5650000000000001,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -1.3450000286102295,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          -0.057500001043081284,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-1-return",
+      "component": "cooling-header-return",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        -0.5650000000000001,
+        3.35,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.6000000000000001,
+          3.31,
+          3.08
+        ],
+        [
+          -0.53,
+          3.39,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-2-return",
+      "component": "cooler-2",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        0.8649999999999999,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          0.08500000089406967,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          1.372499942779541,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-2-return",
+      "component": "cooling-header-return",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        0.8649999999999999,
+        3.35,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          0.8299999999999998,
+          3.31,
+          3.08
+        ],
+        [
+          0.8999999999999999,
+          3.39,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "cooler-3-return",
+      "component": "cooler-3",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        2.295,
+        2.975,
+        2.81
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          1.5149999856948853,
+          1.809999942779541,
+          0.23499999940395355
+        ],
+        [
+          2.802500009536743,
+          2.9749999046325684,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "header-tap-3-return",
+      "component": "cooling-header-return",
+      "domain": "cooling",
+      "service": "return",
+      "position": [
+        2.295,
+        3.35,
+        3.12
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          2.26,
+          3.31,
+          3.08
+        ],
+        [
+          2.33,
+          3.39,
+          3.16
+        ]
+      ],
+      "enclosure_source": "authored_service_junction_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "reserve-out-0",
+      "component": "reserve-0",
+      "domain": "storage",
+      "service": "reserve-illustrative",
+      "position": [
+        3.4,
+        -1.4900000000000002,
+        0.86
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          3.0450000762939453,
+          -2.9704999923706055,
+          0.24300000071525574
+        ],
+        [
+          3.763000011444092,
+          -1.5,
+          2.2850000858306885
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.009999990463256836
+    },
+    {
+      "id": "reserve-switch-0",
+      "component": "switchgear-0",
+      "domain": "storage",
+      "service": "reserve-illustrative",
+      "position": [
+        -4.11,
+        -0.84,
+        0.7
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -4.429999828338623,
+          -0.9399999976158142,
+          0.24699999392032623
+        ],
+        [
+          -3.7899999618530273,
+          0.23000000417232513,
+          2.747499942779541
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "reserve-out-1",
+      "component": "reserve-1",
+      "domain": "storage",
+      "service": "reserve-illustrative",
+      "position": [
+        4.28,
+        -0.8600000000000001,
+        0.86
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          3.924999952316284,
+          -2.3405001163482666,
+          0.24300000071525574
+        ],
+        [
+          4.64300012588501,
+          -0.8700000047683716,
+          2.2850000858306885
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.009999990463256836
+    },
+    {
+      "id": "reserve-switch-1",
+      "component": "switchgear-1",
+      "domain": "storage",
+      "service": "reserve-illustrative",
+      "position": [
+        -3.4400000000000004,
+        -0.84,
+        0.7
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -3.759999990463257,
+          -0.9399999976158142,
+          0.24699999392032623
+        ],
+        [
+          -3.119999885559082,
+          0.23000000417232513,
+          2.747499942779541
+        ]
+      ],
+      "enclosure_source": "authored_equipment_world_bounds",
+      "enclosure_distance_metres": 0.0
+    },
+    {
+      "id": "rack-air-out-0-0",
+      "component": "rack-00",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.275,
+        -0.8700000000000001,
+        2.915
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6654999256134033,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -1.8849999904632568,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-0-0",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.275,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-0-0",
+      "component": "rack-00",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -2.275,
+        -1.9700000000000002,
+        1.545
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6654999256134033,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -1.8849999904632568,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-0-1",
+      "component": "rack-01",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -1.3649999999999998,
+        -0.8700000000000001,
+        2.915
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -1.7554999589920044,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -0.9750000238418579,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-0-1",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -1.3649999999999998,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-0-1",
+      "component": "rack-01",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -1.3649999999999998,
+        -1.9700000000000002,
+        1.545
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -1.7554999589920044,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -0.9750000238418579,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-0-2",
+      "component": "rack-02",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -0.45499999999999985,
+        -0.8700000000000001,
+        2.915
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.8454999923706055,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -0.06499999761581421,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-0-2",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -0.45499999999999985,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-0-2",
+      "component": "rack-02",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -0.45499999999999985,
+        -1.9700000000000002,
+        1.545
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -0.8454999923706055,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          -0.06499999761581421,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-0-3",
+      "component": "rack-03",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        0.45500000000000007,
+        -0.8700000000000001,
+        2.915
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.06449999660253525,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          0.8450000286102295,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-0-3",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        0.45500000000000007,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-0-3",
+      "component": "rack-03",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        0.45500000000000007,
+        -1.9700000000000002,
+        1.545
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          0.06449999660253525,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          0.8450000286102295,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-0-4",
+      "component": "rack-04",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        1.3650000000000002,
+        -0.8700000000000001,
+        2.915
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.9745000004768372,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          1.7549999952316284,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-0-4",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        1.3650000000000002,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-0-4",
+      "component": "rack-04",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        1.3650000000000002,
+        -1.9700000000000002,
+        1.545
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          0.9745000004768372,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          1.7549999952316284,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-0-5",
+      "component": "rack-05",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        2.275,
+        -0.8700000000000001,
+        2.915
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          1.8845000267028809,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          2.6649999618530273,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-0-5",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        2.275,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-0-5",
+      "component": "rack-05",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        2.275,
+        -1.9700000000000002,
+        1.545
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          1.8845000267028809,
+          -2.0144999027252197,
+          0.25450000166893005
+        ],
+        [
+          2.6649999618530273,
+          -0.7279999852180481,
+          3.309999942779541
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-start-0",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.665,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        -1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-end-0",
+      "component": "air-row-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        3.49,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          -1.2039999961853027,
+          2.931999921798706
+        ],
+        [
+          3.490000009536743,
+          -0.5360000133514404,
+          3.4719998836517334
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-1-0",
+      "component": "rack-06",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.275,
+        1.38,
+        3.035
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6654999256134033,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -1.8849999904632568,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-1-0",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.275,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-1-0",
+      "component": "rack-06",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -2.275,
+        0.28,
+        1.665
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6654999256134033,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -1.8849999904632568,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-1-1",
+      "component": "rack-07",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -1.3649999999999998,
+        1.38,
+        3.035
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -1.7554999589920044,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -0.9750000238418579,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-1-1",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -1.3649999999999998,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-1-1",
+      "component": "rack-07",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -1.3649999999999998,
+        0.28,
+        1.665
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -1.7554999589920044,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -0.9750000238418579,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-1-2",
+      "component": "rack-08",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -0.45499999999999985,
+        1.38,
+        3.035
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -0.8454999923706055,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -0.06499999761581421,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-1-2",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -0.45499999999999985,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-1-2",
+      "component": "rack-08",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -0.45499999999999985,
+        0.28,
+        1.665
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -0.8454999923706055,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          -0.06499999761581421,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-1-3",
+      "component": "rack-09",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        0.45500000000000007,
+        1.38,
+        3.035
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.06449999660253525,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          0.8450000286102295,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-1-3",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        0.45500000000000007,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-1-3",
+      "component": "rack-09",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        0.45500000000000007,
+        0.28,
+        1.665
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          0.06449999660253525,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          0.8450000286102295,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-1-4",
+      "component": "rack-10",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        1.3650000000000002,
+        1.38,
+        3.035
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.9745000004768372,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          1.7549999952316284,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-1-4",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        1.3650000000000002,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-1-4",
+      "component": "rack-10",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        1.3650000000000002,
+        0.28,
+        1.665
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          0.9745000004768372,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          1.7549999952316284,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-out-1-5",
+      "component": "rack-11",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        2.275,
+        1.38,
+        3.035
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          1.8845000267028809,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          2.6649999618530273,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-tap-1-5",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        2.275,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "rack-air-in-1-5",
+      "component": "rack-11",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        2.275,
+        0.28,
+        1.665
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          1.8845000267028809,
+          0.23549999296665192,
+          0.37450000643730164
+        ],
+        [
+          2.6649999618530273,
+          1.5219999551773071,
+          3.430000066757202
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-start-1",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.665,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        -1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-row-end-1",
+      "component": "air-row-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        3.49,
+        1.38,
+        3.43
+      ],
+      "normal": [
+        1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.6689999103546143,
+          1.0460000038146973,
+          3.052000045776367
+        ],
+        [
+          3.490000009536743,
+          1.7139999866485596,
+          3.5920000076293945
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-trunk-in",
+      "component": "air-return-trunk",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        3.49,
+        -0.8700000000000001,
+        3.31
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          3.1610000133514404,
+          -1.1990000009536743,
+          2.3499999046325684
+        ],
+        [
+          3.821000099182129,
+          1.9589999914169312,
+          3.5840001106262207
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-trunk-out",
+      "component": "air-return-trunk",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        3.49,
+        1.63,
+        2.45
+      ],
+      "normal": [
+        -1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          3.1610000133514404,
+          -1.1990000009536743,
+          2.3499999046325684
+        ],
+        [
+          3.821000099182129,
+          1.9589999914169312,
+          3.5840001106262207
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-plenum-in",
+      "component": "air-cooling-plenum",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        3.49,
+        1.63,
+        2.45
+      ],
+      "normal": [
+        1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7790000438690186,
+          1.5490000247955322,
+          1.00600004196167
+        ],
+        [
+          3.819000005722046,
+          1.837499976158142,
+          3.1440000534057617
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-plenum-left",
+      "component": "air-cooling-plenum",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.145,
+        1.63,
+        2.45
+      ],
+      "normal": [
+        -1,
+        0,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7790000438690186,
+          1.5490000247955322,
+          1.00600004196167
+        ],
+        [
+          3.819000005722046,
+          1.837499976158142,
+          3.1440000534057617
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-plenum-tap-0",
+      "component": "air-cooling-plenum",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.145,
+        1.63,
+        2.45
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7790000438690186,
+          1.5490000247955322,
+          1.00600004196167
+        ],
+        [
+          3.819000005722046,
+          1.837499976158142,
+          3.1440000534057617
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-in-0",
+      "component": "cooler-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -2.145,
+        1.83,
+        2.45
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7750000953674316,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          -1.4874999523162842,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-out-0",
+      "component": "cooler-0",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -1.945,
+        2.59,
+        3.52
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7750000953674316,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          -1.4874999523162842,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-plenum-tap-1",
+      "component": "air-cooling-plenum",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -0.7150000000000001,
+        1.63,
+        2.45
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7790000438690186,
+          1.5490000247955322,
+          1.00600004196167
+        ],
+        [
+          3.819000005722046,
+          1.837499976158142,
+          3.1440000534057617
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-in-1",
+      "component": "cooler-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        -0.7150000000000001,
+        1.83,
+        2.45
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -1.3450000286102295,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          -0.057500001043081284,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-out-1",
+      "component": "cooler-1",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        -0.5150000000000001,
+        2.59,
+        3.52
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          -1.3450000286102295,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          -0.057500001043081284,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-plenum-tap-2",
+      "component": "air-cooling-plenum",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        0.7149999999999999,
+        1.63,
+        2.45
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7790000438690186,
+          1.5490000247955322,
+          1.00600004196167
+        ],
+        [
+          3.819000005722046,
+          1.837499976158142,
+          3.1440000534057617
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-in-2",
+      "component": "cooler-2",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        0.7149999999999999,
+        1.83,
+        2.45
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          0.08500000089406967,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          1.372499942779541,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-out-2",
+      "component": "cooler-2",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        0.9149999999999998,
+        2.59,
+        3.52
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          0.08500000089406967,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          1.372499942779541,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "air-plenum-tap-3",
+      "component": "air-cooling-plenum",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        2.145,
+        1.63,
+        2.45
+      ],
+      "normal": [
+        0,
+        1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          -2.7790000438690186,
+          1.5490000247955322,
+          1.00600004196167
+        ],
+        [
+          3.819000005722046,
+          1.837499976158142,
+          3.1440000534057617
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-in-3",
+      "component": "cooler-3",
+      "domain": "cooling",
+      "service": "air-return",
+      "position": [
+        2.145,
+        1.83,
+        2.45
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "enclosure_bounds": [
+        [
+          1.5149999856948853,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          2.802500009536743,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    },
+    {
+      "id": "cooler-air-out-3",
+      "component": "cooler-3",
+      "domain": "cooling",
+      "service": "air-supply",
+      "position": [
+        2.345,
+        2.59,
+        3.52
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "enclosure_bounds": [
+        [
+          1.5149999856948853,
+          1.6299999952316284,
+          0.23499999940395355
+        ],
+        [
+          2.802500009536743,
+          3.0159997940063477,
+          3.509999990463257
+        ]
+      ],
+      "enclosure_source": "authored_open_air_aperture",
+      "enclosure_distance_metres": 0
+    }
+  ],
+  "routes": [
+    {
+      "id": "power-bus-0",
+      "domain": "power",
+      "service": "electrical",
+      "from": "power-top-0",
+      "to": "bus-end-0",
+      "profile": "busway",
+      "path": [
+        [
+          -3.44,
+          -0.29,
+          2.75
+        ],
+        [
+          -3.44,
+          -0.29,
+          3.16
+        ],
+        [
+          -3.44,
+          -1.35,
+          3.16
+        ],
+        [
+          2.275,
+          -1.35,
+          3.16
+        ]
+      ],
+      "renderedPath": [
+        [
+          -3.44,
+          -0.29,
+          2.75
+        ],
+        [
+          -3.44,
+          -0.29,
+          3.16
+        ],
+        [
+          -3.44,
+          -1.35,
+          3.16
+        ],
+        [
+          2.275,
+          -1.35,
+          3.16
+        ]
+      ],
+      "renderedLengthMetres": 7.185000427481967,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 7.185000427481967
+    },
+    {
+      "id": "rack-feed-0-0",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-0-0",
+      "to": "rack-in-0-0",
+      "profile": "busway",
+      "path": [
+        [
+          -2.275,
+          -1.35,
+          3.16
+        ],
+        [
+          -2.275,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.275,
+          -1.35,
+          3.16
+        ],
+        [
+          -2.275,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-0-1",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-0-1",
+      "to": "rack-in-0-1",
+      "profile": "busway",
+      "path": [
+        [
+          -1.3649999999999998,
+          -1.35,
+          3.16
+        ],
+        [
+          -1.3649999999999998,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedPath": [
+        [
+          -1.3649999999999998,
+          -1.35,
+          3.16
+        ],
+        [
+          -1.3649999999999998,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-0-2",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-0-2",
+      "to": "rack-in-0-2",
+      "profile": "busway",
+      "path": [
+        [
+          -0.45499999999999985,
+          -1.35,
+          3.16
+        ],
+        [
+          -0.45499999999999985,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedPath": [
+        [
+          -0.45499999999999985,
+          -1.35,
+          3.16
+        ],
+        [
+          -0.45499999999999985,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-0-3",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-0-3",
+      "to": "rack-in-0-3",
+      "profile": "busway",
+      "path": [
+        [
+          0.45500000000000007,
+          -1.35,
+          3.16
+        ],
+        [
+          0.45500000000000007,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedPath": [
+        [
+          0.45500000000000007,
+          -1.35,
+          3.16
+        ],
+        [
+          0.45500000000000007,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-0-4",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-0-4",
+      "to": "rack-in-0-4",
+      "profile": "busway",
+      "path": [
+        [
+          1.3650000000000002,
+          -1.35,
+          3.16
+        ],
+        [
+          1.3650000000000002,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedPath": [
+        [
+          1.3650000000000002,
+          -1.35,
+          3.16
+        ],
+        [
+          1.3650000000000002,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-0-5",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-0-5",
+      "to": "rack-in-0-5",
+      "profile": "busway",
+      "path": [
+        [
+          2.275,
+          -1.35,
+          3.16
+        ],
+        [
+          2.275,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedPath": [
+        [
+          2.275,
+          -1.35,
+          3.16
+        ],
+        [
+          2.275,
+          -1.35,
+          2.97
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "power-bus-1",
+      "domain": "power",
+      "service": "electrical",
+      "from": "power-top-1",
+      "to": "bus-end-1",
+      "profile": "busway",
+      "path": [
+        [
+          -2.77,
+          -0.29,
+          2.75
+        ],
+        [
+          -2.77,
+          -0.29,
+          3.2800000000000002
+        ],
+        [
+          -2.77,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          2.275,
+          0.9,
+          3.2800000000000002
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.77,
+          -0.29,
+          2.75
+        ],
+        [
+          -2.77,
+          -0.29,
+          3.2800000000000002
+        ],
+        [
+          -2.77,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          2.275,
+          0.9,
+          3.2800000000000002
+        ]
+      ],
+      "renderedLengthMetres": 6.7650000693139996,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 6.7650000693139996
+    },
+    {
+      "id": "rack-feed-1-0",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-1-0",
+      "to": "rack-in-1-0",
+      "profile": "busway",
+      "path": [
+        [
+          -2.275,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          -2.275,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.275,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          -2.275,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-1-1",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-1-1",
+      "to": "rack-in-1-1",
+      "profile": "busway",
+      "path": [
+        [
+          -1.3649999999999998,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          -1.3649999999999998,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedPath": [
+        [
+          -1.3649999999999998,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          -1.3649999999999998,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-1-2",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-1-2",
+      "to": "rack-in-1-2",
+      "profile": "busway",
+      "path": [
+        [
+          -0.45499999999999985,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          -0.45499999999999985,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedPath": [
+        [
+          -0.45499999999999985,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          -0.45499999999999985,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-1-3",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-1-3",
+      "to": "rack-in-1-3",
+      "profile": "busway",
+      "path": [
+        [
+          0.45500000000000007,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          0.45500000000000007,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedPath": [
+        [
+          0.45500000000000007,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          0.45500000000000007,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-1-4",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-1-4",
+      "to": "rack-in-1-4",
+      "profile": "busway",
+      "path": [
+        [
+          1.3650000000000002,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          1.3650000000000002,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedPath": [
+        [
+          1.3650000000000002,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          1.3650000000000002,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "rack-feed-1-5",
+      "domain": "workloads",
+      "service": "electrical",
+      "from": "bus-tap-1-5",
+      "to": "rack-in-1-5",
+      "profile": "busway",
+      "path": [
+        [
+          2.275,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          2.275,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedPath": [
+        [
+          2.275,
+          0.9,
+          3.2800000000000002
+        ],
+        [
+          2.275,
+          0.9,
+          3.0900000000000003
+        ]
+      ],
+      "renderedLengthMetres": 0.1900000591968143,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 0.1900000591968143
+    },
+    {
+      "id": "header-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "from": "header-start-supply",
+      "to": "collector-supply",
+      "profile": "pipe",
+      "path": [
+        [
+          -2.295,
+          3.0500000000000003,
+          3.12
+        ],
+        [
+          3.02,
+          3.0500000000000003,
+          3.12
+        ],
+        [
+          3.02,
+          3.23,
+          2.97
+        ],
+        [
+          3.02,
+          3.23,
+          1.1
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.2950000762939453,
+          3.049999952316284,
+          3.119999885559082
+        ],
+        [
+          2.963766098022461,
+          3.049999952316284,
+          3.119999885559082
+        ],
+        [
+          2.995007038116455,
+          3.054800033569336,
+          3.115999937057495
+        ],
+        [
+          3.013751745223999,
+          3.069200038909912,
+          3.1040000915527344
+        ],
+        [
+          3.0199999809265137,
+          3.0931999683380127,
+          3.0839998722076416
+        ],
+        [
+          3.0199999809265137,
+          3.186800003051758,
+          3.00600004196167
+        ],
+        [
+          3.0199999809265137,
+          3.2107999324798584,
+          2.9797520637512207
+        ],
+        [
+          3.0199999809265137,
+          3.2252001762390137,
+          2.949007272720337
+        ],
+        [
+          3.0199999809265137,
+          3.2300000190734863,
+          2.9137661457061768
+        ],
+        [
+          3.0199999809265137,
+          3.2300000190734863,
+          1.100000023841858
+        ]
+      ],
+      "renderedLengthMetres": 7.389683107935838,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 7.419307526100486
+    },
+    {
+      "id": "cooling-0-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "from": "cooler-0-supply",
+      "to": "header-tap-0-supply",
+      "profile": "pipe",
+      "path": [
+        [
+          -2.295,
+          2.975,
+          2.81
+        ],
+        [
+          -2.295,
+          3.0500000000000003,
+          2.81
+        ],
+        [
+          -2.295,
+          3.0500000000000003,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.2950000762939453,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          -2.2950000762939453,
+          3.0319998264312744,
+          2.809999942779541
+        ],
+        [
+          -2.2950003147125244,
+          3.0420000553131104,
+          2.812000036239624
+        ],
+        [
+          -2.2950000762939453,
+          3.047999858856201,
+          2.818000078201294
+        ],
+        [
+          -2.2950000762939453,
+          3.049999952316284,
+          2.828000068664551
+        ],
+        [
+          -2.2950000762939453,
+          3.049999952316284,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.37788123943189944,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.3849999920470856
+    },
+    {
+      "id": "cooling-1-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "from": "cooler-1-supply",
+      "to": "header-tap-1-supply",
+      "profile": "pipe",
+      "path": [
+        [
+          -0.8650000000000001,
+          2.975,
+          2.81
+        ],
+        [
+          -0.8650000000000001,
+          3.0500000000000003,
+          2.81
+        ],
+        [
+          -0.8650000000000001,
+          3.0500000000000003,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          -0.8650000095367432,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          -0.8650000095367432,
+          3.0319998264312744,
+          2.809999942779541
+        ],
+        [
+          -0.8650000095367432,
+          3.0420000553131104,
+          2.812000036239624
+        ],
+        [
+          -0.8650000095367432,
+          3.047999858856201,
+          2.818000078201294
+        ],
+        [
+          -0.8650000095367432,
+          3.049999952316284,
+          2.828000068664551
+        ],
+        [
+          -0.8650000095367432,
+          3.049999952316284,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.3778812394257629,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.3849999920470856
+    },
+    {
+      "id": "cooling-2-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "from": "cooler-2-supply",
+      "to": "header-tap-2-supply",
+      "profile": "pipe",
+      "path": [
+        [
+          0.5649999999999998,
+          2.975,
+          2.81
+        ],
+        [
+          0.5649999999999998,
+          3.0500000000000003,
+          2.81
+        ],
+        [
+          0.5649999999999998,
+          3.0500000000000003,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          0.5649999976158142,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          0.5649999976158142,
+          3.0319998264312744,
+          2.809999942779541
+        ],
+        [
+          0.5649999976158142,
+          3.0420000553131104,
+          2.812000036239624
+        ],
+        [
+          0.565000057220459,
+          3.047999858856201,
+          2.818000078201294
+        ],
+        [
+          0.5649999976158142,
+          3.049999952316284,
+          2.828000068664551
+        ],
+        [
+          0.5649999976158142,
+          3.049999952316284,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.3778812394261465,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.3849999920470856
+    },
+    {
+      "id": "cooling-3-supply",
+      "domain": "cooling",
+      "service": "supply",
+      "from": "cooler-3-supply",
+      "to": "header-tap-3-supply",
+      "profile": "pipe",
+      "path": [
+        [
+          1.995,
+          2.975,
+          2.81
+        ],
+        [
+          1.995,
+          3.0500000000000003,
+          2.81
+        ],
+        [
+          1.995,
+          3.0500000000000003,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          1.9950000047683716,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          1.9950000047683716,
+          3.0319998264312744,
+          2.809999942779541
+        ],
+        [
+          1.9950000047683716,
+          3.0420000553131104,
+          2.812000036239624
+        ],
+        [
+          1.9950000047683716,
+          3.047999858856201,
+          2.818000078201294
+        ],
+        [
+          1.9950000047683716,
+          3.049999952316284,
+          2.828000068664551
+        ],
+        [
+          1.9950000047683716,
+          3.049999952316284,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.3778812394257629,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.3849999920470856
+    },
+    {
+      "id": "header-return",
+      "domain": "cooling",
+      "service": "return",
+      "from": "header-start-return",
+      "to": "collector-return",
+      "profile": "pipe",
+      "path": [
+        [
+          -1.995,
+          3.35,
+          3.12
+        ],
+        [
+          3.17,
+          3.35,
+          3.12
+        ],
+        [
+          3.17,
+          3.23,
+          2.97
+        ],
+        [
+          3.17,
+          3.23,
+          1.1
+        ]
+      ],
+      "renderedPath": [
+        [
+          -1.9950000047683716,
+          3.3499999046325684,
+          3.119999885559082
+        ],
+        [
+          3.1238975524902344,
+          3.3499999046325684,
+          3.119999885559082
+        ],
+        [
+          3.149510145187378,
+          3.346799850463867,
+          3.115999937057495
+        ],
+        [
+          3.164877414703369,
+          3.3371999263763428,
+          3.1040000915527344
+        ],
+        [
+          3.1700000762939453,
+          3.321199893951416,
+          3.0839998722076416
+        ],
+        [
+          3.1700000762939453,
+          3.2588000297546387,
+          3.00600004196167
+        ],
+        [
+          3.1700000762939453,
+          3.242799997329712,
+          2.980877637863159
+        ],
+        [
+          3.1700000762939453,
+          3.2332000732421875,
+          2.953510046005249
+        ],
+        [
+          3.1700000762939453,
+          3.2300000190734863,
+          2.9238975048065186
+        ],
+        [
+          3.1700000762939453,
+          3.2300000190734863,
+          1.100000023841858
+        ]
+      ],
+      "renderedLengthMetres": 7.205228153592286,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 7.227093574905957
+    },
+    {
+      "id": "cooling-0-return",
+      "domain": "cooling",
+      "service": "return",
+      "from": "cooler-0-return",
+      "to": "header-tap-0-return",
+      "profile": "pipe",
+      "path": [
+        [
+          -1.995,
+          2.975,
+          2.81
+        ],
+        [
+          -1.995,
+          3.35,
+          2.81
+        ],
+        [
+          -1.995,
+          3.35,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          -1.9950000047683716,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          -1.9950000047683716,
+          3.275599956512451,
+          2.809999942779541
+        ],
+        [
+          -1.9950000047683716,
+          3.3169333934783936,
+          2.8182666301727295
+        ],
+        [
+          -1.9950000047683716,
+          3.341733455657959,
+          2.843066692352295
+        ],
+        [
+          -1.9950000047683716,
+          3.3499999046325684,
+          2.884399890899658
+        ],
+        [
+          -1.9950000047683716,
+          3.3499999046325684,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.6555763478926163,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.6849999439908562
+    },
+    {
+      "id": "cooling-1-return",
+      "domain": "cooling",
+      "service": "return",
+      "from": "cooler-1-return",
+      "to": "header-tap-1-return",
+      "profile": "pipe",
+      "path": [
+        [
+          -0.5650000000000001,
+          2.975,
+          2.81
+        ],
+        [
+          -0.5650000000000001,
+          3.35,
+          2.81
+        ],
+        [
+          -0.5650000000000001,
+          3.35,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          -0.5649999976158142,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          -0.5649999976158142,
+          3.275599956512451,
+          2.809999942779541
+        ],
+        [
+          -0.5649999976158142,
+          3.3169333934783936,
+          2.8182666301727295
+        ],
+        [
+          -0.565000057220459,
+          3.341733455657959,
+          2.843066692352295
+        ],
+        [
+          -0.5649999976158142,
+          3.3499999046325684,
+          2.884399890899658
+        ],
+        [
+          -0.5649999976158142,
+          3.3499999046325684,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.6555763478927091,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.6849999439908562
+    },
+    {
+      "id": "cooling-2-return",
+      "domain": "cooling",
+      "service": "return",
+      "from": "cooler-2-return",
+      "to": "header-tap-2-return",
+      "profile": "pipe",
+      "path": [
+        [
+          0.8649999999999999,
+          2.975,
+          2.81
+        ],
+        [
+          0.8649999999999999,
+          3.35,
+          2.81
+        ],
+        [
+          0.8649999999999999,
+          3.35,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          0.8650000095367432,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          0.8650000095367432,
+          3.275599956512451,
+          2.809999942779541
+        ],
+        [
+          0.8650000095367432,
+          3.3169333934783936,
+          2.8182666301727295
+        ],
+        [
+          0.8650000095367432,
+          3.341733455657959,
+          2.843066692352295
+        ],
+        [
+          0.8650000095367432,
+          3.3499999046325684,
+          2.884399890899658
+        ],
+        [
+          0.8650000095367432,
+          3.3499999046325684,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.6555763478926163,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.6849999439908562
+    },
+    {
+      "id": "cooling-3-return",
+      "domain": "cooling",
+      "service": "return",
+      "from": "cooler-3-return",
+      "to": "header-tap-3-return",
+      "profile": "pipe",
+      "path": [
+        [
+          2.295,
+          2.975,
+          2.81
+        ],
+        [
+          2.295,
+          3.35,
+          2.81
+        ],
+        [
+          2.295,
+          3.35,
+          3.12
+        ]
+      ],
+      "renderedPath": [
+        [
+          2.2950000762939453,
+          2.9749999046325684,
+          2.809999942779541
+        ],
+        [
+          2.2950000762939453,
+          3.275599956512451,
+          2.809999942779541
+        ],
+        [
+          2.2950003147125244,
+          3.3169333934783936,
+          2.8182666301727295
+        ],
+        [
+          2.2950000762939453,
+          3.341733455657959,
+          2.843066692352295
+        ],
+        [
+          2.2950000762939453,
+          3.3499999046325684,
+          2.884399890899658
+        ],
+        [
+          2.2950000762939453,
+          3.3499999046325684,
+          3.119999885559082
+        ]
+      ],
+      "renderedLengthMetres": 0.6555763478941009,
+      "selectionAccent": {
+        "placement": "exposed copper pipe"
+      },
+      "lengthMetres": 0.6849999439908562
+    },
+    {
+      "id": "reserve-link-0",
+      "domain": "storage",
+      "service": "reserve-illustrative",
+      "from": "reserve-out-0",
+      "to": "reserve-switch-0",
+      "profile": "busway",
+      "path": [
+        [
+          3.4,
+          -1.4900000000000002,
+          0.86
+        ],
+        [
+          3.4,
+          -1.3200000000000003,
+          0.86
+        ],
+        [
+          3.4,
+          -1.3200000000000003,
+          0.39
+        ],
+        [
+          4.87,
+          -1.3200000000000003,
+          0.39
+        ],
+        [
+          4.87,
+          -2.91,
+          0.39
+        ],
+        [
+          -4.11,
+          -2.91,
+          0.39
+        ],
+        [
+          -4.11,
+          -0.84,
+          0.39
+        ],
+        [
+          -4.11,
+          -0.84,
+          0.7
+        ]
+      ],
+      "renderedPath": [
+        [
+          3.4,
+          -1.4900000000000002,
+          0.86
+        ],
+        [
+          3.4,
+          -1.3200000000000003,
+          0.86
+        ],
+        [
+          3.4,
+          -1.3200000000000003,
+          0.39
+        ],
+        [
+          4.87,
+          -1.3200000000000003,
+          0.39
+        ],
+        [
+          4.87,
+          -2.91,
+          0.39
+        ],
+        [
+          -4.11,
+          -2.91,
+          0.39
+        ],
+        [
+          -4.11,
+          -0.84,
+          0.39
+        ],
+        [
+          -4.11,
+          -0.84,
+          0.7
+        ]
+      ],
+      "renderedLengthMetres": 15.059999314802456,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 15.059999314802456
+    },
+    {
+      "id": "reserve-link-1",
+      "domain": "storage",
+      "service": "reserve-illustrative",
+      "from": "reserve-out-1",
+      "to": "reserve-switch-1",
+      "profile": "busway",
+      "path": [
+        [
+          4.28,
+          -0.8600000000000001,
+          0.86
+        ],
+        [
+          4.28,
+          -0.6900000000000001,
+          0.86
+        ],
+        [
+          4.28,
+          -0.6900000000000001,
+          0.39
+        ],
+        [
+          4.87,
+          -0.6900000000000001,
+          0.39
+        ],
+        [
+          4.87,
+          -3.0700000000000003,
+          0.39
+        ],
+        [
+          -3.4400000000000004,
+          -3.0700000000000003,
+          0.39
+        ],
+        [
+          -3.4400000000000004,
+          -0.84,
+          0.39
+        ],
+        [
+          -3.4400000000000004,
+          -0.84,
+          0.7
+        ]
+      ],
+      "renderedPath": [
+        [
+          4.28,
+          -0.8600000000000001,
+          0.86
+        ],
+        [
+          4.28,
+          -0.6900000000000001,
+          0.86
+        ],
+        [
+          4.28,
+          -0.6900000000000001,
+          0.39
+        ],
+        [
+          4.87,
+          -0.6900000000000001,
+          0.39
+        ],
+        [
+          4.87,
+          -3.0700000000000003,
+          0.39
+        ],
+        [
+          -3.4400000000000004,
+          -3.0700000000000003,
+          0.39
+        ],
+        [
+          -3.4400000000000004,
+          -0.84,
+          0.39
+        ],
+        [
+          -3.4400000000000004,
+          -0.84,
+          0.7
+        ]
+      ],
+      "renderedLengthMetres": 14.459999105296468,
+      "selectionAccent": {
+        "placement": "camera-visible raised busway face",
+        "widthMetres": 0.024,
+        "minimumSurfaceClearanceMetres": 0.001
+      },
+      "lengthMetres": 14.459999105296468
+    },
+    {
+      "id": "air-rack-0-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-0-0",
+      "to": "air-row-tap-0-0",
+      "profile": "air-duct",
+      "path": [
+        [
+          -2.275,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          -2.275,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.275,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          -2.275,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-0-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-0-1",
+      "to": "air-row-tap-0-1",
+      "profile": "air-duct",
+      "path": [
+        [
+          -1.3649999999999998,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          -1.3649999999999998,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedPath": [
+        [
+          -1.3649999999999998,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          -1.3649999999999998,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-0-2",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-0-2",
+      "to": "air-row-tap-0-2",
+      "profile": "air-duct",
+      "path": [
+        [
+          -0.45499999999999985,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          -0.45499999999999985,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedPath": [
+        [
+          -0.45499999999999985,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          -0.45499999999999985,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-0-3",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-0-3",
+      "to": "air-row-tap-0-3",
+      "profile": "air-duct",
+      "path": [
+        [
+          0.45500000000000007,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          0.45500000000000007,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedPath": [
+        [
+          0.45500000000000007,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          0.45500000000000007,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-0-4",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-0-4",
+      "to": "air-row-tap-0-4",
+      "profile": "air-duct",
+      "path": [
+        [
+          1.3650000000000002,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          1.3650000000000002,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedPath": [
+        [
+          1.3650000000000002,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          1.3650000000000002,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-0-5",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-0-5",
+      "to": "air-row-tap-0-5",
+      "profile": "air-duct",
+      "path": [
+        [
+          2.275,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          2.275,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedPath": [
+        [
+          2.275,
+          -0.8700000000000001,
+          2.915
+        ],
+        [
+          2.275,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-collector-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-row-start-0",
+      "to": "air-row-end-0",
+      "profile": "air-duct",
+      "path": [
+        [
+          -2.665,
+          -0.8700000000000001,
+          3.31
+        ],
+        [
+          3.49,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.665,
+          -0.8700000000000001,
+          3.31
+        ],
+        [
+          3.49,
+          -0.8700000000000001,
+          3.31
+        ]
+      ],
+      "renderedLengthMetres": 6.154999736720807,
+      "lengthMetres": 6.154999736720807,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-1-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-1-0",
+      "to": "air-row-tap-1-0",
+      "profile": "air-duct",
+      "path": [
+        [
+          -2.275,
+          1.38,
+          3.035
+        ],
+        [
+          -2.275,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.275,
+          1.38,
+          3.035
+        ],
+        [
+          -2.275,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-1-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-1-1",
+      "to": "air-row-tap-1-1",
+      "profile": "air-duct",
+      "path": [
+        [
+          -1.3649999999999998,
+          1.38,
+          3.035
+        ],
+        [
+          -1.3649999999999998,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedPath": [
+        [
+          -1.3649999999999998,
+          1.38,
+          3.035
+        ],
+        [
+          -1.3649999999999998,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-1-2",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-1-2",
+      "to": "air-row-tap-1-2",
+      "profile": "air-duct",
+      "path": [
+        [
+          -0.45499999999999985,
+          1.38,
+          3.035
+        ],
+        [
+          -0.45499999999999985,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedPath": [
+        [
+          -0.45499999999999985,
+          1.38,
+          3.035
+        ],
+        [
+          -0.45499999999999985,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-1-3",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-1-3",
+      "to": "air-row-tap-1-3",
+      "profile": "air-duct",
+      "path": [
+        [
+          0.45500000000000007,
+          1.38,
+          3.035
+        ],
+        [
+          0.45500000000000007,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedPath": [
+        [
+          0.45500000000000007,
+          1.38,
+          3.035
+        ],
+        [
+          0.45500000000000007,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-1-4",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-1-4",
+      "to": "air-row-tap-1-4",
+      "profile": "air-duct",
+      "path": [
+        [
+          1.3650000000000002,
+          1.38,
+          3.035
+        ],
+        [
+          1.3650000000000002,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedPath": [
+        [
+          1.3650000000000002,
+          1.38,
+          3.035
+        ],
+        [
+          1.3650000000000002,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-rack-1-5",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "rack-air-out-1-5",
+      "to": "air-row-tap-1-5",
+      "profile": "air-duct",
+      "path": [
+        [
+          2.275,
+          1.38,
+          3.035
+        ],
+        [
+          2.275,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedPath": [
+        [
+          2.275,
+          1.38,
+          3.035
+        ],
+        [
+          2.275,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedLengthMetres": 0.39499997160102646,
+      "lengthMetres": 0.39499997160102646,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-collector-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-row-start-1",
+      "to": "air-row-end-1",
+      "profile": "air-duct",
+      "path": [
+        [
+          -2.665,
+          1.38,
+          3.43
+        ],
+        [
+          3.49,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.665,
+          1.38,
+          3.43
+        ],
+        [
+          3.49,
+          1.38,
+          3.43
+        ]
+      ],
+      "renderedLengthMetres": 6.154999736720807,
+      "lengthMetres": 6.154999736720807,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-trunk",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-trunk-in",
+      "to": "air-trunk-out",
+      "profile": "air-duct",
+      "path": [
+        [
+          3.49,
+          -0.8700000000000001,
+          3.31
+        ],
+        [
+          3.49,
+          1.38,
+          3.43
+        ],
+        [
+          3.49,
+          1.63,
+          3.43
+        ],
+        [
+          3.49,
+          1.63,
+          2.45
+        ]
+      ],
+      "renderedPath": [
+        [
+          3.49,
+          -0.8700000000000001,
+          3.31
+        ],
+        [
+          3.49,
+          1.38,
+          3.43
+        ],
+        [
+          3.49,
+          1.63,
+          3.43
+        ],
+        [
+          3.49,
+          1.63,
+          2.45
+        ]
+      ],
+      "renderedLengthMetres": 3.483197757150874,
+      "lengthMetres": 3.483197757150874,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-plenum",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-plenum-in",
+      "to": "air-plenum-left",
+      "profile": "air-duct",
+      "path": [
+        [
+          3.49,
+          1.63,
+          2.45
+        ],
+        [
+          -2.145,
+          1.63,
+          2.45
+        ]
+      ],
+      "renderedPath": [
+        [
+          3.49,
+          1.63,
+          2.45
+        ],
+        [
+          -2.145,
+          1.63,
+          2.45
+        ]
+      ],
+      "renderedLengthMetres": 5.635000198215322,
+      "lengthMetres": 5.635000198215322,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-cooling-0",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-plenum-tap-0",
+      "to": "cooler-air-in-0",
+      "profile": "air-duct",
+      "path": [
+        [
+          -2.145,
+          1.63,
+          2.45
+        ],
+        [
+          -2.145,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedPath": [
+        [
+          -2.145,
+          1.63,
+          2.45
+        ],
+        [
+          -2.145,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedLengthMetres": 0.20000004433094964,
+      "lengthMetres": 0.20000004433094964,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-cooling-1",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-plenum-tap-1",
+      "to": "cooler-air-in-1",
+      "profile": "air-duct",
+      "path": [
+        [
+          -0.7150000000000001,
+          1.63,
+          2.45
+        ],
+        [
+          -0.7150000000000001,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedPath": [
+        [
+          -0.7150000000000001,
+          1.63,
+          2.45
+        ],
+        [
+          -0.7150000000000001,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedLengthMetres": 0.20000004433094964,
+      "lengthMetres": 0.20000004433094964,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-cooling-2",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-plenum-tap-2",
+      "to": "cooler-air-in-2",
+      "profile": "air-duct",
+      "path": [
+        [
+          0.7149999999999999,
+          1.63,
+          2.45
+        ],
+        [
+          0.7149999999999999,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedPath": [
+        [
+          0.7149999999999999,
+          1.63,
+          2.45
+        ],
+        [
+          0.7149999999999999,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedLengthMetres": 0.20000004433094964,
+      "lengthMetres": 0.20000004433094964,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    },
+    {
+      "id": "air-cooling-3",
+      "domain": "cooling",
+      "service": "air-return",
+      "from": "air-plenum-tap-3",
+      "to": "cooler-air-in-3",
+      "profile": "air-duct",
+      "path": [
+        [
+          2.145,
+          1.63,
+          2.45
+        ],
+        [
+          2.145,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedPath": [
+        [
+          2.145,
+          1.63,
+          2.45
+        ],
+        [
+          2.145,
+          1.83,
+          2.45
+        ]
+      ],
+      "renderedLengthMetres": 0.20000004433094964,
+      "lengthMetres": 0.20000004433094964,
+      "selectionAccent": {
+        "placement": "outside authored return containment",
+        "widthMetres": 0.018
+      }
+    }
+  ],
+  "supportCount": 18,
+  "checks": {
+    "uniquePortIds": true,
+    "uniqueRouteIds": true,
+    "serviceTypesMatch": true,
+    "allPortsConnected": true,
+    "equipmentTerminationsWithinSixCentimetres": true,
+    "finiteNondegenerateSegments": true,
+    "routeEndpointToleranceMetres": 0
+  },
+  "result": "passed",
+  "airPassages": [
+    {
+      "from": "rack-air-in-0-0",
+      "to": "rack-air-out-0-0",
+      "equipmentId": "rack-00",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-0-1",
+      "to": "rack-air-out-0-1",
+      "equipmentId": "rack-01",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-0-2",
+      "to": "rack-air-out-0-2",
+      "equipmentId": "rack-02",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-0-3",
+      "to": "rack-air-out-0-3",
+      "equipmentId": "rack-03",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-0-4",
+      "to": "rack-air-out-0-4",
+      "equipmentId": "rack-04",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-0-5",
+      "to": "rack-air-out-0-5",
+      "equipmentId": "rack-05",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-1-0",
+      "to": "rack-air-out-1-0",
+      "equipmentId": "rack-06",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-1-1",
+      "to": "rack-air-out-1-1",
+      "equipmentId": "rack-07",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-1-2",
+      "to": "rack-air-out-1-2",
+      "equipmentId": "rack-08",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-1-3",
+      "to": "rack-air-out-1-3",
+      "equipmentId": "rack-09",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-1-4",
+      "to": "rack-air-out-1-4",
+      "equipmentId": "rack-10",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "rack-air-in-1-5",
+      "to": "rack-air-out-1-5",
+      "equipmentId": "rack-11",
+      "kind": "rack-front-to-rear"
+    },
+    {
+      "from": "cooler-air-in-0",
+      "to": "cooler-air-out-0",
+      "equipmentId": "cooler-0",
+      "kind": "cooler-return-to-discharge"
+    },
+    {
+      "from": "cooler-air-in-1",
+      "to": "cooler-air-out-1",
+      "equipmentId": "cooler-1",
+      "kind": "cooler-return-to-discharge"
+    },
+    {
+      "from": "cooler-air-in-2",
+      "to": "cooler-air-out-2",
+      "equipmentId": "cooler-2",
+      "kind": "cooler-return-to-discharge"
+    },
+    {
+      "from": "cooler-air-in-3",
+      "to": "cooler-air-out-3",
+      "equipmentId": "cooler-3",
+      "kind": "cooler-return-to-discharge"
+    }
+  ],
+  "airJunctions": [
+    {
+      "routeId": "air-collector-0",
+      "portId": "air-row-tap-0-0",
+      "s": 0.06336311941510968
+    },
+    {
+      "routeId": "air-collector-0",
+      "portId": "air-row-tap-0-1",
+      "s": 0.2112103980503656
+    },
+    {
+      "routeId": "air-collector-0",
+      "portId": "air-row-tap-0-2",
+      "s": 0.35905767668562144
+    },
+    {
+      "routeId": "air-collector-0",
+      "portId": "air-row-tap-0-3",
+      "s": 0.5069049553208773
+    },
+    {
+      "routeId": "air-collector-0",
+      "portId": "air-row-tap-0-4",
+      "s": 0.6547522339561332
+    },
+    {
+      "routeId": "air-collector-0",
+      "portId": "air-row-tap-0-5",
+      "s": 0.802599512591389
+    },
+    {
+      "routeId": "air-collector-1",
+      "portId": "air-row-tap-1-0",
+      "s": 0.06336311941510968
+    },
+    {
+      "routeId": "air-collector-1",
+      "portId": "air-row-tap-1-1",
+      "s": 0.2112103980503656
+    },
+    {
+      "routeId": "air-collector-1",
+      "portId": "air-row-tap-1-2",
+      "s": 0.35905767668562144
+    },
+    {
+      "routeId": "air-collector-1",
+      "portId": "air-row-tap-1-3",
+      "s": 0.5069049553208773
+    },
+    {
+      "routeId": "air-collector-1",
+      "portId": "air-row-tap-1-4",
+      "s": 0.6547522339561332
+    },
+    {
+      "routeId": "air-collector-1",
+      "portId": "air-row-tap-1-5",
+      "s": 0.802599512591389
+    },
+    {
+      "routeId": "air-trunk",
+      "portId": "air-row-end-0",
+      "s": 0.0
+    },
+    {
+      "routeId": "air-trunk",
+      "portId": "air-row-end-1",
+      "s": 0.6468762015041398
+    },
+    {
+      "routeId": "air-plenum",
+      "portId": "air-plenum-tap-0",
+      "s": 1.0
+    },
+    {
+      "routeId": "air-plenum",
+      "portId": "air-plenum-tap-1",
+      "s": 0.74622892635315
+    },
+    {
+      "routeId": "air-plenum",
+      "portId": "air-plenum-tap-2",
+      "s": 0.4924578527063
+    },
+    {
+      "routeId": "air-plenum",
+      "portId": "air-plenum-tap-3",
+      "s": 0.2386867790594499
+    }
+  ],
+  "coolerLiquidCircuits": {
+    "0": [
+      [
+        -2.295,
+        2.975,
+        2.81
+      ],
+      [
+        -2.295,
+        2.72,
+        2.81
+      ],
+      [
+        -2.595,
+        2.72,
+        0.65
+      ],
+      [
+        -2.595,
+        2.45,
+        0.65
+      ],
+      [
+        -1.695,
+        2.45,
+        0.65
+      ],
+      [
+        -1.695,
+        2.45,
+        1.27
+      ],
+      [
+        -2.595,
+        2.45,
+        1.27
+      ],
+      [
+        -2.595,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        -1.695,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        -1.695,
+        2.45,
+        2.51
+      ],
+      [
+        -2.595,
+        2.45,
+        2.51
+      ],
+      [
+        -2.595,
+        2.72,
+        2.51
+      ],
+      [
+        -1.995,
+        2.72,
+        2.81
+      ],
+      [
+        -1.995,
+        2.975,
+        2.81
+      ]
+    ],
+    "1": [
+      [
+        -0.8650000000000001,
+        2.975,
+        2.81
+      ],
+      [
+        -0.8650000000000001,
+        2.72,
+        2.81
+      ],
+      [
+        -1.165,
+        2.72,
+        0.65
+      ],
+      [
+        -1.165,
+        2.45,
+        0.65
+      ],
+      [
+        -0.26500000000000007,
+        2.45,
+        0.65
+      ],
+      [
+        -0.26500000000000007,
+        2.45,
+        1.27
+      ],
+      [
+        -1.165,
+        2.45,
+        1.27
+      ],
+      [
+        -1.165,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        -0.26500000000000007,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        -0.26500000000000007,
+        2.45,
+        2.51
+      ],
+      [
+        -1.165,
+        2.45,
+        2.51
+      ],
+      [
+        -1.165,
+        2.72,
+        2.51
+      ],
+      [
+        -0.5650000000000001,
+        2.72,
+        2.81
+      ],
+      [
+        -0.5650000000000001,
+        2.975,
+        2.81
+      ]
+    ],
+    "2": [
+      [
+        0.5649999999999998,
+        2.975,
+        2.81
+      ],
+      [
+        0.5649999999999998,
+        2.72,
+        2.81
+      ],
+      [
+        0.26499999999999985,
+        2.72,
+        0.65
+      ],
+      [
+        0.26499999999999985,
+        2.45,
+        0.65
+      ],
+      [
+        1.1649999999999998,
+        2.45,
+        0.65
+      ],
+      [
+        1.1649999999999998,
+        2.45,
+        1.27
+      ],
+      [
+        0.26499999999999985,
+        2.45,
+        1.27
+      ],
+      [
+        0.26499999999999985,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        1.1649999999999998,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        1.1649999999999998,
+        2.45,
+        2.51
+      ],
+      [
+        0.26499999999999985,
+        2.45,
+        2.51
+      ],
+      [
+        0.26499999999999985,
+        2.72,
+        2.51
+      ],
+      [
+        0.8649999999999999,
+        2.72,
+        2.81
+      ],
+      [
+        0.8649999999999999,
+        2.975,
+        2.81
+      ]
+    ],
+    "3": [
+      [
+        1.995,
+        2.975,
+        2.81
+      ],
+      [
+        1.995,
+        2.72,
+        2.81
+      ],
+      [
+        1.695,
+        2.72,
+        0.65
+      ],
+      [
+        1.695,
+        2.45,
+        0.65
+      ],
+      [
+        2.595,
+        2.45,
+        0.65
+      ],
+      [
+        2.595,
+        2.45,
+        1.27
+      ],
+      [
+        1.695,
+        2.45,
+        1.27
+      ],
+      [
+        1.695,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        2.595,
+        2.45,
+        1.8900000000000001
+      ],
+      [
+        2.595,
+        2.45,
+        2.51
+      ],
+      [
+        1.695,
+        2.45,
+        2.51
+      ],
+      [
+        1.695,
+        2.72,
+        2.51
+      ],
+      [
+        2.295,
+        2.72,
+        2.81
+      ],
+      [
+        2.295,
+        2.975,
+        2.81
+      ]
+    ]
+  },
+  "airConstruction": {
+    "scope": "Illustrative geometric air circuit; no CFD or performance claim",
+    "collectorOutsideDepthMetres": 0.65,
+    "collectorOutsideHeightMetres": 0.3,
+    "wallThicknessMetres": 0.008,
+    "rackRearPassage": [
+      0.36,
+      0.6
+    ],
+    "sectionCoverId": "GN_AIR_SECTION_COVERS",
+    "openRoomDomain": {
+      "id": "room-air",
+      "from": [
+        "cooler-air-out-0",
+        "cooler-air-out-1",
+        "cooler-air-out-2",
+        "cooler-air-out-3"
+      ],
+      "to": [
+        "rack-air-in-0-0",
+        "rack-air-in-0-1",
+        "rack-air-in-0-2",
+        "rack-air-in-0-3",
+        "rack-air-in-0-4",
+        "rack-air-in-0-5",
+        "rack-air-in-1-0",
+        "rack-air-in-1-1",
+        "rack-air-in-1-2",
+        "rack-air-in-1-3",
+        "rack-air-in-1-4",
+        "rack-air-in-1-5"
+      ]
+    },
+    "routeCount": 20,
+    "constructionPartCount": 135,
+    "checks": {
+      "allFourFansUncovered": true,
+      "actualCollectorAndIntakeApertures": true,
+      "noOpenRoomStreamline": true
+    }
+  }
+}

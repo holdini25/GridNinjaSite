@@ -49,10 +49,10 @@ async function installTurnstileStub(page: Page) {
 
 async function fillContactForm(page: Page) {
   await page.getByLabel("Name", { exact: true }).fill("Ada Operator")
-  await page.getByLabel("Company", { exact: true }).fill("Atlas Compute")
+  await page.getByLabel("Organization", { exact: true }).fill("Atlas Compute")
   await page.getByLabel("Work email", { exact: true }).fill("ada@example.com")
   await page
-    .getByLabel("What constraint or decision are you working through?", {
+    .getByLabel("Decision context (optional)", {
       exact: true,
     })
     .fill("We need a proof-backed capacity baseline for the next deployment.")
@@ -119,7 +119,7 @@ test.describe("lead form browser behavior", () => {
       "autocomplete",
       "name"
     )
-    await expect(page.getByLabel("Company", { exact: true })).toHaveAttribute(
+    await expect(page.getByLabel("Organization", { exact: true })).toHaveAttribute(
       "autocomplete",
       "organization"
     )
@@ -307,7 +307,7 @@ test.describe("lead form browser behavior", () => {
     ).toContainText("Too many requests. Please try again later.")
     await submit.click()
 
-    await expect(page.getByRole("status")).toContainText(
+    await expect(page.getByRole("status").filter({ has: page.getByRole("heading", { name: "Inquiry received", exact: true }) })).toContainText(
       "Inquiry received"
     )
     expect(submissions).toHaveLength(2)

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "facility-rack-motion-validation.v1",
+  "result": "passed",
+  "method": "Evaluated triangle BVH intersection at 0.5-degree door and 1mm tray steps; conservative fit-bound guard; not a mechanical certification",
+  "doorSamples": 221,
+  "traySamples": 181,
+  "doorDegrees": 110,
+  "trayTravelMetres": 0.18,
+  "hingePositionYup": [
+    -0.37700000405311584,
+    1.4049999713897705,
+    0.6570000052452087
+  ],
+  "axisLocalYup": [
+    0,
+    1,
+    0
+  ],
+  "closedDoorTrayFrontalPlaneSeparationMetres": 0.06000000238418579,
+  "frameIncludes": [
+    "stationary surround",
+    "hinge pins",
+    "plinth",
+    "support rails"
+  ],
+  "doorLeafOnly": true,
+  "cutawayIndependent": true,
+  "serviceConnector": "disconnected plug parked on fixed rail; isolated inlet moves with tray",
+  "intersections": 0,
+  "fitBounds": {
+    "min": [
+      -0.657158,
+      -0.007,
+      -0.727
+    ],
+    "max": [
+      0.567,
+      2.892,
+      1.39216
+    ]
+  },
+  "continuousClearance": {
+    "method": "Analytic projection extrema and recursive interval separating-axis proof on evaluated triangles",
+    "result": "passed",
+    "trianglePairIntervalChecks": 24524,
+    "subdivisions": 7054,
+    "minimumSeparatingProjectionMetres": 5.835250481034393e-06,
+    "numericalSeparationToleranceMetres": 1e-06,
+    "doorIntervalDegrees": [
+      0,
+      110
+    ],
+    "trayIntervalMetres": [
+      0,
+      0.18
+    ],
+    "conditions": [
+      "door motion with tray retracted",
+      "tray motion with door fully open"
+    ],
+    "scope": "Geometric nonintersection only; no load, tolerance-stack, wear or service-safety certification"
+  },
+  "limits": "Continuous geometric nonintersection is conditional on the authored interlock; no mechanical certification.",
+  "modelSha256": "3f4d407513255c78af771f3292dddb3d453638c8064bebcae4d28d05f079c839",
+  "sourceModules": {
+    "generate.py": "d894c9c8d032281edd20a7099f3764f2667aef8f2ea6256f9335742b46a80723",
+    "export.py": "ddb2a4b8cf652bb51ec91ffc2b2a019d3972e3b80f82707e1b1e0e9ddc7b28cf",
+    "surface_bake.py": "dbb7055db8b107aece39b771ceeb27758505cc4c36207098ead45d1aea5b4fc6",
+    "service_routes.py": "126a0d401b8778f145a6a5b37cc894c7a962256aa590518c8ac1856adbe70efa",
+    "engineering_metadata.py": "7669cf6e982703110743b297851a0b9aac8115de2a658a09d8dab5ddffcc8f20",
+    "specimens.py": "6df3255c66f3234398c7a1d5873e50ed0466b8a0e859a47a9a3efe635d8bd82d",
+    "rack_kit.py": "9daa62a20e5f53051564dbf0768eab1fe3c7728ac5c0fa132d83a5f9bc6ba5e2",
+    "rack_motion.py": "91aecd7f1be7d83089cd8d761b032726c68b3bbde17a2420fc9a29ed789b12e4",
+    "air_circuit.py": "cc0b9ab35cc4d0ae93374146c4efcb1897741a89a3021baffda58a31ef89586a",
+    "scene.json": "baf6242b21d17f6f5256c9f5eb11aac6580041d4a32f10303b86a78ebb27c4fb"
+  },
+  "revalidatedFromSavedMaster": true,
+  "savedMasterValidationReportSha256": "287d6567a220d2dae480abdf4162c83b9cb72b7cf18fa5f9be7a9ca8f16daa9e"
+}

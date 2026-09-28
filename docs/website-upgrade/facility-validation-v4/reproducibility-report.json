@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "method": "Separate pinned Blender processes re-exporting the saved editable masters without regeneration",
+  "assets": [
+    {
+      "asset": "facility",
+      "sha256": "61f8bd275e0245f4a2c4919c34428034f47cd8b4a565a4be38d0ca783c96ab2e",
+      "reexportSha256": "61f8bd275e0245f4a2c4919c34428034f47cd8b4a565a4be38d0ca783c96ab2e",
+      "byteIdentical": true,
+      "masterSha256": "9d2f118430a3b1229a1ed37ea4c1568d8974b3e345674ad4d110b056c394efe0"
+    },
+    {
+      "asset": "rack",
+      "sha256": "8c466a4012aea468c6d0cf7f27a7a696a679440bda7436d95c17baf790c99123",
+      "reexportSha256": "8c466a4012aea468c6d0cf7f27a7a696a679440bda7436d95c17baf790c99123",
+      "byteIdentical": true,
+      "masterSha256": "fa8f4786c6eabd0582e3f5097374028c80fab7d1d0161dc1fdac9bcc718b343e"
+    },
+    {
+      "asset": "cooling",
+      "sha256": "3a6f828ce8a0d390f22e3a4d40dcafbc150aecad6ce023224f3a3d3d3c84f019",
+      "reexportSha256": "3a6f828ce8a0d390f22e3a4d40dcafbc150aecad6ce023224f3a3d3d3c84f019",
+      "byteIdentical": true,
+      "masterSha256": "7924ec64c39a42ac65abe062cc8802f2f08cb62e3fc38e50f8dd6fff60abccd2"
+    }
+  ],
+  "result": "passed"
+}

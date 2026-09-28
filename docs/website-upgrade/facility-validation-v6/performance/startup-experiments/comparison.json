@@ -1,0 +1,106 @@
+{
+  "experiment": "Next experimental.inlineCss",
+  "decision": "rejected; reverted",
+  "reason": "Both matched five-run mobile LCP medians and document transfer worsened. TBT improved, but not at the expense of the unchanged LCP gate.",
+  "baseline": {
+    "/": {
+      "lcp": 2756.3983,
+      "tbt": 232,
+      "cls": 0,
+      "bytes": 942772
+    },
+    "/demo": {
+      "lcp": 2758.3471499999996,
+      "tbt": 0.5,
+      "cls": 0,
+      "bytes": 269121
+    }
+  },
+  "candidate": {
+    "/": {
+      "lcp": 2905.8107,
+      "tbt": 191.5,
+      "cls": 0,
+      "bytes": 992184
+    },
+    "/demo": {
+      "lcp": 2903.9557999999997,
+      "tbt": 0,
+      "cls": 0,
+      "bytes": 317429
+    }
+  },
+  "settings": {
+    "formFactor": "mobile",
+    "maxWaitForLoad": 45000
+  },
+  "baselineBuild": {
+    "sourceRevision": "7599a3458b696fa90d334d802d446a4d7ed08b7fae097beed2c756dd83589f9f",
+    "buildId": "zvB_EQvOG6nfpCHR1tPit",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v6",
+      "mode": "auto-adaptive"
+    }
+  },
+  "candidateBuild": {
+    "sourceRevision": "34536e472bee1141d69e07562637c1d77bd0377c91fc10a6f41a51d072ca9b83",
+    "buildId": "J6pbWyBlDRlHCQNvktLM5",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v6",
+      "mode": "auto-adaptive"
+    }
+  },
+  "traceInterpretation": "Home had 29,289 B of render-blocking stylesheet transfer and an estimated 400\u2013450 ms opportunity. Inlining instead added approximately 49 KB transfer. The first-frame GPU preparation stall is a separate TBT contributor; raw traces do not distinguish compilation from first-use upload precisely."
+}

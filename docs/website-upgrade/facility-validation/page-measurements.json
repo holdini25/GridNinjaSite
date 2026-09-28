@@ -1,0 +1,655 @@
+{
+  "baseURL": "http://localhost:3000",
+  "measuredAt": "2026-09-22T23:20:27.700Z",
+  "browser": "154.0.8037.58",
+  "results": [
+    {
+      "route": "/",
+      "profile": "desktop",
+      "automaticBytes": 757567,
+      "throughReady": true,
+      "vitals": {
+        "lcp": 100,
+        "cls": 0
+      },
+      "renderer": {
+        "engine": "three.js r186",
+        "facilityCanvas": "true",
+        "materials": "10",
+        "estimatedBytes": "2108822",
+        "frames": "417",
+        "drawCalls": "39",
+        "triangles": "27530",
+        "geometries": "39",
+        "textures": "3",
+        "ready": "true",
+        "frameP95": "17.30",
+        "buffer": [
+          703,
+          413
+        ]
+      },
+      "requests": [
+        {
+          "url": "http://localhost:3000/",
+          "type": "Document",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 20220
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3y1amx75o7_zj.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 23902
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3u_6u0xh88rke.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 1712
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/25qmb6hcgvrll.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2414
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0jvhpaew_uadu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2968
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 9334
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 71998
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1t2a6qluwgklf.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 44467
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4920
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4279
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/02mxei6ovqb9g.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 5326
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1ivuktt0l3uex.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 10965
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1fqyg5um2pueu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 12343
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3rtkg_s1a3qdg.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 16493
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/2q8flhm-ux4xj.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 6581
+        },
+        {
+          "url": "http://localhost:3000/assets/facility/facility-v1/poster-desktop.webp",
+          "type": "Image",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 69719
+        },
+        {
+          "url": "http://localhost:3000/favicon.ico",
+          "type": "Other",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 3947
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0e3gkerkq_f72.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 259986
+        },
+        {
+          "url": "http://localhost:3000/assets/facility/facility-v1/facility.glb",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "br",
+          "bytes": 185993
+        },
+        {
+          "url": "blob:http://localhost:3000/b50a668f-c4e7-4001-ad70-25c4426616dd",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 0
+        },
+        {
+          "url": "blob:http://localhost:3000/232779b3-f2b6-4396-b54e-195c11408abf",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "automaticBytes": 266328,
+      "throughReady": false,
+      "vitals": {
+        "lcp": 48,
+        "cls": 0
+      },
+      "renderer": {
+        "engine": "three.js r186",
+        "facilityCanvas": "true",
+        "materials": "10",
+        "estimatedBytes": "2108822",
+        "frames": "364",
+        "drawCalls": "39",
+        "triangles": "27530",
+        "geometries": "39",
+        "textures": "3",
+        "ready": "true",
+        "frameP95": "17.00",
+        "buffer": [
+          535,
+          314
+        ]
+      },
+      "requests": [
+        {
+          "url": "http://localhost:3000/",
+          "type": "Document",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 20220
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3y1amx75o7_zj.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 23902
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3u_6u0xh88rke.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 1712
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/25qmb6hcgvrll.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2414
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0jvhpaew_uadu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2968
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 9334
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 71998
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1t2a6qluwgklf.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 44467
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4920
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4279
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/02mxei6ovqb9g.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 5326
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1ivuktt0l3uex.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 10965
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1fqyg5um2pueu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 12343
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3rtkg_s1a3qdg.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 16493
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/2q8flhm-ux4xj.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 6581
+        },
+        {
+          "url": "http://localhost:3000/assets/facility/facility-v1/poster-mobile.webp",
+          "type": "Image",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 24459
+        },
+        {
+          "url": "http://localhost:3000/favicon.ico",
+          "type": "Other",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 3947
+        }
+      ]
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "automaticBytes": 759317,
+      "throughReady": true,
+      "vitals": {
+        "lcp": 116,
+        "cls": 0
+      },
+      "renderer": {
+        "engine": "three.js r186",
+        "facilityCanvas": "true",
+        "materials": "10",
+        "estimatedBytes": "2108822",
+        "frames": "423",
+        "drawCalls": "39",
+        "triangles": "27530",
+        "geometries": "39",
+        "textures": "3",
+        "ready": "true",
+        "frameP95": "17.40",
+        "buffer": [
+          664,
+          390
+        ]
+      },
+      "requests": [
+        {
+          "url": "http://localhost:3000/demo",
+          "type": "Document",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 18372
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3y1amx75o7_zj.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 23902
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3u_6u0xh88rke.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 1712
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/25qmb6hcgvrll.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2414
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0jvhpaew_uadu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2968
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 9334
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 71998
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1t2a6qluwgklf.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 44467
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4920
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4279
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/02mxei6ovqb9g.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 5326
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1ivuktt0l3uex.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 10965
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1fqyg5um2pueu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 12343
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3rtkg_s1a3qdg.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 16493
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/06sn0sl8frjm-.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 10179
+        },
+        {
+          "url": "http://localhost:3000/assets/facility/facility-v1/poster-desktop.webp",
+          "type": "Image",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 69719
+        },
+        {
+          "url": "http://localhost:3000/favicon.ico",
+          "type": "Other",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 3947
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0e3gkerkq_f72.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 259986
+        },
+        {
+          "url": "http://localhost:3000/assets/facility/facility-v1/facility.glb",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "br",
+          "bytes": 185993
+        },
+        {
+          "url": "blob:http://localhost:3000/c2723d87-53b1-43a9-ae35-aebefffa23f0",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 0
+        },
+        {
+          "url": "blob:http://localhost:3000/68ca13a7-4d36-4e4c-bafc-38a95a677e37",
+          "type": "Fetch",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 0
+        }
+      ]
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "automaticBytes": 268078,
+      "throughReady": false,
+      "vitals": {
+        "lcp": 48,
+        "cls": 0
+      },
+      "renderer": {
+        "engine": "three.js r186",
+        "facilityCanvas": "true",
+        "materials": "10",
+        "estimatedBytes": "2108822",
+        "frames": "364",
+        "drawCalls": "39",
+        "triangles": "27530",
+        "geometries": "39",
+        "textures": "3",
+        "ready": "true",
+        "frameP95": "17.10",
+        "buffer": [
+          535,
+          314
+        ]
+      },
+      "requests": [
+        {
+          "url": "http://localhost:3000/demo",
+          "type": "Document",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 18372
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3y1amx75o7_zj.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 23902
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3u_6u0xh88rke.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 1712
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/25qmb6hcgvrll.css",
+          "type": "Stylesheet",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2414
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0jvhpaew_uadu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 2968
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/2mmpezlrfmbu5.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 9334
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3jtoq_i6-slhk.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 71998
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1t2a6qluwgklf.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 44467
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/turbopack-0ecvfmys292sa.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4920
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/0h2qsuyze9ds1.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 4279
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/02mxei6ovqb9g.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 5326
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1ivuktt0l3uex.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 10965
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/1fqyg5um2pueu.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 12343
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/3rtkg_s1a3qdg.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 16493
+        },
+        {
+          "url": "http://localhost:3000/_next/static/chunks/06sn0sl8frjm-.js",
+          "type": "Script",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 10179
+        },
+        {
+          "url": "http://localhost:3000/assets/facility/facility-v1/poster-mobile.webp",
+          "type": "Image",
+          "status": 200,
+          "encoding": "identity",
+          "bytes": 24459
+        },
+        {
+          "url": "http://localhost:3000/favicon.ico",
+          "type": "Other",
+          "status": 200,
+          "encoding": "gzip",
+          "bytes": 3947
+        }
+      ]
+    }
+  ]
+}

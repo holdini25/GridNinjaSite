@@ -1,0 +1,59 @@
+name: Facility performance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  production-performance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: "22.23.2", cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chrome chromium
+      - run: npm run build
+      - name: Measure five fresh profiles and enforce complete release evidence
+        env:
+          FACILITY_BASE_URL: http://localhost:3000
+          FACILITY_RUNS: 5
+        shell: bash
+        run: |
+          mkdir -p build/facility
+          npm run start -- --hostname 127.0.0.1 --port 3000 > build/facility/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent http://localhost:3000/ >/dev/null; then break; fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then cat build/facility/server.log; exit 1; fi
+            sleep 1
+          done
+          curl --fail --silent http://localhost:3000/ >/dev/null
+          failed=0
+          npm run facility:measure || failed=1
+          npm run facility:lighthouse || failed=1
+          npm run facility:performance:validate || failed=1
+          npm run facility:verify-browser || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: facility-performance-${{ github.sha }}
+          path: |
+            build/facility/*.json
+            build/facility/*.png
+            build/facility/*.log
+            build/facility/lighthouse-desktop
+            build/facility/lighthouse-mobile
+            build/facility/facility-v*/*.json
+            build/facility/facility-v*/*.png
+            .next/facility-build.json
+          if-no-files-found: error
+          retention-days: 30

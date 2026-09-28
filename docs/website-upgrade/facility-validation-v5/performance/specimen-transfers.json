@@ -1,0 +1,51 @@
+{
+  "measuredAt": "2026-09-23T22:00:14.855Z",
+  "build": {
+    "sourceRevision": "43c36051d761a898a2e8b1882b275fc53fbc520549fcc393d01d17c788344d4a",
+    "buildId": "LL2ByVjv7rlageFgAnynF",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v5",
+      "mode": "auto-adaptive"
+    }
+  },
+  "method": "Cold HTTP model responses with explicit Brotli negotiation; payload bytes exclude HTTP headers. This is separate from complete automatic browser transfer.",
+  "assets": [
+    {
+      "file": "rack.glb",
+      "encodedBytes": 235900,
+      "decodedBytes": 766888,
+      "sha256": "0529a7ec64061dba4843abbcde77a1e25ad7d40074e9064377d3d2f4570cce06",
+      "encoding": "br"
+    },
+    {
+      "file": "cooling.glb",
+      "encodedBytes": 205541,
+      "decodedBytes": 380684,
+      "sha256": "cc048f992035b72320f930159196f0ae55555f5789754eafd114019dd9461e62",
+      "encoding": "br"
+    }
+  ],
+  "result": "pass"
+}

@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "glb": "/Users/holdenchung/repos/GridNinjaSite/src/content/facility-releases/facility-v2/facility.glb",
+  "sha256": "80bc6c4404047ab4e0c260e7003d0a8b7f2e70a4048cd3aab901f96fdbe6848d",
+  "byteLength": 1380616,
+  "gzipBytes": 248813,
+  "gzipLevel": 9,
+  "brotliBytes": 123979,
+  "triangles": 26954,
+  "staticDrawCallsIncludingLedBatch": 39,
+  "authoredMaterials": 8,
+  "expectedRuntimeMaterials": 10,
+  "geometryBytes": 1315238,
+  "textureBytesRgbaWithMipmaps": 786433,
+  "textures": [
+    {
+      "width": 128,
+      "height": 128,
+      "rgbaBytesWithMipmaps": 87382
+    },
+    {
+      "width": 512,
+      "height": 256,
+      "rgbaBytesWithMipmaps": 699051
+    }
+  ],
+  "semanticIdentityCount": 66,
+  "fans": [
+    {
+      "gnId": "GN_FAN_ROTOR_00",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "shaftVerifiedFromGeometry": true
+    },
+    {
+      "gnId": "GN_FAN_ROTOR_01",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "shaftVerifiedFromGeometry": true
+    },
+    {
+      "gnId": "GN_FAN_ROTOR_02",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "shaftVerifiedFromGeometry": true
+    },
+    {
+      "gnId": "GN_FAN_ROTOR_03",
+      "axisLocal": [
+        0,
+        1,
+        0
+      ],
+      "shaftVerifiedFromGeometry": true
+    }
+  ],
+  "khronos": {
+    "uri": "/Users/holdenchung/repos/GridNinjaSite/src/content/facility-releases/facility-v2/facility.glb",
+    "mimeType": "model/gltf-binary",
+    "validatorVersion": "2.0.0-dev.3.10",
+    "validatedAt": "2026-09-23T00:12:28.295Z",
+    "issues": {
+      "numErrors": 0,
+      "numWarnings": 0,
+      "numInfos": 0,
+      "numHints": 0,
+      "messages": [],
+      "truncated": false
+    },
+    "info": {
+      "version": "2.0",
+      "generator": "Khronos glTF Blender I/O v5.2.40",
+      "resources": [
+        {
+          "pointer": "/buffers/0",
+          "mimeType": "application/gltf-buffer",
+          "storage": "glb",
+          "byteLength": 1336776
+        },
+        {
+          "pointer": "/images/0",
+          "mimeType": "image/png",
+          "storage": "buffer-view",
+          "image": {
+            "width": 128,
+            "height": 128,
+            "format": "rgb",
+            "primaries": "srgb",
+            "transfer": "srgb",
+            "bits": 8
+          }
+        },
+        {
+          "pointer": "/images/1",
+          "mimeType": "image/png",
+          "storage": "buffer-view",
+          "image": {
+            "width": 512,
+            "height": 256,
+            "format": "rgb",
+            "primaries": "srgb",
+            "transfer": "srgb",
+            "bits": 8
+          }
+        }
+      ],
+      "animationCount": 0,
+      "materialCount": 8,
+      "hasMorphTargets": false,
+      "hasSkins": false,
+      "hasTextures": true,
+      "hasDefaultScene": true,
+      "drawCallCount": 42,
+      "totalVertexCount": 43696,
+      "totalTriangleCount": 27002,
+      "maxUVs": 1,
+      "maxInfluences": 0,
+      "maxAttributes": 3
+    }
+  }
+}

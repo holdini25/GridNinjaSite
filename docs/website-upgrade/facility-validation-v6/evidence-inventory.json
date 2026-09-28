@@ -1,0 +1,448 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-09-24T00:03:34.067306+00:00",
+  "buildIdentity": {
+    "sourceRevision": "67bc137f1fa51fff2222305fd8ad13c384e7a65fa1337e34b69ec40c987f3ac4",
+    "buildId": "1yMc5StJM4uWFaZNekBgW",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v6",
+      "mode": "auto-adaptive"
+    }
+  },
+  "scope": "Curated local validation evidence; excludes this inventory itself. Raw working traces remain under build/facility.",
+  "fileCount": 81,
+  "totalBytes": 18558281,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 13046,
+      "sha256": "47381dbbcb76f80dc249e01052bda6ea635020a6c91c61c2bd8b9dc657becbe8"
+    },
+    {
+      "path": "assets/README.md",
+      "bytes": 4068,
+      "sha256": "39efd3389dd4b9cce4466aea3165b8a269c979365e21c70af1f75cd82d27f34a"
+    },
+    {
+      "path": "assets/air-adversarial-validation.json",
+      "bytes": 778,
+      "sha256": "e8a4690da3f9b6142ca6c534331bd5fed0bee0c89755341127f3fa3a6fe7eeab"
+    },
+    {
+      "path": "assets/air-construction-report.json",
+      "bytes": 957,
+      "sha256": "697e5d9f42bc5cf93b0993cf9a06a70fac326349d2e45ef7ae429ba8c5590cfc"
+    },
+    {
+      "path": "assets/asset-report.json",
+      "bytes": 11328,
+      "sha256": "4a1c556267232fd667fc4d596828ab80723695f63643e795bfe05448d6f264e1"
+    },
+    {
+      "path": "assets/bake-report.json",
+      "bytes": 3499,
+      "sha256": "8384776106a5952cb2e10e3dc5e5cdc027e2e2883368bf7f3e11f0fab3727a21"
+    },
+    {
+      "path": "assets/buffer-deduplication-report.json",
+      "bytes": 1322,
+      "sha256": "1c13d7bc8862c41b5c552edf104d5f693af71137e9a2b8fa550c380b715be25d"
+    },
+    {
+      "path": "assets/cooling-asset-report.json",
+      "bytes": 4812,
+      "sha256": "11bff5e7ec23db415fc8b16f4964b7bbac37488318aad5b962cf11f26e24f7a1"
+    },
+    {
+      "path": "assets/cooling-validation.json",
+      "bytes": 4406,
+      "sha256": "7866aa69033d1fff6720e73978cb7225a1f8fdb311f2ea2bace3c92eb628914a"
+    },
+    {
+      "path": "assets/final-audit.json",
+      "bytes": 4713,
+      "sha256": "6681ce8eaed4d5eaa89ae46bd97ab3b0f0bfcea4647527b41fa6afa95fd6d97a"
+    },
+    {
+      "path": "assets/normal-preservation-report.json",
+      "bytes": 6560,
+      "sha256": "12f88ed442edee30a0a8f13ddc2ae7223760d828813a069838841a1cd65f2bd9"
+    },
+    {
+      "path": "assets/packaging-verification.json",
+      "bytes": 877,
+      "sha256": "54c0c229d24df81ded4fbc88e247b48a9b219af19ab08fe442597867cddbc54b"
+    },
+    {
+      "path": "assets/rack-asset-report.json",
+      "bytes": 4976,
+      "sha256": "78f7670a7315ed4c8f8f1c24c22ea13292e9cdc7f767dcd78f2c488eb3b00108"
+    },
+    {
+      "path": "assets/rack-validation.json",
+      "bytes": 4192,
+      "sha256": "922b3da3a06818d3a3edbebf1052d87d98de0dc5d4b05d0cde56b391ef0d4a9a"
+    },
+    {
+      "path": "assets/reproducibility-report.json",
+      "bytes": 1293,
+      "sha256": "262ed4884cdd8860fd5a5f02ba98561ccbcf5410ef0a062300b82a69d336b523"
+    },
+    {
+      "path": "assets/service-report.json",
+      "bytes": 123168,
+      "sha256": "934a70e5b4ae5fbf1396b9aff2bc6b60e226bb74c004bf27a098f74b74d27282"
+    },
+    {
+      "path": "assets/topology.json",
+      "bytes": 104533,
+      "sha256": "ee9b7e30649929f65d80a74e40998675e922f9761138d8484f247c99a380f353"
+    },
+    {
+      "path": "assets/validation.json",
+      "bytes": 20833,
+      "sha256": "8d26c9202129f6f8e6c5632013b72b66211ea40ad5a24f4e5e775fb7a4a614cb"
+    },
+    {
+      "path": "assets/visual-provenance-addendum.json",
+      "bytes": 7873,
+      "sha256": "23903ad053a7f74a9455404b97cceff8262d5f99c9099873a532b63e0d3d9241"
+    },
+    {
+      "path": "checks/attempt-history.json",
+      "bytes": 2125,
+      "sha256": "171cd08a4b0d956cb5f2fb96fd1bc7d6978f67d2020b2660a5c146f3f28b14a1"
+    },
+    {
+      "path": "checks/browser-final.log",
+      "bytes": 220,
+      "sha256": "62075b91e29bba2ee2cfb50e2644f817bf6c55f42853f77181c2ec9c4dd9ed11"
+    },
+    {
+      "path": "checks/build-identity.json",
+      "bytes": 1185,
+      "sha256": "5da92275dcd5d81184012917b27e7dfc3d34a18b72e1653165b96914a5f954cf"
+    },
+    {
+      "path": "checks/capture-ecosystem-final.log",
+      "bytes": 93,
+      "sha256": "a5bf2b31c2bb635acd1dea18f0d3f555d11c0b9942eda91d1afc1e7c307f2cca"
+    },
+    {
+      "path": "checks/capture-material-final.log",
+      "bytes": 95,
+      "sha256": "809e1319404406cfde0ae45e343b4a620b9360214bc16b0bdc51432a15bc28f6"
+    },
+    {
+      "path": "checks/capture-review-final.log",
+      "bytes": 64,
+      "sha256": "4c2339cd3d0ab9d6a667e66790e4a3ce71a987151bd0812916cdcb63afc97aac"
+    },
+    {
+      "path": "checks/e2e-final.log",
+      "bytes": 21989,
+      "sha256": "8d39a4797da3b90617deeccf7203158426ad002dd1fba751684673826bf65e39"
+    },
+    {
+      "path": "checks/e2e-production-attempt1.log",
+      "bytes": 37223,
+      "sha256": "cb6488c59b1c43997e57dae9f136e2fd4a59fe22bde31e57810dd3af7d247e14"
+    },
+    {
+      "path": "checks/e2e-visibility.log",
+      "bytes": 368,
+      "sha256": "10c752b693407d8b1091a84033b5808c65f67d9b1b21f6f041350006ed30a28a"
+    },
+    {
+      "path": "checks/experience-instant-alignment-diagnostics.json",
+      "bytes": 248366,
+      "sha256": "2b5b20ef3e21e4a92801afbbd71b48226958f78a332bd84e246ab2dee6ba8374"
+    },
+    {
+      "path": "checks/experience-instant-alignment-production.log",
+      "bytes": 1111,
+      "sha256": "2cf3f00b6b0ee615e43ea9024dcafc9aada082208a92f347e1940dee564becea"
+    },
+    {
+      "path": "checks/experience-play-regression.log",
+      "bytes": 1111,
+      "sha256": "15e02b327719b5776fc15ad78e78496a732c9f691ae626454bf38666f3111e37"
+    },
+    {
+      "path": "checks/lighthouse-final.log",
+      "bytes": 2454,
+      "sha256": "df8f288396ab86583b0009f42f9bc3bdef5d38269ae37f428f9de54b18066292"
+    },
+    {
+      "path": "checks/lighthouse-throttled-final.log",
+      "bytes": 1323,
+      "sha256": "c3e30397daf5f85998b82ad4cf7e7ef94c92615849c21374825fade75c88d768"
+    },
+    {
+      "path": "checks/lint.log",
+      "bytes": 31,
+      "sha256": "d9b1fcf7e0f0f117deb1ef8c67f535eb799e893ad647f5c0ff5e9bce9b83909a"
+    },
+    {
+      "path": "checks/measure-final.log",
+      "bytes": 3645,
+      "sha256": "02555bbc7ea7df3268c9b598f9d202469bf2fa343c10e001db52833702d10d37"
+    },
+    {
+      "path": "checks/narrative-review.md",
+      "bytes": 7477,
+      "sha256": "11a3d28cb336f4dae659a17f1a09291f8f75448d869d5abcd2acfe989a625507"
+    },
+    {
+      "path": "checks/packaging.log",
+      "bytes": 2166,
+      "sha256": "a157aa6c23ec3167ee0f139252f7c485d370b2204eb73bba0c1bdd8e6c496a8f"
+    },
+    {
+      "path": "checks/performance-final.log",
+      "bytes": 1459,
+      "sha256": "8d3d35441050ae9036175f0f2c8750e94610e86dc48cf794b4522ff62d739b0e"
+    },
+    {
+      "path": "checks/production-build.log",
+      "bytes": 4416,
+      "sha256": "ac299e950b287dfe6d2cf847c753a81f5e960edef6aab3f1c7507a8701797bb2"
+    },
+    {
+      "path": "checks/runtime-membership-focused.log",
+      "bytes": 227,
+      "sha256": "f81dae5b7036b08d4bffaf06f1674637434eb3263004518a96f3330a2ca4d90b"
+    },
+    {
+      "path": "checks/runtime-prewarm-focused.log",
+      "bytes": 226,
+      "sha256": "e32b2676e937fbeb0b0de207ec58408e66b492d3e1f7b3532e4813ea25c5559c"
+    },
+    {
+      "path": "checks/runtime-prewarm-lint.log",
+      "bytes": 31,
+      "sha256": "d9b1fcf7e0f0f117deb1ef8c67f535eb799e893ad647f5c0ff5e9bce9b83909a"
+    },
+    {
+      "path": "checks/runtime-prewarm-typecheck.log",
+      "bytes": 42,
+      "sha256": "8034b165f65b327fa1c55c43dc1b89f0542bac2b2de36b2989cb16cf2cdc9397"
+    },
+    {
+      "path": "checks/runtime-prewarm-unit.log",
+      "bytes": 1960,
+      "sha256": "aa492a0da5bfae0ed4b250069747b3117229a24451895b0da5b745201cb15910"
+    },
+    {
+      "path": "checks/sustained-final.log",
+      "bytes": 1045,
+      "sha256": "f89fae1764bd47fe4924dc35b84fdbb960cd1fcf4c8b91c31f2fe83feaa5ab93"
+    },
+    {
+      "path": "checks/typecheck.log",
+      "bytes": 42,
+      "sha256": "8034b165f65b327fa1c55c43dc1b89f0542bac2b2de36b2989cb16cf2cdc9397"
+    },
+    {
+      "path": "checks/unit.log",
+      "bytes": 499,
+      "sha256": "209ad0217b7f46f55c401d2ebf18cd248456040eefb538c7f12fdde961ee032e"
+    },
+    {
+      "path": "immutability/report.json",
+      "bytes": 7278,
+      "sha256": "c7be6e98011a96d603f3be00e566d5fc15f5bb7b7e9420df662a4081ccf0160d"
+    },
+    {
+      "path": "lighthouse.json",
+      "bytes": 20663,
+      "sha256": "4be3cdb2cf63d3ed71758f4fbab1bcfca49bdcd5ff0a3f8153735899b6ca00db"
+    },
+    {
+      "path": "motion/ecosystem-native.webm",
+      "bytes": 5249607,
+      "sha256": "9ad858b654e32f9c1aac2d2af9e6401d2c144b23ba67c29b4085e5cf7c4df46e"
+    },
+    {
+      "path": "motion/lifecycle-native.webm",
+      "bytes": 6006930,
+      "sha256": "223f27971d9efcbe4924a6ad73adaf613aa5102ed1dab77cbd11f62f2c06284d"
+    },
+    {
+      "path": "performance/browser-validation-native.json",
+      "bytes": 184032,
+      "sha256": "8f22b818d5c8ca77b45ca9fd6e458877e9eb82933e37515750c408bf15d323b2"
+    },
+    {
+      "path": "performance/lighthouse-index.json",
+      "bytes": 3403,
+      "sha256": "498406a9d287e584bd46986ea4f128e925c2be0bd38dbef0e4e989ad7bf64065"
+    },
+    {
+      "path": "performance/lighthouse-throttled-index.json",
+      "bytes": 1833,
+      "sha256": "330d3d6cc510ce610281268a9d8fbf1dbcc76c9d2ee02809c3fe3e493c25dc3e"
+    },
+    {
+      "path": "performance/page-measurements.json",
+      "bytes": 584939,
+      "sha256": "922dd58f76afcdae2207bbbd224d6446f84fa86a693d958b0bbee66fde2003d1"
+    },
+    {
+      "path": "performance/performance-summary.json",
+      "bytes": 20663,
+      "sha256": "4be3cdb2cf63d3ed71758f4fbab1bcfca49bdcd5ff0a3f8153735899b6ca00db"
+    },
+    {
+      "path": "performance/startup-experiments/baseline.json",
+      "bytes": 2918,
+      "sha256": "0e9ccbb585ab1ea9cd685d85df8a9fff4682f6a91e640e0a92b9b8c679ee03f7"
+    },
+    {
+      "path": "performance/startup-experiments/comparison.json",
+      "bytes": 3389,
+      "sha256": "efc67ca5d96f13ef835730767b91b55a6ac729b8551c3f7a2c657495c815d21e"
+    },
+    {
+      "path": "performance/startup-experiments/inline-css.json",
+      "bytes": 2902,
+      "sha256": "15bf90cf09ca14ed9978080bf27dbd51fa695fa31e42d67f290f6f457dd6bf47"
+    },
+    {
+      "path": "performance/startup-experiments/prewarm-comparison.json",
+      "bytes": 3547,
+      "sha256": "44bcda36f6da667318b8d4a956d6430643cd10a7a1e7c3a165935aa690aecce8"
+    },
+    {
+      "path": "performance/startup-experiments/shader-prewarm.json",
+      "bytes": 2938,
+      "sha256": "0188e4499ba211f295eabb7df9496d1176e5f3731fe79d6189414d0ca3c84da0"
+    },
+    {
+      "path": "performance/sustained-chrome-m5.json",
+      "bytes": 2101288,
+      "sha256": "fc8e8db8dc5434dc733d0f2ec2ee1dc1a0037e06d867d20d6f3bc27b6f26a1b2"
+    },
+    {
+      "path": "performance/throttled-diagnostics.json",
+      "bytes": 60730,
+      "sha256": "d11f6307feb93469ee273b2fc623cf6ce041aaf4f64418ed7be69645653835a5"
+    },
+    {
+      "path": "visual/asset-material-benchmark.json",
+      "bytes": 47007,
+      "sha256": "052a9eff6d1285c088857ac51414e238370790a52e790f54dfaadbd192d89d3f"
+    },
+    {
+      "path": "visual/capture-profile.json",
+      "bytes": 13465,
+      "sha256": "c5ac2ca773b65f4e4e25ce5ee47f05aa810f24fe68615640569479460ed64e2d"
+    },
+    {
+      "path": "visual/contact-sheet.png",
+      "bytes": 591166,
+      "sha256": "bde1064a47060a3c13fca905a11d7b75d4b9c288bdb49d20a4d5b45a35d36f5f"
+    },
+    {
+      "path": "visual/cooling-channels-contact-sheet.png",
+      "bytes": 475011,
+      "sha256": "b4235b4fb44bd7ecc00ade7b0d72cf0272f3db8ae12ed238b8df57a2fcfbd532"
+    },
+    {
+      "path": "visual/demo-desktop-dpr1.5-chapter-2.png",
+      "bytes": 195983,
+      "sha256": "024410827211984900d53497e72d054fcb58db09631d5631bef304c14b8e5ba4"
+    },
+    {
+      "path": "visual/demo-desktop-dpr1.5-cooling-closeup.png",
+      "bytes": 42715,
+      "sha256": "5f02802528ec96aca0c38f9abc37c5e857acbfd045f61ef1a09f825069b9b3ed"
+    },
+    {
+      "path": "visual/demo-desktop-dpr1.5-cooling-service.png",
+      "bytes": 55246,
+      "sha256": "29d66a926e4522b2391888edf12e1a3e59649dcc47aa16283ab31af76db90924"
+    },
+    {
+      "path": "visual/demo-desktop-dpr1.5-neutral.png",
+      "bytes": 192471,
+      "sha256": "0d002ea4a4b9e284a6808cda5aa91f241647e28ed95fedb049eefc8b1f17fe58"
+    },
+    {
+      "path": "visual/demo-desktop-dpr1.5-rack-service.png",
+      "bytes": 59684,
+      "sha256": "3d40e89127d9102d6d3e0bd01b7412ac25fd4bea130fe6705f3b2cd8c8abe15d"
+    },
+    {
+      "path": "visual/demo-desktop-dpr1.5-racks-closeup.png",
+      "bytes": 54466,
+      "sha256": "a1b31e4e4972b027aa0dd51e63ce7e8cab2cd9f0598704f948c3a80475decb4c"
+    },
+    {
+      "path": "visual/ecosystem-review.json",
+      "bytes": 727273,
+      "sha256": "673797a73d091ae9b03d8eedfc8bfd5023892f534c3034cd67aff5c764d3c27c"
+    },
+    {
+      "path": "visual/home-mobile-dpr1-chapter-2.png",
+      "bytes": 42536,
+      "sha256": "c4678e6c07c880b2fc9dec9820c79aa764dcd28088c774f8bf54dd9562b7a9a0"
+    },
+    {
+      "path": "visual/home-mobile-dpr1-neutral.png",
+      "bytes": 41723,
+      "sha256": "ba14f205aab4f62cea2a183e954db8b3ef0fe975cad5b237b4ad7a813e11b393"
+    },
+    {
+      "path": "visual/material-fixtures.json",
+      "bytes": 18289,
+      "sha256": "98e909b5895ddae947f6b62f8aa34c5021468b651464b7a68ed8731aa254a51d"
+    },
+    {
+      "path": "visual/rack-channels-contact-sheet.png",
+      "bytes": 410958,
+      "sha256": "abc8ba1285cf5e1cd683f9f1914bf2ef365e178a0896e55528e767e6b470274b"
+    },
+    {
+      "path": "visual/review-capture.json",
+      "bytes": 226375,
+      "sha256": "ce4b19b119df7956b6c242af68f9b6057a2e7984c8bbd841f39cd999587247f8"
+    },
+    {
+      "path": "visual/specimen-contact-sheet.png",
+      "bytes": 202878,
+      "sha256": "97623521408c7be8687eaae9e56df059d703acdc3ff4a1cdd4ed98ba5e2e7241"
+    },
+    {
+      "path": "visual/story-contact-sheet.png",
+      "bytes": 239748,
+      "sha256": "fc6945479ebb4b38a605c00a61b8d0629ee54fc68f7f792c8842b009eb3110c5"
+    }
+  ]
+}

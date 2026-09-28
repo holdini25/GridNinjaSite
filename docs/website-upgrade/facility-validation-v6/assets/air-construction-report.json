@@ -1,0 +1,41 @@
+{
+  "scope": "Illustrative geometric air circuit; no CFD or performance claim",
+  "collectorOutsideDepthMetres": 0.65,
+  "collectorOutsideHeightMetres": 0.3,
+  "wallThicknessMetres": 0.008,
+  "rackRearPassage": [
+    0.36,
+    0.6
+  ],
+  "sectionCoverId": "GN_AIR_SECTION_COVERS",
+  "openRoomDomain": {
+    "id": "room-air",
+    "from": [
+      "cooler-air-out-0",
+      "cooler-air-out-1",
+      "cooler-air-out-2",
+      "cooler-air-out-3"
+    ],
+    "to": [
+      "rack-air-in-0-0",
+      "rack-air-in-0-1",
+      "rack-air-in-0-2",
+      "rack-air-in-0-3",
+      "rack-air-in-0-4",
+      "rack-air-in-0-5",
+      "rack-air-in-1-0",
+      "rack-air-in-1-1",
+      "rack-air-in-1-2",
+      "rack-air-in-1-3",
+      "rack-air-in-1-4",
+      "rack-air-in-1-5"
+    ]
+  },
+  "routeCount": 20,
+  "constructionPartCount": 135,
+  "checks": {
+    "allFourFansUncovered": true,
+    "actualCollectorAndIntakeApertures": true,
+    "noOpenRoomStreamline": true
+  }
+}

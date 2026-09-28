@@ -1,0 +1,122 @@
+
+> nextjs@0.1.0 prebuild
+> npm run assessment:validate && npm run seo:validate && npm run facility:validate
+
+
+> nextjs@0.1.0 assessment:validate
+> node --import ./scripts/assessment/register.mjs scripts/assessment/validate.ts
+
+Assessment publications passed: registry approvals, frozen bytes, hashes, identities, and live fixture parity.
+
+> nextjs@0.1.0 seo:validate
+> node scripts/seo/validate-source-contracts.mjs && node scripts/seo/validate-evidence-releases.mjs && vitest run tests/unit/seo --coverage.enabled=false
+
+SEO source contracts passed (9 files checked).
+Evidence release manifests passed (0 checked).
+
+ RUN  v4.1.10 /Users/holdenchung/repos/GridNinjaSite
+
+
+ Test Files  10 passed (10)
+      Tests  53 passed (53)
+   Start at  19:42:45
+   Duration  2.37s (transform 62ms, setup 199ms, import 86ms, tests 40ms, environment 1.64s)
+
+
+> nextjs@0.1.0 facility:validate
+> node scripts/facility/validate-release.mjs
+
+Facility release validation passed (1 available releases).
+
+> nextjs@0.1.0 build
+> next build
+
+▲ Next.js 16.3.6 (Turbopack)
+✓ Running next.config.ts took 12ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 399ms
+  Running TypeScript ...
+  Finished TypeScript in 1549ms ...
+  Collecting page data using 17 workers ...
+  Generating static pages using 17 workers (0/47) ...
+  Generating static pages using 17 workers (11/47) 
+  Generating static pages using 17 workers (23/47) 
+  Generating static pages using 17 workers (35/47) 
+✓ Generating static pages using 17 workers (47/47) in 451ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /api/contact
+├ ƒ /api/internal/lead-alert
+├ ƒ /api/internal/lead-delivery
+├ ƒ /api/internal/lead-retention
+├ ƒ /api/internal/lead-sweep
+├ ○ /assessment
+├ ƒ /assets/facility/[release]/[file]
+├ ● /authors/[slug]
+├ ○ /contact
+├ ○ /contact/thanks
+├ ○ /data-handling
+├ ○ /dcii
+├ ƒ /demo
+├ ƒ /downloads/assessment/[publicationId]/[version]/[format]
+├ ƒ /downloads/sample-proof-pack
+├ ○ /evidence
+├   /evidence/[slug]
+│ ├ ● /evidence/virtual-capacity-proof-test
+│ ├ ● /evidence/sample-rta-trace
+│ ├ ● /evidence/accepted-headroom-ledger
+│ └ ● /evidence/load-passport-specification
+├ ƒ /evidence/assessments/[publicationId]/[version]
+├ ƒ /evidence/releases/[...path]
+├ ○ /insights
+├   /insights/[slug]
+│ ├ ● /insights/virtual-capacity-control-plane
+│ ├ ● /insights/proof-adjusted-data-center-capacity
+│ ├ ● /insights/runtime-assurance-ai-data-centers
+│ └ ● [+4 more paths]
+├ ○ /manifest.webmanifest
+├ ○ /methodology
+├   /methodology/[slug]
+│ ├ ● /methodology/claims-and-evidence
+│ ├ ● /methodology/comparison-policy
+│ ├ ● /methodology/editorial-corrections
+│ └ ● /methodology/capacity-audit
+├ ƒ /og/[key]
+├ ○ /opengraph-image
+├ ○ /platform
+├ ƒ /platform/dispatch-envelope
+├ ○ /proof
+├ ○ /proof/proof-pack
+├ ○ /robots.txt
+├ ○ /roi
+├ ○ /sitemap.xml
+├ ○ /solutions/ai-cloud
+├ ○ /solutions/bridge-power
+├ ○ /solutions/colocation
+├ ○ /twitter-image
+└ ○ /why-gridninja
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> nextjs@0.1.0 postbuild
+> node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build
+
+/: review first-load JavaScript 154.1 KiB Brotli above the 150 KiB warning threshold
+/: prerendered; 154.1 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+/assessment: review first-load JavaScript 157.5 KiB Brotli above the 150 KiB warning threshold
+/assessment: prerendered; 157.5 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+/demo: review first-load JavaScript 157.1 KiB Brotli above the 150 KiB warning threshold
+/demo: dynamic selection; 157.1 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+/contact: review first-load JavaScript 157.5 KiB Brotli above the 150 KiB warning threshold
+/contact: prerendered; 157.5 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+Publication deployment traces passed: exact registered files present; private and unapproved files excluded.
+Facility release validation passed (1 available releases).

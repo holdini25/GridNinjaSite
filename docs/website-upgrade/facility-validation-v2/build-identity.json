@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-09-23T00:21:52.562Z",
+  "identity": {
+    "sourceRevision": "7454c092dcb82834efbe87ac41983b913b3233e44eca311125b051dae140caee",
+    "buildId": "XAXezoqUa4q4e7M5uGy38",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v2",
+      "mode": "auto-desktop"
+    }
+  }
+}

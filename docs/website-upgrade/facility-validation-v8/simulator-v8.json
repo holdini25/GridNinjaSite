@@ -1,0 +1,121 @@
+{
+  "schemaVersion": "facility-simulator-review.v1",
+  "release": "facility-v8",
+  "recordedAt": "2026-09-24T03:50:02.443539+00:00",
+  "status": "route-load and screenshot review completed; native interaction and physical-device gates remain open",
+  "productionBuildId": "Oa0RceKwM9TFRgBLqEMAB",
+  "baseUrl": "http://127.0.0.1:3000",
+  "device": {
+    "name": "iPhone 17e",
+    "udid": "C31BCF61-6941-4DCD-BF71-18A2A0A2548F",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-27-0",
+    "screenshotPixels": [
+      1170,
+      2532
+    ],
+    "initialState": "Shutdown",
+    "finalState": "Shutdown"
+  },
+  "xcode": {
+    "version": "27.0",
+    "build": "27A266a",
+    "perCommandDeveloperDirectory": "/Applications/Xcode.app/Contents/Developer",
+    "unchangedGlobalDeveloperDirectory": "/Library/Developer/CommandLineTools"
+  },
+  "workflow": {
+    "deviceBootCount": 1,
+    "otherDevicesBooted": false,
+    "noBootedDevicesAfter": true,
+    "settingsChanged": false,
+    "newSoftwareInstalled": false,
+    "nativeTouchActionsPerformed": false,
+    "inspectorConsoleAttached": false
+  },
+  "routes": [
+    {
+      "url": "/",
+      "screenshot": "simulator/iphone17e-home.png",
+      "observation": "Styled homepage; both assessment CTAs visible; historical-input and no-live-control qualification visible."
+    },
+    {
+      "url": "/demo",
+      "screenshot": "simulator/iphone17e-demo.png",
+      "observation": "Styled demo introduction; synthetic/no-operational-authority qualification and scenario B selector visible."
+    },
+    {
+      "url": "/assessment#scope",
+      "screenshot": "simulator/iphone17e-assessment-scope.png",
+      "observation": "Scope heading below the sticky header; inquiry qualification and first form fields visible."
+    },
+    {
+      "url": "/#_R_535febrb_",
+      "screenshot": "simulator/iphone17e-home-facility.png",
+      "observation": "Facility displayed with live 3D controls, Illustrative activity on, Pause and Close 3D. Caption shows 1-hour window and 7.0 MW request; lower caption partly behind Safari toolbar."
+    },
+    {
+      "url": "/demo#_R_4sqnpfebrb_",
+      "screenshot": "simulator/iphone17e-demo-facility.png",
+      "observation": "Facility displayed with Close 3D, Still for performance and Try motion again. Screenshot confirms the adaptive still-state presentation, not its cause or any measured cadence."
+    }
+  ],
+  "method": "simctl boot, bootstatus, openurl, screenshot and shutdown; manual visual inspection of all five PNGs. Generated heading fragments obtained from the served HTML were capture aids, not stable user destinations. No page-load or graphics readiness duration was measured.",
+  "limitations": [
+    "Safari JavaScript console, network and timeline were not attached; JavaScript errors and route requests are unmeasured.",
+    "No native taps, scroll gestures, route link activation, form submission, keyboard entry, toolbar changes, orientation, reduced-motion settings or VoiceOver interaction was exercised.",
+    "The screenshots do not test the rack hinge/tray controls or prove correct motion cadence. Other browser tests cover those independently.",
+    "No obvious horizontal clipping appears in the captured viewports; offscreen layout, DOM dimensions and accessibility are not asserted.",
+    "Simulator graphics and adaptive still fallback do not establish physical iPhone GPU, memory pressure, energy, thermal or sustained performance.",
+    "The old production before captures are invalid after build output replacement. Archived v7 screenshots are historical references with different capture conditions, not matched quantitative comparisons.",
+    "No public deployment or complete mobile acceptance is asserted."
+  ],
+  "evidence": [
+    {
+      "file": "simulator/devices-before.json",
+      "bytes": 6267,
+      "sha256": "17e224f88f574babc5d0952f0ad3c54aa1e19f7b485b103342be0adf6fe18dc9",
+      "writtenAt": "2026-09-24T03:44:11.464390+00:00"
+    },
+    {
+      "file": "simulator/devices-booted-after.json",
+      "bytes": 85,
+      "sha256": "34938a5a3c9a20da920afcb3d17bdaab52c3f11d431e2d941a8d4d43a60f84be",
+      "writtenAt": "2026-09-24T03:48:41.817978+00:00"
+    },
+    {
+      "file": "simulator/iphone17e-assessment-scope.png",
+      "bytes": 262574,
+      "sha256": "9505cc5e1a1979e60e381513e722b0dd9a7403199c8e6959a7b575fabb32aa2a",
+      "writtenAt": "2026-09-24T03:48:03.936552+00:00"
+    },
+    {
+      "file": "simulator/iphone17e-demo-facility.png",
+      "bytes": 620876,
+      "sha256": "faff0b000619fc5a7f83c7b9c3839f555ec820931e44e064eb63e389739b6b6e",
+      "writtenAt": "2026-09-24T03:48:38.469163+00:00"
+    },
+    {
+      "file": "simulator/iphone17e-demo.png",
+      "bytes": 276133,
+      "sha256": "034d60de7c74397949c9e53551f64e4658883f8063cc29a7e5d4fc657a8bd171",
+      "writtenAt": "2026-09-24T03:47:51.506737+00:00"
+    },
+    {
+      "file": "simulator/iphone17e-home-facility.png",
+      "bytes": 626894,
+      "sha256": "97b4d758cb7b1d66c62bea9a69d68040b2c94170db93492d939a2a97a1b711d4",
+      "writtenAt": "2026-09-24T03:48:19.970520+00:00"
+    },
+    {
+      "file": "simulator/iphone17e-home.png",
+      "bytes": 293057,
+      "sha256": "5a4b92c559484f3f40a3169f434c78a86396a301c8771933ea77a1e6dacb8e0b",
+      "writtenAt": "2026-09-24T03:47:15.179020+00:00"
+    },
+    {
+      "file": "simulator/runtimes.json",
+      "bytes": 20033,
+      "sha256": "3e19895dd096d9e508e6d2816913405dd125ae0447eedc6cf66adccf18914e56",
+      "writtenAt": "2026-09-24T03:44:11.543228+00:00"
+    }
+  ]
+}

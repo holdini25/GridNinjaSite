@@ -5,6 +5,8 @@ import { isDeepStrictEqual } from "node:util"
 import { z } from "zod"
 import registrySource from "@/content/assessment-publications/registry.json" with { type: "json" }
 import { parseAssessment } from "@/lib/assessment/invariants"
+import { canCompareHypotheticalMinimum, type HypotheticalMinimumSource } from "@/lib/assessment/hypothetical-minimum"
+import type { AssessmentRecord } from "@/types/assessment"
 
 const formats = { html: { file: "brief.html", mime: "text/html; charset=utf-8" }, pdf: { file: "brief.pdf", mime: "application/pdf" }, json: { file: "snapshot.json", mime: "application/json; charset=utf-8" } } as const
 export type PublicationFormat = keyof typeof formats
@@ -89,4 +91,23 @@ export async function assessmentPublicationResponse(publicationId: string, versi
     "Content-Disposition": `${download ? "attachment" : "inline"}; filename="gridninja-${publicationId}-${version}.${format}"`,
     Link: `<https://gridninja.ai/evidence/assessments/${publicationId}/${version}>; rel="canonical"`,
   } })
+}
+
+/** This optional presentation must fail closed without taking the assessment offline. */
+export async function readHypotheticalMinimumSource(record: AssessmentRecord): Promise<HypotheticalMinimumSource | null> {
+  if (record.scenario !== "b" || record.publication.version !== "1.0.0") return null
+  try {
+    const publication = await readAssessmentPublication(record.publication.id, `v${record.publication.version}`, "json")
+    if (publication.status !== 200 || !isDeepStrictEqual(publication.record, record) || record.modeledEligible.status !== "known") return null
+    const snapshot = publication.manifest.artifacts.find(artifact => artifact.file === "snapshot.json")
+    if (!snapshot) return null
+    const source: HypotheticalMinimumSource = {
+      publicationId: "demo-01-b", version: "1.0.0", snapshotSha256: snapshot.sha256,
+      basisId: record.basis.id, requestedKW: record.requestedProfile.incrementKW,
+      modeledKW: record.modeledEligible.valueKW,
+    }
+    return canCompareHypotheticalMinimum(record, source) ? source : null
+  } catch {
+    return null
+  }
 }

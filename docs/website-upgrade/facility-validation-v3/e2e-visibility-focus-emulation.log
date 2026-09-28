@@ -1,0 +1,51 @@
+
+Running 1 test using 1 worker
+
+(node:46131) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 [chrome-stable] › tests/e2e/facility-visibility.spec.ts:3:5 › real background-tab visibility defers activation and freezes equipment (10.7s)
+
+
+  1) [chrome-stable] › tests/e2e/facility-visibility.spec.ts:3:5 › real background-tab visibility defers activation and freezes equipment 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "hidden"
+    Received: "visible"
+
+    Call Log:
+    - Timeout 10000ms exceeded while waiting on the predicate
+
+      16 |     await viewer.locator(".facility-stage").scrollIntoViewIfNeeded()
+      17 |     await blocker.bringToFront()
+    > 18 |     await expect.poll(() => page.evaluate(() => document.visibilityState)).toBe("hidden")
+         |                                                                            ^
+      19 |     releasePoster()
+      20 |     await page.waitForTimeout(2_000)
+      21 |     expect(modelRequests).toEqual([])
+        at /Users/holdenchung/repos/GridNinjaSite/tests/e2e/facility-visibility.spec.ts:18:76
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/facility-visibility-real-b-461ee-ation-and-freezes-equipment-chrome-stable/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/facility-visibility-real-b-461ee-ation-and-freezes-equipment-chrome-stable/video-1.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: video (video/webm) ──────────────────────────────────────────────────────────────
+    test-results/facility-visibility-real-b-461ee-ation-and-freezes-equipment-chrome-stable/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/facility-visibility-real-b-461ee-ation-and-freezes-equipment-chrome-stable/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/facility-visibility-real-b-461ee-ation-and-freezes-equipment-chrome-stable/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/facility-visibility-real-b-461ee-ation-and-freezes-equipment-chrome-stable/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chrome-stable] › tests/e2e/facility-visibility.spec.ts:3:5 › real background-tab visibility defers activation and freezes equipment 

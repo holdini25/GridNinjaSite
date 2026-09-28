@@ -1,0 +1,96 @@
+{
+  "baseURL": "http://127.0.0.1:3000",
+  "type": "Production static layouts, reduced motion and Save-Data",
+  "pages": [
+    {
+      "route": "/",
+      "width": 1366,
+      "height": 768,
+      "summary": null,
+      "stage": {
+        "y": 143.40625,
+        "height": 414.390625
+      },
+      "scope": null,
+      "form": null,
+      "overflow": 0
+    },
+    {
+      "route": "/demo",
+      "width": 1366,
+      "height": 768,
+      "summary": {
+        "y": 740.53125,
+        "height": 760.984375
+      },
+      "stage": {
+        "y": 777.9375,
+        "height": 428.546875
+      },
+      "scope": null,
+      "form": null,
+      "overflow": 0
+    },
+    {
+      "route": "/assessment",
+      "width": 1366,
+      "height": 768,
+      "summary": null,
+      "stage": null,
+      "scope": {
+        "y": 738.78125,
+        "height": 1206.90625
+      },
+      "form": {
+        "y": 738.78125,
+        "height": 1206.90625
+      },
+      "overflow": 0
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "height": 844,
+      "summary": null,
+      "stage": {
+        "y": 742.203125,
+        "height": 266.828125
+      },
+      "scope": null,
+      "form": null,
+      "overflow": 0
+    },
+    {
+      "route": "/demo",
+      "width": 390,
+      "height": 844,
+      "summary": {
+        "y": 997.4375,
+        "height": 869.078125
+      },
+      "stage": {
+        "y": 1927.765625,
+        "height": 266.828125
+      },
+      "scope": null,
+      "form": null,
+      "overflow": 0
+    },
+    {
+      "route": "/assessment",
+      "width": 390,
+      "height": 844,
+      "summary": null,
+      "stage": null,
+      "scope": {
+        "y": 729.4375,
+        "height": 1749.9375
+      },
+      "form": {
+        "y": 1077,
+        "height": 1402.375
+      },
+      "overflow": 0
+    }
+  ]
+}

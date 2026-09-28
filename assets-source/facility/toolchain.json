@@ -1,0 +1,10 @@
+{
+  "blender": "5.2.2 LTS",
+  "buildHash": "d13f752e3b9c",
+  "platform": "macOS arm64",
+  "units": "metres",
+  "exportAxis": "glTF Y-up",
+  "format": "GLB 2.0",
+  "compressionExtensions": [],
+  "dependencies": "Blender bundled Python and glTF exporter only"
+}

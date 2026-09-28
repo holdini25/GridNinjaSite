@@ -1,0 +1,428 @@
+{
+  "measuredAt": "2026-09-23T01:13:21.481Z",
+  "result": "reverted",
+  "reason": "LCP and whole-page transfer regressed on both routes; no experimental setting retained.",
+  "configDelta": "Temporary experimental: { inlineCss: true } added to next.config.ts; exact original bytes restored.",
+  "originalIdentity": {
+    "sourceRevision": "7454c092dcb82834efbe87ac41983b913b3233e44eca311125b051dae140caee",
+    "buildId": "XAXezoqUa4q4e7M5uGy38",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v2",
+      "mode": "auto-desktop"
+    }
+  },
+  "trialIdentity": {
+    "sourceRevision": "00907baee98c5238f02c743e5e65ccf6a65d826c84f8268dbf425c9bb8ce8e8c",
+    "buildId": "DcFooMb9C6wdIYfTH1Ei0",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v2",
+      "mode": "auto-desktop"
+    }
+  },
+  "originalConfigSha256": "500a59784faecf4c731f7816cb8a93b08f8900f4b52d91d20d5b2fb7f0cd3073",
+  "restored": true,
+  "restoredAt": "2026-09-23T01:14:05.567Z",
+  "restoredServer": {
+    "url": "http://127.0.0.1:3000",
+    "status": 200,
+    "stylesheetLinks": 3
+  },
+  "baselineMedian": {
+    "home": {
+      "lcp": 2756.6967,
+      "fcp": 1204.1875,
+      "transferBytes": 262364
+    },
+    "demo": {
+      "lcp": 2756.0708,
+      "fcp": 1204.0763,
+      "transferBytes": 264094
+    }
+  },
+  "samples": [
+    {
+      "route": "/",
+      "run": 1,
+      "browser": "154.0.8037.58",
+      "lcp": 2916.1795,
+      "fcp": 1123.08975,
+      "transferBytes": 309505,
+      "cssRequests": 0,
+      "browserErrors": [],
+      "runtimeError": null,
+      "provenance": {
+        "schemaVersion": "facility-performance.v2",
+        "sourceRevision": "00907baee98c5238f02c743e5e65ccf6a65d826c84f8268dbf425c9bb8ce8e8c",
+        "buildId": "DcFooMb9C6wdIYfTH1Ei0",
+        "releases": [
+          {
+            "release": "facility-v1",
+            "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+          },
+          {
+            "release": "facility-v2",
+            "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+          }
+        ],
+        "buildSettings": {
+          "selectedRelease": "facility-v2",
+          "mode": "auto-desktop"
+        },
+        "harnessRevision": "c8db5da2d6b5f98cf4353e98046c931be353085391b18db35100177f61d9573b",
+        "browser": "154.0.8037.58",
+        "settings": {
+          "trial": "inlineCss",
+          "profile": "mobile",
+          "freshBrowserProfile": true,
+          "settings": {
+            "output": "json",
+            "maxWaitForFcp": 30000,
+            "maxWaitForLoad": 45000,
+            "pauseAfterFcpMs": 1000,
+            "pauseAfterLoadMs": 1000,
+            "networkQuietThresholdMs": 1000,
+            "cpuQuietThresholdMs": 1000,
+            "formFactor": "mobile",
+            "throttling": {
+              "rttMs": 150,
+              "throughputKbps": 1638.4,
+              "requestLatencyMs": 562.5,
+              "downloadThroughputKbps": 1474.5600000000002,
+              "uploadThroughputKbps": 675,
+              "cpuSlowdownMultiplier": 4
+            },
+            "throttlingMethod": "simulate",
+            "screenEmulation": {
+              "mobile": true,
+              "width": 412,
+              "height": 823,
+              "deviceScaleFactor": 1.75,
+              "disabled": false
+            },
+            "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+            "auditMode": false,
+            "gatherMode": false,
+            "clearStorageTypes": [
+              "file_systems",
+              "shader_cache",
+              "service_workers",
+              "cache_storage"
+            ],
+            "disableStorageReset": false,
+            "debugNavigation": false,
+            "channel": "node",
+            "usePassiveGathering": false,
+            "disableFullPageScreenshot": false,
+            "skipAboutBlank": false,
+            "blankPage": "about:blank",
+            "ignoreStatusCode": false,
+            "locale": "en-US",
+            "blockedUrlPatterns": null,
+            "additionalTraceCategories": null,
+            "extraHeaders": null,
+            "precomputedLanternData": null,
+            "onlyAudits": null,
+            "onlyCategories": null,
+            "skipAudits": null
+          }
+        },
+        "settingsSha256": "5adb958ab79c869b92f1ae37bcc7e6cd13d91f331c7906465d43c37062b90f7b"
+      }
+    },
+    {
+      "route": "/",
+      "run": 2,
+      "browser": "154.0.8037.58",
+      "lcp": 2905.1629000000003,
+      "fcp": 1116.0814500000001,
+      "transferBytes": 309505,
+      "cssRequests": 0,
+      "browserErrors": [],
+      "runtimeError": null,
+      "provenance": {
+        "schemaVersion": "facility-performance.v2",
+        "sourceRevision": "00907baee98c5238f02c743e5e65ccf6a65d826c84f8268dbf425c9bb8ce8e8c",
+        "buildId": "DcFooMb9C6wdIYfTH1Ei0",
+        "releases": [
+          {
+            "release": "facility-v1",
+            "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+          },
+          {
+            "release": "facility-v2",
+            "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+          }
+        ],
+        "buildSettings": {
+          "selectedRelease": "facility-v2",
+          "mode": "auto-desktop"
+        },
+        "harnessRevision": "c8db5da2d6b5f98cf4353e98046c931be353085391b18db35100177f61d9573b",
+        "browser": "154.0.8037.58",
+        "settings": {
+          "trial": "inlineCss",
+          "profile": "mobile",
+          "freshBrowserProfile": true,
+          "settings": {
+            "output": "json",
+            "maxWaitForFcp": 30000,
+            "maxWaitForLoad": 45000,
+            "pauseAfterFcpMs": 1000,
+            "pauseAfterLoadMs": 1000,
+            "networkQuietThresholdMs": 1000,
+            "cpuQuietThresholdMs": 1000,
+            "formFactor": "mobile",
+            "throttling": {
+              "rttMs": 150,
+              "throughputKbps": 1638.4,
+              "requestLatencyMs": 562.5,
+              "downloadThroughputKbps": 1474.5600000000002,
+              "uploadThroughputKbps": 675,
+              "cpuSlowdownMultiplier": 4
+            },
+            "throttlingMethod": "simulate",
+            "screenEmulation": {
+              "mobile": true,
+              "width": 412,
+              "height": 823,
+              "deviceScaleFactor": 1.75,
+              "disabled": false
+            },
+            "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+            "auditMode": false,
+            "gatherMode": false,
+            "clearStorageTypes": [
+              "file_systems",
+              "shader_cache",
+              "service_workers",
+              "cache_storage"
+            ],
+            "disableStorageReset": false,
+            "debugNavigation": false,
+            "channel": "node",
+            "usePassiveGathering": false,
+            "disableFullPageScreenshot": false,
+            "skipAboutBlank": false,
+            "blankPage": "about:blank",
+            "ignoreStatusCode": false,
+            "locale": "en-US",
+            "blockedUrlPatterns": null,
+            "additionalTraceCategories": null,
+            "extraHeaders": null,
+            "precomputedLanternData": null,
+            "onlyAudits": null,
+            "onlyCategories": null,
+            "skipAudits": null
+          }
+        },
+        "settingsSha256": "5adb958ab79c869b92f1ae37bcc7e6cd13d91f331c7906465d43c37062b90f7b"
+      }
+    },
+    {
+      "route": "/demo",
+      "run": 1,
+      "browser": "154.0.8037.58",
+      "lcp": 2907.3514999999993,
+      "fcp": 1116.6757499999999,
+      "transferBytes": 310171,
+      "cssRequests": 0,
+      "browserErrors": [],
+      "runtimeError": null,
+      "provenance": {
+        "schemaVersion": "facility-performance.v2",
+        "sourceRevision": "00907baee98c5238f02c743e5e65ccf6a65d826c84f8268dbf425c9bb8ce8e8c",
+        "buildId": "DcFooMb9C6wdIYfTH1Ei0",
+        "releases": [
+          {
+            "release": "facility-v1",
+            "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+          },
+          {
+            "release": "facility-v2",
+            "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+          }
+        ],
+        "buildSettings": {
+          "selectedRelease": "facility-v2",
+          "mode": "auto-desktop"
+        },
+        "harnessRevision": "c8db5da2d6b5f98cf4353e98046c931be353085391b18db35100177f61d9573b",
+        "browser": "154.0.8037.58",
+        "settings": {
+          "trial": "inlineCss",
+          "profile": "mobile",
+          "freshBrowserProfile": true,
+          "settings": {
+            "output": "json",
+            "maxWaitForFcp": 30000,
+            "maxWaitForLoad": 45000,
+            "pauseAfterFcpMs": 1000,
+            "pauseAfterLoadMs": 1000,
+            "networkQuietThresholdMs": 1000,
+            "cpuQuietThresholdMs": 1000,
+            "formFactor": "mobile",
+            "throttling": {
+              "rttMs": 150,
+              "throughputKbps": 1638.4,
+              "requestLatencyMs": 562.5,
+              "downloadThroughputKbps": 1474.5600000000002,
+              "uploadThroughputKbps": 675,
+              "cpuSlowdownMultiplier": 4
+            },
+            "throttlingMethod": "simulate",
+            "screenEmulation": {
+              "mobile": true,
+              "width": 412,
+              "height": 823,
+              "deviceScaleFactor": 1.75,
+              "disabled": false
+            },
+            "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+            "auditMode": false,
+            "gatherMode": false,
+            "clearStorageTypes": [
+              "file_systems",
+              "shader_cache",
+              "service_workers",
+              "cache_storage"
+            ],
+            "disableStorageReset": false,
+            "debugNavigation": false,
+            "channel": "node",
+            "usePassiveGathering": false,
+            "disableFullPageScreenshot": false,
+            "skipAboutBlank": false,
+            "blankPage": "about:blank",
+            "ignoreStatusCode": false,
+            "locale": "en-US",
+            "blockedUrlPatterns": null,
+            "additionalTraceCategories": null,
+            "extraHeaders": null,
+            "precomputedLanternData": null,
+            "onlyAudits": null,
+            "onlyCategories": null,
+            "skipAudits": null
+          }
+        },
+        "settingsSha256": "5adb958ab79c869b92f1ae37bcc7e6cd13d91f331c7906465d43c37062b90f7b"
+      }
+    },
+    {
+      "route": "/demo",
+      "run": 2,
+      "browser": "154.0.8037.58",
+      "lcp": 2906.2524000000003,
+      "fcp": 1118.1262000000002,
+      "transferBytes": 310171,
+      "cssRequests": 0,
+      "browserErrors": [],
+      "runtimeError": null,
+      "provenance": {
+        "schemaVersion": "facility-performance.v2",
+        "sourceRevision": "00907baee98c5238f02c743e5e65ccf6a65d826c84f8268dbf425c9bb8ce8e8c",
+        "buildId": "DcFooMb9C6wdIYfTH1Ei0",
+        "releases": [
+          {
+            "release": "facility-v1",
+            "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+          },
+          {
+            "release": "facility-v2",
+            "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+          }
+        ],
+        "buildSettings": {
+          "selectedRelease": "facility-v2",
+          "mode": "auto-desktop"
+        },
+        "harnessRevision": "c8db5da2d6b5f98cf4353e98046c931be353085391b18db35100177f61d9573b",
+        "browser": "154.0.8037.58",
+        "settings": {
+          "trial": "inlineCss",
+          "profile": "mobile",
+          "freshBrowserProfile": true,
+          "settings": {
+            "output": "json",
+            "maxWaitForFcp": 30000,
+            "maxWaitForLoad": 45000,
+            "pauseAfterFcpMs": 1000,
+            "pauseAfterLoadMs": 1000,
+            "networkQuietThresholdMs": 1000,
+            "cpuQuietThresholdMs": 1000,
+            "formFactor": "mobile",
+            "throttling": {
+              "rttMs": 150,
+              "throughputKbps": 1638.4,
+              "requestLatencyMs": 562.5,
+              "downloadThroughputKbps": 1474.5600000000002,
+              "uploadThroughputKbps": 675,
+              "cpuSlowdownMultiplier": 4
+            },
+            "throttlingMethod": "simulate",
+            "screenEmulation": {
+              "mobile": true,
+              "width": 412,
+              "height": 823,
+              "deviceScaleFactor": 1.75,
+              "disabled": false
+            },
+            "emulatedUserAgent": "Mozilla/5.0 (Linux; Android 11; moto g power (2022)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36",
+            "auditMode": false,
+            "gatherMode": false,
+            "clearStorageTypes": [
+              "file_systems",
+              "shader_cache",
+              "service_workers",
+              "cache_storage"
+            ],
+            "disableStorageReset": false,
+            "debugNavigation": false,
+            "channel": "node",
+            "usePassiveGathering": false,
+            "disableFullPageScreenshot": false,
+            "skipAboutBlank": false,
+            "blankPage": "about:blank",
+            "ignoreStatusCode": false,
+            "locale": "en-US",
+            "blockedUrlPatterns": null,
+            "additionalTraceCategories": null,
+            "extraHeaders": null,
+            "precomputedLanternData": null,
+            "onlyAudits": null,
+            "onlyCategories": null,
+            "skipAudits": null
+          }
+        },
+        "settingsSha256": "5adb958ab79c869b92f1ae37bcc7e6cd13d91f331c7906465d43c37062b90f7b"
+      }
+    }
+  ],
+  "limitations": [
+    "Next.js documents inlineCss as experimental and not recommended for production.",
+    "Inlining increases document size and removes independent stylesheet caching; navigation and streaming behavior require further coverage.",
+    "Two runs per route are diagnostic only and cannot satisfy the five-fresh-profile release gate.",
+    "Official documentation also identifies global-only configuration, duplicated initial SSR/RSC styles, and external stylesheet links during navigation to prerendered pages."
+  ],
+  "documentation": "https://nextjs.org/docs/app/api-reference/config/next-config-js/inlineCss",
+  "rawReports": "build/facility/inline-css-experiment/"
+}

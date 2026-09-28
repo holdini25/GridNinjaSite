@@ -1,0 +1,197 @@
+{
+  "result": "pass",
+  "unchangedFiles": [
+    {
+      "path": "src/content/facility-releases/facility-v1/facility.glb",
+      "bytes": 1390060,
+      "sha256": "a4fe6e2264b13772c720181db0bf7b0fe689160d4cff1e66a526593eb2109016"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v1/manifest.json",
+      "bytes": 3641,
+      "sha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v1/poster-desktop.webp",
+      "bytes": 69088,
+      "sha256": "a4c488498df4f255268e9debadd99c392b11d423d6dcab838dc8cc69224d6b72"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v1/poster-mobile.webp",
+      "bytes": 23828,
+      "sha256": "9d43a03ed3cdbbf89319fc4db184a09a8e5fa51c9e723e52d885c94fca73aa2c"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v2/facility.glb",
+      "bytes": 1380616,
+      "sha256": "80bc6c4404047ab4e0c260e7003d0a8b7f2e70a4048cd3aab901f96fdbe6848d"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v2/manifest.json",
+      "bytes": 3641,
+      "sha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v2/poster-desktop.webp",
+      "bytes": 62946,
+      "sha256": "87c364b09d9e6c9fd34d7e32e3c533319f0e54380dd061df61c910e976407f29"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v2/poster-mobile.webp",
+      "bytes": 21982,
+      "sha256": "ae703beee328a5650450946b67c7d16201d23021889354a8c79b78d561224130"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v3/facility.glb",
+      "bytes": 2080304,
+      "sha256": "43ff2688b2a7765b38ea59e8918734b20da9fe3beaaaf65f3185bd87d5c6b5ac"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v3/manifest.json",
+      "bytes": 4679,
+      "sha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v3/poster-desktop.webp",
+      "bytes": 46412,
+      "sha256": "fb5a8a5a9e2efbb78cf6e2adf0635b6392f9e98c4c138c581112e17a2375da12"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v3/poster-mobile.webp",
+      "bytes": 15132,
+      "sha256": "3b4920f8a2c6c80e5fa450ca1043e5f431b5675630900dec2596c825f6e4d186"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/cooling-closed.webp",
+      "bytes": 17156,
+      "sha256": "45864cb04b2bae729ffb7dea33f2bb2b06f8b494bfc7ed7124560811699d186a"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/cooling-cutaway.webp",
+      "bytes": 15454,
+      "sha256": "2c978cc3b9141ae8317668add625c828fb5b6c411e053e14fa261871d0b095b0"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/cooling.glb",
+      "bytes": 546792,
+      "sha256": "3a6f828ce8a0d390f22e3a4d40dcafbc150aecad6ce023224f3a3d3d3c84f019"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/facility.glb",
+      "bytes": 2306716,
+      "sha256": "61f8bd275e0245f4a2c4919c34428034f47cd8b4a565a4be38d0ca783c96ab2e"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/manifest.json",
+      "bytes": 13254,
+      "sha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/poster-desktop.webp",
+      "bytes": 47196,
+      "sha256": "496adbad657cc534a9ebaf0193fdfa28caaef282027a7d6656cda2a189dca7dc"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/poster-mobile.webp",
+      "bytes": 15294,
+      "sha256": "4b1fd082a48c6ff9aa2747c8066c8edba90486a8ac22d7c70b401f835ffaea08"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/rack-closed.webp",
+      "bytes": 14304,
+      "sha256": "cc742bbc46309d9f666848cf39c9ef3ef66929b41383f96e8520f83c00503559"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/rack-cutaway.webp",
+      "bytes": 18816,
+      "sha256": "c6d016c69eec842aed9408ec8eaf92c740887d051ee7479ab80ec936b42e4dc4"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v4/rack.glb",
+      "bytes": 917232,
+      "sha256": "8c466a4012aea468c6d0cf7f27a7a696a679440bda7436d95c17baf790c99123"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/cooling-closed.webp",
+      "bytes": 15430,
+      "sha256": "defaa72dc999a66ac55802d27677dd72bcf9180c1d836700723b32606204e2b5"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/cooling-cutaway.webp",
+      "bytes": 18376,
+      "sha256": "ee44a17634b1fddb62711b8173575d0ceb8032156b93a32ce05a5b747c677bbe"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/cooling.glb",
+      "bytes": 380684,
+      "sha256": "cc048f992035b72320f930159196f0ae55555f5789754eafd114019dd9461e62"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/facility.glb",
+      "bytes": 2195744,
+      "sha256": "cf825af47355dddc778440da5a3ad8848abef8409e313d680b0a0eb0ac88cc5d"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/manifest.json",
+      "bytes": 13783,
+      "sha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/poster-desktop.webp",
+      "bytes": 48968,
+      "sha256": "d4d3cb528aa229a21fee31480db6e77857c192922c24cba8d52ea6e2606336bc"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/poster-mobile.webp",
+      "bytes": 16094,
+      "sha256": "ca08167e5f647e4aea235398cffac017b42faf4370138c766f7a8ebced91a827"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/rack-closed.webp",
+      "bytes": 9704,
+      "sha256": "1cb659645b16cc06fdc2987c0bfb4be50c25d221c0b02f4b2eb84dd3b1c6a0fa"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/rack-cutaway.webp",
+      "bytes": 15286,
+      "sha256": "75469e196dea75e0f78cc2dc97e860c2666aa9c20add649689e704f5f83399be"
+    },
+    {
+      "path": "src/content/facility-releases/facility-v5/rack.glb",
+      "bytes": 766888,
+      "sha256": "0529a7ec64061dba4843abbcde77a1e25ad7d40074e9064377d3d2f4570cce06"
+    }
+  ],
+  "priorRegistryEntries": [
+    {
+      "release": "facility-v1",
+      "status": "available",
+      "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+    },
+    {
+      "release": "facility-v2",
+      "status": "available",
+      "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+    },
+    {
+      "release": "facility-v3",
+      "status": "available",
+      "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+    },
+    {
+      "release": "facility-v4",
+      "status": "available",
+      "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+    },
+    {
+      "release": "facility-v5",
+      "status": "available",
+      "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+    }
+  ],
+  "newRegistration": {
+    "release": "facility-v6",
+    "status": "available",
+    "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+  }
+}

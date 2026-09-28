@@ -1,0 +1,68 @@
+00:00.228  blend            | Read blend: "/Users/holdenchung/repos/GridNinjaSite/assets-source/facility/rack-specimen.blend"
+INFO Draco is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_draco_bridge.dylib
+INFO MeshOptimizer is available, use library at /Applications/Blender.app/Contents/Resources/5.2/scripts/addons_core/io_scene_gltf2/libbf_intern_meshopt_bridge.dylib
+23:24:22 | INFO: Starting glTF 2.0 export
+23:24:22 | INFO: Extracting primitive: GN_RACK_DOOR_Graphite
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_DOOR_Grille
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_DOOR_Steel
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_DOOR_Trim
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_FRAME_Dark
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_FRAME_Graphite
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_FRAME_Platform
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_FRAME_Steel
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_PANEL_Graphite
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_PANEL_Steel
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_POWER_Copper
+23:24:22 | WARNING: More than one shader node tex image used for a texture. The resulting glTF sampler will behave like the first shader node tex image.
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_POWER_Dark
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_POWER_Graphite
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_POWER_Steel
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_SERVERS_Dark
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_SERVERS_Graphite
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_SERVERS_Grille
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_SERVERS_Steel
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_SERVERS_Trim
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_TRAY_Copper
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_TRAY_Dark
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_TRAY_Graphite
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_TRAY_Grille
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_TRAY_Steel
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Extracting primitive: GN_RACK_TRAY_Trim
+23:24:22 | INFO: Primitives created: 1
+23:24:22 | INFO: Finished glTF 2.0 export in 0.05041623115539551 s
+
+SPECIMEN_EXPORT {"kind": "rack", "exportBytes": 775976, "renderedTriangles": 10282, "drawCallsWithLedInstances": 26, "materialCount": 7, "sha256": "3f4d407513255c78af771f3292dddb3d453638c8064bebcae4d28d05f079c839"}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:49:19)
+
+Blender quit

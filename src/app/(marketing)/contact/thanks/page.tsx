@@ -27,7 +27,7 @@ export default function ContactThanksPage() {
         <span aria-current="page">Inquiry reference</span>
       </nav>
 
-      <div className="mt-8 rounded-2xl border border-white/10 bg-[#0D151C] p-6 sm:p-9">
+      <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-9">
         <div className="flex items-center gap-3">
           <GridNinjaMark variant="proof-core" className="size-8" priority />
           <p className="gn-eyebrow">Scoped review</p>
@@ -45,7 +45,7 @@ export default function ContactThanksPage() {
         <Link
           href="/proof"
           prefetch={false}
-          className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/10 px-4 text-sm font-medium text-proof-cyan hover:border-proof-cyan/50 hover:text-foreground"
+          className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-lg border border-border bg-surface-2 px-4 text-sm font-medium text-proof-cyan hover:border-primary/50 hover:bg-surface-hover hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           data-seo-related-target="/proof"
         >
           Review proof before autonomy

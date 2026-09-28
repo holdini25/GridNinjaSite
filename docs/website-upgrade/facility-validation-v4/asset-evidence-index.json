@@ -1,0 +1,286 @@
+{
+  "schemaVersion": 1,
+  "packagedAt": "2026-09-23T03:59:31.326135+00:00",
+  "release": "facility-v4",
+  "copiedEvidence": [
+    {
+      "file": "asset-report.json",
+      "source": "build/facility/facility-v4/asset-report.json",
+      "bytes": 9703,
+      "sha256": "8f340ba1f4e2ed924bc0b186edbc0635b7366ac4c640ec30904ba48ed2c42fa6"
+    },
+    {
+      "file": "validation.json",
+      "source": "build/facility/facility-v4/validation.json",
+      "bytes": 17729,
+      "sha256": "909d5d5e6eeb64ae7a06dc09af5a4c8040910fa586e04fca8a09acc53fb45509"
+    },
+    {
+      "file": "rack-asset-report.json",
+      "source": "build/facility/facility-v4/rack-asset-report.json",
+      "bytes": 4193,
+      "sha256": "a5c0647e35f3a34a7f830c3f005a751a7b1aa83b5384241ff516bfdf202c7c81"
+    },
+    {
+      "file": "rack-validation.json",
+      "source": "build/facility/facility-v4/rack-validation.json",
+      "bytes": 11214,
+      "sha256": "a2eaaf5e6941330d8f27657faa88da45fa8a612b03584bde7401994baa83ca2e"
+    },
+    {
+      "file": "cooling-asset-report.json",
+      "source": "build/facility/facility-v4/cooling-asset-report.json",
+      "bytes": 4029,
+      "sha256": "51c09a4fe091e54cb7857b68db80b6c26f4aa43cdfcf99f4e37d933cac516b66"
+    },
+    {
+      "file": "cooling-validation.json",
+      "source": "build/facility/facility-v4/cooling-validation.json",
+      "bytes": 8509,
+      "sha256": "e8bdfc094203c7b4646b12d5a4c366512dadda2427ba47e1193f07f87b77f569"
+    },
+    {
+      "file": "normal-preservation-report.json",
+      "source": "build/facility/facility-v4/normal-preservation-report.json",
+      "bytes": 6532,
+      "sha256": "dcf25156b9bcb6a95e39f5006d612dfed811440c10e934fdb3a284b1fa295e2e"
+    },
+    {
+      "file": "bake-report.json",
+      "source": "build/facility/facility-v4/bake-report.json",
+      "bytes": 2048,
+      "sha256": "724b78869c3aa59ff7645f02a4c42b8f2b101276f3c385b91bd88c5cc8b1e723"
+    },
+    {
+      "file": "service-report.json",
+      "source": "build/facility/facility-v4/service-report.json",
+      "bytes": 62527,
+      "sha256": "4ca53889989782a5416c342dc584c5bc7bb46a738210fdf9c6bec0e6c364b343"
+    },
+    {
+      "file": "topology.json",
+      "source": "build/facility/facility-v4/topology.json",
+      "bytes": 35991,
+      "sha256": "a013ac28b2f25b613f8b4ea8c018573e6d9203e123f71e66aa502436cdc0e383"
+    },
+    {
+      "file": "rack-metadata.json",
+      "source": "build/facility/facility-v4/rack-metadata.json",
+      "bytes": 6401,
+      "sha256": "b451dde5c65bb65f99ecafaaa1122697e50170bef0c9a3759359aad360d5fd73"
+    },
+    {
+      "file": "cooling-metadata.json",
+      "source": "build/facility/facility-v4/cooling-metadata.json",
+      "bytes": 6431,
+      "sha256": "308687ba2bb37467279c5e94487ffc7e4bd2ea276a2fdf1f8901acc588d75a8c"
+    },
+    {
+      "file": "specimen-descriptors.json",
+      "source": "build/facility/facility-v4/specimen-descriptors.json",
+      "bytes": 5812,
+      "sha256": "5087c127685fd6fc9a4fd6bb96012f6c0a28fa263d9dc0fdb946763d4015d5d8"
+    },
+    {
+      "file": "reproducibility-report.json",
+      "source": "build/facility/facility-v4/reproducibility-report.json",
+      "bytes": 1172,
+      "sha256": "3f619701a2b380a20e59e5b374087143cdc7b81c679f541e9f6692049f79ee0e"
+    },
+    {
+      "file": "capture-profile.json",
+      "source": "build/facility/facility-v4/capture-profile.json",
+      "bytes": 8205,
+      "sha256": "492c2add281f2fa0fb0478f7e370f02e79fa913bdacccdaa274c0b9d83dba48d"
+    },
+    {
+      "file": "contact-sheet.png",
+      "source": "build/facility/facility-v4/contact-sheet.png",
+      "bytes": 657433,
+      "sha256": "44ef18f2e46a7e5f4e79615cf51d9616d16f3f13fdc2ada962d032ed4a6e18b6"
+    },
+    {
+      "file": "specimen-contact-sheet.png",
+      "source": "build/facility/facility-v4/specimen-contact-sheet.png",
+      "bytes": 371208,
+      "sha256": "b9cd37d2e0acb7fcca4de617ebd957901fe6fcbd852619165961c58d487a0aa4"
+    },
+    {
+      "file": "rack-service.png",
+      "source": "build/facility/facility-v4/rack-service.png",
+      "bytes": 70110,
+      "sha256": "01128195f480b5c96caa381ef92f9737969f379c2da896b599da4c2eedcca767"
+    },
+    {
+      "file": "cooling-service.png",
+      "source": "build/facility/facility-v4/cooling-service.png",
+      "bytes": 72526,
+      "sha256": "fc1a009a40e01c8a92507810b37f1bec49ab7fdf6a28ab2366773e0784cfbf2a"
+    },
+    {
+      "file": "release-manifest.json",
+      "source": "build/facility/facility-v4/release/manifest.json",
+      "bytes": 13254,
+      "sha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+    }
+  ],
+  "frozenReleaseFiles": [
+    {
+      "file": "facility.glb",
+      "bytes": 2306716,
+      "sha256": "61f8bd275e0245f4a2c4919c34428034f47cd8b4a565a4be38d0ca783c96ab2e",
+      "matchesManifest": true
+    },
+    {
+      "file": "poster-desktop.webp",
+      "bytes": 47196,
+      "sha256": "496adbad657cc534a9ebaf0193fdfa28caaef282027a7d6656cda2a189dca7dc",
+      "matchesManifest": true
+    },
+    {
+      "file": "poster-mobile.webp",
+      "bytes": 15294,
+      "sha256": "4b1fd082a48c6ff9aa2747c8066c8edba90486a8ac22d7c70b401f835ffaea08",
+      "matchesManifest": true
+    },
+    {
+      "file": "rack.glb",
+      "bytes": 917232,
+      "sha256": "8c466a4012aea468c6d0cf7f27a7a696a679440bda7436d95c17baf790c99123",
+      "matchesManifest": true
+    },
+    {
+      "file": "rack-closed.webp",
+      "bytes": 14304,
+      "sha256": "cc742bbc46309d9f666848cf39c9ef3ef66929b41383f96e8520f83c00503559",
+      "matchesManifest": true
+    },
+    {
+      "file": "rack-cutaway.webp",
+      "bytes": 18816,
+      "sha256": "c6d016c69eec842aed9408ec8eaf92c740887d051ee7479ab80ec936b42e4dc4",
+      "matchesManifest": true
+    },
+    {
+      "file": "cooling.glb",
+      "bytes": 546792,
+      "sha256": "3a6f828ce8a0d390f22e3a4d40dcafbc150aecad6ce023224f3a3d3d3c84f019",
+      "matchesManifest": true
+    },
+    {
+      "file": "cooling-closed.webp",
+      "bytes": 17156,
+      "sha256": "45864cb04b2bae729ffb7dea33f2bb2b06f8b494bfc7ed7124560811699d186a",
+      "matchesManifest": true
+    },
+    {
+      "file": "cooling-cutaway.webp",
+      "bytes": 15454,
+      "sha256": "2c978cc3b9141ae8317668add625c828fb5b6c411e053e14fa261871d0b095b0",
+      "matchesManifest": true
+    }
+  ],
+  "frozenReleaseManifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef",
+  "notes": [
+    "Copies preserve source bytes. GLBs and posters are referenced by their frozen release rather than duplicated.",
+    "Browser behavior and final performance reports are recorded separately."
+  ],
+  "captureAndSourceChecks": [
+    {
+      "subject": "overview render profile",
+      "matches": true
+    },
+    {
+      "subject": "overview model",
+      "matches": true
+    },
+    {
+      "subject": "rack render profile",
+      "matches": true
+    },
+    {
+      "subject": "rack model",
+      "matches": true
+    },
+    {
+      "subject": "cooling render profile",
+      "matches": true
+    },
+    {
+      "subject": "cooling model",
+      "matches": true
+    },
+    {
+      "subject": "poster-desktop.webp",
+      "matches": true
+    },
+    {
+      "subject": "poster-mobile.webp",
+      "matches": true
+    },
+    {
+      "subject": "rack-closed.webp",
+      "matches": true
+    },
+    {
+      "subject": "rack-cutaway.webp",
+      "matches": true
+    },
+    {
+      "subject": "cooling-closed.webp",
+      "matches": true
+    },
+    {
+      "subject": "cooling-cutaway.webp",
+      "matches": true
+    },
+    {
+      "subject": "source/engineering_metadata.py",
+      "matches": true
+    },
+    {
+      "subject": "source/export.py",
+      "matches": true
+    },
+    {
+      "subject": "source/generate.py",
+      "matches": true
+    },
+    {
+      "subject": "source/scene.json",
+      "matches": true
+    },
+    {
+      "subject": "source/service_routes.py",
+      "matches": true
+    },
+    {
+      "subject": "source/specimens.py",
+      "matches": true
+    },
+    {
+      "subject": "source/surface_bake.py",
+      "matches": true
+    },
+    {
+      "subject": "source/cooling-specimen.blend",
+      "matches": true
+    },
+    {
+      "subject": "source/rack-specimen.blend",
+      "matches": true
+    },
+    {
+      "subject": "source/facility-master.blend",
+      "matches": true
+    }
+  ],
+  "postIntegrationVerification": {
+    "checkedAt": "2026-09-23T15:09:58.313689+00:00",
+    "frozenAssetCount": 9,
+    "authoringSourceCount": 10,
+    "priorPublicationCount": 32,
+    "result": "passed",
+    "mismatches": []
+  }
+}

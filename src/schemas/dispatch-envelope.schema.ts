@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "@/lib/browser-zod"
 
 export const DispatchDecisionSchema = z.enum([
   "allow",

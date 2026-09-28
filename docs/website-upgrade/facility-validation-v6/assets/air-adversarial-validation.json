@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "assetSha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+  "checks": [
+    {
+      "case": "off-route-branch",
+      "rejected": true,
+      "reason": "Branch air-row-tap-0-0 does not meet its rendered route"
+    },
+    {
+      "case": "cross-fluid-passage",
+      "rejected": true,
+      "reason": "Passage cross-medium contamination"
+    },
+    {
+      "case": "blocked-internal-air-passage",
+      "rejected": true,
+      "reason": "Blocked authored air passage rack-00-air-passage: GN_WORKLOADS_Graphite at -1.9010000228881836,1.545,1.7830000114440918"
+    },
+    {
+      "case": "missing-section-root",
+      "rejected": true,
+      "reason": "Section covers need a stable cooling root"
+    }
+  ],
+  "result": "passed"
+}

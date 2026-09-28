@@ -1,4 +1,5 @@
-import { z } from "zod"
+import { z } from "@/lib/browser-zod"
+import { PUBLIC_TOPICS } from "@/lib/public-topic"
 
 import {
   buyerTypes,
@@ -95,6 +96,7 @@ export const legacyContactLeadSchema = z.object({
 export const contactLeadSchema = z.object({
   ...commonLeadShape,
   schemaVersion: z.literal(2),
+  topic: z.enum(PUBLIC_TOPICS).optional(),
   formType: z.literal("contact"),
   role: withoutAsciiControlCharacters(
     z.string().trim().min(2, "Enter at least two characters.").max(120, "Role is too long.")

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "facility-rack-motion-adversarial.v1",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "authored continuous hinge and rail clearance",
+      "passed": true
+    },
+    {
+      "name": "inward hinge swing rejected",
+      "passed": true,
+      "rejection": "Rack motion collision: [{'phase': 'door', 'angleDegrees': 1.0, 'fixedOverlaps': 36, 'trayOverlaps': 0}, {'phase': 'door', 'angleDegrees': 1.5, 'fixedOverlaps': 36, 'trayOverlaps': 0}, {'phase': 'door', 'angleDegrees': 2.0, 'fixedOverlaps': 41, 'trayOverlaps': 0}] with ['Kit door cross rail.001', 'Kit door cross rail']"
+    },
+    {
+      "name": "tray extension with closed door rejected",
+      "passed": true,
+      "rejection": "Rack motion collision: [{'phase': 'tray', 'travelMetres': 0.07999999999999999, 'fixedOverlaps': 0, 'doorOverlaps': 24}, {'phase': 'tray', 'travelMetres': 0.081, 'fixedOverlaps': 0, 'doorOverlaps': 24}, {'phase': 'tray', 'travelMetres': 0.082, 'fixedOverlaps': 0, 'doorOverlaps': 32}] with ['Moving door perforations']"
+    }
+  ],
+  "sourceMaster": "assets-source/facility/rack-specimen.blend",
+  "writesMaster": false
+}

@@ -1,3 +1,4 @@
+import { resolvePublicTopic, type PublicTopic } from "@/lib/public-topic"
 import {
   contactConversationTypes,
   leadIntents,
@@ -12,11 +13,12 @@ export type ContactAttribution = {
   intent: LeadIntent
   conversationType: ContactConversationType
   source: string
+  topic?: PublicTopic
 }
 
 export function resolveContactAttribution(
   search: string,
-  defaults: { intent?: LeadIntent; source?: string } = {}
+  defaults: { intent?: LeadIntent; source?: string; topic?: PublicTopic } = {}
 ): ContactAttribution {
   const query = new URLSearchParams(search)
   const requestedIntent = query.get("intent")
@@ -27,6 +29,7 @@ export function resolveContactAttribution(
 
   return {
     intent,
+    topic: query.has("topic") ? resolvePublicTopic(query.getAll("topic").length === 1 ? query.get("topic") : undefined) : defaults.topic,
     conversationType: conversationTypeForIntent(intent),
     source:
       requestedSource && isLeadSource(requestedSource)

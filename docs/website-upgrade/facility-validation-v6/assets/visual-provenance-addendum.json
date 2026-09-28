@@ -1,0 +1,174 @@
+{
+  "schemaVersion": 1,
+  "release": "facility-v6",
+  "measuredAt": "2026-09-23T23:44:29.356Z",
+  "result": "passed",
+  "scope": "Non-GPU provenance audit of curated reports, copied captures, the root-authored specimen composite and native motion recordings. No source/harness/model/browser/Blender changes.",
+  "frozenManifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b",
+  "frozenProfileSha256": "493f25627a1a5f9f8636335b25aa19492819f58c439ce0e96b61e4276da6cc72",
+  "packagingVerificationStatus": "Existing assets/packaging-verification.json checks remain accurate. This addendum records final replacement capture reports, motion-copy provenance and the explicitly derived specimen contact sheet.",
+  "reports": [
+    {
+      "file": "visual/capture-profile.json",
+      "sha256": "c5ac2ca773b65f4e4e25ce5ee47f05aa810f24fe68615640569479460ed64e2d",
+      "capturedAt": null,
+      "scope": "Production browser poster capture",
+      "captureCount": null,
+      "sourceDigestCount": 0,
+      "currentSourceDigestsMatch": true,
+      "manifestSha256": null,
+      "modelSha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+      "profileSha256": "493f25627a1a5f9f8636335b25aa19492819f58c439ce0e96b61e4276da6cc72"
+    },
+    {
+      "file": "visual/review-capture.json",
+      "sha256": "ce4b19b119df7956b6c242af68f9b6057a2e7984c8bbd841f39cd999587247f8",
+      "capturedAt": "2026-09-23T23:33:08.721Z",
+      "scope": "Still visual review with bounded diagnostic DPR override; not adaptive performance evidence",
+      "captureCount": 48,
+      "sourceDigestCount": 0,
+      "currentSourceDigestsMatch": true,
+      "manifestSha256": null,
+      "modelSha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723",
+      "profileSha256": "493f25627a1a5f9f8636335b25aa19492819f58c439ce0e96b61e4276da6cc72"
+    },
+    {
+      "file": "visual/ecosystem-review.json",
+      "sha256": "673797a73d091ae9b03d8eedfc8bfd5023892f534c3034cd67aff5c764d3c27c",
+      "capturedAt": "2026-09-23T23:33:55.315Z",
+      "scope": "Chapter/cutaway visual review; diagnostic DPR overrides are separate from adaptive performance evidence",
+      "captureCount": 36,
+      "sourceDigestCount": 0,
+      "currentSourceDigestsMatch": true,
+      "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b",
+      "modelSha256": null,
+      "profileSha256": null
+    },
+    {
+      "file": "visual/asset-material-benchmark.json",
+      "sha256": "052a9eff6d1285c088857ac51414e238370790a52e790f54dfaadbd192d89d3f",
+      "capturedAt": "2026-09-23T23:35:12.779Z",
+      "scope": "facility-asset-material-benchmark.v1",
+      "captureCount": 48,
+      "sourceDigestCount": 17,
+      "currentSourceDigestsMatch": true,
+      "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b",
+      "modelSha256": null,
+      "profileSha256": null
+    },
+    {
+      "file": "visual/material-fixtures.json",
+      "sha256": "98e909b5895ddae947f6b62f8aa34c5021468b651464b7a68ed8731aa254a51d",
+      "capturedAt": "2026-09-23T22:53:39.238Z",
+      "scope": "facility-material-benchmark.v1",
+      "captureCount": null,
+      "sourceDigestCount": 4,
+      "currentSourceDigestsMatch": true,
+      "manifestSha256": null,
+      "modelSha256": null,
+      "profileSha256": null
+    }
+  ],
+  "visualCopies": {
+    "exactBuildFileCopies": 17,
+    "derivedContactSheets": 1,
+    "otherUnexplainedDifferences": 0
+  },
+  "specimenContactSheet": {
+    "file": "visual/specimen-contact-sheet.png",
+    "bytes": 202878,
+    "sha256": "97623521408c7be8687eaae9e56df059d703acdc3ff4a1cdd4ed98ba5e2e7241",
+    "dimensions": [
+      1440,
+      628
+    ],
+    "inputs": [
+      {
+        "path": "build/facility/facility-v6/review/demo-desktop-dpr1.5-rack-closed.png",
+        "sha256": "bc8f0b107df14601e158e6c782c55a63c7f2cd457c64f77f0cd5ff4b7fce7e00",
+        "bytes": 51518,
+        "column": 0,
+        "row": 0,
+        "label": "Rack · Closed"
+      },
+      {
+        "path": "build/facility/facility-v6/review/demo-desktop-dpr1.5-rack-cutaway.png",
+        "sha256": "a584b4c288b4e11f72cd6969a16d5ea4438d61810c63f47b4a1ad253ed9e7ec7",
+        "bytes": 53853,
+        "column": 1,
+        "row": 0,
+        "label": "Rack · Cutaway"
+      },
+      {
+        "path": "build/facility/facility-v6/review/demo-desktop-dpr1.5-rack-service.png",
+        "sha256": "3d40e89127d9102d6d3e0bd01b7412ac25fd4bea130fe6705f3b2cd8c8abe15d",
+        "bytes": 59684,
+        "column": 2,
+        "row": 0,
+        "label": "Rack · Service detail"
+      },
+      {
+        "path": "build/facility/facility-v6/review/demo-desktop-dpr1.5-cooling-closed.png",
+        "sha256": "22e0e5a0a021cc26ed7ca1c297dee02dbe1c61266b40f6e6b89f67e82af557e7",
+        "bytes": 95379,
+        "column": 0,
+        "row": 1,
+        "label": "Cooling · Closed"
+      },
+      {
+        "path": "build/facility/facility-v6/review/demo-desktop-dpr1.5-cooling-cutaway.png",
+        "sha256": "9c6d4346f713be35ed1f2cb61e23f0d7b497eb8d6d10c3e8e7ff7a18ec74cc99",
+        "bytes": 54872,
+        "column": 1,
+        "row": 1,
+        "label": "Cooling · Cutaway"
+      },
+      {
+        "path": "build/facility/facility-v6/review/demo-desktop-dpr1.5-cooling-service.png",
+        "sha256": "29d66a926e4522b2391888edf12e1a3e59649dcc47aa16283ab31af76db90924",
+        "bytes": 55246,
+        "column": 2,
+        "row": 1,
+        "label": "Cooling · Service detail"
+      }
+    ],
+    "method": "Root-authored Sharp derivative: each source resized to 480×282 with fit=contain and #080808 background; extend top by 32 pixels; add an SVG label at x=14,y=23 using sans-serif 16px #eee. Composite three pose columns and two equipment rows on RGB #080808. No geometry or source-image content edits beyond resizing and labels."
+  },
+  "motion": [
+    {
+      "file": "motion/ecosystem-native.webm",
+      "source": "build/facility/facility-v6/ecosystem-review/motion/page@f8d8804f53f86f031e113061614b3c93.webm",
+      "bytes": 5249607,
+      "sha256": "9ad858b654e32f9c1aac2d2af9e6401d2c144b23ba67c29b4085e5cf7c4df46e",
+      "matchingReport": "visual/ecosystem-review.json",
+      "matchingReportSha256": "673797a73d091ae9b03d8eedfc8bfd5023892f534c3034cd67aff5c764d3c27c",
+      "byteIdentical": true
+    },
+    {
+      "file": "motion/lifecycle-native.webm",
+      "source": "build/facility/facility-v6/motion/page@637d36d485ccf1d7b8924219dfb4d0eb.webm",
+      "bytes": 6006930,
+      "sha256": "223f27971d9efcbe4924a6ad73adaf613aa5102ed1dab77cbd11f62f2c06284d",
+      "matchingReport": "performance/browser-validation-native.json",
+      "matchingReportSha256": "8f22b818d5c8ca77b45ca9fd6e458877e9eb82933e37515750c408bf15d323b2",
+      "byteIdentical": true
+    }
+  ],
+  "buildIdentity": {
+    "sourceRevision": "67bc137f1fa51fff2222305fd8ad13c384e7a65fa1337e34b69ec40c987f3ac4",
+    "buildId": "1yMc5StJM4uWFaZNekBgW",
+    "savedBuildAndNativeLifecycleReportMatch": true
+  },
+  "allocationClarification": {
+    "posterCaptureOverviewRetainedBytes": 7958280,
+    "finalReviewOverviewRetainedBytes": 7958342,
+    "finalReviewPeakBytes": 12119291,
+    "deltaOverviewBytes": 62,
+    "note": "The poster capture predates a 62-byte runtime controller-index accounting change. Its frozen model, render profile and poster hashes remain valid; current allocation claims use the final review/lifecycle captures."
+  },
+  "limits": [
+    "Capture/model/profile/manifest and runtime source digest checks establish provenance; they do not replace performance, accessibility or physical-device acceptance.",
+    "Still review uses explicit diagnostic DPR overrides; native motion evidence is Chrome on the local M5 Pro, not a physical phone or sustained energy/thermal test.",
+    "No evolving overall documentation inventory was read or modified."
+  ]
+}

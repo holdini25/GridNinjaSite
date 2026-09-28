@@ -1,0 +1,617 @@
+{
+  "schemaVersion": "facility.v1",
+  "release": "facility-v6",
+  "environment": "synthetic",
+  "profile": {
+    "camera": [
+      12.48401,
+      12.75822,
+      13.8649
+    ],
+    "target": [
+      0,
+      1.1,
+      0
+    ],
+    "padding": 1.12,
+    "framing": "projected-geometry",
+    "background": "#080808",
+    "exposure": 1.15,
+    "colorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "surfaces": {
+      "version": 1,
+      "pipeline": "pbr-semantic-v2",
+      "uvSet": 0,
+      "maxTextureBytes": 3145728
+    },
+    "ecosystem": {
+      "version": 1,
+      "seed": 61427,
+      "ambientIntervalSeconds": [
+        12,
+        18
+      ],
+      "sequenceSeconds": 8,
+      "chapterSeconds": [
+        4,
+        4,
+        5,
+        4,
+        4,
+        3
+      ],
+      "colors": {
+        "electrical": "#e3e7e4",
+        "cooling": "#76abb4",
+        "heat": "#c98554"
+      },
+      "fanModulation": 0.1,
+      "maxEquipment": 96,
+      "maxRoutes": 128,
+      "maxTraces": 2
+    },
+    "lighting": {
+      "hemisphere": {
+        "sky": "#eeeeee",
+        "ground": "#292929",
+        "intensity": 0.4
+      },
+      "directional": [
+        {
+          "position": [
+            -8,
+            15,
+            8
+          ],
+          "color": "#fffaf3",
+          "intensity": 2
+        },
+        {
+          "position": [
+            7,
+            8,
+            -7
+          ],
+          "color": "#f1f1f1",
+          "intensity": 0.9
+        },
+        {
+          "position": [
+            0,
+            5,
+            12
+          ],
+          "color": "#ededed",
+          "intensity": 0.35
+        }
+      ],
+      "environment": {
+        "preset": "industrial-softbox-v2",
+        "resolution": 128,
+        "intensity": 1,
+        "rotationY": 0
+      }
+    },
+    "motion": {
+      "fanRadiansPerSecond": 1.6,
+      "fanPhaseOffsets": [
+        0,
+        1.57,
+        3.14,
+        4.71
+      ],
+      "ledPulseRadiansPerSecond": 1.8,
+      "ledPulseAmplitude": 0.14
+    },
+    "led": {
+      "color": "#ffc079",
+      "steadyIntensity": 0.82,
+      "size": [
+        0.038,
+        0.025,
+        0.018
+      ]
+    },
+    "engineering": {
+      "version": 1,
+      "seed": 41727,
+      "accent": {
+        "resting": "#9d632f",
+        "hover": "#ffbe63",
+        "selected": "#ffd18a",
+        "previewWeight": 0.85,
+        "baseEmission": 0.035,
+        "activeEmission": 1,
+        "transitionMs": 150
+      },
+      "activity": {
+        "resting": 0.12,
+        "peak": 1,
+        "steady": 0.5,
+        "pulseMs": [
+          120,
+          180
+        ],
+        "eventMs": [
+          80,
+          180
+        ],
+        "maxPulses": 3,
+        "ambientTraceSeconds": [
+          8,
+          12
+        ],
+        "selectedTraceQuietSeconds": 2.8
+      },
+      "cameraTransitionMs": 420,
+      "poseTransitionMs": 280,
+      "rendering": {
+        "ambientFps": 30,
+        "interactionFps": 60,
+        "mobilePixels": 650000,
+        "desktopPixels": 1500000,
+        "probeSeconds": 2
+      }
+    }
+  },
+  "systems": {
+    "power": {
+      "root": "GN_POWER",
+      "accent": "GN_ACCENT_POWER",
+      "pick": "GN_PICK_POWER"
+    },
+    "cooling": {
+      "root": "GN_COOLING",
+      "accent": "GN_ACCENT_COOLING",
+      "pick": "GN_PICK_COOLING"
+    },
+    "storage": {
+      "root": "GN_STORAGE",
+      "accent": "GN_ACCENT_STORAGE",
+      "pick": "GN_PICK_STORAGE"
+    },
+    "workloads": {
+      "root": "GN_WORKLOADS",
+      "accent": "GN_ACCENT_WORKLOADS",
+      "pick": "GN_PICK_WORKLOADS"
+    }
+  },
+  "equipment": {
+    "rotors": [
+      {
+        "id": "GN_FAN_ROTOR_00",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_01",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_02",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_03",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "leds": [
+      "GN_LED_00",
+      "GN_LED_01",
+      "GN_LED_02",
+      "GN_LED_03",
+      "GN_LED_04",
+      "GN_LED_05",
+      "GN_LED_06",
+      "GN_LED_07",
+      "GN_LED_08",
+      "GN_LED_09",
+      "GN_LED_10",
+      "GN_LED_11",
+      "GN_LED_12",
+      "GN_LED_13",
+      "GN_LED_14",
+      "GN_LED_15",
+      "GN_LED_16",
+      "GN_LED_17",
+      "GN_LED_18",
+      "GN_LED_19",
+      "GN_LED_20",
+      "GN_LED_21",
+      "GN_LED_22",
+      "GN_LED_23",
+      "GN_LED_24",
+      "GN_LED_25",
+      "GN_LED_26",
+      "GN_LED_27",
+      "GN_LED_28",
+      "GN_LED_29",
+      "GN_LED_30",
+      "GN_LED_31",
+      "GN_LED_32",
+      "GN_LED_33",
+      "GN_LED_34",
+      "GN_LED_35",
+      "GN_LED_36",
+      "GN_LED_37",
+      "GN_LED_38",
+      "GN_LED_39",
+      "GN_LED_40",
+      "GN_LED_41",
+      "GN_LED_42",
+      "GN_LED_43",
+      "GN_LED_44",
+      "GN_LED_45",
+      "GN_LED_46",
+      "GN_LED_47"
+    ]
+  },
+  "specimens": {
+    "rack": {
+      "kind": "rack",
+      "label": "Representative rack construction",
+      "system": "workloads",
+      "profile": {
+        "camera": [
+          3.2,
+          2.7,
+          4
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12,
+        "framing": "projected-geometry",
+        "background": "#080808",
+        "exposure": 1.15,
+        "colorSpace": "srgb",
+        "toneMapping": "aces-filmic",
+        "surfaces": {
+          "version": 1,
+          "pipeline": "pbr-semantic-v2",
+          "uvSet": 0,
+          "maxTextureBytes": 3145728
+        },
+        "lighting": {
+          "hemisphere": {
+            "sky": "#eeeeee",
+            "ground": "#292929",
+            "intensity": 0.4
+          },
+          "directional": [
+            {
+              "position": [
+                -8,
+                15,
+                8
+              ],
+              "color": "#fffaf3",
+              "intensity": 2
+            },
+            {
+              "position": [
+                7,
+                8,
+                -7
+              ],
+              "color": "#f1f1f1",
+              "intensity": 0.9
+            },
+            {
+              "position": [
+                0,
+                5,
+                12
+              ],
+              "color": "#ededed",
+              "intensity": 0.35
+            }
+          ],
+          "environment": {
+            "preset": "industrial-softbox-v2",
+            "resolution": 128,
+            "intensity": 1,
+            "rotationY": 0
+          }
+        },
+        "motion": {
+          "fanRadiansPerSecond": 1.6,
+          "fanPhaseOffsets": [
+            0,
+            1.57,
+            3.14,
+            4.71
+          ],
+          "ledPulseRadiansPerSecond": 1.8,
+          "ledPulseAmplitude": 0.14
+        },
+        "led": {
+          "color": "#ffc079",
+          "steadyIntensity": 0.82,
+          "size": [
+            0.018,
+            0.012,
+            0.012
+          ]
+        },
+        "engineering": {
+          "version": 1,
+          "seed": 41727,
+          "accent": {
+            "resting": "#9d632f",
+            "hover": "#ffbe63",
+            "selected": "#ffd18a",
+            "previewWeight": 0.85,
+            "baseEmission": 0.035,
+            "activeEmission": 1,
+            "transitionMs": 150
+          },
+          "activity": {
+            "resting": 0.12,
+            "peak": 1,
+            "steady": 0.5,
+            "pulseMs": [
+              120,
+              180
+            ],
+            "eventMs": [
+              80,
+              180
+            ],
+            "maxPulses": 3,
+            "ambientTraceSeconds": [
+              8,
+              12
+            ],
+            "selectedTraceQuietSeconds": 2.8
+          },
+          "cameraTransitionMs": 420,
+          "poseTransitionMs": 280,
+          "rendering": {
+            "ambientFps": 30,
+            "interactionFps": 60,
+            "mobilePixels": 650000,
+            "desktopPixels": 1500000,
+            "probeSeconds": 2
+          }
+        }
+      },
+      "requiredIds": [
+        "GN_SPECIMEN_ROOT",
+        "GN_RACK_FRAME",
+        "GN_RACK_PANEL",
+        "GN_RACK_DOOR",
+        "GN_RACK_SERVERS",
+        "GN_RACK_TRAY",
+        "GN_RACK_POWER"
+      ]
+    },
+    "cooling": {
+      "kind": "cooling",
+      "label": "Illustrative cooling assembly",
+      "system": "cooling",
+      "profile": {
+        "camera": [
+          3.4,
+          2.7,
+          4
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12,
+        "framing": "projected-geometry",
+        "background": "#080808",
+        "exposure": 1.15,
+        "colorSpace": "srgb",
+        "toneMapping": "aces-filmic",
+        "surfaces": {
+          "version": 1,
+          "pipeline": "pbr-semantic-v2",
+          "uvSet": 0,
+          "maxTextureBytes": 3145728
+        },
+        "lighting": {
+          "hemisphere": {
+            "sky": "#eeeeee",
+            "ground": "#292929",
+            "intensity": 0.4
+          },
+          "directional": [
+            {
+              "position": [
+                -8,
+                15,
+                8
+              ],
+              "color": "#fffaf3",
+              "intensity": 2
+            },
+            {
+              "position": [
+                7,
+                8,
+                -7
+              ],
+              "color": "#f1f1f1",
+              "intensity": 0.9
+            },
+            {
+              "position": [
+                0,
+                5,
+                12
+              ],
+              "color": "#ededed",
+              "intensity": 0.35
+            }
+          ],
+          "environment": {
+            "preset": "industrial-softbox-v2",
+            "resolution": 128,
+            "intensity": 1,
+            "rotationY": 0
+          }
+        },
+        "motion": {
+          "fanRadiansPerSecond": 1.6,
+          "fanPhaseOffsets": [
+            0,
+            1.57,
+            3.14,
+            4.71
+          ],
+          "ledPulseRadiansPerSecond": 1.8,
+          "ledPulseAmplitude": 0.14
+        },
+        "led": {
+          "color": "#ffc079",
+          "steadyIntensity": 0.82,
+          "size": [
+            0.018,
+            0.012,
+            0.012
+          ]
+        },
+        "engineering": {
+          "version": 1,
+          "seed": 41727,
+          "accent": {
+            "resting": "#9d632f",
+            "hover": "#ffbe63",
+            "selected": "#ffd18a",
+            "previewWeight": 0.85,
+            "baseEmission": 0.035,
+            "activeEmission": 1,
+            "transitionMs": 150
+          },
+          "activity": {
+            "resting": 0.12,
+            "peak": 1,
+            "steady": 0.5,
+            "pulseMs": [
+              120,
+              180
+            ],
+            "eventMs": [
+              80,
+              180
+            ],
+            "maxPulses": 3,
+            "ambientTraceSeconds": [
+              8,
+              12
+            ],
+            "selectedTraceQuietSeconds": 2.8
+          },
+          "cameraTransitionMs": 420,
+          "poseTransitionMs": 280,
+          "rendering": {
+            "ambientFps": 30,
+            "interactionFps": 60,
+            "mobilePixels": 650000,
+            "desktopPixels": 1500000,
+            "probeSeconds": 2
+          }
+        }
+      },
+      "requiredIds": [
+        "GN_SPECIMEN_ROOT",
+        "GN_COOLER_FRAME",
+        "GN_COOLER_PANEL",
+        "GN_COOLER_COIL",
+        "GN_COOLER_MANIFOLD",
+        "GN_COOLER_FAN",
+        "GN_COOLER_GUARD"
+      ]
+    }
+  },
+  "files": [
+    {
+      "file": "facility.glb",
+      "bytes": 2333504,
+      "sha256": "23621828e4bbb31d4299a0e3daa1ca693d6a127c66a4e6a8a4d8c212f4c4d723"
+    },
+    {
+      "file": "poster-desktop.webp",
+      "bytes": 42574,
+      "sha256": "3cc5ffa8ac95101b8c8b5d48f649c1fdda9e40cb1915303b0b2456c031e90ad1"
+    },
+    {
+      "file": "poster-mobile.webp",
+      "bytes": 14266,
+      "sha256": "4d5f7a23d303613f7c010f0391b8df0e3a91cfb37cc338304ea590a72191e7a6"
+    },
+    {
+      "file": "rack.glb",
+      "bytes": 762700,
+      "sha256": "f2d2b2ce3ead78dbcbe332e351b9b8af7c2a0dd04080917c37c53b85a00cfb1e"
+    },
+    {
+      "file": "rack-closed.webp",
+      "bytes": 6700,
+      "sha256": "40ee451e4a290285133c6104a476fd7c3702afd9688d630be25652e5fb5bbd0d"
+    },
+    {
+      "file": "rack-cutaway.webp",
+      "bytes": 13822,
+      "sha256": "5b8a3b6138cd9bf1d01656ca2e47702b6275ef1125cc56404db7de3bbdb3600b"
+    },
+    {
+      "file": "cooling.glb",
+      "bytes": 379796,
+      "sha256": "36d432e515da3aab8a4de67dab83424c5c2995b154f4792753e2fe8f6e338d69"
+    },
+    {
+      "file": "cooling-closed.webp",
+      "bytes": 15030,
+      "sha256": "2048e91c7dee70d83093748e5f9d57f804eb7ccca2dd068de8301e46725f9cef"
+    },
+    {
+      "file": "cooling-cutaway.webp",
+      "bytes": 16106,
+      "sha256": "039f40bcd6351c411730436adb82bf49b9038473196f06b7b522a195f824aea4"
+    }
+  ],
+  "source": {
+    "blender": "5.2.2 LTS",
+    "masterSha256": "a2d08c23a705ba72992c755cb42c1437187c047a4de15e8c8ab51d954d7eef39",
+    "generatorSha256": "c43ce03b28af5568bedf648f65dec05e6ba5b862a89211e583ebbcc8998382f2",
+    "modules": {
+      "air_circuit.py": "cc0b9ab35cc4d0ae93374146c4efcb1897741a89a3021baffda58a31ef89586a",
+      "engineering_metadata.py": "191f3c77a5cd2b267ff591cd179865a5cad6bf3a808bb40c6d8299bb39352ab8",
+      "export.py": "21ccebe818e2c4b7a540466c382554890e10af4c22234c62e028a1254b620c0b",
+      "generate.py": "c43ce03b28af5568bedf648f65dec05e6ba5b862a89211e583ebbcc8998382f2",
+      "rack_kit.py": "bb5a7c8dda30ddde24a1854e14620f43722f07d919f33088ec350c21279814fb",
+      "scene.json": "2266049789043c59275963612480994204f65dd002a385dbff0d229fd68431bb",
+      "service_routes.py": "126a0d401b8778f145a6a5b37cc894c7a962256aa590518c8ac1856adbe70efa",
+      "specimens.py": "09d92a6249eca5202b13bc4055c978b9b55544388b65e48bd9215efd1d78faf7",
+      "surface_bake.py": "7717bc8e95fa01db16e7eec82adf8509ea82c7b73e51a2857e0723b2756fd19b"
+    },
+    "masters": {
+      "cooling-specimen.blend": "6a4d053c6db29f9e2bce7765a190e34340ca7297d1c76d0e97c7c0bc918fe235",
+      "rack-specimen.blend": "9b66adc80ed0b8a2b49c503cb7814eab608d8c9ec38cc414725a4b70052b55ec"
+    }
+  }
+}

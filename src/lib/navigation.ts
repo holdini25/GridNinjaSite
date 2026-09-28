@@ -1,7 +1,8 @@
 export function isNavPathActive(pathname: string, href: string) {
-  return href === "/"
-    ? pathname === href
-    : pathname === href || pathname.startsWith(`${href}/`)
+  const path = href.split(/[?#]/, 1)[0]
+  return path === "/"
+    ? pathname === path
+    : pathname === path || pathname.startsWith(`${path}/`)
 }
 
 export function getMostSpecificActiveHref(

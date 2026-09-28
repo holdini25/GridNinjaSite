@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "facility-authoring.v5",
+  "candidate": "facility-v5",
+  "scope": "Illustrative construction; no manufacturer identity, rating, capacity calculation or operational telemetry",
+  "toolchain": {
+    "blender": "5.2.2 LTS",
+    "buildHash": "d13f752e3b9c",
+    "platform": "macOS arm64",
+    "units": "metres",
+    "exportAxis": "glTF Y-up",
+    "format": "GLB 2.0",
+    "compressionExtensions": [],
+    "dependencies": "Blender bundled Python and glTF exporter only"
+  },
+  "sourceModules": {
+    "generate.py": "b8f54779fb98de2c0a3b1dc8320ad1a4c4c70e51746d81bbc2cd2a7a6910072f",
+    "export.py": "a40a538cabfd26a15f6349876a8e9ddea87869a9f6513b62c627a35b0ac4c982",
+    "surface_bake.py": "7717bc8e95fa01db16e7eec82adf8509ea82c7b73e51a2857e0723b2756fd19b",
+    "service_routes.py": "98471c4feea0ed1733943a7a3f0aeb000fedec907e24d89fefa6e5886980aa78",
+    "engineering_metadata.py": "d2d4980de9e7deebddd115159bafb9a1d59c85d9189099f52a16d79aa654377f",
+    "specimens.py": "883531de8bab135a649174ccabc61c5cb7c6181e03392a905816ca9f6d8fad6d",
+    "rack_kit.py": "b69d8b6c7fc907f4174106d6ca76cacbfbfe5bfc3d4be41404703618cf7cdd81",
+    "scene.json": "2266049789043c59275963612480994204f65dd002a385dbff0d229fd68431bb"
+  },
+  "masters": {
+    "overview": {
+      "source": "assets-source/facility/facility-master.blend",
+      "sha256": "9f7edf3c44312300350c52a9b9003cb6facc9c5d0d51630b2ce3ed28e9880f63"
+    },
+    "rack": {
+      "source": "assets-source/facility/rack-specimen.blend",
+      "sha256": "765a1bfb0ec16dfcfafab9119d16c8a07def9f1d488135e3cd5b2186281e5bf5"
+    },
+    "cooling": {
+      "source": "assets-source/facility/cooling-specimen.blend",
+      "sha256": "9841e8bcec45e9d96d1dd7376f23fe6bff4d24a2c01d8519eadb3dec26010a40"
+    }
+  },
+  "embeddedImages": [
+    {
+      "name": "surface-orm",
+      "bytes": 91778,
+      "sha256": "958eff6efc966d4d3efef2bec4cc94c7a109bfd707749bd148468e490702b2a1"
+    },
+    {
+      "name": "surface-color",
+      "bytes": 1638,
+      "sha256": "3c92356970b94c1523c6aeb92c4a1b110ae013471cf697ecb4ad796ad765438a"
+    },
+    {
+      "name": "surface-normal",
+      "bytes": 81825,
+      "sha256": "fb614bfeb9027e8161993e2e303e46579452164d431c8a7f75fc13579b824a9f"
+    }
+  ],
+  "construction": {
+    "sharedKit": "rack_kit.py enclosure and front_module; .78x1.24x2.55m body envelope",
+    "overviewLod": "outer door skin omitted; tiny recess/gasket backs planar; closed thin walls, separated modules, rails and levers retained",
+    "specimenLod": "real separate MASK door, hollow structure and internal tray assemblies",
+    "grilleTileMetres": [
+      0.4,
+      0.8
+    ],
+    "grillePitchMetres": [
+      0.028571428571428574,
+      0.02666666666666667
+    ],
+    "paletteMarks": "GN branding only; inventory identities in metadata and HTML",
+    "serviceTrayTravelMetres": 0.18,
+    "tubeFrames": "minimal-rotation parallel transport; unchanged authored centerlines"
+  },
+  "texturePipeline": {
+    "normal": [
+      512,
+      512
+    ],
+    "orm": [
+      512,
+      512
+    ],
+    "color": [
+      256,
+      256
+    ],
+    "normalMappedRole": "grille",
+    "normalScale": 0.35,
+    "uvChannel": 0,
+    "atlasGutterPixels": 8,
+    "compression": "lossless IDAT deflate9; decoded scanlines verified identical",
+    "selectiveTangents": "actual exported triangle UV derivatives plus retained normals; validator checks orthonormal basis and handedness"
+  },
+  "references": [
+    {
+      "url": "https://iportal.se.com/Contents/docs/UPS-JKUR-9M3JGG_R0_EN.PDF",
+      "use": "construction vocabulary: separate perforated doors, mounting structure, leveling hardware"
+    },
+    {
+      "url": "https://www.se.com/us/en/product/AR7050AB2/netshelter-sx-advanced-42u-750mm-wide-perforated-curved-door-black/",
+      "use": "separate perforated black front-door component"
+    },
+    {
+      "url": "https://www.vertiv.com/globalassets/shared/sl-10061_47274_00.pdf",
+      "use": "construction vocabulary: fin-and-tube coil, headers, guards and frame"
+    },
+    {
+      "url": "https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html",
+      "use": "standard material encoding"
+    }
+  ],
+  "validation": "See validation.json, rack-validation.json, cooling-validation.json; browser appearance is a separate release gate."
+}

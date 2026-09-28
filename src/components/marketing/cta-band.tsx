@@ -21,7 +21,7 @@ export function CtaBand({
 }) {
   return (
     <div className="gn-panel px-6 py-7 sm:px-8 sm:py-8 lg:flex lg:items-end lg:justify-between lg:gap-10">
-      <div className="max-w-2xl">
+      <div className="min-w-0 max-w-2xl [overflow-wrap:anywhere]">
         <p className="gn-eyebrow">{eyebrow}</p>
         <h2 className="mt-4 text-balance text-[2.05rem] leading-[1.08] font-medium text-foreground sm:text-[2.45rem] sm:leading-[1.06] lg:text-[2.65rem]">
           {headline}
@@ -30,8 +30,8 @@ export function CtaBand({
           {body}
         </p>
       </div>
-      <div className="mt-8 lg:mt-0">
-        <Button asChild size="lg" className="group">
+      <div className="mt-8 min-w-0 lg:mt-0">
+        <Button asChild size="lg" className="group h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
           <Link prefetch={false} href={href} data-gn-event={eventName}>
             {label}
             <ArrowRightIcon className="transition-transform group-hover:translate-x-0.5" />

@@ -33,8 +33,10 @@ export function observeClientHealth(page: Page) {
   })
   page.on("requestfailed", (request: Request) => {
     const errorText = request.failure()?.errorText ?? "unknown error"
+    // WebKit spells native-navigation cancellation "cancelled". The RC04 trace
+    // confirms these are outgoing-page imports, not destination load failures.
     const navigationCancelledRequest =
-      errorText === "net::ERR_ABORTED" || errorText === "NS_BINDING_ABORTED"
+      errorText === "net::ERR_ABORTED" || errorText === "NS_BINDING_ABORTED" || errorText === "cancelled"
 
     if (
       checkedResourceTypes.has(request.resourceType()) &&

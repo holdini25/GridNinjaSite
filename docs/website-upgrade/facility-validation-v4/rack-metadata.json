@@ -1,0 +1,361 @@
+{
+  "schemaVersion": "facility-specimen.v1",
+  "kind": "rack",
+  "system": "workloads",
+  "parts": [
+    {
+      "id": "GN_RACK_FRAME",
+      "index": 0,
+      "label": "Load-bearing frame",
+      "role": "structural_frame",
+      "objectId": "GN_RACK_FRAME",
+      "connections": [
+        "GN_RACK_PANEL",
+        "GN_RACK_DOOR",
+        "GN_RACK_SERVERS",
+        "GN_RACK_TRAY",
+        "GN_RACK_POWER"
+      ],
+      "bounds": {
+        "min": [
+          -0.56,
+          0.0,
+          -0.72
+        ],
+        "max": [
+          0.56,
+          2.1525,
+          0.72
+        ]
+      }
+    },
+    {
+      "id": "GN_RACK_PANEL",
+      "index": 1,
+      "label": "Removable side panel",
+      "role": "removable_panel",
+      "objectId": "GN_RACK_PANEL",
+      "connections": [
+        "GN_RACK_FRAME"
+      ],
+      "bounds": {
+        "min": [
+          0.403,
+          0.18,
+          -0.55
+        ],
+        "max": [
+          0.431,
+          2.12,
+          0.55
+        ]
+      }
+    },
+    {
+      "id": "GN_RACK_DOOR",
+      "index": 2,
+      "label": "Perforated front door",
+      "role": "front_door",
+      "objectId": "GN_RACK_DOOR",
+      "connections": [
+        "GN_RACK_FRAME"
+      ],
+      "bounds": {
+        "min": [
+          -0.39,
+          0.192,
+          0.557
+        ],
+        "max": [
+          0.39,
+          2.108,
+          0.604
+        ]
+      }
+    },
+    {
+      "id": "GN_RACK_SERVERS",
+      "index": 3,
+      "label": "Server tray bank",
+      "role": "server_trays",
+      "objectId": "GN_RACK_SERVERS",
+      "connections": [
+        "GN_RACK_FRAME",
+        "GN_RACK_POWER"
+      ],
+      "bounds": {
+        "min": [
+          -0.325,
+          0.251,
+          -0.36
+        ],
+        "max": [
+          0.325,
+          1.913,
+          0.56
+        ]
+      }
+    },
+    {
+      "id": "GN_RACK_TRAY",
+      "index": 4,
+      "label": "Representative service tray",
+      "role": "service_tray",
+      "objectId": "GN_RACK_TRAY",
+      "connections": [
+        "GN_RACK_FRAME",
+        "GN_RACK_POWER"
+      ],
+      "bounds": {
+        "min": [
+          -0.325,
+          1.099,
+          -0.36
+        ],
+        "max": [
+          0.325,
+          1.277,
+          0.56
+        ]
+      }
+    },
+    {
+      "id": "GN_RACK_POWER",
+      "index": 5,
+      "label": "Single-feed distribution and cable management",
+      "role": "illustrative_electrical",
+      "objectId": "GN_RACK_POWER",
+      "connections": [
+        "GN_RACK_SERVERS",
+        "GN_RACK_TRAY"
+      ],
+      "bounds": {
+        "min": [
+          0.195,
+          0.28,
+          -0.5025
+        ],
+        "max": [
+          0.365,
+          2.177,
+          -0.314
+        ]
+      }
+    }
+  ],
+  "poses": {
+    "closed": {
+      "camera": {
+        "camera": [
+          3.2,
+          2.7,
+          4.0
+        ],
+        "target": [
+          0,
+          1.1,
+          0
+        ],
+        "padding": 1.12
+      },
+      "transforms": [
+        {
+          "id": "GN_RACK_FRAME",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_PANEL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_DOOR",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_SERVERS",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_TRAY",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_POWER",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        }
+      ]
+    },
+    "cutaway": {
+      "camera": {
+        "camera": [
+          3.3,
+          2.5,
+          4.0
+        ],
+        "target": [
+          0,
+          1.08,
+          0
+        ],
+        "padding": 1.12
+      },
+      "transforms": [
+        {
+          "id": "GN_RACK_FRAME",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_PANEL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": false
+        },
+        {
+          "id": "GN_RACK_DOOR",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": false
+        },
+        {
+          "id": "GN_RACK_SERVERS",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_TRAY",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_POWER",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        }
+      ]
+    },
+    "service": {
+      "camera": {
+        "camera": [
+          3.0,
+          4.8,
+          3.8
+        ],
+        "target": [
+          0,
+          1.1,
+          0.14
+        ],
+        "padding": 1.12
+      },
+      "transforms": [
+        {
+          "id": "GN_RACK_FRAME",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_PANEL",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": false
+        },
+        {
+          "id": "GN_RACK_DOOR",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": false
+        },
+        {
+          "id": "GN_RACK_SERVERS",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_TRAY",
+          "position": [
+            0,
+            0,
+            0.18
+          ],
+          "visible": true
+        },
+        {
+          "id": "GN_RACK_POWER",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "visible": true
+        }
+      ]
+    }
+  }
+}

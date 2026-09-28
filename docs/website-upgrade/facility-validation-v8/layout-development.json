@@ -1,0 +1,1836 @@
+{
+  "baseURL": "http://127.0.0.1:3001",
+  "method": "Chromium desktop viewports; reduced motion plus Save-Data; no 3D activation",
+  "widths": [
+    320,
+    390,
+    768,
+    1366,
+    1920
+  ],
+  "pages": [
+    {
+      "name": "home",
+      "width": 320,
+      "viewport": {
+        "width": 320,
+        "height": 768
+      },
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 70,
+        "right": 320,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 16.859375,
+        "y": 158.5625,
+        "width": 286.28125,
+        "height": 117.234375,
+        "right": 303.140625,
+        "bottom": 275.796875
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 95.5,
+            "y": 11.296875,
+            "width": 157.046875,
+            "height": 46.390625,
+            "right": 252.546875,
+            "bottom": 57.6875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-hero#scope",
+          "rect": {
+            "x": 16.859375,
+            "y": 499.265625,
+            "width": 204.265625,
+            "height": 50.609375,
+            "right": 221.125,
+            "bottom": 549.875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo?scenario=b&version=1.0.0&perspective=business#decision-brief",
+          "rect": {
+            "x": 16.859375,
+            "y": 566.734375,
+            "width": 247.375,
+            "height": 50.609375,
+            "right": 264.234375,
+            "bottom": 617.34375
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-final#scope",
+          "rect": {
+            "x": 43.15625,
+            "y": 8148,
+            "width": 227.4375,
+            "height": 50.609375,
+            "right": 270.59375,
+            "bottom": 8198.609375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 16.859375,
+            "y": 8871.890625,
+            "width": 188.375,
+            "height": 46.390625,
+            "right": 205.234375,
+            "bottom": 8918.28125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": {
+        "x": 16.859375,
+        "y": 780.21875,
+        "width": 286.28125,
+        "height": 214.703125,
+        "right": 303.140625,
+        "bottom": 994.921875
+      },
+      "inspection": {
+        "x": 16.859375,
+        "y": 726.96875,
+        "width": 286.28125,
+        "height": 875.546875,
+        "right": 303.140625,
+        "bottom": 1602.515625
+      },
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "demo",
+      "width": 320,
+      "viewport": {
+        "width": 320,
+        "height": 768
+      },
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 70,
+        "right": 320,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 16.859375,
+        "y": 156.703125,
+        "width": 286.28125,
+        "height": 237.1875,
+        "right": 303.140625,
+        "bottom": 393.890625
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 95.5,
+            "y": 11.296875,
+            "width": 157.046875,
+            "height": 46.390625,
+            "right": 252.546875,
+            "bottom": 57.6875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=demo-final#scope",
+          "rect": {
+            "x": 43.15625,
+            "y": 3873.03125,
+            "width": 227.4375,
+            "height": 50.609375,
+            "right": 270.59375,
+            "bottom": 3923.640625
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 16.859375,
+            "y": 5977.71875,
+            "width": 188.375,
+            "height": 46.390625,
+            "right": 205.234375,
+            "bottom": 6024.109375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": {
+        "x": 16.859375,
+        "y": 1079.03125,
+        "width": 286.28125,
+        "height": 1004.5625,
+        "right": 303.140625,
+        "bottom": 2083.59375
+      },
+      "stage": {
+        "x": 16.859375,
+        "y": 2162.140625,
+        "width": 286.28125,
+        "height": 214.703125,
+        "right": 303.140625,
+        "bottom": 2376.84375
+      },
+      "inspection": {
+        "x": 16.859375,
+        "y": 2108.890625,
+        "width": 286.28125,
+        "height": 878.125,
+        "right": 303.140625,
+        "bottom": 2987.015625
+      },
+      "summaryPrecedesInspection": true,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "assessment",
+      "width": 320,
+      "viewport": {
+        "width": 320,
+        "height": 768
+      },
+      "documentWidth": 320,
+      "bodyWidth": 320,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 70,
+        "right": 320,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 16.859375,
+        "y": 167,
+        "width": 286.28125,
+        "height": 79.6875,
+        "right": 303.140625,
+        "bottom": 246.6875
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 95.5,
+            "y": 11.296875,
+            "width": 157.046875,
+            "height": 46.390625,
+            "right": 252.546875,
+            "bottom": 57.6875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "#scope",
+          "rect": {
+            "x": 16.859375,
+            "y": 440.640625,
+            "width": 204.265625,
+            "height": 50.609375,
+            "right": 221.125,
+            "bottom": 491.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo#decision-brief",
+          "rect": {
+            "x": 16.859375,
+            "y": 508.109375,
+            "width": 247.375,
+            "height": 50.609375,
+            "right": 264.234375,
+            "bottom": 558.71875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 16.859375,
+            "y": 10010.046875,
+            "width": 188.375,
+            "height": 46.390625,
+            "right": 205.234375,
+            "bottom": 10056.4375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": null,
+      "inspection": null,
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": [],
+      "scopeAnchor": {
+        "scrollY": 714,
+        "hash": "#scope",
+        "targetTop": 86.0625,
+        "headingTop": 119.78125,
+        "headerBottom": 70,
+        "headingUnobscured": true,
+        "scrollMarginTop": "86px"
+      }
+    },
+    {
+      "name": "home",
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 768
+      },
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 70,
+        "right": 390,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 17.109375,
+        "y": 159.8125,
+        "width": 355.78125,
+        "height": 118.96875,
+        "right": 372.890625,
+        "bottom": 278.78125
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 162.546875,
+            "y": 10.96875,
+            "width": 159.015625,
+            "height": 47.0625,
+            "right": 321.5625,
+            "bottom": 58.03125
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-hero#scope",
+          "rect": {
+            "x": 17.109375,
+            "y": 475.59375,
+            "width": 206.859375,
+            "height": 51.34375,
+            "right": 223.96875,
+            "bottom": 526.9375
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo?scenario=b&version=1.0.0&perspective=business#decision-brief",
+          "rect": {
+            "x": 17.109375,
+            "y": 544.046875,
+            "width": 250.46875,
+            "height": 51.34375,
+            "right": 267.578125,
+            "bottom": 595.390625
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-final#scope",
+          "rect": {
+            "x": 43.78125,
+            "y": 7538.53125,
+            "width": 230.375,
+            "height": 51.34375,
+            "right": 274.15625,
+            "bottom": 7589.875
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 17.109375,
+            "y": 8189.96875,
+            "width": 190.6875,
+            "height": 47.0625,
+            "right": 207.796875,
+            "bottom": 8237.03125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": {
+        "x": 17.109375,
+        "y": 742.203125,
+        "width": 355.78125,
+        "height": 266.828125,
+        "right": 372.890625,
+        "bottom": 1009.03125
+      },
+      "inspection": {
+        "x": 17.109375,
+        "y": 706.625,
+        "width": 355.78125,
+        "height": 870.265625,
+        "right": 372.890625,
+        "bottom": 1576.890625
+      },
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "demo",
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 768
+      },
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 70,
+        "right": 390,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 17.109375,
+        "y": 157.953125,
+        "width": 355.78125,
+        "height": 144.421875,
+        "right": 372.890625,
+        "bottom": 302.375
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 162.546875,
+            "y": 10.96875,
+            "width": 159.015625,
+            "height": 47.0625,
+            "right": 321.5625,
+            "bottom": 58.03125
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=demo-final#scope",
+          "rect": {
+            "x": 43.78125,
+            "y": 3464,
+            "width": 230.375,
+            "height": 51.34375,
+            "right": 274.15625,
+            "bottom": 3515.34375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 17.109375,
+            "y": 5652.171875,
+            "width": 190.6875,
+            "height": 47.0625,
+            "right": 207.796875,
+            "bottom": 5699.234375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": {
+        "x": 17.109375,
+        "y": 997.4375,
+        "width": 355.78125,
+        "height": 869.078125,
+        "right": 372.890625,
+        "bottom": 1866.515625
+      },
+      "stage": {
+        "x": 17.109375,
+        "y": 1927.765625,
+        "width": 355.78125,
+        "height": 266.828125,
+        "right": 372.890625,
+        "bottom": 2194.59375
+      },
+      "inspection": {
+        "x": 17.109375,
+        "y": 1892.1875,
+        "width": 355.78125,
+        "height": 871.015625,
+        "right": 372.890625,
+        "bottom": 2763.203125
+      },
+      "summaryPrecedesInspection": true,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "assessment",
+      "width": 390,
+      "viewport": {
+        "width": 390,
+        "height": 768
+      },
+      "documentWidth": 390,
+      "bodyWidth": 390,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 70,
+        "right": 390,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 17.109375,
+        "y": 146.984375,
+        "width": 355.78125,
+        "height": 80.875,
+        "right": 372.890625,
+        "bottom": 227.859375
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 162.546875,
+            "y": 10.96875,
+            "width": 159.015625,
+            "height": 47.0625,
+            "right": 321.5625,
+            "bottom": 58.03125
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "#scope",
+          "rect": {
+            "x": 17.109375,
+            "y": 394.71875,
+            "width": 206.859375,
+            "height": 51.34375,
+            "right": 223.96875,
+            "bottom": 446.0625
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo#decision-brief",
+          "rect": {
+            "x": 17.109375,
+            "y": 463.171875,
+            "width": 250.46875,
+            "height": 51.34375,
+            "right": 267.578125,
+            "bottom": 514.515625
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 17.109375,
+            "y": 9016.796875,
+            "width": 190.6875,
+            "height": 47.0625,
+            "right": 207.796875,
+            "bottom": 9063.859375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": null,
+      "inspection": null,
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": [],
+      "scopeAnchor": {
+        "scrollY": 643,
+        "hash": "#scope",
+        "targetTop": 86.4375,
+        "headingTop": 120.65625,
+        "headerBottom": 70,
+        "headingUnobscured": true,
+        "scrollMarginTop": "86px"
+      }
+    },
+    {
+      "name": "home",
+      "width": 768,
+      "viewport": {
+        "width": 768,
+        "height": 768
+      },
+      "documentWidth": 768,
+      "bodyWidth": 768,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 70,
+        "right": 768,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 27,
+        "y": 142,
+        "width": 571.796875,
+        "height": 111.21875,
+        "right": 598.796875,
+        "bottom": 253.21875
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 520.5625,
+            "y": 9.75,
+            "width": 166.4375,
+            "height": 49.5,
+            "right": 687,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-hero#scope",
+          "rect": {
+            "x": 27,
+            "y": 410.71875,
+            "width": 217.046875,
+            "height": 54,
+            "right": 244.046875,
+            "bottom": 464.71875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo?scenario=b&version=1.0.0&perspective=business#decision-brief",
+          "rect": {
+            "x": 262.046875,
+            "y": 410.71875,
+            "width": 262.671875,
+            "height": 54,
+            "right": 524.71875,
+            "bottom": 464.71875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-final#scope",
+          "rect": {
+            "x": 64,
+            "y": 6244.71875,
+            "width": 241.796875,
+            "height": 54,
+            "right": 305.796875,
+            "bottom": 6298.71875
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 27,
+            "y": 6880.3125,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 227.171875,
+            "bottom": 6929.8125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": {
+        "x": 27,
+        "y": 596.625,
+        "width": 714,
+        "height": 420,
+        "right": 741,
+        "bottom": 1016.625
+      },
+      "inspection": {
+        "x": 27,
+        "y": 559.21875,
+        "width": 714,
+        "height": 903.125,
+        "right": 741,
+        "bottom": 1462.34375
+      },
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "demo",
+      "width": 768,
+      "viewport": {
+        "width": 768,
+        "height": 768
+      },
+      "documentWidth": 768,
+      "bodyWidth": 768,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 70,
+        "right": 768,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 27,
+        "y": 180.53125,
+        "width": 714,
+        "height": 135,
+        "right": 741,
+        "bottom": 315.53125
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 520.5625,
+            "y": 9.75,
+            "width": 166.4375,
+            "height": 49.5,
+            "right": 687,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=demo-final#scope",
+          "rect": {
+            "x": 64,
+            "y": 2910.140625,
+            "width": 241.796875,
+            "height": 54,
+            "right": 305.796875,
+            "bottom": 2964.140625
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 27,
+            "y": 5138.234375,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 227.171875,
+            "bottom": 5187.734375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": {
+        "x": 27,
+        "y": 740.53125,
+        "width": 714,
+        "height": 643.984375,
+        "right": 741,
+        "bottom": 1384.515625
+      },
+      "stage": {
+        "x": 27,
+        "y": 1448.921875,
+        "width": 714,
+        "height": 420,
+        "right": 741,
+        "bottom": 1868.921875
+      },
+      "inspection": {
+        "x": 27,
+        "y": 1411.515625,
+        "width": 714,
+        "height": 873.125,
+        "right": 741,
+        "bottom": 2284.640625
+      },
+      "summaryPrecedesInspection": true,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "assessment",
+      "width": 768,
+      "viewport": {
+        "width": 768,
+        "height": 768
+      },
+      "documentWidth": 768,
+      "bodyWidth": 768,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 768,
+        "height": 70,
+        "right": 768,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 27,
+        "y": 169,
+        "width": 639.078125,
+        "height": 113.375,
+        "right": 666.078125,
+        "bottom": 282.375
+      },
+      "ctas": [
+        {
+          "label": "Scope assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 520.5625,
+            "y": 9.75,
+            "width": 166.4375,
+            "height": 49.5,
+            "right": 687,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "#scope",
+          "rect": {
+            "x": 27,
+            "y": 439.875,
+            "width": 217.046875,
+            "height": 54,
+            "right": 244.046875,
+            "bottom": 493.875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo#decision-brief",
+          "rect": {
+            "x": 262.046875,
+            "y": 439.875,
+            "width": 262.671875,
+            "height": 54,
+            "right": 524.71875,
+            "bottom": 493.875
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 27,
+            "y": 7675.859375,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 227.171875,
+            "bottom": 7725.359375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": null,
+      "inspection": null,
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": [],
+      "scopeAnchor": {
+        "scrollY": 652,
+        "hash": "#scope",
+        "targetTop": 85.875,
+        "headingTop": 126.375,
+        "headerBottom": 70,
+        "headingUnobscured": true,
+        "scrollMarginTop": "86px"
+      }
+    },
+    {
+      "name": "home",
+      "width": 1366,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "bodyWidth": 1366,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1366,
+        "height": 70,
+        "right": 1366,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 36,
+        "y": 173.5,
+        "width": 553.515625,
+        "height": 194.625,
+        "right": 589.515625,
+        "bottom": 368.125
+      },
+      "ctas": [
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 1141.828125,
+            "y": 9.75,
+            "width": 197.171875,
+            "height": 49.5,
+            "right": 1339,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-hero#scope",
+          "rect": {
+            "x": 36,
+            "y": 561.625,
+            "width": 217.046875,
+            "height": 54,
+            "right": 253.046875,
+            "bottom": 615.625
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo?scenario=b&version=1.0.0&perspective=business#decision-brief",
+          "rect": {
+            "x": 271.046875,
+            "y": 561.625,
+            "width": 262.671875,
+            "height": 54,
+            "right": 533.71875,
+            "bottom": 615.625
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-final#scope",
+          "rect": {
+            "x": 1051.203125,
+            "y": 4911.3125,
+            "width": 241.796875,
+            "height": 54,
+            "right": 1293,
+            "bottom": 4965.3125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 36,
+            "y": 5582.90625,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 236.171875,
+            "bottom": 5632.40625
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": {
+        "x": 625.515625,
+        "y": 143.40625,
+        "width": 704.484375,
+        "height": 414.390625,
+        "right": 1330,
+        "bottom": 557.796875
+      },
+      "inspection": {
+        "x": 625.515625,
+        "y": 106,
+        "width": 704.484375,
+        "height": 905.71875,
+        "right": 1330,
+        "bottom": 1011.71875
+      },
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "demo",
+      "width": 1366,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "bodyWidth": 1366,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1366,
+        "height": 70,
+        "right": 1366,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 36,
+        "y": 180.53125,
+        "width": 864,
+        "height": 135,
+        "right": 900,
+        "bottom": 315.53125
+      },
+      "ctas": [
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 1141.828125,
+            "y": 9.75,
+            "width": 197.171875,
+            "height": 49.5,
+            "right": 1339,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=demo-final#scope",
+          "rect": {
+            "x": 1051.203125,
+            "y": 2165.359375,
+            "width": 241.796875,
+            "height": 54,
+            "right": 1293,
+            "bottom": 2219.359375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 36,
+            "y": 3904.953125,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 236.171875,
+            "bottom": 3954.453125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": {
+        "x": 36,
+        "y": 740.53125,
+        "width": 538.46875,
+        "height": 760.984375,
+        "right": 574.46875,
+        "bottom": 1501.515625
+      },
+      "stage": {
+        "x": 601.46875,
+        "y": 777.9375,
+        "width": 728.53125,
+        "height": 428.546875,
+        "right": 1330,
+        "bottom": 1206.484375
+      },
+      "inspection": {
+        "x": 601.46875,
+        "y": 740.53125,
+        "width": 728.53125,
+        "height": 881.671875,
+        "right": 1330,
+        "bottom": 1622.203125
+      },
+      "summaryPrecedesInspection": true,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "assessment",
+      "width": 1366,
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "documentWidth": 1366,
+      "bodyWidth": 1366,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1366,
+        "height": 70,
+        "right": 1366,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 179,
+        "y": 178,
+        "width": 745.59375,
+        "height": 132.28125,
+        "right": 924.59375,
+        "bottom": 310.28125
+      },
+      "ctas": [
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 1141.828125,
+            "y": 9.75,
+            "width": 197.171875,
+            "height": 49.5,
+            "right": 1339,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "#scope",
+          "rect": {
+            "x": 179,
+            "y": 431.78125,
+            "width": 217.046875,
+            "height": 54,
+            "right": 396.046875,
+            "bottom": 485.78125
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo#decision-brief",
+          "rect": {
+            "x": 414.046875,
+            "y": 431.78125,
+            "width": 262.671875,
+            "height": 54,
+            "right": 676.71875,
+            "bottom": 485.78125
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 36,
+            "y": 6704.34375,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 236.171875,
+            "bottom": 6753.84375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": null,
+      "inspection": null,
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": [],
+      "scopeAnchor": {
+        "scrollY": 653,
+        "hash": "#scope",
+        "targetTop": 85.78125,
+        "headingTop": 126.28125,
+        "headerBottom": 70,
+        "headingUnobscured": true,
+        "scrollMarginTop": "86px"
+      }
+    },
+    {
+      "name": "home",
+      "width": 1920,
+      "viewport": {
+        "width": 1920,
+        "height": 768
+      },
+      "documentWidth": 1920,
+      "bodyWidth": 1920,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 70,
+        "right": 1920,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 312,
+        "y": 173.5,
+        "width": 554.390625,
+        "height": 194.625,
+        "right": 866.390625,
+        "bottom": 368.125
+      },
+      "ctas": [
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 1482.828125,
+            "y": 9.75,
+            "width": 197.171875,
+            "height": 49.5,
+            "right": 1680,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-hero#scope",
+          "rect": {
+            "x": 312,
+            "y": 561.625,
+            "width": 217.046875,
+            "height": 54,
+            "right": 529.046875,
+            "bottom": 615.625
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo?scenario=b&version=1.0.0&perspective=business#decision-brief",
+          "rect": {
+            "x": 547.046875,
+            "y": 561.625,
+            "width": 262.671875,
+            "height": 54,
+            "right": 809.71875,
+            "bottom": 615.625
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=home-final#scope",
+          "rect": {
+            "x": 1329.203125,
+            "y": 4911.984375,
+            "width": 241.796875,
+            "height": 54,
+            "right": 1571,
+            "bottom": 4965.984375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 312,
+            "y": 5583.578125,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 512.171875,
+            "bottom": 5633.078125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": {
+        "x": 902.390625,
+        "y": 143.40625,
+        "width": 705.609375,
+        "height": 415.0625,
+        "right": 1608,
+        "bottom": 558.46875
+      },
+      "inspection": {
+        "x": 902.390625,
+        "y": 106,
+        "width": 705.609375,
+        "height": 906.390625,
+        "right": 1608,
+        "bottom": 1012.390625
+      },
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "demo",
+      "width": 1920,
+      "viewport": {
+        "width": 1920,
+        "height": 768
+      },
+      "documentWidth": 1920,
+      "bodyWidth": 1920,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 70,
+        "right": 1920,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 312,
+        "y": 180.53125,
+        "width": 864,
+        "height": 135,
+        "right": 1176,
+        "bottom": 315.53125
+      },
+      "ctas": [
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 1482.828125,
+            "y": 9.75,
+            "width": 197.171875,
+            "height": 49.5,
+            "right": 1680,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=demo-final#scope",
+          "rect": {
+            "x": 1329.203125,
+            "y": 2166.03125,
+            "width": 241.796875,
+            "height": 54,
+            "right": 1571,
+            "bottom": 2220.03125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 312,
+            "y": 3905.625,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 512.171875,
+            "bottom": 3955.125
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": {
+        "x": 312,
+        "y": 740.53125,
+        "width": 539.3125,
+        "height": 760.984375,
+        "right": 851.3125,
+        "bottom": 1501.515625
+      },
+      "stage": {
+        "x": 878.3125,
+        "y": 777.9375,
+        "width": 729.6875,
+        "height": 429.21875,
+        "right": 1608,
+        "bottom": 1207.15625
+      },
+      "inspection": {
+        "x": 878.3125,
+        "y": 740.53125,
+        "width": 729.6875,
+        "height": 882.34375,
+        "right": 1608,
+        "bottom": 1622.875
+      },
+      "summaryPrecedesInspection": true,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": []
+    },
+    {
+      "name": "assessment",
+      "width": 1920,
+      "viewport": {
+        "width": 1920,
+        "height": 768
+      },
+      "documentWidth": 1920,
+      "bodyWidth": 1920,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1920,
+        "height": 70,
+        "right": 1920,
+        "bottom": 70
+      },
+      "h1": {
+        "x": 456,
+        "y": 178,
+        "width": 745.59375,
+        "height": 132.28125,
+        "right": 1201.59375,
+        "bottom": 310.28125
+      },
+      "ctas": [
+        {
+          "label": "Scope an assessment",
+          "href": "/assessment?source=header#scope",
+          "rect": {
+            "x": 1482.828125,
+            "y": 9.75,
+            "width": 197.171875,
+            "height": 49.5,
+            "right": 1680,
+            "bottom": 59.25
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": false
+        },
+        {
+          "label": "Scope an assessment",
+          "href": "#scope",
+          "rect": {
+            "x": 456,
+            "y": 431.78125,
+            "width": 217.046875,
+            "height": 54,
+            "right": 673.046875,
+            "bottom": 485.78125
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "See a sample decision brief",
+          "href": "/demo#decision-brief",
+          "rect": {
+            "x": 691.046875,
+            "y": 431.78125,
+            "width": 262.671875,
+            "height": 54,
+            "right": 953.71875,
+            "bottom": 485.78125
+          },
+          "inInitialViewport": true,
+          "clippedHorizontally": false,
+          "inMain": true
+        },
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope",
+          "rect": {
+            "x": 312,
+            "y": 6704.34375,
+            "width": 200.171875,
+            "height": 49.5,
+            "right": 512.171875,
+            "bottom": 6753.84375
+          },
+          "inInitialViewport": false,
+          "clippedHorizontally": false,
+          "inMain": false
+        }
+      ],
+      "summary": null,
+      "stage": null,
+      "inspection": null,
+      "summaryPrecedesInspection": null,
+      "canvasCount": 0,
+      "overflow": [],
+      "errors": [],
+      "modelRequests": [],
+      "scopeAnchor": {
+        "scrollY": 653,
+        "hash": "#scope",
+        "targetTop": 85.78125,
+        "headingTop": 126.28125,
+        "headerBottom": 70,
+        "headingUnobscured": true,
+        "scrollMarginTop": "86px"
+      }
+    }
+  ],
+  "navigation": [
+    {
+      "failureInjected": false,
+      "blocked": [],
+      "dialog": true,
+      "status": [
+        "",
+        "Static facility illustration. Select a system below. "
+      ],
+      "expanded": "true",
+      "footerLinks": [
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope"
+        },
+        {
+          "label": "Capacity assessment",
+          "href": "/assessment"
+        },
+        {
+          "label": "Sample decision brief",
+          "href": "/demo"
+        },
+        {
+          "label": "Platform direction",
+          "href": "/platform"
+        },
+        {
+          "label": "AI Cloud",
+          "href": "/solutions/ai-cloud"
+        },
+        {
+          "label": "Colocation & REITs",
+          "href": "/solutions/colocation"
+        },
+        {
+          "label": "Bridge Power & DER",
+          "href": "/solutions/bridge-power"
+        },
+        {
+          "label": "Evidence library",
+          "href": "/evidence"
+        },
+        {
+          "label": "Review the proof pack",
+          "href": "/proof/proof-pack"
+        },
+        {
+          "label": "Methodology",
+          "href": "/methodology"
+        },
+        {
+          "label": "Insights",
+          "href": "/insights"
+        },
+        {
+          "label": "About",
+          "href": "/about"
+        },
+        {
+          "label": "Why GridNinja",
+          "href": "/why-gridninja"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact"
+        },
+        {
+          "label": "Data handling",
+          "href": "/data-handling"
+        }
+      ],
+      "bodyScrollWidth": 390,
+      "viewport": 390,
+      "escapeClosed": true,
+      "focusRecovered": true
+    },
+    {
+      "failureInjected": true,
+      "blocked": [
+        "http://127.0.0.1:3001/_next/static/chunks/node_modules_0b6_471._.js",
+        "http://127.0.0.1:3001/_next/static/chunks/src_components_0xmqd7k._.js",
+        "http://127.0.0.1:3001/_next/static/chunks/node_modules_0b6_471._.js",
+        "http://127.0.0.1:3001/_next/static/chunks/src_components_0xmqd7k._.js"
+      ],
+      "dialog": false,
+      "status": [
+        "Navigation could not load. Activate Open navigation to retry, or use the footer links.",
+        "Static facility illustration. Select a system below. "
+      ],
+      "expanded": "false",
+      "footerLinks": [
+        {
+          "label": "Scope an assessment →",
+          "href": "/assessment?source=footer#scope"
+        },
+        {
+          "label": "Capacity assessment",
+          "href": "/assessment"
+        },
+        {
+          "label": "Sample decision brief",
+          "href": "/demo"
+        },
+        {
+          "label": "Platform direction",
+          "href": "/platform"
+        },
+        {
+          "label": "AI Cloud",
+          "href": "/solutions/ai-cloud"
+        },
+        {
+          "label": "Colocation & REITs",
+          "href": "/solutions/colocation"
+        },
+        {
+          "label": "Bridge Power & DER",
+          "href": "/solutions/bridge-power"
+        },
+        {
+          "label": "Evidence library",
+          "href": "/evidence"
+        },
+        {
+          "label": "Review the proof pack",
+          "href": "/proof/proof-pack"
+        },
+        {
+          "label": "Methodology",
+          "href": "/methodology"
+        },
+        {
+          "label": "Insights",
+          "href": "/insights"
+        },
+        {
+          "label": "About",
+          "href": "/about"
+        },
+        {
+          "label": "Why GridNinja",
+          "href": "/why-gridninja"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact"
+        },
+        {
+          "label": "Data handling",
+          "href": "/data-handling"
+        }
+      ],
+      "bodyScrollWidth": 390,
+      "viewport": 390,
+      "retryOpened": true
+    }
+  ],
+  "noJavaScript": {
+    "footerLinkCount": 15,
+    "mainText": "CAPACITY DECISIONS · PROOF BEFORE AUTONOMY\n\nMake your next capacity decision with confidence.\n\nEvaluate one capacity commitment through a paid, bounded assessment of authorized historical inputs. Receive a decision brief with the modeled result, its conditions, and what still needs review.\n\nScope an assessment\nSee a sample decision brief\n\nHistorica",
+    "documentWidth": 390
+  }
+}

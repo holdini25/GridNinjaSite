@@ -1,0 +1,24 @@
+
+> nextjs@0.1.0 facility:measure
+> node scripts/facility/measure-page.mjs
+
+{"route":"/","profile":"desktop","run":1,"transferBytes":963908,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":2,"transferBytes":963908,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.700000762939453,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":3,"transferBytes":963908,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":4,"transferBytes":963908,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.700000762939453,"budgetFailures":[]}
+{"route":"/","profile":"desktop","run":5,"transferBytes":963908,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":1,"transferBytes":935600,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.700000762939453,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":2,"transferBytes":935600,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":3,"transferBytes":935600,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":4,"transferBytes":935600,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/","profile":"mobile-emulation","run":5,"transferBytes":935600,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":1,"transferBytes":969715,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":2,"transferBytes":969715,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.700000762939453,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":3,"transferBytes":969715,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":4,"transferBytes":969715,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"desktop","run":5,"transferBytes":969715,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.700000762939453,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":1,"transferBytes":941407,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.700000762939453,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":2,"transferBytes":941407,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":3,"transferBytes":941407,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":4,"transferBytes":941407,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}
+{"route":"/demo","profile":"mobile-emulation","run":5,"transferBytes":941407,"renderer":"hardware","frameP95":33.400001525878906,"capabilityP95":16.799999237060547,"budgetFailures":[]}

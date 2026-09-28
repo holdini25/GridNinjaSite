@@ -1,0 +1,222 @@
+{
+  "schemaVersion": "facility.v1",
+  "release": "facility-v3",
+  "environment": "synthetic",
+  "profile": {
+    "camera": [
+      12.48401,
+      12.75822,
+      13.8649
+    ],
+    "target": [
+      0,
+      1.1,
+      0
+    ],
+    "padding": 1.12,
+    "framing": "projected-geometry",
+    "background": "#080808",
+    "exposure": 1.15,
+    "colorSpace": "srgb",
+    "toneMapping": "aces-filmic",
+    "lighting": {
+      "hemisphere": {
+        "sky": "#eeeeee",
+        "ground": "#3b3b3b",
+        "intensity": 0.65
+      },
+      "directional": [
+        {
+          "position": [
+            -8,
+            15,
+            8
+          ],
+          "color": "#fff0dd",
+          "intensity": 2.3
+        },
+        {
+          "position": [
+            7,
+            8,
+            -7
+          ],
+          "color": "#e0e0e0",
+          "intensity": 1
+        },
+        {
+          "position": [
+            0,
+            5,
+            12
+          ],
+          "color": "#e8e8e8",
+          "intensity": 0.5
+        }
+      ],
+      "environment": {
+        "preset": "industrial-softbox-v1",
+        "resolution": 128,
+        "intensity": 0.9,
+        "rotationY": 0
+      }
+    },
+    "motion": {
+      "fanRadiansPerSecond": 1.6,
+      "fanPhaseOffsets": [
+        0,
+        1.57,
+        3.14,
+        4.71
+      ],
+      "ledPulseRadiansPerSecond": 1.8,
+      "ledPulseAmplitude": 0.14
+    },
+    "led": {
+      "color": "#ffc079",
+      "steadyIntensity": 0.82,
+      "size": [
+        0.032,
+        0.022,
+        0.018
+      ]
+    }
+  },
+  "systems": {
+    "power": {
+      "root": "GN_POWER",
+      "accent": "GN_ACCENT_POWER",
+      "pick": "GN_PICK_POWER"
+    },
+    "cooling": {
+      "root": "GN_COOLING",
+      "accent": "GN_ACCENT_COOLING",
+      "pick": "GN_PICK_COOLING"
+    },
+    "storage": {
+      "root": "GN_STORAGE",
+      "accent": "GN_ACCENT_STORAGE",
+      "pick": "GN_PICK_STORAGE"
+    },
+    "workloads": {
+      "root": "GN_WORKLOADS",
+      "accent": "GN_ACCENT_WORKLOADS",
+      "pick": "GN_PICK_WORKLOADS"
+    }
+  },
+  "equipment": {
+    "rotors": [
+      {
+        "id": "GN_FAN_ROTOR_00",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_01",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_02",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "id": "GN_FAN_ROTOR_03",
+        "axis": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "leds": [
+      "GN_LED_00",
+      "GN_LED_01",
+      "GN_LED_02",
+      "GN_LED_03",
+      "GN_LED_04",
+      "GN_LED_05",
+      "GN_LED_06",
+      "GN_LED_07",
+      "GN_LED_08",
+      "GN_LED_09",
+      "GN_LED_10",
+      "GN_LED_11",
+      "GN_LED_12",
+      "GN_LED_13",
+      "GN_LED_14",
+      "GN_LED_15",
+      "GN_LED_16",
+      "GN_LED_17",
+      "GN_LED_18",
+      "GN_LED_19",
+      "GN_LED_20",
+      "GN_LED_21",
+      "GN_LED_22",
+      "GN_LED_23",
+      "GN_LED_24",
+      "GN_LED_25",
+      "GN_LED_26",
+      "GN_LED_27",
+      "GN_LED_28",
+      "GN_LED_29",
+      "GN_LED_30",
+      "GN_LED_31",
+      "GN_LED_32",
+      "GN_LED_33",
+      "GN_LED_34",
+      "GN_LED_35",
+      "GN_LED_36",
+      "GN_LED_37",
+      "GN_LED_38",
+      "GN_LED_39",
+      "GN_LED_40",
+      "GN_LED_41",
+      "GN_LED_42",
+      "GN_LED_43",
+      "GN_LED_44",
+      "GN_LED_45",
+      "GN_LED_46",
+      "GN_LED_47"
+    ]
+  },
+  "files": [
+    {
+      "file": "facility.glb",
+      "bytes": 2080304,
+      "sha256": "43ff2688b2a7765b38ea59e8918734b20da9fe3beaaaf65f3185bd87d5c6b5ac"
+    },
+    {
+      "file": "poster-desktop.webp",
+      "bytes": 46412,
+      "sha256": "fb5a8a5a9e2efbb78cf6e2adf0635b6392f9e98c4c138c581112e17a2375da12"
+    },
+    {
+      "file": "poster-mobile.webp",
+      "bytes": 15132,
+      "sha256": "3b4920f8a2c6c80e5fa450ca1043e5f431b5675630900dec2596c825f6e4d186"
+    }
+  ],
+  "source": {
+    "blender": "5.2.2 LTS",
+    "masterSha256": "945e25862ba190bf150c938728937ad6424b05d0405903a9c2d09ab57dedbe28",
+    "generatorSha256": "cc93fac11d34a13b1f8a46eb8a18647bab4a344215f0d80b4a9a93624429d1f7",
+    "modules": {
+      "export.py": "7baec2777ca90723aa1706fcef94d54f77558748f4ca70699a74dfe50b04ee43",
+      "generate.py": "cc93fac11d34a13b1f8a46eb8a18647bab4a344215f0d80b4a9a93624429d1f7",
+      "scene.json": "2266049789043c59275963612480994204f65dd002a385dbff0d229fd68431bb",
+      "service_routes.py": "12bc03519fc3544a04080656121a6252e9e35438076a5e5a0fa027328fd92136",
+      "surface_bake.py": "414735d153f452ad3fd695fb8e7da968559886a33327790d35caa42369a23485"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{"seconds":60,"tier":"high","missedRatio":0,"cpuP95":0.6000000238418579}
+{"seconds":120,"tier":"high","missedRatio":0,"cpuP95":0.699999988079071}
+{"seconds":180,"tier":"high","missedRatio":0,"cpuP95":0.6000000238418579}
+{"seconds":240,"tier":"high","missedRatio":0,"cpuP95":0.6000000238418579}
+{"seconds":300,"tier":"high","missedRatio":0,"cpuP95":0.699999988079071}
+{"seconds":360,"tier":"high","missedRatio":0,"cpuP95":0.699999988079071}
+{"seconds":420,"tier":"high","missedRatio":0,"cpuP95":0.699999988079071}
+{"seconds":480,"tier":"high","missedRatio":0,"cpuP95":0.6000000238418579}
+{"seconds":540,"tier":"high","missedRatio":0,"cpuP95":0.699999988079071}
+{"seconds":600,"tier":"high","missedRatio":0,"cpuP95":0.6000000238418579}
+{"seconds":660,"tier":"high","missedRatio":0,"cpuP95":0.699999988079071}
+{"seconds":720,"tier":"high","missedRatio":0,"cpuP95":0.5}
+{"seconds":780,"tier":"high","missedRatio":0,"cpuP95":0.699999988079071}
+{"seconds":840,"tier":"high","missedRatio":0,"cpuP95":0.6000000238418579}
+{"result":"pass","samples":893}

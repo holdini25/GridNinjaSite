@@ -1,0 +1,457 @@
+{
+  "release": "facility-v5",
+  "baseURL": "http://127.0.0.1:3000",
+  "viewport": [
+    1360,
+    800
+  ],
+  "reducedMotion": true,
+  "modelSha256": "cf825af47355dddc778440da5a3ad8848abef8409e313d680b0a0eb0ac88cc5d",
+  "profileSha256": "c386560aefe7ce72726659d08968ba280ab41743b61729e5b0e7c68012b92c4d",
+  "posters": {
+    "poster-desktop.webp": "d4d3cb528aa229a21fee31480db6e77857c192922c24cba8d52ea6e2606336bc",
+    "poster-mobile.webp": "ca08167e5f647e4aea235398cffac017b42faf4370138c766f7a8ebced91a827",
+    "rack-closed.webp": "1cb659645b16cc06fdc2987c0bfb4be50c25d221c0b02f4b2eb84dd3b1c6a0fa",
+    "rack-cutaway.webp": "75469e196dea75e0f78cc2dc97e860c2666aa9c20add649689e704f5f83399be",
+    "cooling-closed.webp": "defaa72dc999a66ac55802d27677dd72bcf9180c1d836700723b32606204e2b5",
+    "cooling-cutaway.webp": "ee44a17634b1fddb62711b8173575d0ceb8032156b93a32ce05a5b747c677bbe"
+  },
+  "metadata": {
+    "frames": 7,
+    "drawCalls": 38,
+    "triangles": 33480,
+    "geometries": 38,
+    "textures": 5,
+    "materials": 9,
+    "estimatedBytes": 7821932,
+    "peakEstimatedBytes": 9460332,
+    "environmentBytes": 2359296,
+    "frameP95": null,
+    "cpuP95": null,
+    "sampleCount": 0,
+    "dpr": 1,
+    "quality": "balanced",
+    "targetFps": 30,
+    "activeSeconds": 0,
+    "view": {
+      "kind": "overview"
+    },
+    "qualityProbe": false,
+    "assetError": null,
+    "requestedView": {
+      "kind": "overview"
+    },
+    "sceneKind": "overview",
+    "probeName": "GN_PLATFORM_Dark",
+    "probeVisible": true,
+    "probeRendered": true,
+    "schedulerRequestCount": 8,
+    "schedulerPending": 0,
+    "tierHistory": [
+      {
+        "activeSeconds": 0,
+        "reason": "conservative-startup",
+        "from": null,
+        "to": "balanced"
+      }
+    ],
+    "hiddenFrameCount": 0,
+    "cameraFrustum": [
+      -7.994281349899443,
+      7.9942813498994445,
+      4.586301653882515,
+      -4.818735228352125
+    ],
+    "rendererCssSize": [
+      1360,
+      800
+    ],
+    "reviewDpr": null,
+    "interactionUntil": 0,
+    "clockSeconds": 0,
+    "transitionRemaining": 0,
+    "missedRatio": 0,
+    "width": 1360,
+    "height": 800
+  },
+  "selectionPixels": {
+    "power": 10251,
+    "cooling": 33005,
+    "storage": 21690,
+    "workloads": 56564
+  },
+  "specimens": {
+    "rack": {
+      "modelSha256": "0529a7ec64061dba4843abbcde77a1e25ad7d40074e9064377d3d2f4570cce06",
+      "profileSha256": "fcca4abd4eb692f7587515e339aa55d22d537d801b0e48f694031147b38cfc01",
+      "poses": {
+        "closed": {
+          "frames": 4,
+          "drawCalls": 25,
+          "triangles": 9418,
+          "geometries": 25,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6262909,
+          "peakEstimatedBytes": 11987689,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "closed"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "closed"
+          },
+          "sceneKind": "rack",
+          "probeName": "GN_RACK_DOOR_Graphite",
+          "probeVisible": true,
+          "probeRendered": true,
+          "schedulerRequestCount": 5,
+          "schedulerPending": 0,
+          "tierHistory": [
+            {
+              "activeSeconds": 0,
+              "reason": "conservative-startup",
+              "from": null,
+              "to": "balanced"
+            }
+          ],
+          "hiddenFrameCount": 0,
+          "cameraFrustum": [
+            -2.9267593912036127,
+            2.9267593912036127,
+            1.9461102562970933,
+            -1.4971360862953924
+          ],
+          "rendererCssSize": [
+            1360,
+            800
+          ],
+          "reviewDpr": null,
+          "interactionUntil": 0,
+          "clockSeconds": 0,
+          "transitionRemaining": 0,
+          "missedRatio": 0
+        },
+        "cutaway": {
+          "frames": 6,
+          "drawCalls": 20,
+          "triangles": 8906,
+          "geometries": 25,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6262909,
+          "peakEstimatedBytes": 11987689,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "cutaway"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "cutaway"
+          },
+          "sceneKind": "rack",
+          "probeName": "GN_RACK_DOOR_Graphite",
+          "probeVisible": false,
+          "probeRendered": true,
+          "schedulerRequestCount": 7,
+          "schedulerPending": 0,
+          "tierHistory": [
+            {
+              "activeSeconds": 0,
+              "reason": "conservative-startup",
+              "from": null,
+              "to": "balanced"
+            }
+          ],
+          "hiddenFrameCount": 0,
+          "cameraFrustum": [
+            -2.9004375471350894,
+            2.9004375471350894,
+            1.9551983718359933,
+            -1.457081095381759
+          ],
+          "rendererCssSize": [
+            1360,
+            800
+          ],
+          "reviewDpr": null,
+          "interactionUntil": 0,
+          "clockSeconds": 0,
+          "transitionRemaining": 0,
+          "missedRatio": 0
+        },
+        "service": {
+          "frames": 8,
+          "drawCalls": 20,
+          "triangles": 8906,
+          "geometries": 25,
+          "textures": 5,
+          "materials": 8,
+          "estimatedBytes": 6262909,
+          "peakEstimatedBytes": 11987689,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "service"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "service"
+          },
+          "sceneKind": "rack",
+          "probeName": "GN_RACK_DOOR_Graphite",
+          "probeVisible": false,
+          "probeRendered": true,
+          "schedulerRequestCount": 9,
+          "schedulerPending": 0,
+          "tierHistory": [
+            {
+              "activeSeconds": 0,
+              "reason": "conservative-startup",
+              "from": null,
+              "to": "balanced"
+            }
+          ],
+          "hiddenFrameCount": 0,
+          "cameraFrustum": [
+            -2.888745176077542,
+            3.0662450034454594,
+            1.9728263573763212,
+            -1.5301090423430914
+          ],
+          "rendererCssSize": [
+            1360,
+            800
+          ],
+          "reviewDpr": null,
+          "interactionUntil": 0,
+          "clockSeconds": 0,
+          "transitionRemaining": 0,
+          "missedRatio": 0
+        }
+      }
+    },
+    "cooling": {
+      "modelSha256": "cc048f992035b72320f930159196f0ae55555f5789754eafd114019dd9461e62",
+      "profileSha256": "4b6ae8cbaee5834aef2880ac76bf2aa27d25497954ae80c9fb75545560d1cdbd",
+      "poses": {
+        "closed": {
+          "frames": 9,
+          "drawCalls": 17,
+          "triangles": 4194,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5720196,
+          "peakEstimatedBytes": 9623809,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "closed"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "closed"
+          },
+          "sceneKind": "cooling",
+          "probeName": "GN_COOLER_COIL_Copper",
+          "probeVisible": true,
+          "probeRendered": true,
+          "schedulerRequestCount": 10,
+          "schedulerPending": 0,
+          "tierHistory": [
+            {
+              "activeSeconds": 0,
+              "reason": "conservative-startup",
+              "from": null,
+              "to": "balanced"
+            }
+          ],
+          "hiddenFrameCount": 0,
+          "cameraFrustum": [
+            -2.308848317666985,
+            2.308848317666985,
+            1.2566660206004923,
+            -1.4596261178312548
+          ],
+          "rendererCssSize": [
+            1360,
+            800
+          ],
+          "reviewDpr": null,
+          "interactionUntil": 0,
+          "clockSeconds": 0,
+          "transitionRemaining": 0,
+          "missedRatio": 0
+        },
+        "cutaway": {
+          "frames": 11,
+          "drawCalls": 14,
+          "triangles": 3900,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5720196,
+          "peakEstimatedBytes": 9623809,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "cutaway"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "cutaway"
+          },
+          "sceneKind": "cooling",
+          "probeName": "GN_COOLER_COIL_Copper",
+          "probeVisible": true,
+          "probeRendered": true,
+          "schedulerRequestCount": 12,
+          "schedulerPending": 0,
+          "tierHistory": [
+            {
+              "activeSeconds": 0,
+              "reason": "conservative-startup",
+              "from": null,
+              "to": "balanced"
+            }
+          ],
+          "hiddenFrameCount": 0,
+          "cameraFrustum": [
+            -2.2763822168383316,
+            2.2763822168383316,
+            1.2402970427950462,
+            -1.4377996828971087
+          ],
+          "rendererCssSize": [
+            1360,
+            800
+          ],
+          "reviewDpr": null,
+          "interactionUntil": 0,
+          "clockSeconds": 0,
+          "transitionRemaining": 0,
+          "missedRatio": 0
+        },
+        "service": {
+          "frames": 13,
+          "drawCalls": 14,
+          "triangles": 3900,
+          "geometries": 17,
+          "textures": 5,
+          "materials": 7,
+          "estimatedBytes": 5720196,
+          "peakEstimatedBytes": 9623809,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "service"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "service"
+          },
+          "sceneKind": "cooling",
+          "probeName": "GN_COOLER_COIL_Copper",
+          "probeVisible": true,
+          "probeRendered": true,
+          "schedulerRequestCount": 14,
+          "schedulerPending": 0,
+          "tierHistory": [
+            {
+              "activeSeconds": 0,
+              "reason": "conservative-startup",
+              "from": null,
+              "to": "balanced"
+            }
+          ],
+          "hiddenFrameCount": 0,
+          "cameraFrustum": [
+            -2.3246249248141,
+            2.244426741825156,
+            1.355179186902895,
+            -1.332498264061373
+          ],
+          "rendererCssSize": [
+            1360,
+            800
+          ],
+          "reviewDpr": null,
+          "interactionUntil": 0,
+          "clockSeconds": 0,
+          "transitionRemaining": 0,
+          "missedRatio": 0
+        }
+      }
+    }
+  }
+}

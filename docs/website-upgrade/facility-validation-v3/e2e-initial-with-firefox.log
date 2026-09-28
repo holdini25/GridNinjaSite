@@ -1,0 +1,72 @@
+
+Running 144 tests using 2 workers
+
+(node:44522) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:44523) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓    2 [chrome-stable] › tests/e2e/assessment.spec.ts:9:7 › capacity assessment › all ordered transitions keep the explanation, quantities, and exact exports synchronized (1.1s)
+  ✓    3 [chrome-stable] › tests/e2e/assessment.spec.ts:49:7 › capacity assessment › technical download serves the current record and its publication version (438ms)
+  ✓    4 [chrome-stable] › tests/e2e/assessment.spec.ts:85:7 › capacity assessment › history and reset restore the same record, perspective, interval, and disclosure state (871ms)
+  ✓    5 [chrome-stable] › tests/e2e/assessment.spec.ts:101:7 › capacity assessment › unavailable and ambiguous deep links never display a substituted result (534ms)
+  ✓    1 [chrome-stable] › tests/e2e/facility-explanation.spec.ts:17:5 › explanations reflow without moving scope across selections and current records (3.5s)
+  ✓    6 [chrome-stable] › tests/e2e/assessment.spec.ts:112:7 › capacity assessment › keyboard focus and accessible alternatives survive reduced-motion scenario changes (666ms)
+  ✓    8 [chrome-stable] › tests/e2e/assessment.spec.ts:124:7 › capacity assessment › server-rendered explanation and fixture navigation work without JavaScript (400ms)
+  ✓    9 [chrome-stable] › tests/e2e/navigation-loading.spec.ts:10:7 › deferred navigation › a failed import remains retryable and recovers keyboard focus (1.1s)
+  ✓   10 [chrome-stable] › tests/e2e/navigation-loading.spec.ts:26:7 › deferred navigation › Escape during loading prevents a late drawer opening (660ms)
+  ✓   11 [chrome-stable] › tests/e2e/navigation.spec.ts:15:7 › desktop primary navigation › uses deterministic disclosure buttons with concise destination context (458ms)
+  ✓   12 [chrome-stable] › tests/e2e/navigation.spec.ts:58:7 › desktop primary navigation › supports pointer hover without making hover the only interaction (364ms)
+  ✓    7 [chrome-stable] › tests/e2e/facility.spec.ts:5:7 › facility inspection › automatic desktop loading and manual mobile loading preserve assessment quantities (3.4s)
+  ✓   13 [chrome-stable] › tests/e2e/navigation.spec.ts:71:7 › desktop primary navigation › traverses submenu links and restores trigger focus on Escape (378ms)
+  ✓   15 [chrome-stable] › tests/e2e/navigation.spec.ts:96:7 › desktop primary navigation › closes on outside interaction and when focus leaves the group (447ms)
+  ✓   16 [chrome-stable] › tests/e2e/navigation.spec.ts:115:7 › desktop primary navigation › marks one most-specific child and shows the active orange dot (515ms)
+  ✓   14 [chrome-stable] › tests/e2e/facility.spec.ts:36:7 › facility inspection › normal production rendering exposes no diagnostic snapshot or per-frame DOM mutations (1.5s)
+  ✓   17 [chrome-stable] › tests/e2e/navigation.spec.ts:139:7 › responsive navigation boundaries › hands off from the drawer to a non-wrapping desktop header at 1120px (810ms)
+  ✓   18 [chrome-stable] › tests/e2e/facility.spec.ts:54:7 › facility inspection › reduced motion, fixture D, keyboard selection and reset retain authoritative records (717ms)
+  ✓   19 [chrome-stable] › tests/e2e/navigation.spec.ts:199:7 › responsive navigation boundaries › uses one mobile accordion at a time without duplicate parent links (459ms)
+  ✓   21 [chrome-stable] › tests/e2e/navigation.spec.ts:233:7 › responsive navigation boundaries › keeps active navigation scrollable above a fixed mobile CTA (446ms)
+  -   22 [chrome-stable] › tests/e2e/navigation.spec.ts:295:7 › touch-capable desktop navigation › opens disclosures by tap without depending on hover
+  -   23 [chrome-stable] › tests/e2e/navigation.spec.ts:316:7 › reduced-motion navigation › remains usable with motion reduction enabled
+(node:44687) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   20 [chrome-stable] › tests/e2e/facility.spec.ts:72:7 › facility inspection › failed transfer restores poster, requires explicit retry and closes stale loads (3.3s)
+  ✓   25 [chrome-stable] › tests/e2e/facility.spec.ts:93:7 › facility inspection › Save-Data blocks automatic downloads while manual activation works (2.9s)
+(node:44701) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   26 [chromium-desktop] › tests/e2e/facility-explanation.spec.ts:17:5 › explanations reflow without moving scope across selections and current records (2.4s)
+  ✓   27 [chromium-desktop] › tests/e2e/facility.spec.ts:5:7 › facility inspection › automatic desktop loading and manual mobile loading preserve assessment quantities (12.2s)
+  ✓   28 [chromium-desktop] › tests/e2e/facility.spec.ts:36:7 › facility inspection › normal production rendering exposes no diagnostic snapshot or per-frame DOM mutations (3.3s)
+  ✓   29 [chromium-desktop] › tests/e2e/facility.spec.ts:54:7 › facility inspection › reduced motion, fixture D, keyboard selection and reset retain authoritative records (637ms)
+  ✓   30 [chromium-desktop] › tests/e2e/facility.spec.ts:72:7 › facility inspection › failed transfer restores poster, requires explicit retry and closes stale loads (3.7s)
+  ✓   24 [chromium-desktop] › tests/e2e/assessment.spec.ts:9:7 › capacity assessment › all ordered transitions keep the explanation, quantities, and exact exports synchronized (29.6s)
+  ✓   32 [chromium-desktop] › tests/e2e/assessment.spec.ts:49:7 › capacity assessment › technical download serves the current record and its publication version (372ms)
+  ✓   33 [chromium-desktop] › tests/e2e/assessment.spec.ts:85:7 › capacity assessment › history and reset restore the same record, perspective, interval, and disclosure state (513ms)
+  ✓   31 [chromium-desktop] › tests/e2e/facility.spec.ts:93:7 › facility inspection › Save-Data blocks automatic downloads while manual activation works (3.7s)
+  ✓   34 [chromium-desktop] › tests/e2e/assessment.spec.ts:101:7 › capacity assessment › unavailable and ambiguous deep links never display a substituted result (829ms)
+  ✓   36 [chromium-desktop] › tests/e2e/assessment.spec.ts:112:7 › capacity assessment › keyboard focus and accessible alternatives survive reduced-motion scenario changes (564ms)
+  ✓   37 [chromium-desktop] › tests/e2e/assessment.spec.ts:124:7 › capacity assessment › server-rendered explanation and fixture navigation work without JavaScript (272ms)
+  ✓   35 [chromium-desktop] › tests/e2e/navigation-loading.spec.ts:10:7 › deferred navigation › a failed import remains retryable and recovers keyboard focus (1.1s)
+  ✓   38 [chromium-desktop] › tests/e2e/navigation.spec.ts:15:7 › desktop primary navigation › uses deterministic disclosure buttons with concise destination context (388ms)
+  ✓   40 [chromium-desktop] › tests/e2e/navigation.spec.ts:58:7 › desktop primary navigation › supports pointer hover without making hover the only interaction (309ms)
+  ✓   39 [chromium-desktop] › tests/e2e/navigation-loading.spec.ts:26:7 › deferred navigation › Escape during loading prevents a late drawer opening (610ms)
+  ✓   41 [chromium-desktop] › tests/e2e/navigation.spec.ts:71:7 › desktop primary navigation › traverses submenu links and restores trigger focus on Escape (292ms)
+(node:44763) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   42 [chromium-desktop] › tests/e2e/navigation.spec.ts:96:7 › desktop primary navigation › closes on outside interaction and when focus leaves the group (330ms)
+  ✓   44 [chromium-desktop] › tests/e2e/navigation.spec.ts:115:7 › desktop primary navigation › marks one most-specific child and shows the active orange dot (431ms)
+  ✓   45 [chromium-desktop] › tests/e2e/navigation.spec.ts:139:7 › responsive navigation boundaries › hands off from the drawer to a non-wrapping desktop header at 1120px (639ms)
+  ✓   46 [chromium-desktop] › tests/e2e/navigation.spec.ts:199:7 › responsive navigation boundaries › uses one mobile accordion at a time without duplicate parent links (344ms)
+  ✓   47 [chromium-desktop] › tests/e2e/navigation.spec.ts:233:7 › responsive navigation boundaries › keeps active navigation scrollable above a fixed mobile CTA (366ms)
+  ✓   48 [chromium-desktop] › tests/e2e/navigation.spec.ts:295:7 › touch-capable desktop navigation › opens disclosures by tap without depending on hover (245ms)
+  ✓   49 [chromium-desktop] › tests/e2e/navigation.spec.ts:316:7 › reduced-motion navigation › remains usable with motion reduction enabled (272ms)
+(node:44787) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   43 [firefox-desktop] › tests/e2e/assessment.spec.ts:9:7 › capacity assessment › all ordered transitions keep the explanation, quantities, and exact exports synchronized (0ms)
+  ✘   50 [firefox-desktop] › tests/e2e/facility-explanation.spec.ts:17:5 › explanations reflow without moving scope across selections and current records (1ms)
+
+  2 interrupted
+    [firefox-desktop] › tests/e2e/assessment.spec.ts:9:7 › capacity assessment › all ordered transitions keep the explanation, quantities, and exact exports synchronized 
+    [firefox-desktop] › tests/e2e/facility-explanation.spec.ts:17:5 › explanations reflow without moving scope across selections and current records 
+  2 skipped
+  94 did not run
+  46 passed (2.7m)

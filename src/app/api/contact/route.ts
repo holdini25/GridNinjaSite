@@ -14,6 +14,7 @@ import {
 } from "@/lib/contact/rate-limit"
 import {
   ContactPayloadTooLargeError,
+  ContactPayloadTimeoutError,
   fingerprintContactSubmission,
   getTrustedClientIp,
   hashContactIdentifier,
@@ -201,6 +202,7 @@ export async function POST(request: Request) {
       clientSubmissionId: submission.clientSubmissionId,
       requestFingerprint,
       schemaVersion: submission.schemaVersion,
+      topic: "topic" in submission ? submission.topic ?? null : null,
       formType: submission.formType,
       intent: submission.intent,
       name: submission.name,
@@ -268,6 +270,9 @@ export async function POST(request: Request) {
       duplicate ? 200 : 202
     )
   } catch (error) {
+    if (error instanceof ContactPayloadTimeoutError) {
+      return jsonError(408, "Request body timed out. Please try again.", requestId)
+    }
     if (error instanceof ContactPayloadTooLargeError) {
       return jsonError(413, "Request is too large.", requestId)
     }

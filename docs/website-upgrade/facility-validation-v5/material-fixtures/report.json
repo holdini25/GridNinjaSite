@@ -1,0 +1,437 @@
+{
+  "schemaVersion": "facility-material-benchmark.v1",
+  "measuredAt": "2026-09-23T21:32:28.602Z",
+  "browser": "154.0.8037.58",
+  "sourceDigests": {
+    "src/lib/facility/engineering-materials.ts": "6468d33154c1a58d89229576b5534d65844a5a758a417a5ee852dfc5f3145958",
+    "tests/support/facility-material-fixtures.mjs": "e4b64d5d45f19829533bf4fccdad68f60a686e2fa1acc1abf78868edad720680",
+    "scripts/facility/verify-materials.mjs": "3f9d1106acdf1df700d4c22258a3c80602cf677ad6e95fb284cf98d8e172b759"
+  },
+  "result": "pass",
+  "runs": [
+    {
+      "dpr": 1,
+      "checks": [
+        {
+          "name": "Neutral composition preserves the stock normal/ORM/albedo response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Asymmetric tangent normal fixture changes lighting",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteSurfaceRGBDifference": 4.6484375
+          }
+        },
+        {
+          "name": "Mirrored UVs preserve the derivative tangent response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Hover and selected accents render distinct responses",
+          "pass": true,
+          "evidence": {
+            "restToHover": 6.778188705444336,
+            "hoverToSelected": 2.9284591674804688
+          }
+        },
+        {
+          "name": "Selected routes retain albedo modulation",
+          "pass": true,
+          "evidence": {
+            "bright": [
+              196,
+              178,
+              149
+            ],
+            "dark": [
+              63,
+              50,
+              34
+            ]
+          }
+        },
+        {
+          "name": "Same semantic counts use independent profile uniforms",
+          "pass": true,
+          "evidence": {
+            "betweenProfiles": 11.713309288024902,
+            "originalAfterReuse": 0,
+            "originalKey": "gridninja-pbr-semantic-v2-1-1-opaque",
+            "alternateKey": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "Equipment edge emphasis uses the unperturbed surface normal",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "High sampling remains within the two-sample anisotropy ceiling",
+          "pass": true,
+          "evidence": {
+            "anisotropy": 2
+          }
+        },
+        {
+          "name": "Coverage responds to actual multisample context support",
+          "pass": true,
+          "evidence": {
+            "samples": 4,
+            "alphaToCoverage": true
+          }
+        },
+        {
+          "name": "Single-sample contexts retain alpha testing without alpha-to-coverage",
+          "pass": true,
+          "evidence": {
+            "samples": 0,
+            "alphaToCoverage": false,
+            "anisotropy": 1
+          }
+        },
+        {
+          "name": "Resolved MASK apertures reveal the background",
+          "pass": true,
+          "evidence": {
+            "darkPixels": 20376
+          }
+        },
+        {
+          "name": "Subpixel MASK detail converges to the opaque grille",
+          "pass": true,
+          "evidence": [
+            {
+              "repeat": 1,
+              "darkPixels": 20376,
+              "mean": [
+                95.434853515625,
+                95.434853515625,
+                95.434853515625
+              ]
+            },
+            {
+              "repeat": 2,
+              "darkPixels": 20592,
+              "mean": [
+                88.465048828125,
+                88.465048828125,
+                88.465048828125
+              ]
+            },
+            {
+              "repeat": 4,
+              "darkPixels": 20736,
+              "mean": [
+                85.8644140625,
+                85.8644140625,
+                85.8644140625
+              ]
+            },
+            {
+              "repeat": 8,
+              "darkPixels": 9216,
+              "mean": [
+                91.497255859375,
+                91.497255859375,
+                91.497255859375
+              ]
+            },
+            {
+              "repeat": 16,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            },
+            {
+              "repeat": 32,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cutout and opaque materials have distinct program features",
+          "pass": true,
+          "evidence": {
+            "mask": "gridninja-pbr-semantic-v2-1-1-mask",
+            "opaque": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "WebGL remains error free after material reuse",
+          "pass": true,
+          "evidence": {
+            "programs": 9
+          }
+        }
+      ],
+      "captures": [
+        "stock-asymmetric-normal-orm",
+        "composed-neutral-normal-orm",
+        "flat-normal-comparison",
+        "mirrored-uv-stock",
+        "mirrored-uv-composed",
+        "normal-diagnostic",
+        "roughness-diagnostic",
+        "route-resting",
+        "route-hover",
+        "route-selected",
+        "same-counts-alternate-profile",
+        "same-counts-original-restored",
+        "equipment-edge-perturbed-normal",
+        "equipment-edge-geometric-normal",
+        "grille-resolved-holes",
+        "grille-minification-1",
+        "grille-minification-2",
+        "grille-minification-4",
+        "grille-minification-8",
+        "grille-minification-16",
+        "grille-minification-32"
+      ],
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "threeRevision": "186",
+      "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "msaaSamples": 4,
+      "drawingBuffer": [
+        512,
+        512
+      ],
+      "devicePixelRatio": 1,
+      "note": "Synthetic shader correctness benchmark; not a performance or asset-quality measurement.",
+      "sourceDigests": {
+        "src/lib/facility/engineering-materials.ts": "6468d33154c1a58d89229576b5534d65844a5a758a417a5ee852dfc5f3145958",
+        "tests/support/facility-material-fixtures.mjs": "e4b64d5d45f19829533bf4fccdad68f60a686e2fa1acc1abf78868edad720680",
+        "scripts/facility/verify-materials.mjs": "3f9d1106acdf1df700d4c22258a3c80602cf677ad6e95fb284cf98d8e172b759"
+      },
+      "errors": []
+    },
+    {
+      "dpr": 1.5,
+      "checks": [
+        {
+          "name": "Neutral composition preserves the stock normal/ORM/albedo response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Asymmetric tangent normal fixture changes lighting",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteSurfaceRGBDifference": 4.6484375
+          }
+        },
+        {
+          "name": "Mirrored UVs preserve the derivative tangent response",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "Hover and selected accents render distinct responses",
+          "pass": true,
+          "evidence": {
+            "restToHover": 6.778188705444336,
+            "hoverToSelected": 2.9284591674804688
+          }
+        },
+        {
+          "name": "Selected routes retain albedo modulation",
+          "pass": true,
+          "evidence": {
+            "bright": [
+              196,
+              178,
+              149
+            ],
+            "dark": [
+              63,
+              50,
+              34
+            ]
+          }
+        },
+        {
+          "name": "Same semantic counts use independent profile uniforms",
+          "pass": true,
+          "evidence": {
+            "betweenProfiles": 11.713309288024902,
+            "originalAfterReuse": 0,
+            "originalKey": "gridninja-pbr-semantic-v2-1-1-opaque",
+            "alternateKey": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "Equipment edge emphasis uses the unperturbed surface normal",
+          "pass": true,
+          "evidence": {
+            "meanAbsoluteChannelDifference": 0
+          }
+        },
+        {
+          "name": "High sampling remains within the two-sample anisotropy ceiling",
+          "pass": true,
+          "evidence": {
+            "anisotropy": 2
+          }
+        },
+        {
+          "name": "Coverage responds to actual multisample context support",
+          "pass": true,
+          "evidence": {
+            "samples": 4,
+            "alphaToCoverage": true
+          }
+        },
+        {
+          "name": "Single-sample contexts retain alpha testing without alpha-to-coverage",
+          "pass": true,
+          "evidence": {
+            "samples": 0,
+            "alphaToCoverage": false,
+            "anisotropy": 1
+          }
+        },
+        {
+          "name": "Resolved MASK apertures reveal the background",
+          "pass": true,
+          "evidence": {
+            "darkPixels": 20376
+          }
+        },
+        {
+          "name": "Subpixel MASK detail converges to the opaque grille",
+          "pass": true,
+          "evidence": [
+            {
+              "repeat": 1,
+              "darkPixels": 20376,
+              "mean": [
+                95.434853515625,
+                95.434853515625,
+                95.434853515625
+              ]
+            },
+            {
+              "repeat": 2,
+              "darkPixels": 20592,
+              "mean": [
+                88.465048828125,
+                88.465048828125,
+                88.465048828125
+              ]
+            },
+            {
+              "repeat": 4,
+              "darkPixels": 20736,
+              "mean": [
+                85.8644140625,
+                85.8644140625,
+                85.8644140625
+              ]
+            },
+            {
+              "repeat": 8,
+              "darkPixels": 9216,
+              "mean": [
+                91.497255859375,
+                91.497255859375,
+                91.497255859375
+              ]
+            },
+            {
+              "repeat": 16,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            },
+            {
+              "repeat": 32,
+              "darkPixels": 0,
+              "mean": [
+                123,
+                123,
+                123
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cutout and opaque materials have distinct program features",
+          "pass": true,
+          "evidence": {
+            "mask": "gridninja-pbr-semantic-v2-1-1-mask",
+            "opaque": "gridninja-pbr-semantic-v2-1-1-opaque"
+          }
+        },
+        {
+          "name": "WebGL remains error free after material reuse",
+          "pass": true,
+          "evidence": {
+            "programs": 9
+          }
+        }
+      ],
+      "captures": [
+        "stock-asymmetric-normal-orm",
+        "composed-neutral-normal-orm",
+        "flat-normal-comparison",
+        "mirrored-uv-stock",
+        "mirrored-uv-composed",
+        "normal-diagnostic",
+        "roughness-diagnostic",
+        "route-resting",
+        "route-hover",
+        "route-selected",
+        "same-counts-alternate-profile",
+        "same-counts-original-restored",
+        "equipment-edge-perturbed-normal",
+        "equipment-edge-geometric-normal",
+        "grille-resolved-holes",
+        "grille-minification-1",
+        "grille-minification-2",
+        "grille-minification-4",
+        "grille-minification-8",
+        "grille-minification-16",
+        "grille-minification-32"
+      ],
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+      "threeRevision": "186",
+      "glVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "msaaSamples": 4,
+      "drawingBuffer": [
+        512,
+        512
+      ],
+      "devicePixelRatio": 1.5,
+      "note": "Synthetic shader correctness benchmark; not a performance or asset-quality measurement.",
+      "sourceDigests": {
+        "src/lib/facility/engineering-materials.ts": "6468d33154c1a58d89229576b5534d65844a5a758a417a5ee852dfc5f3145958",
+        "tests/support/facility-material-fixtures.mjs": "e4b64d5d45f19829533bf4fccdad68f60a686e2fa1acc1abf78868edad720680",
+        "scripts/facility/verify-materials.mjs": "3f9d1106acdf1df700d4c22258a3c80602cf677ad6e95fb284cf98d8e172b759"
+      },
+      "errors": []
+    }
+  ]
+}

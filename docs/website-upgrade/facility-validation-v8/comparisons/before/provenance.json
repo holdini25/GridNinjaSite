@@ -1,0 +1,69 @@
+{
+  "release": "facility-v7",
+  "capturedAt": "2026-09-24T00:57:01.286Z",
+  "browser": "154.0.8037.58",
+  "sourceReport": "build/facility/facility-v7/review/review-capture.json",
+  "files": [
+    {
+      "file": "home-desktop-dpr1-page.png",
+      "source": "build/facility/facility-v7/review/home-desktop-dpr1-page.png",
+      "sha256": "58c2b17c38781dfacd9b608b20342be93c4e35db7039eec6acd27f5a0cdded34",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "deviceScaleFactor": 1,
+      "reducedMotion": true,
+      "mobileTouchEmulated": false,
+      "captureType": "full page, initial static presentation before explicit activation"
+    },
+    {
+      "file": "home-mobile-dpr1-page.png",
+      "source": "build/facility/facility-v7/review/home-mobile-dpr1-page.png",
+      "sha256": "d07db7cd77f3741027642cc4e5bc93d2f99b8de2ee78a32378fb5e0acee9699c",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 1,
+      "reducedMotion": true,
+      "mobileTouchEmulated": true,
+      "captureType": "full page, initial static presentation before explicit activation"
+    },
+    {
+      "file": "demo-desktop-dpr1-page.png",
+      "source": "build/facility/facility-v7/review/demo-desktop-dpr1-page.png",
+      "sha256": "03c23122bfd0217153ce677c68242c2ac3a8dc36a64caa8871852aaf122dc1f8",
+      "viewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "deviceScaleFactor": 1,
+      "reducedMotion": true,
+      "mobileTouchEmulated": false,
+      "captureType": "full page, initial static presentation before explicit activation"
+    },
+    {
+      "file": "demo-mobile-dpr1-page.png",
+      "source": "build/facility/facility-v7/review/demo-mobile-dpr1-page.png",
+      "sha256": "55b38ede5aa4d93d441c4a0d825cd233d21c436cb37af5845105446097830453",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 1,
+      "reducedMotion": true,
+      "mobileTouchEmulated": true,
+      "captureType": "full page, initial static presentation before explicit activation"
+    }
+  ],
+  "use": "Historical visual reference only; not a matched quantitative before/after comparison",
+  "limitations": [
+    "Desktop viewport1440x1100 differs from current1366x768 request.",
+    "Mobile390x844 matches requested viewport but capture time/code differs from currentv8.",
+    "V7 validation notes original review captures may predate its final explanatory UI.",
+    "No verifiedv7 assessment-route baseline found; no substitute asserted.",
+    "Full-page images preserve offscreen deferred-paint blank regions.",
+    "Do not use invalid adjacent port3000 captures or their offsets."
+  ]
+}

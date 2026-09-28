@@ -1,0 +1,31 @@
+{
+  "modelSha256": "0529a7ec64061dba4843abbcde77a1e25ad7d40074e9064377d3d2f4570cce06",
+  "validatorSha256": "39b1d5564d472fb6d22661996236aef42062301036613c14a1354d695ef17755",
+  "cases": [
+    {
+      "mutation": "lost_black_palette_factor",
+      "rejected": true,
+      "reason": "Authored linear palette factor lost: Graphite"
+    },
+    {
+      "mutation": "blend_instead_of_mask",
+      "rejected": true,
+      "reason": "Only rack may use MASK"
+    },
+    {
+      "mutation": "roughness_double_multiply",
+      "rejected": true,
+      "reason": "Final mapped roughness/metalness require factor 1"
+    },
+    {
+      "mutation": "image_outside_buffer",
+      "rejected": true,
+      "reason": "PNG bufferView bounds invalid"
+    },
+    {
+      "mutation": "missing_material_role",
+      "rejected": true,
+      "reason": "Missing/unknown surface role"
+    }
+  ]
+}

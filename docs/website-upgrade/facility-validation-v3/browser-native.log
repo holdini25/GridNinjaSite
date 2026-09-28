@@ -1,0 +1,5 @@
+
+> nextjs@0.1.0 facility:verify-browser
+> node scripts/facility/verify-browser.mjs
+
+{"result":"pass","frameP95":9.800000190734863,"desktopFrameTargetMet":true,"nativeAppleM5Metal":true,"output":"build/facility/browser-validation-native.json"}

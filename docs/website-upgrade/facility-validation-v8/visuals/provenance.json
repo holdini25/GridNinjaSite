@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "facility-diagnostic-sheets.v1",
+  "release": "facility-v8",
+  "copiedAt": "2026-09-24T04:13:28.287361+00:00",
+  "method": "Byte-for-byte copy of existing browser diagnostic composites; no new capture or image generation",
+  "frozenManifestSha256": "4b652220b7d2282d97b1782a72dce7d97ebccf84c4d76866dc660fe8cc2bfa8e",
+  "captureReport": {
+    "file": "../assets/capture-profile.json",
+    "originalPath": "build/facility/facility-v8/capture-profile.json",
+    "sha256": "f7fbbf7216d0a740086a9db1c66d25e2861c9de533344320ffa7e05af181626e",
+    "baseUrl": "http://127.0.0.1:3001",
+    "stageCssSize": [
+      1360,
+      800
+    ],
+    "reducedMotion": true
+  },
+  "sheets": [
+    {
+      "file": "contact-sheet.png",
+      "source": "build/facility/facility-v8/contact-sheet.png",
+      "bytes": 540419,
+      "sha256": "a223887e3ca33eabb8b952df4add7f7dda422da5b7a337eceec719ded9412388",
+      "sourceFileModifiedAt": "2026-09-24T03:55:10.367551+00:00",
+      "dimensions": [
+        1360,
+        1308
+      ],
+      "role": "Diagnostic review composite; not a published poster"
+    },
+    {
+      "file": "specimen-contact-sheet.png",
+      "source": "build/facility/facility-v8/specimen-contact-sheet.png",
+      "bytes": 375482,
+      "sha256": "b154b925b6d0c54714e258dba295b4d3d12976590d9950e8b88f96258176955a",
+      "sourceFileModifiedAt": "2026-09-24T03:29:46.754922+00:00",
+      "dimensions": [
+        1360,
+        1308
+      ],
+      "role": "Diagnostic review composite; not a published poster"
+    }
+  ],
+  "frozenPostersUnchanged": true,
+  "posterHashes": {
+    "poster-desktop.webp": "0183e3fa5f78310f57bc20411a0897da3ce094d46fbffe9a0a7ce55d34980e6c",
+    "poster-mobile.webp": "c6cd1ceac1b40029622db2efdd94c4484b96cd002b0bd899d81bd145f3ae2d91",
+    "rack-closed.webp": "215246701544b17205b42fcb1c0e2535a3105dfbf98977611e1a3806a4c64394",
+    "rack-cutaway.webp": "d0174146820898b89b3242fb724ee09c20cba482c12a689bb073f4bb334a750d",
+    "cooling-closed.webp": "5bb08a25b08ca0bfdf3c27c19e594b61a25a3f5f327fdca67f1b3940dc46044d",
+    "cooling-cutaway.webp": "40ad824c25aba3f3aae0f6f60f171af9f6cd5deeba7423bf0881a636b97c0c34"
+  },
+  "notes": [
+    "Source modification timestamps are file metadata, not independent capture-clock evidence.",
+    "Composites contain 680x400 review tiles with labels, created by the browser capture script from the stage renders.",
+    "Capture-only CSS isolates the stage and hides controls; these sheets do not establish full page layout or accessibility.",
+    "Capture diagnostics have zero cadence samples; these images are not performance evidence.",
+    "All frozen v8 file hashes matched before and after the copy."
+  ]
+}

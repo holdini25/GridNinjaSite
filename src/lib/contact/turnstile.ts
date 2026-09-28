@@ -32,6 +32,7 @@ export async function verifyTurnstile(input: {
   try {
     const response = await fetch(TURNSTILE_VERIFY_URL, {
       method: "POST",
+      redirect: "error",
       signal: AbortSignal.timeout(5_000),
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

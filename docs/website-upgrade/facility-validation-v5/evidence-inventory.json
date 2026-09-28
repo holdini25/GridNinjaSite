@@ -1,0 +1,429 @@
+{
+  "schemaVersion": "facility-evidence-package.v1",
+  "packagedAt": "2026-09-23T22:06:12.645682+00:00",
+  "release": "facility-v5",
+  "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5",
+  "fileCount": 74,
+  "totalBytes": 12785407,
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 8415,
+      "sha256": "1313118f05c43879e8e2eb7d86a7633f49a43cbdccf82e64bf3f2b12fd245214"
+    },
+    {
+      "file": "assets/asset-report.json",
+      "bytes": 10732,
+      "sha256": "9e3817c3c75b619efd9f08eaa7bd2998925e0b33a4d6f394bab8be81e4cf03b0",
+      "source": "build/facility/facility-v5/asset-report.json"
+    },
+    {
+      "file": "assets/cooling-asset-report.json",
+      "bytes": 4722,
+      "sha256": "bf8eb628706c0040f54e666b70061a73dc0658746dc6604b49035c27a0e1015f",
+      "source": "build/facility/facility-v5/cooling-asset-report.json"
+    },
+    {
+      "file": "assets/cooling-metadata.json",
+      "bytes": 6429,
+      "sha256": "c0c8c12c0b3a098a1329976acbda68efcc196c5c5a2daf820c38025bf8c45af0",
+      "source": "build/facility/facility-v5/cooling-metadata.json"
+    },
+    {
+      "file": "assets/cooling-validation.json",
+      "bytes": 4348,
+      "sha256": "328bb0bc0f6768bcda6cd7583ef6107b593b7cf2628806e041912ccd3cf302e8",
+      "source": "build/facility/facility-v5/cooling-validation.json"
+    },
+    {
+      "file": "assets/rack-asset-report.json",
+      "bytes": 4886,
+      "sha256": "629c10c88fdab14909657d326db1f9a75fe6778ad98e224d05450bb9d8f4c20c",
+      "source": "build/facility/facility-v5/rack-asset-report.json"
+    },
+    {
+      "file": "assets/rack-metadata.json",
+      "bytes": 6407,
+      "sha256": "96dfad767983ba6331ec706b3dc9ca815474767ca4902b1b130ff02b3b88bb49",
+      "source": "build/facility/facility-v5/rack-metadata.json"
+    },
+    {
+      "file": "assets/rack-validation.json",
+      "bytes": 4134,
+      "sha256": "bcb8a43b76cbcbc0ca87877359caf22d3798f802b4fcb1940fecf4e9b4e5bcd2",
+      "source": "build/facility/facility-v5/rack-validation.json"
+    },
+    {
+      "file": "assets/service-report.json",
+      "bytes": 62659,
+      "sha256": "76d957ad2395427b4ac32f47818d6b1a6dcf9991462597a1ea96cdedda6fb0d8",
+      "source": "build/facility/facility-v5/service-report.json"
+    },
+    {
+      "file": "assets/specimen-descriptors.json",
+      "bytes": 6106,
+      "sha256": "b24568e1796bff7df4a9d2162be21ea0b8c9a253c846cae1d23c20139ca449ee",
+      "source": "build/facility/facility-v5/specimen-descriptors.json"
+    },
+    {
+      "file": "assets/surface-negative-report.json",
+      "bytes": 869,
+      "sha256": "40627c1f1b9c03ebab5cc088987a7412e470aa8a73f980793b28d1fed423bf02",
+      "source": "build/facility/facility-v5/surface-negative-report.json"
+    },
+    {
+      "file": "assets/topology.json",
+      "bytes": 36003,
+      "sha256": "b774d888677418aa32c5eb6c042278a40e9102e3768458068d159beafc0237b6",
+      "source": "build/facility/facility-v5/topology.json"
+    },
+    {
+      "file": "assets/validation-freeze.json",
+      "bytes": 5736,
+      "sha256": "454647b38d0399a4fed55f9f9283a72b36300fd80d20dfa664ed303e1949173f",
+      "source": "build/facility/facility-v5/validation-freeze.json"
+    },
+    {
+      "file": "assets/validation.json",
+      "bytes": 5670,
+      "sha256": "1a8bdd28815a3b7d921fe87d8c43da420c8e8364160e3f77aa5423ebcfe78cc4",
+      "source": "build/facility/facility-v5/validation.json"
+    },
+    {
+      "file": "authoring/authoring-report.json",
+      "bytes": 4283,
+      "sha256": "39f243cc24366573044933a5179c9b1a8c35915f6ce1ae2a45179d9e3ea57ef6",
+      "source": "build/facility/facility-v5/authoring-report.json"
+    },
+    {
+      "file": "authoring/bake-report.json",
+      "bytes": 3499,
+      "sha256": "53b2d5ff17f872bb85fdb780c8b04c676840fecbdc2d26907d78f6b1f080dffa",
+      "source": "build/facility/facility-v5/bake-report.json"
+    },
+    {
+      "file": "authoring/normal-preservation-report.json",
+      "bytes": 6361,
+      "sha256": "c4b2f761b7cbe87d31ba35b035a227ef10c3475cb2ff872369789fff0ad20992",
+      "source": "build/facility/facility-v5/normal-preservation-report.json"
+    },
+    {
+      "file": "authoring/reproducibility-report.json",
+      "bytes": 2577,
+      "sha256": "ea3b8654ce4ecf09d989a8a568237438f90e2f0f8d1ede7a08a8c6e91dd51cbb",
+      "source": "build/facility/facility-v5/reproducibility-report.json"
+    },
+    {
+      "file": "authoring/source-validation.json",
+      "bytes": 13324,
+      "sha256": "9cfad3ad5572044c9142f290bfbb8ffe3d7b29202d57d1bb029ee9c862b9873d"
+    },
+    {
+      "file": "checks/e2e-chrome.log",
+      "bytes": 9622,
+      "sha256": "8a60b77358ef7960936b320890f17bdd53b782817c4844e65e7bb04998181f3d"
+    },
+    {
+      "file": "checks/e2e-lifecycle.log",
+      "bytes": 1805,
+      "sha256": "3798fbf48cc82a99b40abd973ee66566195ac247184e7ee91fcca0bffc4464e7",
+      "source": "build/facility/facility-v5/e2e-lifecycle.log"
+    },
+    {
+      "file": "checks/e2e-materials-chrome.log",
+      "bytes": 581,
+      "sha256": "c6feb77b7f0dc73b3e8c74030d1d13777a5dde1888aa331441e0d65d83ed0a7a"
+    },
+    {
+      "file": "checks/e2e-mobile-webkit.log",
+      "bytes": 12168,
+      "sha256": "bd1039e5c305f30a8969cc43a5e8cc58e61cf37ac543871c3d33f2778406fb12"
+    },
+    {
+      "file": "checks/e2e-visibility.log",
+      "bytes": 367,
+      "sha256": "f4f2cf4c522ba60b3042495730753980fa8062de182453571ddc56721b05af93"
+    },
+    {
+      "file": "checks/final-lint.log",
+      "bytes": 31,
+      "sha256": "d9b1fcf7e0f0f117deb1ef8c67f535eb799e893ad647f5c0ff5e9bce9b83909a",
+      "source": "build/facility/facility-v5/final-lint.log"
+    },
+    {
+      "file": "checks/final-typecheck.log",
+      "bytes": 42,
+      "sha256": "8034b165f65b327fa1c55c43dc1b89f0542bac2b2de36b2989cb16cf2cdc9397",
+      "source": "build/facility/facility-v5/final-typecheck.log"
+    },
+    {
+      "file": "checks/lint.log",
+      "bytes": 31,
+      "sha256": "d9b1fcf7e0f0f117deb1ef8c67f535eb799e893ad647f5c0ff5e9bce9b83909a"
+    },
+    {
+      "file": "checks/packaging-fixtures.json",
+      "bytes": 2166,
+      "sha256": "edba2c47715c50ae3e75c6b1176f26210e0a52a6ff6278940c09be04e30956db"
+    },
+    {
+      "file": "checks/production-build.json",
+      "bytes": 1041,
+      "sha256": "8b92b86485997fd6065c53e9693661473032ec3933b5814d455cb1dadfe9a207"
+    },
+    {
+      "file": "checks/production-build.log",
+      "bytes": 4330,
+      "sha256": "7083bdeff154eff0fd34920c30068fd4caf6ca7d1f2c75ea548dc1459e03f317"
+    },
+    {
+      "file": "checks/typecheck.log",
+      "bytes": 42,
+      "sha256": "8034b165f65b327fa1c55c43dc1b89f0542bac2b2de36b2989cb16cf2cdc9397"
+    },
+    {
+      "file": "checks/unit-tests.log",
+      "bytes": 574,
+      "sha256": "3277c0894c22cb33d9f6ca3f1315679d45a231c021789068eb07c774353418a9"
+    },
+    {
+      "file": "immutability/prior-release-hashes.json",
+      "bytes": 3011,
+      "sha256": "fb0d5f7e045d6e72f3c94fd288ea0062d1f763dea2845604e712759c266adef5",
+      "source": "build/facility/facility-v5/prior-release-hashes.json"
+    },
+    {
+      "file": "immutability/report.json",
+      "bytes": 8719,
+      "sha256": "727ae60a00f5ec67b165dddce0ddb48f9aa630e612477c3ac71ef8d9a46fa39a"
+    },
+    {
+      "file": "lighthouse.json",
+      "bytes": 20353,
+      "sha256": "518f4ecf6053ad87c6ce5ca9032ccdbb67decc65cfeeca5f4c8a559678fc60e2"
+    },
+    {
+      "file": "material-assets/cooling-channels-contact-sheet.png",
+      "bytes": 498314,
+      "sha256": "c99f82cec1b25bae1611f9cbc6d2595c48cf37d632fd33378d9dd6d66f035879",
+      "source": "build/facility/facility-v5/asset-material-benchmark/cooling-channels-contact-sheet.png"
+    },
+    {
+      "file": "material-assets/rack-channels-contact-sheet.png",
+      "bytes": 427521,
+      "sha256": "8661d79bd0e3b3224b173aa8197fbae112b830bebb8f2cc2b4b15212c4f9d0a0",
+      "source": "build/facility/facility-v5/asset-material-benchmark/rack-channels-contact-sheet.png"
+    },
+    {
+      "file": "material-assets/report.json",
+      "bytes": 47015,
+      "sha256": "d540428be0ae23bef88d16d787027989f6b11a6fbd51661204c743bda0485f92",
+      "source": "build/facility/facility-v5/asset-material-benchmark/report.json"
+    },
+    {
+      "file": "material-fixtures/grille-minification-16.png",
+      "bytes": 1909,
+      "sha256": "f87d0e04190269d6d80bf85ab1c3d8b0b5143be6a005d405df52fb4f4f75731b",
+      "source": "build/facility/facility-v5/material-benchmark/dpr-1/grille-minification-16.png"
+    },
+    {
+      "file": "material-fixtures/grille-resolved-holes.png",
+      "bytes": 6298,
+      "sha256": "51bd1a73c7cbf3b8d0945f2e9f0c0560c40d2d71f336d7c6c12b0a8cb0c74b7e",
+      "source": "build/facility/facility-v5/material-benchmark/dpr-1/grille-resolved-holes.png"
+    },
+    {
+      "file": "material-fixtures/mirrored-uv-composed.png",
+      "bytes": 3137,
+      "sha256": "a0947ea7ce03daf8b19019514c36c23d009aa44e35fa8800c6ae10af8ab757aa",
+      "source": "build/facility/facility-v5/material-benchmark/dpr-1/mirrored-uv-composed.png"
+    },
+    {
+      "file": "material-fixtures/report.json",
+      "bytes": 12845,
+      "sha256": "314211d9865d11f2c41bb33b386e3c1613530bd13d1ace73fa51a2ce5b452bc2",
+      "source": "build/facility/facility-v5/material-benchmark/report.json"
+    },
+    {
+      "file": "material-fixtures/route-selected.png",
+      "bytes": 6719,
+      "sha256": "13016e39bba7be5a912f7a05a2e58e003ee521c41bd7b583bba3ffef2cc3947a",
+      "source": "build/facility/facility-v5/material-benchmark/dpr-1/route-selected.png"
+    },
+    {
+      "file": "material-fixtures/stock-asymmetric-normal-orm.png",
+      "bytes": 3258,
+      "sha256": "84a345b7c2efbf5590ec50d4edf8fa005dbadc1521a0363bcce31834cdfdb3ce",
+      "source": "build/facility/facility-v5/material-benchmark/dpr-1/stock-asymmetric-normal-orm.png"
+    },
+    {
+      "file": "motion/lifecycle-native.webm",
+      "bytes": 5854240,
+      "sha256": "1612ae2722003cf07f8fc82683e3b89636eba4da4455dc1a0875500c2e6eb9b0"
+    },
+    {
+      "file": "performance/browser-validation-native.json",
+      "bytes": 167055,
+      "sha256": "db62fb961652909394e46c738706080114c9b346276c398295d91bcc39c63d25"
+    },
+    {
+      "file": "performance/lifecycle-native.log",
+      "bytes": 136,
+      "sha256": "5b924d502519c33dd293ddcdf990bfd5d4a0d2afe45a6a16ad7816326d06ad02"
+    },
+    {
+      "file": "performance/lighthouse-index.json",
+      "bytes": 3403,
+      "sha256": "80805b47186a0b6ef2ca85f83abd04984182b5c1f57066c4e6b2a78121a62cf9"
+    },
+    {
+      "file": "performance/lighthouse.log",
+      "bytes": 2444,
+      "sha256": "481e92e88d2ec6dab58e354e3032e0a498c08ce1b1d0bebcb9357ae88a795956"
+    },
+    {
+      "file": "performance/measurement-attempt-1/page-measurements.json",
+      "bytes": 319856,
+      "sha256": "0af26282bcc180118561ccefc722f59eb61484212ea29f5bc3a4165fac9fb9e5"
+    },
+    {
+      "file": "performance/measurement-attempt-1/page-measurements.log",
+      "bytes": 3504,
+      "sha256": "6afa356ec56c841e22c4f3b7af4654c2ad71cc9d34905f9179fec0dcbd4c09ef"
+    },
+    {
+      "file": "performance/page-measurements.json",
+      "bytes": 504379,
+      "sha256": "f8edebeb6fe791f3f2f9acd994559b389cacaabfd771325503008f26492d3c4e"
+    },
+    {
+      "file": "performance/page-measurements.log",
+      "bytes": 3471,
+      "sha256": "b5345393bb345c8ae1c78fe9677242a66527ba3ffa956f765a1088a49d657a77"
+    },
+    {
+      "file": "performance/performance-summary.json",
+      "bytes": 20353,
+      "sha256": "518f4ecf6053ad87c6ce5ca9032ccdbb67decc65cfeeca5f4c8a559678fc60e2"
+    },
+    {
+      "file": "performance/performance-summary.log",
+      "bytes": 1470,
+      "sha256": "dbd70605a7c922a5e7e266a0d794ea9373b6af829614ba653fa72e457ba1b080"
+    },
+    {
+      "file": "performance/specimen-transfers.json",
+      "bytes": 1661,
+      "sha256": "93ce252567e49c51d27393622a64e096876b53c5cbe35c7a4c0505d16c054129"
+    },
+    {
+      "file": "visual/capture-profile.json",
+      "bytes": 12868,
+      "sha256": "990becc2e861c751c4a3512327b117c3f41ad25ed055c7a2443ca82a5631bee4",
+      "source": "build/facility/facility-v5/capture-profile.json"
+    },
+    {
+      "file": "visual/contact-sheet.png",
+      "bytes": 634631,
+      "sha256": "6c082956f555f24340ef39bd38662427ad1d3e64487cf42b387b3c260bdd0b4c",
+      "source": "build/facility/facility-v5/contact-sheet.png"
+    },
+    {
+      "file": "visual/demo-mobile-dpr1-page.png",
+      "bytes": 394784,
+      "sha256": "9694d9e703457dbf1088e80bfd417ebe608c0cf019be58be00752c2d0cb8a3f2",
+      "source": "build/facility/facility-v5/review/demo-mobile-dpr1-page.png"
+    },
+    {
+      "file": "visual/home-desktop-dpr1-live.png",
+      "bytes": 170852,
+      "sha256": "916f1d9c96a1f2c3d6659edcb1d2b9724d1d9bbbb573bbd2d8222a3a986a9ee5",
+      "source": "build/facility/facility-v5/review/home-desktop-dpr1-live.png"
+    },
+    {
+      "file": "visual/home-desktop-dpr1-page.png",
+      "bytes": 897673,
+      "sha256": "a6fff3ecd38efacd04c1202a70cd8f1e844b405b13b9ae8ad54a4be2551619d1",
+      "source": "build/facility/facility-v5/review/home-desktop-dpr1-page.png"
+    },
+    {
+      "file": "visual/home-desktop-dpr1.5-cooling-closeup.png",
+      "bytes": 67202,
+      "sha256": "0a00db58693f0f8fda792e090ca3c5f2c58281b55fc837d1f66fe06cbc060168",
+      "source": "build/facility/facility-v5/review/home-desktop-dpr1.5-cooling-closeup.png"
+    },
+    {
+      "file": "visual/home-desktop-dpr1.5-racks-closeup.png",
+      "bytes": 64379,
+      "sha256": "f72405b2419899072495f8e486c9f9bd068bf0bb91b8089be4d07b5c0828ec33",
+      "source": "build/facility/facility-v5/review/home-desktop-dpr1.5-racks-closeup.png"
+    },
+    {
+      "file": "visual/home-mobile-dpr1-live.png",
+      "bytes": 84569,
+      "sha256": "2648b1a54cfeea631b2f75a0ea940b4b366af2f467554ee071bc6037cb441611",
+      "source": "build/facility/facility-v5/review/home-mobile-dpr1-live.png"
+    },
+    {
+      "file": "visual/home-mobile-dpr1-page.png",
+      "bytes": 754306,
+      "sha256": "e5f4a255a59fb5c99261c4751348e70747e4951a3a234283808a08283009094b",
+      "source": "build/facility/facility-v5/review/home-mobile-dpr1-page.png"
+    },
+    {
+      "file": "visual/review-capture.json",
+      "bytes": 203976,
+      "sha256": "6e00fb8ae7fa56d99394568955e6a2accad1e021c09fba74a892c703c794bd0b",
+      "source": "build/facility/facility-v5/review/review-capture.json"
+    },
+    {
+      "file": "visual/specimen-contact-sheet.png",
+      "bytes": 346610,
+      "sha256": "92859cb9009bd6557cb9cbdb671e78351177960cd92b23e4336e945b04b2f328",
+      "source": "build/facility/facility-v5/specimen-contact-sheet.png"
+    },
+    {
+      "file": "visual/specimens/cooling-closed-dpr1.5.png",
+      "bytes": 95960,
+      "sha256": "202cf13affac8cbacf79186b4da125bd137b3207fd2563637e230f499a787c4e",
+      "source": "build/facility/facility-v5/review/demo-desktop-dpr1.5-cooling-closed.png"
+    },
+    {
+      "file": "visual/specimens/cooling-cutaway-dpr1.5.png",
+      "bytes": 60403,
+      "sha256": "84d8bd411480a3a13b66d77f028f2bc9b8622f6d5389dcd9abe9a232de3ae546",
+      "source": "build/facility/facility-v5/review/demo-desktop-dpr1.5-cooling-cutaway.png"
+    },
+    {
+      "file": "visual/specimens/cooling-service-dpr1.5.png",
+      "bytes": 62047,
+      "sha256": "9e3ed28bf97fad2364561df526c08cddc6707b9c6fb5271ce833963ce65258bb",
+      "source": "build/facility/facility-v5/review/demo-desktop-dpr1.5-cooling-service.png"
+    },
+    {
+      "file": "visual/specimens/rack-closed-dpr1.5.png",
+      "bytes": 55436,
+      "sha256": "455b5e4ce949013634d0ec704ac339bedfbe5cec1ce90d80d5b1cfcc6bf8b2e1",
+      "source": "build/facility/facility-v5/review/demo-desktop-dpr1.5-rack-closed.png"
+    },
+    {
+      "file": "visual/specimens/rack-cutaway-dpr1.5.png",
+      "bytes": 58996,
+      "sha256": "9efdde0de56de2282f381057684546d5e34b655b024149cf0448e715840ebd19",
+      "source": "build/facility/facility-v5/review/demo-desktop-dpr1.5-rack-cutaway.png"
+    },
+    {
+      "file": "visual/specimens/rack-service-dpr1.5.png",
+      "bytes": 62104,
+      "sha256": "053c22fca60a38a9575e261c09c548094a2cbee27ceab2eb06c76d95378b9be5",
+      "source": "build/facility/facility-v5/review/demo-desktop-dpr1.5-rack-service.png"
+    },
+    {
+      "file": "visual/v4-v5-comparison.png",
+      "bytes": 607580,
+      "sha256": "2a520c5185d66919db020ce3e39178a80baee3e3e6a13176d855b76a6599ddd2",
+      "source": "build/facility/facility-v5/v4-v5-comparison.png"
+    }
+  ],
+  "note": "Curated local validation evidence. This inventory excludes itself. Performance includes a retained failed first attempt and the final complete measurements; mobile LCP and physical/manual release gates remain outstanding. Source paths are listed only when their current bytes match."
+}

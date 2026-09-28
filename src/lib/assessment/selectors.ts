@@ -25,6 +25,17 @@ export function selectAttribution(record: AssessmentRecord) {
   return record.attribution.map((item) => { const startKW = endpointKW; endpointKW -= item.reductionKW; return { ...item, startKW, endKW: endpointKW } })
 }
 
+/** All bars share one zero and one scale; missing quantities never become zero. */
+export function selectCapacityComparison(record: AssessmentRecord) {
+  const rows = [
+    { id: "requested", label: "Requested", valueKW: record.requestedProfile.incrementKW },
+    { id: "modeled", label: record.revisedProfile ? "Recorded revision" : "Modeled eligible", valueKW: record.modeledEligible.status === "known" ? record.modeledEligible.valueKW : null },
+    ...(record.minimumViableIncrementKW === null ? [] : [{ id: "minimum", label: "Recorded minimum", valueKW: record.minimumViableIncrementKW }]),
+  ]
+  const maximumKW = Math.max(1, ...rows.map(row => row.valueKW ?? 0))
+  return { rows, maximumKW, requestDifferenceKW: record.modeledEligible.status === "known" ? record.requestedProfile.incrementKW - record.modeledEligible.valueKW : null }
+}
+
 type SearchInput = URLSearchParams | Record<string, string | string[] | undefined>
 
 export function resolveAssessmentSelection(search: SearchInput): AssessmentSelection {

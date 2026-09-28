@@ -1,0 +1,1553 @@
+{
+  "schemaVersion": "facility-v7-compact-measurements.v1",
+  "description": "Lossless selected-field summary for documentation; full request ledgers, scene snapshots and traces remain in the referenced original reports. This does not replace original evidence.",
+  "sourceReports": {
+    "pageMeasurements": {
+      "path": "build/facility/page-measurements.json",
+      "sha256": "ef2be719be38bbe19338fcfe1f7ce20c521b9f1fa7ba2d29cafc696a32593da7"
+    },
+    "lifecycle": {
+      "path": "build/facility/facility-v7/browser-validation-native.json",
+      "sha256": "4c433ab63aa90e8c00f44da1fb2bedb2d0746799a239f86be6062d152fd4eb10"
+    },
+    "returnedOverview": {
+      "path": "build/facility/facility-v7/returned-overview-resource-audit.json",
+      "sha256": "a11ff96d049065d08c574b64afc4be7957d56c2dace9c68c59e953339804ffd9"
+    },
+    "transport": {
+      "path": "build/facility/facility-v7/transport-comparison.json",
+      "sha256": "e0971d9ce383bc3558f3bd35a47c4aa890fdc75ea0007edae106b38bea78c517"
+    },
+    "ecosystem": {
+      "path": "build/facility/facility-v7/ecosystem-review/report.json",
+      "sha256": "85d73159963c7f7bd5b130c476675ef867bd7ed7dbf5391244c8b352d53c0b2e"
+    },
+    "explicitSpecimens": {
+      "path": "build/facility/facility-v7/explicit-specimen-transfer.json",
+      "sha256": "f103c42f2fe8403b3502e6145e8754afb874beb9d74b7025c93ead7db552c5fb"
+    },
+    "sustainedAttempt1": {
+      "path": "build/facility/facility-v7/sustained-attempt-1/sustained-chrome-m5.json",
+      "sha256": "993cf372500d57f9ef6930d0a05c3674a8789439326623e8c8ee09965836041a"
+    },
+    "sustainedAttempt2": {
+      "path": "build/facility/facility-v7/sustained-chrome-m5.json",
+      "sha256": "755ab0b22c8de310aed345dde96b00155d559f0652de2026c19c2d93325f84ae"
+    }
+  },
+  "provenance": {
+    "schemaVersion": "facility-performance.v2",
+    "sourceRevision": "f34d526e2a5431c7dd63b2784f43332b8fa7dd0af5a5e689be21200e64270c3b",
+    "buildId": "w2z9veXyp4PSVzR2uzc5-",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      },
+      {
+        "release": "facility-v7",
+        "manifestSha256": "c6ccfae472adebef0af6a8a85104be2db9f0879019babec2e297d82a9f71ce37"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v7",
+      "mode": "auto-adaptive"
+    },
+    "harnessRevision": "8a78a39133bed2c1ab172df28163ec688316ab80d1b314337e165eb27c6f5b90",
+    "browser": "154.0.8037.58",
+    "settings": {
+      "baseURL": "http://127.0.0.1:3000",
+      "runCount": 5,
+      "freshContextEveryRun": true,
+      "cacheDisabled": true,
+      "settleQuietMs": 750,
+      "settleTimeoutMs": 15000,
+      "readinessTimeoutMs": 12000,
+      "pauseSettleTimeoutMs": 1000,
+      "pauseIdleQuietMs": 250,
+      "pauseObservationMs": 500,
+      "desktopViewport": {
+        "width": 1440,
+        "height": 1100
+      },
+      "mobileDevice": "Pixel 5",
+      "capabilityFps": 60,
+      "ambientFps": 30,
+      "capabilityFrameLimitsMs": {
+        "desktop": 20,
+        "mobile": 34
+      },
+      "launch": {
+        "headless": false,
+        "channel": "chrome",
+        "args": [
+          "--use-angle=metal",
+          "--use-gl=angle"
+        ],
+        "ignoreDefaultArgs": [
+          "--use-angle=swiftshader",
+          "--disable-gpu"
+        ]
+      }
+    },
+    "settingsSha256": "cadc73b9b0a00e073bd292f922a0c84d8eb5fce5093137b85e56c0388d4eb9d3"
+  },
+  "pageMeasurementResult": "pass",
+  "pageMeasurementFailures": [],
+  "runs": [
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 1,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 972397,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.70000076293945,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 2,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 972397,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.900001525878906,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.399999618530273,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 3,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 972397,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.900001525878906,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 4,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 972397,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.5,
+        "cpuP95": 1.100000023841858,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "desktop",
+      "run": 5,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 972397,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.900001525878906,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.399999618530273,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 1,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 943331,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 35,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.200000762939453,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 2,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 943331,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 35,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 3,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 943331,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 35,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 4,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 943331,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.79999923706055,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 17.799999237060547,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "profile": "mobile-emulation",
+      "run": 5,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 943331,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.5,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.100000381469727,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 1,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 978178,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 35,
+        "cpuP95": 1.100000023841858,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 2,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 978178,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.900001525878906,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 3,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 978178,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.900001525878906,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 4,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 978178,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "desktop",
+      "run": 5,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 978178,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 35,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "balanced",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 1,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 949112,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 35,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.200000762939453,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 2,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 949112,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.599998474121094,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.200000762939453,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 3,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 949112,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.900001525878906,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 4,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 949112,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 35,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.800000011920929,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/demo",
+      "profile": "mobile-emulation",
+      "run": 5,
+      "complete": true,
+      "freshContext": true,
+      "throughReady": true,
+      "transferBytes": 949112,
+      "specimenRequestCount": 0,
+      "renderingClass": "hardware",
+      "ambient": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 34.099998474121094,
+        "cpuP95": 1,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 30,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "capability": {
+        "drawCalls": 39,
+        "triangles": 35472,
+        "materials": 9,
+        "geometries": 39,
+        "textures": 5,
+        "estimatedBytes": 7967462,
+        "peakEstimatedBytes": 9605862,
+        "frameP95": 18.299999237060547,
+        "cpuP95": 0.8999999761581421,
+        "dpr": 1,
+        "quality": "economy",
+        "targetFps": 60,
+        "sampleCount": 121,
+        "missedRatio": 0,
+        "hiddenFrameCount": 0
+      },
+      "settledPauseFrameDelta": 0,
+      "budgetFailures": [],
+      "pageErrors": []
+    }
+  ],
+  "lifecycle": {
+    "result": "pass",
+    "errors": [],
+    "budgetFailures": [],
+    "closeCycles": 10,
+    "assetCycles": 10,
+    "motionMaxConcurrentActivityObserved": 2,
+    "steadyStatusLamps": 12,
+    "returnedOverviewAudit": {
+      "result": "pass",
+      "source": "build/facility/facility-v7/browser-validation-native.json",
+      "buildId": "w2z9veXyp4PSVzR2uzc5-",
+      "returnedOverview": [
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        },
+        {
+          "geometries": 39,
+          "textures": 5,
+          "estimatedBytes": 7967462,
+          "drawCalls": 39,
+          "materials": 9
+        }
+      ],
+      "closeCycles": 10,
+      "assetCycles": 10,
+      "peakEstimatedBytes": 11866267,
+      "closeHeapGrowth": 1651340,
+      "assetHeapGrowth": 909640
+    }
+  },
+  "transport": {
+    "result": "pass",
+    "comparisons": 20,
+    "limitations": [
+      "Transport-only loopback replay, not a browser navigation: no browser parsing, JS, rendering, LCP, CLS, TBT, GPU or device throttling.",
+      "Encoded payload excludes HTTP headers, TLS overhead and HTTP/2 framing. This is not the whole-page transfer budget and does not replace the unchanged Lighthouse gate.",
+      "Device labels identify observed request sets only. Requests use an identical Node user agent and bounded queue, not browser dependency discovery or scheduling.",
+      "HTTP/2 measurement includes TLS connection establishment, an extra local proxy hop and dynamic Brotli compression at quality 5. HTTP/1 uses actual production response encodings.",
+      "Raster/vector image responses retain upstream encoded bytes. Each pair must have identical decoded response sizes and SHA-256 hashes.",
+      "No response cache in the proxy; upstream Next.js and operating-system caches remain uncontrolled. Pair ordering alternates to reduce ordering bias."
+    ],
+    "summary": [
+      {
+        "route": "/",
+        "profile": "desktop",
+        "pairedRuns": 5,
+        "allDecodedHashesMatch": true,
+        "modes": [
+          {
+            "mode": "http1-production",
+            "medianEncodedPayloadBytes": 959671,
+            "medianTransportElapsedMs": 22.449791000000005,
+            "minTransportElapsedMs": 19.729874999999993,
+            "maxTransportElapsedMs": 26.993291999999997
+          },
+          {
+            "mode": "http2-brotli",
+            "medianEncodedPayloadBytes": 918348,
+            "medianTransportElapsedMs": 40.83641699999998,
+            "minTransportElapsedMs": 39.77320900000001,
+            "maxTransportElapsedMs": 51.12866700000001
+          }
+        ]
+      },
+      {
+        "route": "/",
+        "profile": "mobile-emulation",
+        "pairedRuns": 5,
+        "allDecodedHashesMatch": true,
+        "modes": [
+          {
+            "mode": "http1-production",
+            "medianEncodedPayloadBytes": 930605,
+            "medianTransportElapsedMs": 20.341750000000047,
+            "minTransportElapsedMs": 19.539332999999942,
+            "maxTransportElapsedMs": 22.924999999999955
+          },
+          {
+            "mode": "http2-brotli",
+            "medianEncodedPayloadBytes": 889282,
+            "medianTransportElapsedMs": 39.71504200000004,
+            "minTransportElapsedMs": 38.18758300000002,
+            "maxTransportElapsedMs": 42.02658399999996
+          }
+        ]
+      },
+      {
+        "route": "/demo",
+        "profile": "desktop",
+        "pairedRuns": 5,
+        "allDecodedHashesMatch": true,
+        "modes": [
+          {
+            "mode": "http1-production",
+            "medianEncodedPayloadBytes": 964694,
+            "medianTransportElapsedMs": 27.443084,
+            "minTransportElapsedMs": 24.209666999999968,
+            "maxTransportElapsedMs": 30.20245799999998
+          },
+          {
+            "mode": "http2-brotli",
+            "medianEncodedPayloadBytes": 923637,
+            "medianTransportElapsedMs": 45.42670899999996,
+            "minTransportElapsedMs": 44.76933299999996,
+            "maxTransportElapsedMs": 47.24412499999994
+          }
+        ]
+      },
+      {
+        "route": "/demo",
+        "profile": "mobile-emulation",
+        "pairedRuns": 5,
+        "allDecodedHashesMatch": true,
+        "modes": [
+          {
+            "mode": "http1-production",
+            "medianEncodedPayloadBytes": 935628,
+            "medianTransportElapsedMs": 26.491250000000036,
+            "minTransportElapsedMs": 24.986249999999927,
+            "maxTransportElapsedMs": 28.845000000000027
+          },
+          {
+            "mode": "http2-brotli",
+            "medianEncodedPayloadBytes": 894571,
+            "medianTransportElapsedMs": 45.64437500000008,
+            "minTransportElapsedMs": 44.06183299999998,
+            "maxTransportElapsedMs": 47.79420899999991
+          }
+        ]
+      }
+    ]
+  },
+  "ecosystem": {
+    "result": "pass",
+    "stillStates": 36,
+    "errors": [],
+    "motionSamples": 55,
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)"
+  },
+  "explicitSpecimens": {
+    "result": "pass",
+    "measuredAt": "2026-09-24T01:59:19.735Z",
+    "scope": "One fresh cache-disabled production Chrome context, explicit overview then explicit rack and cooling assemblies. Incremental request ledgers through settled readiness; no timed cadence, LCP, whole-page or physical-device conclusion.",
+    "byteDefinitions": {
+      "wireBytes": "CDP Network.loadingFinished.encodedDataLength from the existing TransferLedger, summed without adding header bytes again",
+      "headerBytes": "CDP response.encodedDataLength recorded by TransferLedger",
+      "encodedDataBytes": "Sum of CDP dataReceived.encodedDataLength",
+      "responseHash": "SHA-256 of the actual decoded response body returned by Chrome, compared with the frozen release file"
+    },
+    "noSpecimensBeforeExplicit": true,
+    "totalExplicitSpecimenWireBytes": 452878,
+    "errors": [],
+    "hashErrors": [],
+    "stages": [
+      {
+        "phase": "explicit-rack",
+        "action": "Server rack",
+        "requestedFile": "rack.glb",
+        "complete": true,
+        "transfer": {
+          "requests": [
+            {
+              "requestId": "33992.49",
+              "hop": 0,
+              "url": "http://127.0.0.1:3000/assets/facility/facility-v7/rack.glb",
+              "type": "Fetch",
+              "status": 200,
+              "encoding": "br",
+              "headerBytes": 661,
+              "dataBytes": 240547,
+              "bytes": 241208,
+              "terminal": "finished",
+              "error": null
+            }
+          ],
+          "requestCount": 1,
+          "complete": true,
+          "wireBytes": 241208,
+          "headerBytes": 661,
+          "encodedDataBytes": 240547
+        },
+        "readinessAndSettlementElapsedMs": 829.0978749999999,
+        "model": {
+          "file": "rack.glb",
+          "wireBytes": 241208,
+          "headerBytes": 661,
+          "encodedDataBytes": 240547,
+          "contentEncoding": "br",
+          "actualDecodedBytes": 730672,
+          "actualSha256": "0561cd72dce6fdba81c4c77b7ed23d013f4ca63118d1554a7df095fcf77ae5d7",
+          "matchesManifest": true
+        }
+      },
+      {
+        "phase": "explicit-cooling",
+        "action": "Cooling assembly",
+        "requestedFile": "cooling.glb",
+        "complete": true,
+        "transfer": {
+          "requests": [
+            {
+              "requestId": "33992.53",
+              "hop": 0,
+              "url": "http://127.0.0.1:3000/assets/facility/facility-v7/cooling.glb",
+              "type": "Fetch",
+              "status": 200,
+              "encoding": "br",
+              "headerBytes": 661,
+              "dataBytes": 211009,
+              "bytes": 211670,
+              "terminal": "finished",
+              "error": null
+            }
+          ],
+          "requestCount": 1,
+          "complete": true,
+          "wireBytes": 211670,
+          "headerBytes": 661,
+          "encodedDataBytes": 211009
+        },
+        "readinessAndSettlementElapsedMs": 804.9362499999997,
+        "model": {
+          "file": "cooling.glb",
+          "wireBytes": 211670,
+          "headerBytes": 661,
+          "encodedDataBytes": 211009,
+          "contentEncoding": "br",
+          "actualDecodedBytes": 364456,
+          "actualSha256": "f2ff6b526ff7825a683bbd201ed24ec60e9ac6895e9bfcd39b2bf31f13fc9d75",
+          "matchesManifest": true
+        }
+      }
+    ]
+  },
+  "sustainedAttempt1": {
+    "result": "fail",
+    "requestedDurationSeconds": 900,
+    "sampleCount": 481,
+    "lastSample": {
+      "elapsedSeconds": 485.29856662500003,
+      "geometries": 39,
+      "textures": 5,
+      "materials": 9,
+      "estimatedBytes": 7967462,
+      "dpr": 1.5,
+      "quality": "high",
+      "hiddenFrameCount": 0,
+      "targetFps": 30,
+      "frameP95": 41.599998474121094
+    },
+    "errors": [],
+    "lifecycleEvents": [
+      {
+        "event": "page-close",
+        "at": "2026-09-24T01:58:12.796Z",
+        "intentionalShutdown": false
+      },
+      {
+        "event": "context-close",
+        "at": "2026-09-24T01:58:12.815Z",
+        "intentionalShutdown": true
+      },
+      {
+        "event": "browser-disconnected",
+        "at": "2026-09-24T01:58:12.827Z",
+        "intentionalShutdown": true
+      }
+    ],
+    "failure": "page.waitForTimeout: Target page, context or browser has been closed",
+    "interpretation": "Incomplete: unexpected page closure; no page-crash event or application error recorded, cause unknown. Does not establish an external/user cause or sustained acceptance. Preserved separately from the passing second attempt."
+  },
+  "sustainedAttempt2": {
+    "result": "pass",
+    "measuredAt": "2026-09-24T01:59:51.648Z",
+    "summary": {
+      "elapsedSeconds": 900.0506593749999,
+      "sampleCount": 892,
+      "tiers": [
+        "balanced",
+        "high"
+      ],
+      "maxPeakEstimatedBytes": 9605862,
+      "cpuP95": 0.8999999761581421,
+      "cadenceP95": 35,
+      "maxMissedRatio": 0.008264462809917356,
+      "interactionP95": 33.959000000031665,
+      "hiddenFrames": 0
+    },
+    "interactionCount": 14,
+    "interactions": [
+      {
+        "elapsedSeconds": 60.544472292,
+        "systemIndex": 0,
+        "inputThroughFrameMs": 21.26600000000326
+      },
+      {
+        "elapsedSeconds": 121.084204292,
+        "systemIndex": 1,
+        "inputThroughFrameMs": 31.53962500000489
+      },
+      {
+        "elapsedSeconds": 181.590908917,
+        "systemIndex": 2,
+        "inputThroughFrameMs": 23.99895799998194
+      },
+      {
+        "elapsedSeconds": 242.11626516699997,
+        "systemIndex": 3,
+        "inputThroughFrameMs": 29.281667000002926
+      },
+      {
+        "elapsedSeconds": 302.658575375,
+        "systemIndex": 0,
+        "inputThroughFrameMs": 24.735583000001498
+      },
+      {
+        "elapsedSeconds": 363.20009016700004,
+        "systemIndex": 1,
+        "inputThroughFrameMs": 29.343416000017896
+      },
+      {
+        "elapsedSeconds": 423.76745937500004,
+        "systemIndex": 2,
+        "inputThroughFrameMs": 32.728209000022616
+      },
+      {
+        "elapsedSeconds": 484.31668525000003,
+        "systemIndex": 3,
+        "inputThroughFrameMs": 31.37495799997123
+      },
+      {
+        "elapsedSeconds": 544.8612775839999,
+        "systemIndex": 0,
+        "inputThroughFrameMs": 34.40433300007135
+      },
+      {
+        "elapsedSeconds": 605.4273385419999,
+        "systemIndex": 1,
+        "inputThroughFrameMs": 33.959000000031665
+      },
+      {
+        "elapsedSeconds": 665.968344292,
+        "systemIndex": 2,
+        "inputThroughFrameMs": 26.723708000034094
+      },
+      {
+        "elapsedSeconds": 726.508033,
+        "systemIndex": 3,
+        "inputThroughFrameMs": 30.67262500000652
+      },
+      {
+        "elapsedSeconds": 787.0490831669999,
+        "systemIndex": 0,
+        "inputThroughFrameMs": 22.22958300006576
+      },
+      {
+        "elapsedSeconds": 847.5913722500001,
+        "systemIndex": 1,
+        "inputThroughFrameMs": 30.974625000031665
+      }
+    ],
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+    "errors": [],
+    "lifecycleEvents": [
+      {
+        "event": "page-close",
+        "at": "2026-09-24T02:14:53.767Z",
+        "intentionalShutdown": true
+      },
+      {
+        "event": "context-close",
+        "at": "2026-09-24T02:14:53.768Z",
+        "intentionalShutdown": true
+      },
+      {
+        "event": "browser-disconnected",
+        "at": "2026-09-24T02:14:53.810Z",
+        "intentionalShutdown": true
+      }
+    ],
+    "lastSample": {
+      "elapsedSeconds": 900.034810292,
+      "activeSeconds": 900.4576000001293,
+      "geometries": 39,
+      "textures": 5,
+      "materials": 9,
+      "estimatedBytes": 7967462,
+      "peakEstimatedBytes": 9605862,
+      "dpr": 1.5,
+      "quality": "high",
+      "hiddenFrameCount": 0,
+      "targetFps": 30,
+      "tierHistory": [
+        {
+          "activeSeconds": 0,
+          "reason": "conservative-startup",
+          "from": null,
+          "to": "balanced"
+        },
+        {
+          "activeSeconds": 31.408300000000132,
+          "reason": "stable-visible-performance",
+          "from": "balanced",
+          "to": "high"
+        }
+      ]
+    },
+    "constantResourceCounts": true,
+    "thermalBefore": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "thermalAfter": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+    "thermalInterpretation": "pmset reports no recorded thermal/performance warning level or CPU power status. No temperature, energy, or absence-of-throttling guarantee is established.",
+    "gpuTimestampSamples": "Not collected by this harness."
+  }
+}

@@ -1,0 +1,282 @@
+{
+  "release": "facility-v4",
+  "baseURL": "http://localhost:3001",
+  "viewport": [
+    1360,
+    800
+  ],
+  "reducedMotion": true,
+  "modelSha256": "61f8bd275e0245f4a2c4919c34428034f47cd8b4a565a4be38d0ca783c96ab2e",
+  "profileSha256": "768b90f70280fb486370907be967cf0ec9e19a22221d0e4cae9c1804fc061358",
+  "posters": {
+    "poster-desktop.webp": "496adbad657cc534a9ebaf0193fdfa28caaef282027a7d6656cda2a189dca7dc",
+    "poster-mobile.webp": "4b1fd082a48c6ff9aa2747c8066c8edba90486a8ac22d7c70b401f835ffaea08",
+    "rack-closed.webp": "cc742bbc46309d9f666848cf39c9ef3ef66929b41383f96e8520f83c00503559",
+    "rack-cutaway.webp": "c6d016c69eec842aed9408ec8eaf92c740887d051ee7479ab80ec936b42e4dc4",
+    "cooling-closed.webp": "45864cb04b2bae729ffb7dea33f2bb2b06f8b494bfc7ed7124560811699d186a",
+    "cooling-cutaway.webp": "2c978cc3b9141ae8317668add625c828fb5b6c411e053e14fa261871d0b095b0"
+  },
+  "metadata": {
+    "frames": 7,
+    "drawCalls": 39,
+    "triangles": 33310,
+    "geometries": 39,
+    "textures": 4,
+    "materials": 10,
+    "estimatedBytes": 7412735,
+    "peakEstimatedBytes": 9051135,
+    "environmentBytes": 2359296,
+    "frameP95": null,
+    "cpuP95": null,
+    "sampleCount": 0,
+    "dpr": 1,
+    "quality": "balanced",
+    "targetFps": 30,
+    "activeSeconds": 0,
+    "view": {
+      "kind": "overview"
+    },
+    "qualityProbe": false,
+    "assetError": null,
+    "requestedView": {
+      "kind": "overview"
+    },
+    "sceneKind": "overview",
+    "probeName": "GN_PLATFORM_Dark",
+    "probeVisible": true,
+    "probeRendered": true,
+    "missedRatio": 0,
+    "width": 1360,
+    "height": 800
+  },
+  "selectionPixels": {
+    "power": 7983,
+    "cooling": 33368,
+    "storage": 20781,
+    "workloads": 50898
+  },
+  "specimens": {
+    "rack": {
+      "modelSha256": "8c466a4012aea468c6d0cf7f27a7a696a679440bda7436d95c17baf790c99123",
+      "profileSha256": "b908aeff011efb41b910df5279f8413c870b994eb433b1e321cf32155d061727",
+      "poses": {
+        "closed": {
+          "frames": 4,
+          "drawCalls": 26,
+          "triangles": 9962,
+          "geometries": 26,
+          "textures": 4,
+          "materials": 8,
+          "estimatedBytes": 5804455,
+          "peakEstimatedBytes": 10857894,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "closed"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "closed"
+          },
+          "sceneKind": "rack",
+          "probeName": "GN_RACK_DOOR_Graphite",
+          "probeVisible": true,
+          "probeRendered": true,
+          "missedRatio": 0
+        },
+        "cutaway": {
+          "frames": 6,
+          "drawCalls": 21,
+          "triangles": 9656,
+          "geometries": 26,
+          "textures": 4,
+          "materials": 8,
+          "estimatedBytes": 5804455,
+          "peakEstimatedBytes": 10857894,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "cutaway"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "cutaway"
+          },
+          "sceneKind": "rack",
+          "probeName": "GN_RACK_DOOR_Graphite",
+          "probeVisible": false,
+          "probeRendered": true,
+          "missedRatio": 0
+        },
+        "service": {
+          "frames": 8,
+          "drawCalls": 21,
+          "triangles": 9656,
+          "geometries": 26,
+          "textures": 4,
+          "materials": 8,
+          "estimatedBytes": 5804455,
+          "peakEstimatedBytes": 10857894,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "service"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "rack",
+            "pose": "service"
+          },
+          "sceneKind": "rack",
+          "probeName": "GN_RACK_DOOR_Graphite",
+          "probeVisible": false,
+          "probeRendered": true,
+          "missedRatio": 0
+        }
+      }
+    },
+    "cooling": {
+      "modelSha256": "3a6f828ce8a0d390f22e3a4d40dcafbc150aecad6ce023224f3a3d3d3c84f019",
+      "profileSha256": "f931f06f2a1846718f81624a3468184a099dff9e90f340dee08aa717a79bd514",
+      "poses": {
+        "closed": {
+          "frames": 9,
+          "drawCalls": 17,
+          "triangles": 4194,
+          "geometries": 17,
+          "textures": 4,
+          "materials": 7,
+          "estimatedBytes": 5368543,
+          "peakEstimatedBytes": 8813702,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "closed"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "closed"
+          },
+          "sceneKind": "cooling",
+          "probeName": "GN_COOLER_COIL_Copper",
+          "probeVisible": true,
+          "probeRendered": true,
+          "missedRatio": 0
+        },
+        "cutaway": {
+          "frames": 11,
+          "drawCalls": 14,
+          "triangles": 3900,
+          "geometries": 17,
+          "textures": 4,
+          "materials": 7,
+          "estimatedBytes": 5368543,
+          "peakEstimatedBytes": 8813702,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "cutaway"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "cutaway"
+          },
+          "sceneKind": "cooling",
+          "probeName": "GN_COOLER_COIL_Copper",
+          "probeVisible": true,
+          "probeRendered": true,
+          "missedRatio": 0
+        },
+        "service": {
+          "frames": 13,
+          "drawCalls": 14,
+          "triangles": 3900,
+          "geometries": 17,
+          "textures": 4,
+          "materials": 7,
+          "estimatedBytes": 5368543,
+          "peakEstimatedBytes": 8813702,
+          "environmentBytes": 2359296,
+          "frameP95": null,
+          "cpuP95": null,
+          "sampleCount": 0,
+          "dpr": 1,
+          "quality": "balanced",
+          "targetFps": 30,
+          "activeSeconds": 0,
+          "view": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "service"
+          },
+          "qualityProbe": false,
+          "assetError": null,
+          "requestedView": {
+            "kind": "specimen",
+            "specimen": "cooling",
+            "pose": "service"
+          },
+          "sceneKind": "cooling",
+          "probeName": "GN_COOLER_COIL_Copper",
+          "probeVisible": true,
+          "probeRendered": true,
+          "missedRatio": 0
+        }
+      }
+    }
+  }
+}

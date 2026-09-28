@@ -1,0 +1,2046 @@
+{
+  "schemaVersion": "facility-asset-material-benchmark.v1",
+  "release": "facility-v5",
+  "measuredAt": "2026-09-23T21:37:07.283Z",
+  "browser": "154.0.8037.58",
+  "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5",
+  "assetHashes": {
+    "facility.glb": "cf825af47355dddc778440da5a3ad8848abef8409e313d680b0a0eb0ac88cc5d",
+    "rack.glb": "0529a7ec64061dba4843abbcde77a1e25ad7d40074e9064377d3d2f4570cce06",
+    "cooling.glb": "cc048f992035b72320f930159196f0ae55555f5789754eafd114019dd9461e62"
+  },
+  "sourceDigests": {
+    "scripts/facility/capture-material-assets.mjs": "c21d2cec6c886e0ab72bd587ac47dc5b837ab7bfa5384bfe558499b09b88e42a",
+    "src/lib/facility/asset-runtime.ts": "89cead012e8475fee683322034e1f955cbe59d7cc949eb7ed9bf8f66f645cb22",
+    "src/lib/facility/asset-preflight.ts": "3d6c08a28864dab3b6d0b0584965b576d326ae9906d83ed4be0053bbc5b31c41",
+    "src/lib/facility/surface-contract.ts": "ecfd5e1a282008788c13fd29432e3e4ae4fcbe119f60fdae5bddae86b749555f",
+    "src/lib/facility/surface-coverage.ts": "d2ac64257dc7ca5894bda89db4c4a5d4bfce78256c2f7d5cbc4f2fd65598e24b",
+    "src/lib/facility/topology-runtime.ts": "86dce6113d27be4a01f473beffb017b7d54037cc1900fbde2f75331ea6a16638",
+    "src/lib/facility/engineering-materials.ts": "6468d33154c1a58d89229576b5534d65844a5a758a417a5ee852dfc5f3145958",
+    "src/lib/facility/render-environment.ts": "abeee78e503e3db76b89630863793b7a619017c94f10eddd9df44a5098ad70f4",
+    "src/lib/facility/render-framing.ts": "12a6bd981bd6fc83250300e10917f832c40a86f7f2a4c564ab44c306f3e358bb",
+    "src/lib/facility/inspection-camera.ts": "098dd83fe9de1437fad7df836f83c2036463ddb8b28d950c1a16b707b95bc82b",
+    "src/types/facility.ts": "f09c212ad8c40b98d98a3478d8050c27546ba66904e82476530a9d43a3d17e8f",
+    "tests/support/facility-asset-material-fixture.mjs": "e83a91340f064f968ee269ade87ee9cffab76e5f6814acd7d1418d886a4f97b2",
+    "node_modules/three/build/three.module.js": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+    "node_modules/three/build/three.core.js": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+    "node_modules/three/examples/jsm/loaders/GLTFLoader.js": "131c0f78c01d19368ae495caa65b3adaa10487810a36a05bb5901b769a35ac16",
+    "node_modules/three/examples/jsm/utils/BufferGeometryUtils.js": "9fb63427ce6641fa14fd0baff9cc4d1b5f9c3d85fd084bf2e90e803c44ec1797",
+    "node_modules/three/examples/jsm/utils/SkeletonUtils.js": "b1632a703206c3d830de9fcbe515696770d04b71a15ee6b50afa6d2c3298c86f"
+  },
+  "result": "pass",
+  "captures": [
+    {
+      "filename": "rack-closed-dpr1-final.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "final",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "3296150e91c98465580c88e84272dbb451ddee40839def1a13c669f15573a468"
+    },
+    {
+      "filename": "rack-closed-dpr1-gray.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "gray",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "2484d9ccd5f70bfd6eaf6986046d65e858ff80715401e7a29a2071f19ca3106e"
+    },
+    {
+      "filename": "rack-closed-dpr1-normal.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "normal",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "87a6927e1f403172b1410a7ea7c34780372928a7d504c23f1cf27eab46715dd8"
+    },
+    {
+      "filename": "rack-closed-dpr1-roughness.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "roughness",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "023f13c46080406ef3299544ec05db492a7830c82104287364baa42049f140d6"
+    },
+    {
+      "filename": "rack-closed-dpr1.5-final.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "final",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "8143f3888ca2b508300c73fcade7d3bdb160ec74b5bae749004d79ff2c3bbe3c"
+    },
+    {
+      "filename": "rack-closed-dpr1.5-gray.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "gray",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "f708a401e62a7c4965a683156f5ce851f29889d3d97521ffab84c5ba7ba4b192"
+    },
+    {
+      "filename": "rack-closed-dpr1.5-normal.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "normal",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "aa290eb48beb14d68b16ff550f94b299b8c1faa899b4360b556abbfadf22c0db"
+    },
+    {
+      "filename": "rack-closed-dpr1.5-roughness.png",
+      "kind": "rack",
+      "pose": "closed",
+      "mode": "roughness",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 25,
+      "triangles": 9418,
+      "camera": {
+        "position": [
+          3.2,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.9267593912036127,
+          2.9267593912036127,
+          1.9461102562970933,
+          -1.4971360862953924
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "dd5b45c338b1c964cc3dfaf3a38a14467986863b0063be5f566612f880c7e356"
+    },
+    {
+      "filename": "rack-cutaway-dpr1-final.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "final",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "9d4efd0b805c6857de1fd47dad68ae4c4059c22bd7f305eb010a4db8f635eede"
+    },
+    {
+      "filename": "rack-cutaway-dpr1-gray.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "gray",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "93e600f2fa90ebc96d956611056d8c861f8abf8785b5bf99463e7e32aa01f35f"
+    },
+    {
+      "filename": "rack-cutaway-dpr1-normal.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "normal",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "c2108879f12e0bace6761c7d2a8697d5b00aa6cdf345f5b0eb88e618484890a9"
+    },
+    {
+      "filename": "rack-cutaway-dpr1-roughness.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "roughness",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "344ebaf2811cfc6991551d24c9f2c6324efafa8e6163acddb7694823851d66e3"
+    },
+    {
+      "filename": "rack-cutaway-dpr1.5-final.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "final",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "9e56cffd26119d686ce579e90216900d013f0da3ca78815279a42d0874897258"
+    },
+    {
+      "filename": "rack-cutaway-dpr1.5-gray.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "gray",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "5115f295cffcbaf363e5b65a5b18d004c117f947daf85a8e9d219a098f77c62e"
+    },
+    {
+      "filename": "rack-cutaway-dpr1.5-normal.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "normal",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "87b04c60f9b7fe0f0ce7d830dac0123d2bd8983e2123184c4325a4028e1999b0"
+    },
+    {
+      "filename": "rack-cutaway-dpr1.5-roughness.png",
+      "kind": "rack",
+      "pose": "cutaway",
+      "mode": "roughness",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3.3,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.9004375471350894,
+          2.9004375471350894,
+          1.9551983718359933,
+          -1.457081095381759
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "ec022bae987085a96ee505ade9e95ec81ebaab07e3e770517120da0fe6a763ef"
+    },
+    {
+      "filename": "rack-service-dpr1-final.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "final",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "226c4de3b30a3be6557326c4210cc8a32efeb2f960d3ed6be0d0dddb66d619e9"
+    },
+    {
+      "filename": "rack-service-dpr1-gray.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "gray",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "aef0874029cd607f765dec3e662529c91237d10bf7dbaf606295c3c37513c982"
+    },
+    {
+      "filename": "rack-service-dpr1-normal.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "normal",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "6bd2c8216603eead30e5d9637d148bb9edb44c2bb1943b66d0757c9918638678"
+    },
+    {
+      "filename": "rack-service-dpr1-roughness.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "roughness",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "0d1257702751b2e7feba77fee27fa925f49760595bacd9c6321880fc0b534ff3"
+    },
+    {
+      "filename": "rack-service-dpr1.5-final.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "final",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "b85a9488cc312fe44bbfd8616f16226cdfad76468b75d131b1d35c008acd6948"
+    },
+    {
+      "filename": "rack-service-dpr1.5-gray.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "gray",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "ac5507b9364e97e0ef1b5abd94abd7a299f1b41d5705b1531cecfa4af1a87ee9"
+    },
+    {
+      "filename": "rack-service-dpr1.5-normal.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "normal",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "78736ca21342ab0907d3b8537bcfb7b4a39b67c5563a2c70925cdebe328daa2b"
+    },
+    {
+      "filename": "rack-service-dpr1.5-roughness.png",
+      "kind": "rack",
+      "pose": "service",
+      "mode": "roughness",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 20,
+      "triangles": 8906,
+      "camera": {
+        "position": [
+          3,
+          4.8,
+          3.8
+        ],
+        "frustum": [
+          -2.888745176077542,
+          3.0662450034454594,
+          1.9728263573763212,
+          -1.5301090423430914
+        ]
+      },
+      "materialNames": [
+        "Graphite",
+        "Grille",
+        "Trim",
+        "Dark",
+        "Platform",
+        "Steel",
+        "Copper",
+        ""
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "66957b9ab7695d74d8af33c56f60dcfe8daa09d9c64ca4f36b7eba31584c3a22"
+    },
+    {
+      "filename": "cooling-closed-dpr1-final.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "final",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "e443f945435723b4c9b55d58ab448e5e7b3afcf10bd74554d2fc6aabb203fec1"
+    },
+    {
+      "filename": "cooling-closed-dpr1-gray.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "gray",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "2a05c59a8e77be0766bd63cb5ff82284362a502a647d0148ba29b2062ab8601a"
+    },
+    {
+      "filename": "cooling-closed-dpr1-normal.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "normal",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "4799a2f13018083368cdfbe7e80a567a3fd6c535166101a8b3f0d2f0adcd3c49"
+    },
+    {
+      "filename": "cooling-closed-dpr1-roughness.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "roughness",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "573aca4cf80eb9e87f8214608526631d64967f03216e2d5ce32ec2af5f53a5f5"
+    },
+    {
+      "filename": "cooling-closed-dpr1.5-final.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "final",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "a90b44f38a05802a226d9153d05189fafa03ef06752bd2380a49bd5faaa9403c"
+    },
+    {
+      "filename": "cooling-closed-dpr1.5-gray.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "gray",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "328fbdf561bd591238f8c0cf29d155fd88c5b7865ae7702c27fff217e0fbfb1d"
+    },
+    {
+      "filename": "cooling-closed-dpr1.5-normal.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "normal",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "c639a38854088f6d78856de14385ac09d29985445f3b341f75e6fce7d6471b8f"
+    },
+    {
+      "filename": "cooling-closed-dpr1.5-roughness.png",
+      "kind": "cooling",
+      "pose": "closed",
+      "mode": "roughness",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 17,
+      "triangles": 4194,
+      "camera": {
+        "position": [
+          3.4,
+          2.7,
+          4
+        ],
+        "frustum": [
+          -2.308848317666985,
+          2.308848317666985,
+          1.2566660206004923,
+          -1.4596261178312548
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "b9527e20598fdfebcf9ca841ba6b2c81d1e41fa7989b2151c607fb13313ae672"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1-final.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "final",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "7fc27151f2d7ac10fca7a71ffaaaba8a5948f1d180ea7ae7113e771efe8c104e"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1-gray.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "gray",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "5b1a6bb9d25840ea05cba5d84621a5e5ba1b01ee004b95698b2621aa49797727"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1-normal.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "normal",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "5c3a1213d7e40396fb8e4d2d6b44690ad568e15c37b5d1ba4698f8fbbcd55b55"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1-roughness.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "roughness",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "7bbab453c13104088d1827e82701c92860c4d4526c5407db775a843448fb324e"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1.5-final.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "final",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "6be69900a2bdcacc151fd7c602bae0550a09fc8b17e83b34f9c7b2d84b30eb34"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1.5-gray.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "gray",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "f61e6e69bd716bb22e02ec4d536e76bbd499e9e96c9b2a1934b7d068b6479401"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1.5-normal.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "normal",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "de4eb2d69f2acb3359669dbff8f34abccf801fcd6be666f803c9f40582102e68"
+    },
+    {
+      "filename": "cooling-cutaway-dpr1.5-roughness.png",
+      "kind": "cooling",
+      "pose": "cutaway",
+      "mode": "roughness",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          3.4,
+          2.5,
+          4
+        ],
+        "frustum": [
+          -2.2763822168383316,
+          2.2763822168383316,
+          1.2402970427950462,
+          -1.4377996828971087
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "0ef0fe7d7d8130ccdb34a624ace3d0b50f846f2e2c45d73a1106708e538adce1"
+    },
+    {
+      "filename": "cooling-service-dpr1-final.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "final",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "1538cc79eee2fbddbd0b0a26c1118dfdbe2b241d7b301aa35511a0e8d46506ce"
+    },
+    {
+      "filename": "cooling-service-dpr1-gray.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "gray",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "e4592b50b364527f4174286a21998269457b1761a62afaa30001e7c0489ad997"
+    },
+    {
+      "filename": "cooling-service-dpr1-normal.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "normal",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "28c821c60f700b0976f2a093ffbf4069255ace3be9b08a9f1da5eff48f99a196"
+    },
+    {
+      "filename": "cooling-service-dpr1-roughness.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "roughness",
+      "dpr": 1,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1020,
+        600
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "d5dd45b08ba3bada9825b765323999b6f00d45b3856a52df7179dda390913e4d"
+    },
+    {
+      "filename": "cooling-service-dpr1.5-final.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "final",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Production PBR materials and authored lighting.",
+      "sha256": "0b3a9a1b0aa6230434e61d2298b41a086e58ae45bfd300a37cc5cfbb221c3c0e"
+    },
+    {
+      "filename": "cooling-service-dpr1.5-gray.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "gray",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Neutral diffuse geometry with fixed roughness, AO and masked coverage retained.",
+      "sha256": "4b8d835a009e915cc65f9e19560ba8f29a011207e28cc2a9590352a8041e56a7"
+    },
+    {
+      "filename": "cooling-service-dpr1.5-normal.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "normal",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "View-space perturbed normals encoded as RGB, before tone mapping.",
+      "sha256": "006b7864edb57c2c168abddcab93fe4b9906a5dc9264c475119805732444a4cc"
+    },
+    {
+      "filename": "cooling-service-dpr1.5-roughness.png",
+      "kind": "cooling",
+      "pose": "service",
+      "mode": "roughness",
+      "dpr": 1.5,
+      "cssSize": [
+        1020,
+        600
+      ],
+      "drawingBuffer": [
+        1530,
+        900
+      ],
+      "drawCalls": 14,
+      "triangles": 3900,
+      "camera": {
+        "position": [
+          2.2,
+          2.8,
+          5.2
+        ],
+        "frustum": [
+          -2.3246249248141,
+          2.244426741825156,
+          1.355179186902895,
+          -1.332498264061373
+        ]
+      },
+      "materialNames": [
+        "Copper",
+        "Graphite",
+        "Steel",
+        "Trim",
+        "Platform",
+        "Dark",
+        "Grille"
+      ],
+      "interpretation": "Final scalar roughness, including authored map and factor, encoded directly as grayscale.",
+      "sha256": "95d1a6543a5205355a908644e899ee74086d33645ed7d925935535bf6338c306"
+    }
+  ],
+  "errors": [],
+  "graphics": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)",
+    "threeRevision": "186",
+    "samples": 4,
+    "note": "Actual candidate GLBs loaded by production asset loader/composer, studio environment and inspection framing. Diagnostic modes are local test-only material clones; continuous activity is frozen."
+  },
+  "contactSheetOrder": {
+    "columns": [
+      "final",
+      "gray",
+      "normal",
+      "roughness"
+    ],
+    "rows": [
+      "closed",
+      "cutaway",
+      "service"
+    ]
+  }
+}

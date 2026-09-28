@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 1,
+  "engine": "Blender Cycles",
+  "blender": "5.2.2 LTS",
+  "seed": 19,
+  "resolution": [
+    512,
+    512
+  ],
+  "colorResolution": [
+    256,
+    256
+  ],
+  "gutterPixels": 8,
+  "normalMappedRoles": [
+    "grille"
+  ],
+  "metricTileFootprints": {
+    "paint": [
+      4.0,
+      4.0
+    ],
+    "rack_a": [
+      0.4,
+      0.8
+    ],
+    "face_a": [
+      0.3,
+      0.2
+    ],
+    "face_b": [
+      0.2,
+      0.2
+    ],
+    "coil": [
+      1.1,
+      3.0
+    ]
+  },
+  "ormFinishes": {
+    "floor": [
+      0.78,
+      0
+    ],
+    "plinth": [
+      0.5,
+      0
+    ],
+    "rack_a": [
+      0.55,
+      0
+    ],
+    "face_a": [
+      0.55,
+      0
+    ],
+    "face_b": [
+      0.55,
+      0
+    ],
+    "coil": [
+      0.55,
+      0
+    ],
+    "paint": [
+      0.5,
+      0
+    ],
+    "label": [
+      0.45,
+      0
+    ],
+    "metal": [
+      0.34,
+      1
+    ],
+    "polished": [
+      0.28,
+      1
+    ],
+    "rubber": [
+      0.76,
+      0
+    ],
+    "copper": [
+      0.32,
+      1
+    ],
+    "indicator": [
+      0.4,
+      0
+    ],
+    "platform": [
+      0.78,
+      0
+    ],
+    "polymer": [
+      0.4,
+      0
+    ]
+  },
+  "roughnessMultiplier": 1,
+  "excludedRoles": [
+    "fan_rotor",
+    "picking_proxy"
+  ],
+  "stages": [
+    {
+      "receiver": "floor",
+      "type": "CYCLES_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.75,
+      "filter": "edge-clamped separable 1-2-1",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    {
+      "receiver": "plinth",
+      "type": "CYCLES_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.75,
+      "filter": "edge-clamped separable 1-2-1",
+      "minimum": 0.0,
+      "maximum": 0.9950979948043823
+    },
+    {
+      "receiver": "rack_a",
+      "type": "CYCLES_SELECTED_TO_ACTIVE_NORMAL_AND_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.08,
+      "cageExtrusionMetres": 0.1,
+      "maxRayDistanceMetres": 0.2,
+      "highTriangles": 73728
+    },
+    {
+      "receiver": "face_a",
+      "type": "CYCLES_SELECTED_TO_ACTIVE_NORMAL_AND_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.08,
+      "cageExtrusionMetres": 0.1,
+      "maxRayDistanceMetres": 0.2,
+      "highTriangles": 73728
+    },
+    {
+      "receiver": "face_b",
+      "type": "CYCLES_SELECTED_TO_ACTIVE_NORMAL_AND_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.08,
+      "cageExtrusionMetres": 0.1,
+      "maxRayDistanceMetres": 0.2,
+      "highTriangles": 73728
+    },
+    {
+      "receiver": "coil",
+      "type": "CYCLES_SELECTED_TO_ACTIVE_NORMAL_AND_AO",
+      "samples": 64,
+      "aoDistanceMetres": 0.08,
+      "cageExtrusionMetres": 0.1,
+      "maxRayDistanceMetres": 0.2,
+      "highTriangles": 73728
+    }
+  ],
+  "images": [
+    {
+      "file": "surface-normal.png",
+      "bytes": 81825,
+      "sha256": "fb614bfeb9027e8161993e2e303e46579452164d431c8a7f75fc13579b824a9f"
+    },
+    {
+      "file": "surface-orm.png",
+      "bytes": 91778,
+      "sha256": "958eff6efc966d4d3efef2bec4cc94c7a109bfd707749bd148468e490702b2a1"
+    },
+    {
+      "file": "surface-color.png",
+      "bytes": 1638,
+      "sha256": "3c92356970b94c1523c6aeb92c4a1b110ae013471cf697ecb4ad796ad765438a"
+    }
+  ],
+  "sourceSha256": "7717bc8e95fa01db16e7eec82adf8509ea82c7b73e51a2857e0723b2756fd19b",
+  "notes": [
+    "Actual Cycles ray-traced AO and selected-to-active surface normal bakes.",
+    "AO is a visual shading aid, not physical airflow or capacity evidence.",
+    "No rotor pose or rotor shadow is baked into a receiver."
+  ]
+}
