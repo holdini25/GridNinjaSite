@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright"
-import { scrollFacilityIntoView, openFacilityDisplayOptions, chooseFacilityStillImage, settleFacilityActivity } from "../support/facility-viewer"
+import { scrollFacilityIntoView, openFacilityDisplayOptions, chooseFacilityStillImage, settleFacilityActivity, waitForFacilityReady } from "../support/facility-viewer"
 import { expect, test, type Page, type Locator } from "@playwright/test"
 
 async function openEngineering(page: Page, scenario = "b") {
@@ -8,7 +8,7 @@ async function openEngineering(page: Page, scenario = "b") {
   const inspector = page.getByTestId("facility-inspection")
   await scrollFacilityIntoView(inspector)
   await expect(inspector).toHaveAttribute("data-engineering", "true")
-  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await waitForFacilityReady(page, inspector)
   return inspector
 }
 
@@ -206,7 +206,7 @@ test.describe("facility engineering inspection", () => {
     await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector, testInfo)
     const settled = await settleFacilityActivity(page, inspector, testInfo)
     await openFacilityDisplayOptions(inspector)
     await inspector.getByRole("checkbox", { name: "Equipment motion" }).uncheck()

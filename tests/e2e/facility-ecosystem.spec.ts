@@ -1,6 +1,6 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
-import { openAssessmentControls, scrollFacilityIntoView } from "../support/facility-viewer"
+import { openAssessmentControls, scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
 
 test.describe("facility ecosystem narrative", () => {
   test("A–D chapters remain useful without graphics and never change authoritative results", async ({ page }) => {
@@ -50,7 +50,7 @@ test.describe("facility ecosystem narrative", () => {
     await page.goto("/demo")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     const original = await inspector.locator("canvas").elementHandle()
     await inspector.getByRole("button", { name: "Show air-path section", exact: true }).click()
     await expect(inspector.getByRole("button", { name: "Close air-path section", exact: true })).toHaveAttribute("aria-pressed", "true")
@@ -85,7 +85,7 @@ test.describe("facility ecosystem narrative", () => {
     await page.goto("/demo?scenario=d")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     await inspector.getByRole("button", { name: "Follow one workload", exact: true }).click()
     const story = inspector.getByTestId("facility-ecosystem-story")
     if (await inspector.getAttribute("data-quality") !== "still") {

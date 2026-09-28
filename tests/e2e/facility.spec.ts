@@ -1,14 +1,17 @@
 import AxeBuilder from "@axe-core/playwright"
-import { scrollFacilityIntoView, chooseFacilityStillImage, openAssessmentControls, settleFacilityActivity } from "../support/facility-viewer"
+import { scrollFacilityIntoView, chooseFacilityStillImage, openAssessmentControls, settleFacilityActivity, waitForFacilityReady, expectFacilityAutomaticAcquisition } from "../support/facility-viewer"
 import { expect, test } from "@playwright/test"
 
 test.describe("facility inspection", () => {
-  test("adaptive automatic loading preserves assessment quantities", async ({ page }, testInfo) => {
+  test("native automatic loading or an explicit software fallback preserves assessment quantities", async ({ page }, testInfo) => {
     await page.addInitScript(() => { window.__GN_FACILITY_DIAGNOSTICS__ = true })
+    const models: string[] = []
+    page.on("request", request => { if (new URL(request.url()).pathname.endsWith("/facility.glb")) models.push(request.url()) })
     await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await expectFacilityAutomaticAcquisition(page, inspector, models)
+    await waitForFacilityReady(page, inspector)
     const caption = await page.getByRole("region", { name: "Fixture B decision", exact: true }).textContent()
     await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("7.0 MW")
     await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("5.8 MW")
@@ -39,7 +42,7 @@ test.describe("facility inspection", () => {
     await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     const diagnostics = await inspector.locator("canvas").evaluate(async (element: HTMLCanvasElement) => {
       let mutations = 0
       const observer = new MutationObserver(records => { mutations += records.length })
@@ -56,7 +59,7 @@ test.describe("facility inspection", () => {
     await page.goto("/demo?scenario=d&perspective=engineering")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     await inspector.locator(".facility-settings summary").click()
     await expect(inspector.getByRole("checkbox", { name: "Equipment motion" })).toBeDisabled()
     await expect(inspector.getByRole("button", { name: "Pause", exact: true })).toHaveCount(0)

@@ -87,7 +87,7 @@ try {
           }
           continue
         }
-        assert((profile !== "desktop" && pages.provenance.buildSettings.mode !== "auto-adaptive") || result.throughReady, "Automatic transfer stopped before 3D readiness")
+        assert((scope.functional && result.automaticAcquisition?.reason === "software" && result.manualThroughReady) || (profile !== "desktop" && pages.provenance.buildSettings.mode !== "auto-adaptive") || result.throughReady, "Automatic transfer stopped before 3D readiness without verified software fallback/manual coverage")
         assertCompleteTransfer(result.transfer)
         assertRendererBudget(result.renderer)
         if (result.settlement) {
@@ -114,7 +114,7 @@ try {
         }
         }catch(error){summary.failures.push(`${profile} ${route} run ${result.run}: ${error instanceof Error?error.message:String(error)}`)}
       }
-      summary.profiles.push({ profile, route, lighthouseVersion: group[0].lighthouseVersion, settings: group[0].configSettings, medians, samples, throughReadyTransfers: transfers.map(result => ({ bytes: result.transfer?.bytes, cinematic: result.cinematic, renderingClass: result.renderingClass, frameP95: result.renderer?.frameP95, capabilityP95:result.capability?.frameP95, complete:result.complete, ambientCadence:result.ambientCadence, settlementMode:result.settlement?.mode ?? "legacy-explicit-pause", budgetFailures:result.budgetFailures })) })
+      summary.profiles.push({ profile, route, lighthouseVersion: group[0].lighthouseVersion, settings: group[0].configSettings, medians, samples, throughReadyTransfers: transfers.map(result => ({ bytes: result.transfer?.bytes, automaticBytes: result.automaticTransfer?.bytes, automaticAcquisition: result.automaticAcquisition, manualThroughReady: result.manualThroughReady, cinematic: result.cinematic, renderingClass: result.renderingClass, frameP95: result.renderer?.frameP95, capabilityP95:result.capability?.frameP95, complete:result.complete, ambientCadence:result.ambientCadence, settlementMode:result.settlement?.mode ?? "legacy-explicit-pause", budgetFailures:result.budgetFailures })) })
     }
   }
   summary.result = summary.failures.length ? "fail" : "pass"

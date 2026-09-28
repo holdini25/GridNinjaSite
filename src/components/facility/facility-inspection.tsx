@@ -14,6 +14,7 @@ import { commitRackJourney, INITIAL_RACK_JOURNEY } from "@/lib/facility/rack-ser
 import { isRackServiceDetail } from "@/lib/facility/rack-service-view"
 import { serviceReturnScroll } from "@/lib/facility/service-return-scroll"
 import { eligibleForAutomaticFacility, facilityConnection } from "@/lib/facility/loading-policy"
+import { probeAutomaticFacilityGraphics, type FacilityGraphicsProbe } from "@/lib/facility/graphics-capability"
 import { createPosterDecoder } from "@/lib/facility/poster-decode"
 import { readFacilityPreferences, subscribeFacilityPreferences, writeFacilityPreferences } from "@/lib/facility/preferences"
 import { FACILITY_SYSTEMS } from "@/types/facility"
@@ -100,6 +101,8 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
     focusManualActivation.current = true
     dispatch({ type: "activate" })
   }, [activateOnMount, mode, requestPoster])
+  const graphicsProbe = useRef<FacilityGraphicsProbe | null>(null)
+  const [automaticGraphics, setAutomaticGraphics] = useState<FacilityGraphicsProbe["status"] | "unchecked">("unchecked")
   const posterDecoder = useRef<ReturnType<typeof createPosterDecoder> | null>(null)
   const [resetSeen, setResetSeen] = useState(resetRevision)
   const [resetRevealRevision, setResetRevealRevision] = useState<number | null>(null)
@@ -238,18 +241,24 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
 
   useEffect(() => {
     const eligible = () => eligibleForAutomaticFacility({ ...state, mode, connection: facilityConnection() })
-    if (!eligible() || !posterDecoder.current?.isDecoded()) return
+    if (!eligible() || !posterDecoder.current?.isDecoded() || graphicsProbe.current?.automatic === false) return
+    let cancelled = false
+    const currentEligible = () => !cancelled && eligibleForAutomaticFacility({ ...state, mode, connection: facilityConnection(), documentVisible: document.visibilityState === "visible", reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches, desktop: window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches }) && posterDecoder.current?.isDecoded()
     const activate = () => {
-      // Conditions are re-read at the idle boundary; a changed preference must not race the import.
-      const current = { ...state, mode, connection: facilityConnection(), documentVisible: document.visibilityState === "visible", reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches, desktop: window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)").matches }
-      if (eligibleForAutomaticFacility(current) && posterDecoder.current?.isDecoded()) dispatch({ type: "activate" })
+      // Re-read policy at idle, before even the tiny disposable WebGL probe.
+      if (!currentEligible()) return
+      const capability = graphicsProbe.current ?? probeAutomaticFacilityGraphics()
+      graphicsProbe.current = capability
+      if (cancelled) return
+      setAutomaticGraphics(capability.status)
+      if (capability.automatic && currentEligible()) dispatch({ type: "activate" })
     }
     if ("requestIdleCallback" in window) {
       const id = window.requestIdleCallback(activate, { timeout: 1_500 })
-      return () => window.cancelIdleCallback(id)
+      return () => { cancelled = true; window.cancelIdleCallback(id) }
     }
     const timer = setTimeout(activate, 1_500)
-    return () => clearTimeout(timer)
+    return () => { cancelled = true; clearTimeout(timer) }
   }, [mode, state])
 
   const fail = useCallback((reason: string) => {
@@ -569,10 +578,10 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
   const layoutView = assetPhase === "failed" ? activeView : requestedView
   const rackActionsReady = ready && activeView.kind === "specimen" && activeView.specimen === "rack" && !!metadata.specimen?.rackMotion
   const reserveRackActions = ready && layoutView.kind === "specimen" && layoutView.specimen === "rack" && (rackActionsReady || release.profile.inspection?.mobileRackAspect !== undefined)
-  const status = state.media.phase === "failed" ? "3D is unavailable. The assessment is still available." : loading ? "Preparing the facility view…" : ready ? "3D view ready. Select equipment or a system below." : "Static facility illustration. Select a system below."
+  const status = state.media.phase === "failed" ? "3D is unavailable. The assessment is still available." : loading ? "Preparing the facility view…" : ready ? "3D view ready. Select equipment or a system below." : automaticGraphics === "software" ? "Static facility illustration keeps this view responsive. Explore in 3D when you’re ready." : "Static facility illustration. Select a system below."
 
   return (
-    <section ref={container} className={`facility-inspection facility-inspection--${variant}${expanded ? " facility-inspection--expanded" : ""}`} data-testid="facility-inspection" data-phase={state.media.phase} data-failure={state.media.reason ?? undefined} data-release={release.release} data-night-inspection={nightInspection || undefined} data-detail={activeView.kind === "overview" ? activeView.detail : undefined} data-engineering={engineering || undefined} data-ecosystem={ecosystem || undefined} data-scenario={record.scenario} data-view={activeView.kind === "specimen" ? activeView.specimen : "overview"} data-pose={activeView.kind === "specimen" ? activeView.pose : undefined} data-quality={quality ?? undefined} data-preview-system={facilityPreviewTarget(state)?.system ?? facilityPreview(state) ?? undefined} aria-labelledby={headingId} aria-describedby={scopeId}
+    <section ref={container} className={`facility-inspection facility-inspection--${variant}${expanded ? " facility-inspection--expanded" : ""}`} data-testid="facility-inspection" data-phase={state.media.phase} data-automatic-graphics={automaticGraphics} data-failure={state.media.reason ?? undefined} data-release={release.release} data-night-inspection={nightInspection || undefined} data-detail={activeView.kind === "overview" ? activeView.detail : undefined} data-engineering={engineering || undefined} data-ecosystem={ecosystem || undefined} data-scenario={record.scenario} data-view={activeView.kind === "specimen" ? activeView.specimen : "overview"} data-pose={activeView.kind === "specimen" ? activeView.pose : undefined} data-quality={quality ?? undefined} data-preview-system={facilityPreviewTarget(state)?.system ?? facilityPreview(state) ?? undefined} aria-labelledby={headingId} aria-describedby={scopeId}
       onKeyDown={event => { if (event.key === "Escape" && (state.selected || state.pointerPreview || state.focusPreview || presentation.chapter !== null)) { event.preventDefault(); event.stopPropagation(); clearSelection() } }}>
       <div className="facility-heading" ref={heading}>
         <h2 id={headingId}>Illustrative system view</h2>

@@ -1,3 +1,4 @@
+import { waitForFacilityReady, expectFacilityAutomaticAcquisition } from "../support/facility-viewer"
 import { mkdtemp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
@@ -46,7 +47,8 @@ test("real background-tab visibility defers activation and freezes equipment", a
     await expect(viewer).toHaveAttribute("data-phase", "poster")
 
     await page.bringToFront()
-    await expect(viewer).toHaveAttribute("data-phase", "ready")
+    await expectFacilityAutomaticAcquisition(page, viewer, modelRequests)
+    await waitForFacilityReady(page, viewer, testInfo)
     const canvas = viewer.locator("canvas")
     const snapshot = () => canvas.evaluate(element => {
       const diagnostic = (element as HTMLCanvasElement & { __gnFacilitySnapshot: (equipment: boolean) => { frames: number; equipment: { fans: { phase: number }[]; ledColors: number[] } } }).__gnFacilitySnapshot(true)

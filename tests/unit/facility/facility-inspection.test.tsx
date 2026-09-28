@@ -1,12 +1,14 @@
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { renderToStaticMarkup } from "react-dom/server"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { assessmentFixtures } from "@/content/assessments/fixtures"
 import type { FacilityCanvasProps, FacilitySceneMetadata, FacilityTopology, FacilityVisualRelease } from "@/types/facility"
 import ecosystemTopologySource from "./fixtures/ecosystem-topology.json"
 import { testMatchMedia } from "../../support/match-media"
 
+const graphics = vi.hoisted(() => ({ probe: vi.fn() }))
+vi.mock("@/lib/facility/graphics-capability", () => ({ probeAutomaticFacilityGraphics: graphics.probe }))
 const renderer = vi.hoisted(() => ({ render: vi.fn() }))
 vi.mock("@/components/facility/facility-canvas", () => ({ default: (props: FacilityCanvasProps) => { renderer.render(props); return <div data-testid="mock-facility-canvas" /> } }))
 import { FacilityInspection } from "@/components/facility/facility-inspection"
@@ -40,6 +42,8 @@ function openAssemblyParts() {
   const summary = screen.getByText("Inspect assembly parts", { selector: "summary" })
   if (!summary.closest("details")!.open) fireEvent.click(summary)
 }
+
+beforeEach(() => { graphics.probe.mockReset().mockReturnValue({ status: "available", automatic: true }) })
 
 afterEach(() => { cleanup(); renderer.render.mockClear(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); window.sessionStorage.clear() })
 
@@ -352,6 +356,49 @@ describe("facility graphics session", () => {
     await act(async () => { await vi.advanceTimersByTimeAsync(1) })
     expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-phase", "failed")
     expect(screen.getByRole("button", { name: "Retry 3D" })).toBeVisible()
+  })
+
+  it.each(["software", "unavailable"])("keeps %s graphics on the poster and preserves explicit activation", async status => {
+    testMatchMedia.setMatches("(min-width: 1024px) and (hover: hover) and (pointer: fine)", true)
+    graphics.probe.mockReturnValue({ status, automatic: false })
+    const idles: (() => void)[] = []
+    vi.stubGlobal("requestIdleCallback", vi.fn((callback: () => void) => { idles.push(callback); return idles.length }))
+    vi.stubGlobal("cancelIdleCallback", vi.fn())
+    render(<FacilityInspection {...props} loadingPolicy="auto-desktop" />)
+    const image = screen.getByRole("img")
+    Object.defineProperties(image, { naturalWidth: { value: 1200 }, complete: { value: true } })
+    fireEvent.load(image)
+    expect(graphics.probe).not.toHaveBeenCalled()
+    act(() => idles.at(-1)!())
+    expect(graphics.probe).toHaveBeenCalledTimes(1)
+    expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-automatic-graphics", status)
+    expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-phase", "poster")
+    expect(renderer.render).not.toHaveBeenCalled()
+    // Repeated visibility changes must not acquire another context or model.
+    fireEvent(document, new Event("visibilitychange"))
+    expect(graphics.probe).toHaveBeenCalledTimes(1)
+    fireEvent.click(screen.getByRole("button", { name: /Explore in 3D/ }))
+    await waitFor(() => expect(renderer.render).toHaveBeenCalled())
+    expect(graphics.probe).toHaveBeenCalledTimes(1)
+  })
+
+  it.each(["save-data", "hidden", "unmount"])("cancels automatic acquisition before the capability probe when %s intervenes", condition => {
+    testMatchMedia.setMatches("(min-width: 1024px) and (hover: hover) and (pointer: fine)", true)
+    const idles: (() => void)[] = []
+    vi.stubGlobal("requestIdleCallback", vi.fn((callback: () => void) => { idles.push(callback); return idles.length }))
+    vi.stubGlobal("cancelIdleCallback", vi.fn())
+    const mounted = render(<FacilityInspection {...props} loadingPolicy="auto-desktop" />)
+    const image = screen.getByRole("img")
+    Object.defineProperties(image, { naturalWidth: { value: 1200 }, complete: { value: true } })
+    fireEvent.load(image)
+    expect(idles.length).toBeGreaterThan(0)
+    if (condition === "save-data") Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true } })
+    if (condition === "hidden") vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden")
+    if (condition === "unmount") mounted.unmount()
+    act(() => idles.at(-1)!())
+    expect(graphics.probe).not.toHaveBeenCalled()
+    expect(renderer.render).not.toHaveBeenCalled()
+    if (condition === "save-data") Reflect.deleteProperty(navigator, "connection")
   })
 
   it("loads automatically only after poster decode and 25% visibility, rechecks preferences, and stays closed", async () => {

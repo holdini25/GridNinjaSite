@@ -36,7 +36,9 @@ try {
   report.result = "fail"; report.error = String(error); process.exitCode = 1
 } finally {
   await browser?.close()
-  await mkdir("test-results", { recursive: true })
-  await writeFile(`test-results/graphics-preflight-${engine}.json`, `${JSON.stringify(report, null, 2)}\n`)
+  // Playwright clears its output directory when the subsequent suite starts.
+  // Retain the preflight outside that directory for both successful and failed runs.
+  await mkdir("build/qa/browser-graphics", { recursive: true })
+  await writeFile(`build/qa/browser-graphics/graphics-preflight-${engine}.json`, `${JSON.stringify(report, null, 2)}\n`)
   console.log(JSON.stringify(report))
 }

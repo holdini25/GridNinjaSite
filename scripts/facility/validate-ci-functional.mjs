@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import { readFile, writeFile } from "node:fs/promises"
+import { assertSoftwareAcquisition } from "./measurement-scope.mjs"
 import { assertCinematicMotion } from "../cinematic/motion-evidence.mjs"
 import { assertCompleteTransfer, assertRendererBudget, assertSettlementEvidence, assertSameBuild, provenance } from "./performance-contract.mjs"
 
@@ -28,6 +29,10 @@ try {
         assert(row.cinematic.pause.before.paused && row.cinematic.pause.after.paused)
         assert(Math.abs(row.cinematic.pause.after.time-row.cinematic.pause.before.time) < .001)
       } else {
+        if (row.automaticAcquisition?.reason === "software") {
+          assertSoftwareAcquisition(row)
+          assertCompleteTransfer(row.automaticTransfer)
+        } else assert.equal(row.throughReady, true, "Missing automatic model readiness")
         assert.equal(row.capability, null); assert.equal(row.frameBudgetMet, null)
         assert.equal(row.capabilityEvidence?.status, "not-measured")
         assertRendererBudget(row.renderer)

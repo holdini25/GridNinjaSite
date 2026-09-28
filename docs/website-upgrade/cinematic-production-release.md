@@ -42,4 +42,27 @@ authorization does not create independent craft, usability, physical-device, or
 screen-reader review results. Missing independent reviews remain unperformed;
 they must not be reported as passing.
 
-Current CI corrections and deployment outcome will be recorded after execution.
+## CI and delivery corrections
+
+- Restore the deployed contact delivery and database contract; remove the
+  unactivated minute cron that Hobby rejected.
+- Align SEO, navigation, responsive and facility assertions with the actual
+  registered release and assessment-first homepage.
+- Keep complete transfer accounting and all thirty facility Lighthouse reports.
+  Hosted software-renderer functionality is explicitly separate from physical
+  device performance qualification; neither replaces the other.
+- On devices reporting software rendering, retain the finished demo poster and
+  offer the existing explicit “Explore in 3D” action. A small disposable native
+  capability probe runs only when automatic loading would otherwise be eligible.
+  Hardware or privacy-masked renderers retain automatic acquisition. Browser
+  tests verify the native choice and use the visible control for manual coverage.
+- Build explicitly before browser readiness checks in CI. Firefox verifies a
+  real WebGL2 context and pixel readback through its headed Linux display.
+  Server-readiness deadlines and product budgets are unchanged.
+- Enumerate approved cinematic deployment files and exclude private sources;
+  integrity, withdrawal, conditional requests, and byte ranges remain enforced.
+
+The local integration build, lint, typecheck and all 1,055 unit tests pass after
+these corrections. GitHub checks and Vercel deployment records attached to PR #3
+are the authority for the exact merged revision and deployment outcome; earlier
+preview success does not establish a successful production deployment.

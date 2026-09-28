@@ -1,4 +1,4 @@
-import { expect, type Locator, type Page, type TestInfo } from "@playwright/test"
+import { expect, test, type Locator, type Page, type TestInfo } from "@playwright/test"
 
 /** WebKit can replace its initial streamed node while a navigation settles.
  * Resolve a fresh locator after that transient detachment; never relax readiness.
@@ -70,4 +70,46 @@ export async function openAssessmentControls(page: Page) {
   await expect(controls.locator("button").filter({ hasText: /^Reset example$/ })).toHaveCount(1)
   if (await controls.getAttribute("open") === null) await controls.locator(":scope > summary").click()
   await expect(page.getByRole("combobox", { name: "Scenario", exact: true })).toBeVisible()
+}
+
+/** Interactive tests may follow the real software-renderer fallback through the
+ * visitor's native control. Unavailable graphics is a failure, never a skip. */
+export async function waitForFacilityReady(page: Page, inspector: Locator, testInfo: TestInfo = test.info()) {
+  let state = { phase: "", graphics: "" }
+  await expect.poll(async () => {
+    state = await inspector.evaluate(element => ({ phase: element.getAttribute("data-phase") ?? "", graphics: element.getAttribute("data-automatic-graphics") ?? "" }))
+    if (state.graphics === "unavailable" || state.phase === "failed") return "failed"
+    if (state.phase === "ready") return "ready"
+    return state.phase === "poster" && state.graphics === "software" ? "software-poster" : "pending"
+  }, { message: "Wait for native readiness or an explicitly reported software poster", timeout: 15_000 }).not.toBe("pending")
+  expect(state.graphics, "Graphics-specific coverage requires WebGL2; unavailable graphics must fail").not.toBe("unavailable")
+  expect(state.phase, "The native graphics session failed before readiness").not.toBe("failed")
+  if (state.phase === "poster" && state.graphics === "software") {
+    await expect(inspector.locator(".facility-poster")).toBeVisible()
+    await expect(inspector.locator("canvas")).toHaveCount(0)
+    testInfo.annotations.push({ type: "graphics-activation", description: "Actual software-renderer poster fallback verified; interactive coverage uses the visitor's explicit Explore in 3D action. No automatic or hardware qualification is claimed." })
+    await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
+  }
+  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await expect(inspector.locator("canvas[data-ready=true]")).toBeVisible()
+  await expect(page.locator("canvas[data-facility-canvas]")).toHaveCount(1)
+}
+
+/** Automatic-loading tests inspect the actual native policy before any helper
+ * may choose manual graphics. The software poster must acquire no model. */
+export async function expectFacilityAutomaticAcquisition(page: Page, inspector: Locator, modelRequests: readonly string[]) {
+  await expect(inspector).toHaveAttribute("data-automatic-graphics", /^(available|unknown|software|unavailable)$/, { timeout: 15_000 })
+  const graphics = await inspector.getAttribute("data-automatic-graphics")
+  expect(graphics, "Graphics-specific coverage requires actual WebGL2 support").not.toBe("unavailable")
+  if (graphics === "software") {
+    await expect(inspector).toHaveAttribute("data-phase", "poster")
+    await expect(inspector.locator(".facility-poster")).toBeVisible()
+    await expect(inspector.locator("canvas")).toHaveCount(0)
+    await page.waitForTimeout(350)
+    expect(modelRequests, "Software graphics must not automatically acquire a model").toEqual([])
+  } else {
+    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    expect(modelRequests, "An eligible native renderer must acquire exactly one overview model").toHaveLength(1)
+  }
+  return graphics
 }

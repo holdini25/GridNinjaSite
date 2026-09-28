@@ -2,7 +2,7 @@ import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import { expect, test } from "@playwright/test"
 import { createMaterialHarness, runMaterialHarness, verifyV5MaterialAsset } from "../../scripts/facility/verify-materials.mjs"
-import { scrollFacilityIntoView } from "../support/facility-viewer"
+import { scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
 
 test.describe("production material composer", () => {
   let harness: Awaited<ReturnType<typeof createMaterialHarness>>
@@ -47,7 +47,7 @@ test("material highlights and assembly poses render without changing assessment 
   }
   await testInfo.attach("exported-materials", { body: JSON.stringify(materialAssets, null, 2), contentType: "application/json" })
   await scrollFacilityIntoView(inspector)
-  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await waitForFacilityReady(page, inspector)
   const canvas = inspector.locator("canvas[data-ready=true]")
   const assessment = page.getByTestId("assessment-summary")
   const initialCaption = await assessment.textContent()

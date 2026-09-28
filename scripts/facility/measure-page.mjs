@@ -133,28 +133,49 @@ try {
       }
       const inspector = page.getByTestId("facility-inspection")
       const adaptive = report.provenance.buildSettings.mode === "auto-adaptive"
-      if (profile === "desktop" || adaptive) {
+      const automaticExpected = profile === "desktop" || adaptive
+      let softwareFallback = false
+      if (automaticExpected) {
         result.phase = "initial-stage-visibility"
         await revealStage(page, inspector)
         result.phase = "initial-viewer-readiness"
-        await inspector.locator("canvas[data-ready=true]").waitFor({ timeout: settings.readinessTimeoutMs })
-      } else { result.phase = "poster-decode"; await inspector.locator("img").evaluate(image => image.decode()) }
-      result.phase = "transfer-settle"
-      result.transfer = await settleTransfers(ledger)
-      checkBudget(()=>assertCompleteTransfer(result.transfer))
-      const model = result.transfer.requests.find(request => new URL(request.url).pathname.endsWith("/facility.glb"))
-      assert(profile === "desktop" || adaptive ? !!model : !model, "Incorrect automatic model activation")
-      result.throughReady = profile === "desktop" || adaptive
-      assert(!result.transfer.requests.some(request=>/\/(rack|cooling)\.glb$/.test(new URL(request.url).pathname)), "Specimen downloaded automatically")
+        await page.waitForFunction(() => {
+          const inspector = document.querySelector('[data-testid="facility-inspection"]')
+          return inspector?.dataset.phase === "ready" || (inspector?.dataset.phase === "poster" && ["software", "unavailable"].includes(inspector.dataset.automaticGraphics))
+        }, null, { timeout: settings.readinessTimeoutMs })
+        const automaticGraphics = await inspector.getAttribute("data-automatic-graphics")
+        softwareFallback = await inspector.getAttribute("data-phase") === "poster" && automaticGraphics === "software"
+        if (await inspector.getAttribute("data-phase") === "poster") {
+          assert(softwareFallback, "Automatic WebGL2 is unavailable; graphics functionality remains unverified")
+          assert(scope.functional, "Hardware qualification cannot use an automatic software-renderer fallback")
+          assert.equal(await inspector.locator("canvas").count(), 0, "Software fallback must not import a graphics scene")
+        }
+        result.automaticAcquisition = { kind: softwareFallback ? "poster" : "model", reason: softwareFallback ? "software" : null, graphics: automaticGraphics }
+      } else {
+        result.phase = "poster-decode"; await inspector.locator("img").evaluate(image => image.decode())
+        result.automaticAcquisition = { kind: "poster", reason: "manual-policy", graphics: "unchecked" }
+      }
+      result.phase = "automatic-transfer-settle"
+      result.automaticTransfer = await settleTransfers(ledger)
+      checkBudget(()=>assertCompleteTransfer(result.automaticTransfer))
+      const automaticModel = result.automaticTransfer.requests.find(request => new URL(request.url).pathname.endsWith("/facility.glb"))
+      assert(automaticExpected && !softwareFallback ? !!automaticModel : !automaticModel, "Incorrect automatic model activation")
+      result.throughReady = automaticExpected && !softwareFallback
+      assert(!result.automaticTransfer.requests.some(request=>/\/(rack|cooling)\.glb$/.test(new URL(request.url).pathname)), "Specimen downloaded automatically")
       result.release = await inspector.getAttribute("data-release")
       assert.equal(result.release, report.provenance.buildSettings.selectedRelease, "Served facility release differs from the measured build")
       result.vitals = await page.evaluate(() => window.__facilityVitals)
-      if (profile !== "desktop" && !adaptive) {
+      if (!result.throughReady) {
         result.phase = "manual-activation"
-        await inspector.getByRole("button", { name: "Explore in 3D" }).click()
+        await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
         await inspector.locator("canvas[data-ready=true]").waitFor({ timeout: settings.readinessTimeoutMs })
-        await inspector.getByRole("checkbox", { name: "Equipment motion" }).check()
+        result.manualThroughReady = true
       }
+      // Preserve both the automatic poster cost and the cumulative complete page
+      // after a real manual load. The larger total still obeys the same ceiling.
+      result.phase = "complete-transfer-settle"
+      result.transfer = await settleTransfers(ledger)
+      checkBudget(()=>assertCompleteTransfer(result.transfer))
       result.phase = "measurement-stage-visibility"
       await revealStage(page, inspector)
       result.phase = "graphics-identity"
@@ -163,6 +184,7 @@ try {
         return { renderer: debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : "unavailable", vendor: debug ? gl.getParameter(debug.UNMASKED_VENDOR_WEBGL) : "unavailable" }
       })
       result.renderingClass = /SwiftShader|llvmpipe|software/i.test(result.graphics.renderer) ? "software-emulation" : result.graphics.renderer === "unavailable" ? "unknown" : "hardware"
+      if (softwareFallback) assert.equal(result.renderingClass, "software-emulation", "The reported software fallback disagrees with the actual manually loaded renderer")
       if (!scope.functional) assert.equal(result.renderingClass, "hardware", "Device qualification requires an actual hardware renderer; use the separately labelled CI functional scope on software runners")
       if(adaptive){
         result.phase = "ambient-policy-settle"

@@ -14,6 +14,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: facility-performance-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   software-functional-and-transfer:
     runs-on: ubuntu-latest

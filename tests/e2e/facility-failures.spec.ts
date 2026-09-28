@@ -1,5 +1,5 @@
 import { expect, test, type Page, type Route } from "@playwright/test"
-import { scrollFacilityIntoView } from "../support/facility-viewer"
+import { scrollFacilityIntoView, expectFacilityAutomaticAcquisition } from "../support/facility-viewer"
 
 const modelPath = "**/assets/facility/**/facility.glb"
 
@@ -327,7 +327,6 @@ test.describe("facility failure boundaries", () => {
     await expect(inspector).toHaveAttribute("data-phase", "poster")
     await page.setViewportSize({ width: 1440, height: 1100 })
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
-    expect(requests).toHaveLength(1)
+    await expectFacilityAutomaticAcquisition(page, inspector, requests)
   })
 })

@@ -2,7 +2,7 @@ import { expect, test, type Locator } from "@playwright/test"
 import { mkdir, readFile } from "node:fs/promises"
 import { OrthographicCamera, PerspectiveCamera, Vector3 } from "three"
 import type { FacilityEquipmentIndex } from "../../src/types/facility"
-import { scrollFacilityIntoView } from "../support/facility-viewer"
+import { scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
 
 type PickCamera = {
   cameraProjection: "orthographic" | "perspective"; cameraFov: number | null; cameraAspect: number
@@ -54,7 +54,7 @@ test("v7 explicit projection changes reuse the canvas, preserve evidence, and re
   const inspector = page.getByTestId("facility-inspection")
   await expect(inspector).toHaveAttribute("data-night-inspection", "true")
   await scrollFacilityIntoView(inspector)
-  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await waitForFacilityReady(page, inspector)
   const canvas = inspector.locator("canvas[data-ready=true]"), original = await canvas.elementHandle()
   const caption = page.getByTestId("assessment-summary"), evidence = await caption.textContent()
   const snapshot = () => canvas.evaluate(element => (element as unknown as { __gnFacilitySnapshot: () => { cameraProjection: string; cameraFov: number | null; cameraAspect: number; probeRendered: boolean; ecosystem?: { section: boolean } } }).__gnFacilitySnapshot())
@@ -87,6 +87,7 @@ test("real v7 pointer picks survive perspective resize and overview restoration 
   const inspector = page.getByTestId("facility-inspection")
   await scrollFacilityIntoView(inspector)
   await expect(inspector).toHaveAttribute("data-night-inspection", "true")
+  await waitForFacilityReady(page, inspector)
   await expect(inspector.getByRole("button", { name: "View rack close-up", exact: true })).toBeEnabled()
   const canvas = inspector.locator("canvas[data-ready=true]")
   await expect(canvas).toBeVisible()
@@ -147,6 +148,7 @@ test("rear Rack 09 detail preserves its identity and provides an explicit unobst
   const inspector = page.getByTestId("facility-inspection")
   await scrollFacilityIntoView(inspector)
   await expect(inspector).toHaveAttribute("data-night-inspection", "true")
+  await waitForFacilityReady(page, inspector)
   await expect(inspector.getByRole("button", { name: "View rack close-up", exact: true })).toBeEnabled()
   const canvas = inspector.locator("canvas[data-ready=true]")
   await expect(canvas).toBeVisible()
