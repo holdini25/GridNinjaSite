@@ -26,10 +26,11 @@ describe("cinematic poster rendition ownership", () => {
     expect(document.querySelector("button")).toBeNull()
     expect(html).not.toContain(".mp4")
   })
-  it.each(["desktop", "mobile"] as const)("pins both picture paths and intrinsic dimensions to %s", kind => {
+  it.each(["desktop", "mobile"] as const)("pins %s selection and dimensions without rewriting image URLs", kind => {
     const { container } = render(<FacilityCinematicPoster release={release} rendition={kind} />)
-    expect(container.querySelector("source")).toHaveAttribute("srcset", release.renditions[kind].poster.url)
-    expect(container.querySelector("img")).toHaveAttribute("src", release.renditions[kind].poster.url)
+    expect(container.querySelector("source")).toHaveAttribute("srcset", release.renditions.mobile.poster.url)
+    expect(container.querySelector("source")).toHaveAttribute("media", kind === "mobile" ? "all" : "not all")
+    expect(container.querySelector("img")).toHaveAttribute("src", release.renditions.desktop.poster.url)
     expect(container.querySelector("img")).toHaveAttribute("width", String(release.renditions[kind].width))
     expect(container.querySelector("img")).toHaveAttribute("height", String(release.renditions[kind].height))
   })
@@ -44,8 +45,9 @@ describe("cinematic poster rendition ownership", () => {
     for (const state of [selected, { ...selected, phase: "poster" as const, reason: "reduced-motion" as const, frameReady: false }, { ...selected, phase: "error" as const, reason: "network" as const, frameReady: false }]) {
       act(() => publish(state))
       expect(container.querySelector("img")).toBe(image)
-      expect(image).toHaveAttribute("src", "/poster-mobile.webp")
+      expect(image).toHaveAttribute("src", "/poster-desktop.webp")
       expect(container.querySelector("source")).toHaveAttribute("srcset", "/poster-mobile.webp")
+      expect(container.querySelector("source")).toHaveAttribute("media", "all")
       expect(stage).toHaveAttribute("data-rendition", "mobile")
     }
     expect(createCinematicPlayback).toHaveBeenCalledOnce()

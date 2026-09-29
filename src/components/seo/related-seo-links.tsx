@@ -23,7 +23,7 @@ export function RelatedSeoLinks({ path }: { path: PublicPath }) {
         <p className="gn-eyebrow">Related operator resources</p>
         <h2
           id={`related-seo-${route.key}`}
-          className="mt-4 text-balance text-[1.85rem] leading-tight font-medium text-foreground"
+          className="mt-4 text-balance text-[1.85rem] leading-tight font-medium text-foreground [overflow-wrap:anywhere]"
         >
           Continue the proof path
         </h2>

@@ -61,8 +61,30 @@ they must not be reported as passing.
   Server-readiness deadlines and product budgets are unchanged.
 - Enumerate approved cinematic deployment files and exclude private sources;
   integrity, withdrawal, conditional requests, and byte ranges remain enforced.
+- Retain the same responsive poster node and image URLs when selecting a movie;
+  an intentional failed-poster Retry pins the rendition before restoring the
+  source. Movie acquisition still waits for the fresh poster's decoded load.
+- Align an explicit demo journey after native hash scrolling has settled, with
+  cancellation for user input, changed focus, navigation, and unmount. Allow the
+  proof-path heading to wrap at narrow widths and enlarged text sizes.
+- Use the Webpack production build used by the earlier private candidate. A
+  fixed five-run local comparison on each mobile route measured median LCP of
+  2,475 ms (home), 2,387 ms (demo), and 2,461 ms (assessment), under the unchanged
+  2,500 ms release limit. These local results have narrow margins and do not
+  replace the complete Linux CI matrix or physical-device qualification.
+- Keep frame callbacks free of per-frame forced layout reads. Preserve callback
+  gaps, native presentation timestamps, and skipped-callback evidence separately;
+  all loop and transfer gates remain unchanged. The local five-loop diagnostic
+  included one startup-gap failure and is not a full passing qualification.
+- Preserve invalid Lighthouse reports and their raw trace/network evidence. Only
+  a missing-navigation capture without a measured LCP may receive one fresh-profile
+  replacement; valid slow measurements are never retried or discarded.
+- Exercise real keyboard modality before testing keyboard-only material previews,
+  and await the enhanced controls before measuring an offscreen viewer. Neither
+  test changes the product's visibility threshold or acquisition requirement.
 
-The local integration build, lint, typecheck and all 1,055 unit tests pass after
-these corrections. GitHub checks and Vercel deployment records attached to PR #3
+The local integration build, lint, typecheck, brand validation, all 1,075 unit
+tests, and sixteen targeted Chromium/WebKit recovery, reflow and navigation
+checks pass after these corrections. GitHub checks and Vercel deployment records attached to PR #3
 are the authority for the exact merged revision and deployment outcome; earlier
 preview success does not establish a successful production deployment.

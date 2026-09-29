@@ -290,15 +290,16 @@ test("essential controls retain touch targets and page content reflows under tex
         const targets = document.querySelectorAll<HTMLElement>('header [data-gn-logo-trigger], header [data-gn-event="header-capacity-audit"], [data-mobile-menu] > summary, main h1, main h2, main h3, main article[aria-label^="Decision brief preview"], main [data-gn-event="hero-primary-cta"], main [data-gn-event="hero-secondary-cta"], .gn-lead-form, footer')
         for (const target of targets) {
           if (!target.checkVisibility({ checkVisibilityCSS: true }) || target.closest(".facility-inspection, .sr-only")) continue
+          const label = `${target.tagName} “${target.textContent?.trim().replace(/\s+/g, " ").slice(0, 80)}”`
           const box = target.getBoundingClientRect()
-          if (box.left < -1 || box.right > innerWidth + 1) problems.push(`${target.tagName}: element outside viewport width`)
+          if (box.left < -1 || box.right > innerWidth + 1) problems.push(`${label}: element outside viewport width`)
           for (const rect of textRects(target)) {
-            if (rect.left < -1 || rect.right > innerWidth + 1) problems.push(`${target.tagName}: text outside viewport width`)
+            if (rect.left < -1 || rect.right > innerWidth + 1) problems.push(`${label}: text outside viewport width`)
             for (let parent: HTMLElement | null = target; parent; parent = parent.parentElement) {
               const style = getComputedStyle(parent)
               if (!/hidden|clip|auto|scroll/.test(style.overflowX)) continue
               const parentBox = parent.getBoundingClientRect()
-              if (rect.left < parentBox.left - 1 || rect.right > parentBox.right + 1) { problems.push(`${target.tagName}: text clipped by ${parent.tagName}`); break }
+              if (rect.left < parentBox.left - 1 || rect.right > parentBox.right + 1) { problems.push(`${label}: text clipped by ${parent.tagName}`); break }
             }
           }
         }

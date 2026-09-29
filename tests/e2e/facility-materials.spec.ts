@@ -72,7 +72,13 @@ test("material highlights and assembly poses render without changing assessment 
   const selectedImages = []
   for (const system of ["Power", "Cooling", "Storage", "Workloads"]) {
     const button = inspector.locator(".facility-systems").getByRole("button", { name: system, exact: true })
+    // Manual Explore and the preceding selection use pointer modality. Preview
+    // is intentionally keyboard-only, so exercise a real key before focusing.
+    await page.keyboard.press("Tab")
     await button.focus()
+    await expect(button).toBeFocused()
+    await expect.poll(() => button.evaluate(element => element.matches(":focus-visible"))).toBe(true)
+    await expect(button).toHaveAttribute("data-preview", "true")
     await scrollFacilityIntoView(inspector)
     const preview = await imageHash()
     expect(preview).not.toBe(initialImage)

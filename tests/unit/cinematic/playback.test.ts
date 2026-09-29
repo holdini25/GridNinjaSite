@@ -189,6 +189,21 @@ describe("cinematic native playback lifecycle", () => {
     expect(view.state()).toMatchObject({ phase: "paused", reason: "user" })
     expect(view.video.hasAttribute("src")).toBe(false)
   })
+  it("pins the intended phone rendition before poster Retry, retaining it through a resize and fresh decode", async () => {
+    testMatchMedia.setMatches("(max-width: 639px)", true)
+    const view = setup({ decoded: false }); await flush()
+    view.poster.dispatchEvent(new Event("error"))
+    expect(view.state()?.rendition).toBe(null)
+    view.control.retry()
+    expect(view.state()?.rendition).toBe("mobile")
+    expect(view.video.hasAttribute("src")).toBe(false)
+    testMatchMedia.setMatches("(max-width: 639px)", false)
+    window.dispatchEvent(new Event("resize")); await flush()
+    expect(view.video.hasAttribute("src")).toBe(false)
+    view.poster.dispatchEvent(new Event("load")); view.decode(); await flush()
+    expect(view.video.getAttribute("src")).toBe("/mobile.mp4")
+    expect(view.state()?.rendition).toBe("mobile")
+  })
   it("bounds a stalled poster retry and cancels source restoration after disposal", async () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] })
     const view = setup({ decoded: false }); view.poster.src = "/desktop.webp"

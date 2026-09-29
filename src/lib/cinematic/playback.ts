@@ -158,7 +158,9 @@ export function createCinematicPlayback({ video, poster, stage, release, onState
     video.removeAttribute("src"); video.load(); assigned = false
     failure = null
     userPaused = false; intentionalPlay = true
-    publish({ phase: "poster", reason: "user", frameReady: false, frameEvidence: "none" })
+    // Pin the picture before restoring a failed source. Changing its media
+    // selection after the fresh load can make Chromium request it twice.
+    publish({ phase: "poster", reason: "user", frameReady: false, frameEvidence: "none", rendition: state.rendition ?? (mobile.matches ? "mobile" : "desktop") })
     if (retryPoster) reloadPoster()
     else decodePoster()
     advance()

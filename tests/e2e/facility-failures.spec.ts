@@ -318,6 +318,9 @@ test.describe("facility failure boundaries", () => {
     page.on("request", request => { if (request.url().endsWith("facility.glb")) requests.push(request.url()) })
     await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
+    // Wait for the enhanced owner to replace the streamed preview. This
+    // attachment assertion does not scroll or admit the offscreen viewer.
+    await expect(inspector.locator(".facility-systems button")).toHaveCount(4)
     // Avoid locator actions that would scroll the viewer into the viewport.
     const bounds = await inspector.locator(".facility-stage").boundingBox()
     expect(bounds).not.toBeNull()

@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "prebuild": "npm run assessment:validate && npm run seo:validate && npm run facility:validate && npm run cinematic:validate",
-    "build": "next build",
+    "build": "next build --webpack",
     "postbuild": "node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build && node scripts/cinematic/validate.mjs --build && node scripts/facility/record-build.mjs",
     "start": "next start",
     "lint": "eslint",
