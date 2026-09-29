@@ -297,6 +297,21 @@ describe("deferred assessment identity and fallback", () => {
     frame()
     expect(scroll).not.toHaveBeenCalled()
   })
+  it.each([false, true])("waits for late document loading and respects cancellation (%s) before aligning a native fragment", async cancel => {
+    vi.spyOn(document, "readyState", "get").mockReturnValue("interactive")
+    const frame = controlFrames(), scroll = vi.fn()
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", { configurable: true, value: scroll })
+    let resolve!: (value: typeof explorerModule) => void
+    load.mockImplementation(() => new Promise(value => { resolve = value }))
+    window.history.replaceState(null, "", "/demo#facility-construction")
+    mount(); document.getElementById("facility-construction")!.focus()
+    await act(async () => { await Promise.resolve(); resolve(explorerModule) })
+    frame(); frame()
+    expect(scroll).not.toHaveBeenCalled()
+    if (cancel) window.dispatchEvent(new Event("wheel"))
+    window.dispatchEvent(new Event("load")); frame(); frame()
+    expect(scroll).toHaveBeenCalledTimes(cancel ? 0 : 1)
+  })
   it("does not scroll or reclaim a journey after focus moves to another task", async () => {
     const scroll = vi.fn()
     Object.defineProperty(HTMLElement.prototype, "scrollIntoView", { configurable: true, value: scroll })

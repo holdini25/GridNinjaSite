@@ -58,6 +58,40 @@ describe("cinematic loop evidence classification", () => {
     const contradictory = diagnosed(); contradictory.loopBoundaries[0].callbackGapMs = 60
     expect(() => assertCinematicMotion(contradictory)).toThrow("boundary callback gap")
   })
+  it("bounds the full compositor interval without averaging across a skipped callback", () => {
+    const motion = diagnosed(); motion.callbackMaxMs = 83.4
+    Object.assign(motion.loopBoundaries[0], {
+      callbackGapMs: 83.4, fromMediaTime: 9.966667, toMediaTime: .033333,
+      expectedDisplayGapMs: 66.7, presentedFramesDelta: 2,
+      fromFrame: { expectedDisplayTimeMs: 10377.7, presentedFrames: 300, mediaTime: 9.966667 },
+      toFrame: { expectedDisplayTimeMs: 10444.4, presentedFrames: 302, mediaTime: .033333 },
+    })
+    const result = assertCinematicMotion(motion)
+    expect(result.boundaryTimings[0]).toMatchObject({ basis: "compositor-expected-display-endpoints", unobservedFrames: 1 })
+    expect(result.boundaryTimings[0].gapMs).toBeCloseTo(66.7)
+    expect(result.limits).toEqual(CINEMATIC_MOTION_LIMITS)
+    const boundary = motion.loopBoundaries[0] as typeof motion.loopBoundaries[0] & { expectedDisplayGapMs: number; toFrame: { expectedDisplayTimeMs: number } }
+    boundary.expectedDisplayGapMs = 80
+    boundary.toFrame.expectedDisplayTimeMs = 10457.7
+    expect(() => assertCinematicMotion(motion)).toThrow("boundary display gap")
+  })
+  it("rejects unsubstantiated compositor timing and retains the independent callback ceiling", () => {
+    const native = () => {
+      const motion = diagnosed(); motion.callbackMaxMs = 83.4
+      Object.assign(motion.loopBoundaries[0], { callbackGapMs: 83.4, expectedDisplayGapMs: 50, presentedFramesDelta: 1,
+        fromFrame: { expectedDisplayTimeMs: 10000, presentedFrames: 300, mediaTime: 9.966667 },
+        toFrame: { expectedDisplayTimeMs: 10050, presentedFrames: 301, mediaTime: 0 } })
+      return motion
+    }
+    const fabricated = native(); Object.assign(fabricated.loopBoundaries[0], { expectedDisplayGapMs: 20 })
+    expect(() => assertCinematicMotion(fabricated)).toThrow("Contradictory native boundary display")
+    const missing = native(); Object.assign(missing.loopBoundaries[0], { fromFrame: null })
+    expect(() => assertCinematicMotion(missing)).toThrow("Missing native boundary")
+    const counter = native(); Object.assign(counter.loopBoundaries[0], { presentedFramesDelta: 0 })
+    expect(() => assertCinematicMotion(counter)).toThrow("frame counter")
+    const stalled = native(); stalled.callbackMaxMs = 101.01
+    expect(() => assertCinematicMotion(stalled)).toThrow("callback gap")
+  })
   it("requires exact raw event counts, adequate observations and a full ten-second cycle", () => {
     expect(() => assertCinematicMotion({ ...diagnosed(), waitingEvents: 0 })).toThrow("counts disagree")
     expect(() => assertCinematicMotion({ ...diagnosed(), presentedCallbacks: 119 })).toThrow("Too few")

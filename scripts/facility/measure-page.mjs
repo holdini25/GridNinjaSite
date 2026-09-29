@@ -18,6 +18,7 @@ const browser = await chromium.launch(launchSettings)
 const settings = { baseURL, runCount, freshContextEveryRun: true, cacheDisabled: true, settleQuietMs: 750, settleTimeoutMs: 15_000, readinessTimeoutMs: 12_000, pauseSettleTimeoutMs: 1_000, pauseIdleQuietMs: 250, pauseObservationMs: 500, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", capabilityFps: 60, ambientFps: 30, capabilityFrameLimitsMs: { desktop: 20, mobile: 34 }, launch: launchSettings }
 settings.measurementScope = scope.name
 settings.cinematic = { ...CINEMATIC_MOTION_LIMITS, readinessTimeoutMs: 18_000, loopExtraDeadlineMs: 15_000, maximumUnexpectedWaitingEvents: 0, continuouslyVisible: true, firstMotionTimingBasis: "Element Timing poster paint to first native callback after visible CSS; compositor display proxy, separate decode timing" }
+settings.cinematic.loopBoundaryTimingBasis = "Full compositor expectedDisplayTime endpoint interval, never divided by missed callbacks; legacy evidence uses the callback clock. Separate callback stall ceiling remains enforced."
 const report = { measuredAt: new Date().toISOString(), hardwareQualification: scope.hardwareQualification, provenance: await provenance(browser.version(), settings), results: [], result: "incomplete" }
 await mkdir("build/facility", { recursive: true })
 

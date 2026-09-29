@@ -65,7 +65,8 @@ they must not be reported as passing.
   an intentional failed-poster Retry pins the rendition before restoring the
   source. Movie acquisition still waits for the fresh poster's decoded load.
 - Align an explicit demo journey after native hash scrolling has settled, with
-  cancellation for user input, changed focus, navigation, and unmount. Allow the
+  late document load included, and cancellation for user input, changed focus,
+  navigation, and unmount. Allow the
   proof-path heading to wrap at narrow widths and enlarged text sizes.
 - Use the Webpack production build used by the earlier private candidate. A
   fixed five-run local comparison on each mobile route measured median LCP of
@@ -74,17 +75,28 @@ they must not be reported as passing.
   replace the complete Linux CI matrix or physical-device qualification.
 - Keep frame callbacks free of per-frame forced layout reads. Preserve callback
   gaps, native presentation timestamps, and skipped-callback evidence separately;
-  all loop and transfer gates remain unchanged. The local five-loop diagnostic
+  numeric loop and transfer limits remain unchanged. The local five-loop diagnostic
   included one startup-gap failure and is not a full passing qualification.
+- Measure loop boundaries using the full compositor expected-display interval,
+  rather than callback dispatch timing. Hosted runs recorded 83 ms callback gaps
+  with 66.7 ms expected-display intervals, no decoder drops, and one unobserved
+  callback at loop start. The complete endpoint interval must meet the existing
+  67.67 ms limit, even when a callback is missing; it is never divided by frame
+  count. Raw callback evidence, missed observations, the 101 ms callback ceiling,
+  buffered-seek limits, and legacy callback validation remain intact. Expected
+  display timestamps are a browser compositor proxy, not a physical display test.
 - Preserve invalid Lighthouse reports and their raw trace/network evidence. Only
   a missing-navigation capture without a measured LCP may receive one fresh-profile
   replacement; valid slow measurements are never retried or discarded.
 - Exercise real keyboard modality before testing keyboard-only material previews,
   and await the enhanced controls before measuring an offscreen viewer. Neither
   test changes the product's visibility threshold or acquisition requirement.
+- Let assessment cards shrink and wrap long headings at narrow widths and 200%
+  text size. The complete browser matrix revealed this after the earlier heading
+  fix; five local Chrome/Chromium/WebKit profiles pass the existing reflow test.
 
-The local integration build, lint, typecheck, brand validation, all 1,075 unit
-tests, and sixteen targeted Chromium/WebKit recovery, reflow and navigation
+The local integration build, lint, typecheck, brand validation, all 1,079 unit
+tests, and ten targeted Chrome/Chromium/WebKit reflow and navigation
 checks pass after these corrections. GitHub checks and Vercel deployment records attached to PR #3
 are the authority for the exact merged revision and deployment outcome; earlier
 preview success does not establish a successful production deployment.

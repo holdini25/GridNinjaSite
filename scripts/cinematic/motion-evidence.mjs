@@ -8,6 +8,22 @@ export const CINEMATIC_MOTION_LIMITS = Object.freeze({
 })
 const nonnegative = value => Number.isFinite(value) && value >= 0
 
+/** rVFC's callback clock can move between one and two display refreshes ahead
+ * of presentation at a loop. Compare compositor endpoints when available.
+ * Even when a callback was skipped, their full interval is a conservative
+ * upper bound, never a per-frame average. Keep that missing observation explicit.
+ */
+function boundaryTiming(boundary, epsilon) {
+  if (boundary.expectedDisplayGapMs === undefined) return { basis: "legacy-callback-clock", gapMs: boundary.callbackGapMs, unobservedFrames: null }
+  const from = boundary.fromFrame, to = boundary.toFrame
+  assert(from && to && nonnegative(from.expectedDisplayTimeMs) && nonnegative(to.expectedDisplayTimeMs), "Missing native boundary display timestamps")
+  const gapMs = to.expectedDisplayTimeMs - from.expectedDisplayTimeMs
+  assert(gapMs > 0 && Math.abs(gapMs - boundary.expectedDisplayGapMs) <= epsilon, "Contradictory native boundary display interval")
+  assert(Number.isInteger(from.presentedFrames) && from.presentedFrames >= 0 && Number.isInteger(to.presentedFrames) && to.presentedFrames > from.presentedFrames && boundary.presentedFramesDelta === to.presentedFrames - from.presentedFrames, "Invalid native boundary frame counter")
+  assert(Math.abs(from.mediaTime - boundary.fromMediaTime) <= epsilon && Math.abs(to.mediaTime - boundary.toMediaTime) <= epsilon, "Contradictory native boundary media timestamps")
+  return { basis: "compositor-expected-display-endpoints", gapMs, unobservedFrames: boundary.presentedFramesDelta - 1 }
+}
+
 /** A native loop may emit `waiting` while seeking through already-buffered
  * frames. Accept that event only when its raw timings prove a bounded loop
  * transition. This never substitutes events for actual frame callbacks. */
@@ -20,11 +36,15 @@ export function assertCinematicMotion(motion) {
   assert(Number.isInteger(motion.waitingEvents) && motion.waitingEvents >= 0 && Array.isArray(motion.waitingEpisodes) && motion.waitingEvents === motion.waitingEpisodes.length, "Cinematic waiting event/episode counts disagree")
   assert(Array.isArray(motion.loopBoundaries) && motion.loopBoundaries.length > 0, "Missing observed cinematic loop boundary")
   let previousBoundary = -1
+  const boundaryTimings = []
   for (const boundary of motion.loopBoundaries) {
     assert(nonnegative(boundary.atMs) && boundary.atMs > previousBoundary, "Invalid cinematic boundary timing")
     previousBoundary = boundary.atMs
     assert(nonnegative(boundary.fromMediaTime) && boundary.fromMediaTime >= motion.durationSeconds - limits.maximumBoundaryGapMs / 1000 && boundary.fromMediaTime <= motion.durationSeconds + epsilon && nonnegative(boundary.toMediaTime) && boundary.toMediaTime <= limits.maximumLoopSeekMediaTime + epsilon, "Observed cinematic boundary is not an end-to-start transition")
-    assert(nonnegative(boundary.callbackGapMs) && boundary.callbackGapMs > 0 && boundary.callbackGapMs <= limits.maximumBoundaryGapMs && boundary.callbackGapMs <= motion.callbackMaxMs + epsilon, "Cinematic loop boundary callback gap exceeds its limit")
+    assert(nonnegative(boundary.callbackGapMs) && boundary.callbackGapMs > 0 && boundary.callbackGapMs <= motion.callbackMaxMs + epsilon, "Contradictory cinematic boundary callback gap")
+    const timing = boundaryTiming(boundary, epsilon)
+    assert(nonnegative(timing.gapMs) && timing.gapMs > 0 && timing.gapMs <= limits.maximumBoundaryGapMs, `Cinematic loop boundary ${timing.basis === "legacy-callback-clock" ? "callback" : "display"} gap exceeds its limit`)
+    boundaryTimings.push(timing)
   }
   const usedBoundaries = new Set(), toleratedLoopSeeks = []
   let previousEnd = -1
@@ -44,6 +64,6 @@ export function assertCinematicMotion(motion) {
   return {
     classification: motion.waitingEvents ? "bounded-buffered-loop-seek" : "continuous-without-waiting",
     rawCounts: { presentedCallbacks: motion.presentedCallbacks, waitingEvents: motion.waitingEvents, waitingEpisodes: motion.waitingEpisodes.length, loopBoundaries: motion.loopBoundaries.length },
-    toleratedLoopSeeks, limits,
+    toleratedLoopSeeks, boundaryTimings, limits,
   }
 }

@@ -128,14 +128,15 @@ export function DeferredAssessmentExplorer({ initialSelection, initialTarget, in
     destination?.focus({ preventScroll: true })
     pendingFocus.current = null
     if (!journey || !destination) return
-    // The native hash scroll can still have a queued smooth-scroll frame when
-    // enhancement replaces its target. Align once after that frame settles;
+    // Native fragment scrolling can run at load, after enhancement has already
+    // replaced its target. Wait for load and its queued scroll frames;
     // ordinary observer-driven enhancement never scrolls.
     const location = window.location.href
     let first = 0, second = 0, cancelled = false
     const cancel = () => {
       cancelled = true
       cancelAnimationFrame(first); cancelAnimationFrame(second)
+      window.removeEventListener("load", schedule)
       window.removeEventListener("wheel", cancel)
       window.removeEventListener("touchmove", cancel)
       window.removeEventListener("pointerdown", cancel)
@@ -145,11 +146,13 @@ export function DeferredAssessmentExplorer({ initialSelection, initialTarget, in
     window.addEventListener("touchmove", cancel, { passive: true })
     window.addEventListener("pointerdown", cancel, { passive: true })
     window.addEventListener("keydown", cancel)
-    first = requestAnimationFrame(() => { second = requestAnimationFrame(() => {
+    const schedule = () => { first = requestAnimationFrame(() => { second = requestAnimationFrame(() => {
       const current = !cancelled && destination.isConnected && document.activeElement === destination && window.location.href === location
       cancel()
       if (current) destination.scrollIntoView({ block: "start", behavior: "instant" })
-    }) })
+    }) }) }
+    if (document.readyState === "complete") schedule()
+    else window.addEventListener("load", schedule, { once: true })
     return cancel
   }, [Explorer])
 
