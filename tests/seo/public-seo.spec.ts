@@ -490,9 +490,9 @@ test.describe("snippet and raw-content controls", () => {
     )
     await expect(page.locator("form [required]")).toHaveCount(3)
     await expect(page.getByLabel("Intake commitments").getByRole("listitem")).toHaveCount(4)
-    await expect(page.getByText("Review", { exact: true })).toBeVisible()
-    await expect(page.getByText("Evidence map", { exact: true })).toBeVisible()
-    await expect(page.getByText("Scoped next step", { exact: true })).toBeVisible()
+    await expect(page.getByText("Review your inquiry", { exact: true })).toBeVisible()
+    await expect(page.getByText("Confirm the inputs", { exact: true })).toBeVisible()
+    await expect(page.getByText("Agree the scope", { exact: true })).toBeVisible()
     await expect(page.locator("main .gn-content-auto")).toHaveCount(0)
   })
 

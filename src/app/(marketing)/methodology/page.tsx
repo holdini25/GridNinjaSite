@@ -20,7 +20,7 @@ export default function MethodologyPage() {
         path="/methodology"
         eyebrow="GridNinja methodology"
         title="Methods for claims that operators can defend"
-        answer="These methods define how GridNinja scopes public claims, comparisons, corrections, and Capacity Audit outputs. The governing principle is proof before autonomy and proof before promotion: exact wording stays tied to an environment, maturity, evidence object, caveat, approved surface, owner, and review date, while no-proof remains a valid published outcome."
+        answer="A capacity claim needs a stated scope, supporting evidence, and a responsible reviewer. This page explains the evidence stages used to distinguish a specification from tested software, site evaluation, and an accepted customer decision. The detailed methods below await publication."
         boundary="The methodology index describes intended controls. Individual candidate text and artifacts are withheld until evidence, accountable ownership, and publication permission are established. The current assessment scope and its boundaries are described on the assessment page."
         resources={methodologyResources}
       />

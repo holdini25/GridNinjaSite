@@ -4,7 +4,7 @@ export const cinematicHome = {
   headline: "Understand your capacity. Know the limits.",
   body: "Review your next AI workload or tenant commitment against declared facility limits. GridNinja offers a paid, bounded assessment of authorized historical inputs, with a decision brief, supporting model record and unresolved questions for review.",
   trust: "Historical inputs. No live connection or equipment control.",
-  purpose: "Data centers share infrastructure with the communities around them. We want growing data centers to be better neighbors and responsible stewards of that shared infrastructure.",
+  purpose: "Data centers share infrastructure with the communities around them. We want growing data centers to be better neighbors and responsible stewards of that shared infrastructure. Our work starts with one capacity commitment: review it against the stated power, cooling and reserve conditions, and make evidence gaps visible.",
   mechanism: [
     { title: "Model the constraints", body: "Bring the workload, power, cooling and reserve conditions into one bounded assessment." },
     { title: "Check the request", body: "Compare the proposed profile with the declared limits, evidence quality and time window." },

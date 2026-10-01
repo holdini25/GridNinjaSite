@@ -11,7 +11,7 @@ export const decisionPages = {
     ],
   },
   platform: {
-    eyebrow: "Platform direction · specified", headline: "A control-plane direction, with evidence before authority.",
+    eyebrow: "Platform direction · In development", headline: "A control-plane direction, with evidence before authority.",
     body: "GridNinja is developing an AI Data Center Virtual Capacity Control Plane for vendor-agnostic, inside-the-fence orchestration. The current commercial offer is a bounded historical-data assessment; this page describes the intended architecture.",
     sections: [
       { title: "The intended decision loop", body: "Telemetry → model → decide → assure → prove. Each proposed action must carry its scope, constraints, margin to limit, evidence freshness, and authority boundary.", items: [
@@ -63,7 +63,7 @@ export const decisionPages = {
         { title: "Operational controls", body: "These retain their existing authority. A model screening result or decision brief is not a command or permission to operate." },
         { title: "Commercial planning", body: "The business determines usefulness, price, and commitment. Modeled capacity does not automatically establish revenue, time-to-power, or SLA protection." },
       ] },
-      { title: "Judge the work within its stated scope", body: "The public example is synthetic and cannot establish superiority over another product. Any future comparison needs a defined task, comparable evidence, current primary sources, limitations, and an accountable review.", link: { label: "Review the comparison method", href: "/methodology/comparison-policy" } },
+      { title: "Judge the work within its stated scope", body: "The public example is synthetic and cannot establish superiority over another product. Any future comparison needs a defined task, comparable evidence, current primary sources, limitations, and an accountable review.", link: { label: "Check comparison policy status", href: "/methodology/comparison-policy" } },
     ],
   },
   aiCloud: {
@@ -117,7 +117,7 @@ export const decisionPages = {
       { title: "What the inquiry collects", body: "Name, email, and organization are required. An optional decision description and optional scoping details help route the conversation. Inquiry intent and approved source labels may be recorded with the submission. A receipt confirms stored intake; it does not confirm delivery to an individual or acceptance of an engagement." },
       { title: "How the inquiry is handled", body: "The intake implementation stores submissions in a database and queues notifications for delivery. It includes bot verification, rate limiting, delivery retry, and an optional CRM integration. Service configuration and authorized recipients must be verified before production operation; this page does not claim an independently audited security certification." },
       { title: "Operational data requires a separate agreement", body: "Before exchanging historical site inputs, agree the data owner, permission to share, minimum necessary fields, authorized recipients, secure transfer method, storage location, access, retention, deletion, and permitted use. Confirm whether confidentiality or customer approvals are required. No such transfer is authorized by sending an inquiry." },
-      { title: "Retention and correction", body: "The application schedules inquiry redaction after 180 days and deletion after 365 days, including retained notification request data. Operator execution, backups, and any email or CRM provider retention require separate verification; these schedules do not establish deletion from every processor. Use the contact route to request clarification or correction, identifying only the minimum information needed to locate the inquiry.", link: { label: "Contact GridNinja", href: "/contact" } },
+      { title: "Retention and correction", body: "Each accepted inquiry is assigned a redaction date 180 days after receipt and a deletion date 365 days after receipt, including retained notification request data. Operator execution, backups, and any email or CRM provider retention require separate verification; these schedules do not establish deletion from every processor. Use the contact route to request clarification or correction, identifying only the minimum information needed to locate the inquiry.", link: { label: "Contact GridNinja", href: "/contact" } },
     ],
   },
 } as const satisfies Record<string, DecisionPageContent>

@@ -60,8 +60,8 @@ export const constraintOptions = [
 ] as const
 
 export const intentLabels: Record<LeadIntent, string> = {
-  "capacity-audit": "Capacity Audit",
-  "shadow-mode": "Shadow Mode Demo",
+  "capacity-audit": "Capacity assessment inquiry",
+  "shadow-mode": "Shadow Mode discussion",
   "sellable-capacity": "Sellable Capacity Assessment",
   partnership: "Partnership Conversation",
   "book-demo": "Proof Demo",

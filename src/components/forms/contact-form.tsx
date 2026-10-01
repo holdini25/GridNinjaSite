@@ -465,8 +465,8 @@ export function ContactForm({
             id="contact-message-helper"
             className="mt-2 text-sm leading-6 text-muted-foreground"
           >
-            Optional. Describe the operating decision, capacity claim, recurring constraint,
-            or evidence gap. Do not include credentials, site drawings, customer
+            Briefly describe the decision or question your team wants to resolve.
+            Do not include credentials, site drawings, customer
             data or sensitive topology.
           </p>
         </ContactField>

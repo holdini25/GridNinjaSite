@@ -61,7 +61,7 @@ export default function ContactPage() {
                     id="contact-safeguards"
                     className="mt-2 text-base font-medium tracking-tight text-foreground"
                   >
-                    Proof-first, access-bounded engagement.
+                    Agree the scope before sharing data.
                   </h2>
                 </div>
               </div>
