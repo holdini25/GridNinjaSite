@@ -78,7 +78,7 @@ test.describe("contact intake layout", () => {
     ).toBeVisible()
     await expect(
       page.getByText(
-        "Share the capacity decision in front of your team. Scoping establishes fit, authorized historical inputs, deliverables and price for one bounded paid assessment.",
+        "Tell us about the capacity decision your team is facing. We will discuss whether an assessment can help, what historical inputs are available, and the work and price to agree before starting.",
         { exact: true }
       )
     ).toBeVisible()
