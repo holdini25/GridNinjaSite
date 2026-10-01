@@ -34,6 +34,7 @@ export default async function HomePage() {
 
       <section className="gn-home-light gn-home-section gn-home-mechanism" aria-labelledby="mechanism-heading">
         <div className="gn-home-container">
+          <p className="gn-home-purpose">{cinematicHome.purpose}</p>
           <p className="gn-home-eyebrow">The assessment mechanism</p>
           <h2 id="mechanism-heading">From physical constraints<br className="gn-home-desktop-break" /> to inspectable decisions.</h2>
           <ol className="gn-home-mechanism-grid">{cinematicHome.mechanism.map((step, index) => <li key={step.title}>
@@ -77,7 +78,7 @@ export default async function HomePage() {
 
       <section id="evidence" className="gn-home-light gn-home-section gn-home-evidence" aria-labelledby="evidence-heading">
         <div className="gn-home-container">
-          <div className="gn-home-section-heading"><div><p className="gn-home-eyebrow">Inspect the basis</p><h2 id="evidence-heading">Engineering you can inspect.</h2><p>The intended architecture, the authority boundaries, and the available example.</p></div><Link href="/evidence" prefetch={false} className="gn-home-text-link">Explore public evidence <span aria-hidden="true">→</span></Link></div>
+          <div className="gn-home-section-heading"><div><p className="gn-home-eyebrow">Inspect the basis</p><h2 id="evidence-heading">Engineering you can inspect.</h2><p>Start with the sample output. Review the method and the platform direction.</p></div><Link href="/evidence" prefetch={false} className="gn-home-text-link">Explore public evidence <span aria-hidden="true">→</span></Link></div>
           <div className="gn-home-evidence-grid">{cinematicHome.evidence.map(card => {
             const still = card.image === "construction" ? construction : cooling
             return <article key={card.href} className="gn-home-evidence-card">

@@ -1,27 +1,52 @@
 import { Client } from "pg"
 
 import { expect, test } from "@playwright/test"
+import {
+  assertStagingRequestTarget,
+  assertStagingResponseStatus,
+  stagingIntakeConfig,
+} from "../../scripts/qa/staging-contract.mjs"
 
-const databaseUrl = process.env.STAGING_DATABASE_URL
+const { baseURL, databaseUrl, email } = stagingIntakeConfig(process.env)
 
-test.skip(!databaseUrl, "STAGING_DATABASE_URL is required.")
-
-test("one browser submission becomes one durable delivered lead", async ({
+test("one browser submission becomes one durable lead accepted by its providers", async ({
   page,
 }) => {
+  await page.route("**/*", async route => {
+    const request = route.request()
+    const mainNavigation = request.isNavigationRequest() && request.frame() === page.mainFrame()
+    if (!mainNavigation && new URL(request.url()).pathname !== "/api/contact") {
+      await route.continue()
+      return
+    }
+    try {
+      assertStagingRequestTarget(request.url(), baseURL)
+      // Do not follow a 307/308 that could forward the submission elsewhere.
+      const response = await route.fetch({ maxRedirects: 0, maxRetries: 0 })
+      assertStagingResponseStatus(response.status())
+      await route.fulfill({ response })
+    } catch (error) {
+      await route.abort("blockedbyclient")
+      throw error
+    }
+  })
   await page.goto("/contact?intent=capacity-audit&source=staging-canary")
   await page.getByLabel("Name", { exact: true }).fill("GridNinja Canary")
-  await page.getByLabel("Company", { exact: true }).fill("GridNinja Staging")
+  const formEngagedAt = Date.now()
+  await page.getByLabel("Organization", { exact: true }).fill("GridNinja Staging")
   await page
     .getByLabel("Work email", { exact: true })
-    .fill("contact-canary@gridninja.ai")
+    .fill(email)
   await page
-    .getByLabel("What constraint or decision are you working through?", {
+    .getByLabel("Decision context (optional)", {
       exact: true,
     })
     .fill("Automated staging-only durability and delivery canary submission.")
 
   await expect(page.getByText("Security verification complete.")).toBeVisible()
+  // Preserve the backend's 1,200 ms minimum interaction age for bot protection.
+  await expect.poll(() => Date.now() - formEngagedAt).toBeGreaterThanOrEqual(1_200)
+  assertStagingRequestTarget(page.url(), baseURL)
   await page.getByRole("button", { name: "Scope an assessment" }).click()
   await expect(page.getByRole("heading", { name: "Inquiry received" })).toBeVisible()
   const reference = page.getByText(/^Reference:/)
@@ -30,6 +55,7 @@ test("one browser submission becomes one durable delivered lead", async ({
 
   expect(submissionId).toMatch(/^[0-9a-f-]{36}$/i)
 
+  // The backend's delivered status records provider acceptance, not inbox receipt.
   const client = new Client({ connectionString: databaseUrl })
   await client.connect()
 

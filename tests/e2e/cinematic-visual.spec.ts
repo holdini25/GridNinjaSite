@@ -1,5 +1,6 @@
 import {expect,test} from "@playwright/test"
 import sharp from "sharp"
+import { captureVisitedReviewPage } from "../../scripts/facility/review-page-capture.mjs"
 
 test.skip(process.env.CINEMATIC_E2E !== "1", "Requires the selected cinematic release")
 
@@ -57,7 +58,10 @@ for (const size of [{width:1366,height:768},{width:390,height:844}]) {
       }
       await page.evaluate(()=>window.scrollTo(0,0))
     }
-    await page.screenshot({path:testInfo.outputPath("homepage.png"),fullPage:size.width<640})
+    if(size.width<640) {
+      const painting = await captureVisitedReviewPage(page, testInfo.outputPath("homepage.png"), { scrollMethod: "programmatic" })
+      await testInfo.attach("homepage-review-painting", { body: Buffer.from(JSON.stringify(painting, null, 2)), contentType: "application/json" })
+    } else await page.screenshot({path:testInfo.outputPath("homepage.png"),fullPage:false})
   })
 }
 

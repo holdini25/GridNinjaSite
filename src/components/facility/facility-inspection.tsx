@@ -96,11 +96,15 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
   const focusManualActivation = useRef(false)
   useEffect(() => {
     if (!activateOnMount || initialActivationSeen.current || mode === "poster") return
+    // A background deep link cannot present its first frame. Wait for the
+    // document, but not intersection: hash alignment may reveal the stage later.
+    // Recheck the DOM in case React has not observed the latest visibility event.
+    if (!state.documentVisible || document.visibilityState !== "visible") return
     initialActivationSeen.current = true
     requestPoster()
     focusManualActivation.current = true
     dispatch({ type: "activate" })
-  }, [activateOnMount, mode, requestPoster])
+  }, [activateOnMount, mode, requestPoster, state.documentVisible])
   const graphicsProbe = useRef<FacilityGraphicsProbe | null>(null)
   const [automaticGraphics, setAutomaticGraphics] = useState<FacilityGraphicsProbe["status"] | "unchecked">("unchecked")
   const posterDecoder = useRef<ReturnType<typeof createPosterDecoder> | null>(null)

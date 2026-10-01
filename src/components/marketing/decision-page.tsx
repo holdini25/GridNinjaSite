@@ -26,7 +26,7 @@ export function DecisionPage({ path, content, facilityEntry }: { path: PublicPat
     <SeoPageJsonLd path={path} />
     <SeoBreadcrumbs path={path} />
     <Hero eyebrow={content.eyebrow} headline={content.headline} body={content.body}
-      primaryCta={{ label: "Contact Us", href: scopeHref, analyticsEvent: "assessment_cta_selected", analyticsSource: journey.source }}
+      primaryCta={{ label: "Scope an assessment", href: scopeHref, analyticsEvent: "assessment_cta_selected", analyticsSource: journey.source }}
       secondaryCta={{ label: "See a sample decision brief", href: sampleHref }} />
     {facilityEntry}
     {path === "/proof/proof-pack" && <SectionShell deferRendering={false}><div className="max-w-3xl"><DecisionBriefPreview record={assessmentFixtures.b} /></div></SectionShell>}
@@ -38,6 +38,6 @@ export function DecisionPage({ path, content, facilityEntry }: { path: PublicPat
       </div>
     </SectionShell>)}
     <RelatedSeoLinks path={path} />
-    <SectionShell deferRendering={false}><CtaBand eyebrow="Proof before autonomy" headline="Start with one capacity question." body="Agree the decision, evidence boundary, responsibilities, and paid scope before work begins." label="Contact Us" href={scopeHref} /></SectionShell>
+    <SectionShell deferRendering={false}><CtaBand eyebrow="Proof before autonomy" headline="Start with one capacity question." body="Agree the decision, evidence boundary, responsibilities, and paid scope before work begins." label="Scope an assessment" href={scopeHref} /></SectionShell>
   </div>
 }

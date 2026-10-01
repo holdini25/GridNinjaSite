@@ -78,9 +78,22 @@ schedule IDs so a configuration rerun updates rather than duplicates them.
 The repository command `npm run contact:qstash:configure` creates or updates
 both schedules from `QSTASH_TOKEN` and `NEXT_PUBLIC_SITE_URL`.
 
-The manual `Contact staging canary` workflow uses staging-only Turnstile and
-notification destinations, submits one real browser lead, and verifies the lead
-and all configured delivery rows directly in the staging database.
+The manual `Contact staging canary` workflow submits one real browser lead and
+verifies durable intake and provider acceptance in the staging database. It does
+not establish recipient inbox delivery or operator acknowledgement. Before an
+authorized run, configure isolated staging Turnstile, database, and notification
+destinations, including the internal email recipient and any CRM webhook.
+
+The staging environment requires secrets `STAGING_BASE_URL`,
+`STAGING_DATABASE_URL`, and `STAGING_CANARY_EMAIL` (the approved form test email),
+plus variables `STAGING_CANARY_AUTHORIZED_ORIGIN` (exact origin) and
+`STAGING_CANARY_AUTHORIZED=staging-only`. Local invocation uses the same five
+environment variables. Missing values fail before browser launch; production
+hosts, remote HTTP, URL credentials, and navigation/contact redirects are rejected.
+The canary runs once without automatic retries, because each run writes a lead.
+An arbitrary preview alias is not proof of resource isolation; verify the actual
+configured recipients and backend before authorizing its origin. These checks
+retain the existing contact backend and do not enable enterprise monitoring.
 
 ## Validation
 

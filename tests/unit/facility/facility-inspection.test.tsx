@@ -184,6 +184,67 @@ describe("facility HTML shell and authoritative assessment", () => {
 })
 
 describe("facility graphics session", () => {
+  it("defers deep-link activation while hidden and activates once when foregrounded without waiting for intersection", async () => {
+    vi.useFakeTimers()
+    const visibility = vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden")
+    // The hash-alignment journey can reveal the stage after acquisition starts.
+    vi.stubGlobal("IntersectionObserver", class {
+      observe() {}
+      disconnect() {}
+    })
+    render(<FacilityInspection {...props} activateOnMount />)
+    const inspector = screen.getByTestId("facility-inspection")
+    await act(async () => { await vi.advanceTimersByTimeAsync(9_000) })
+    expect(inspector).toHaveAttribute("data-phase", "poster")
+    expect(inspector).not.toHaveAttribute("data-failure")
+    expect(screen.getByRole("img")).toBeVisible()
+    expect(screen.queryByTestId("mock-facility-canvas")).not.toBeInTheDocument()
+    expect(renderer.render).not.toHaveBeenCalled()
+
+    await act(async () => {
+      visibility.mockReturnValue("visible")
+      fireEvent(document, new Event("visibilitychange"))
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(renderer.render).toHaveBeenCalled()
+    expect(inspector).toHaveAttribute("data-phase", "loading")
+    const generation = currentCanvas().generation
+    expect(generation).toBe(1)
+    expect(currentCanvas().visible).toBe(false)
+    act(() => { currentCanvas().onStaged(); currentCanvas().onPresented() })
+    act(() => { visibility.mockReturnValue("hidden"); fireEvent(document, new Event("visibilitychange")) })
+    act(() => { visibility.mockReturnValue("visible"); fireEvent(document, new Event("visibilitychange")) })
+    expect(inspector).toHaveAttribute("data-phase", "ready")
+    expect(currentCanvas().generation).toBe(generation)
+
+    fireEvent.click(stillImageControl())
+    renderer.render.mockClear()
+    act(() => { visibility.mockReturnValue("hidden"); fireEvent(document, new Event("visibilitychange")) })
+    act(() => { visibility.mockReturnValue("visible"); fireEvent(document, new Event("visibilitychange")) })
+    expect(inspector).toHaveAttribute("data-phase", "poster")
+    expect(renderer.render).not.toHaveBeenCalled()
+  })
+
+  it("rechecks actual document visibility before a newly requested deep-link activation", async () => {
+    vi.useFakeTimers()
+    const visibility = vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible")
+    const { rerender } = render(<FacilityInspection {...props} />)
+    // The document changed before its visibility event updated React state.
+    visibility.mockReturnValue("hidden")
+    rerender(<FacilityInspection {...props} activateOnMount />)
+    await act(async () => { await vi.advanceTimersByTimeAsync(9_000) })
+    expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-phase", "poster")
+    expect(renderer.render).not.toHaveBeenCalled()
+    act(() => { fireEvent(document, new Event("visibilitychange")) })
+    await act(async () => {
+      visibility.mockReturnValue("visible")
+      fireEvent(document, new Event("visibilitychange"))
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(renderer.render).toHaveBeenCalled()
+    expect(currentCanvas().generation).toBe(1)
+  })
+
   it("keeps a WebKit null-relatedTarget blur from cancelling an internal still-image click", async () => {
     render(<FacilityInspection {...props} />)
     fireEvent.click(screen.getByRole("button", { name: /Explore in 3D/ }))

@@ -1,7 +1,55 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest"
-import { stagingCanaryConfig, stagingFrozenPayloadEvidence } from "../../../scripts/qa/staging-contract.mjs"
+import {
+  assertStagingRequestTarget, assertStagingResponseStatus, stagingIntakeConfig,
+  stagingCanaryConfig, stagingFrozenPayloadEvidence,
+} from "../../../scripts/qa/staging-contract.mjs"
 const env = { STAGING_BASE_URL: "https://preview.example.test", STAGING_CANARY_AUTHORIZED_ORIGIN: "https://preview.example.test", STAGING_CANARY_AUTHORIZED: "staging-only", STAGING_DATABASE_URL: "postgresql://test@127.0.0.1/gridninja_test", STAGING_CANARY_EMAIL: "sink@example.test", STAGING_CANARY_OPERATOR_REFERENCE: "release-operator", STAGING_CANARY_DELIVERY_EMAIL: "notification-sink@example.test", STAGING_CANARY_EXPECTED_ATTESTATION_SHA256: "a".repeat(64), STAGING_CANARY_PREFLIGHT_TOKEN: "x".repeat(32) }
+
+describe("current intake smoke contract", () => {
+  const intake = {
+    STAGING_BASE_URL: env.STAGING_BASE_URL,
+    STAGING_CANARY_AUTHORIZED_ORIGIN: env.STAGING_CANARY_AUTHORIZED_ORIGIN,
+    STAGING_CANARY_AUTHORIZED: env.STAGING_CANARY_AUTHORIZED,
+    STAGING_DATABASE_URL: env.STAGING_DATABASE_URL,
+    STAGING_CANARY_EMAIL: env.STAGING_CANARY_EMAIL,
+  }
+
+  it("requires every intake setting without requiring deferred enterprise services", () => {
+    for (const key of Object.keys(intake)) {
+      expect(() => stagingIntakeConfig({ ...intake, [key]: "" })).toThrow(/required/)
+    }
+    expect(stagingIntakeConfig(intake)).toEqual({
+      baseURL: intake.STAGING_BASE_URL,
+      databaseUrl: intake.STAGING_DATABASE_URL,
+      email: intake.STAGING_CANARY_EMAIL,
+    })
+    expect(() => stagingIntakeConfig({ ...intake, STAGING_CANARY_AUTHORIZED: "yes" })).toThrow(/staging-only/)
+    expect(() => stagingIntakeConfig({ ...intake, STAGING_DATABASE_URL: "https://database.example.test" })).toThrow(/PostgreSQL/)
+  })
+
+  it("accepts only one explicit form test email", () => {
+    for (const email of ["invalid", "Name <sink@example.test>", "a@example.test,b@example.test", "a@example.test;b@example.test"]) {
+      expect(() => stagingIntakeConfig({ ...intake, STAGING_CANARY_EMAIL: email })).toThrow(/one approved/)
+    }
+  })
+
+  it("prevents navigation and contact requests from escaping the authorized origin", () => {
+    expect(() => assertStagingRequestTarget(`${intake.STAGING_BASE_URL}/api/contact`, intake.STAGING_BASE_URL)).not.toThrow()
+    for (const url of ["https://gridninja.ai/api/contact", "https://other.example.test/contact", "https://preview.example.test:8443/api/contact", "https://user:secret@preview.example.test/contact"]) {
+      expect(() => assertStagingRequestTarget(url, intake.STAGING_BASE_URL)).toThrow(/authorized staging origin/)
+    }
+  })
+
+  it("rejects all redirect responses before they can forward a request", () => {
+    for (const status of [301, 302, 303, 307, 308]) {
+      expect(() => assertStagingResponseStatus(status)).toThrow(/must not redirect/)
+    }
+    for (const status of [200, 202, 400, 403, 503]) {
+      expect(() => assertStagingResponseStatus(status)).not.toThrow()
+    }
+  })
+})
 describe("staging canary fails closed", () => {
   it("requires a database, recipient and explicit matching target", () => {
     for (const key of Object.keys(env)) expect(() => stagingCanaryConfig({ ...env, [key]: "" })).toThrow(/required/)

@@ -2,8 +2,9 @@
 export const cinematicHome = {
   eyebrow: "Capacity decisions · Proof before autonomy",
   headline: "Understand your capacity. Know the limits.",
-  body: "Evaluate one capacity commitment through a paid, bounded assessment of authorized historical inputs. Receive a decision brief with the modeled result, its conditions, and what still needs review.",
+  body: "Review your next AI workload or tenant commitment against declared facility limits. GridNinja offers a paid, bounded assessment of authorized historical inputs, with a decision brief, supporting model record and unresolved questions for review.",
   trust: "Historical inputs. No live connection or equipment control.",
+  purpose: "Data centers share infrastructure with the communities around them. We want growing data centers to be better neighbors and responsible stewards of that shared infrastructure.",
   mechanism: [
     { title: "Model the constraints", body: "Bring the workload, power, cooling and reserve conditions into one bounded assessment." },
     { title: "Check the request", body: "Compare the proposed profile with the declared limits, evidence quality and time window." },
@@ -14,8 +15,8 @@ export const cinematicHome = {
     { title: "Commit colocation capacity.", audience: "Colocation operators and infrastructure teams", body: "Examine a proposed tenant increment before a commercial commitment. Make the reserve, evidence and SLA questions explicit.", href: "/solutions/colocation", topic: "colocation" },
   ],
   evidence: [
-    { title: "Physical constraints", status: "Platform direction · in development", body: "The intended relationship between workloads, facility limits and inside-the-fence orchestration.", href: "/platform", link: "Explore the platform direction", image: "construction" },
+    { title: "A versioned decision brief", status: "Sample output · Synthetic", body: "A requested profile, modeled revision and unresolved question in a traceable record.", href: "/demo#decision-brief", link: "See a sample decision brief", image: "brief" },
     { title: "Proof before autonomy", status: "Method and authority boundaries", body: "Why a modeled result, a business decision and permission to operate remain distinct.", href: "/proof", link: "Understand the boundaries", image: "cooling" },
-    { title: "A versioned decision brief", status: "Synthetic example", body: "A requested profile, modeled revision and unresolved question in a traceable record.", href: "/demo#decision-brief", link: "See a sample decision brief", image: "brief" },
+    { title: "Physical constraints", status: "Platform direction · In development", body: "The intended relationship between workloads, facility limits and inside-the-fence orchestration.", href: "/platform", link: "Explore the platform direction", image: "construction" },
   ],
 } as const

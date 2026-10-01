@@ -2,7 +2,7 @@ import type { DecisionPageContent } from "@/components/marketing/decision-page"
 export const decisionPages = {
   about: {
     eyebrow: "About GridNinja", headline: "Building a defensible basis for capacity decisions.",
-    body: "GridNinja focuses on constrained AI infrastructure: how a proposed workload or capacity commitment relates to facility limits, evidence quality, and commercial requirements.",
+    body: "Our ambition is for growing data centers to be better neighbors and responsible stewards of shared infrastructure. GridNinja starts with a bounded capacity decision: how a proposed workload or commitment relates to facility limits, evidence quality, and commercial requirements.",
     sections: [
       { title: "The offer today", body: "A bounded, paid capacity decision assessment using authorized historical inputs. Scope, availability, reviewers, price, schedule, and deliverables are agreed before work begins.", link: { label: "Review the assessment", href: "/assessment" } },
       { title: "Demonstrated work and its limits", body: "The public sample shows a synthetic assessment record, model screening outcomes, explicit unknowns, and a versioned decision brief. It is not evidence of site deployment, customer performance, independent certification, or operating authority.", link: { label: "Inspect the synthetic example", href: "/demo" } },
@@ -36,6 +36,7 @@ export const decisionPages = {
       ] },
       { title: "A conditional path to more authority", body: "Shadow Mode would observe without control. Advisory Mode would put proposals before operators. Bounded Autonomy would require a verified dispatch envelope, explicit permissions, rollback, and audit evidence. Expanded Autonomy would require further evidence. These are development stages, not services proven by the synthetic sample." },
       { title: "What evidence must travel with a number", body: "A capacity report needs the requested and revised profiles, reference load, meter boundary, time interval, binding conditions, assumptions, unknowns, dataset/model versions, and review status. A safety report requires its own supported scope; a software check cannot stand in for it.", link: { label: "Inspect the proof-pack contents", href: "/proof/proof-pack" } },
+      { title: "Community benefits require separate evidence", body: "A modeled facility result does not establish a community benefit. Claims about local electricity affordability, water use, or effects on shared grid infrastructure require their own scope, evidence, and review. The synthetic sample does not assess these outcomes." },
     ],
   },
   proofPack: {

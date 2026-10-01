@@ -71,7 +71,7 @@ test("native evidence activation survives a press begun before hydration and enh
   }
 })
 
-test("the mobile decision and form destination expose useful content immediately", async ({ page }) => {
+test("the mobile decision and form destination expose useful content immediately", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
   await page.goto("/demo")
@@ -85,6 +85,16 @@ test("the mobile decision and form destination expose useful content immediately
   const box = await question.boundingBox()
   expect(box!.y + box!.height).toBeLessThan(844)
   await expect(page.locator("[data-assessment-controls]")).not.toHaveAttribute("open")
+  await page.goto("/assessment")
+  const offer = page.locator("#assessment-offer-heading")
+  const form = page.locator("form")
+  await expect(offer).toBeVisible()
+  expect(await offer.evaluate(heading => Boolean(heading.compareDocumentPosition(document.querySelector("form")!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true)
+  const offerBox = await offer.boundingBox()
+  const formBox = await form.boundingBox()
+  expect(offerBox!.y + offerBox!.height).toBeLessThan(formBox!.y)
+  await offer.evaluate(element => element.scrollIntoView({ block: "start", behavior: "instant" }))
+  await page.screenshot({ path: testInfo.outputPath("assessment-offer-before-form.png") })
   await page.goto("/assessment?source=demo-final&topic=ai-cloud#scope")
   const anchor = page.locator("#scope")
   await expect(anchor).toHaveJSProperty("tagName", "H2")

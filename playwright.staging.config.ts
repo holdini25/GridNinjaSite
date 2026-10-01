@@ -1,20 +1,19 @@
 import { defineConfig, devices } from "@playwright/test"
+import { stagingIntakeConfig } from "./scripts/qa/staging-contract.mjs"
 
-const baseURL = process.env.STAGING_BASE_URL
-
-if (!baseURL) {
-  throw new Error("STAGING_BASE_URL is required for the contact staging canary.")
-}
+const { baseURL } = stagingIntakeConfig(process.env)
 
 export default defineConfig({
   testDir: "./tests/staging",
   timeout: 90_000,
-  retries: 1,
+  retries: 0,
+  workers: 1,
   reporter: [["list"]],
   use: {
     baseURL,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
+    serviceWorkers: "block",
   },
   projects: [
     {
