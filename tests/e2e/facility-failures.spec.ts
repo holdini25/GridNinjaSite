@@ -38,7 +38,8 @@ test.describe("facility failure boundaries", () => {
     let missingPosters = 0
     await page.route("**/assets/facility/**/poster-*.webp", route => { missingPosters++; return route.fulfill({ status: 404, contentType: "text/plain", body: "Missing poster fixture" }) })
     const inspector = await openManual(page)
-    expect(missingPosters).toBeGreaterThan(0)
+    // Visible HTML controls can precede the deferred poster request on mobile.
+    await expect.poll(() => missingPosters).toBeGreaterThan(0)
     await expect(inspector).toContainText("Facility illustration unavailable")
     const decision = page.getByRole("region", { name: "Fixture B decision", exact: true })
     const before = await decision.textContent()
