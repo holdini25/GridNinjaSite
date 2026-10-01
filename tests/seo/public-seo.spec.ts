@@ -14,6 +14,7 @@ import {
 } from "../../src/seo/route-manifest"
 import { PRODUCTION_ORIGIN } from "../../src/seo/policy"
 import { publicAuthors } from "../../src/content/authors"
+import { cinematicHome } from "../../src/content/copy/cinematic-home"
 
 const productionHost = new URL(PRODUCTION_ORIGIN).host
 const criticalRoutes = indexableSeoRoutes.filter((route) => route.tier <= 1)
@@ -450,7 +451,7 @@ test.describe("snippet and raw-content controls", () => {
     expect(response?.status()).toBe(200)
     await expect(page.locator("main h1")).toHaveCount(1)
     await expect(page.locator("main h1")).toBeVisible()
-    await expect(page.locator("main h1 + p")).toHaveText("Evaluate one capacity commitment through a paid, bounded assessment of authorized historical inputs. Receive a decision brief with the modeled result, its conditions, and what still needs review.")
+    await expect(page.locator("main h1 + p")).toHaveText(cinematicHome.body)
     await expect(page.locator("main h1 + p")).toBeVisible()
     await expect(
       page.getByText("AI Data Center Virtual Capacity Control Plane", {
