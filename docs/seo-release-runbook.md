@@ -6,18 +6,21 @@ and require named owners.
 
 ## Canonical host and deployment controls
 
-The only production identity is `https://gridninja.ai`. In Vercel, set the apex
-domain as the production primary and configure each variant as one permanent
-path-and-query-preserving hop:
+The only production identity is `https://gridninja.ai`. The approved production
+redirect contract preserves the complete path and query at every hop:
 
 - `http://gridninja.ai/*` to `https://gridninja.ai/*`
-- `http://www.gridninja.ai/*` to `https://gridninja.ai/*`
+- `http://www.gridninja.ai/*` to `https://www.gridninja.ai/*`, then
+  `https://gridninja.ai/*` (two permanent hops)
 - `https://www.gridninja.ai/*` to `https://gridninja.ai/*`
 
-Do not rely on a two-hop HTTP-to-www-to-apex chain. The application adds an
-apex redirect defense for the `www` host, but the Vercel domain configuration
-must be corrected before release. Run the deployment SEO smoke workflow against
-the apex after the domain change.
+Only HTTP `www` permits two hops; the other variants require one. Every hop must
+use 301 or 308, with no temporary redirect, extra hop, or path/query loss. Vercel's
+CDN applies its mandatory HTTP-to-HTTPS redirect before the host redirect; see
+[Vercel's encryption documentation](https://vercel.com/docs/cdn-security/encryption).
+The application retains its apex redirect for the `www` host. Run the deployment
+SEO smoke workflow against the apex to verify the live chain. This contract
+records the accepted hosting behavior; it does not imply a hosting change.
 
 Keep preview deployment protection enabled. Every preview response must expose
 `X-Robots-Tag: noindex, nofollow, noarchive`; custom preview domains need the

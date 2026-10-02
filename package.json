@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run assessment:validate && npm run seo:validate && npm run facility:validate && npm run cinematic:validate",
+    "prebuild": "npm run css:validate && npm run assessment:validate && npm run seo:validate && npm run facility:validate && npm run cinematic:validate",
     "build": "next build --webpack",
     "postbuild": "node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build && node scripts/cinematic/validate.mjs --build && node scripts/facility/record-build.mjs",
     "start": "next start",
@@ -25,6 +25,7 @@
     "test:staging:contact": "playwright test --config=playwright.staging.config.ts",
     "test:seo": "playwright test --config=playwright.seo.config.ts",
     "test:seo:smoke": "playwright test --config=playwright.seo-smoke.config.ts",
+    "css:validate": "node scripts/css/validate-sources.mjs",
     "seo:validate": "node scripts/seo/validate-source-contracts.mjs && node scripts/seo/validate-evidence-releases.mjs && vitest run tests/unit/seo --coverage.enabled=false",
     "lighthouse": "npm run lighthouse:collect && npm run lighthouse:validate-budgets",
     "lighthouse:collect": "lhci autorun --config=./lighthouserc.cjs",

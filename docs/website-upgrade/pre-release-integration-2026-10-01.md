@@ -1,5 +1,7 @@
 # GridNinja final candidate review — 1 October 2026
 
+Historical review of the revisions named below. See the [2 October follow-up](release-performance-2026-10-02.md) and latest PR checks for subsequent changes and release status.
+
 **Local implementation and authorized validation are complete; ready for an authorized push and exact-revision CI review. Production release is not yet fully qualified.** The remaining gates below are explicit. Current results belong to application commit `119153e` plus the test-only correction `76f5f13`; earlier-build evidence is not reused as current qualification.
 
 ## Candidate and scope
