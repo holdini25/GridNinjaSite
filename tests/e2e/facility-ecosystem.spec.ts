@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
+import { centerLocatorInViewport } from "./support/viewport"
 import { openAssessmentControls, scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
 
 test.describe("facility ecosystem narrative", () => {
@@ -20,7 +21,9 @@ test.describe("facility ecosystem narrative", () => {
       await expect(story).toContainText("whole facility")
       await expect(story.getByRole("button", { name: "Play story", exact: true })).toBeDisabled()
       for (let chapter = 1; chapter < 6; chapter++) {
-        await story.getByRole("button", { name: "Next chapter", exact: true }).click()
+        const nextChapter = story.getByRole("button", { name: "Next chapter", exact: true })
+        await centerLocatorInViewport(nextChapter)
+        await nextChapter.click()
         await expect(story).toHaveAttribute("data-chapter", String(chapter))
         expect(await page.getByTestId("assessment-summary").textContent()).toBe(caption)
         if (chapter === 3) await expect(story).toContainText("Independent storage capacity, contribution and dispatchability are unassessed")

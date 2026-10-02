@@ -19,10 +19,10 @@ test("deployment exposes one canonical identity and crawl policy", async ({
   await expect(page.locator('link[rel="canonical"]')).toHaveCount(1)
 
   if (target.origin === apexOrigin) {
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      `${apexOrigin}/`
-    )
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute("href")
+    // URL identity treats an origin's empty path and `/` identically.
+    // Parsing without a base still rejects relative or malformed canonicals.
+    expect(new URL(canonical ?? "").href).toBe(`${apexOrigin}/`)
     const robots = await request.get("/robots.txt")
     expect(robots.status()).toBe(200)
     expect(await robots.text()).toContain(

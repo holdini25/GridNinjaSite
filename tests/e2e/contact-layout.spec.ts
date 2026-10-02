@@ -159,7 +159,9 @@ test.describe("contact intake layout", () => {
     // empty error region. Its links must recover focus to the invalid controls.
     const errorSummary = page.locator('[aria-labelledby="contact-error-summary-title"]')
     await expect(errorSummary.getByRole("link")).toHaveCount(3)
-    await errorSummary.getByRole("link", { name: "Name: Enter your name." }).click()
+    const nameErrorLink = errorSummary.getByRole("link", { name: "Name: Enter your name." })
+    await centerLocatorInViewport(nameErrorLink)
+    await nameErrorLink.click()
     await expect(page.getByLabel("Name", { exact: true })).toBeFocused()
     await clientHealth.expectNoHorizontalOverflow()
 
