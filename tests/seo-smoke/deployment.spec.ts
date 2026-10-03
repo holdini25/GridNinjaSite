@@ -19,10 +19,10 @@ test("deployment exposes one canonical identity and crawl policy", async ({
   await expect(page.locator('link[rel="canonical"]')).toHaveCount(1)
 
   if (target.origin === apexOrigin) {
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      `${apexOrigin}/`
-    )
+    const canonical = await page.locator('link[rel="canonical"]').getAttribute("href")
+    // URL identity treats an origin's empty path and `/` identically.
+    // Parsing without a base still rejects relative or malformed canonicals.
+    expect(new URL(canonical ?? "").href).toBe(`${apexOrigin}/`)
     const robots = await request.get("/robots.txt")
     expect(robots.status()).toBe(200)
     expect(await robots.text()).toContain(
@@ -47,25 +47,45 @@ test("deployment exposes one canonical identity and crawl policy", async ({
   }
 })
 
-test("production host variants redirect to apex in one permanent hop", async ({
+test("production host variants follow the approved permanent redirect chains", async ({
   baseURL,
-}) => {
+}, testInfo) => {
   test.skip(new URL(baseURL ?? apexOrigin).origin !== apexOrigin)
 
-  for (const source of [
-    "http://gridninja.ai/seo-smoke?proof=1",
-    "http://www.gridninja.ai/seo-smoke?proof=1",
-    "https://www.gridninja.ai/seo-smoke?proof=1",
-  ]) {
-    const context = await playwrightRequest.newContext()
-    try {
-      const response = await context.get(source, { maxRedirects: 0 })
-      expect([301, 308], source).toContain(response.status())
-      expect(response.headers().location, source).toBe(
-        `${apexOrigin}/seo-smoke?proof=1`
-      )
-    } finally {
-      await context.dispose()
+  const pathAndQuery = "/assessment?proof=1&source=seo-smoke"
+  // Vercel upgrades HTTP to HTTPS before the host redirect. Only HTTP www
+  // has this approved two-hop chain; neither temporary nor extra hops qualify.
+  // https://vercel.com/docs/cdn-security/encryption
+  const chains = [
+    ["http://gridninja.ai", apexOrigin],
+    ["http://www.gridninja.ai", "https://www.gridninja.ai", apexOrigin],
+    ["https://www.gridninja.ai", apexOrigin],
+  ]
+  const observations: { url: string; status: number; location: string | null }[] = []
+  const context = await playwrightRequest.newContext()
+  try {
+    for (const chain of chains) {
+      for (let hop = 0; hop < chain.length; hop++) {
+        const url = `${chain[hop]}${pathAndQuery}`
+        const response = await context.get(url, { maxRedirects: 0 })
+        const location = response.headers().location ?? null
+        observations.push({ url, status: response.status(), location })
+        if (hop === chain.length - 1) {
+          expect(response.status(), `terminal ${url}`).toBe(200)
+          expect(location, `no further redirect from ${url}`).toBeNull()
+        } else {
+          expect([301, 308], url).toContain(response.status())
+          expect(location, `hop ${hop + 1} from ${url}`).toBe(
+            `${chain[hop + 1]}${pathAndQuery}`
+          )
+        }
+      }
     }
+  } finally {
+    await testInfo.attach("production-redirect-chains", {
+      body: Buffer.from(JSON.stringify(observations, null, 2)),
+      contentType: "application/json",
+    })
+    await context.dispose()
   }
 })

@@ -21,7 +21,7 @@ export function studioEnvironmentAllocation(resolution: 128) {
 
 /** This frozen reflection rig is generated once; it never enters the visible scene. */
 export function createStudioEnvironment(renderer: WebGLRenderer, profile: EnvironmentProfile): StudioEnvironment {
-  if (!["industrial-softbox-v1", "industrial-softbox-v2", "industrial-night-v1", "industrial-night-v2", "industrial-night-v3"].includes(profile.preset) || profile.resolution !== 128) throw new Error("environment_profile")
+  if (!["industrial-softbox-v1", "industrial-softbox-v2", "industrial-night-v1", "industrial-night-v2", "industrial-night-v3", "industrial-night-v4"].includes(profile.preset) || profile.resolution !== 128) throw new Error("environment_profile")
   const studio = new Scene()
   studio.background = new Color(profile.preset.startsWith("industrial-night-") ? "#080808" : profile.preset === "industrial-softbox-v2" ? "#101010" : "#191919")
   const geometry = new PlaneGeometry(1, 1)
@@ -42,7 +42,14 @@ export function createStudioEnvironment(renderer: WebGLRenderer, profile: Enviro
     return setRenderTarget.call(this, target, ...args)
   }
   try {
-    const panels = profile.preset === "industrial-night-v3" ? [
+    const panels = profile.preset === "industrial-night-v4" ? [
+      // The cinematic derivative uses the same four-panel allocation. Broader
+      // neutral highlights reveal its formed vent faces and cooler graphite.
+      { position: [-6, 8, -7], size: [9, 6], color: "#f5f5f3", radiance: .65 },
+      { position: [7, 5, -7], size: [2, 10], color: "#e6edef", radiance: 2.0 },
+      { position: [-6, -4, 8], size: [9, 6], color: "#f3f3f1", radiance: 1.6 },
+      { position: [8, -4, -6], size: [5, 6], color: "#ededed", radiance: .72 },
+    ] : profile.preset === "industrial-night-v3" ? [
       // Broad neutral key, quieter frontal fill and a narrow side reflection
       // reveal recessed fronts and the moving tray without glazing every panel.
       { position: [-6, 8, -7], size: [9, 6], color: "#f5f5f3", radiance: .45 },

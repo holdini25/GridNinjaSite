@@ -135,10 +135,13 @@
 .facility-walkthrough-evidence { display: flex; flex-wrap: wrap; gap: .15rem 1rem; margin-top: .4rem; }
 
 /* V6 narrative is ordinary HTML. The renderer owns all continuous movement. */
-.facility-ecosystem { padding: .2rem 1rem .55rem; border-bottom: 1px solid var(--facility-line); }
+.facility-ecosystem { padding: .75rem 1rem 1rem; border-bottom: 1px solid var(--facility-line); }
+.facility-ecosystem-intro { max-width: 62ch; margin: 0 0 .65rem; color: #b9b9b9; font-size: var(--facility-body); line-height: 1.65; }
 .facility-ecosystem-actions, .facility-ecosystem-playback, .facility-ecosystem-links { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .65rem; }
 .facility-ecosystem-actions { justify-content: space-between; }
 .facility-ecosystem-actions .facility-action { padding-inline: 0; text-align: left; }
+.facility-ecosystem-actions .facility-story-entry { padding: .55rem .8rem; border: 1px solid #9b7548; border-radius: 5px; background: #ffad3808; }
+.facility-ecosystem-actions .facility-story-entry:is(:hover, :focus-visible) { background: #ffad3814; border-color: #e8b777; }
 .facility-ecosystem-story { margin-top: .4rem; min-width: 0; }
 .facility-ecosystem-kicker, .facility-ecosystem-index { margin: .3rem 0; color: #d7b587; font: 400 var(--facility-meta)/1.65 var(--font-mono); }
 .facility-ecosystem-chapters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .3rem; margin: .65rem 0; }

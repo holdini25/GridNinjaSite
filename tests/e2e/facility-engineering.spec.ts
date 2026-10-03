@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright"
-import { scrollFacilityIntoView, openFacilityDisplayOptions, chooseFacilityStillImage } from "../support/facility-viewer"
+import { scrollFacilityIntoView, openFacilityDisplayOptions, chooseFacilityStillImage, settleFacilityActivity, waitForFacilityReady } from "../support/facility-viewer"
 import { expect, test, type Page, type Locator } from "@playwright/test"
 
 async function openEngineering(page: Page, scenario = "b") {
@@ -8,7 +8,7 @@ async function openEngineering(page: Page, scenario = "b") {
   const inspector = page.getByTestId("facility-inspection")
   await scrollFacilityIntoView(inspector)
   await expect(inspector).toHaveAttribute("data-engineering", "true")
-  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await waitForFacilityReady(page, inspector)
   return inspector
 }
 
@@ -201,22 +201,32 @@ test.describe("facility engineering inspection", () => {
     await expect(inspector).toHaveAttribute("data-scenario", "b")
   })
 
-  test("Close and explicit motion preferences persist for this tab across navigation", async ({ page }) => {
-    await page.goto("/")
+  test("Close and motion preferences persist for this tab across navigation", async ({ page }, testInfo) => {
+    await page.addInitScript(() => { window.__GN_FACILITY_DIAGNOSTICS__ = true })
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
-    await inspector.getByRole("button", { name: "Pause", exact: true }).click()
+    await waitForFacilityReady(page, inspector, testInfo)
+    const settled = await settleFacilityActivity(page, inspector, testInfo)
     await openFacilityDisplayOptions(inspector)
     await inspector.getByRole("checkbox", { name: "Equipment motion" }).uncheck()
     await chooseFacilityStillImage(inspector)
+    await page.goto("/")
+    await expect(page.getByTestId("facility-inspection")).toHaveCount(0)
+    await expect(page.locator("canvas[data-facility-canvas]")).toHaveCount(0)
     await page.goto("/demo")
     await scrollFacilityIntoView(inspector)
     await page.waitForTimeout(1800)
     await expect(inspector).toHaveAttribute("data-phase", "poster")
     await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")
-    await expect(inspector.getByRole("button", { name: "Resume", exact: true })).toHaveAttribute("aria-pressed", "true")
+    if (settled === "explicit-pause") await expect(inspector.getByRole("button", { name: "Resume", exact: true })).toHaveAttribute("aria-pressed", "true")
+    else {
+      await expect(inspector.getByRole("button", { name: /^(Pause|Resume)$/, exact: true })).toHaveCount(0)
+      await expect(inspector.locator(".facility-state-label")).toHaveText("Equipment motion off")
+      const preferences = await page.evaluate(() => JSON.parse(sessionStorage.getItem("gridninja.facility.preferences.v1") ?? "{}"))
+      expect(preferences.paused).not.toBe(true)
+    }
     await openFacilityDisplayOptions(inspector)
     await expect(inspector.getByRole("checkbox", { name: "Equipment motion" })).not.toBeChecked()
   })

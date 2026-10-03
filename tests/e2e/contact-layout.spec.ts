@@ -78,7 +78,7 @@ test.describe("contact intake layout", () => {
     ).toBeVisible()
     await expect(
       page.getByText(
-        "Share the capacity decision in front of your team. Scoping establishes fit, authorized historical inputs, deliverables and price for one bounded paid assessment.",
+        "Tell us about the capacity decision your team is facing. We will discuss whether an assessment can help, what historical inputs are available, and the work and price to agree before starting.",
         { exact: true }
       )
     ).toBeVisible()
@@ -159,7 +159,9 @@ test.describe("contact intake layout", () => {
     // empty error region. Its links must recover focus to the invalid controls.
     const errorSummary = page.locator('[aria-labelledby="contact-error-summary-title"]')
     await expect(errorSummary.getByRole("link")).toHaveCount(3)
-    await errorSummary.getByRole("link", { name: "Name: Enter your name." }).click()
+    const nameErrorLink = errorSummary.getByRole("link", { name: "Name: Enter your name." })
+    await centerLocatorInViewport(nameErrorLink)
+    await nameErrorLink.click()
     await expect(page.getByLabel("Name", { exact: true })).toBeFocused()
     await clientHealth.expectNoHorizontalOverflow()
 

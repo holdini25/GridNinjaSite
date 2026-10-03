@@ -118,7 +118,7 @@ export type FacilityRenderProfile = {
     directional: { position: [number, number, number]; color: string; intensity: number }[]
     /** Optional single, shadowless local source; absent releases remain unchanged. */
     finite?: { version: 1; type: "point"; position: [number, number, number]; color: string; intensity: number; decay: 2; distance: 0 }
-    environment?: { preset: "industrial-softbox-v1" | "industrial-softbox-v2" | "industrial-night-v1" | "industrial-night-v2" | "industrial-night-v3"; resolution: 128; intensity: number; rotationY: number }
+    environment?: { preset: "industrial-softbox-v1" | "industrial-softbox-v2" | "industrial-night-v1" | "industrial-night-v2" | "industrial-night-v3" | "industrial-night-v4"; resolution: 128; intensity: number; rotationY: number }
   }
   motion?: {
     fanRadiansPerSecond: number

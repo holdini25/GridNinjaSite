@@ -22,6 +22,7 @@ import {
   readBodyLimited,
 } from "@/lib/contact/request"
 import { verifyTurnstile } from "@/lib/contact/turnstile"
+import { PUBLIC_TOPIC_LABELS } from "@/lib/public-topic"
 import {
   leadSubmissionSchema,
   mapZodErrors,
@@ -197,12 +198,20 @@ export async function POST(request: Request) {
     const timeline = "timeline" in submission ? submission.timeline : null
     const capacityRange =
       "capacityRange" in submission ? submission.capacityRange : null
+    const topic = "topic" in submission ? submission.topic : undefined
+    const message =
+      submission.formType === "contact" ? submission.message ?? null : null
+    // Preserve the optional assessment context in the deployed message column.
+    const contextualMessage = topic
+      ? [`Public assessment topic: ${PUBLIC_TOPIC_LABELS[topic]}`, message]
+          .filter(Boolean)
+          .join("\n\n")
+      : message
     const accepted = await acceptLead({
       requestId,
       clientSubmissionId: submission.clientSubmissionId,
       requestFingerprint,
       schemaVersion: submission.schemaVersion,
-      topic: "topic" in submission ? submission.topic ?? null : null,
       formType: submission.formType,
       intent: submission.intent,
       name: submission.name,
@@ -216,7 +225,7 @@ export async function POST(request: Request) {
       capacityRange,
       constraints:
         submission.formType === "contact" ? submission.constraints : null,
-      message: submission.formType === "contact" ? submission.message ?? null : null,
+      message: contextualMessage,
       source: submission.source,
       ipHash,
       turnstileHostname: turnstile.hostname,

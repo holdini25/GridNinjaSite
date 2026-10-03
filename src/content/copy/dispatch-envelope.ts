@@ -50,7 +50,7 @@ export const dispatchEnvelopeHero: SectionCopy = {
 export const dispatchEnvelopeSections = {
   roleMap: {
     eyebrow: "Dispatch Envelope",
-    headline: "The runtime-assured capacity aperture, not a dashboard claim",
+    headline: "How the model limits a proposed action",
     body: "The intended dispatch envelope would constrain proposed actions against declared electrical, storage, cooling, workload, and policy limits. This synthetic example illustrates that record structure; it does not establish safe sellable capacity.",
   },
   proof: {

@@ -87,6 +87,18 @@ test("guided rack service preserves pose, evidence, one canvas and explicit deta
     const headerBottom = document.querySelector("header")?.getBoundingClientRect().bottom ?? top
     return bounds.top >= Math.max(top, headerBottom) && bounds.bottom <= bottom
   })).toBe(true)
+  await expect.poll(() => rack.inspector.evaluate(element => {
+    const rail = element.querySelector(".facility-rack-handle-controls")?.getBoundingClientRect()
+    const scene = element.querySelector(".facility-stage")?.getBoundingClientRect()
+    const action = element.querySelector('[data-service-inspect="true"]')?.getBoundingClientRect()
+    const viewport = window.visualViewport
+    const top = Math.max(viewport?.offsetTop ?? 0, document.querySelector("header")?.getBoundingClientRect().bottom ?? 0) + 12
+    const bottom = (viewport?.offsetTop ?? 0) + (viewport?.height ?? window.innerHeight) - 12
+    if (!rail || !scene || !action) return false
+    // On short/zoomed screens the focus target takes priority. At normal phone
+    // height the complete handle rail and assembly must remain unobscured.
+    return action.bottom - rail.top > bottom - top || rail.top >= top - 1 && scene.bottom <= bottom + 1
+  })).toBe(true)
   expect((await snapshot(rack.canvas)).rackMotion).toMatchObject({ door: 1, tray: 1, cutaway: true, moving: false })
   expect(framing(await snapshot(rack.canvas))).toEqual(wholeFrame)
   await rack.primary.press("Enter")

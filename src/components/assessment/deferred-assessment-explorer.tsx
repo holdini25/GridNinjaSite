@@ -126,10 +126,34 @@ export function DeferredAssessmentExplorer({ initialSelection, initialTarget, in
     const destination = container.current?.querySelector<HTMLElement>(selector)
       ?? container.current?.querySelector<HTMLElement>("#decision-brief")
     destination?.focus({ preventScroll: true })
-    // The explicit native destination moved when its server preview was replaced.
-    // Correct it once; ordinary observer-driven enhancement never scrolls.
-    if (journey) destination?.scrollIntoView({ block: "start", behavior: "instant" })
     pendingFocus.current = null
+    if (!journey || !destination) return
+    // Native fragment scrolling can run at load, after enhancement has already
+    // replaced its target. Wait for load and its queued scroll frames;
+    // ordinary observer-driven enhancement never scrolls.
+    const location = window.location.href
+    let first = 0, second = 0, cancelled = false
+    const cancel = () => {
+      cancelled = true
+      cancelAnimationFrame(first); cancelAnimationFrame(second)
+      window.removeEventListener("load", schedule)
+      window.removeEventListener("wheel", cancel)
+      window.removeEventListener("touchmove", cancel)
+      window.removeEventListener("pointerdown", cancel)
+      window.removeEventListener("keydown", cancel)
+    }
+    window.addEventListener("wheel", cancel, { passive: true })
+    window.addEventListener("touchmove", cancel, { passive: true })
+    window.addEventListener("pointerdown", cancel, { passive: true })
+    window.addEventListener("keydown", cancel)
+    const schedule = () => { first = requestAnimationFrame(() => { second = requestAnimationFrame(() => {
+      const current = !cancelled && destination.isConnected && document.activeElement === destination && window.location.href === location
+      cancel()
+      if (current) destination.scrollIntoView({ block: "start", behavior: "instant" })
+    }) }) }
+    if (document.readyState === "complete") schedule()
+    else window.addEventListener("load", schedule, { once: true })
+    return cancel
   }, [Explorer])
 
   useEffect(() => {

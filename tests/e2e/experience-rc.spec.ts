@@ -1,14 +1,23 @@
-import { expect, test } from "@playwright/test"
+import { readFile } from "node:fs/promises"
+import { expect, test, type Download } from "@playwright/test"
+import publishedRecordC from "../../src/content/assessment-publications/demo-01-c/v1.0.0/snapshot.json"
 
 test("native evidence activation survives a press begun before hydration and enhancement", async ({ page, browserName }) => {
   await page.setViewportSize({ width: 390, height: 844 })
+  const selectionPath = "/demo?scenario=c&version=1.0.0"
+  const downloadPath = "/downloads/assessment/demo-01-c/v1.0.0/json"
+  let nativeDownload: Download | undefined
+  const captureDownload = (download: Download) => { nativeDownload = download }
+  page.on("download", captureDownload)
   let release = () => {}
   const gate = new Promise<void>(resolve => { release = resolve })
   await page.route("**/_next/static/**/*.js", async route => { await gate; await route.continue().catch(() => {}) })
   try {
-    await page.goto("/demo?scenario=c&version=1.0.0", { waitUntil: "commit" })
+    await page.goto(selectionPath, { waitUntil: "commit" })
+    const selectionUrl = page.url()
+    const downloadUrl = new URL(downloadPath, selectionUrl).href
     const link = page.getByRole("link", { name: "Download this technical record", exact: true })
-    await expect(link).toHaveAttribute("href", "/downloads/assessment/demo-01-c/v1.0.0/json")
+    await expect(link).toHaveAttribute("href", downloadPath)
     await link.scrollIntoViewIfNeeded()
     const box = await link.boundingBox()
     await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2)
@@ -20,13 +29,32 @@ test("native evidence activation survives a press begun before hydration and enh
     await expect(page.getByText("Preparing interactive inspection.", { exact: false })).toHaveCount(0)
     await expect(page.locator(".facility-systems")).toHaveCount(0)
     await expect.poll(() => link.evaluate(node => node.matches(":active"))).toBe(true)
-    const responsePromise = page.waitForResponse(response => new URL(response.url()).pathname === "/downloads/assessment/demo-01-c/v1.0.0/json")
-    const downloadPromise = browserName === "webkit" && process.platform === "linux" ? null : page.waitForEvent("download")
+    const responsePromise = page.waitForResponse(response => response.url() === downloadUrl)
     await page.mouse.up()
     const response = await responsePromise
     expect(response.status()).toBe(200)
     expect(response.headers()["content-disposition"]).toBe('attachment; filename="gridninja-demo-01-c-v1.0.0.json"')
-    if (downloadPromise) expect((await downloadPromise).suggestedFilename()).toBe("gridninja-demo-01-c-v1.0.0.json")
+    await expect.poll(() => nativeDownload ? "download" : page.url() === downloadUrl ? "document" : "pending").not.toBe("pending")
+    if (nativeDownload) {
+      expect(nativeDownload.suggestedFilename()).toBe("gridninja-demo-01-c-v1.0.0.json")
+      const downloadedPath = await nativeDownload.path()
+      expect(downloadedPath).not.toBeNull()
+      expect(JSON.parse(await readFile(downloadedPath!, "utf8"))).toEqual(publishedRecordC)
+      await expect(page).toHaveURL(selectionUrl)
+    } else {
+      // Linux WebKit can render an attachment response as a document. Verify
+      // that real outcome and its exact immutable record before returning.
+      expect(browserName).toBe("webkit")
+      expect(process.platform).toBe("linux")
+      test.info().annotations.push({ type: "native-attachment", description: "Linux WebKit rendered the attachment; exact published JSON and native Back recovery were verified." })
+      await page.waitForLoadState("domcontentloaded")
+      await expect(page).toHaveURL(downloadUrl)
+      expect(JSON.parse(await page.locator("body").innerText())).toEqual(publishedRecordC)
+      await page.goBack({ waitUntil: "domcontentloaded" })
+      await expect(page).toHaveURL(selectionUrl)
+      await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "c")
+      await expect(page.getByRole("link", { name: "Download this technical record", exact: true })).toHaveAttribute("href", downloadPath)
+    }
     // Engines that focus links retain that native node until focus leaves it.
     const outside = page.getByRole("link", { name: "GridNinja home", exact: true }).first()
     await outside.focus()
@@ -35,12 +63,15 @@ test("native evidence activation survives a press begun before hydration and enh
     await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "c")
   } finally {
     release()
-    await page.mouse.up().catch(() => {})
-    await page.unroute("**/_next/static/**/*.js")
+    page.off("download", captureDownload)
+    if (!page.isClosed()) {
+      await page.mouse.up().catch(() => {})
+      await page.unroute("**/_next/static/**/*.js").catch(() => {})
+    }
   }
 })
 
-test("the mobile decision and form destination expose useful content immediately", async ({ page }) => {
+test("the mobile decision and form destination expose useful content immediately", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
   await page.goto("/demo")
@@ -54,6 +85,16 @@ test("the mobile decision and form destination expose useful content immediately
   const box = await question.boundingBox()
   expect(box!.y + box!.height).toBeLessThan(844)
   await expect(page.locator("[data-assessment-controls]")).not.toHaveAttribute("open")
+  await page.goto("/assessment")
+  const offer = page.locator("#assessment-offer-heading")
+  const form = page.locator("form")
+  await expect(offer).toBeVisible()
+  expect(await offer.evaluate(heading => Boolean(heading.compareDocumentPosition(document.querySelector("form")!) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true)
+  const offerBox = await offer.boundingBox()
+  const formBox = await form.boundingBox()
+  expect(offerBox!.y + offerBox!.height).toBeLessThan(formBox!.y)
+  await offer.evaluate(element => element.scrollIntoView({ block: "start", behavior: "instant" }))
+  await page.screenshot({ path: testInfo.outputPath("assessment-offer-before-form.png") })
   await page.goto("/assessment?source=demo-final&topic=ai-cloud#scope")
   const anchor = page.locator("#scope")
   await expect(anchor).toHaveJSProperty("tagName", "H2")
@@ -259,15 +300,16 @@ test("essential controls retain touch targets and page content reflows under tex
         const targets = document.querySelectorAll<HTMLElement>('header [data-gn-logo-trigger], header [data-gn-event="header-capacity-audit"], [data-mobile-menu] > summary, main h1, main h2, main h3, main article[aria-label^="Decision brief preview"], main [data-gn-event="hero-primary-cta"], main [data-gn-event="hero-secondary-cta"], .gn-lead-form, footer')
         for (const target of targets) {
           if (!target.checkVisibility({ checkVisibilityCSS: true }) || target.closest(".facility-inspection, .sr-only")) continue
+          const label = `${target.tagName} “${target.textContent?.trim().replace(/\s+/g, " ").slice(0, 80)}”`
           const box = target.getBoundingClientRect()
-          if (box.left < -1 || box.right > innerWidth + 1) problems.push(`${target.tagName}: element outside viewport width`)
+          if (box.left < -1 || box.right > innerWidth + 1) problems.push(`${label}: element outside viewport width`)
           for (const rect of textRects(target)) {
-            if (rect.left < -1 || rect.right > innerWidth + 1) problems.push(`${target.tagName}: text outside viewport width`)
+            if (rect.left < -1 || rect.right > innerWidth + 1) problems.push(`${label}: text outside viewport width`)
             for (let parent: HTMLElement | null = target; parent; parent = parent.parentElement) {
               const style = getComputedStyle(parent)
               if (!/hidden|clip|auto|scroll/.test(style.overflowX)) continue
               const parentBox = parent.getBoundingClientRect()
-              if (rect.left < parentBox.left - 1 || rect.right > parentBox.right + 1) { problems.push(`${target.tagName}: text clipped by ${parent.tagName}`); break }
+              if (rect.left < parentBox.left - 1 || rect.right > parentBox.right + 1) { problems.push(`${label}: text clipped by ${parent.tagName}`); break }
             }
           }
         }
@@ -295,7 +337,8 @@ test("essential controls retain touch targets and page content reflows under tex
         return [...new Set(problems)]
       })
       expect(failures, `${route} at ${width}px and 200% computed text`).toEqual([])
-      await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveText("Contact Us")
+      if (width >= 480) await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveText("Scope an assessment")
+      else await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveCount(0)
     }
   }
 })

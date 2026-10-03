@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test"
-import { openAssessmentControls, scrollFacilityIntoView } from "../support/facility-viewer"
+import { openAssessmentControls, scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
 
 type ReadingSnapshot = {
   readingHold: boolean; frames: number; activeSeconds: number; hiddenFrameCount: number
@@ -97,7 +97,7 @@ test("visible reading stops scene frames, keeps interaction, and resumes ambient
   await page.goto("/demo?scenario=b&interactive=1")
   const inspector = page.getByTestId("facility-inspection")
   await scrollFacilityIntoView(inspector)
-  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await waitForFacilityReady(page, inspector)
   const canvas = inspector.locator("canvas")
   await awaitInitialMotion(inspector, canvas)
   const initiallyActive = await verifyPermittedActivity(page, inspector, canvas, "ambient-initial")
@@ -138,7 +138,7 @@ test("reading pauses playback at the current chapter and closing it requires exp
   await page.goto("/demo?scenario=b&interactive=1")
   const inspector = page.getByTestId("facility-inspection")
   await scrollFacilityIntoView(inspector)
-  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await waitForFacilityReady(page, inspector)
   const canvas = inspector.locator("canvas")
   await awaitInitialMotion(inspector, canvas)
   await inspector.getByRole("button", { name: "Follow one workload", exact: true }).click()

@@ -27,7 +27,10 @@ export default defineConfig({
   webServer: externalBaseURL
     ? undefined
     : {
-        command: "npm run build && npm run start -- --hostname 127.0.0.1",
+        // CI builds in its own visible step; this budget covers server readiness.
+        command: process.env.PLAYWRIGHT_PREBUILT === "1"
+          ? "npm run start -- --hostname 127.0.0.1"
+          : "npm run build && npm run start -- --hostname 127.0.0.1",
         url: baseURL,
         reuseExistingServer: !process.env.CI,
         timeout: 240_000,

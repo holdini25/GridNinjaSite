@@ -14,6 +14,7 @@ import {
 } from "../../src/seo/route-manifest"
 import { PRODUCTION_ORIGIN } from "../../src/seo/policy"
 import { publicAuthors } from "../../src/content/authors"
+import { cinematicHome } from "../../src/content/copy/cinematic-home"
 
 const productionHost = new URL(PRODUCTION_ORIGIN).host
 const criticalRoutes = indexableSeoRoutes.filter((route) => route.tier <= 1)
@@ -450,16 +451,16 @@ test.describe("snippet and raw-content controls", () => {
     expect(response?.status()).toBe(200)
     await expect(page.locator("main h1")).toHaveCount(1)
     await expect(page.locator("main h1")).toBeVisible()
-    await expect(page.locator("main h1 + p")).toHaveText("Evaluate one capacity commitment through a paid, bounded assessment of authorized historical inputs. Receive a decision brief with the modeled result, its conditions, and what still needs review.")
+    await expect(page.locator("main h1 + p")).toHaveText(cinematicHome.body)
     await expect(page.locator("main h1 + p")).toBeVisible()
     await expect(
       page.getByText("AI Data Center Virtual Capacity Control Plane", {
         exact: false,
       }).first()
     ).toBeVisible()
-    await expect(
-      page.getByRole("main").getByRole("link", { name: "Contact Us", exact: true }).first()
-    ).toBeVisible()
+    const primaryCta = page.getByRole("main").getByRole("link", { name: "Scope an assessment", exact: true }).first()
+    await expect(primaryCta).toBeVisible()
+    await expect(primaryCta).toHaveAttribute("href", "/assessment?source=home-hero#scope")
     expect((await page.locator("main section").count())).toBeGreaterThan(0)
     expect((await page.locator("main").innerText()).toLowerCase()).toContain(
       "proof"
@@ -489,9 +490,9 @@ test.describe("snippet and raw-content controls", () => {
     )
     await expect(page.locator("form [required]")).toHaveCount(3)
     await expect(page.getByLabel("Intake commitments").getByRole("listitem")).toHaveCount(4)
-    await expect(page.getByText("Review", { exact: true })).toBeVisible()
-    await expect(page.getByText("Evidence map", { exact: true })).toBeVisible()
-    await expect(page.getByText("Scoped next step", { exact: true })).toBeVisible()
+    await expect(page.getByText("Review your inquiry", { exact: true })).toBeVisible()
+    await expect(page.getByText("Confirm the inputs", { exact: true })).toBeVisible()
+    await expect(page.getByText("Agree the scope", { exact: true })).toBeVisible()
     await expect(page.locator("main .gn-content-auto")).toHaveCount(0)
   })
 
@@ -565,9 +566,9 @@ test.describe("snippet and raw-content controls", () => {
       await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)
     ).toBe(true)
     await expect(page.locator("main h1")).toBeVisible()
-    await expect(
-      page.getByRole("main").getByRole("link", { name: "Contact Us", exact: true }).first()
-    ).toBeVisible()
+    const primaryCta = page.getByRole("main").getByRole("link", { name: "Scope an assessment", exact: true }).first()
+    await expect(primaryCta).toBeVisible()
+    await expect(primaryCta).toHaveAttribute("href", "/assessment?source=home-hero#scope")
     expect(await page.locator("main h1").evaluate((node) => getComputedStyle(node).opacity)).toBe(
       "1"
     )

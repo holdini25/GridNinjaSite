@@ -28,8 +28,8 @@ export const navItems = [
     children: [
       { label: "Evidence library", href: "/evidence", description: "Published synthetic examples and their supporting records." },
       { label: "Proof before autonomy", href: "/proof", description: "How evidence, commercial usefulness, and authority stay distinct." },
-      { label: "Methodology", href: "/methodology", description: "Assessment methods, claim boundaries, and corrections." },
-      { label: "Insights", href: "/insights", description: "Operator-focused explanations of capacity and runtime assurance." },
+      { label: "Methodology", href: "/methodology", description: "Evidence stages and the publication status of planned methods." },
+      { label: "Insights", href: "/insights", description: "Planned articles on capacity and runtime assurance; not yet published." },
     ],
   },
   {

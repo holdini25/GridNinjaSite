@@ -5,8 +5,8 @@ import { drizzle } from "drizzle-orm/neon-http"
 
 import * as schema from "@/db/schema"
 
-export function createDatabase(databaseUrl: string, fetchOptions?: RequestInit) {
-  const client = neon(databaseUrl, { fetchOptions })
+export function createDatabase(databaseUrl: string) {
+  const client = neon(databaseUrl)
 
   return drizzle({ client, schema })
 }

@@ -80,7 +80,7 @@ export function SeoResourceHub({
           </div>
           <Button asChild size="lg" className="mt-8 lg:mt-0">
             <Link href={assessmentScopeHref(path === "/insights" ? "insights-hub" : path === "/evidence" ? "evidence-hub" : "methodology-hub")}>
-              Contact Us
+              Scope an assessment
             </Link>
           </Button>
         </section>

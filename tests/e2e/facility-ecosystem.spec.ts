@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
-import { openAssessmentControls, scrollFacilityIntoView } from "../support/facility-viewer"
+import { centerLocatorInViewport } from "./support/viewport"
+import { openAssessmentControls, scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
 
 test.describe("facility ecosystem narrative", () => {
   test("A–D chapters remain useful without graphics and never change authoritative results", async ({ page }) => {
@@ -20,7 +21,9 @@ test.describe("facility ecosystem narrative", () => {
       await expect(story).toContainText("whole facility")
       await expect(story.getByRole("button", { name: "Play story", exact: true })).toBeDisabled()
       for (let chapter = 1; chapter < 6; chapter++) {
-        await story.getByRole("button", { name: "Next chapter", exact: true }).click()
+        const nextChapter = story.getByRole("button", { name: "Next chapter", exact: true })
+        await centerLocatorInViewport(nextChapter)
+        await nextChapter.click()
         await expect(story).toHaveAttribute("data-chapter", String(chapter))
         expect(await page.getByTestId("assessment-summary").textContent()).toBe(caption)
         if (chapter === 3) await expect(story).toContainText("Independent storage capacity, contribution and dispatchability are unassessed")
@@ -50,7 +53,7 @@ test.describe("facility ecosystem narrative", () => {
     await page.goto("/demo")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     const original = await inspector.locator("canvas").elementHandle()
     await inspector.getByRole("button", { name: "Show air-path section", exact: true }).click()
     await expect(inspector.getByRole("button", { name: "Close air-path section", exact: true })).toHaveAttribute("aria-pressed", "true")
@@ -85,7 +88,7 @@ test.describe("facility ecosystem narrative", () => {
     await page.goto("/demo?scenario=d")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     await inspector.getByRole("button", { name: "Follow one workload", exact: true }).click()
     const story = inspector.getByTestId("facility-ecosystem-story")
     if (await inspector.getAttribute("data-quality") !== "still") {

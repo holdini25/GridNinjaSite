@@ -1,8 +1,14 @@
 import { createHash } from "node:crypto"
 
-/** Deliberate staging traffic requires an explicit target and disposable test recipient. */
-export function stagingCanaryConfig(env) {
-  const required = name => { const value = env[name]?.trim(); if (!value) throw new Error(`${name} is required; the staging canary must not skip.`); return value }
+function requiredValue(env, name) {
+  const value = env[name]?.trim()
+  if (!value) throw new Error(`${name} is required; the staging canary must not skip.`)
+  return value
+}
+
+/** Basic intake smoke contract; does not enable the deferred enterprise preflight. */
+export function stagingIntakeConfig(env) {
+  const required = name => requiredValue(env, name)
   const baseURL = required("STAGING_BASE_URL")
   const url = new URL(baseURL)
   if (!["https:", "http:"].includes(url.protocol) || url.username || url.password || url.pathname !== "/" || url.search || url.hash) throw new Error("STAGING_BASE_URL must be a clean HTTP(S) origin")
@@ -18,7 +24,14 @@ export function stagingCanaryConfig(env) {
   const database = new URL(databaseUrl)
   if (!["postgres:", "postgresql:"].includes(database.protocol)) throw new Error("STAGING_DATABASE_URL must name PostgreSQL")
   const email = required("STAGING_CANARY_EMAIL")
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error("STAGING_CANARY_EMAIL must name an approved test recipient")
+  if (!/^[^\s@<>,;]+@[^\s@<>,;]+\.[^\s@<>,;]+$/.test(email)) throw new Error("STAGING_CANARY_EMAIL must name one approved test email")
+  return { baseURL: url.origin, databaseUrl, email }
+}
+
+/** Deliberate enterprise rehearsal also requires its separate operational evidence. */
+export function stagingCanaryConfig(env) {
+  const intake = stagingIntakeConfig(env)
+  const required = name => requiredValue(env, name)
   const operatorReference = required("STAGING_CANARY_OPERATOR_REFERENCE")
   if (!/^[a-zA-Z0-9_-]{1,64}$/.test(operatorReference)) throw new Error("STAGING_CANARY_OPERATOR_REFERENCE must name the assigned operator using a non-sensitive identifier")
   const deliveryEmail = required("STAGING_CANARY_DELIVERY_EMAIL")
@@ -27,7 +40,20 @@ export function stagingCanaryConfig(env) {
   if (!/^[a-f0-9]{64}$/.test(expectedAttestationSha256)) throw new Error("STAGING_CANARY_EXPECTED_ATTESTATION_SHA256 must identify the qualified build artifact")
   const preflightToken = required("STAGING_CANARY_PREFLIGHT_TOKEN")
   if (preflightToken.length < 32) throw new Error("STAGING_CANARY_PREFLIGHT_TOKEN must be a long operations credential")
-  return { baseURL: url.origin, databaseUrl, email, operatorReference, deliveryEmail, expectedAttestationSha256, preflightToken }
+  return { ...intake, operatorReference, deliveryEmail, expectedAttestationSha256, preflightToken }
+}
+
+export function assertStagingRequestTarget(requestUrl, authorizedOrigin) {
+  const url = new URL(requestUrl)
+  if (url.origin !== authorizedOrigin || url.username || url.password) {
+    throw new Error("Canary navigation and contact requests must stay on the authorized staging origin")
+  }
+}
+
+export function assertStagingResponseStatus(status) {
+  if (status >= 300 && status < 400) {
+    throw new Error("Canary navigation and contact requests must not redirect")
+  }
 }
 
 /** Return evidence, never message contents, for the exact frozen provider request. */

@@ -13,7 +13,7 @@ import { validateSelectedFacility } from "../../../scripts/facility/build-select
 const execute = promisify(execFile)
 const repository = process.cwd()
 const sha256 = (bytes: Buffer) => createHash("sha256").update(bytes).digest("hex")
-const release = "facility-v10"
+const release = "facility-v12"
 let root: string, directory: string, manifest: typeof frozenV1
 
 async function approve() {
@@ -26,6 +26,9 @@ async function writeRegistry(entries: unknown[]) {
 }
 function environment(overrides: Partial<NodeJS.ProcessEnv> = {}) {
   const env = { ...process.env }
+  // This isolated fixture contains facility bytes only; cinematic defaults are
+  // qualified separately against the registered production bundle.
+  env.CINEMATIC_ASSET_RELEASE = ""
   delete env.FACILITY_ASSET_RELEASE
   delete env.FACILITY_3D_MODE
   return { ...env, ...overrides }
@@ -56,7 +59,7 @@ beforeEach(async () => {
 afterEach(async () => { await rm(root, { recursive: true, force: true }) })
 
 describe("fail-closed facility build selection", () => {
-  it("keeps the configured legacy default without an explicit override", async () => {
+  it("selects the registered production default without an explicit override", async () => {
     const result = await validateSelectedFacility({ root, env: {} })
     expect(result.settings).toEqual({ selectedRelease: release, mode: "auto-adaptive" })
     expect(result.manifest.release).toBe(release)

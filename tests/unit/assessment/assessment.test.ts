@@ -13,6 +13,7 @@ describe("assessment evidence contract", () => {
       expect(parseAssessment(record)).toEqual(record)
       expect(JSON.parse(serializeAssessment(record))).toEqual(record)
       expect(record.basis.referenceLoadKW).toBe(20_000)
+      expect(selectAssessment(record).durationHours).toBe(1)
       expect(record.operationalAuthority).toBe("none")
       expect(record.operatorAccepted.status).toBe("not-applicable")
       expect(record.observedDelivered.status).toBe("not-applicable")

@@ -465,8 +465,8 @@ export function ContactForm({
             id="contact-message-helper"
             className="mt-2 text-sm leading-6 text-muted-foreground"
           >
-            Optional. Describe the operating decision, capacity claim, recurring constraint,
-            or evidence gap. Do not include credentials, site drawings, customer
+            Briefly describe the decision or question your team wants to resolve.
+            Do not include credentials, site drawings, customer
             data or sensitive topology.
           </p>
         </ContactField>
@@ -589,7 +589,7 @@ export function ContactForm({
         disabled={!hydrated || isBusy || expiredAttempt || (uncertain && Boolean(originalPayloadRef.current))}
         aria-busy={isBusy}
         data-gn-event="contact-submit"
-        className="mt-5 min-h-12 w-full rounded-lg"
+        className={`mt-5 min-h-12 w-full rounded-lg${variant === "contact" ? " gn-contact-submit" : ""}`}
       >
         {isPending ? (
           <>

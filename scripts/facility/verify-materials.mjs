@@ -28,9 +28,9 @@ export async function verifyV5MaterialAsset(bytes, filename, approvedManifest) {
     const files = approvedManifest.files?.filter(file => file.file === filename) ?? []
     assert(files.length === 1 && files[0].bytes === bytes.length && files[0].sha256 === sha256(bytes), `${filename}: approved manifest asset mismatch`)
     const preset = approvedManifest.profile?.lighting?.environment?.preset
-    assert(preset === "industrial-softbox-v2" || preset === "industrial-night-v1" || preset === "industrial-night-v2" || preset === "industrial-night-v3", `${filename}: unsupported atlas appearance revision`)
+    assert(preset === "industrial-softbox-v2" || preset === "industrial-night-v1" || preset === "industrial-night-v2" || preset === "industrial-night-v3" || preset === "industrial-night-v4", `${filename}: unsupported atlas appearance revision`)
     practicalFloor = preset === "industrial-night-v1" || preset === "industrial-night-v2"
-    neutralFloor = preset === "industrial-night-v3"
+    neutralFloor = preset === "industrial-night-v3" || preset === "industrial-night-v4"
     // Night v1/v2 carry the frozen warm direct-light floor bake. Night v3
     // deliberately uses neutral albedo with one session-owned finite source;
     // service-light housings alone do not imply baked direct illumination.

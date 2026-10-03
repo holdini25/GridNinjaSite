@@ -50,14 +50,14 @@ export const seoRoutes = [
     path: "/",
     tier: 0,
     indexable: true,
-    title: "GridNinja | Capacity Decisions with Confidence",
-    description: "Make your next capacity decision with confidence. Scope a bounded assessment with authorized historical inputs, explicit constraints, and a decision brief.",
-    h1: "Make your next capacity decision with confidence.",
+    title: "GridNinja | Understand Your Capacity. Know the Limits.",
+    description: "Scope a paid, bounded capacity decision assessment using authorized historical inputs. Review the modeled result, its conditions, and the evidence still needed.",
+    h1: "Understand your capacity. Know the limits.",
     topicCluster: "virtual-capacity-control-plane",
     searchIntent: "brand",
     schemaTypes: ["WebPage"],
     socialImageKey: "home",
-    contentUpdatedAt: "2026-07-14",
+    contentUpdatedAt: "2026-09-28",
     breadcrumbs: [],
     targetQuestions: ["What is an AI Data Center Virtual Capacity Control Plane?"],
     relatedPaths: ["/platform", "/proof", "/assessment"],
@@ -153,7 +153,7 @@ export const seoRoutes = [
     tier: 0,
     indexable: true,
     title: "Proof Before Autonomy for AI Data Centers | GridNinja",
-    description: "See how Shadow Mode, replay, allow / repair / reject decisions, audit logs, and proof packs establish evidence before bounded autonomy.",
+    description: "Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.",
     h1: "Evidence informs a decision. Authority stays explicit.",
     topicCluster: "proof-before-autonomy",
     searchIntent: "evidence",
@@ -205,7 +205,7 @@ export const seoRoutes = [
     indexable: true,
     title: "Synthetic Capacity Decision Brief and Scenarios | GridNinja",
     description: "Inspect a synthetic capacity decision brief. Compare requested and revised profiles, model screening, unknowns, and the unresolved business decision.",
-    h1: "See the decision, the conditions, and the unanswered question.",
+    h1: "Inspect a capacity decision.",
     topicCluster: "proof-demo",
     searchIntent: "evidence",
     schemaTypes: ["WebPage"],
@@ -330,9 +330,9 @@ function makeAssessmentPublicationRoutes(): SeoRoute[] {
 
 function makeHubRoutes(): SeoRoute[] {
   return [
-    hub("insights", "/insights", "Virtual Capacity Insights for AI Data Centers | GridNinja", "Technical explainers for virtual capacity, runtime assurance, Shadow Mode, time-to-power, and cross-domain constraints.", "Virtual capacity insights for constrained AI infrastructure", "definition", ["/platform", "/evidence", "/assessment"]),
-    hub("evidence", "/evidence", "Virtual Capacity Evidence Library | GridNinja", "Publication-gated methods, synthetic traces, ledgers, specifications, and proof artifacts for evaluating virtual capacity claims.", "Evidence for safe, usable, auditable capacity", "evidence", ["/proof", "/insights", "/methodology"]),
-    hub("methodology", "/methodology", "GridNinja Claims, Evidence & Capacity Methods", "How GridNinja governs claims, comparisons, corrections, evidence maturity, and Capacity Audit methods.", "Methods for claims that operators can defend", "evidence", ["/proof", "/evidence", "/assessment"]),
+    hub("insights", "/insights", "Virtual Capacity Insights for AI Data Centers | GridNinja", "See planned articles on capacity constraints and runtime assurance, their publication status, and the current synthetic assessment example.", "Virtual capacity insights for constrained AI infrastructure", "definition", ["/platform", "/evidence", "/assessment"]),
+    hub("evidence", "/evidence", "Virtual Capacity Evidence Library | GridNinja", "Inspect versioned synthetic decision briefs and their matching PDF and technical records. Read the modeled result, conditions, and unresolved question together.", "Inspect the evidence behind a capacity decision.", "evidence", ["/proof", "/insights", "/methodology"]),
+    hub("methodology", "/methodology", "GridNinja Claims, Evidence & Capacity Methods", "Understand the evidence stages for capacity claims and check the publication status of planned assessment and review methods.", "Methods for claims that operators can defend", "evidence", ["/proof", "/evidence", "/assessment"]),
   ]
 }
 

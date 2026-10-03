@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright"
 import { expect, test } from "@playwright/test"
+import { centerLocatorInViewport } from "./support/viewport"
 
 test("mobile decision comes first and assessment scoping clears the header", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
@@ -11,6 +12,7 @@ test("mobile decision comes first and assessment scoping clears the header", asy
   await expect(summary).toContainText("5.8 MW")
   const link = page.locator('a[href*="source=demo-final"]')
   await expect(link).toHaveAttribute("href", /topic=ai-cloud.*#scope/)
+  await centerLocatorInViewport(link)
   await link.click()
   await expect(page).toHaveURL(/assessment.*topic=ai-cloud.*#scope/)
   const scope = page.locator("#scope"), header = page.locator("body > header")

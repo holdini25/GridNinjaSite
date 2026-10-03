@@ -1,10 +1,14 @@
 import type { NextConfig } from "next";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 import { PRODUCTION_ORIGIN } from "./src/seo/policy";
 import assessmentRegistry from "./src/content/assessment-publications/registry.json";
 import facilityRegistry from "./src/content/facility-releases/registry.json";
+import cinematicRegistry from "./src/content/cinematic-releases/registry.json";
 import { contentSecurityPolicy, cspMode, PUBLICATION_CSP } from "./src/lib/security/csp";
+
+const privateCandidate = existsSync(".gridninja-private-candidate.json");
+if (privateCandidate && process.env.VERCEL === "1") throw new Error("Private qualification candidates cannot be deployed");
 
 const assessmentFiles = assessmentRegistry.filter(entry => entry.status === "available").flatMap(entry =>
   ["snapshot.json", "narrative.json", "brief.html", "brief.pdf", "manifest.json"].map(file =>
@@ -13,6 +17,11 @@ const facilityFiles = facilityRegistry.filter((entry: {status: string}) => entry
   const base = `./src/content/facility-releases/${entry.release}`;
   const manifest = JSON.parse(readFileSync(`${base}/manifest.json`, "utf8")) as { files: { file: string }[] };
   // The prebuild validator checks each manifest and exact file allowlist.
+  return ["manifest.json", ...manifest.files.map(item => item.file)].map(file => `${base}/${file}`);
+});
+const cinematicFiles = cinematicRegistry.filter((entry: {status: string}) => entry.status === "available").flatMap((entry: {release: string}) => {
+  const base = `./src/content/cinematic-releases/${entry.release}`;
+  const manifest = JSON.parse(readFileSync(`${base}/manifest.json`, "utf8")) as { files: { file: string }[] };
   return ["manifest.json", ...manifest.files.map(item => item.file)].map(file => `${base}/${file}`);
 });
 
@@ -56,12 +65,12 @@ const nextConfig: NextConfig = {
     "/evidence/assessments/*/*": assessmentFiles,
     "/downloads/assessment/*/*/*": assessmentFiles,
     "/assets/facility/*/*": facilityFiles,
-    "/": facilityFiles,
+    "/assets/cinematic/*/*": ["./src/content/cinematic-releases/registry.json", ...cinematicFiles],
+    "/": [...facilityFiles, ...cinematicFiles],
     "/demo": facilityFiles,
-    "/api/internal/lead-staging-preflight": ["./.next/facility-build.json", "./.next/BUILD_ID"],
   },
   outputFileTracingExcludes: {
-    "/*": ["./assets-source/**/*", "./build/facility/**/*"],
+    "/*": ["./assets-source/**/*", "./evidence-candidates/**/*", "./build/facility/**/*", "./build/cinematic/**/*", "./.gridninja-private-candidate.json"],
   },
   async redirects() {
     return [
@@ -85,7 +94,7 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
-      ...(process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production"
+      ...((privateCandidate || process.env.VERCEL_ENV && process.env.VERCEL_ENV !== "production")
         ? [
             {
               source: "/(.*)",

@@ -20,14 +20,15 @@ test("explanations reflow without clipping and keep collapsed disclosures compac
   await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
   for (const width of [320, 640, 1440]) {
     await page.setViewportSize({ width, height: 1000 })
-    for (const route of ["/", "/demo"]) {
+    {
+      const route = "/demo?interactive=1"
       await page.goto(route)
       const inspector = page.getByTestId("facility-inspection")
       await scrollFacilityIntoView(inspector)
       await expect(inspector.getByRole("button", { name: "Power", exact: true })).toBeVisible()
-      if (route === "/demo") await openAssessmentControls(page)
-      for (const scenario of route === "/demo" ? ["a", "b", "c", "d"] : ["b"]) {
-        if (route === "/demo") await page.getByRole("combobox", { name: "Scenario", exact: true }).selectOption(scenario)
+      await openAssessmentControls(page)
+      for (const scenario of ["a", "b", "c", "d"]) {
+        await page.getByRole("combobox", { name: "Scenario", exact: true }).selectOption(scenario)
         const clear = inspector.getByRole("button", { name: "Clear selection" })
         if (await clear.isEnabled()) await clear.click()
         const neutral = await inspectSelection(inspector)

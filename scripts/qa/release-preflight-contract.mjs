@@ -1,6 +1,7 @@
 /** These checks establish prerequisites, never hosted execution or release approval. */
 export function productionQualificationIssues(settings) {
   const issues = []
+  if (settings?.privateCandidate) issues.push("private-candidate-is-not-release-approved")
   if (settings?.observability !== true) issues.push("production-observability-not-in-build")
   if (settings?.httpsPolicy !== true) issues.push("https-policy-not-in-build")
   if (settings?.verification !== "live") issues.push("live-verification-not-in-build")

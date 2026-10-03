@@ -173,14 +173,29 @@ describe("POST /api/contact", () => {
     expect(mocks.acceptLead).toHaveBeenCalledWith(expect.objectContaining({ schemaVersion: 2, message: null }))
   })
 
-  it("persists a public topic separately and protects retry identity", async () => {
+  it("preserves an assessment topic in the deployed message field and protects retry identity", async () => {
     const candidate = { ...payload, schemaVersion: 2 as const, formType: "contact" as const, topic: "cooling" as const, constraints: [], source: "demo-inspection-room" }
     expect((await post(candidate)).status).toBe(202)
-    expect(mocks.acceptLead).toHaveBeenCalledWith(expect.objectContaining({ topic: "cooling", message: null, source: "demo-inspection-room" }))
+    expect(mocks.acceptLead).toHaveBeenCalledWith(expect.objectContaining({ message: "Public assessment topic: Cooling evidence", source: "demo-inspection-room" }))
+    expect(mocks.acceptLead.mock.calls[0][0]).not.toHaveProperty("topic")
     mocks.findLead.mockResolvedValue({ id: "lead-existing", formType: "contact", requestFingerprint: fingerprintContactSubmission({ ...stripLeadSecurityFields(contactLeadSchema.parse(candidate)), email: candidate.email.toLowerCase() }, runtimeConfig.pseudonymSecret) })
     expect((await post(candidate)).status).toBe(200)
     expect((await post({ ...candidate, topic: "power" })).status).toBe(409)
     expect((await post({ ...candidate, topic: "private@example.com" })).status).toBe(400)
+  })
+
+  it("retains visitor prose alongside the human-readable assessment topic", async () => {
+    const message = "Review our 15-minute commitment.\nRetain this second line."
+    const response = await post({
+      ...payload, schemaVersion: 2, formType: "contact", topic: "storage",
+      constraints: [], message, source: "assessment-page",
+    })
+
+    expect(response.status).toBe(202)
+    expect(mocks.acceptLead).toHaveBeenCalledWith(expect.objectContaining({
+      message: `Public assessment topic: Reserve contribution and duration\n\n${message}`,
+    }))
+    expect(mocks.acceptLead.mock.calls[0][0]).not.toHaveProperty("topic")
   })
 
   it("returns the original submission without spending another Turnstile token", async () => {

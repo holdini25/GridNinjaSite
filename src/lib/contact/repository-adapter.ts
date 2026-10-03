@@ -2,7 +2,6 @@ import "server-only"
 
 import type { LeadDeliveryContext } from "@/server/leads/repository"
 import {
-  beginProviderAttempt,
   claimNextDueOutbox,
   claimOutboxById,
   deleteExpiredLeads,
@@ -19,12 +18,7 @@ import type {
   DeliveryOperationsRepository,
 } from "@/lib/contact/operations"
 
-import { recordOperationHeartbeat, pruneProviderEvents, reconcileProviderEvents } from "@/server/leads/enterprise-repository"
-
 export const deliveryOperationsRepository: DeliveryOperationsRepository = {
-  beginProviderAttempt,
-  recordHeartbeat: recordOperationHeartbeat,
-  pruneProviderEvents,
   async claimNextDueOutbox(now, leaseMs) {
     return mapClaim(await claimNextDueOutbox(now, leaseMs))
   },
@@ -37,7 +31,6 @@ export const deliveryOperationsRepository: DeliveryOperationsRepository = {
       leaseToken,
       providerMessageId
     )
-    if (result.updated && providerMessageId) await reconcileProviderEvents()
     return result.updated
   },
   async rescheduleOutbox(id, leaseToken, update) {
@@ -103,9 +96,6 @@ function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
       attemptCount: delivery.attemptCount,
       leaseToken: delivery.leaseToken,
       idempotencyKey: delivery.idempotencyKey,
-      firstProviderAttemptAt: delivery.firstProviderAttemptAt,
-      frozenRequest: delivery.providerRequestBody && delivery.providerTargetUrl
-        ? { body: delivery.providerRequestBody, targetUrl: delivery.providerTargetUrl } : null,
     },
     lead: {
       id: lead.id,
@@ -119,7 +109,6 @@ function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
       siteType: lead.siteType,
       timeline: lead.timeline,
       capacityRange: lead.capacityRange,
-      topic: lead.topic,
       intent: lead.intent,
       source: lead.source,
       role: lead.role,

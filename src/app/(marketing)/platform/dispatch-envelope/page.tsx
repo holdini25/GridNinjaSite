@@ -60,11 +60,11 @@ export default async function DispatchEnvelopePage({
         headline={dispatchEnvelopeHero.headline}
         body={dispatchEnvelopeHero.body}
         primaryCta={{
-          label: "Contact Us",
+          label: "Scope an assessment",
           href: assessmentScopeHref("dispatch-envelope-hero"),
         }}
         secondaryCta={{
-          label: "See Shadow Mode",
+          label: "Review proof before autonomy",
           href: "/proof",
         }}
         trustLine="Synthetic timed-dispatch teaching example. Separate dataset from DEMO-01; no operational acceptance or equipment authority."
@@ -240,7 +240,7 @@ export default async function DispatchEnvelopePage({
         <CtaBand
           headline={dispatchEnvelopeSections.cta.headline}
           body={dispatchEnvelopeSections.cta.body}
-          label="Contact Us"
+          label="Scope an assessment"
           href={assessmentScopeHref("dispatch-envelope-final")}
           eventName="dispatch-envelope-final-cta"
         />

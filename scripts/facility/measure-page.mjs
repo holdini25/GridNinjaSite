@@ -2,9 +2,13 @@ import assert from "node:assert/strict"
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { chromium, devices } from "@playwright/test"
 import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, collectTransfers, provenance, settleTransfers, verifiedBuildIdentity } from "./performance-contract.mjs"
+import { measureCinematicPage } from "../cinematic/measure-page.mjs"
+import { CINEMATIC_MOTION_LIMITS } from "../cinematic/motion-evidence.mjs"
+import { measurementScope } from "./measurement-scope.mjs"
 
 const baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000"
-await rm("build/facility/page-measurements.json", { force: true })
+const scope = measurementScope(process.env.FACILITY_MEASUREMENT_SCOPE)
+await rm(scope.output, { force: true })
 const runCount = Number(process.env.FACILITY_RUNS ?? 5)
 assert(Number.isInteger(runCount) && runCount >= 1 && runCount <= 5)
 const headed = process.env.FACILITY_HEADED === "1"
@@ -12,7 +16,10 @@ const angle = process.env.FACILITY_ANGLE
 const launchSettings = { headless: !headed, channel: process.env.FACILITY_CHROME_CHANNEL ?? "chrome", ...(angle === "metal" ? { args: ["--use-angle=metal", "--use-gl=angle"], ignoreDefaultArgs: ["--use-angle=swiftshader", "--disable-gpu"] } : {}) }
 const browser = await chromium.launch(launchSettings)
 const settings = { baseURL, runCount, freshContextEveryRun: true, cacheDisabled: true, settleQuietMs: 750, settleTimeoutMs: 15_000, readinessTimeoutMs: 12_000, pauseSettleTimeoutMs: 1_000, pauseIdleQuietMs: 250, pauseObservationMs: 500, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", capabilityFps: 60, ambientFps: 30, capabilityFrameLimitsMs: { desktop: 20, mobile: 34 }, launch: launchSettings }
-const report = { measuredAt: new Date().toISOString(), provenance: await provenance(browser.version(), settings), results: [], result: "incomplete" }
+settings.measurementScope = scope.name
+settings.cinematic = { ...CINEMATIC_MOTION_LIMITS, readinessTimeoutMs: 18_000, loopExtraDeadlineMs: 15_000, maximumUnexpectedWaitingEvents: 0, continuouslyVisible: true, firstMotionTimingBasis: "Element Timing poster paint to first native callback after visible CSS; compositor display proxy, separate decode timing" }
+settings.cinematic.loopBoundaryTimingBasis = "Full compositor expectedDisplayTime endpoint interval, never divided by missed callbacks; legacy evidence uses the callback clock. Separate callback stall ceiling remains enforced."
+const report = { measuredAt: new Date().toISOString(), hardwareQualification: scope.hardwareQualification, provenance: await provenance(browser.version(), settings), results: [], result: "incomplete" }
 await mkdir("build/facility", { recursive: true })
 
 async function revealStage(page, inspector) {
@@ -70,6 +77,39 @@ try {
       await page.addInitScript(() => {
         window.__GN_FACILITY_DIAGNOSTICS__ = true
         window.__facilityVitals = { lcp: 0, cls: 0 }
+        window.__cinematicPosterPaint = null
+        window.__cinematicVisibleFrame = null
+        // Observation only: the server annotates its real image before paint.
+        // Unsupported engines report no paint timestamp, never a decode surrogate.
+        if (PerformanceObserver.supportedEntryTypes.includes("element")) {
+          new PerformanceObserver(list => {
+            for (const entry of list.getEntries()) if (entry.identifier === "cinematic-poster" && entry.renderTime > 0 && window.__cinematicPosterPaint === null) window.__cinematicPosterPaint = entry.renderTime
+          }).observe({ type: "element", buffered: true })
+        }
+        // Qualification-only, bounded observer. The player's first callback may
+        // precede React revealing the video; observe a subsequent native frame
+        // with visible CSS instead of labelling that earlier callback visible.
+        let observedVideo = null, frameCallback = 0
+        const disconnect = () => { discovery.disconnect(); observedVideo?.cancelVideoFrameCallback?.(frameCallback) }
+        const observeFrame = (now, metadata) => {
+          const rect = observedVideo.getBoundingClientRect(), style = getComputedStyle(observedVideo)
+          const width = Math.max(0, Math.min(innerWidth, rect.right) - Math.max(0, rect.left))
+          const height = Math.max(0, Math.min(innerHeight, rect.bottom) - Math.max(0, rect.top))
+          if (document.visibilityState === "visible" && !observedVideo.paused && style.opacity === "1" && style.visibility === "visible" && rect.width * rect.height > 0 && width * height >= rect.width * rect.height * .25) {
+            window.__cinematicVisibleFrame = { observedAtMs: now, expectedDisplayTimeMs: metadata.expectedDisplayTime, mediaTime: metadata.mediaTime }
+            disconnect()
+          } else frameCallback = observedVideo.requestVideoFrameCallback(observeFrame)
+        }
+        const discovery = new MutationObserver(() => {
+          if (observedVideo) return
+          const candidate = document.querySelector('[data-testid="cinematic-facility"] video')
+          if (candidate?.requestVideoFrameCallback) {
+            observedVideo = candidate
+            frameCallback = observedVideo.requestVideoFrameCallback(observeFrame)
+          }
+        })
+        discovery.observe(document, { childList: true, subtree: true })
+        setTimeout(disconnect, 30_000)
         // Existing 250ms observers also preserve bounded pre-fallback evidence.
         // This does not schedule frames or change the application's cadence.
         window.__facilityAmbientDiagnostics = []
@@ -82,30 +122,61 @@ try {
         new PerformanceObserver(list => { for (const entry of list.getEntries()) if (!entry.hadRecentInput) window.__facilityVitals.cls += entry.value }).observe({ type: "layout-shift", buffered: true })
       })
       await page.goto(baseURL + route, { waitUntil: "load", timeout: 30_000 })
+      if (route === "/" && report.provenance.buildSettings.cinematic?.selectedRelease) {
+        result.phase = "cinematic-loop-readiness"
+        const cinematic = await measureCinematicPage(page, ledger, { identity: report.provenance, profile })
+        Object.assign(result, { cinematic, transfer: cinematic.transfer, throughReady: cinematic.throughReady, release: cinematic.release })
+        result.vitals = await page.evaluate(() => window.__facilityVitals)
+        assert.deepEqual(result.pageErrors, [], "Page errors occurred during cinematic measurement")
+        result.phase = "complete"; result.complete = true
+        console.log(JSON.stringify({ route, profile, run, transferBytes: result.transfer.bytes, cinematic: cinematic.status, decodedPosterToFirstFrameMs: cinematic.first?.decodedPosterToFirstFrameMs }))
+        continue
+      }
       const inspector = page.getByTestId("facility-inspection")
       const adaptive = report.provenance.buildSettings.mode === "auto-adaptive"
-      if (profile === "desktop" || adaptive) {
+      const automaticExpected = profile === "desktop" || adaptive
+      let softwareFallback = false
+      if (automaticExpected) {
         result.phase = "initial-stage-visibility"
         await revealStage(page, inspector)
         result.phase = "initial-viewer-readiness"
-        await inspector.locator("canvas[data-ready=true]").waitFor({ timeout: settings.readinessTimeoutMs })
-      } else { result.phase = "poster-decode"; await inspector.locator("img").evaluate(image => image.decode()) }
-      result.phase = "transfer-settle"
-      result.transfer = await settleTransfers(ledger)
-      checkBudget(()=>assertCompleteTransfer(result.transfer))
-      const model = result.transfer.requests.find(request => new URL(request.url).pathname.endsWith("/facility.glb"))
-      assert(profile === "desktop" || adaptive ? !!model : !model, "Incorrect automatic model activation")
-      result.throughReady = profile === "desktop" || adaptive
-      assert(!result.transfer.requests.some(request=>/\/(rack|cooling)\.glb$/.test(new URL(request.url).pathname)), "Specimen downloaded automatically")
+        await page.waitForFunction(() => {
+          const inspector = document.querySelector('[data-testid="facility-inspection"]')
+          return inspector?.dataset.phase === "ready" || (inspector?.dataset.phase === "poster" && ["software", "unavailable"].includes(inspector.dataset.automaticGraphics))
+        }, null, { timeout: settings.readinessTimeoutMs })
+        const automaticGraphics = await inspector.getAttribute("data-automatic-graphics")
+        softwareFallback = await inspector.getAttribute("data-phase") === "poster" && automaticGraphics === "software"
+        if (await inspector.getAttribute("data-phase") === "poster") {
+          assert(softwareFallback, "Automatic WebGL2 is unavailable; graphics functionality remains unverified")
+          assert(scope.functional, "Hardware qualification cannot use an automatic software-renderer fallback")
+          assert.equal(await inspector.locator("canvas").count(), 0, "Software fallback must not import a graphics scene")
+        }
+        result.automaticAcquisition = { kind: softwareFallback ? "poster" : "model", reason: softwareFallback ? "software" : null, graphics: automaticGraphics }
+      } else {
+        result.phase = "poster-decode"; await inspector.locator("img").evaluate(image => image.decode())
+        result.automaticAcquisition = { kind: "poster", reason: "manual-policy", graphics: "unchecked" }
+      }
+      result.phase = "automatic-transfer-settle"
+      result.automaticTransfer = await settleTransfers(ledger)
+      checkBudget(()=>assertCompleteTransfer(result.automaticTransfer))
+      const automaticModel = result.automaticTransfer.requests.find(request => new URL(request.url).pathname.endsWith("/facility.glb"))
+      assert(automaticExpected && !softwareFallback ? !!automaticModel : !automaticModel, "Incorrect automatic model activation")
+      result.throughReady = automaticExpected && !softwareFallback
+      assert(!result.automaticTransfer.requests.some(request=>/\/(rack|cooling)\.glb$/.test(new URL(request.url).pathname)), "Specimen downloaded automatically")
       result.release = await inspector.getAttribute("data-release")
       assert.equal(result.release, report.provenance.buildSettings.selectedRelease, "Served facility release differs from the measured build")
       result.vitals = await page.evaluate(() => window.__facilityVitals)
-      if (profile !== "desktop" && !adaptive) {
+      if (!result.throughReady) {
         result.phase = "manual-activation"
-        await inspector.getByRole("button", { name: "Explore in 3D" }).click()
+        await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
         await inspector.locator("canvas[data-ready=true]").waitFor({ timeout: settings.readinessTimeoutMs })
-        await inspector.getByRole("checkbox", { name: "Equipment motion" }).check()
+        result.manualThroughReady = true
       }
+      // Preserve both the automatic poster cost and the cumulative complete page
+      // after a real manual load. The larger total still obeys the same ceiling.
+      result.phase = "complete-transfer-settle"
+      result.transfer = await settleTransfers(ledger)
+      checkBudget(()=>assertCompleteTransfer(result.transfer))
       result.phase = "measurement-stage-visibility"
       await revealStage(page, inspector)
       result.phase = "graphics-identity"
@@ -113,7 +184,9 @@ try {
         const gl = canvas.getContext("webgl2"), debug = gl?.getExtension("WEBGL_debug_renderer_info")
         return { renderer: debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : "unavailable", vendor: debug ? gl.getParameter(debug.UNMASKED_VENDOR_WEBGL) : "unavailable" }
       })
-      result.renderingClass = /SwiftShader|llvmpipe|software/i.test(result.graphics.renderer) ? "software-emulation" : result.graphics.renderer === "unavailable" ? "unknown" : "hardware"
+      result.renderingClass = /SwiftShader|llvmpipe|softpipe|software|Microsoft Basic Render|GDI Generic/i.test(result.graphics.renderer) ? "software-emulation" : result.graphics.renderer === "unavailable" ? "unknown" : "hardware"
+      if (softwareFallback) assert.equal(result.renderingClass, "software-emulation", "The reported software fallback disagrees with the actual manually loaded renderer")
+      if (!scope.functional) assert.equal(result.renderingClass, "hardware", "Device qualification requires an actual hardware renderer; use the separately labelled CI functional scope on software runners")
       if(adaptive){
         result.phase = "ambient-policy-settle"
         await page.mouse.move(0,0)
@@ -132,14 +205,18 @@ try {
       result.allocationTargetMet = result.renderer.peakEstimatedBytes <= 16 * 1024 * 1024
       result.ambientDiagnostics = await page.evaluate(() => window.__facilityAmbientDiagnostics)
       result.ambientCadence = result.renderer.quality === "still"
-        ? { status: "not-applicable", reason: "Interactive Still requests no continuing ambient cadence; this is not a successful 30fps measurement. Static settlement and independent fixed-cadence capability remain required." }
-        : { status: "measured", reason: "Active-tier cadence is checked against requested slots." }
+        ? { status: "not-applicable", reason: "Interactive Still requests no continuing ambient cadence; this is not a successful 30fps measurement. Static settlement is verified separately; hardware qualification additionally requires fixed-cadence capability." }
+        : scope.functional
+          ? { status: "observed-not-qualified", reason: "Observed active-tier cadence in functional CI; no device performance or cadence budget qualification is claimed." }
+          : { status: "measured", reason: "Active-tier cadence is checked against requested slots." }
       // Keep any complete active-tier violation observed before a later fallback.
-      if (result.renderingClass === "hardware") for (const sample of result.ambientDiagnostics) if (sample.quality !== "still" && sample.sampleCount >= 120) checkBudget(() => assertCadenceBudget(sample))
+      if (!scope.functional && result.renderingClass === "hardware") for (const sample of result.ambientDiagnostics) if (sample.quality !== "still" && sample.sampleCount >= 120) checkBudget(() => assertCadenceBudget(sample))
       if (adaptive) {
         if(result.renderer.quality!=="still")assert.equal(result.renderer.targetFps,30,"Ambient measurement included an interaction boost")
-        if(result.renderingClass === "hardware" && result.renderer.quality !== "still") checkBudget(()=>assertCadenceBudget(result.renderer))
+        if(!scope.functional && result.renderingClass === "hardware" && result.renderer.quality !== "still") checkBudget(()=>assertCadenceBudget(result.renderer))
         result.ambientFallback = result.renderer.quality === "still" ? "interactive-still" : null
+      }
+      if (adaptive && !scope.functional) {
         result.phase = "capability-stage-visibility"
         await revealStage(page, inspector)
         result.phase = "capability-samples"
@@ -147,11 +224,14 @@ try {
         await page.waitForFunction(()=>document.querySelector("canvas[data-facility-canvas]")?.__gnFacilitySnapshot?.().sampleCount >= 120,null,{timeout:result.renderingClass === "hardware" ? 15000 : 30000,polling:250})
         result.capability = await inspector.locator("canvas").evaluate(canvas=>canvas.__gnFacilitySnapshot())
         await inspector.locator("canvas").evaluate(canvas=>canvas.__gnFacilityCapability(null))
-      } else result.capability = result.renderer
-      result.frameBudgetMet = result.capability.frameP95 > 0 && result.capability.frameP95 <= (profile === "desktop" ? 20 : 34)
-      if (result.renderingClass === "hardware") checkBudget(()=>assertFrameBudget(result.capability, profile === "desktop" ? 20 : 34))
-      // Still is a supported policy result, not an explicit user pause. Keep
-      // capability/transfer/cadence checks above unchanged and label this proof.
+      } else result.capability = scope.functional ? null : result.renderer
+      result.capabilityEvidence = scope.functional
+        ? { status: "not-measured", reason: "CI functional scope checks the actual adaptive tier, transfer, allocations and settled behavior. No forced cadence or hardware performance qualification." }
+        : { status: "measured" }
+      result.frameBudgetMet = scope.functional ? null : result.capability.frameP95 > 0 && result.capability.frameP95 <= (profile === "desktop" ? 20 : 34)
+      if (!scope.functional && result.renderingClass === "hardware") checkBudget(()=>assertFrameBudget(result.capability, profile === "desktop" ? 20 : 34))
+      // Both scopes verify the same actual settled state. Only qualification
+      // additionally requires hardware cadence and the independent 120-frame probe.
       const tierAtSettlement = await inspector.locator("canvas").evaluate(canvas => canvas.__gnFacilitySnapshot().quality)
       const settlementMode = adaptive && tierAtSettlement === "still" ? "adaptive-still" : "explicit-pause"
       result.phase = settlementMode === "adaptive-still" ? "still-stability" : "pause-stability"
@@ -205,8 +285,9 @@ try {
       assert.deepEqual(result.pageErrors, [], "Page errors occurred during measurement")
       result.phase = "complete"
       result.complete = true
-      console.log(JSON.stringify({ route, profile, run, transferBytes: result.transfer.bytes, renderer: result.renderingClass, frameP95: result.renderer.frameP95, capabilityP95:result.capability.frameP95, budgetFailures:result.budgetFailures }))
+      console.log(JSON.stringify({ route, profile, run, scope: scope.name, transferBytes: result.transfer.bytes, renderer: result.renderingClass, frameP95: result.renderer.frameP95, capabilityP95:result.capability?.frameP95 ?? null, budgetFailures:result.budgetFailures }))
     } catch (error) {
+      if (error?.cinematicEvidence) result.cinematicObservation = error.cinematicEvidence
       result.ambientDiagnostics ??= await page.evaluate(() => window.__facilityAmbientDiagnostics ?? []).catch(() => [])
       result.failurePhase = result.phase
       result.failure = error instanceof Error ? error.message : String(error)
@@ -224,6 +305,6 @@ try {
   report.failure = error instanceof Error ? error.message : String(error)
   process.exitCode = 1
 } finally {
-  await writeFile("build/facility/page-measurements.json", `${JSON.stringify(report, null, 2)}\n`)
+  await writeFile(scope.output, `${JSON.stringify(report, null, 2)}\n`)
   await browser.close()
 }

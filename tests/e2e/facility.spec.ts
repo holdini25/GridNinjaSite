@@ -1,27 +1,28 @@
 import AxeBuilder from "@axe-core/playwright"
-import { scrollFacilityIntoView, chooseFacilityStillImage } from "../support/facility-viewer"
+import { scrollFacilityIntoView, chooseFacilityStillImage, openAssessmentControls, settleFacilityActivity, waitForFacilityReady, expectFacilityAutomaticAcquisition } from "../support/facility-viewer"
 import { expect, test } from "@playwright/test"
 
 test.describe("facility inspection", () => {
-  test("adaptive automatic loading preserves assessment quantities", async ({ page }) => {
+  test("native automatic loading or an explicit software fallback preserves assessment quantities", async ({ page }, testInfo) => {
     await page.addInitScript(() => { window.__GN_FACILITY_DIAGNOSTICS__ = true })
-    await page.goto("/")
+    const models: string[] = []
+    page.on("request", request => { if (new URL(request.url()).pathname.endsWith("/facility.glb")) models.push(request.url()) })
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
-    const caption = await inspector.getByTestId("facility-assessment-caption").textContent()
+    await expectFacilityAutomaticAcquisition(page, inspector, models)
+    await waitForFacilityReady(page, inspector)
+    const caption = await page.getByRole("region", { name: "Fixture B decision", exact: true }).textContent()
+    await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("7.0 MW")
+    await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("5.8 MW")
     for (const name of ["Power", "Cooling", "Storage", "Workloads"]) {
-      await inspector.getByRole("button", { name, exact: false }).filter({ hasText: name }).click()
-      await expect(inspector.getByTestId("facility-assessment-caption")).toHaveText(caption!)
+      await inspector.locator(".facility-systems").getByRole("button", { name, exact: true }).click()
+      await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toHaveText(caption!)
     }
     const canvas = inspector.locator("canvas")
     expect(await canvas.evaluate((element: HTMLCanvasElement) => element.__gnFacilitySnapshot!().drawCalls)).toBeLessThanOrEqual(40)
     expect(await canvas.evaluate((element: HTMLCanvasElement) => element.__gnFacilitySnapshot!().triangles)).toBeLessThanOrEqual(60_000)
-    await inspector.getByRole("button", { name: "Pause", exact: true }).click()
-    await page.waitForTimeout(150)
-    const frames = await canvas.evaluate((element: HTMLCanvasElement) => element.__gnFacilitySnapshot!().frames)
-    await page.waitForTimeout(250)
-    expect(await canvas.evaluate((element: HTMLCanvasElement) => element.__gnFacilitySnapshot!().frames)).toBe(frames)
+    await settleFacilityActivity(page, inspector, testInfo)
     await inspector.getByLabel("Display options", { exact: true }).focus()
     await page.keyboard.press("Enter")
     await expect(inspector.getByRole("button", { name: "Use still image", exact: true })).toBeVisible()
@@ -37,20 +38,21 @@ test.describe("facility inspection", () => {
     await expect(inspector).toHaveAttribute("data-phase", "poster")
   })
 
-  test("normal production rendering exposes no diagnostic snapshot or per-frame DOM mutations", async ({ page }) => {
-    await page.goto("/")
+  test("normal production rendering exposes no diagnostic snapshot or per-frame DOM mutations", async ({ page }, testInfo) => {
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     const diagnostics = await inspector.locator("canvas").evaluate(async (element: HTMLCanvasElement) => {
-      let mutations = 0
-      const observer = new MutationObserver(records => { mutations += records.length })
-      observer.observe(element, { attributes: true })
+      const mutations: { name: string | null; oldValue: string | null; value: string | null }[] = []
+      const observer = new MutationObserver(records => { mutations.push(...records.map(record => ({ name: record.attributeName, oldValue: record.oldValue, value: element.getAttribute(record.attributeName!) }))) })
+      observer.observe(element, { attributes: true, attributeOldValue: true })
       await new Promise(resolve => setTimeout(resolve, 350))
       observer.disconnect()
       return { hook: typeof element.__gnFacilitySnapshot, framesAttribute: element.hasAttribute("data-frames"), mutations }
     })
-    expect(diagnostics).toEqual({ hook: "undefined", framesAttribute: false, mutations: 0 })
+    await testInfo.attach("canvas-mutations", { body: Buffer.from(JSON.stringify(diagnostics)), contentType: "application/json" })
+    expect(diagnostics).toEqual({ hook: "undefined", framesAttribute: false, mutations: [] })
   })
 
   test("reduced motion, fixture D, keyboard selection and reset retain authoritative records", async ({ page }) => {
@@ -58,7 +60,7 @@ test.describe("facility inspection", () => {
     await page.goto("/demo?scenario=d&perspective=engineering")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
+    await waitForFacilityReady(page, inspector)
     await inspector.locator(".facility-settings summary").click()
     await expect(inspector.getByRole("checkbox", { name: "Equipment motion" })).toBeDisabled()
     await expect(inspector.getByRole("button", { name: "Pause", exact: true })).toHaveCount(0)
@@ -70,6 +72,7 @@ test.describe("facility inspection", () => {
       await inspector.getByTestId("facility-contextual-inspector").locator("summary").filter({ hasText: /^Evidence$/ }).click()
       await expect(inspector.getByRole("link", { name: "Read this versioned decision brief" })).toHaveAttribute("href", /demo-01-d\/v1.0.0/)
     } else await expect(inspector.getByRole("link", { name: /published decision brief/ })).toHaveAttribute("href", /demo-01-d\/v1.0.0/)
+    await openAssessmentControls(page)
     await page.getByRole("button", { name: "Reset example" }).click()
     await expect(inspector).toHaveAttribute("data-scenario", "b")
     await expect(inspector.locator('.facility-systems [aria-pressed="true"]')).toHaveCount(0)
@@ -81,13 +84,13 @@ test.describe("facility inspection", () => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
     await page.route("**/facility.glb", route => route.abort())
-    await page.goto("/")
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
     await inspector.getByRole("button", { name: "Explore in 3D" }).click()
     await expect(inspector).toHaveAttribute("data-phase", "failed")
     await expect(inspector.locator(".facility-poster")).toBeVisible()
-    await expect(inspector).toContainText("7.0 MW")
+    await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("7.0 MW")
     await page.unroute("**/facility.glb")
     await inspector.getByRole("button", { name: "Retry 3D" }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")
@@ -104,7 +107,7 @@ test.describe("facility inspection", () => {
     await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
     const models: string[] = []
     page.on("request", request => { if (request.url().endsWith("facility.glb")) models.push(request.url()) })
-    await page.goto("/")
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
     await page.waitForTimeout(1_700)

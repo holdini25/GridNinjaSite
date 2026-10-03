@@ -6,6 +6,7 @@ import {
   buildLeadAcceptedEvent,
   buildLeadEmailHtml,
   buildLeadEmailSubject,
+  buildLeadEmailText,
   getNextAttemptAt,
   isRetryableProviderStatus,
   type LeadDeliveryPayload,
@@ -149,14 +150,16 @@ describe("contact delivery core", () => {
     expect(html).not.toContain("Timeline</th>")
   })
 
-  it("delivers optional public topic context without changing v1 or absent-topic webhooks", () => {
-    const current = { ...lead, schemaVersion: 2 as const, topic: "cooling" }
-    const event = buildLeadAcceptedEvent(current, "event-topic")
-    expect(event).toMatchObject({ schemaVersion: 2, data: { qualification: { topic: "cooling", message: lead.message } } })
-    expect(buildLeadEmailHtml(current)).toContain("Cooling evidence")
-    expect(buildLeadAcceptedEvent({ ...current, topic: null }, "event-absent").data.qualification).not.toHaveProperty("topic")
-    expect(buildLeadAcceptedEvent({ ...current, topic: "private@example.com" }, "event-invalid").data.qualification).not.toHaveProperty("topic")
-    expect(buildLeadAcceptedEvent({ ...lead, topic: "cooling" }, "event-legacy").data.qualification).not.toHaveProperty("topic")
+  it("delivers assessment context through the existing email and v2 message fields", () => {
+    const message = "Public assessment topic: Cooling evidence\n\nReview the declared cooling boundary."
+    const contextualLead: LeadDeliveryPayload = { ...lead, schemaVersion: 2, message }
+    const event = buildLeadAcceptedEvent(contextualLead, "event-topic")
+
+    expect(event.data.qualification.message).toBe(message)
+    expect(event.data.qualification).not.toHaveProperty("topic")
+    expect(buildLeadEmailText(contextualLead)).toContain(message)
+    expect(buildLeadEmailHtml(contextualLead)).toContain("Public assessment topic: Cooling evidence")
+    expect(buildLeadEmailHtml(contextualLead)).toContain("Review the declared cooling boundary.")
   })
 
   it("rejects unsupported v2 Capacity Audit delivery records", () => {

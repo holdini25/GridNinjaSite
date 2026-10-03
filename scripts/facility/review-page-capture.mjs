@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 
+const reviewPaintSelector = ".gn-content-auto, .gn-home > :is(.gn-home-fit, .gn-home-evidence)"
 const paintOpportunity = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
 
 /** Review images need offscreen paint, which a full-page screenshot does not
@@ -8,8 +9,9 @@ const paintOpportunity = page => page.evaluate(() => new Promise(resolve => requ
  * Never use this conditioning for layout, loading or performance qualification.
  * @param {import('@playwright/test').Page} page
  * @param {string} path
+ * @param {{ scrollMethod?: "wheel" | "programmatic" }} options
  */
-export async function captureVisitedReviewPage(page, path) {
+export async function captureVisitedReviewPage(page, path, { scrollMethod = "wheel" } = {}) {
   const originalScroll = await page.evaluate(() => ({ x: scrollX, y: scrollY }))
   let owned, result, failure
   try {
@@ -19,7 +21,11 @@ export async function captureVisitedReviewPage(page, path) {
     for (; steps < 160; steps++) {
       const position = await page.evaluate(() => ({ y: scrollY, height: innerHeight, documentHeight: document.documentElement.scrollHeight }))
       if (position.y + position.height >= position.documentHeight - 1) break
-      await page.mouse.wheel(0, Math.max(100, Math.floor(position.height * .6)))
+      const distance = Math.max(100, Math.floor(position.height * .6))
+      // Mobile WebKit has no mouse wheel. Visit the same scroll positions
+      // before capture; this remains paint evidence, never input/performance QA.
+      if (scrollMethod === "programmatic") await page.evaluate(top => scrollBy({ top, behavior: "instant" }), distance)
+      else await page.mouse.wheel(0, distance)
       await paintOpportunity(page)
     }
     assert(steps < 160, "Review normal-scroll warmup did not reach the page end")
@@ -29,25 +35,25 @@ export async function captureVisitedReviewPage(page, path) {
     // Retain exact element references. The owned stylesheet never touches their
     // inline CSSOM: Chromium can normalize a removed dirty style attribute to
     // an empty attribute, so mutating/restoring inline styles is not byte-exact.
-    owned = await page.evaluateHandle(() => {
-      const entries = [...document.querySelectorAll(".gn-content-auto")].map(element => {
+    owned = await page.evaluateHandle(selector => {
+      const entries = [...document.querySelectorAll(selector)].map(element => {
         const rect = element.getBoundingClientRect()
         return { element, style: element.getAttribute("style"), before: { top: rect.top, left: rect.left, width: rect.width, height: rect.height } }
       })
       const body = document.body.getBoundingClientRect()
-      return { entries, beforeHeight: document.documentElement.scrollHeight, beforeWidth: document.documentElement.scrollWidth, beforeBody: { top: body.top, left: body.left, width: body.width, height: body.height } }
-    })
+      return { selector, entries, beforeHeight: document.documentElement.scrollHeight, beforeWidth: document.documentElement.scrollWidth, beforeBody: { top: body.top, left: body.left, width: body.width, height: body.height } }
+    }, reviewPaintSelector)
     result = await owned.evaluate(state => {
       state.paintStyle = document.createElement("style")
       // Keep the formatting context supplied implicitly by content-visibility.
       // Removing layout containment could collapse child margins through their
       // parent and turn a paint-only capture into a different page layout.
-      state.paintStyle.textContent = ".gn-content-auto { content-visibility: visible !important; contain: layout style paint !important; }"
+      state.paintStyle.textContent = `${state.selector} { content-visibility: visible !important; contain: layout style paint !important; }`
       document.head.appendChild(state.paintStyle)
       const body = document.body.getBoundingClientRect()
       return {
         conditioning: "review-only-eager-paint-after-normal-scroll",
-        override: ".gn-content-auto { content-visibility: visible !important; contain: layout style paint !important; }",
+        override: state.paintStyle.textContent,
         interpretation: "Offscreen paint is forced for this image only; this is not normal-scroll, loading or performance evidence.",
         beforeDocumentHeight: state.beforeHeight, afterDocumentHeight: document.documentElement.scrollHeight,
         beforeDocumentWidth: state.beforeWidth, afterDocumentWidth: document.documentElement.scrollWidth,
@@ -69,6 +75,7 @@ export async function captureVisitedReviewPage(page, path) {
     await page.screenshot({ path, fullPage: true, animations: "disabled", caret: "hide" })
     result.screenshotOptions = { fullPage: true, animations: "disabled", caret: "hide" }
     result.scrollSteps = steps
+    result.warmupScrollMethod = scrollMethod
     result.image = path
   } catch (error) { failure = error }
   finally {

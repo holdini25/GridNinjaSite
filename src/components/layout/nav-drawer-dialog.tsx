@@ -177,7 +177,7 @@ export default function NavDrawerDialog({ pathname, open, onOpenChange, trigger,
                   motion="micro-response"
                   className="gap-2.5"
                   markClassName="size-[36px]"
-                  textClassName="text-sm"
+                  textClassName="text-[22px] normal-case font-semibold tracking-[-0.045em]"
                 />
               </Link>
             </SheetClose>
@@ -200,7 +200,7 @@ export default function NavDrawerDialog({ pathname, open, onOpenChange, trigger,
                 data-analytics-event="assessment_cta_selected"
                 data-analytics-source="header"
               >
-                Contact Us
+                Scope an assessment
               </Link>
             </Button>
           </SheetClose>

@@ -21,6 +21,13 @@ function mount(eager = false) {
   </div>} />)
 }
 function activate() { const link = screen.getByRole("link", { name: "Explore the facility in 3D" }); link.focus(); fireEvent.click(link) }
+function controlFrames() {
+  const pending = new Map<number, FrameRequestCallback>()
+  let next = 0
+  vi.spyOn(window, "requestAnimationFrame").mockImplementation(callback => { pending.set(++next, callback); return next })
+  vi.spyOn(window, "cancelAnimationFrame").mockImplementation(id => { pending.delete(id) })
+  return () => { const callbacks = [...pending.values()]; pending.clear(); act(() => { callbacks.forEach(callback => callback(0)) }) }
+}
 beforeEach(() => { load.mockReset(); reload.mockReset(); window.history.replaceState(null, "", "/demo") })
 afterEach(() => {
   cleanup(); vi.useRealTimers(); vi.restoreAllMocks()
@@ -253,6 +260,7 @@ describe("deferred assessment identity and fallback", () => {
     expect(screen.queryByTestId("loaded-explorer")).toBeNull()
   })
   it.each(["facility-construction", "workload-story"])("hands the explicit %s journey to its enhanced section exactly once", async target => {
+    const frame = controlFrames()
     const scroll = vi.fn()
     Object.defineProperty(HTMLElement.prototype, "scrollIntoView", { configurable: true, value: scroll })
     let resolve!: (value: typeof explorerModule) => void
@@ -263,8 +271,46 @@ describe("deferred assessment identity and fallback", () => {
     await act(async () => { await Promise.resolve() })
     await act(async () => { resolve(explorerModule) })
     expect(document.getElementById(target)).toHaveFocus()
+    expect(scroll).not.toHaveBeenCalled()
+    frame()
+    expect(scroll).not.toHaveBeenCalled()
+    frame()
     expect(scroll).toHaveBeenCalledExactlyOnceWith({ block: "start", behavior: "instant" })
+    frame()
+    expect(scroll).toHaveBeenCalledTimes(1)
     expect(screen.getByTestId("loaded-explorer")).toHaveAttribute("data-activate", "false")
+  })
+  it.each(["wheel", "touchmove", "pointerdown", "keydown", "focus", "location", "unmount"])("cancels deferred journey alignment after %s supersedes its intent", async reason => {
+    const frame = controlFrames(), scroll = vi.fn()
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", { configurable: true, value: scroll })
+    let resolve!: (value: typeof explorerModule) => void
+    load.mockImplementation(() => new Promise(value => { resolve = value }))
+    window.history.replaceState(null, "", "/demo#facility-construction")
+    const view = mount()
+    document.getElementById("facility-construction")!.focus()
+    await act(async () => { await Promise.resolve(); resolve(explorerModule) })
+    frame()
+    if (reason === "focus") screen.getByTestId("loaded-explorer").focus()
+    else if (reason === "location") window.history.replaceState(null, "", "/demo#workload-story")
+    else if (reason === "unmount") view.unmount()
+    else window.dispatchEvent(new Event(reason))
+    frame()
+    expect(scroll).not.toHaveBeenCalled()
+  })
+  it.each([false, true])("waits for late document loading and respects cancellation (%s) before aligning a native fragment", async cancel => {
+    vi.spyOn(document, "readyState", "get").mockReturnValue("interactive")
+    const frame = controlFrames(), scroll = vi.fn()
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", { configurable: true, value: scroll })
+    let resolve!: (value: typeof explorerModule) => void
+    load.mockImplementation(() => new Promise(value => { resolve = value }))
+    window.history.replaceState(null, "", "/demo#facility-construction")
+    mount(); document.getElementById("facility-construction")!.focus()
+    await act(async () => { await Promise.resolve(); resolve(explorerModule) })
+    frame(); frame()
+    expect(scroll).not.toHaveBeenCalled()
+    if (cancel) window.dispatchEvent(new Event("wheel"))
+    window.dispatchEvent(new Event("load")); frame(); frame()
+    expect(scroll).toHaveBeenCalledTimes(cancel ? 0 : 1)
   })
   it("does not scroll or reclaim a journey after focus moves to another task", async () => {
     const scroll = vi.fn()

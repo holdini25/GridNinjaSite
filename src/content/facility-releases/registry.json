@@ -48,5 +48,10 @@
     "release": "facility-v10",
     "status": "available",
     "manifestSha256": "7a95fe6a859f11d074a7d4a38fb6d7de9ecefc956b19d899486d294f32a11712"
+  },
+  {
+    "release": "facility-v12",
+    "status": "available",
+    "manifestSha256": "95e5b6394da9183cdc57d00992407ffec4fd6d55d1674ffd9bb8d13b6955658f"
   }
 ]

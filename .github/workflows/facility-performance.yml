@@ -5,14 +5,23 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      hardware_qualification:
+        description: Run exact-device qualification on a provisioned M5 Metal runner
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
+concurrency:
+  group: facility-performance-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  production-performance:
+  software-functional-and-transfer:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -20,10 +29,11 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chrome chromium
       - run: npm run build
-      - name: Measure five fresh profiles and enforce complete release evidence
+      - name: Enforce functional, transfer and all 30 Lighthouse measurements
         env:
           FACILITY_BASE_URL: http://localhost:3000
           FACILITY_RUNS: 5
+          FACILITY_MEASUREMENT_SCOPE: ci-functional
         shell: bash
         run: |
           mkdir -p build/facility
@@ -38,14 +48,14 @@ jobs:
           curl --fail --silent http://localhost:3000/ >/dev/null
           failed=0
           npm run facility:measure || failed=1
+          node scripts/facility/validate-ci-functional.mjs || failed=1
           npm run facility:lighthouse || failed=1
           npm run facility:performance:validate || failed=1
-          npm run facility:verify-browser || failed=1
           exit "$failed"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: facility-performance-${{ github.sha }}
+          name: facility-ci-functional-${{ github.sha }}
           path: |
             build/facility/*.json
             build/facility/*.png
@@ -54,6 +64,53 @@ jobs:
             build/facility/lighthouse-mobile
             build/facility/facility-v*/*.json
             build/facility/facility-v*/*.png
+            .next/facility-build.json
+          if-no-files-found: error
+          retention-days: 30
+
+  # Ubuntu's SwiftShader runner is deliberately not a device-performance gate.
+  # This optional job requires a provisioned runner with this explicit label;
+  # no hosted-runner result is relabelled as native Metal qualification.
+  hardware-qualification:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.hardware_qualification }}
+    runs-on: [self-hosted, macOS, ARM64, gridninja-m5-metal]
+    timeout-minutes: 45
+    env:
+      FACILITY_ANGLE: metal
+      FACILITY_RUNS: 5
+      FACILITY_BASE_URL: http://127.0.0.1:3000
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: "22.23.2", cache: npm }
+      - run: npm ci
+      - run: npx playwright install chrome chromium
+      - run: npm run build
+      - name: Enforce unchanged hardware, cadence, transfer and Lighthouse budgets
+        shell: bash
+        run: |
+          mkdir -p build/facility
+          npm run start -- --hostname 127.0.0.1 --port 3000 > build/facility/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent "$FACILITY_BASE_URL/" >/dev/null; then break; fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then cat build/facility/server.log; exit 1; fi
+            sleep 1
+          done
+          curl --fail --silent "$FACILITY_BASE_URL/" >/dev/null
+          failed=0
+          npm run facility:measure || failed=1
+          npm run facility:lighthouse || failed=1
+          npm run facility:performance:validate || failed=1
+          npm run facility:verify-browser || failed=1
+          exit "$failed"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: facility-hardware-qualification-${{ github.sha }}
+          path: |
+            build/facility
             .next/facility-build.json
           if-no-files-found: error
           retention-days: 30

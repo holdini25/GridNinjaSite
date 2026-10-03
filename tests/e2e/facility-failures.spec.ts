@@ -1,12 +1,12 @@
 import { expect, test, type Page, type Route } from "@playwright/test"
-import { scrollFacilityIntoView } from "../support/facility-viewer"
+import { scrollFacilityIntoView, expectFacilityAutomaticAcquisition } from "../support/facility-viewer"
 
 const modelPath = "**/assets/facility/**/facility.glb"
 
 async function openManual(page: Page) {
   await page.emulateMedia({ reducedMotion: "reduce" })
   await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
-  await page.goto("/")
+  await page.goto("/demo?interactive=1")
   const inspector = page.getByTestId("facility-inspection")
   await scrollFacilityIntoView(inspector)
   await expect(inspector.locator(".facility-systems").getByRole("button", { name: "Power", exact: true })).toBeVisible()
@@ -38,14 +38,19 @@ test.describe("facility failure boundaries", () => {
     let missingPosters = 0
     await page.route("**/assets/facility/**/poster-*.webp", route => { missingPosters++; return route.fulfill({ status: 404, contentType: "text/plain", body: "Missing poster fixture" }) })
     const inspector = await openManual(page)
-    expect(missingPosters).toBeGreaterThan(0)
+    // Visible HTML controls can precede the deferred poster request on mobile.
+    await expect.poll(() => missingPosters).toBeGreaterThan(0)
     await expect(inspector).toContainText("Facility illustration unavailable")
-    await expect(inspector.getByTestId("facility-assessment-caption")).toContainText("5.8 MW")
+    const decision = page.getByRole("region", { name: "Fixture B decision", exact: true })
+    const before = await decision.textContent()
+    await expect(decision).toContainText("7.0 MW")
+    await expect(decision).toContainText("5.8 MW")
     await inspector.getByRole("button", { name: /Storage/ }).click()
     await expect(inspector).toContainText("Independent storage capacity and dispatchability are unassessed")
     await inspector.getByRole("button", { name: "Explore in 3D" }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")
     await expect(inspector).not.toContainText("Facility illustration unavailable")
+    await expect(decision).toHaveText(before!)
   })
 
   test("same-length corrupt model bytes fail integrity and leave the assessment unchanged", async ({ page }) => {
@@ -58,12 +63,12 @@ test.describe("facility failure boundaries", () => {
       await route.fulfill({ status: 200, contentType: "model/gltf-binary", headers: { "content-length": String(bytes.length), "cache-control": "no-store" }, body: bytes })
     })
     const inspector = await openManual(page)
-    const before = await inspector.getByTestId("facility-assessment-caption").textContent()
+    const before = await page.getByRole("region", { name: "Fixture B decision", exact: true }).textContent()
     await inspector.getByRole("button", { name: "Explore in 3D" }).click()
     await expect(inspector).toHaveAttribute("data-phase", "failed")
     expect(intercepted).toBe(1)
     await expect(inspector.locator(".facility-poster")).toBeVisible()
-    await expect(inspector.getByTestId("facility-assessment-caption")).toHaveText(before!)
+    await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toHaveText(before!)
     await expect(inspector.locator("canvas")).toHaveCount(0)
     await expect(inspector.getByRole("button", { name: "Retry 3D" })).toBeVisible()
   })
@@ -74,7 +79,7 @@ test.describe("facility failure boundaries", () => {
     await inspector.getByRole("button", { name: "Explore in 3D" }).click()
     await expect(inspector).toHaveAttribute("data-phase", "failed")
     await expect(inspector.locator("canvas")).toHaveCount(0)
-    await expect(inspector.getByTestId("facility-assessment-caption")).toContainText("7.0 MW")
+    await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("7.0 MW")
     await expect(inspector.getByRole("button", { name: "Retry 3D" })).toBeVisible()
   })
 
@@ -98,7 +103,7 @@ test.describe("facility failure boundaries", () => {
       await page.keyboard.press("Enter")
       await expect(inspector).toHaveAttribute("data-phase", "ready")
       await expect(inspector.getByLabel("Display options", { exact: true })).toBeFocused()
-      await expect(inspector.getByTestId("facility-assessment-caption")).toContainText("5.8 MW")
+      await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("5.8 MW")
     } finally { await transfer.release() }
   })
 
@@ -118,7 +123,7 @@ test.describe("facility failure boundaries", () => {
     await expect(inspector.locator(".facility-poster")).toBeVisible()
     await inspector.getByRole("button", { name: /Cooling/ }).click()
     await expect(inspector).toContainText("Cooling evidence")
-    await expect(inspector.getByTestId("facility-assessment-caption")).toContainText("5.8 MW")
+    await expect(page.getByRole("region", { name: "Fixture B decision", exact: true })).toContainText("5.8 MW")
     await page.unroute("**/_next/static/**/*.js")
     await inspector.getByRole("button", { name: "Retry 3D" }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")
@@ -133,7 +138,7 @@ test.describe("facility failure boundaries", () => {
       const inspector = await openManual(page)
       await inspector.getByRole("button", { name: "Explore in 3D" }).click()
       await expect.poll(transfer.requested).toBe(true)
-      await page.locator('a[data-analytics-source="home-hero"]').click()
+      await page.locator('a[data-gn-event="cta-band"][href^="/assessment?"]').click()
       await expect(page).toHaveURL(url => url.pathname === "/assessment" && url.hash === "#scope")
       await transfer.release()
       await expect(page.getByTestId("facility-inspection")).toHaveCount(0)
@@ -149,10 +154,10 @@ test.describe("facility failure boundaries", () => {
     const errors: string[] = []
     page.on("pageerror", error => errors.push(error.message))
     const inspector = await openManual(page)
-    const caption = inspector.getByTestId("facility-assessment-caption")
+    const caption = page.getByRole("region", { name: "Fixture B decision", exact: true })
     const before = await caption.textContent()
     const scenario = await inspector.getAttribute("data-scenario")
-    const brief = page.getByRole("link", { name: "Read this decision brief", exact: true })
+    const brief = page.locator('[aria-label="Current example downloads"]').getByRole("link", { name: "Read the versioned brief", exact: true })
     const publication = await brief.getAttribute("href")
     await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")
@@ -190,13 +195,19 @@ test.describe("facility failure boundaries", () => {
     } finally { await original?.dispose() }
   })
 
-  test("three client route pairs replace sessions without growing owned resources or retaining stale canvases", async ({ page }) => {
+  test("three client home/demo route pairs dispose and replace demo sessions without growing owned resources", async ({ page }) => {
     test.setTimeout(60_000)
     await page.addInitScript(() => { window.__GN_FACILITY_DIAGNOSTICS__ = true })
     const errors: string[] = [], modelRequests: string[] = []
     page.on("pageerror", error => errors.push(error.message))
     page.on("request", request => { if (new URL(request.url()).pathname.endsWith("/facility.glb")) modelRequests.push(request.url()) })
-    const inspector = await openManual(page)
+    await page.emulateMedia({ reducedMotion: "reduce" })
+    await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true, effectiveType: "4g" } }))
+    await page.goto("/")
+    const enterDemo = () => page.locator(".gn-home-hero").getByRole("link", { name: "See a sample decision brief", exact: true }).click()
+    await enterDemo()
+    const inspector = page.getByTestId("facility-inspection")
+    await scrollFacilityIntoView(inspector)
     await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")
     const documentOrigin = await page.evaluate(() => performance.timeOrigin)
@@ -212,15 +223,22 @@ test.describe("facility failure boundaries", () => {
     expect(baseline.textures).toBeGreaterThan(0)
     expect(modelRequests).toHaveLength(1)
     let activations = 1
-    for (let pair = 0; pair < 3; pair++) for (const destination of ["/demo", "/"]) {
+    for (let pair = 0; pair < 3; pair++) {
       const previous = await inspector.locator("canvas").elementHandle()
       try {
-        // The hero is a real Next Link. Back returns through its client history;
-        // the intentionally native header Home link belongs to the separate test.
-        if (destination === "/demo") await page.getByRole("link", { name: "See a sample decision brief", exact: true }).first().click()
-        else await page.goBack()
-        await expect(page).toHaveURL(url => url.pathname === destination)
-        await expect(page.locator(destination === "/demo" ? ".facility-inspection--demo" : ".facility-inspection--hero")).toBeVisible()
+        // The server-rendered home owns no viewer. Client history must dispose
+        // the demo's graphics before the real hero Link creates a fresh visit.
+        await page.goBack()
+        await expect(page).toHaveURL(url => url.pathname === "/")
+        await expect(page.getByTestId("facility-inspection")).toHaveCount(0)
+        await expect(page.locator("canvas[data-facility-canvas]")).toHaveCount(0)
+        await expect.poll(() => previous!.evaluate(element => !element.isConnected && typeof (element as HTMLCanvasElement).__gnFacilitySnapshot === "undefined")).toBe(true)
+        expect(modelRequests).toHaveLength(activations)
+        expect(await page.evaluate(() => performance.timeOrigin)).toBe(documentOrigin)
+        await expect(page.locator(".gn-home-decision")).toContainText("5.8 MW")
+        await enterDemo()
+        await expect(page).toHaveURL(url => url.pathname === "/demo")
+        await expect(page.locator(".facility-inspection--demo")).toBeVisible()
         expect(await page.evaluate(() => performance.timeOrigin)).toBe(documentOrigin)
         await scrollFacilityIntoView(inspector)
         await expect(inspector).toHaveAttribute("data-phase", "poster")
@@ -234,10 +252,10 @@ test.describe("facility failure boundaries", () => {
         await expect(page.locator("canvas[data-facility-canvas]")).toHaveCount(1)
         expect(await resources()).toEqual(baseline)
         expect(modelRequests).toHaveLength(activations)
-        await expect(destination === "/demo" ? page.getByTestId("assessment-summary") : inspector.getByTestId("facility-assessment-caption")).toContainText("5.8 MW")
+        await expect(page.getByTestId("assessment-summary")).toContainText("5.8 MW")
       } finally { await previous?.dispose() }
     }
-    expect(activations).toBe(7)
+    expect(activations).toBe(4)
     expect(documentRequests).toBe(0)
     expect(errors).toEqual([])
   })
@@ -284,7 +302,7 @@ test.describe("facility failure boundaries", () => {
     await page.addInitScript(() => Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: false, effectiveType: "2g" } }))
     const requests: string[] = []
     page.on("request", request => { if (request.url().endsWith("facility.glb")) requests.push(request.url()) })
-    await page.goto("/")
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
     await page.waitForTimeout(1_700)
@@ -299,8 +317,11 @@ test.describe("facility failure boundaries", () => {
     await page.setViewportSize({ width: 1440, height: 130 })
     const requests: string[] = []
     page.on("request", request => { if (request.url().endsWith("facility.glb")) requests.push(request.url()) })
-    await page.goto("/")
+    await page.goto("/demo?interactive=1")
     const inspector = page.getByTestId("facility-inspection")
+    // Wait for the enhanced owner to replace the streamed preview. This
+    // attachment assertion does not scroll or admit the offscreen viewer.
+    await expect(inspector.locator(".facility-systems button")).toHaveCount(4)
     // Avoid locator actions that would scroll the viewer into the viewport.
     const bounds = await inspector.locator(".facility-stage").boundingBox()
     expect(bounds).not.toBeNull()
@@ -309,7 +330,7 @@ test.describe("facility failure boundaries", () => {
     expect(requests).toEqual([])
     await expect(inspector).toHaveAttribute("data-phase", "poster")
     await page.setViewportSize({ width: 1440, height: 1100 })
-    await expect(inspector).toHaveAttribute("data-phase", "ready")
-    expect(requests).toHaveLength(1)
+    await scrollFacilityIntoView(inspector)
+    await expectFacilityAutomaticAcquisition(page, inspector, requests)
   })
 })

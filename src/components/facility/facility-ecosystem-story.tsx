@@ -28,8 +28,9 @@ export function FacilityEcosystemStory(props: Props) {
   const step = chapter === null ? null : narrative.chapters[chapter]
   const exit = () => { props.onExit(); openButton.current?.focus({ preventScroll: true }) }
   return <div className="facility-ecosystem" data-testid="facility-ecosystem" data-story-open={step ? "true" : "false"}>
+    <p className="facility-ecosystem-intro">Explore the illustrative power and cooling paths. Read the versioned assessment for the result and its limits.</p>
     <div className="facility-ecosystem-actions">
-      <button ref={openButton} type="button" className="facility-action facility-action--activate" aria-expanded={Boolean(step)} aria-controls={step ? headingId : undefined} onClick={step ? exit : props.onOpen}>{step ? "Exit story" : "Follow one workload"}<span aria-hidden="true">{step ? "×" : "→"}</span></button>
+      <button ref={openButton} type="button" className="facility-action facility-action--activate facility-story-entry" aria-expanded={Boolean(step)} aria-controls={step ? headingId : undefined} onClick={step ? exit : props.onOpen}>{step ? "Exit story" : "Follow one workload"}<span aria-hidden="true">{step ? "×" : "→"}</span></button>
       <button type="button" className="facility-action" aria-pressed={props.sectionOpen} disabled={!props.ready} onClick={props.onSection}>{props.sectionOpen ? "Close air-path section" : "Show air-path section"}</button>
     </div>
     {step && <section id={headingId} className="facility-ecosystem-story" aria-labelledby={chapterId} aria-describedby={noteId} data-testid="facility-ecosystem-story" data-chapter={chapter} data-playing={props.presentation.playing ? "true" : "false"} onKeyDown={event => { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); exit() } }}>

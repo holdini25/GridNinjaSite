@@ -1,12 +1,14 @@
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { renderToStaticMarkup } from "react-dom/server"
-import { afterEach, describe, expect, it, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { assessmentFixtures } from "@/content/assessments/fixtures"
 import type { FacilityCanvasProps, FacilitySceneMetadata, FacilityTopology, FacilityVisualRelease } from "@/types/facility"
 import ecosystemTopologySource from "./fixtures/ecosystem-topology.json"
 import { testMatchMedia } from "../../support/match-media"
 
+const graphics = vi.hoisted(() => ({ probe: vi.fn() }))
+vi.mock("@/lib/facility/graphics-capability", () => ({ probeAutomaticFacilityGraphics: graphics.probe }))
 const renderer = vi.hoisted(() => ({ render: vi.fn() }))
 vi.mock("@/components/facility/facility-canvas", () => ({ default: (props: FacilityCanvasProps) => { renderer.render(props); return <div data-testid="mock-facility-canvas" /> } }))
 import { FacilityInspection } from "@/components/facility/facility-inspection"
@@ -40,6 +42,8 @@ function openAssemblyParts() {
   const summary = screen.getByText("Inspect assembly parts", { selector: "summary" })
   if (!summary.closest("details")!.open) fireEvent.click(summary)
 }
+
+beforeEach(() => { graphics.probe.mockReset().mockReturnValue({ status: "available", automatic: true }) })
 
 afterEach(() => { cleanup(); renderer.render.mockClear(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); window.sessionStorage.clear() })
 
@@ -180,6 +184,67 @@ describe("facility HTML shell and authoritative assessment", () => {
 })
 
 describe("facility graphics session", () => {
+  it("defers deep-link activation while hidden and activates once when foregrounded without waiting for intersection", async () => {
+    vi.useFakeTimers()
+    const visibility = vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden")
+    // The hash-alignment journey can reveal the stage after acquisition starts.
+    vi.stubGlobal("IntersectionObserver", class {
+      observe() {}
+      disconnect() {}
+    })
+    render(<FacilityInspection {...props} activateOnMount />)
+    const inspector = screen.getByTestId("facility-inspection")
+    await act(async () => { await vi.advanceTimersByTimeAsync(9_000) })
+    expect(inspector).toHaveAttribute("data-phase", "poster")
+    expect(inspector).not.toHaveAttribute("data-failure")
+    expect(screen.getByRole("img")).toBeVisible()
+    expect(screen.queryByTestId("mock-facility-canvas")).not.toBeInTheDocument()
+    expect(renderer.render).not.toHaveBeenCalled()
+
+    await act(async () => {
+      visibility.mockReturnValue("visible")
+      fireEvent(document, new Event("visibilitychange"))
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(renderer.render).toHaveBeenCalled()
+    expect(inspector).toHaveAttribute("data-phase", "loading")
+    const generation = currentCanvas().generation
+    expect(generation).toBe(1)
+    expect(currentCanvas().visible).toBe(false)
+    act(() => { currentCanvas().onStaged(); currentCanvas().onPresented() })
+    act(() => { visibility.mockReturnValue("hidden"); fireEvent(document, new Event("visibilitychange")) })
+    act(() => { visibility.mockReturnValue("visible"); fireEvent(document, new Event("visibilitychange")) })
+    expect(inspector).toHaveAttribute("data-phase", "ready")
+    expect(currentCanvas().generation).toBe(generation)
+
+    fireEvent.click(stillImageControl())
+    renderer.render.mockClear()
+    act(() => { visibility.mockReturnValue("hidden"); fireEvent(document, new Event("visibilitychange")) })
+    act(() => { visibility.mockReturnValue("visible"); fireEvent(document, new Event("visibilitychange")) })
+    expect(inspector).toHaveAttribute("data-phase", "poster")
+    expect(renderer.render).not.toHaveBeenCalled()
+  })
+
+  it("rechecks actual document visibility before a newly requested deep-link activation", async () => {
+    vi.useFakeTimers()
+    const visibility = vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible")
+    const { rerender } = render(<FacilityInspection {...props} />)
+    // The document changed before its visibility event updated React state.
+    visibility.mockReturnValue("hidden")
+    rerender(<FacilityInspection {...props} activateOnMount />)
+    await act(async () => { await vi.advanceTimersByTimeAsync(9_000) })
+    expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-phase", "poster")
+    expect(renderer.render).not.toHaveBeenCalled()
+    act(() => { fireEvent(document, new Event("visibilitychange")) })
+    await act(async () => {
+      visibility.mockReturnValue("visible")
+      fireEvent(document, new Event("visibilitychange"))
+      await vi.advanceTimersByTimeAsync(0)
+    })
+    expect(renderer.render).toHaveBeenCalled()
+    expect(currentCanvas().generation).toBe(1)
+  })
+
   it("keeps a WebKit null-relatedTarget blur from cancelling an internal still-image click", async () => {
     render(<FacilityInspection {...props} />)
     fireEvent.click(screen.getByRole("button", { name: /Explore in 3D/ }))
@@ -352,6 +417,49 @@ describe("facility graphics session", () => {
     await act(async () => { await vi.advanceTimersByTimeAsync(1) })
     expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-phase", "failed")
     expect(screen.getByRole("button", { name: "Retry 3D" })).toBeVisible()
+  })
+
+  it.each(["software", "unavailable"])("keeps %s graphics on the poster and preserves explicit activation", async status => {
+    testMatchMedia.setMatches("(min-width: 1024px) and (hover: hover) and (pointer: fine)", true)
+    graphics.probe.mockReturnValue({ status, automatic: false })
+    const idles: (() => void)[] = []
+    vi.stubGlobal("requestIdleCallback", vi.fn((callback: () => void) => { idles.push(callback); return idles.length }))
+    vi.stubGlobal("cancelIdleCallback", vi.fn())
+    render(<FacilityInspection {...props} loadingPolicy="auto-desktop" />)
+    const image = screen.getByRole("img")
+    Object.defineProperties(image, { naturalWidth: { value: 1200 }, complete: { value: true } })
+    fireEvent.load(image)
+    expect(graphics.probe).not.toHaveBeenCalled()
+    act(() => idles.at(-1)!())
+    expect(graphics.probe).toHaveBeenCalledTimes(1)
+    expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-automatic-graphics", status)
+    expect(screen.getByTestId("facility-inspection")).toHaveAttribute("data-phase", "poster")
+    expect(renderer.render).not.toHaveBeenCalled()
+    // Repeated visibility changes must not acquire another context or model.
+    fireEvent(document, new Event("visibilitychange"))
+    expect(graphics.probe).toHaveBeenCalledTimes(1)
+    fireEvent.click(screen.getByRole("button", { name: /Explore in 3D/ }))
+    await waitFor(() => expect(renderer.render).toHaveBeenCalled())
+    expect(graphics.probe).toHaveBeenCalledTimes(1)
+  })
+
+  it.each(["save-data", "hidden", "unmount"])("cancels automatic acquisition before the capability probe when %s intervenes", condition => {
+    testMatchMedia.setMatches("(min-width: 1024px) and (hover: hover) and (pointer: fine)", true)
+    const idles: (() => void)[] = []
+    vi.stubGlobal("requestIdleCallback", vi.fn((callback: () => void) => { idles.push(callback); return idles.length }))
+    vi.stubGlobal("cancelIdleCallback", vi.fn())
+    const mounted = render(<FacilityInspection {...props} loadingPolicy="auto-desktop" />)
+    const image = screen.getByRole("img")
+    Object.defineProperties(image, { naturalWidth: { value: 1200 }, complete: { value: true } })
+    fireEvent.load(image)
+    expect(idles.length).toBeGreaterThan(0)
+    if (condition === "save-data") Object.defineProperty(navigator, "connection", { configurable: true, value: { saveData: true } })
+    if (condition === "hidden") vi.spyOn(document, "visibilityState", "get").mockReturnValue("hidden")
+    if (condition === "unmount") mounted.unmount()
+    act(() => idles.at(-1)!())
+    expect(graphics.probe).not.toHaveBeenCalled()
+    expect(renderer.render).not.toHaveBeenCalled()
+    if (condition === "save-data") Reflect.deleteProperty(navigator, "connection")
   })
 
   it("loads automatically only after poster decode and 25% visibility, rechecks preferences, and stays closed", async () => {
@@ -1060,6 +1168,7 @@ it("reuses the sequential attribution and authored system inventory without manu
 })
 
 it("retains a selected rack part across guided commands, commits detail history only when ready, and restores inspection focus", async () => {
+  const scroll = vi.spyOn(window, "scrollTo").mockImplementation(() => {})
   const modern = { ...engineeringRelease, profile: { ...engineeringRelease.profile, inspection: {} } } as FacilityVisualRelease
   const rackMetadata = structuredClone(specimenMetadata)
   rackMetadata.specimen!.rackMotion = { serviceDetail: { version: 1, partIds: ["part-0"], requiresCutaway: true } } as NonNullable<typeof rackMetadata.specimen>["rackMotion"]
@@ -1079,6 +1188,7 @@ it("retains a selected rack part across guided commands, commits detail history 
   commit(); expect(primary()).toHaveTextContent("Return to whole assembly")
   primary().focus(); fireEvent.click(primary()); commit()
   await waitFor(() => expect(screen.getByRole("button", { name: "Inspect service connection again" })).toHaveFocus())
+  expect(scroll).toHaveBeenCalledWith(expect.objectContaining({ behavior: "instant" }))
   expect(primary()).toHaveTextContent("Retract server tray")
   expect(currentCanvas().view).toMatchObject({ rack: { door: "open", tray: "extended", cutaway: true } })
   expect(currentCanvas().target?.partId).toBe("part-0")

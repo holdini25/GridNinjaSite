@@ -20,7 +20,7 @@ export default function EvidencePage() {
         introduction={<SectionShell deferRendering={false}><PublishedAssessmentLibrary /></SectionShell>}
         path="/evidence"
         eyebrow="GridNinja evidence"
-        title="Evidence for safe, usable, auditable capacity"
+        title="Inspect the evidence behind a capacity decision."
         answer="Start with a versioned decision brief. Check its requested increment, modeled result, conditions, and unresolved question, then inspect the matching technical record. These synthetic examples explain the assessment method; they do not establish customer results or physical validation."
         boundary="The synthetic assessment has a versioned decision brief, PDF, and technical record. Other resources remain unavailable until their evidence, accountable reviewers, and publication approval are established."
         resources={evidenceResources}

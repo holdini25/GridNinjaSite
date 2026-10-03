@@ -7,6 +7,7 @@ afterEach(() => { document.body.replaceChildren(); vi.restoreAllMocks(); vi.unst
 function fixture(options: { sizeChange?: number; screenshotError?: boolean; mutationError?: boolean } = {}) {
   vi.stubGlobal("innerHeight", 1000); vi.stubGlobal("scrollX", 0); vi.stubGlobal("scrollY", 125)
   vi.stubGlobal("scrollTo", (position: { top: number; left: number }) => { globalThis.scrollY = Math.max(0, Math.min(1000, position.top)); globalThis.scrollX = position.left })
+  vi.stubGlobal("scrollBy", (position: { top: number }) => { globalThis.scrollY = Math.min(1000, scrollY + position.top) })
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => { callback(0); return 1 })
   vi.spyOn(document.documentElement, "scrollHeight", "get").mockReturnValue(2000)
   const original = [null, "", "color: red; --verbatim: 1;"]
@@ -14,14 +15,15 @@ function fixture(options: { sizeChange?: number; screenshotError?: boolean; muta
   // owned stylesheet is present; native capture verifies the real CSS engine.
   const paintRule = () => [...document.head.querySelectorAll("style")]
     .flatMap(style => [...style.sheet?.cssRules ?? []])
-    .find((rule): rule is CSSStyleRule => "selectorText" in rule && rule.selectorText === ".gn-content-auto")
+    .find((rule): rule is CSSStyleRule => "selectorText" in rule && typeof rule.selectorText === "string" && rule.selectorText.includes(".gn-content-auto"))
   const painting = () => paintRule()?.style.getPropertyValue("content-visibility") === "visible"
   vi.stubGlobal("getComputedStyle", () => ({ contentVisibility: painting() ? "visible" : "auto" }) as CSSStyleDeclaration)
+  const home = document.createElement("div"); home.className = "gn-home"; document.body.append(home)
   const sections = original.map((style, index) => {
-    const section = document.createElement("section"); section.className = "gn-content-auto"
+    const section = document.createElement("section"); section.className = ["gn-content-auto", "gn-home-fit", "gn-home-evidence"][index]
     if (style !== null) section.setAttribute("style", style)
     section.getBoundingClientRect = () => ({ top: 1100 + index * 100 - scrollY, left: 0, width: 900, height: 100 + (getComputedStyle(section).contentVisibility === "visible" ? options.sizeChange ?? 0 : 0) }) as DOMRect
-    document.body.append(section); return section
+    home.append(section); return section
   })
   if (options.mutationError) vi.spyOn(document.head, "appendChild").mockImplementation(() => { throw new Error("mutation interrupted") })
   const disposed = vi.fn(), screenshot = vi.fn(async () => {
@@ -36,7 +38,7 @@ function fixture(options: { sizeChange?: number; screenshotError?: boolean; muta
   const page = {
     mouse, screenshot, waitForTimeout: vi.fn(async () => {}),
     evaluate: async <T, A>(callback: (arg: A) => T, arg: A) => callback(arg),
-    evaluateHandle: async <T>(callback: () => T) => { const value = callback(); return { evaluate: async <R>(read: (state: T) => R) => read(value), dispose: disposed } },
+    evaluateHandle: async <T, A>(callback: (arg: A) => T, arg: A) => { const value = callback(arg); return { evaluate: async <R>(read: (state: T) => R) => read(value), dispose: disposed } },
   } as unknown as Page
   return { page, sections, original, disposed, screenshot, mouse }
 }
@@ -57,6 +59,16 @@ it("rejects a layout change rather than capturing a misleading full page, and re
   expect(f.screenshot).not.toHaveBeenCalled()
   expect(f.sections.map(section => section.getAttribute("style"))).toEqual(f.original)
   expect(scrollY).toBe(125); expect(f.disposed).toHaveBeenCalledOnce()
+})
+
+it("supports mobile WebKit scroll warmup without requiring a mouse wheel", async () => {
+  const f = fixture()
+  f.mouse.wheel.mockRejectedValue(new Error("Mouse wheel is not supported in mobile WebKit"))
+  const result = await captureVisitedReviewPage(f.page, "/tmp/review.png", { scrollMethod: "programmatic" })
+  expect(f.mouse.wheel).not.toHaveBeenCalled()
+  expect(result).toMatchObject({ warmupScrollMethod: "programmatic", scrollSteps: 2, exactStylesRestored: true })
+  expect(f.sections.map(section => section.getAttribute("style"))).toEqual(f.original)
+  expect(scrollY).toBe(125)
 })
 
 it("restores exact styles and scroll after screenshot rejection", async () => {

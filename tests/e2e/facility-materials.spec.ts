@@ -2,7 +2,7 @@ import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import { expect, test } from "@playwright/test"
 import { createMaterialHarness, runMaterialHarness, verifyV5MaterialAsset } from "../../scripts/facility/verify-materials.mjs"
-import { scrollFacilityIntoView } from "../support/facility-viewer"
+import { scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
 
 test.describe("production material composer", () => {
   let harness: Awaited<ReturnType<typeof createMaterialHarness>>
@@ -25,7 +25,11 @@ test("material highlights and assembly poses render without changing assessment 
   await page.emulateMedia({ reducedMotion: "reduce" })
   await page.goto("/demo?scenario=d&perspective=engineering")
   const inspector = page.getByTestId("facility-inspection")
-  const release = process.env.FACILITY_ASSET_RELEASE ?? "facility-v8"
+  // Match the actual production build, including a default release selected by
+  // the server. A stale test fallback must not assert an unrelated old asset.
+  const build = JSON.parse(await readFile(".next/facility-build.json", "utf8"))
+  const release = build.identity.buildSettings.selectedRelease as string
+  expect(release).toMatch(/^facility-v\d+$/)
   await expect(inspector).toHaveAttribute("data-release", release)
   await expect(inspector).toHaveAttribute("data-scenario", "d")
   await expect(page.getByRole("combobox", { name: "Scenario", exact: true })).toHaveValue("d")
@@ -43,7 +47,7 @@ test("material highlights and assembly poses render without changing assessment 
   }
   await testInfo.attach("exported-materials", { body: JSON.stringify(materialAssets, null, 2), contentType: "application/json" })
   await scrollFacilityIntoView(inspector)
-  await expect(inspector).toHaveAttribute("data-phase", "ready")
+  await waitForFacilityReady(page, inspector)
   const canvas = inspector.locator("canvas[data-ready=true]")
   const assessment = page.getByTestId("assessment-summary")
   const initialCaption = await assessment.textContent()
@@ -68,7 +72,13 @@ test("material highlights and assembly poses render without changing assessment 
   const selectedImages = []
   for (const system of ["Power", "Cooling", "Storage", "Workloads"]) {
     const button = inspector.locator(".facility-systems").getByRole("button", { name: system, exact: true })
+    // Manual Explore and the preceding selection use pointer modality. Preview
+    // is intentionally keyboard-only, so exercise a real key before focusing.
+    await page.keyboard.press("Tab")
     await button.focus()
+    await expect(button).toBeFocused()
+    await expect.poll(() => button.evaluate(element => element.matches(":focus-visible"))).toBe(true)
+    await expect(button).toHaveAttribute("data-preview", "true")
     await scrollFacilityIntoView(inspector)
     const preview = await imageHash()
     expect(preview).not.toBe(initialImage)
