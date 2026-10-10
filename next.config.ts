@@ -5,6 +5,7 @@ import { PRODUCTION_ORIGIN } from "./src/seo/policy";
 import assessmentRegistry from "./src/content/assessment-publications/registry.json";
 import facilityRegistry from "./src/content/facility-releases/registry.json";
 import cinematicRegistry from "./src/content/cinematic-releases/registry.json";
+import editorialRegistry from "./src/content/editorial-releases/registry.json";
 import { contentSecurityPolicy, cspMode, PUBLICATION_CSP } from "./src/lib/security/csp";
 
 const privateCandidate = existsSync(".gridninja-private-candidate.json");
@@ -21,6 +22,11 @@ const facilityFiles = facilityRegistry.filter((entry: {status: string}) => entry
 });
 const cinematicFiles = cinematicRegistry.filter((entry: {status: string}) => entry.status === "available").flatMap((entry: {release: string}) => {
   const base = `./src/content/cinematic-releases/${entry.release}`;
+  const manifest = JSON.parse(readFileSync(`${base}/manifest.json`, "utf8")) as { files: { file: string }[] };
+  return ["manifest.json", ...manifest.files.map(item => item.file)].map(file => `${base}/${file}`);
+});
+const editorialFiles = editorialRegistry.filter((entry: {status: string}) => entry.status === "available").flatMap((entry: {release: string}) => {
+  const base = `./src/content/editorial-releases/${entry.release}`;
   const manifest = JSON.parse(readFileSync(`${base}/manifest.json`, "utf8")) as { files: { file: string }[] };
   return ["manifest.json", ...manifest.files.map(item => item.file)].map(file => `${base}/${file}`);
 });
@@ -66,7 +72,8 @@ const nextConfig: NextConfig = {
     "/downloads/assessment/*/*/*": assessmentFiles,
     "/assets/facility/*/*": facilityFiles,
     "/assets/cinematic/*/*": ["./src/content/cinematic-releases/registry.json", ...cinematicFiles],
-    "/": [...facilityFiles, ...cinematicFiles],
+    "/assets/editorial/*/*": ["./src/content/editorial-releases/registry.json", ...editorialFiles],
+    "/": [...facilityFiles, ...cinematicFiles, ...editorialFiles],
     "/demo": facilityFiles,
   },
   outputFileTracingExcludes: {

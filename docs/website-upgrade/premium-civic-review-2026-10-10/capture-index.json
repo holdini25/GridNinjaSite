@@ -1,0 +1,1271 @@
+[
+  {
+    "slug": "home",
+    "path": "/",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:13.984Z",
+    "documentHeight": 5074,
+    "documentWidth": 1440,
+    "h1": [
+      "Understand your capacity. Know the limits."
+    ],
+    "headings": [
+      "From physical constraints to inspectable decisions.",
+      "The limit is a finding.The commitment is a decision.",
+      "What are you ready to commit?",
+      "Engineering you can inspect.",
+      "One question.A reviewable answer.",
+      "Start with your operating constraints."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic data center facility with graphite server racks, cooling fans, electrical equipment and amber service routes.",
+        "complete": true,
+        "naturalWidth": 1280,
+        "src": "/assets/cinematic/cinematic-v1/poster-desktop.webp"
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 720,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 720,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-cooling.webp"
+      },
+      {
+        "alt": "",
+        "complete": true,
+        "naturalWidth": 720,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "assessment",
+    "path": "/assessment",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:15.663Z",
+    "documentHeight": 7137,
+    "documentWidth": 1440,
+    "h1": [
+      "Scope your next capacity decision."
+    ],
+    "headings": [
+      "A reviewable answer, with an agreed scope.",
+      "Start with the decision in front of your team",
+      "A decision brief with a traceable basis.",
+      "Confirm readiness, permissions, and responsibilities.",
+      "Fit, readiness, then a paid scope.",
+      "A useful answer need not be a larger number.",
+      "Continue the proof path"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/assessment",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "demo",
+    "path": "/demo",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:17.308Z",
+    "documentHeight": 3040,
+    "documentWidth": 1440,
+    "h1": [
+      "Inspect a capacity decision."
+    ],
+    "headings": [
+      "Sample capacity decision brief",
+      "A smaller commitment needs review",
+      "Illustrative system view",
+      "What decision is your team facing?",
+      "Continue the proof path"
+    ],
+    "images": [
+      {
+        "alt": "Architectural cutaway of a synthetic data center: server racks, electrical distribution, cooling units, and reserve-storage cabinets.",
+        "complete": true,
+        "naturalWidth": 1360,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/demo",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "platform",
+    "path": "/platform",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:18.821Z",
+    "documentHeight": 4417,
+    "documentWidth": 1440,
+    "h1": [
+      "A control-plane direction, with evidence before authority."
+    ],
+    "headings": [
+      "The intended decision loop",
+      "Inspect a synthetic timed-dispatch example",
+      "Proof before autonomy",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/platform",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "proof",
+    "path": "/proof",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:20.340Z",
+    "documentHeight": 4699,
+    "documentWidth": 1440,
+    "h1": [
+      "Evidence informs a decision. Authority stays explicit."
+    ],
+    "headings": [
+      "What each result means",
+      "A conditional path to more authority",
+      "What evidence must travel with a number",
+      "Community benefits require separate evidence",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/proof",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "evidence",
+    "path": "/evidence",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:21.849Z",
+    "documentHeight": 4837,
+    "documentWidth": 1440,
+    "h1": [
+      "Inspect the evidence behind a capacity decision."
+    ],
+    "headings": [
+      "Published synthetic decision briefs",
+      "Read the scope with the result",
+      "Continue the proof path",
+      "Bring the operator question before the capacity claim"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/evidence",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "about",
+    "path": "/about",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:23.363Z",
+    "documentHeight": 4108,
+    "documentWidth": 1440,
+    "h1": [
+      "Building a defensible basis for capacity decisions."
+    ],
+    "headings": [
+      "The offer today",
+      "Demonstrated work and its limits",
+      "Establish the delivery team during scoping",
+      "The development direction",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/about",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "solutions-ai-cloud",
+    "path": "/solutions/ai-cloud",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:24.977Z",
+    "documentHeight": 4327,
+    "documentWidth": 1440,
+    "h1": [
+      "Evaluate the next workload before committing capacity."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "Start with one admission question",
+      "A decision package for the right reviewers",
+      "Keep investment options separate",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 1360,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/ai-cloud",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "solutions-colocation",
+    "path": "/solutions/colocation",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:26.591Z",
+    "documentHeight": 4381,
+    "documentWidth": 1440,
+    "h1": [
+      "Review the evidence before the next tenant commitment."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "A modeled increment is not yet sellable capacity",
+      "Bring the decision owners together",
+      "Useful findings include refusal and uncertainty",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 1360,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/colocation",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "solutions-bridge-power",
+    "path": "/solutions/bridge-power",
+    "width": 1440,
+    "capturedAt": "2026-10-10T19:27:28.103Z",
+    "documentHeight": 3926,
+    "documentWidth": 1440,
+    "h1": [
+      "Define the capacity question before selecting the asset."
+    ],
+    "headings": [
+      "Separate an option from an assessed recommendation",
+      "Scope the partner contribution",
+      "Integration remains a separate validation step",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/bridge-power",
+    "viewport": {
+      "height": 1000,
+      "width": 1440
+    }
+  },
+  {
+    "slug": "home",
+    "path": "/",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:32.402Z",
+    "documentHeight": 6772,
+    "documentWidth": 768,
+    "h1": [
+      "Understand your capacity. Know the limits."
+    ],
+    "headings": [
+      "From physical constraints to inspectable decisions.",
+      "The limit is a finding.The commitment is a decision.",
+      "What are you ready to commit?",
+      "Engineering you can inspect.",
+      "One question.A reviewable answer.",
+      "Start with your operating constraints."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic data center facility with graphite server racks, cooling fans, electrical equipment and amber service routes.",
+        "complete": true,
+        "naturalWidth": 1280,
+        "src": "/assets/cinematic/cinematic-v1/poster-desktop.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-cooling.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "assessment",
+    "path": "/assessment",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:33.854Z",
+    "documentHeight": 8078,
+    "documentWidth": 768,
+    "h1": [
+      "Scope your next capacity decision."
+    ],
+    "headings": [
+      "A reviewable answer, with an agreed scope.",
+      "Start with the decision in front of your team",
+      "A decision brief with a traceable basis.",
+      "Confirm readiness, permissions, and responsibilities.",
+      "Fit, readiness, then a paid scope.",
+      "A useful answer need not be a larger number.",
+      "Continue the proof path"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/assessment",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "demo",
+    "path": "/demo",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:35.565Z",
+    "documentHeight": 4379,
+    "documentWidth": 768,
+    "h1": [
+      "Inspect a capacity decision."
+    ],
+    "headings": [
+      "Sample capacity decision brief",
+      "A smaller commitment needs review",
+      "What decision is your team facing?",
+      "Continue the proof path"
+    ],
+    "images": [
+      {
+        "alt": "Architectural cutaway of a synthetic data center: server racks, electrical distribution, cooling units, and reserve-storage cabinets.",
+        "complete": true,
+        "naturalWidth": 1360,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/demo",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "platform",
+    "path": "/platform",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:37.081Z",
+    "documentHeight": 4780,
+    "documentWidth": 768,
+    "h1": [
+      "A control-plane direction, with evidence before authority."
+    ],
+    "headings": [
+      "The intended decision loop",
+      "Inspect a synthetic timed-dispatch example",
+      "Proof before autonomy",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/platform",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "proof",
+    "path": "/proof",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:38.693Z",
+    "documentHeight": 5263,
+    "documentWidth": 768,
+    "h1": [
+      "Evidence informs a decision. Authority stays explicit."
+    ],
+    "headings": [
+      "What each result means",
+      "A conditional path to more authority",
+      "What evidence must travel with a number",
+      "Community benefits require separate evidence",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/proof",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "evidence",
+    "path": "/evidence",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:40.191Z",
+    "documentHeight": 5988,
+    "documentWidth": 768,
+    "h1": [
+      "Inspect the evidence behind a capacity decision."
+    ],
+    "headings": [
+      "Published synthetic decision briefs",
+      "Read the scope with the result",
+      "Continue the proof path",
+      "Bring the operator question before the capacity claim"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/evidence",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "about",
+    "path": "/about",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:41.813Z",
+    "documentHeight": 4507,
+    "documentWidth": 768,
+    "h1": [
+      "Building a defensible basis for capacity decisions."
+    ],
+    "headings": [
+      "The offer today",
+      "Demonstrated work and its limits",
+      "Establish the delivery team during scoping",
+      "The development direction",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/about",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "solutions-ai-cloud",
+    "path": "/solutions/ai-cloud",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:43.323Z",
+    "documentHeight": 4889,
+    "documentWidth": 768,
+    "h1": [
+      "Evaluate the next workload before committing capacity."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "Start with one admission question",
+      "A decision package for the right reviewers",
+      "Keep investment options separate",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 1360,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/ai-cloud",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "solutions-colocation",
+    "path": "/solutions/colocation",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:45.011Z",
+    "documentHeight": 5244,
+    "documentWidth": 768,
+    "h1": [
+      "Review the evidence before the next tenant commitment."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "A modeled increment is not yet sellable capacity",
+      "Bring the decision owners together",
+      "Useful findings include refusal and uncertainty",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 1360,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/colocation",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "solutions-bridge-power",
+    "path": "/solutions/bridge-power",
+    "width": 768,
+    "capturedAt": "2026-10-10T19:27:46.453Z",
+    "documentHeight": 4353,
+    "documentWidth": 768,
+    "h1": [
+      "Define the capacity question before selecting the asset."
+    ],
+    "headings": [
+      "Separate an option from an assessed recommendation",
+      "Scope the partner contribution",
+      "Integration remains a separate validation step",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/bridge-power",
+    "viewport": {
+      "height": 1000,
+      "width": 768
+    }
+  },
+  {
+    "slug": "home",
+    "path": "/",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:27:52.873Z",
+    "documentHeight": 8008,
+    "documentWidth": 390,
+    "h1": [
+      "Understand your capacity. Know the limits."
+    ],
+    "headings": [
+      "From physical constraints to inspectable decisions.",
+      "The limit is a finding.The commitment is a decision.",
+      "What are you ready to commit?",
+      "Engineering you can inspect.",
+      "One question.A reviewable answer.",
+      "Start with your operating constraints."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic data center facility with graphite server racks, cooling fans, electrical equipment and amber service routes.",
+        "complete": true,
+        "naturalWidth": 768,
+        "src": "/assets/cinematic/cinematic-v1/poster-desktop.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-cooling.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "assessment",
+    "path": "/assessment",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:27:54.318Z",
+    "documentHeight": 9439,
+    "documentWidth": 390,
+    "h1": [
+      "Scope your next capacity decision."
+    ],
+    "headings": [
+      "A reviewable answer, with an agreed scope.",
+      "Start with the decision in front of your team",
+      "A decision brief with a traceable basis.",
+      "Confirm readiness, permissions, and responsibilities.",
+      "Fit, readiness, then a paid scope.",
+      "A useful answer need not be a larger number.",
+      "Continue the proof path"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/assessment",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "demo",
+    "path": "/demo",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:27:55.956Z",
+    "documentHeight": 4713,
+    "documentWidth": 390,
+    "h1": [
+      "Inspect a capacity decision."
+    ],
+    "headings": [
+      "Sample capacity decision brief",
+      "A smaller commitment needs review",
+      "What decision is your team facing?",
+      "Continue the proof path"
+    ],
+    "images": [
+      {
+        "alt": "Architectural cutaway of a synthetic data center: server racks, electrical distribution, cooling units, and reserve-storage cabinets.",
+        "complete": true,
+        "naturalWidth": 680,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/demo",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "platform",
+    "path": "/platform",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:27:57.470Z",
+    "documentHeight": 5509,
+    "documentWidth": 390,
+    "h1": [
+      "A control-plane direction, with evidence before authority."
+    ],
+    "headings": [
+      "The intended decision loop",
+      "Inspect a synthetic timed-dispatch example",
+      "Proof before autonomy",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/platform",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "proof",
+    "path": "/proof",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:27:58.980Z",
+    "documentHeight": 5847,
+    "documentWidth": 390,
+    "h1": [
+      "Evidence informs a decision. Authority stays explicit."
+    ],
+    "headings": [
+      "What each result means",
+      "A conditional path to more authority",
+      "What evidence must travel with a number",
+      "Community benefits require separate evidence",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/proof",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "evidence",
+    "path": "/evidence",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:28:00.489Z",
+    "documentHeight": 8210,
+    "documentWidth": 390,
+    "h1": [
+      "Inspect the evidence behind a capacity decision."
+    ],
+    "headings": [
+      "Published synthetic decision briefs",
+      "Read the scope with the result",
+      "Continue the proof path",
+      "Bring the operator question before the capacity claim"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/evidence",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "about",
+    "path": "/about",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:28:02.085Z",
+    "documentHeight": 5220,
+    "documentWidth": 390,
+    "h1": [
+      "Building a defensible basis for capacity decisions."
+    ],
+    "headings": [
+      "The offer today",
+      "Demonstrated work and its limits",
+      "Establish the delivery team during scoping",
+      "The development direction",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/about",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "solutions-ai-cloud",
+    "path": "/solutions/ai-cloud",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:28:03.515Z",
+    "documentHeight": 5607,
+    "documentWidth": 390,
+    "h1": [
+      "Evaluate the next workload before committing capacity."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "Start with one admission question",
+      "A decision package for the right reviewers",
+      "Keep investment options separate",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 680,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/ai-cloud",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "solutions-colocation",
+    "path": "/solutions/colocation",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:28:05.129Z",
+    "documentHeight": 5719,
+    "documentWidth": 390,
+    "h1": [
+      "Review the evidence before the next tenant commitment."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "A modeled increment is not yet sellable capacity",
+      "Bring the decision owners together",
+      "Useful findings include refusal and uncertainty",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 680,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/colocation",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "solutions-bridge-power",
+    "path": "/solutions/bridge-power",
+    "width": 390,
+    "capturedAt": "2026-10-10T19:28:06.536Z",
+    "documentHeight": 5082,
+    "documentWidth": 390,
+    "h1": [
+      "Define the capacity question before selecting the asset."
+    ],
+    "headings": [
+      "Separate an option from an assessed recommendation",
+      "Scope the partner contribution",
+      "Integration remains a separate validation step",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/bridge-power",
+    "viewport": {
+      "height": 1000,
+      "width": 390
+    }
+  },
+  {
+    "slug": "home",
+    "path": "/",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:46.953Z",
+    "documentHeight": 8459,
+    "documentWidth": 320,
+    "h1": [
+      "Understand your capacity. Know the limits."
+    ],
+    "headings": [
+      "From physical constraints to inspectable decisions.",
+      "The limit is a finding.The commitment is a decision.",
+      "What are you ready to commit?",
+      "Engineering you can inspect.",
+      "One question.A reviewable answer.",
+      "Start with your operating constraints."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic data center facility with graphite server racks, cooling fans, electrical equipment and amber service routes.",
+        "complete": true,
+        "naturalWidth": 768,
+        "src": "/assets/cinematic/cinematic-v1/poster-desktop.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-cooling.webp"
+      },
+      {
+        "alt": "",
+        "complete": false,
+        "naturalWidth": 0,
+        "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "assessment",
+    "path": "/assessment",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:48.381Z",
+    "documentHeight": 10292,
+    "documentWidth": 320,
+    "h1": [
+      "Scope your next capacity decision."
+    ],
+    "headings": [
+      "A reviewable answer, with an agreed scope.",
+      "Start with the decision in front of your team",
+      "A decision brief with a traceable basis.",
+      "Confirm readiness, permissions, and responsibilities.",
+      "Fit, readiness, then a paid scope.",
+      "A useful answer need not be a larger number.",
+      "Continue the proof path"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/assessment",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "demo",
+    "path": "/demo",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:49.890Z",
+    "documentHeight": 4820,
+    "documentWidth": 320,
+    "h1": [
+      "Inspect a capacity decision."
+    ],
+    "headings": [
+      "Sample capacity decision brief",
+      "A smaller commitment needs review",
+      "What decision is your team facing?",
+      "Continue the proof path"
+    ],
+    "images": [
+      {
+        "alt": "Architectural cutaway of a synthetic data center: server racks, electrical distribution, cooling units, and reserve-storage cabinets.",
+        "complete": true,
+        "naturalWidth": 680,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/demo",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "platform",
+    "path": "/platform",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:51.398Z",
+    "documentHeight": 5855,
+    "documentWidth": 320,
+    "h1": [
+      "A control-plane direction, with evidence before authority."
+    ],
+    "headings": [
+      "The intended decision loop",
+      "Inspect a synthetic timed-dispatch example",
+      "Proof before autonomy",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/platform",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "proof",
+    "path": "/proof",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:52.910Z",
+    "documentHeight": 6295,
+    "documentWidth": 320,
+    "h1": [
+      "Evidence informs a decision. Authority stays explicit."
+    ],
+    "headings": [
+      "What each result means",
+      "A conditional path to more authority",
+      "What evidence must travel with a number",
+      "Community benefits require separate evidence",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/proof",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "evidence",
+    "path": "/evidence",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:54.422Z",
+    "documentHeight": 8461,
+    "documentWidth": 320,
+    "h1": [
+      "Inspect the evidence behind a capacity decision."
+    ],
+    "headings": [
+      "Published synthetic decision briefs",
+      "Read the scope with the result",
+      "Continue the proof path",
+      "Bring the operator question before the capacity claim"
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/evidence",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "about",
+    "path": "/about",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:55.833Z",
+    "documentHeight": 5551,
+    "documentWidth": 320,
+    "h1": [
+      "Building a defensible basis for capacity decisions."
+    ],
+    "headings": [
+      "The offer today",
+      "Demonstrated work and its limits",
+      "Establish the delivery team during scoping",
+      "The development direction",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/about",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "solutions-ai-cloud",
+    "path": "/solutions/ai-cloud",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:57.524Z",
+    "documentHeight": 6036,
+    "documentWidth": 320,
+    "h1": [
+      "Evaluate the next workload before committing capacity."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "Start with one admission question",
+      "A decision package for the right reviewers",
+      "Keep investment options separate",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 680,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/ai-cloud",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "solutions-colocation",
+    "path": "/solutions/colocation",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:29:58.857Z",
+    "documentHeight": 6134,
+    "documentWidth": 320,
+    "h1": [
+      "Review the evidence before the next tenant commitment."
+    ],
+    "headings": [
+      "Inspect the decision behind the increment.",
+      "A modeled increment is not yet sellable capacity",
+      "Bring the decision owners together",
+      "Useful findings include refusal and uncertainty",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [
+      {
+        "alt": "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships.",
+        "complete": true,
+        "naturalWidth": 680,
+        "src": "/assets/facility/facility-v12/poster-desktop.webp"
+      }
+    ],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/colocation",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  },
+  {
+    "slug": "solutions-bridge-power",
+    "path": "/solutions/bridge-power",
+    "width": 320,
+    "capturedAt": "2026-10-10T19:30:00.360Z",
+    "documentHeight": 5322,
+    "documentWidth": 320,
+    "h1": [
+      "Define the capacity question before selecting the asset."
+    ],
+    "headings": [
+      "Separate an option from an assessed recommendation",
+      "Scope the partner contribution",
+      "Integration remains a separate validation step",
+      "Continue the proof path",
+      "Start with one capacity question."
+    ],
+    "images": [],
+    "overflow": [],
+    "scrollY": 0,
+    "url": "https://gridninja.ai/solutions/bridge-power",
+    "viewport": {
+      "height": 1000,
+      "width": 320
+    }
+  }
+]

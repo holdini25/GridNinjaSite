@@ -18,13 +18,13 @@ export function SectionShell({
   return (
     <section
       className={cn(
-        "px-4 sm:px-6 lg:px-8",
+        "gn-section-shell",
         deferRendering && "gn-content-auto",
         className
       )}
       {...props}
     >
-      <div className={cn("mx-auto w-full max-w-6xl", containerClassName)}>
+      <div className={cn("gn-section-container mx-auto w-full max-w-7xl", containerClassName)}>
         {children}
       </div>
     </section>

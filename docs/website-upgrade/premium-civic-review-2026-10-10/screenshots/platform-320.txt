@@ -1,0 +1,115 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - generic "Open navigation":
+- main:
+  - region "Platform direction · In development":
+    - paragraph: Platform direction · In development
+    - heading "A control-plane direction, with evidence before authority." [level=1]
+    - paragraph: GridNinja is developing an AI Data Center Virtual Capacity Control Plane for vendor-agnostic, inside-the-fence orchestration. The current commercial offer is a bounded historical-data assessment; this page describes the intended architecture.
+    - link "Scope an assessment":
+      - /url: /assessment?source=platform-hero#scope
+    - link "See a sample decision brief":
+      - /url: /demo?scenario=b&version=1.0.0&perspective=business#decision-brief
+  - heading "The intended decision loop" [level=2]
+  - paragraph: Telemetry → model → decide → assure → prove. Each proposed action must carry its scope, constraints, margin to limit, evidence freshness, and authority boundary.
+  - article:
+    - heading "Observe and model" [level=3]
+    - paragraph: Reconcile workload, electrical, cooling, reserve, and on-site generation inputs. Unknown or inconsistent evidence must remain visible.
+  - article:
+    - heading "Decide and assure" [level=3]
+    - paragraph: Compare a requested profile with explicit conditions. Runtime assurance is intended to allow, repair, reject, or return no-proof; a website model does not operate equipment.
+  - article:
+    - heading "Prove and review" [level=3]
+    - paragraph: Keep the decision record, assumptions, audit log, and replay basis together. A reviewer must be able to reproduce the stated conclusion within its scope.
+  - article:
+    - heading "Integrate under site authority" [level=3]
+    - paragraph: Future integrations would work with existing operational systems and local policy. Supported interfaces, read access, and control permissions require separate validation.
+  - heading "Inspect a synthetic timed-dispatch example" [level=2]
+  - paragraph: The dispatch-envelope teaching example uses a separate timed maneuver and dataset from DEMO-01. Its model output is neither a commercial commitment nor an operationally accepted action.
+  - link "Explore the dispatch-envelope example":
+    - /url: /platform/dispatch-envelope
+    - text: Explore the dispatch-envelope example
+    - generic: →
+  - heading "Proof before autonomy" [level=2]
+  - paragraph: The intended path is historical assessment, separately agreed Shadow Mode, advisory review, and only then bounded autonomy under explicit envelopes. Expanded autonomy is conditional on accumulated evidence and approved authority, never implied by a successful demo.
+  - link "Review evidence and authority boundaries":
+    - /url: /proof
+    - text: Review evidence and authority boundaries
+    - generic: →
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - link "How much virtual capacity is safe, for how long, and under which evidence? Learn how a dispatch envelope constrains data center actions by electrical, thermal, reserve, workload, water, and SLA limits before execution.":
+        - /url: /platform/dispatch-envelope
+        - text: How much virtual capacity is safe, for how long, and under which evidence?
+        - generic: Learn how a dispatch envelope constrains data center actions by electrical, thermal, reserve, workload, water, and SLA limits before execution.
+      - link "Evidence informs a decision. Authority stays explicit. Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.":
+        - /url: /proof
+        - text: Evidence informs a decision. Authority stays explicit.
+        - generic: Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.
+      - link "Inspect a capacity decision. Inspect a synthetic capacity decision brief. Compare requested and revised profiles, model screening, unknowns, and the unresolved business decision.":
+        - /url: /demo
+        - text: Inspect a capacity decision.
+        - generic: Inspect a synthetic capacity decision brief. Compare requested and revised profiles, model screening, unknowns, and the unresolved business decision.
+      - link "A research direction for proof-backed AI capacity. Explore GridNinja's proof-backed AI capacity project framing for infrastructure partners, operators, and technical evaluators.":
+        - /url: /dcii
+        - text: A research direction for proof-backed AI capacity.
+        - generic: Explore GridNinja's proof-backed AI capacity project framing for infrastructure partners, operators, and technical evaluators.
+  - paragraph: Proof before autonomy
+  - heading "Start with one capacity question." [level=2]
+  - paragraph: Agree the decision, evidence boundary, responsibilities, and paid scope before work begins.
+  - link "Scope an assessment":
+    - /url: /assessment?source=platform-hero#scope
+    - text: Scope an assessment
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

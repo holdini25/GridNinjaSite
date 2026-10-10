@@ -1,0 +1,21 @@
+{
+  "fileKey": "NwWJIF0no26vNQPZ1sDkeF",
+  "url": "https://www.figma.com/design/NwWJIF0no26vNQPZ1sDkeF",
+  "name": "GridNinja \u2014 Premium Civic Website",
+  "status": "draft-quota-limited-browser-reference-authorized",
+  "entities": {},
+  "pages": {
+    "foundations": "0:1",
+    "art": "2:2",
+    "journeys": "2:3"
+  },
+  "openIssues": [
+    "Secondary button shared property needs correction",
+    "Poster fill propagation not visible in screenshot",
+    "Mobile civic crop must use uncropped corrected browser composition",
+    "Canonical research copy requires synchronization"
+  ],
+  "userDisposition": "Proceed with browser design review; Figma sync pending",
+  "browserReference": "http://localhost:3101/",
+  "fontNote": "System-ui production font stack unchanged. Inter only in Figma because SF Pro variable instances report missing font. Browser rendering governs final wrapping."
+}

@@ -1,0 +1,184 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - generic "Open navigation":
+- main:
+  - region "A bounded, paid assessment":
+    - paragraph: A bounded, paid assessment
+    - heading "Scope your next capacity decision." [level=1]
+    - paragraph: Evaluate one capacity question using authorized historical inputs. Agree the facility boundary, workload profiles, conditions, and review criteria before analysis begins.
+    - link "Scope an assessment":
+      - /url: "#scope"
+    - link "See a sample decision brief":
+      - /url: /demo#decision-brief
+    - paragraph: Scoping is a conversation. Work begins only under an agreed paid scope.
+  - complementary "A reviewable answer, with an agreed scope.":
+    - heading "A reviewable answer, with an agreed scope." [level=2]
+    - paragraph: Receive a concise decision brief, a supporting model record, and a review of assumptions, evidence gaps, and unresolved questions.
+    - paragraph: This inquiry starts a conversation; it does not buy an assessment or authorize operational work.
+    - link "Review the deliverables":
+      - /url: "#deliverables"
+    - link "See a sample decision brief":
+      - /url: /demo#decision-brief
+  - group "Inquiry details":
+    - generic: Inquiry details
+    - heading "Start with the decision in front of your team" [level=2]
+    - generic: Name(required)
+    - textbox "Name"
+    - generic: Work email(required)
+    - textbox "Work email"
+    - generic: Organization(required)
+    - textbox "Organization"
+    - generic: Topic (optional)
+    - combobox "Topic (optional)":
+      - option "No topic selected" [selected]
+      - option "AI workload admission"
+      - option "Tenant capacity commitment"
+      - option "Electrical boundary"
+      - option "Cooling evidence"
+      - option "Reserve contribution and duration"
+      - option "Workload request and revision"
+    - paragraph: You can change this topic. It provides context for the inquiry.
+    - generic: Decision context (optional)
+    - textbox "Decision context (optional)"
+    - paragraph: Briefly describe the decision or question your team wants to resolve. Do not include credentials, site drawings, customer data or sensitive topology.
+    - generic "Add optional site details":
+      - generic: Add optional site details
+      - generic: +
+    - option "Not specified" [selected]
+    - option "AI training campus"
+    - option "Inference cluster"
+    - option "Colocation facility"
+    - option "Hybrid power campus"
+    - option "Bridge power deployment"
+    - option "Other"
+    - option "Not specified" [selected]
+    - option "Immediate (0-3 months)"
+    - option "Near term (3-6 months)"
+    - option "Planning window (6-12 months)"
+    - option "Exploratory"
+  - paragraph: Security verification
+  - status: Security verification will load when the form is engaged.
+  - paragraph
+  - button "Scope an assessment"
+  - paragraph: Do not include security-sensitive or confidential information.
+  - link "Contact us about something else":
+    - /url: /contact?intent=other&source=assessment-page
+  - paragraph: What you receive
+  - heading "A decision brief with a traceable basis." [level=2]
+  - paragraph: The engagement defines one decision, a facility boundary, a historical window, agreed alternatives, reviewers, deliverables, and review rounds. Inputs and conclusions remain scoped to that agreement.
+  - article:
+    - heading "Decision contract" [level=3]
+    - paragraph: One capacity question, facility boundary, historical window, agreed alternatives, and acceptance criteria for the report.
+  - article:
+    - heading "Readiness and constraint findings" [level=3]
+    - paragraph: An input inventory, assumptions, binding constraints, and evidence gaps that limit what can be concluded.
+  - article:
+    - heading "Bounded model comparison" [level=3]
+    - paragraph: Requested and revised workload profiles assessed against the agreed conditions. Unassessed alternatives remain separate.
+  - article:
+    - heading "Review package" [level=3]
+    - paragraph: A concise decision brief with the supporting model record, limitations, unresolved questions, and agreed review rounds.
+  - paragraph: Before modeling
+  - heading "Confirm readiness, permissions, and responsibilities." [level=2]
+  - paragraph: The site or data owner must authorize the historical inputs and confirm the relevant operating context. A useful assessment depends on that evidence being available and interpretable.
+  - article:
+    - heading "Customer responsibilities" [level=3]
+    - paragraph: Name the decision owner and operational reviewer. Confirm permission to share inputs, the facility boundary, workload requirements, and applicable operating constraints.
+  - article:
+    - heading "Historical inputs" [level=3]
+    - paragraph: Agree the relevant load and cooling history, capacity commitments, topology, reserve policies, and workload profiles. Readiness is reviewed before modeling is scoped.
+  - article:
+    - heading "GridNinja responsibilities" [level=3]
+    - paragraph: Document assumptions and gaps, perform the agreed analysis, distinguish modeled findings from operating permission, and deliver the contracted review package.
+  - paragraph:
+    - text: Do not submit telemetry, facility diagrams, credentials, or commercially sensitive files through this website. Any operational-data exchange is agreed separately.
+    - link "Review data handling.":
+      - /url: /data-handling
+  - paragraph: How it starts
+  - heading "Fit, readiness, then a paid scope." [level=2]
+  - paragraph: Schedule and price depend on the question, evidence, and agreed work. No fixed delivery period or performance improvement is promised here.
+  - article:
+    - heading "Start a scoping inquiry" [level=3]
+    - paragraph: Describe the capacity decision and organization. This starts a conversation; it does not purchase an assessment.
+  - article:
+    - heading "Review fit and readiness" [level=3]
+    - paragraph: Agree who owns the decision, what evidence is available, what may be shared, and whether a bounded assessment can answer the question.
+  - article:
+    - heading "Agree the paid scope" [level=3]
+    - paragraph: Confirm deliverables, schedule, price, review rounds, data handling, exclusions, and acceptance criteria before work starts.
+  - paragraph: Decision value
+  - heading "A useful answer need not be a larger number." [level=2]
+  - paragraph: Report acceptance, commercial usefulness, modeled eligibility, and operating authorization are separate decisions.
+  - article:
+    - heading "A conditional path" [level=3]
+    - paragraph: A requested or revised profile fits the modeled conditions. Commercial usefulness and operating permission still require separate decisions.
+  - article:
+    - heading "A useful negative result" [level=3]
+    - paragraph: The request does not fit the agreed conditions, or a modeled revision does not meet the stated service requirement. The constraint is explicit.
+  - article:
+    - heading "An evidence gap" [level=3]
+    - paragraph: The available information cannot support a conclusion. The report identifies what is missing and the next investigation required.
+  - generic "Boundaries and change control"
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - link "Tell us where capacity is constrained. Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.":
+        - /url: /contact
+        - text: Tell us where capacity is constrained.
+        - generic: Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.
+      - link "Agree the data boundary before sharing operational inputs. Understand inquiry handling, historical input permissions, separate operational-data exchange, and the responsibilities to agree before sharing site data.":
+        - /url: /data-handling
+        - text: Agree the data boundary before sharing operational inputs.
+        - generic: Understand inquiry handling, historical input permissions, separate operational-data exchange, and the responsibilities to agree before sharing site data.
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

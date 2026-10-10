@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./premium-civic.css";
 
 /* Keep automatic scanning for current and new views; omit unreachable legacy components. */
 @source not "../components/assessment/assessment-decision-brief.tsx";
@@ -125,32 +126,32 @@
 :root,
 .dark {
   --background: #080808;
-  --foreground: #F4F4F4;
-  --card: #101010;
-  --card-foreground: #F4F4F4;
-  --popover: #181818;
-  --popover-foreground: #F4F4F4;
+  --foreground: var(--gn-heading);
+  --card: var(--gn-surface);
+  --card-foreground: var(--gn-heading);
+  --popover: var(--gn-raised);
+  --popover-foreground: var(--gn-heading);
   --primary: #ff9f1a;
   --primary-foreground: #080808;
-  --secondary: #181818;
-  --secondary-foreground: #F4F4F4;
-  --muted: #181818;
+  --secondary: var(--gn-raised);
+  --secondary-foreground: var(--gn-heading);
+  --muted: var(--gn-raised);
   --muted-foreground: #B8B8B8;
-  --accent: #202020;
-  --accent-foreground: #F4F4F4;
-  --destructive: #ff6b6b;
+  --accent: var(--gn-raised);
+  --accent-foreground: var(--gn-heading);
+  --destructive: var(--gn-reject);
   /* Decorative edges and essential control boundaries have separate roles. */
   --border: rgba(255, 255, 255, 0.11);
-  --divider: rgba(255, 255, 255, 0.08);
-  --input: #686868;
-  --ring: #ffbe63;
-  --surface: #101010;
-  --surface-2: #181818;
-  --surface-hover: #202020;
-  --signal: #48e89a;
+  --divider: var(--gn-divider);
+  --input: var(--gn-control-edge);
+  --ring: var(--gn-orange);
+  --surface: var(--gn-surface);
+  --surface-2: var(--gn-raised);
+  --surface-hover: var(--gn-raised);
+  --signal: var(--gn-allow);
   --proof-cyan: #61e4ff;
-  --warning: #e0b24a;
-  --danger: #ff6b6b;
+  --warning: var(--gn-repair);
+  --danger: var(--gn-reject);
   --radius: 8px;
   --anchor-offset: 86px;
 }
@@ -161,8 +162,8 @@
   }
 
   html {
-    @apply font-sans scroll-smooth;
-    font-size: clamp(16.75px, 0.35vw + 15.75px, 18px);
+    @apply font-sans;
+    font-size: 100%;
     max-width: 100%;
     overflow-x: clip;
   }

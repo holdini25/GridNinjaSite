@@ -2,6 +2,8 @@
 
 Status: **planned; no participant study has been conducted.** Automated checks, source review, and developer walkthroughs are separate evidence. This protocol evaluates comprehension and discovery; it does not establish customer demand, site performance, or accessibility conformance.
 
+The [premium civic implementation addendum](premium-civic-implementation/participant-validation-protocol.md) preserves this five-task protocol and adds a separate first-read exercise, civic/research probes, a four-person grid/community panel and blank session templates. Twelve buyer sessions, the four separate perspectives, physical-device checks and actual results remain pending; the addendum is not evidence that testing occurred.
+
 ## Purpose and rounds
 
 Run two rounds with **six representative visitors per round** (twelve sessions total). Recruit new participants for round two so learning the first interface does not mask discovery problems.

@@ -1,0 +1,32 @@
+{
+  "version": "editorial-authoring.v1",
+  "release": "editorial-v1",
+  "seed": 192809,
+  "samples": 128,
+  "adaptiveThreshold": 0.005,
+  "frameCount": 300,
+  "fps": 30,
+  "shutterFrames": 0,
+  "rotorTurns": [17, 19, 21, 23],
+  "rotorPhase": [0, 1.57, 3.14, 4.71],
+  "studyDimensions": [800, 500],
+  "masterDimensions": [1600, 1000],
+  "deliveryWidths": [480, 800, 1280],
+  "families": {
+    "A-instrument": {
+      "ai-workload": [28, 15, 1.15],
+      "colocation-hall": [46, 22, 1.13],
+      "platform-systems": [42, 28, 1.10]
+    },
+    "B-architectural": {
+      "ai-workload": [36, 21, 1.15],
+      "colocation-hall": [58, 26, 1.13],
+      "platform-systems": [34, 30, 1.10]
+    },
+    "C-frontal": {
+      "ai-workload": [18, 12, 1.15],
+      "colocation-hall": [22, 16, 1.13],
+      "platform-systems": [24, 24, 1.10]
+    }
+  }
+}

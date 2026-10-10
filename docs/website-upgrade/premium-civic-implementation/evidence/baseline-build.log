@@ -1,0 +1,133 @@
+
+> nextjs@0.1.0 prebuild
+> npm run css:validate && npm run assessment:validate && npm run seo:validate && npm run facility:validate && npm run cinematic:validate
+
+
+> nextjs@0.1.0 css:validate
+> node scripts/css/validate-sources.mjs
+
+CSS source validation passed: 75 excluded components remain unreachable from 209 conservative source roots.
+
+> nextjs@0.1.0 assessment:validate
+> node --import ./scripts/assessment/register.mjs scripts/assessment/validate.ts
+
+Assessment publications passed: registry approvals, frozen bytes, hashes, identities, and live fixture parity.
+
+> nextjs@0.1.0 seo:validate
+> node scripts/seo/validate-source-contracts.mjs && node scripts/seo/validate-evidence-releases.mjs && vitest run tests/unit/seo --coverage.enabled=false
+
+SEO source contracts passed (10 files checked).
+Evidence release manifests passed (0 checked).
+
+ RUN  v4.1.11 /Users/holdenchung/.codex/worktrees/premium-civic-upgrade/GridNinjaSite
+
+
+ Test Files  11 passed (11)
+      Tests  63 passed (63)
+   Start at  15:54:23
+   Duration  2.74s (transform 89ms, setup 244ms, import 143ms, tests 52ms, environment 1.82s)
+
+
+> nextjs@0.1.0 facility:validate
+> node scripts/facility/validate-release.mjs
+
+Facility release validation passed (11 available releases).
+
+> nextjs@0.1.0 cinematic:validate
+> node scripts/cinematic/validate.mjs
+
+{"cinematicValidation":"pass","selectedRelease":"cinematic-v1","mode":"auto","preview":false,"manifestSha256":"b19c53acb14dd4a0318696a18de6b706b97061f1887fcbbf4edca23190dd3a3c"}
+
+> nextjs@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.3.6 (webpack)
+✓ Running next.config.ts took 511ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.6s
+  Running TypeScript ...
+  Finished TypeScript in 4.8s ...
+  Collecting page data using 17 workers ...
+  Generating static pages using 17 workers (0/47) ...
+  Generating static pages using 17 workers (11/47) 
+  Generating static pages using 17 workers (23/47) 
+  Generating static pages using 17 workers (35/47) 
+✓ Generating static pages using 17 workers (47/47) in 536ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /about
+├ ƒ /api/contact
+├ ƒ /api/internal/lead-alert
+├ ƒ /api/internal/lead-delivery
+├ ƒ /api/internal/lead-retention
+├ ƒ /api/internal/lead-sweep
+├ ƒ /api/security/csp-report
+├ ○ /assessment
+├ ƒ /assets/cinematic/[release]/[file]
+├ ƒ /assets/facility/[release]/[file]
+├ ● /authors/[slug]
+├ ○ /contact
+├ ○ /contact/thanks
+├ ○ /data-handling
+├ ○ /dcii
+├ ƒ /demo
+├ ƒ /downloads/assessment/[publicationId]/[version]/[format]
+├ ƒ /downloads/sample-proof-pack
+├ ○ /evidence
+├   /evidence/[slug]
+│ ├ ● /evidence/virtual-capacity-proof-test
+│ ├ ● /evidence/sample-rta-trace
+│ ├ ● /evidence/accepted-headroom-ledger
+│ └ ● /evidence/load-passport-specification
+├ ƒ /evidence/assessments/[publicationId]/[version]
+├ ƒ /evidence/releases/[...path]
+├ ○ /insights
+├   /insights/[slug]
+│ ├ ● /insights/virtual-capacity-control-plane
+│ ├ ● /insights/proof-adjusted-data-center-capacity
+│ ├ ● /insights/runtime-assurance-ai-data-centers
+│ └ ● [+4 more paths]
+├ ○ /manifest.webmanifest
+├ ○ /methodology
+├   /methodology/[slug]
+│ ├ ● /methodology/claims-and-evidence
+│ ├ ● /methodology/comparison-policy
+│ ├ ● /methodology/editorial-corrections
+│ └ ● /methodology/capacity-audit
+├ ƒ /og/[key]
+├ ○ /opengraph-image
+├ ○ /platform
+├ ƒ /platform/dispatch-envelope
+├ ○ /proof
+├ ○ /proof/proof-pack
+├ ○ /robots.txt
+├ ○ /roi
+├ ○ /sitemap.xml
+├ ○ /solutions/ai-cloud
+├ ○ /solutions/bridge-power
+├ ○ /solutions/colocation
+├ ○ /twitter-image
+└ ○ /why-gridninja
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> nextjs@0.1.0 postbuild
+> node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build && node scripts/cinematic/validate.mjs --build && node scripts/facility/record-build.mjs
+
+/: prerendered; 117.3 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+/assessment: prerendered; 136.5 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+/demo: dynamic selection; 129.5 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+/contact: prerendered; 134.9 KiB Brotli initial JavaScript including shared framework (180 KiB maximum).
+Publication deployment traces passed: exact registered files present; private and unapproved files excluded.
+Facility release validation passed (11 available releases).
+{"cinematicValidation":"pass","selectedRelease":"cinematic-v1","mode":"auto","preview":false,"manifestSha256":"b19c53acb14dd4a0318696a18de6b706b97061f1887fcbbf4edca23190dd3a3c"}
+Facility production build attested: Aluk0PCsxz_V4BlWHbQKp, source 1a8515aabf18

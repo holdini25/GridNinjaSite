@@ -1,0 +1,12 @@
+{
+  "fetchedAtUtc": "2026-10-10T19:26:05.643821+00:00",
+  "url": "https://gridninja.ai/",
+  "htmlSha256": "d20e27be24f35b545c4713279ad83502745af17b8f144eb83892827ff0f7fc66",
+  "headers": {
+    "Content-Type": "text/html; charset=utf-8",
+    "Etag": "\"c7d4cc96dcd29696829f7a7a3210a570\"",
+    "X-Vercel-Cache": "HIT",
+    "X-Vercel-Id": "iad1::mv6cr-1791660365593-67aa6eaef343"
+  },
+  "recordedBuildPresent": true
+}

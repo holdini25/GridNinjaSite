@@ -56,7 +56,7 @@ export async function verifiedBuildIdentity() {
   return current
 }
 export async function provenance(browser, settings) {
-  const harnessFiles = (await Promise.all(["scripts/facility", "scripts/cinematic"].map(filesAt))).flat().sort()
+  const harnessFiles = (await Promise.all(["scripts/facility", "scripts/cinematic", "lighthouserc.cjs", "scripts/seo/validate-lighthouse-budgets.mjs"].map(filesAt))).flat().sort()
   const hash = createHash("sha256")
   for (const path of harnessFiles.sort()) hash.update(path).update(await readFile(path))
   return { schemaVersion: "facility-performance.v2", ...await verifiedBuildIdentity(), harnessRevision: hash.digest("hex"), browser, settings, settingsSha256: settingsDigest(settings) }

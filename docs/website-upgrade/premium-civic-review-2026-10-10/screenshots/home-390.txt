@@ -1,0 +1,250 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - generic "Open navigation":
+- main:
+  - region "Understand your capacity. Know the limits.":
+    - paragraph: Capacity decisions · Proof before autonomy
+    - heading "Understand your capacity. Know the limits." [level=1]:
+      - text: Understand your capacity.
+      - text: Know the limits.
+    - paragraph: Review your next AI workload or tenant commitment against declared facility limits. GridNinja offers a paid, bounded assessment of authorized historical inputs, with a decision brief, supporting model record and unresolved questions for review.
+    - link "Scope an assessment":
+      - /url: /assessment?source=home-hero#scope
+      - text: Scope an assessment
+      - generic: ↗
+    - link "See a sample decision brief":
+      - /url: /demo?scenario=b&version=1.0.0&perspective=business#decision-brief
+      - text: See a sample decision brief
+      - generic: →
+    - paragraph: Historical inputs. No live connection or equipment control.
+    - figure "Illustrative facility animation · Synthetic Inspect the illustrative facility":
+      - generic: Illustrative facility animation · Synthetic
+      - link "Inspect the illustrative facility":
+        - /url: /demo?scenario=b&version=1.0.0&perspective=business&activate=1#facility-construction
+        - text: Inspect facility
+        - generic: ↗
+      - img "Synthetic data center facility with graphite server racks, cooling fans, electrical equipment and amber service routes."
+      - button "Pause facility animation": Pause
+      - generic: Illustrative motion · no live telemetry
+    - article "Synthetic capacity decision, fixture B":
+      - generic: Synthetic example · 1-hour window
+      - generic: "Model screen: REPAIR"
+      - term: Requested increment
+      - definition: 7.0 MW
+      - term: Modeled eligible increment
+      - definition: 5.8 MW
+      - paragraph: Additional to the 20.0 MW reference. 2026-09-22 · 00:00–01:00 UTC.
+      - paragraph:
+        - text: Economics unestimated. No site action is authorized.
+        - text: "Accepted and delivered capacity: not applicable."
+      - link "Read demo-01-b version 1.0.0":
+        - /url: /evidence/assessments/demo-01-b/v1.0.0
+        - generic: DEMO-01-B
+        - generic: v1.0.0 ↗
+  - region "From physical constraints to inspectable decisions.":
+    - paragraph: "Data centers share infrastructure with the communities around them. We want growing data centers to be better neighbors and responsible stewards of that shared infrastructure. Our work starts with one capacity commitment: review it against the stated power, cooling and reserve conditions, and make evidence gaps visible."
+    - paragraph: The assessment mechanism
+    - heading "From physical constraints to inspectable decisions." [level=2]
+    - list:
+      - heading "01 Model the constraints" [level=3]:
+        - generic: "01"
+        - text: Model the constraints
+      - paragraph: Bring the workload, power, cooling and reserve conditions into one bounded assessment.
+      - heading "02 Check the request" [level=3]:
+        - generic: "02"
+        - text: Check the request
+      - paragraph: Compare the proposed profile with the declared limits, evidence quality and time window.
+      - heading "03 Inspect the evidence" [level=3]:
+        - generic: "03"
+        - text: Inspect the evidence
+      - paragraph: Review the result, its assumptions and the business question that still needs an answer.
+  - region "The limit is a finding. The commitment is a decision.":
+    - paragraph: A worked decision · synthetic
+    - heading "The limit is a finding. The commitment is a decision." [level=2]:
+      - text: The limit is a finding.
+      - text: The commitment is a decision.
+    - paragraph: Fixture B records a proposed increment and a smaller modeled revision. The next question belongs to the service and commercial decision owner.
+    - paragraph: A useful assessment can also return a negative result or identify missing evidence.
+    - link "Compare the four scenarios":
+      - /url: /demo?scenario=b&version=1.0.0&perspective=business#decision-brief
+      - text: Compare the four scenarios
+      - generic: →
+    - article "Would the reduced 5.8 MW profile still meet the service and commercial requirement?":
+      - generic: DEMO-01-B / v1.0.0
+      - generic: Model screen · REPAIR
+      - heading "Would the reduced 5.8 MW profile still meet the service and commercial requirement?" [level=3]
+      - figure "Capacity increments compared from a common zero":
+        - generic: Requested
+        - generic: 7.0 MW
+        - generic: Recorded revision
+        - generic: 5.8 MW
+        - generic: All values are additional load at the same meter and for the same hour. The request exceeds the modeled increment by 1.2 MW.
+      - paragraph: Additional to the 20.0 MW reference. 2026-09-22 · 00:00–01:00 UTC.
+      - paragraph: The proposed 7.0 MW increment exceeds the fixture’s modeled 5.8 MW increment. A reduced workload profile requires review.
+      - paragraph: "Synthetic. Economics unestimated. Accepted and delivered capacity: not applicable. No operational authority."
+      - link "Read this decision brief":
+        - /url: /evidence/assessments/demo-01-b/v1.0.0
+        - text: Read this decision brief
+        - generic: ↗
+      - link "Download PDF":
+        - /url: /downloads/assessment/demo-01-b/v1.0.0/pdf
+        - text: Download PDF
+        - generic: ↓
+  - region "What are you ready to commit?":
+    - paragraph: Start with your decision
+    - heading "What are you ready to commit?" [level=2]
+    - paragraph: One clear question. The right evidence. An accountable decision owner.
+    - article:
+      - paragraph: AI cloud infrastructure and operations
+      - heading "Admit the next AI workload." [level=3]
+      - paragraph: Review a proposed workload increment before a service commitment. Keep the facility conditions and service need together.
+      - link "Explore the decision":
+        - /url: /solutions/ai-cloud
+        - text: Explore the decision
+        - generic: →
+    - article:
+      - paragraph: Colocation operators and infrastructure teams
+      - heading "Commit colocation capacity." [level=3]
+      - paragraph: Examine a proposed tenant increment before a commercial commitment. Make the reserve, evidence and SLA questions explicit.
+      - link "Explore the decision":
+        - /url: /solutions/colocation
+        - text: Explore the decision
+        - generic: →
+    - paragraph:
+      - text: Considering cooling investment or
+      - link "bridge power and on-site generation":
+        - /url: /solutions/bridge-power
+      - text: "? Feasibility and economics require a separate assessment scope."
+  - region "Engineering you can inspect.":
+    - paragraph: Inspect the basis
+    - heading "Engineering you can inspect." [level=2]
+    - paragraph: Start with the sample output. Review the method and the platform direction.
+    - link "Explore public evidence":
+      - /url: /evidence
+      - text: Explore public evidence
+      - generic: →
+    - article:
+      - generic: GRIDNINJA
+      - generic: DECISION BRIEF
+      - paragraph: DEMO-01-B · v1.0.0
+      - strong: A smaller commitment needs review
+      - text: Requested
+      - generic: 7.0 MW
+      - text: Modeled eligible
+      - generic: 5.8 MW
+      - generic: Synthetic example · No operational authority
+      - generic: Decision brief excerpt
+      - paragraph: Sample output · Synthetic · v1.0.0
+      - heading "A versioned decision brief" [level=3]
+      - paragraph: A requested profile, modeled revision and unresolved question in a traceable record.
+      - link "See a sample decision brief":
+        - /url: /demo?scenario=b&version=1.0.0&perspective=business#decision-brief
+        - text: See a sample decision brief
+        - generic: →
+    - article:
+      - generic: Illustrative cooling assembly
+      - paragraph: Method and authority boundaries
+      - heading "Proof before autonomy" [level=3]
+      - paragraph: Why a modeled result, a business decision and permission to operate remain distinct.
+      - link "Understand the boundaries":
+        - /url: /proof
+        - text: Understand the boundaries
+        - generic: →
+    - article:
+      - generic: Illustrative facility
+      - paragraph: Platform direction · In development
+      - heading "Physical constraints" [level=3]
+      - paragraph: The intended relationship between workloads, facility limits and inside-the-fence orchestration.
+      - link "Explore the platform direction":
+        - /url: /platform
+        - text: Explore the platform direction
+        - generic: →
+    - paragraph:
+      - text: GridNinja is developing an
+      - strong: AI Data Center Virtual Capacity Control Plane
+      - text: and a
+      - strong: runtime-assured virtual capacity engine
+      - text: for inside-the-fence orchestration. Proof before autonomy.
+    - paragraph: Delivery responsibilities, relevant experience and reviewer availability are established during scoping. Public team credentials and customer outcomes are not yet published.
+    - link "About the work":
+      - /url: /about
+      - text: About the work
+      - generic: →
+  - region "One question. A reviewable answer.":
+    - paragraph: A bounded, paid assessment
+    - heading "One question. A reviewable answer." [level=2]:
+      - text: One question.
+      - text: A reviewable answer.
+    - paragraph: Agree the decision, evidence and responsibilities before analysis begins.
+    - term: You bring
+    - definition: A capacity question, a decision owner, a facility boundary and permission to use the relevant historical inputs.
+    - term: You receive
+    - definition: A decision brief, assumptions and evidence gaps, a supporting model record, and a review of unresolved questions.
+    - paragraph: Deliverables, review rounds, exclusions, price and schedule are agreed during scoping. Do not send operational files or credentials through this website.
+    - link "Review the deliverables":
+      - /url: /assessment#deliverables
+      - text: Review the deliverables
+      - generic: →
+    - link "Data handling and permissions":
+      - /url: /data-handling
+      - text: Data handling and permissions
+      - generic: →
+  - region "Start with your operating constraints.":
+    - paragraph: Your next capacity decision
+    - heading "Start with your operating constraints." [level=2]
+    - paragraph: A scoping conversation establishes fit. Paid work starts only after agreement.
+    - link "Scope an assessment":
+      - /url: /assessment?source=home-final#scope
+      - text: Scope an assessment
+      - generic: ↗
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

@@ -1,0 +1,164 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - navigation "Primary":
+    - generic "How it works":
+      - text: How it works
+    - generic "Solutions":
+      - text: Solutions
+    - link "Sample brief":
+      - /url: /demo#decision-brief
+      - text: Sample brief
+    - generic "Evidence":
+      - text: Evidence
+    - generic "Company":
+      - text: Company
+  - link "Scope an assessment":
+    - /url: /assessment?source=header#scope
+- main:
+  - paragraph: Proof before autonomy
+  - heading "Inspect a capacity decision." [level=1]
+  - paragraph: Explore a synthetic capacity request, compare it with the modeled result, and see the question the decision owner still needs to resolve.
+  - heading "Sample capacity decision brief" [level=2]
+  - paragraph
+  - region "Fixture B decision":
+    - paragraph: Synthetic · Fixture B
+    - paragraph: "Model screen: REPAIR"
+    - heading "A smaller commitment needs review" [level=2]
+    - term: Requested increment
+    - definition: 7.0 MW
+    - term: Modeled eligible increment
+    - definition: 5.8 MW
+    - paragraph: Additional to the 20.0 MW reference. 2026-09-22 · 00:00–01:00 UTC.
+    - heading "Decision still to make" [level=3]
+    - paragraph: Would the reduced 5.8 MW profile still meet the service and commercial requirement?
+    - paragraph: Synthetic · Economics unestimated. No operational authority.
+    - generic "Result and assessment limits"
+  - generic "Change scenario or perspective"
+  - option "A · Request fits the modeled screen"
+  - option "B · Smaller commitment needs review" [selected]
+  - option "C · Minimum cannot be met"
+  - option "D · Cooling evidence missing"
+  - option "Business decision" [selected]
+  - option "Engineering evidence"
+  - generic "Explore a hypothetical minimum"
+  - region "Illustrative system view":
+    - heading "Illustrative system view" [level=2]
+    - generic: Synthetic
+    - generic: Loading…
+    - generic "Display options":
+      - generic: Display options
+    - group "Facility model":
+      - 'img "Architectural cutaway of a synthetic data center: server racks, electrical distribution, cooling units, and reserve-storage cabinets."'
+    - group "Inspect a facility system":
+      - generic: Inspect a facility system
+      - button "Power":
+        - generic: "01"
+        - text: Power
+      - button "Cooling":
+        - generic: "02"
+        - text: Cooling
+      - button "Storage":
+        - generic: "03"
+        - text: Storage
+      - button "Workloads":
+        - generic: "04"
+        - text: Workloads
+    - strong: Inspect the physical context
+    - button "Clear selection" [disabled]
+    - paragraph: Select Power, Cooling, Storage or Workloads to inspect their role in this assessment.
+    - generic "Construction details":
+      - paragraph: Load the facility to inspect construction. Opening a representative assembly is a separate, explicit download.
+      - button "Loading facility…" [disabled]
+      - button "View rack close-up" [disabled]
+      - button "View air-path cutaway" [disabled]
+    - generic "Equipment identities"
+    - paragraph: Explore the illustrative power and cooling paths. Read the versioned assessment for the result and its limits.
+    - button "Follow one workload":
+      - text: Follow one workload
+      - generic: →
+    - button "Show air-path section" [disabled]
+    - paragraph:
+      - text: Synthetic illustration · Economics unestimated.
+      - text: "No site action is authorized. Accepted and delivered capacity: not applicable."
+    - status: Preparing the facility view…
+  - generic "Current example downloads":
+    - link "Read the versioned brief":
+      - /url: /evidence/assessments/demo-01-b/v1.0.0
+    - link "Download this PDF":
+      - /url: /downloads/assessment/demo-01-b/v1.0.0/pdf
+    - link "Download this technical record":
+      - /url: /downloads/assessment/demo-01-b/v1.0.0/json
+  - generic "Conditions and assessment evidence"
+  - paragraph: Your capacity decision
+  - heading "What decision is your team facing?" [level=2]
+  - paragraph: Tell us about the capacity commitment your team is considering and the historical inputs available. We will review fit and readiness before agreeing a paid scope, price and schedule.
+  - link "Scope an assessment":
+    - /url: /assessment?source=demo-final#scope
+    - text: Scope an assessment
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - link "Evidence informs a decision. Authority stays explicit. Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.":
+        - /url: /proof
+        - text: Evidence informs a decision. Authority stays explicit.
+        - generic: Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.
+      - link "How much virtual capacity is safe, for how long, and under which evidence? Learn how a dispatch envelope constrains data center actions by electrical, thermal, reserve, workload, water, and SLA limits before execution.":
+        - /url: /platform/dispatch-envelope
+        - text: How much virtual capacity is safe, for how long, and under which evidence?
+        - generic: Learn how a dispatch envelope constrains data center actions by electrical, thermal, reserve, workload, water, and SLA limits before execution.
+      - link "Tell us where capacity is constrained. Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.":
+        - /url: /contact
+        - text: Tell us where capacity is constrained.
+        - generic: Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

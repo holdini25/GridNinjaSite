@@ -1,0 +1,338 @@
+{
+  "schemaVersion": "gridninja.color-design.v1",
+  "status": "specified-not-applied",
+  "colorSpace": "sRGB",
+  "tokens": {
+    "canvas": {
+      "hex": "#080808",
+      "oklch": {
+        "L": 0.1344092,
+        "C": 0.0,
+        "h": 0
+      }
+    },
+    "surface": {
+      "hex": "#111315",
+      "oklch": {
+        "L": 0.1854035,
+        "C": 0.0051783,
+        "h": 248.10742
+      }
+    },
+    "surface-raised": {
+      "hex": "#191C20",
+      "oklch": {
+        "L": 0.2250257,
+        "C": 0.0090175,
+        "h": 255.60532
+      }
+    },
+    "heading": {
+      "hex": "#F4F7FA",
+      "oklch": {
+        "L": 0.9747155,
+        "C": 0.0051315,
+        "h": 247.87655
+      }
+    },
+    "body": {
+      "hex": "#CDD3D8",
+      "oklch": {
+        "L": 0.8636916,
+        "C": 0.0095376,
+        "h": 242.85589
+      }
+    },
+    "supporting": {
+      "hex": "#B8B8B8",
+      "oklch": {
+        "L": 0.7826037,
+        "C": 0.0,
+        "h": 0
+      }
+    },
+    "orange": {
+      "hex": "#FF9F1A",
+      "oklch": {
+        "L": 0.7827371,
+        "C": 0.1684707,
+        "h": 66.352
+      }
+    },
+    "orange-hover": {
+      "hex": "#FFB44D",
+      "oklch": {
+        "L": 0.8231713,
+        "C": 0.1451209,
+        "h": 71.62632
+      }
+    },
+    "orange-pressed": {
+      "hex": "#E98B0C",
+      "oklch": {
+        "L": 0.7206568,
+        "C": 0.1609791,
+        "h": 63.79047
+      }
+    },
+    "control-edge": {
+      "hex": "#7B858E",
+      "oklch": {
+        "L": 0.611453,
+        "C": 0.0180373,
+        "h": 245.23615
+      }
+    },
+    "decorative-edge": {
+      "hex": "#2A3035",
+      "oklch": {
+        "L": 0.305411,
+        "C": 0.0123092,
+        "h": 243.24298
+      }
+    },
+    "allow": {
+      "hex": "#83D8AD",
+      "oklch": {
+        "L": 0.8162826,
+        "C": 0.1036574,
+        "h": 160.88292
+      }
+    },
+    "repair": {
+      "hex": "#E2C168",
+      "oklch": {
+        "L": 0.8212908,
+        "C": 0.114875,
+        "h": 89.43056
+      }
+    },
+    "reject": {
+      "hex": "#FF8F91",
+      "oklch": {
+        "L": 0.7707378,
+        "C": 0.1354722,
+        "h": 19.56623
+      }
+    },
+    "no-proof": {
+      "hex": "#AFC2D6",
+      "oklch": {
+        "L": 0.8060131,
+        "C": 0.0351734,
+        "h": 249.62812
+      }
+    },
+    "proof-cyan": {
+      "hex": "#61E4FF",
+      "oklch": {
+        "L": 0.8562788,
+        "C": 0.1196189,
+        "h": 213.57678
+      }
+    },
+    "paper": {
+      "hex": "#E8EDF1",
+      "oklch": {
+        "L": 0.9434516,
+        "C": 0.0076163,
+        "h": 241.66646
+      }
+    },
+    "paper-ink": {
+      "hex": "#1A2026",
+      "oklch": {
+        "L": 0.2401751,
+        "C": 0.0145193,
+        "h": 248.43131
+      }
+    },
+    "paper-secondary": {
+      "hex": "#485662",
+      "oklch": {
+        "L": 0.4457314,
+        "C": 0.0264349,
+        "h": 244.27828
+      }
+    },
+    "paper-orange": {
+      "hex": "#86420B",
+      "oklch": {
+        "L": 0.4575408,
+        "C": 0.1113205,
+        "h": 52.30599
+      }
+    },
+    "media-matte": {
+      "hex": "#010101",
+      "oklch": {
+        "L": 0.0672046,
+        "C": 0.0,
+        "h": 0
+      }
+    }
+  },
+  "contrastChecks": [
+    {
+      "role": "Heading",
+      "foreground": "heading",
+      "background": "canvas",
+      "ratio": 18.6268,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Body",
+      "foreground": "body",
+      "background": "surface",
+      "ratio": 12.3293,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Supporting text",
+      "foreground": "supporting",
+      "background": "surface-raised",
+      "ratio": 8.6188,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Primary action default",
+      "foreground": "canvas",
+      "background": "orange",
+      "ratio": 9.7525,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Primary action hover",
+      "foreground": "canvas",
+      "background": "orange-hover",
+      "ratio": 11.3371,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Primary action pressed",
+      "foreground": "canvas",
+      "background": "orange-pressed",
+      "ratio": 7.785,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Link default and underline",
+      "foreground": "orange",
+      "background": "surface",
+      "ratio": 9.0673,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Link hover",
+      "foreground": "orange-hover",
+      "background": "surface",
+      "ratio": 10.5405,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Focus ring against canvas",
+      "foreground": "orange-hover",
+      "background": "canvas",
+      "ratio": 11.3371,
+      "minimum": 3,
+      "pass": true
+    },
+    {
+      "role": "Focus ring against raised surface",
+      "foreground": "orange-hover",
+      "background": "surface-raised",
+      "ratio": 9.6782,
+      "minimum": 3,
+      "pass": true
+    },
+    {
+      "role": "Essential control border",
+      "foreground": "control-edge",
+      "background": "surface-raised",
+      "ratio": 4.5492,
+      "minimum": 3,
+      "pass": true
+    },
+    {
+      "role": "Allow label",
+      "foreground": "allow",
+      "background": "surface-raised",
+      "ratio": 10.0878,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Repair label",
+      "foreground": "repair",
+      "background": "surface-raised",
+      "ratio": 9.8198,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Reject label",
+      "foreground": "reject",
+      "background": "surface-raised",
+      "ratio": 7.8075,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "No proof label",
+      "foreground": "no-proof",
+      "background": "surface-raised",
+      "ratio": 9.3711,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Proof line and label",
+      "foreground": "proof-cyan",
+      "background": "surface-raised",
+      "ratio": 11.4383,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Paper body",
+      "foreground": "paper-ink",
+      "background": "paper",
+      "ratio": 13.9341,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Paper secondary",
+      "foreground": "paper-secondary",
+      "background": "paper",
+      "ratio": 6.4013,
+      "minimum": 4.5,
+      "pass": true
+    },
+    {
+      "role": "Paper link and focus",
+      "foreground": "paper-orange",
+      "background": "paper",
+      "ratio": 6.3675,
+      "minimum": 4.5,
+      "pass": true
+    }
+  ],
+  "excludedUse": {
+    "whiteOnOrange": 2.0536,
+    "reason": "Fails ordinary and large text contrast; use dark labels."
+  },
+  "limitations": [
+    "Computed solid-color pair checks, not a rendered-page accessibility audit.",
+    "Essential focus/control geometry and alpha composition require browser verification.",
+    "Decorative edges are not substitutes for necessary control boundaries."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "validatedAtUtc": "2026-10-10T19:41:04.772912+00:00",
+  "scope": "Review artifacts only; not live-site conformance or application tests",
+  "pass": true,
+  "errors": [],
+  "jsonFilesParsed": 9,
+  "relativeFileLinksChecked": 164,
+  "canonicalViewportCaptures": 40,
+  "topAndFullImagesChecked": 80,
+  "uniqueFindings": 14,
+  "colorPairsIndependentlyRecomputed": 19,
+  "httpPageProbes": 41,
+  "researchTypecheck": "Passed isolated strict tsc; see cross-review-technical.md",
+  "browserReportReview": "Desktop1440 and mobile390; no document-level horizontal overflow. Screenshots retained.",
+  "notRun": [
+    "Application lint/typecheck/build/unit/browser suites (no application changes)",
+    "Fresh live performance measurements",
+    "Complete live keyboard/reduced-motion/no-JavaScript/failed-media matrix",
+    "Verified200% enlarged-text capture",
+    "Physical-device checks"
+  ]
+}

@@ -1,0 +1,354 @@
+{
+  "schemaVersion": "gridninja.visual-audit.v1",
+  "reviewDate": "2026-10-10",
+  "scoring": "(2 \u00d7 visual impact + 2 \u00d7 message clarity + confidence) / effort weight; editorial triage, not measured conversion",
+  "findings": [
+    {
+      "id": "A10",
+      "title": "Keep the brief facsimile legible and faithful",
+      "routes": [
+        "/"
+      ],
+      "viewportState": "1440px #evidence; 390px full-page",
+      "screenshots": [
+        "home-evidence-1440.jpg",
+        "home-390-full.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The existing HTML brief preview conveys a document but some source text is 5px and cannot serve as readable evidence at card size.",
+      "proposal": "Show the same-version record ID, published title and synthetic/no-authority label in a nonnumeric HTML excerpt. Keep quantities, reference/time basis and qualifications in the separate worked decision and linked immutable brief.",
+      "confidence": "High",
+      "effort": "S",
+      "visualImpact": 4,
+      "messageClarity": 4,
+      "acceptance": "Record identity, version and synthetic status are readable at actual card width and remain HTML. No frozen publication bytes, metrics or labels change.",
+      "confidenceScore": 5,
+      "effortWeight": 1,
+      "priorityScore": 21.0
+    },
+    {
+      "id": "A04",
+      "title": "Keep the narrative dark and the document light",
+      "routes": [
+        "/"
+      ],
+      "viewportState": "1440, 768 and 390px full-page composition",
+      "screenshots": [
+        "home-1440-full.jpg",
+        "home-390-full.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The current homepage alternates into broad light sections while supporting pages remain predominantly dark. This is an aesthetic mismatch with the requested direction, not an accessibility defect.",
+      "proposal": "Use graphite sections and isolate light paper to the worked decision and brief excerpt. Vary spacing and composition rather than alternating full-width light panels.",
+      "confidence": "High observation / medium design",
+      "effort": "S",
+      "visualImpact": 5,
+      "messageClarity": 3,
+      "acceptance": "Desktop/mobile contact sheets show one coherent dark narrative with local paper contrast. Qualification text remains readable, and existing layouts reserve media dimensions.",
+      "confidenceScore": 4,
+      "effortWeight": 1,
+      "priorityScore": 20.0
+    },
+    {
+      "id": "A05",
+      "title": "Unify orange and the hierarchy around it",
+      "routes": [
+        "/",
+        "/assessment",
+        "/demo"
+      ],
+      "viewportState": "1440 and 390px; default controls",
+      "screenshots": [
+        "home-1440.jpg",
+        "assessment-390.jpg",
+        "demo-390.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The homepage uses pale local action orange (#FFAE55); shared primary is #FF9F1A. Broad neutral-light regions also change its perceived emphasis.",
+      "proposal": "Adopt the sRGB/OKLCH state contract, with dark button labels, restrained cool graphite and limited saturated area. Keep REPAIR semantically distinct.",
+      "confidence": "High source observation / medium design",
+      "effort": "S",
+      "visualImpact": 5,
+      "messageClarity": 3,
+      "acceptance": "Every delivered component state uses a checked pair; brand orange appears strongest on the primary action. Verify rendered contrast and grayscale hierarchy, not only token math.",
+      "confidenceScore": 4,
+      "effortWeight": 1,
+      "priorityScore": 20.0
+    },
+    {
+      "id": "A09",
+      "title": "Make the evidence route easier to enter",
+      "routes": [
+        "/evidence"
+      ],
+      "viewportState": "390px top viewport, 1440px heading",
+      "screenshots": [
+        "evidence-390.jpg",
+        "evidence-1440.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The first 1000px on mobile contains primarily introduction and qualification. Brief cards start below it; the desktop H1 is tightly wrapped.",
+      "proposal": "Add an immediate sample-brief anchor and concise structure, preserve synthetic qualifiers, broaden the H1 measure. Put external research after GridNinja examples.",
+      "confidence": "High observation / medium design",
+      "effort": "S",
+      "visualImpact": 3,
+      "messageClarity": 5,
+      "acceptance": "An unfamiliar reviewer can open the existing synthetic brief from the introductory screen; research is clearly external and never replaces product evidence.",
+      "confidenceScore": 4,
+      "effortWeight": 1,
+      "priorityScore": 20.0
+    },
+    {
+      "id": "A13",
+      "title": "Add three balanced research notes",
+      "routes": [
+        "/",
+        "/evidence",
+        "/about"
+      ],
+      "viewportState": "Homepage evidence section; Evidence/About top views",
+      "screenshots": [
+        "home-evidence-1440.jpg",
+        "evidence-390.jpg",
+        "about-1440.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The reviewed homepage has no concise external-research strip connecting flexibility, tradeoffs and local resource context. This is a content opportunity, not a broken feature.",
+      "proposal": "Use the three proposed notes plus visible study limits, with the seven-entry bibliography at /evidence#research. Render server-side.",
+      "confidence": "High observation / medium design",
+      "effort": "S",
+      "visualImpact": 3,
+      "messageClarity": 5,
+      "acceptance": "Each note includes setting, limitation and a working descriptive link with JavaScript disabled. External studies cannot be mistaken for GridNinja demonstrations or economics.",
+      "confidenceScore": 4,
+      "effortWeight": 1,
+      "priorityScore": 20.0
+    },
+    {
+      "id": "A06",
+      "title": "Use one editorial alignment grid",
+      "routes": [
+        "/about",
+        "/proof",
+        "/evidence",
+        "/platform",
+        "/solutions/ai-cloud",
+        "/solutions/colocation",
+        "/solutions/bridge-power"
+      ],
+      "viewportState": "1440px normal reading, with 768px comparison",
+      "screenshots": [
+        "about-1440.jpg",
+        "proof-1440.jpg",
+        "evidence-1440.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "Shared supporting-page heroes start noticeably farther right than following sections, producing a visible alignment reset.",
+      "proposal": "Unify container starts, headline measure and section grids in the shared page primitive; retain deliberate nested body measures.",
+      "confidence": "High",
+      "effort": "S",
+      "visualImpact": 4,
+      "messageClarity": 3,
+      "acceptance": "Hero, breadcrumb, body and final CTA align to the specified grid at 1440/768px, while paragraphs remain within readable measures.",
+      "confidenceScore": 5,
+      "effortWeight": 1,
+      "priorityScore": 19.0
+    },
+    {
+      "id": "A07",
+      "title": "Shorten mobile breadcrumbs and tighten the gap",
+      "routes": [
+        "/solutions/ai-cloud",
+        "/solutions/colocation",
+        "/solutions/bridge-power"
+      ],
+      "viewportState": "390 and 320px normal reading",
+      "screenshots": [
+        "solutions-ai-cloud-390.jpg",
+        "solutions-colocation-320.jpg",
+        "solutions-bridge-power-390.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "Solution breadcrumbs repeat the long hero wording, wrap, and precede a substantial empty interval.",
+      "proposal": "Use short audience labels in breadcrumbs and the shared mobile spacing scale. Keep the full page promise in the H1.",
+      "confidence": "High",
+      "effort": "S",
+      "visualImpact": 3,
+      "messageClarity": 4,
+      "acceptance": "At 320px, breadcrumb navigation remains understandable and keyboard accessible; no duplicate full H1 or oversized spacer before the heading.",
+      "confidenceScore": 5,
+      "effortWeight": 1,
+      "priorityScore": 19.0
+    },
+    {
+      "id": "A08",
+      "title": "Bring the assessment inquiry forward",
+      "routes": [
+        "/assessment"
+      ],
+      "viewportState": "390 and 768px normal reading",
+      "screenshots": [
+        "assessment-390.jpg",
+        "assessment-768.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The page repeats the scoping explanation and sample link before the inquiry; on the 390px top capture the form is still below view. This does not prove conversion loss.",
+      "proposal": "Compress duplicated pre-form prose while keeping conversation versus paid-work boundaries. Preserve the scope anchor and form fields. Add no artwork before the inquiry.",
+      "confidence": "High observation / medium behavioral inference",
+      "effort": "S",
+      "visualImpact": 2,
+      "messageClarity": 5,
+      "acceptance": "One concise offer explanation precedes the inquiry. Scope an assessment reaches the form with a visible heading/focus target, and all existing validation and data-handling behavior remains intact.",
+      "confidenceScore": 4,
+      "effortWeight": 1,
+      "priorityScore": 18.0
+    },
+    {
+      "id": "A11",
+      "title": "Establish a first and advanced action in the demo",
+      "routes": [
+        "/demo"
+      ],
+      "viewportState": "390 and 768px normal reading",
+      "screenshots": [
+        "demo-390.jpg",
+        "demo-768.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "Scenario exploration and the hypothetical minimum are similarly prominent bordered disclosures. Result and unresolved commercial question correctly precede the illustration.",
+      "proposal": "Preserve the result-first mobile sequence; make scenario comparison primary and the hypothetical minimum an advanced disclosure.",
+      "confidence": "High observation / medium design",
+      "effort": "S",
+      "visualImpact": 2,
+      "messageClarity": 4,
+      "acceptance": "Independent readers find the scenario comparison first; hypothetical values remain unmistakable. Existing keyboard/disclosure tests pass in Chromium, Firefox and WebKit.",
+      "confidenceScore": 4,
+      "effortWeight": 1,
+      "priorityScore": 16.0
+    },
+    {
+      "id": "A14",
+      "title": "Make the present offer and sample path consistent",
+      "routes": [
+        "/solutions/ai-cloud",
+        "/solutions/colocation",
+        "/solutions/bridge-power",
+        "/about"
+      ],
+      "viewportState": "390 and 320px normal reading",
+      "screenshots": [
+        "solutions-ai-cloud-390.jpg",
+        "solutions-colocation-390.jpg",
+        "solutions-bridge-power-390.jpg",
+        "about-390.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "AI Cloud and Colocation show only the primary hero action while Bridge Power shows both; About stacks differently sized CTA treatments. At 320px, the three solution first screens do not explicitly say paid; Colocation and Bridge Power also omit the historical-input/no-live-control boundary in that top capture. This is a consistency opportunity, not evidence of a false claim or missing content lower on the page.",
+      "proposal": "Use the same primary/secondary hierarchy on solution pages and consistent mobile group sizing where both appear. Preserve scenario-aware destinations. Add a short shared present-offer trust line to the three solution heroes: Paid, bounded assessment of authorized historical inputs. No live connection or equipment control.",
+      "confidence": "High",
+      "effort": "S",
+      "visualImpact": 2,
+      "messageClarity": 3,
+      "acceptance": "Approved CTA strings remain exact and both paths are discoverable. At 320px groups fit without overlap and labels do not truncate. The current commercial scope and no-live-control boundary remain visible in each solution introduction.",
+      "confidenceScore": 5,
+      "effortWeight": 1,
+      "priorityScore": 15.0
+    },
+    {
+      "id": "A01",
+      "title": "Make the civic ambition a signature composition",
+      "routes": [
+        "/",
+        "/about"
+      ],
+      "viewportState": "1440, 768, 390, 320px; normal reading",
+      "screenshots": [
+        "home-1440-full.jpg",
+        "about-390.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The homepage already contains a neighbor/stewardship paragraph. It shares space with the assessment mechanism and has no dedicated site\u2013grid\u2013community composition. About also states the ambition.",
+      "proposal": "Replace and expand that paragraph with the approved mission, a static architectural SVG and three responsibilities. Connect it immediately to the paid historical-input assessment.",
+      "confidence": "High observation / medium design",
+      "effort": "M",
+      "visualImpact": 5,
+      "messageClarity": 5,
+      "acceptance": "Within a 60-second read, an unfamiliar reviewer identifies both the civic ambition and the current paid assessment. All three responsibilities are visible at 320px, with no implication of delivered grid or community benefits.",
+      "confidenceScore": 4,
+      "effortWeight": 2,
+      "priorityScore": 12.0
+    },
+    {
+      "id": "A03",
+      "title": "Give proof and platform the right visual subjects",
+      "routes": [
+        "/",
+        "/proof",
+        "/platform"
+      ],
+      "viewportState": "1440px at #evidence and 390px normal reading",
+      "screenshots": [
+        "home-evidence-1440.jpg",
+        "proof-390.jpg",
+        "platform-390.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The proof card shows a cooling assembly; platform reuses the construction still. Neither subject explains the distinction between proposed action, constraint check and authority.",
+      "proposal": "Use a static modeled-result \u2192 human/business-review \u2192 separately bounded operating-permission diagram, with a visible gap and labeled gate before permission. Use a whole-system bounded facility subject for platform and keep the brief a faithful nonnumeric HTML excerpt.",
+      "confidence": "High observation / medium design",
+      "effort": "M",
+      "visualImpact": 5,
+      "messageClarity": 5,
+      "acceptance": "All five card subjects are distinguishable at actual size. The proof diagram implies reviewable evidence, not execution; platform visibly says in development.",
+      "confidenceScore": 4,
+      "effortWeight": 2,
+      "priorityScore": 12.0
+    },
+    {
+      "id": "A02",
+      "title": "Differentiate the two buyer thumbnails",
+      "routes": [
+        "/"
+      ],
+      "viewportState": "1440px at #solutions; all four homepage widths",
+      "screenshots": [
+        "home-solutions-1440.jpg",
+        "home-390-full.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "AI cloud and colocation use the same construction still with different object positions. Source and live image URLs corroborate the repetition.",
+      "proposal": "Create a close compute/rack subject and a wider tenant-capacity hall subject. Use common lighting/materials with distinct silhouettes in 16:10 apertures.",
+      "confidence": "High",
+      "effort": "M",
+      "visualImpact": 5,
+      "messageClarity": 4,
+      "acceptance": "Two reviewers correctly match each uncaptioned image to its art brief at 160\u00d7100 and 320\u00d7200; no same-scene recrop. Keep exactly two buyer cards.",
+      "confidenceScore": 5,
+      "effortWeight": 2,
+      "priorityScore": 11.5
+    },
+    {
+      "id": "A12",
+      "title": "Make the platform direction graspable in one figure",
+      "routes": [
+        "/platform"
+      ],
+      "viewportState": "390px and 1440px normal reading",
+      "screenshots": [
+        "platform-390.jpg",
+        "platform-1440.jpg"
+      ],
+      "classification": "observed condition; proposed improvement is a design hypothesis",
+      "observed": "The first screen relies on prose, and the phone H1 splits control- and plane across lines. The development boundary is visible and must remain so.",
+      "proposal": "Improve heading measure without shrinking it excessively; add a static intended-loop figure after the introduction with visible authority boundary.",
+      "confidence": "High observation / medium design",
+      "effort": "M",
+      "visualImpact": 3,
+      "messageClarity": 4,
+      "acceptance": "At 320px the title reads naturally and the figure works as stacked HTML/SVG. A reader distinguishes present assessment from intended control plane without opening a disclosure.",
+      "confidenceScore": 4,
+      "effortWeight": 2,
+      "priorityScore": 9.0
+    }
+  ]
+}

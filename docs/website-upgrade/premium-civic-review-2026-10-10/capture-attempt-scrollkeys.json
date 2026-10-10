@@ -1,0 +1,178 @@
+{
+  "status": "superseded",
+  "reason": "ControlOrMeta+Home did not reliably return native pages to the top; replaced by fresh navigation captures.",
+  "captures": [
+    {
+      "slug": "home",
+      "path": "/",
+      "width": 1440,
+      "capturedAt": "2026-10-10T19:26:36.479Z",
+      "documentHeight": 4371,
+      "documentWidth": 1440,
+      "h1": [
+        "Understand your capacity. Know the limits."
+      ],
+      "headings": [
+        "From physical constraints to inspectable decisions.",
+        "The limit is a finding.The commitment is a decision.",
+        "What are you ready to commit?",
+        "Engineering you can inspect.",
+        "One question.A reviewable answer.",
+        "Start with your operating constraints."
+      ],
+      "images": [
+        {
+          "alt": "Synthetic data center facility with graphite server racks, cooling fans, electrical equipment and amber service routes.",
+          "complete": true,
+          "naturalWidth": 1280,
+          "src": "/assets/cinematic/cinematic-v1/poster-desktop.webp"
+        },
+        {
+          "alt": "",
+          "complete": true,
+          "naturalWidth": 720,
+          "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+        },
+        {
+          "alt": "",
+          "complete": true,
+          "naturalWidth": 720,
+          "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+        },
+        {
+          "alt": "",
+          "complete": true,
+          "naturalWidth": 720,
+          "src": "/assets/cinematic/cinematic-v1/still-cooling.webp"
+        },
+        {
+          "alt": "",
+          "complete": true,
+          "naturalWidth": 720,
+          "src": "/assets/cinematic/cinematic-v1/still-construction.webp"
+        }
+      ],
+      "overflow": [],
+      "scrollY": 3336.5,
+      "url": "https://gridninja.ai/",
+      "viewport": {
+        "height": 1000,
+        "width": 1440
+      }
+    },
+    {
+      "slug": "assessment",
+      "path": "/assessment",
+      "width": 1440,
+      "capturedAt": "2026-10-10T19:26:37.992Z",
+      "documentHeight": 7137,
+      "documentWidth": 1440,
+      "h1": [
+        "Scope your next capacity decision."
+      ],
+      "headings": [
+        "A reviewable answer, with an agreed scope.",
+        "Start with the decision in front of your team",
+        "A decision brief with a traceable basis.",
+        "Confirm readiness, permissions, and responsibilities.",
+        "Fit, readiness, then a paid scope.",
+        "A useful answer need not be a larger number.",
+        "Continue the proof path"
+      ],
+      "images": [],
+      "overflow": [],
+      "scrollY": 58.5,
+      "url": "https://gridninja.ai/assessment",
+      "viewport": {
+        "height": 1000,
+        "width": 1440
+      }
+    },
+    {
+      "slug": "demo",
+      "path": "/demo",
+      "width": 1440,
+      "capturedAt": "2026-10-10T19:26:40.706Z",
+      "documentHeight": 3040,
+      "documentWidth": 1440,
+      "h1": [
+        "Inspect a capacity decision."
+      ],
+      "headings": [
+        "Sample capacity decision brief",
+        "A smaller commitment needs review",
+        "Illustrative system view",
+        "What decision is your team facing?",
+        "Continue the proof path"
+      ],
+      "images": [
+        {
+          "alt": "Architectural cutaway of a synthetic data center: server racks, electrical distribution, cooling units, and reserve-storage cabinets.",
+          "complete": true,
+          "naturalWidth": 1360,
+          "src": "/assets/facility/facility-v12/poster-desktop.webp"
+        }
+      ],
+      "overflow": [],
+      "scrollY": 776.5,
+      "url": "https://gridninja.ai/demo",
+      "viewport": {
+        "height": 1000,
+        "width": 1440
+      }
+    },
+    {
+      "slug": "platform",
+      "path": "/platform",
+      "width": 1440,
+      "capturedAt": "2026-10-10T19:26:42.150Z",
+      "documentHeight": 4417,
+      "documentWidth": 1440,
+      "h1": [
+        "A control-plane direction, with evidence before authority."
+      ],
+      "headings": [
+        "The intended decision loop",
+        "Inspect a synthetic timed-dispatch example",
+        "Proof before autonomy",
+        "Continue the proof path",
+        "Start with one capacity question."
+      ],
+      "images": [],
+      "overflow": [],
+      "scrollY": 490,
+      "url": "https://gridninja.ai/platform",
+      "viewport": {
+        "height": 1000,
+        "width": 1440
+      }
+    },
+    {
+      "slug": "proof",
+      "path": "/proof",
+      "width": 1440,
+      "capturedAt": "2026-10-10T19:26:43.676Z",
+      "documentHeight": 4699,
+      "documentWidth": 1440,
+      "h1": [
+        "Evidence informs a decision. Authority stays explicit."
+      ],
+      "headings": [
+        "What each result means",
+        "A conditional path to more authority",
+        "What evidence must travel with a number",
+        "Community benefits require separate evidence",
+        "Continue the proof path",
+        "Start with one capacity question."
+      ],
+      "images": [],
+      "overflow": [],
+      "scrollY": 790,
+      "url": "https://gridninja.ai/proof",
+      "viewport": {
+        "height": 1000,
+        "width": 1440
+      }
+    }
+  ]
+}

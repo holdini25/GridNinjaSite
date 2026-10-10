@@ -1,6 +1,11 @@
 const externalServer = process.env.LHCI_EXTERNAL_SERVER === "1"
 const mobileProfile = process.env.LHCI_FORM_FACTOR === "mobile"
 const releaseCandidate = process.env.LHCI_RELEASE_CANDIDATE === "1"
+// Keep the generic CI route inventory aligned with the reviewed release matrix.
+// The provenance-aware facility collector remains the final profile evidence.
+// LHCI requires its synchronous CommonJS configuration entry point.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { performanceMatrix } = require("./scripts/facility/lighthouse-matrix.mjs")
 
 const commonAssertions = {
   "categories:accessibility": ["error", { minScore: 0.95, aggregationMethod: "median-run" }],
@@ -29,16 +34,7 @@ module.exports = {
         startServerReadyPattern: "Ready in|Local:",
         startServerReadyTimeout: 120000,
       }),
-      url: [
-        "http://127.0.0.1:3000/",
-        "http://127.0.0.1:3000/platform",
-        "http://127.0.0.1:3000/proof",
-        "http://127.0.0.1:3000/assessment",
-        "http://127.0.0.1:3000/demo",
-        "http://127.0.0.1:3000/contact",
-        "http://127.0.0.1:3000/insights",
-        "http://127.0.0.1:3000/evidence/assessments/demo-01-b/v1.0.0",
-      ],
+      url: performanceMatrix("premium-civic").routes.map(route => `http://127.0.0.1:3000${route}`),
       settings: {
         chromeFlags: "--headless --no-sandbox",
         ...(mobileProfile ? { formFactor: "mobile" } : { preset: "desktop" }),

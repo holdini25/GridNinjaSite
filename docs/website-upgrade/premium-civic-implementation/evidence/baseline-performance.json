@@ -1,0 +1,494 @@
+{
+  "scope": "Local source baseline, not production-equivalent qualification",
+  "recordedAt": "2026-10-10T20:00:46.935Z",
+  "collection": "pass",
+  "build": {
+    "recordedAt": "2026-10-10T19:55:46.610Z",
+    "identity": {
+      "sourceRevision": "1a8515aabf18049b515424fd7f35e6643b2754f7523a80e600f3ca7c91f80d17",
+      "buildId": "Aluk0PCsxz_V4BlWHbQKp",
+      "releases": [
+        {
+          "release": "facility-v1",
+          "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+        },
+        {
+          "release": "facility-v2",
+          "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+        },
+        {
+          "release": "facility-v3",
+          "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+        },
+        {
+          "release": "facility-v4",
+          "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+        },
+        {
+          "release": "facility-v5",
+          "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+        },
+        {
+          "release": "facility-v6",
+          "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+        },
+        {
+          "release": "facility-v7",
+          "manifestSha256": "c6ccfae472adebef0af6a8a85104be2db9f0879019babec2e297d82a9f71ce37"
+        },
+        {
+          "release": "facility-v8",
+          "manifestSha256": "4b652220b7d2282d97b1782a72dce7d97ebccf84c4d76866dc660fe8cc2bfa8e"
+        },
+        {
+          "release": "facility-v9",
+          "manifestSha256": "5f5d0e7d6b0ebec2463aa09a40bf886548e09b143e16af62c238ea0e0a3d8269"
+        },
+        {
+          "release": "facility-v10",
+          "manifestSha256": "7a95fe6a859f11d074a7d4a38fb6d7de9ecefc956b19d899486d294f32a11712"
+        },
+        {
+          "release": "facility-v12",
+          "manifestSha256": "95e5b6394da9183cdc57d00992407ffec4fd6d55d1674ffd9bb8d13b6955658f"
+        }
+      ],
+      "buildSettings": {
+        "selectedRelease": "facility-v12",
+        "mode": "auto-adaptive",
+        "cinematic": {
+          "selectedRelease": "cinematic-v1",
+          "mode": "auto",
+          "preview": false,
+          "manifestSha256": "b19c53acb14dd4a0318696a18de6b706b97061f1887fcbbf4edca23190dd3a3c"
+        },
+        "cinematicPerformanceVersion": "cinematic-performance.v1",
+        "privateCandidate": null,
+        "observability": false,
+        "csp": "enforce",
+        "httpsPolicy": false,
+        "verification": "unconfigured",
+        "verificationSiteKeySha256": null
+      }
+    }
+  },
+  "webkit": {
+    "passed": 6,
+    "skipped": 0,
+    "flaky": 0,
+    "platform": "darwin-arm64",
+    "historicalLinuxFailureResolved": false
+  },
+  "profiles": [
+    {
+      "profile": "desktop",
+      "route": "/",
+      "runs": 5,
+      "lcpSamples": [
+        587.2573,
+        607.5183750000001,
+        586.3794,
+        586.0521000000001,
+        616.6564999999999
+      ],
+      "medians": {
+        "lcp": 587.2573,
+        "fcp": 286.3794,
+        "tbt": 0,
+        "cls": 0.0001365480255669381
+      },
+      "hardLcpPass": true,
+      "soft2200AimMet": true,
+      "browser": "154.0.8037.98",
+      "graphics": {
+        "status": "available",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Version 27.0 (Build 26A428))",
+        "vendor": "Google Inc. (Apple)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "enabled_on",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        }
+      }
+    },
+    {
+      "profile": "desktop",
+      "route": "/demo",
+      "runs": 5,
+      "lcpSamples": [
+        595.0236,
+        595.6244,
+        595.7682,
+        595.274,
+        516.2085999999999
+      ],
+      "medians": {
+        "lcp": 595.274,
+        "fcp": 284.137,
+        "tbt": 0,
+        "cls": 0.0007662323424685522
+      },
+      "hardLcpPass": true,
+      "soft2200AimMet": true,
+      "browser": "154.0.8037.98",
+      "graphics": {
+        "status": "available",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Version 27.0 (Build 26A428))",
+        "vendor": "Google Inc. (Apple)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "enabled_on",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        }
+      }
+    },
+    {
+      "profile": "desktop",
+      "route": "/assessment",
+      "runs": 5,
+      "lcpSamples": [
+        496.99080000000004,
+        495.51920000000007,
+        539.6383,
+        537.52975,
+        527.34055
+      ],
+      "medians": {
+        "lcp": 527.34055,
+        "fcp": 284.8937,
+        "tbt": 0,
+        "cls": 0
+      },
+      "hardLcpPass": true,
+      "soft2200AimMet": true,
+      "browser": "154.0.8037.98",
+      "graphics": {
+        "status": "available",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Version 27.0 (Build 26A428))",
+        "vendor": "Google Inc. (Apple)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "enabled_on",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        }
+      }
+    },
+    {
+      "profile": "mobile",
+      "route": "/",
+      "runs": 5,
+      "lcpSamples": [
+        2448.7254999999996,
+        2460.61945,
+        2303.6138,
+        2450.1449999999995,
+        2450.0699999999997
+      ],
+      "medians": {
+        "lcp": 2450.0699999999997,
+        "fcp": 1055.7255,
+        "tbt": 0,
+        "cls": 0
+      },
+      "hardLcpPass": true,
+      "soft2200AimMet": false,
+      "browser": "154.0.8037.98",
+      "graphics": {
+        "status": "available",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Version 27.0 (Build 26A428))",
+        "vendor": "Google Inc. (Apple)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "enabled_on",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        }
+      }
+    },
+    {
+      "profile": "mobile",
+      "route": "/demo",
+      "runs": 5,
+      "lcpSamples": [
+        2310.7778,
+        2299.3486,
+        2300.481,
+        2299.8599,
+        2300.8416
+      ],
+      "medians": {
+        "lcp": 2300.481,
+        "fcp": 1054.3486,
+        "tbt": 0,
+        "cls": 0
+      },
+      "hardLcpPass": true,
+      "soft2200AimMet": false,
+      "browser": "154.0.8037.98",
+      "graphics": {
+        "status": "available",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Version 27.0 (Build 26A428))",
+        "vendor": "Google Inc. (Apple)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "enabled_on",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        }
+      }
+    },
+    {
+      "profile": "mobile",
+      "route": "/assessment",
+      "runs": 5,
+      "lcpSamples": [
+        2300.8911,
+        2300.5429999999997,
+        2300.1246,
+        2308.5306,
+        2302.5208
+      ],
+      "medians": {
+        "lcp": 2300.8911,
+        "fcp": 1054.5306,
+        "tbt": 0,
+        "cls": 0
+      },
+      "hardLcpPass": true,
+      "soft2200AimMet": false,
+      "browser": "154.0.8037.98",
+      "graphics": {
+        "status": "available",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Version 27.0 (Build 26A428))",
+        "vendor": "Google Inc. (Apple)",
+        "featureStatus": {
+          "2d_canvas": "enabled",
+          "direct_rendering_display_compositor": "disabled_off_ok",
+          "gpu_compositing": "enabled",
+          "multiple_raster_threads": "enabled_on",
+          "opengl": "enabled_on",
+          "rasterization": "enabled",
+          "raw_draw": "disabled_off_ok",
+          "skia_graphite": "enabled_on",
+          "trees_in_viz": "disabled_off",
+          "video_decode": "enabled",
+          "video_encode": "enabled",
+          "webgl": "enabled",
+          "webgpu": "enabled",
+          "webnn": "disabled_off"
+        }
+      }
+    }
+  ],
+  "reportFiles": [
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/assessment-1.json",
+      "sha256": "5a981ecadeb94a49de17ffb22b487ff20f0404fb1e11d1a91ba247a1264bae6a",
+      "bytes": 843592
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/assessment-2.json",
+      "sha256": "a792ec216d26fe1e793cebd8e3742ea94234fff004c8275bfc844297b4b9a694",
+      "bytes": 843532
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/assessment-3.json",
+      "sha256": "d905f9d98f1155f65cb3c47daf6be749c85c5f4eec14a4d7160c8862224311d2",
+      "bytes": 843586
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/assessment-4.json",
+      "sha256": "8ae4ee392deccf572132a097da6a06ac12a166761698eec28157bdf02eb49a3c",
+      "bytes": 843857
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/assessment-5.json",
+      "sha256": "993de9726b8ade10915c348255081232d6db9eb70dc0b7ca7d01e5b280d855af",
+      "bytes": 843848
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/demo-1.json",
+      "sha256": "5c0906472b34ea4be6c32ec3521439657346fe5469a6e39b3115a70aa3adc0b0",
+      "bytes": 727790
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/demo-2.json",
+      "sha256": "357ea08e81f3c66a827e596740306208facc6ce72d9b22205e903dcf72fad44e",
+      "bytes": 727607
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/demo-3.json",
+      "sha256": "f2dd5c347b67dc582ca294f7a10870b2c402b0befb3aecb23a5249f2e2a9652e",
+      "bytes": 729217
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/demo-4.json",
+      "sha256": "3872276879c504a03a8f2a79a8912d1310ed5c97ec7345fab92ad085aa1d8aa0",
+      "bytes": 727768
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/demo-5.json",
+      "sha256": "11b7575e85406d3489b63d0a4f5355b6024f2612fdff1d5c34f928b261d330c9",
+      "bytes": 720275
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/home-1.json",
+      "sha256": "1e8350816f20e5a51d6cd12354560a5259de7cc259cfbcf9b2d9ee837910e23f",
+      "bytes": 910572
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/home-2.json",
+      "sha256": "2ad94a0a40e544ad1181cd82dd85778b5c7957cc075c8807accbe896637e3c6e",
+      "bytes": 910809
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/home-3.json",
+      "sha256": "2d95acb5c9c847bab0fef7abe06531aa61cd84c32c69bd51c14c60138dbb7dee",
+      "bytes": 910657
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/home-4.json",
+      "sha256": "c51ccad2f202fed188178a2ac3748c99261b86357a545b988f01ba0200c17c7f",
+      "bytes": 910876
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-desktop/home-5.json",
+      "sha256": "b206587acee62394e5cbbe7fb5e837d1b8697584f7b8a6c4dfbe08de2ddbd202",
+      "bytes": 912459
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/assessment-1.json",
+      "sha256": "88f2e2238f804b0fee699b24cd31a5eb53f1064c6afc2ce2da14b70f4fa5faa7",
+      "bytes": 854599
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/assessment-2.json",
+      "sha256": "3e3498c83dfbc5bb3ebbd1eba7cc135e8fb4d1d80981c7811471362a14eeeec4",
+      "bytes": 854586
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/assessment-3.json",
+      "sha256": "bb69856cdaf05ecc1c5d4b027c125b0e5a979337bdb25559e77b7359b38daf92",
+      "bytes": 854511
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/assessment-4.json",
+      "sha256": "c0e738b915e8342e15270ea15078006cff1a3753fa125396fabfa491a80579f0",
+      "bytes": 856140
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/assessment-5.json",
+      "sha256": "a7116adc4e5327a1bb8c79fdaf80fc949726971e22489ddcd5b6aa9f898f876f",
+      "bytes": 854682
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/demo-1.json",
+      "sha256": "dfe632b71a788fc6789f7b38296df1096fd3925f9356628e82133d0cd7953c1d",
+      "bytes": 719653
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/demo-2.json",
+      "sha256": "0cfb8c2b742db289daafb092d3ae8d37560f3996c290f3a37f6c5ce98589c637",
+      "bytes": 718366
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/demo-3.json",
+      "sha256": "a69b2bbaeb15f06dc4cedbba0a33ccb77abac7019233a4e3237dba617bfd1aba",
+      "bytes": 718178
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/demo-4.json",
+      "sha256": "736a1235c0d72c31ae25fc75852dfb8d76b25f293d0b1ee39976021e0188b9c7",
+      "bytes": 718364
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/demo-5.json",
+      "sha256": "77c72cf8f08ed3aa947102356e4606b95333c77075881231874e97fa92c055bc",
+      "bytes": 718320
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/home-1.json",
+      "sha256": "040326ded8d828a1ac8af1a0a000acd1ec2b752d93e2f87a7bd61c562e318381",
+      "bytes": 859513
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/home-2.json",
+      "sha256": "26f86e614b488aeb07465ea82654378a4d4214f903a179b3d547ce812aaaf1b1",
+      "bytes": 861230
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/home-3.json",
+      "sha256": "3d1e2105d880a63190e3b244eb52c6f82b8c4a6ffb28d000d43deb2721911aa5",
+      "bytes": 859432
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/home-4.json",
+      "sha256": "48f4b095a055f087d8f0dd357c23bd18efc6d47d353c8cc5ead66794bb417d06",
+      "bytes": 859449
+    },
+    {
+      "path": "build/facility/baseline-e980000/lighthouse-mobile/home-5.json",
+      "sha256": "f4764c297e8ebbf2684d046b3e1bd53e3c4eb30cb9b34659acc5df74e5ff4629",
+      "bytes": 859373
+    }
+  ],
+  "failures": [],
+  "limitations": [
+    "HTTP local build: observability false and verification unconfigured.",
+    "No physical mobile or through-readiness/frame qualification measured here.",
+    "The historic2503.1661ms live-source release concern is retained; these are new local measurements."
+  ]
+}

@@ -1,0 +1,122 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - navigation "Primary":
+    - generic "How it works":
+      - text: How it works
+    - generic "Solutions":
+      - text: Solutions
+    - link "Sample brief":
+      - /url: /demo#decision-brief
+    - generic "Evidence":
+      - text: Evidence
+    - generic "Company":
+      - text: Company
+  - link "Scope an assessment":
+    - /url: /assessment?source=header#scope
+- main:
+  - navigation "Breadcrumb":
+    - list:
+      - link "Home":
+        - /url: /
+      - generic: /
+      - link "Solutions":
+        - /url: /#solutions
+      - generic: /
+      - generic: Define the capacity question before selecting the asset.
+  - region "For bridge power and DER partners":
+    - paragraph: For bridge power and DER partners
+    - heading "Define the capacity question before selecting the asset." [level=1]
+    - paragraph: Bridge power and on-site generation may be investigation options for constrained AI infrastructure. Their usefulness depends on site conditions, reserves, transitions, cooling, workload requirements, and the commercial agreement.
+    - link "Scope an assessment":
+      - /url: /assessment?source=bridge-power-page&topic=power#scope
+    - link "See a sample decision brief":
+      - /url: /demo?scenario=b&version=1.0.0&perspective=business&topic=power#decision-brief
+  - heading "Separate an option from an assessed recommendation" [level=2]
+  - paragraph: The public assessment sample does not evaluate a generator, BESS, fuel supply, interconnection, emissions permission, or investment return. It does not rank bridge power against cooling upgrades or workload changes.
+  - heading "Scope the partner contribution" [level=2]
+  - paragraph: A partner discussion can establish what an eventual assessment would require.
+  - article:
+    - heading "Asset and operating evidence" [level=3]
+    - paragraph: Agree the relevant capabilities, reserve requirements, transition behavior, input permissions, and local review responsibilities.
+  - article:
+    - heading "Service and commercial conditions" [level=3]
+    - paragraph: Identify the load obligation, decision owner, deployment constraints, and economic inputs that would need evaluation under a separate scope.
+  - heading "Integration remains a separate validation step" [level=2]
+  - paragraph: The control-plane direction is vendor-agnostic orchestration alongside existing systems. No live asset connectivity, dispatch authority, or partner integration is established by this website.
+  - link "Contact partnerships":
+    - /url: /contact?intent=partnership&source=bridge-power-page
+    - text: Contact partnerships
+    - generic: →
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - link "A control-plane direction, with evidence before authority. Explore the intended virtual capacity control-plane architecture, its evidence and authority boundaries, and the current bounded assessment offer.":
+        - /url: /platform
+        - text: A control-plane direction, with evidence before authority.
+        - generic: Explore the intended virtual capacity control-plane architecture, its evidence and authority boundaries, and the current bounded assessment offer.
+      - link "Evaluate the next workload before committing capacity. Assess a proposed AI workload increment using historical inputs and declared constraints before service, time-to-power, or commercial commitments.":
+        - /url: /solutions/ai-cloud
+        - text: Evaluate the next workload before committing capacity.
+        - generic: Assess a proposed AI workload increment using historical inputs and declared constraints before service, time-to-power, or commercial commitments.
+      - link "Tell us where capacity is constrained. Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.":
+        - /url: /contact
+        - text: Tell us where capacity is constrained.
+        - generic: Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.
+  - paragraph: Proof before autonomy
+  - heading "Start with one capacity question." [level=2]
+  - paragraph: Agree the decision, evidence boundary, responsibilities, and paid scope before work begins.
+  - link "Scope an assessment":
+    - /url: /assessment?source=bridge-power-page&topic=power#scope
+    - text: Scope an assessment
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

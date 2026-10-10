@@ -1,0 +1,207 @@
+{
+  "schema": "gridninja.implementation-run.v1",
+  "task": "premium-civic-upgrade",
+  "status": "candidate-freeze-preparation",
+  "recordStarted": "2026-10-10",
+  "historicalAccounting": "Partial. Prior commands, other-agent activity and provisional checks outside the bounded qualification wrapper are unmetered; unknown values are not zero. The four-hour/40-command budget measures instrumented qualification commands only.",
+  "lead": {
+    "name": "/root",
+    "threadId": "01a1273d-82a5-7942-9752-101f08fabc53",
+    "role": "Accountable integration and release lead",
+    "owns": [
+      "homepage",
+      "shared CSS and typography",
+      "Hero and SectionShell",
+      "civic and authority components",
+      "assessment presentation",
+      "Figma and browser design reference",
+      "PR/release integration"
+    ],
+    "stoppingBudget": "Final qualification runner: 4-hour window and 40 commands from first invocation, at most 3 attempts per phase; then record the stopping condition and obtain a documented disposition before additional qualification."
+  },
+  "worktree": "/Users/holdenchung/.codex/worktrees/premium-civic-upgrade/GridNinjaSite",
+  "branch": "codex/premium-civic-upgrade",
+  "baseRevision": "e980000ea458f50662c268218791f6087f9e8ca3",
+  "candidateRevision": null,
+  "candidateState": "Candidate source is being frozen. Exact commit, source digest and build identity will be recorded in build/qa/premium-civic-candidate.json; earlier mutable passes are provisional.",
+  "workers": [
+    {
+      "owner": "/root/site_architecture_review",
+      "threadId": "01a1273f-df66-73d3-813a-88c12f05cf22",
+      "scope": [
+        "scripts/facility performance matrix and compute lock",
+        "tests/e2e/public-routes.spec.ts",
+        "tests/support/facility-viewer.ts",
+        "focused QA tests",
+        "scripts/qa bounded command runner",
+        "baseline and QA evidence"
+      ],
+      "sharedFileWindow": "Owns package-lock/package.json only for explicitly coordinated minimal dependency fixes; release window before another owner edits.",
+      "dependencies": [
+        "source freeze for baseline/final performance",
+        "GPU lock excludes rendering",
+        "lead source-stable signal"
+      ],
+      "expectedArtifacts": [
+        "baseline identity and122publication/media hashes",
+        "Linux disclosure trace diagnosis",
+        "38-route matrix",
+        "130-run qualification evidence",
+        "bounded QA receipts"
+      ],
+      "separateVerifier": "Lead and research worker for implementation/coverage; final review record must identify exact candidate.",
+      "acceptanceCommands": [
+        "npm run typecheck",
+        "focused Vitest tests",
+        "npm run test:e2e",
+        "documented premium-civic performance matrix"
+      ],
+      "status": "baseline and harness complete; final candidate checks pending",
+      "stoppingBudget": "At most3 repair cycles per failing phase; runner deadlines and4-hour/40-command qualification cap apply."
+    },
+    {
+      "owner": "/root/research_review",
+      "threadId": "01a1273f-cc63-7043-88e4-415e1224dc15",
+      "scope": [
+        "src/content/research.ts",
+        "src/components/research",
+        "tests/unit/research",
+        "DecisionPage",
+        "SeoResourceHub",
+        "Evidence page",
+        "participant protocol and research review docs"
+      ],
+      "dependencies": [
+        "root art component interfaces",
+        "primary-source access",
+        "source freeze lifted before edits"
+      ],
+      "expectedArtifacts": [
+        "7-source typed catalog",
+        "server reading notes/bibliography",
+        "source/correction receipts",
+        "reader protocol/session template",
+        "secondary journey integration"
+      ],
+      "separateVerifier": "Technical worker reviews contracts; art worker independently reviews narrative at final candidate.",
+      "acceptanceCommands": [
+        "focused research Vitest tests",
+        "targeted ESLint",
+        "tsc --noEmit --incremental false"
+      ],
+      "status": "implementation and author checks complete; final candidate review pending",
+      "stoppingBudget": "No new source-search loops without a new uncertainty; at most3 repairs per failing final gate."
+    },
+    {
+      "owner": "/root/narrative_critique",
+      "threadId": "01a1273f-f596-7da0-99d8-54c74e5f5f9e",
+      "scope": [
+        "assets-source/editorial",
+        "scripts/editorial",
+        "src/content/editorial-releases",
+        "src/lib/editorial",
+        "src/types/editorial.ts",
+        "src/app/assets/editorial",
+        "editorial tests/runbook"
+      ],
+      "sharedFileWindow": "Coordinated package build validators and next.config tracing only; other owners notified.",
+      "dependencies": [
+        "GPU lock excludes performance",
+        "new source/settings identities for mutable artwork",
+        "root five-slot integration"
+      ],
+      "expectedArtifacts": [
+        "3compositionfamilies",
+        "128sample finals and256sample references",
+        "editorial-v1 immutable manifest",
+        "responsive WebP derivatives",
+        "bounded retry evidence",
+        "ray tracing runbook"
+      ],
+      "separateVerifier": "Technical and research reviewers distinguish all5 thumbnails; author art review is labeled separately.",
+      "acceptanceCommands": [
+        "npm run editorial:validate",
+        "focused editorial contract/supervisor tests",
+        "build trace validation"
+      ],
+      "status": "assets and author checks complete; retry enforcement in progress; final review pending",
+      "stoppingBudget": "One evidence-linked Metal fallback retry per job identity, bounded child timeout/log size; no further speculative render families."
+    }
+  ],
+  "coordination": {
+    "maxConcurrentAgentsIncludingLead": 4,
+    "maxDelegationDepth": 1,
+    "newAgents": "Use existing specialists; no new delegation beyond depth1.",
+    "sharedOwnership": "One declared owner per edited file. Resolve conflicting changes through that owner; never reset another worker's work.",
+    "handoffIdentity": "Every final handoff supplies candidate revision, source digest and artifact hashes. Unknown historical identities remain unknown.",
+    "compute": "Shared compute lock serializes GPU rendering and browser performance; cleanup only resources owned by current process."
+  },
+  "reviewProtocol": {
+    "required": [
+      "freeze candidate and source/build identity",
+      "independent art/narrative/technical implementation reviews",
+      "record scope, findings, severity and dispositions",
+      "rerun only relevant checks/review after changes",
+      "any failed check or required missing gate blocks completion"
+    ],
+    "notSubstitutes": [
+      "author tests",
+      "earlier design review",
+      "majority vote",
+      "agent simulation of target readers",
+      "emulated physical device"
+    ]
+  },
+  "designReference": {
+    "figma": "https://www.figma.com/design/NwWJIF0no26vNQPZ1sDkeF",
+    "status": "draft; Starter MCP quota exhausted",
+    "knownIssues": [
+      "secondary shared button label",
+      "poster fill propagation",
+      "mobile civic crop",
+      "pending exact canonical research synchronization"
+    ],
+    "userDisposition": "Proceed with browser design review; Figma sync pending",
+    "productionFonts": "Existing system-ui stack. Inter is a documented editable Figma-only surrogate because exposed SF Pro instances report missing fonts."
+  },
+  "openReleaseDependencies": [
+    "frozen candidate and complete technical evidence",
+    "independent final implementation reviews",
+    "2 rounds of6newtargetreaders",
+    "separate2gridand2communityreaders",
+    "physical iPhone/Safari check (available, not tested)",
+    "other required device/screen-reader/zoom checks",
+    "reviewable PR and preview",
+    "production deployment and verification"
+  ],
+  "metering": {
+    "perAgentTokens": null,
+    "monetaryCost": null,
+    "perAgentModel": "Unavailable from observed evidence; not inferred from defaults",
+    "measured": [
+      "Instrumented qualification command receipts only; prior and other-agent activity remain unmetered.",
+      "editorial supervisor logs and single-run durations",
+      "performance samples with source/build identity"
+    ],
+    "noClaims": [
+      "no inferred cost savings",
+      "no new agent-effectiveness benchmark",
+      "no model downloads or global routing/settings changes"
+    ]
+  },
+  "candidateRecordPath": "build/qa/premium-civic-candidate.json",
+  "provisionalFindings": [
+    {
+      "finding": "CtaBand hydration mismatch across seven routes in Next development server",
+      "productionCheck": "No errors on the same seven routes using production build p288K7BnO4AFcP_-32rJP; correct CTA hrefs. Development-only cause not established.",
+      "evidence": "build/qa/provisional-hydration.json",
+      "status": "production probe passed; final suite pending"
+    },
+    {
+      "finding": "40 route/viewport previews",
+      "result": "No document overflow or failed images; preview contrast harness error explicitly not a pass.",
+      "evidence": "build/premium-civic/journey-review/report.json",
+      "status": "provisional"
+    }
+  ]
+}

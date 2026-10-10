@@ -1,0 +1,338 @@
+{
+  "schemaVersion": "gridninja.review-routes.v1",
+  "sourceCommit": "bcd960db52057d768feccdefe393d6986fb9bf84",
+  "sourceWorktree": "/Users/holdenchung/.codex/worktrees/cinematic-release/GridNinjaSite",
+  "observedDate": "2026-10-10",
+  "status": "source-inventory-not-live-verification",
+  "routes": [
+    {
+      "key": "home",
+      "path": "/",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Understand your capacity. Know the limits."
+    },
+    {
+      "key": "platform",
+      "path": "/platform",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "A control-plane direction, with evidence before authority."
+    },
+    {
+      "key": "dispatch-envelope",
+      "path": "/platform/dispatch-envelope",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "How much virtual capacity is safe, for how long, and under which evidence?"
+    },
+    {
+      "key": "ai-cloud",
+      "path": "/solutions/ai-cloud",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Evaluate the next workload before committing capacity."
+    },
+    {
+      "key": "colocation",
+      "path": "/solutions/colocation",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Review the evidence before the next tenant commitment."
+    },
+    {
+      "key": "bridge-power",
+      "path": "/solutions/bridge-power",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Define the capacity question before selecting the asset."
+    },
+    {
+      "key": "proof",
+      "path": "/proof",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Evidence informs a decision. Authority stays explicit."
+    },
+    {
+      "key": "why-gridninja",
+      "path": "/why-gridninja",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Connect a capacity question to its evidence."
+    },
+    {
+      "key": "proof-pack",
+      "path": "/proof/proof-pack",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "A concise brief, with a traceable supporting record."
+    },
+    {
+      "key": "demo",
+      "path": "/demo",
+      "tier": 1,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Inspect a capacity decision."
+    },
+    {
+      "key": "dcii",
+      "path": "/dcii",
+      "tier": 1,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "A research direction for proof-backed AI capacity."
+    },
+    {
+      "key": "assessment",
+      "path": "/assessment",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Scope your next capacity decision."
+    },
+    {
+      "key": "about",
+      "path": "/about",
+      "tier": 1,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Building a defensible basis for capacity decisions."
+    },
+    {
+      "key": "contact",
+      "path": "/contact",
+      "tier": 0,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Tell us where capacity is constrained."
+    },
+    {
+      "key": "contact-thanks",
+      "path": "/contact/thanks",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Check your inquiry receipt."
+    },
+    {
+      "key": "data-handling",
+      "path": "/data-handling",
+      "tier": 1,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Agree the data boundary before sharing operational inputs."
+    },
+    {
+      "key": "assessment-publication-a",
+      "path": "/evidence/assessments/demo-01-a/v1.0.0",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "publication",
+      "h1": "Request fits the modeled conditions"
+    },
+    {
+      "key": "assessment-publication-b",
+      "path": "/evidence/assessments/demo-01-b/v1.0.0",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "publication",
+      "h1": "A smaller commitment needs review"
+    },
+    {
+      "key": "assessment-publication-c",
+      "path": "/evidence/assessments/demo-01-c/v1.0.0",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "publication",
+      "h1": "No admissible revision under the stated minimum"
+    },
+    {
+      "key": "assessment-publication-d",
+      "path": "/evidence/assessments/demo-01-d/v1.0.0",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "publication",
+      "h1": "Missing evidence prevents assessment"
+    },
+    {
+      "key": "insights",
+      "path": "/insights",
+      "tier": 1,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Virtual capacity insights for constrained AI infrastructure"
+    },
+    {
+      "key": "evidence",
+      "path": "/evidence",
+      "tier": 1,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Inspect the evidence behind a capacity decision."
+    },
+    {
+      "key": "methodology",
+      "path": "/methodology",
+      "tier": 1,
+      "indexable": true,
+      "presentation": "page",
+      "h1": "Methods for claims that operators can defend"
+    },
+    {
+      "key": "virtual-capacity-control-plane",
+      "path": "/insights/virtual-capacity-control-plane",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "What is a virtual capacity control plane?",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "proof-adjusted-data-center-capacity",
+      "path": "/insights/proof-adjusted-data-center-capacity",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Proof-adjusted capacity starts where nominal headroom stops",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "runtime-assurance-ai-data-centers",
+      "path": "/insights/runtime-assurance-ai-data-centers",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Runtime assurance keeps capacity actions inside the envelope",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "data-center-shadow-mode",
+      "path": "/insights/data-center-shadow-mode",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Shadow Mode proves behavior before authority expands",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "cross-domain-capacity-constraints",
+      "path": "/insights/cross-domain-capacity-constraints",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Capacity is bound by the tightest cross-domain constraint",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "safe-data-center-grid-flexibility",
+      "path": "/insights/safe-data-center-grid-flexibility",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Grid flexibility must remain subordinate to site safety",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "ai-data-center-time-to-power",
+      "path": "/insights/ai-data-center-time-to-power",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Time-to-power improves when capacity claims become defensible",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "virtual-capacity-proof-test",
+      "path": "/evidence/virtual-capacity-proof-test",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Virtual Capacity Proof Test v1.0",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "sample-rta-trace",
+      "path": "/evidence/sample-rta-trace",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Sample runtime-assurance decision trace",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "accepted-headroom-ledger",
+      "path": "/evidence/accepted-headroom-ledger",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Accepted-headroom ledger specification",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "load-passport-specification",
+      "path": "/evidence/load-passport-specification",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Load Passport specification",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "claims-and-evidence",
+      "path": "/methodology/claims-and-evidence",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Claims must never outrun evidence",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "comparison-policy",
+      "path": "/methodology/comparison-policy",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "A scoped, source-backed comparison policy",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "editorial-corrections",
+      "path": "/methodology/editorial-corrections",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "Corrections remain visible and attributable",
+      "publicationStatus": "gated"
+    },
+    {
+      "key": "capacity-audit",
+      "path": "/methodology/capacity-audit",
+      "tier": 2,
+      "indexable": false,
+      "presentation": "page",
+      "h1": "How a Capacity Audit turns constraints into a defensible decision",
+      "publicationStatus": "gated"
+    }
+  ],
+  "releaseContext": {
+    "mergeCommit": "e980000ea458f50662c268218791f6087f9e8ca3",
+    "recordedDeployment": "E2w6oLVgMVzpoxX4TjVXqQzA8n8s",
+    "liveBuild": "4x9zp1Zusx59GVCtWyvPt",
+    "evidence": [
+      "release-record.json",
+      "live-home-response.json"
+    ],
+    "scope": "Route inventory from approved source; per-route HTTP review is separate."
+  }
+}

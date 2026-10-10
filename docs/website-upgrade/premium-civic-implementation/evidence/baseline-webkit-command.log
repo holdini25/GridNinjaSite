@@ -1,0 +1,4 @@
+
+> nextjs@0.1.0 test:e2e
+> playwright test tests/e2e/assessment.spec.ts --project=webkit-desktop --project=webkit-mobile --grep server-rendered explanation --repeat-each=3 --workers=1 --reporter=json
+

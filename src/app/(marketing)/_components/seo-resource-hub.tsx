@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { assessmentScopeHref } from "@/lib/marketing-journeys"
+import { assessmentScopeHref, sampleBriefHref } from "@/lib/marketing-journeys"
 import type { ReactNode } from "react"
 
 import { SectionShell } from "@/components/layout/section-shell"
@@ -16,6 +16,7 @@ type ResourceHubProps = {
   boundary: string
   resources: readonly SeoResource[]
   introduction?: ReactNode
+  research?: ReactNode
 }
 
 export function SeoResourceHub({
@@ -26,6 +27,7 @@ export function SeoResourceHub({
   boundary,
   resources,
   introduction,
+  research,
 }: ResourceHubProps) {
   const published = resources.filter(resource => isPublicationPromotable(resource.publicationStatus))
   const pending = resources.filter(resource => !isPublicationPromotable(resource.publicationStatus))
@@ -40,10 +42,16 @@ export function SeoResourceHub({
           <p className="mt-6 max-w-3xl text-lg leading-9 text-muted-foreground">
             {answer}
           </p>
+          {path === "/evidence" && <div className="gn-evidence-sample-action mt-6">
+            <Button asChild size="lg" variant="outline">
+              <Link prefetch={false} href={sampleBriefHref()}>See a sample decision brief</Link>
+            </Button>
+          </div>}
         </SectionShell>
       </header>
 
       {introduction}
+      {research}
 
       <SectionShell>
         <section className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">

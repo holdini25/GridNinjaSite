@@ -1,0 +1,49 @@
+/* DESIGN CONTRACT ONLY. Not loaded by the website. sRGB fallbacks remain authoritative. */
+:root {
+  --gn-canvas: #080808;
+  --gn-surface: #111315;
+  --gn-surface-raised: #191C20;
+  --gn-heading: #F4F7FA;
+  --gn-body: #CDD3D8;
+  --gn-supporting: #B8B8B8;
+  --gn-orange: #FF9F1A;
+  --gn-orange-hover: #FFB44D;
+  --gn-orange-pressed: #E98B0C;
+  --gn-control-edge: #7B858E;
+  --gn-decorative-edge: #2A3035;
+  --gn-allow: #83D8AD;
+  --gn-repair: #E2C168;
+  --gn-reject: #FF8F91;
+  --gn-no-proof: #AFC2D6;
+  --gn-proof-cyan: #61E4FF;
+  --gn-paper: #E8EDF1;
+  --gn-paper-ink: #1A2026;
+  --gn-paper-secondary: #485662;
+  --gn-paper-orange: #86420B;
+  --gn-media-matte: #010101;
+}
+@supports (color: oklch(50% 0 0)) {
+  :root {
+    --gn-canvas: oklch(0.1344092 0.0000000 0.00000);
+    --gn-surface: oklch(0.1854035 0.0051783 248.10742);
+    --gn-surface-raised: oklch(0.2250257 0.0090175 255.60532);
+    --gn-heading: oklch(0.9747155 0.0051315 247.87655);
+    --gn-body: oklch(0.8636916 0.0095376 242.85589);
+    --gn-supporting: oklch(0.7826037 0.0000000 0.00000);
+    --gn-orange: oklch(0.7827371 0.1684707 66.35200);
+    --gn-orange-hover: oklch(0.8231713 0.1451209 71.62632);
+    --gn-orange-pressed: oklch(0.7206568 0.1609791 63.79047);
+    --gn-control-edge: oklch(0.6114530 0.0180373 245.23615);
+    --gn-decorative-edge: oklch(0.3054110 0.0123092 243.24298);
+    --gn-allow: oklch(0.8162826 0.1036574 160.88292);
+    --gn-repair: oklch(0.8212908 0.1148750 89.43056);
+    --gn-reject: oklch(0.7707378 0.1354722 19.56623);
+    --gn-no-proof: oklch(0.8060131 0.0351734 249.62812);
+    --gn-proof-cyan: oklch(0.8562788 0.1196189 213.57678);
+    --gn-paper: oklch(0.9434516 0.0076163 241.66646);
+    --gn-paper-ink: oklch(0.2401751 0.0145193 248.43131);
+    --gn-paper-secondary: oklch(0.4457314 0.0264349 244.27828);
+    --gn-paper-orange: oklch(0.4575408 0.1113205 52.30599);
+    --gn-media-matte: oklch(0.0672046 0.0000000 0.00000);
+  }
+}

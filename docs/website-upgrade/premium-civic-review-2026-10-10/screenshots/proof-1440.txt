@@ -1,0 +1,125 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - navigation "Primary":
+    - generic "How it works":
+      - text: How it works
+    - generic "Solutions":
+      - text: Solutions
+    - link "Sample brief":
+      - /url: /demo#decision-brief
+    - generic "Evidence":
+      - text: Evidence
+    - generic "Company":
+      - text: Company
+  - link "Scope an assessment":
+    - /url: /assessment?source=header#scope
+- main:
+  - region "Proof before autonomy":
+    - paragraph: Proof before autonomy
+    - heading "Evidence informs a decision. Authority stays explicit." [level=1]
+    - paragraph: A modeled result, a useful business outcome, acceptance of a report, and permission to operate are different things. A capacity assessment must keep those boundaries visible.
+    - link "Scope an assessment":
+      - /url: /assessment?source=proof-hero#scope
+    - link "See a sample decision brief":
+      - /url: /demo?scenario=b&version=1.0.0&perspective=business#decision-brief
+  - heading "What each result means" [level=2]
+  - paragraph: Model screening uses allow / repair / reject / no-proof for a stated profile and evidence set. The labels do not authorize equipment changes or establish safe sellable MW.
+  - article:
+    - heading "Modeled eligibility" [level=3]
+    - paragraph: A workload fits the authored model conditions, requires a revision, fails a stated requirement, or cannot be assessed. A result applies only to its scope and window.
+  - article:
+    - heading "Commercial usefulness" [level=3]
+    - paragraph: The decision owner determines whether a profile meets the service and business need. A smaller modeled increment is not automatically a useful offer.
+  - article:
+    - heading "Report acceptance" [level=3]
+    - paragraph: The customer reviews contracted deliverables against agreed criteria. Accepting a report is not acceptance of an operational action.
+  - article:
+    - heading "Operating permission" [level=3]
+    - paragraph: Facilities and operational authorities control site changes. Engineering, safety, contractual, and regulatory review are separate from this public demonstration.
+  - heading "A conditional path to more authority" [level=2]
+  - paragraph: Shadow Mode would observe without control. Advisory Mode would put proposals before operators. Bounded Autonomy would require a verified dispatch envelope, explicit permissions, rollback, and audit evidence. Expanded Autonomy would require further evidence. These are development stages, not services proven by the synthetic sample.
+  - heading "What evidence must travel with a number" [level=2]
+  - paragraph: A capacity report needs the requested and revised profiles, reference load, meter boundary, time interval, binding conditions, assumptions, unknowns, dataset/model versions, and review status. A safety report requires its own supported scope; a software check cannot stand in for it.
+  - link "Inspect the proof-pack contents":
+    - /url: /proof/proof-pack
+    - text: Inspect the proof-pack contents
+    - generic: →
+  - heading "Community benefits require separate evidence" [level=2]
+  - paragraph: A modeled facility result does not establish a community benefit. Claims about local electricity affordability, water use, or effects on shared grid infrastructure require their own scope, evidence, and review. The synthetic sample does not assess these outcomes.
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - 'link "A concise brief, with a traceable supporting record. Review the contents of a capacity decision package: profiles, conditions, model records, unknowns, review responsibilities, and publication versions."':
+        - /url: /proof/proof-pack
+        - text: A concise brief, with a traceable supporting record.
+        - generic: "Review the contents of a capacity decision package: profiles, conditions, model records, unknowns, review responsibilities, and publication versions."
+      - link "Inspect a capacity decision. Inspect a synthetic capacity decision brief. Compare requested and revised profiles, model screening, unknowns, and the unresolved business decision.":
+        - /url: /demo
+        - text: Inspect a capacity decision.
+        - generic: Inspect a synthetic capacity decision brief. Compare requested and revised profiles, model screening, unknowns, and the unresolved business decision.
+      - link "Inspect the evidence behind a capacity decision. Inspect versioned synthetic decision briefs and their matching PDF and technical records. Read the modeled result, conditions, and unresolved question together.":
+        - /url: /evidence
+        - text: Inspect the evidence behind a capacity decision.
+        - generic: Inspect versioned synthetic decision briefs and their matching PDF and technical records. Read the modeled result, conditions, and unresolved question together.
+      - link "Connect a capacity question to its evidence. Understand the proposed GridNinja assessment role alongside existing monitoring, models, controls, and commercial planning, with explicit evidence limits.":
+        - /url: /why-gridninja
+        - text: Connect a capacity question to its evidence.
+        - generic: Understand the proposed GridNinja assessment role alongside existing monitoring, models, controls, and commercial planning, with explicit evidence limits.
+  - paragraph: Proof before autonomy
+  - heading "Start with one capacity question." [level=2]
+  - paragraph: Agree the decision, evidence boundary, responsibilities, and paid scope before work begins.
+  - link "Scope an assessment":
+    - /url: /assessment?source=proof-hero#scope
+    - text: Scope an assessment
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

@@ -21,11 +21,11 @@ export function FacilityHero({ record, release, fallback, cinematicUnavailable =
     <div className="gn-home-container gn-home-hero-grid">
       <div className="gn-home-intro">
         <p className="gn-home-eyebrow">{cinematicHome.eyebrow}</p>
-        <h1 id="home-heading">Understand your capacity.<br /> Know the limits.</h1>
+        <h1 id="home-heading">{cinematicHome.headline}</h1>
         <p className="gn-home-lead">{cinematicHome.body}</p>
         <div className="gn-home-actions">
           <Link href={assessmentScopeHref("home-hero")} prefetch={false} className="gn-home-button" data-analytics-event="assessment_cta_selected" data-analytics-source="home-hero">Scope an assessment <span aria-hidden="true">↗</span></Link>
-          <Link href={sampleBriefHref()} prefetch={false} className="gn-home-text-link">See a sample decision brief <span aria-hidden="true">→</span></Link>
+          <Link href={sampleBriefHref()} prefetch={false} className="gn-home-secondary-button">See a sample decision brief <span aria-hidden="true">→</span></Link>
         </div>
         <p className="gn-home-trust">{cinematicHome.trust}</p>
       </div>

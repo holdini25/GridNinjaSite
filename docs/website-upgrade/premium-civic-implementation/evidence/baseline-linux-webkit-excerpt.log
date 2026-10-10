@@ -1,0 +1,103 @@
+2026-10-03T01:03:47.5557680Z Ubuntu
+2026-10-03T01:03:47.5558198Z 24.04.5
+2026-10-03T01:03:47.5561097Z Version: 20260927.320.1
+2026-10-03T01:03:47.5562691Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-03T01:03:56.2094096Z node: v22.23.2
+2026-10-03T01:03:56.2094503Z npm: 10.9.8
+2026-10-03T01:04:57.6667003Z Downloading WebKit 26.5 (playwright webkit v2311) from https://cdn.playwright.dev/dbazure/download/playwright/builds/webkit/2311/webkit-ubuntu-24.04.zip
+2026-10-03T01:08:27.2998096Z {"engine":"webkit","headed":false,"platform":"linux","checkedAt":"2026-10-03T01:08:22.299Z","result":"pass","browser":"26.5","graphics":{"webgl2":true,"renderer":"Apple GPU","pixel":[64,128,191,255],"error":0},"renderingClass":"unclassified","note":"Browser functionality only. This preflight does not qualify hardware performance."}
+2026-10-03T01:08:52.5880178Z   ✓    6 [webkit-desktop] › tests/e2e/assessment.spec.ts:130:7 › capacity assessment › server-rendered explanation and fixture navigation work without JavaScript (2.8s)
+2026-10-03T01:23:05.1578672Z   1) [webkit-desktop] › tests/e2e/enterprise-experience.spec.ts:65:5 › a hypothetical minimum never changes assessment identity, files, or navigation 
+2026-10-03T01:23:05.1578672Z   1) [webkit-desktop] › tests/e2e/enterprise-experience.spec.ts:65:5 › a hypothetical minimum never changes assessment identity, files, or navigation 
+2026-10-03T01:23:05.1579837Z 
+2026-10-03T01:23:05.1580144Z     Error: expect(locator).toBeVisible() failed
+2026-10-03T01:23:05.1580567Z 
+2026-10-03T01:23:05.1580984Z     Locator: getByRole('combobox', { name: 'Scenario', exact: true })
+2026-10-03T01:23:05.1581703Z     Expected: visible
+2026-10-03T01:23:05.1582353Z     Timeout: 10000ms
+2026-10-03T01:23:05.1582837Z     Error: element(s) not found
+2026-10-03T01:23:05.1583139Z 
+2026-10-03T01:23:05.1583292Z     Call log:
+2026-10-03T01:23:05.1583772Z       - Expect "toBeVisible" with timeout 10000ms
+2026-10-03T01:23:05.1584581Z       - waiting for getByRole('combobox', { name: 'Scenario', exact: true })
+2026-10-03T01:23:05.1585111Z 
+2026-10-03T01:23:05.1585121Z 
+2026-10-03T01:23:05.1585365Z        at ../support/facility-viewer.ts:72
+2026-10-03T01:23:05.1585713Z 
+2026-10-03T01:23:05.1586358Z       70 |   await expect(controls.locator("button").filter({ hasText: /^Reset example$/ })).toHaveCount(1)
+2026-10-03T01:23:05.1587721Z       71 |   if (await controls.getAttribute("open") === null) await controls.locator(":scope > summary").click()
+2026-10-03T01:23:05.1589037Z     > 72 |   await expect(page.getByRole("combobox", { name: "Scenario", exact: true })).toBeVisible()
+2026-10-03T01:23:05.1590033Z          |                                                                               ^
+2026-10-03T01:23:05.1590645Z       73 | }
+2026-10-03T01:23:05.1590969Z       74 |
+2026-10-03T01:23:05.1591673Z       75 | /** Interactive tests may follow the real software-renderer fallback through the
+2026-10-03T01:23:05.1592997Z         at openAssessmentControls (/home/runner/work/GridNinjaSite/GridNinjaSite/tests/support/facility-viewer.ts:72:79)
+2026-10-03T01:23:05.1593880Z         at /home/runner/work/GridNinjaSite/GridNinjaSite/tests/e2e/enterprise-experience.spec.ts:82:3
+2026-10-03T01:23:05.1594308Z 
+2026-10-03T01:23:05.1594803Z     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1595655Z     test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop/test-failed-1.png
+2026-10-03T01:23:05.1596541Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1596837Z 
+2026-10-03T01:23:05.1597231Z     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1597998Z     test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop/video.webm
+2026-10-03T01:23:05.1598812Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1599099Z 
+2026-10-03T01:23:05.1599614Z     Error Context: test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop/error-context.md
+2026-10-03T01:23:05.1600156Z 
+2026-10-03T01:23:05.1600563Z     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1601617Z     test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop/trace.zip
+2026-10-03T01:23:05.1602596Z     Usage:
+2026-10-03T01:23:05.1602732Z 
+2026-10-03T01:23:05.1603287Z         npx playwright show-trace test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop/trace.zip
+2026-10-03T01:23:05.1603858Z 
+2026-10-03T01:23:05.1604234Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1604517Z 
+2026-10-03T01:23:05.1604874Z     Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1605172Z 
+2026-10-03T01:23:05.1605331Z     Error: expect(locator).toBeVisible() failed
+2026-10-03T01:23:05.1605546Z 
+2026-10-03T01:23:05.1605767Z     Locator: getByRole('combobox', { name: 'Scenario', exact: true })
+2026-10-03T01:23:05.1606135Z     Expected: visible
+2026-10-03T01:23:05.1606365Z     Timeout: 10000ms
+2026-10-03T01:23:05.1606628Z     Error: element(s) not found
+2026-10-03T01:23:05.1606792Z 
+2026-10-03T01:23:05.1606874Z     Call log:
+2026-10-03T01:23:05.1607160Z       - Expect "toBeVisible" with timeout 10000ms
+2026-10-03T01:23:05.1607609Z       - waiting for getByRole('combobox', { name: 'Scenario', exact: true })
+2026-10-03T01:23:05.1607911Z 
+2026-10-03T01:23:05.1607916Z 
+2026-10-03T01:23:05.1608051Z        at ../support/facility-viewer.ts:72
+2026-10-03T01:23:05.1608248Z 
+2026-10-03T01:23:05.1608611Z       70 |   await expect(controls.locator("button").filter({ hasText: /^Reset example$/ })).toHaveCount(1)
+2026-10-03T01:23:05.1609371Z       71 |   if (await controls.getAttribute("open") === null) await controls.locator(":scope > summary").click()
+2026-10-03T01:23:05.1610089Z     > 72 |   await expect(page.getByRole("combobox", { name: "Scenario", exact: true })).toBeVisible()
+2026-10-03T01:23:05.1610652Z          |                                                                               ^
+2026-10-03T01:23:05.1610985Z       73 | }
+2026-10-03T01:23:05.1611175Z       74 |
+2026-10-03T01:23:05.1611576Z       75 | /** Interactive tests may follow the real software-renderer fallback through the
+2026-10-03T01:23:05.1612780Z         at openAssessmentControls (/home/runner/work/GridNinjaSite/GridNinjaSite/tests/support/facility-viewer.ts:72:79)
+2026-10-03T01:23:05.1613643Z         at /home/runner/work/GridNinjaSite/GridNinjaSite/tests/e2e/enterprise-experience.spec.ts:82:3
+2026-10-03T01:23:05.1614050Z 
+2026-10-03T01:23:05.1614482Z     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1615505Z     test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop-retry1/test-failed-1.png
+2026-10-03T01:23:05.1616552Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1616846Z 
+2026-10-03T01:23:05.1617254Z     attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1618574Z     test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop-retry1/video.webm
+2026-10-03T01:23:05.1619667Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1620113Z 
+2026-10-03T01:23:05.1620672Z     Error Context: test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop-retry1/error-context.md
+2026-10-03T01:23:05.1621399Z 
+2026-10-03T01:23:05.1621822Z     attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1622975Z     test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop-retry1/trace.zip
+2026-10-03T01:23:05.1623761Z     Usage:
+2026-10-03T01:23:05.1623933Z 
+2026-10-03T01:23:05.1624987Z         npx playwright show-trace test-results/enterprise-experience-a-hy-081ad-dentity-files-or-navigation-webkit-desktop-retry1/trace.zip
+2026-10-03T01:23:05.1625776Z 
+2026-10-03T01:23:05.1626308Z     ────────────────────────────────────────────────────────────────────────────────────────────────
+2026-10-03T01:23:05.1626643Z 
+2026-10-03T01:23:05.1626737Z   1 failed
+2026-10-03T01:23:05.1627551Z     [webkit-desktop] › tests/e2e/enterprise-experience.spec.ts:65:5 › a hypothetical minimum never changes assessment identity, files, or navigation 
+2026-10-03T01:23:05.1628207Z   11 skipped
+2026-10-03T01:23:05.1628418Z   178 passed (14.6m)
+

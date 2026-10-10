@@ -1,0 +1,118 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - link "Scope an assessment":
+    - /url: /assessment?source=header#scope
+  - generic "Open navigation":
+- main:
+  - navigation "Breadcrumb":
+    - list:
+      - link "Home":
+        - /url: /
+      - generic: /
+      - link "Solutions":
+        - /url: /#solutions
+      - generic: /
+      - generic: Evaluate the next workload before committing capacity.
+  - region "For AI cloud operators":
+    - paragraph: For AI cloud operators
+    - heading "Evaluate the next workload before committing capacity." [level=1]
+    - paragraph: Scope a bounded assessment of a proposed AI workload increment against authorized historical inputs and declared facility conditions. Keep time-to-power, service requirements, and the next commercial decision in view.
+    - link "Scope an assessment":
+      - /url: /assessment?source=ai-cloud-page&topic=ai-cloud#scope
+  - img "Synthetic facility illustrating electrical, cooling, reserve, and workload relationships."
+  - paragraph: Synthetic example · Fixture B
+  - heading "Inspect the decision behind the increment." [level=2]
+  - paragraph: Explore the same authored request, proposed revision, and unresolved commercial question. The miniature illustrates equipment relationships; it does not calculate capacity.
+  - link "See a sample decision brief":
+    - /url: /demo?scenario=b&version=1.0.0&perspective=business&focus=workloads&topic=ai-cloud#decision-brief
+    - text: See a sample decision brief
+    - generic: →
+  - heading "Start with one admission question" [level=2]
+  - paragraph: What workload profile is proposed, at which facility boundary, over which window, and with what minimum service requirement? Name the infrastructure sponsor and operational reviewer before modeling.
+  - heading "A decision package for the right reviewers" [level=2]
+  - paragraph: Agree the evidence and the review question rather than a target uplift.
+  - article:
+    - heading "Infrastructure and facilities" [level=3]
+    - paragraph: Review load history, cooling constraints, reserve policy, topology, and input gaps. A result is scoped to what the model can support.
+  - article:
+    - heading "Service and commercial owners" [level=3]
+    - paragraph: Compare a requested profile and any modeled revision with the workload's actual service need. Revenue and delivered GPU-hours are not inferred from modeled MW.
+  - heading "Keep investment options separate" [level=2]
+  - paragraph: Rescheduling, phasing, cooling upgrades, and bridge power may be worth investigating. They remain unassessed until their technical feasibility, cost, timing, and contractual implications are evaluated.
+  - link "Inspect fixture B's unresolved decision":
+    - /url: /demo?scenario=b&version=1.0.0&perspective=business&topic=ai-cloud#decision-brief
+    - text: Inspect fixture B's unresolved decision
+    - generic: →
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - link "Scope your next capacity decision. Scope a paid, bounded capacity decision assessment using authorized historical inputs, explicit conditions, model comparisons, and a reviewable brief.":
+        - /url: /assessment
+        - text: Scope your next capacity decision.
+        - generic: Scope a paid, bounded capacity decision assessment using authorized historical inputs, explicit conditions, model comparisons, and a reviewable brief.
+      - link "Define the capacity question before selecting the asset. Scope the evidence needed to investigate bridge power and DER for constrained AI infrastructure, with explicit site and commercial boundaries.":
+        - /url: /solutions/bridge-power
+        - text: Define the capacity question before selecting the asset.
+        - generic: Scope the evidence needed to investigate bridge power and DER for constrained AI infrastructure, with explicit site and commercial boundaries.
+      - link "Evidence informs a decision. Authority stays explicit. Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.":
+        - /url: /proof
+        - text: Evidence informs a decision. Authority stays explicit.
+        - generic: Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.
+  - paragraph: Proof before autonomy
+  - heading "Start with one capacity question." [level=2]
+  - paragraph: Agree the decision, evidence boundary, responsibilities, and paid scope before work begins.
+  - link "Scope an assessment":
+    - /url: /assessment?source=ai-cloud-page&topic=ai-cloud#scope
+    - text: Scope an assessment
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert
