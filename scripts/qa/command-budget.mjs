@@ -31,6 +31,10 @@ const sha256 = value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value
 const commit = value => typeof value === "string" && /^[a-f0-9]{40}$/.test(value)
 const nonempty = value => typeof value === "string" && /\S/.test(value)
 
+/** @typedef {{head: string, sourceRevision: string, qaHarnessRevision: string}} CorrectionIdentity */
+/** @typedef {{schemaVersion: string, authorizedBy: string, recordedAt: string, reason: string, dispositionSha256: string, priorCandidateHead: string, candidate: CorrectionIdentity, recordSha256: string, recordPath?: string}} CorrectionEntry */
+/** @typedef {{sequence: number, phase: string, phaseAttempt: number, candidateSequence: number, candidateHead: string, startedAt: number, timeoutMs: number, status: string, directory?: string, finishedAt?: number, receiptSha256?: string}} CorrectionAttempt */
+
 export function validateCorrectionAuthorization(record) {
   assert.equal(record?.schemaVersion, "gridninja-correction-authorization.v1", "Unknown correction authorization")
   assert(typeof record.id === "string" && /^[a-z][a-z0-9-]{0,79}$/.test(record.id), "Invalid correction id")
@@ -48,10 +52,10 @@ export function validateCorrectionAuthorization(record) {
 export function newCorrectionBudget(now, authorization) {
   assert(sha256(authorization?.dispositionSha256) && sha256(authorization?.priorBudgetSha256) && sha256(authorization?.userRequestSha256), "Correction binding hashes are required")
   assert(commit(authorization.baselineHead), "Correction baseline binding is required")
-  return { schemaVersion: "gridninja-command-budget.v2", scope: "premium-civic-correction", authorization: JSON.parse(JSON.stringify(authorization)), firstInvocationAt: now, deadlineAt: now + CORRECTION_LIMITS.windowMs, limits: { ...CORRECTION_LIMITS }, candidates: [], attempts: [] }
+  return { schemaVersion: "gridninja-command-budget.v2", scope: "premium-civic-correction", authorization: JSON.parse(JSON.stringify(authorization)), firstInvocationAt: now, deadlineAt: now + CORRECTION_LIMITS.windowMs, limits: { ...CORRECTION_LIMITS }, candidates: /** @type {Array<CorrectionIdentity & {sequence: number, boundAt: number, entry: CorrectionEntry | null}>} */ ([]), attempts: /** @type {CorrectionAttempt[]} */ ([]) }
 }
 
-export function reserveCorrectionCommand(budget, phase, now, timeoutMs, { authorization, candidate, candidateEntry = null }) {
+export function reserveCorrectionCommand(budget, phase, now, timeoutMs, { authorization, candidate, candidateEntry = /** @type {CorrectionEntry | null} */ (null) }) {
   assert.equal(budget.schemaVersion, "gridninja-command-budget.v2", "Unknown correction budget")
   assert.equal(budget.scope, "premium-civic-correction", "Wrong correction scope")
   assert.deepEqual(budget.authorization, authorization, "Correction authorization binding changed")
