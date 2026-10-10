@@ -7,6 +7,23 @@ const solutions = [
   { path: "/solutions/bridge-power", source: "bridge-power-page", topic: "power" },
 ] as const
 
+test.describe("server-rendered solution decisions", () => {
+  test.use({ javaScriptEnabled: false })
+
+  for (const solution of solutions) {
+    test(`${solution.path} delivers both assessment actions without JavaScript`, async ({ page }) => {
+      await page.goto(solution.path, { waitUntil: "domcontentloaded" })
+      const hero = page.locator(".gn-premium-hero")
+      const primary = hero.getByRole("link", { name: "Scope an assessment", exact: true })
+      const sample = hero.getByRole("link", { name: "See a sample decision brief", exact: true })
+      await expect(primary).toBeVisible()
+      await expect(sample).toBeVisible()
+      await expect(primary).toHaveAttribute("href", assessmentScopeHref(solution.source, solution.topic))
+      await expect(sample).toHaveAttribute("href", sampleBriefHref(solution.topic))
+    })
+  }
+})
+
 // Inspect the built response and browser navigation, not only React source props:
 // a previous prerender omitted the sample action on two solution routes.
 test.describe("premium solution journey continuity", () => {

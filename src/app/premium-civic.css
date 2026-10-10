@@ -64,6 +64,10 @@
 .gn-civic-figure.gn-civic-figure--immersive { width: 100%; margin: 0; }
 .gn-civic-figure--immersive .gn-civic-artwork { max-width: 1920px; margin-inline: auto; }
 .gn-civic-figure--immersive .gn-civic-artwork::after { background: linear-gradient(90deg,var(--gn-canvas) 0%,rgb(8 8 8 / .92) 20%,rgb(8 8 8 / .60) 32%,rgb(8 8 8 / .20) 42%,transparent 54%),linear-gradient(180deg,var(--gn-canvas),transparent 15%,transparent 78%,var(--gn-canvas)); }
+@media (min-width: 820px) {
+  /* Keep all three fallback subjects beside the headline if the photograph fails. */
+  .gn-civic-figure--immersive .gn-civic-landscape { width: 60%; margin-left: 40%; }
+}
 .gn-civic-principles { margin-top: 48px; }
 .gn-civic-responsibilities { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 40px; padding: 0; list-style: none; }
 .gn-civic-responsibilities li { padding-top: 24px; border-top: 1px solid var(--gn-divider); }
