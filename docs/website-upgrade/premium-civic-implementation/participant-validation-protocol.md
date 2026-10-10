@@ -10,7 +10,7 @@ Conduct two rounds of six participants, with **new people in round two**. Each r
 
 Assign three desktop and three physical-mobile starters per round, balanced across roles. Use the person's usual access method. Record browser, device, operating system, viewport, input method, connection, reduced-motion preference and candidate/source identity. Emulated mobile does not close physical-device coverage. A missing device or role stays pending.
 
-Use synthetic form details and the isolated mock intake endpoint from the existing protocol. Never submit these study inquiries to production. Keep names, contact details, consent and recordings in the user's private study records, outside the repository, analytics and public reports. Use participant codes in the [session template](session-record-template.md).
+Use synthetic form details and the [isolated reader-session proxy](../../../scripts/qa/READER-SESSION.md), after a facilitator dry run against the declared candidate. Its mock receipt does not reach the inquiry backend. Loopback use is prepared; physical iPhone LAN use requires a supplied certificate already trusted by the device, and remote participants require a separately accessible isolated host. Those availability and session results remain pending. Never submit these study inquiries to production. Keep names, contact details, consent and recordings in the user's private study records, outside the repository, analytics and public reports. Use participant codes in the [session template](session-record-template.md).
 
 ### Separate 60-second first-read exercise
 
