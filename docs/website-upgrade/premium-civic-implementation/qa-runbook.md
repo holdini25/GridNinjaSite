@@ -36,6 +36,8 @@ Ordinary automatic transfer ≤1,572,864 bytes. Cinematic-home automatic transfe
 
 The new full-scroll ledger enforces total, per-image, font and applicable article-script ceilings after visiting lazy sections. Each observation begins before initial loading and uses one cumulative ledger. `fullPageBytes` already includes `initialBytes`: never add them, and never count these observations as extra Lighthouse/LCP samples.
 
+Full-scroll collection visits each viewport until that same ledger settles before advancing. The protocol records its 750ms network-quiet requirement, 15s settlement deadline and 100-step bound; document height is re-read after settlement to follow lazy content growth. This collects the complete assets encountered during settled visits, not a rapid-fling cancellation trace. No failed request is exempted. The failed earlier rapid-scroll observations remain preserved in the [a3e399c disposition](evidence/a3e399c-qualification.md).
+
 ## Serialized final performance collection
 
 Freeze site source, dependency lock, build environment and harness for the whole collection. Close competing render/encoding/CPU-heavy jobs and browser capture work. Both collectors acquire `build/qa/compute.lock`, shared with the editorial supervisor. A stale-looking lock is never stolen: coordinate with its owner and verify the recorded PID before deliberate recovery. Keep failed report sets; choose a new directory after a correction rather than replacing a poor valid result.

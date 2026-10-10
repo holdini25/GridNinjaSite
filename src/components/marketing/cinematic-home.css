@@ -133,8 +133,10 @@
 .gn-home-evidence-copy h3 { margin-top: 12px; font-size: 1.5rem; }
 .gn-home-evidence-copy > p:not(.gn-home-card-label) { margin-top: 16px; font-size: 1rem; }
 .gn-home-evidence-copy .gn-home-text-link { margin-top: 16px; }
-.gn-home-brief-thumbnail { display: grid; aspect-ratio: 8/5; align-items: center; padding: 24px; background: #d0d9e1; }
-.gn-home-paper { padding: 24px; border: 1px solid #bac4cb; color: var(--gn-paper-ink); background: var(--gn-paper); }
+/* This thumbnail contains live text: let it grow instead of transferring a
+   shared row's height into an oversized aspect-ratio width or clipping copy. */
+.gn-home-brief-thumbnail { display: grid; width: 100%; min-width: 0; grid-template-columns: minmax(0,1fr); align-items: center; padding: 24px; background: #d0d9e1; }
+.gn-home-paper { min-width: 0; overflow-wrap: anywhere; padding: 24px; border: 1px solid #bac4cb; color: var(--gn-paper-ink); background: var(--gn-paper); }
 .gn-home-paper > div:first-child { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font: .625rem/1.5 var(--font-mono); color: var(--gn-paper-secondary); }
 .gn-home .gn-home-paper > p { margin-top: 16px; color: var(--gn-paper-orange); font: .75rem/1.5 var(--font-mono); }
 .gn-home-paper > strong { display: block; margin-top: 12px; font-size: 1.375rem; font-weight: 500; line-height: 1.25; letter-spacing: -.025em; }

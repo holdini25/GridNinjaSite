@@ -19,6 +19,8 @@ Current implementation and the supporting materials follow the [review specifica
 
 The [run record](run-record.json) identifies owners, separate reviewers, scope, stopping rules and open dependencies. The [QA runbook](qa-runbook.md) distinguishes candidate checks from release approval. Exact candidate/build identity and command receipts are generated during qualification; provisional screenshots and passing author checks do not close release gates.
 
+The [a3e399c qualification disposition](evidence/a3e399c-qualification.md) preserves the subsequent CI and local failures, their corrections and the explicit bounded requalification decision. Its passing preview and scoped reviews were not a production approval.
+
 The [artwork record](editorial-artwork.md) documents the Cycles Metal pipeline, 128/256-sample comparison, color management and its measurement limits. The [research review](research-publication-review.md) preserves actual review dates, source access and limitations. The [participant protocol](participant-validation-protocol.md) and [session template](session-record-template.md) are ready for actual readers; no sessions have been fabricated or replaced by agent simulations.
 
 Physical iPhone/Safari is available but untested. Reader recruitment, physical-device and assistive-technology evidence, final independent reviews, production-configured performance and deployment verification remain release dependencies. Business outcomes require private records and follow-up; diagnostic click counts are not session conversion rates.

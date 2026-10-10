@@ -1,5 +1,7 @@
 "use client"
 
+import "./dispatch-envelope.css"
+
 import type { KeyboardEvent } from "react"
 import { useMemo, useState } from "react"
 

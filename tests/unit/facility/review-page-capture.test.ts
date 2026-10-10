@@ -1,15 +1,26 @@
 import { afterEach, expect, it, vi } from "vitest"
-import type { Page } from "@playwright/test"
+import { mkdtemp, rm } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import sharp from "sharp"
+import type { Page, PageScreenshotOptions } from "@playwright/test"
 import { captureVisitedReviewPage } from "../../../scripts/facility/review-page-capture.mjs"
 
-afterEach(() => { document.body.replaceChildren(); vi.restoreAllMocks(); vi.unstubAllGlobals() })
+const temporaryDirectories: string[] = []
+afterEach(async () => {
+  document.body.replaceChildren(); vi.restoreAllMocks(); vi.unstubAllGlobals()
+  await Promise.all(temporaryDirectories.splice(0).map(path => rm(path, { recursive: true, force: true })))
+})
 
-function fixture(options: { sizeChange?: number; screenshotError?: boolean; mutationError?: boolean } = {}) {
+function fixture(options: { sizeChange?: number; screenshotError?: boolean; mutationError?: boolean; documentHeight?: number; scale?: number; tileErrorAt?: number; wrongTileHeight?: boolean } = {}) {
+  const documentHeight = options.documentHeight ?? 2000, scale = options.scale ?? 1, maxScroll = documentHeight - 1000
   vi.stubGlobal("innerHeight", 1000); vi.stubGlobal("scrollX", 0); vi.stubGlobal("scrollY", 125)
-  vi.stubGlobal("scrollTo", (position: { top: number; left: number }) => { globalThis.scrollY = Math.max(0, Math.min(1000, position.top)); globalThis.scrollX = position.left })
-  vi.stubGlobal("scrollBy", (position: { top: number }) => { globalThis.scrollY = Math.min(1000, scrollY + position.top) })
+  vi.stubGlobal("devicePixelRatio", scale)
+  vi.stubGlobal("scrollTo", (position: { top: number; left: number }) => { globalThis.scrollY = Math.max(0, Math.min(maxScroll, position.top)); globalThis.scrollX = position.left })
+  vi.stubGlobal("scrollBy", (position: { top: number }) => { globalThis.scrollY = Math.min(maxScroll, scrollY + position.top) })
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => { callback(0); return 1 })
-  vi.spyOn(document.documentElement, "scrollHeight", "get").mockReturnValue(2000)
+  vi.spyOn(document.documentElement, "scrollHeight", "get").mockReturnValue(documentHeight)
+  vi.spyOn(document.documentElement, "scrollWidth", "get").mockReturnValue(20)
   const original = [null, "", "color: red; --verbatim: 1;"]
   // JSDOM does not implement content-visibility layout. Model only whether the
   // owned stylesheet is present; native capture verifies the real CSS engine.
@@ -26,15 +37,21 @@ function fixture(options: { sizeChange?: number; screenshotError?: boolean; muta
     home.append(section); return section
   })
   if (options.mutationError) vi.spyOn(document.head, "appendChild").mockImplementation(() => { throw new Error("mutation interrupted") })
-  const disposed = vi.fn(), screenshot = vi.fn(async () => {
+  let tile = 0
+  const disposed = vi.fn(), screenshot = vi.fn(async (capture: PageScreenshotOptions) => {
     expect(sections.every(section => getComputedStyle(section).contentVisibility === "visible")).toBe(true)
     // Eager paint must preserve the formatting context without adding size
     // containment; otherwise margin collapse can change the reviewed layout.
     expect(paintRule()?.style.getPropertyValue("contain").split(/\s+/).sort()).toEqual(["layout", "paint", "style"])
     if (options.screenshotError) throw new Error("capture interrupted")
+    if (capture.clip) {
+      tile++
+      if (options.tileErrorAt === tile) throw new Error("later tile interrupted")
+      return sharp({ create: { width: Math.ceil(capture.clip.width * scale), height: Math.ceil(capture.clip.height * scale) + (options.wrongTileHeight ? 1 : 0), channels: 3, background: { r: tile * 40, g: 0, b: 0 } } }).png().toBuffer()
+    }
     return Buffer.from("image")
   })
-  const mouse = { wheel: vi.fn(async (_x: number, y: number) => { globalThis.scrollY = Math.min(1000, scrollY + y) }) }
+  const mouse = { wheel: vi.fn(async (_x: number, y: number) => { globalThis.scrollY = Math.min(maxScroll, scrollY + y) }) }
   const page = {
     mouse, screenshot, waitForTimeout: vi.fn(async () => {}),
     evaluate: async <T, A>(callback: (arg: A) => T, arg: A) => callback(arg),
@@ -82,6 +99,58 @@ it("owns the stylesheet before insertion so failed conditioning also cleans up",
   const f = fixture({ mutationError: true })
   await expect(captureVisitedReviewPage(f.page, "/tmp/review.png")).rejects.toThrow("mutation interrupted")
   expect(f.screenshot).not.toHaveBeenCalled()
+  expect(f.sections.map(section => section.getAttribute("style"))).toEqual(f.original)
+  expect(scrollY).toBe(125); expect(f.disposed).toHaveBeenCalledOnce()
+})
+
+it("keeps the native full-page call unchanged at the device-pixel side limit", async () => {
+  const f = fixture({ documentHeight: 32767 })
+  const result = await captureVisitedReviewPage(f.page, "/tmp/review.png", { scrollMethod: "programmatic" })
+  expect(f.screenshot).toHaveBeenCalledOnce()
+  expect(f.screenshot).toHaveBeenCalledWith({ path: "/tmp/review.png", fullPage: true, animations: "disabled", caret: "hide" })
+  expect(result).not.toHaveProperty("tiledCapture")
+  expect(result).toHaveProperty("exactStylesRestored", true)
+})
+
+it.each([3, 2.75])("stitches complete native-scale document coverage beyond the limit at DPR %s without changing layout or styles", async scale => {
+  const directory = await mkdtemp(join(tmpdir(), "review-page-capture-")); temporaryDirectories.push(directory)
+  const path = join(directory, "page.png"), documentHeight = 12003
+  const f = fixture({ documentHeight, scale })
+  const result = await captureVisitedReviewPage(f.page, path, { scrollMethod: "programmatic" })
+  expect(result).toMatchObject({ beforeDocumentHeight: documentHeight, afterDocumentHeight: documentHeight, exactStylesRestored: true, tiledCapture: { method: "document-coordinate-png-tiles-stitched-with-sharp", document: { scale }, pixels: { width: Math.ceil(20 * scale), height: Math.ceil(documentHeight * scale) } } })
+  expect(f.screenshot).toHaveBeenCalledTimes(3)
+  const { data, info } = await sharp(path).removeAlpha().raw().toBuffer({ resolveWithObject: true })
+  expect(info.height).toBe(Math.ceil(documentHeight * scale))
+  let row = 0, cssY = 0
+  for (const [index, call] of f.screenshot.mock.calls.entries()) {
+    const options = call[0], clip = options.clip!
+    expect(options).toMatchObject({ fullPage: true, animations: "disabled", caret: "hide", type: "png" })
+    expect(clip).toMatchObject({ x: 0, y: cssY, width: 20 })
+    const rows = Math.ceil(clip.height * scale)
+    expect(rows).toBeLessThanOrEqual(16000)
+    // Inspect every stitched row, including both sides of each join. Resizing,
+    // missed rows, duplicated padding and a missing final tile cannot pass.
+    for (let y = row; y < row + rows; y++) expect(data[y * info.width * info.channels]).toBe((index + 1) * 40)
+    row += rows; cssY += clip.height
+  }
+  expect(row).toBe(info.height); expect(cssY).toBe(documentHeight)
+  expect(f.sections.map(section => section.getAttribute("style"))).toEqual(f.original)
+  expect(scrollY).toBe(125); expect(f.disposed).toHaveBeenCalledOnce()
+})
+
+it("restores exact styles and original scroll when a later native tile fails", async () => {
+  const f = fixture({ documentHeight: 12003, scale: 3, tileErrorAt: 2 })
+  await expect(captureVisitedReviewPage(f.page, "/tmp/review.png", { scrollMethod: "programmatic" })).rejects.toThrow("later tile interrupted")
+  expect(f.screenshot).toHaveBeenCalledTimes(2)
+  expect(f.sections.map(section => section.getAttribute("style"))).toEqual(f.original)
+  expect(document.head.querySelectorAll("style")).toHaveLength(0)
+  expect(scrollY).toBe(125); expect(f.disposed).toHaveBeenCalledOnce()
+})
+
+it("rejects a tile with different dimensions rather than stretching it, and restores exact styles", async () => {
+  const f = fixture({ documentHeight: 12003, scale: 3, wrongTileHeight: true })
+  await expect(captureVisitedReviewPage(f.page, "/tmp/review.png", { scrollMethod: "programmatic" })).rejects.toThrow("Review tile height differs from its document clip")
+  expect(f.screenshot).toHaveBeenCalledOnce()
   expect(f.sections.map(section => section.getAttribute("style"))).toEqual(f.original)
   expect(scrollY).toBe(125); expect(f.disposed).toHaveBeenCalledOnce()
 })

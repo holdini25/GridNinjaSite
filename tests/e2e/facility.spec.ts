@@ -1,6 +1,8 @@
 import AxeBuilder from "@axe-core/playwright"
 import { scrollFacilityIntoView, chooseFacilityStillImage, openAssessmentControls, settleFacilityActivity, waitForFacilityReady, expectFacilityAutomaticAcquisition } from "../support/facility-viewer"
 import { expect, test } from "@playwright/test"
+import { assessCanvasObservation, observeProductionCanvas } from "../support/canvas-mutation-window"
+import facilityManifest from "../../src/content/facility-releases/facility-v12/manifest.json"
 
 test.describe("facility inspection", () => {
   test("native automatic loading or an explicit software fallback preserves assessment quantities", async ({ page }, testInfo) => {
@@ -43,16 +45,12 @@ test.describe("facility inspection", () => {
     const inspector = page.getByTestId("facility-inspection")
     await scrollFacilityIntoView(inspector)
     await waitForFacilityReady(page, inspector)
-    const diagnostics = await inspector.locator("canvas").evaluate(async (element: HTMLCanvasElement) => {
-      const mutations: { name: string | null; oldValue: string | null; value: string | null }[] = []
-      const observer = new MutationObserver(records => { mutations.push(...records.map(record => ({ name: record.attributeName, oldValue: record.oldValue, value: element.getAttribute(record.attributeName!) }))) })
-      observer.observe(element, { attributes: true, attributeOldValue: true })
-      await new Promise(resolve => setTimeout(resolve, 350))
-      observer.disconnect()
-      return { hook: typeof element.__gnFacilitySnapshot, framesAttribute: element.hasAttribute("data-frames"), mutations }
-    })
-    await testInfo.attach("canvas-mutations", { body: Buffer.from(JSON.stringify(diagnostics)), contentType: "application/json" })
-    expect(diagnostics).toEqual({ hook: "undefined", framesAttribute: false, mutations: [] })
+    await expect(inspector).toHaveAttribute("data-release", facilityManifest.release)
+    const observation = await inspector.locator("canvas").evaluate(observeProductionCanvas)
+    const assessment = assessCanvasObservation(observation, facilityManifest.profile.engineering.rendering)
+    await testInfo.attach("canvas-mutations", { body: Buffer.from(JSON.stringify({ observation, assessment })), contentType: "application/json" })
+    expect(assessment.failures).toEqual([])
+    expect(assessment.diagnostics).toEqual({ hook: "undefined", framesAttribute: false, mutations: [] })
   })
 
   test("reduced motion, fixture D, keyboard selection and reset retain authoritative records", async ({ page }) => {

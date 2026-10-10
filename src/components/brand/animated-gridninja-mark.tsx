@@ -1,5 +1,7 @@
 "use client"
 
+import "./animated-gridninja-mark.css"
+
 import { type PointerEvent, useId, useLayoutEffect, useRef } from "react"
 
 import { MicroMark } from "./micro-gridninja-mark"

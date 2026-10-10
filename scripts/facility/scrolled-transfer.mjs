@@ -3,6 +3,8 @@ import { devices } from "@playwright/test"
 import { assertCompleteTransfer, collectTransfers, settleTransfers } from "./performance-contract.mjs"
 import { LIGHTHOUSE_RESOURCE_BUDGETS } from "../seo/validate-lighthouse-budgets.mjs"
 
+export const SCROLLED_TRANSFER_PROTOCOL = Object.freeze({ protocol: "settled-viewport-visits", maximumSteps: 100, settleQuietMs: 750, settleTimeoutMs: 15_000 })
+
 /** Apply resource ceilings to the cumulative ledger too: Lighthouse's initial
  * viewport alone cannot qualify the later lazy-loaded editorial illustrations. */
 export function assertScrolledTransfer(transfer, options) {
@@ -11,6 +13,29 @@ export function assertScrolledTransfer(transfer, options) {
   assert(bytesOf("font") <= LIGHTHOUSE_RESOURCE_BUDGETS.fontBytes, "Full-scroll font transfer exceeds budget")
   for (const request of transfer.requests.filter(request => request.type?.toLowerCase() === "image")) assert(request.bytes <= LIGHTHOUSE_RESOURCE_BUDGETS.largestImageBytes, "Full-scroll image transfer exceeds budget")
   if (options.route.startsWith("/insights/")) assert(bytesOf("script") <= LIGHTHOUSE_RESOURCE_BUDGETS.insightScriptBytes, "Full-scroll insight script transfer exceeds budget")
+}
+
+/** Visit each viewport until its transfers settle before moving on. A rapid
+ * programmatic fling can start and immediately suspend a native video request;
+ * that measures cancellation, not the complete assets encountered by a reader.
+ * The same cumulative ledger still rejects every failed or incomplete request.
+ */
+export async function visitScrolledPage(page, settle) {
+  const steps = []
+  for (let step = 0; step < SCROLLED_TRANSFER_PROTOCOL.maximumSteps; step++) {
+    await page.evaluate(async () => {
+      const bottom = Math.max(0, document.documentElement.scrollHeight - innerHeight)
+      window.scrollTo({ top: Math.min(bottom, scrollY + Math.max(1, innerHeight * .8)), behavior: "instant" })
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    })
+    const transfer = await settle()
+    // Lazy content can change the document during settlement. Test the current
+    // bottom, never the stale height from before those resources arrived.
+    const position = await page.evaluate(() => ({ y: scrollY, height: document.documentElement.scrollHeight, viewportHeight: innerHeight }))
+    steps.push({ ...position, cumulativeBytes: transfer.bytes })
+    if (position.y >= Math.max(0, position.height - position.viewportHeight) - 1) return { complete: true, steps, protocol: "settled-viewport-visits" }
+  }
+  return { complete: false, steps, protocol: "settled-viewport-visits" }
 }
 
 /** Separate transfer observations, not additional Lighthouse/LCP samples.
@@ -29,17 +54,10 @@ export async function measureScrolledRoutes(browser, { matrix, baseURL, buildSet
       await page.goto(baseURL + route, { waitUntil: "load", timeout: 30_000 })
       result.initialTransfer = await settleTransfers(ledger)
       assertScrolledTransfer(result.initialTransfer, { route, profile, buildSettings })
-      result.scroll = await page.evaluate(async () => {
-        const steps = []
-        for (let step = 0; step < 100; step++) {
-          const bottom = Math.max(0, document.documentElement.scrollHeight - innerHeight)
-          const target = Math.min(bottom, scrollY + Math.max(1, innerHeight * .8))
-          window.scrollTo({ top: target, behavior: "instant" })
-          await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
-          steps.push({ y: scrollY, height: document.documentElement.scrollHeight })
-          if (scrollY >= Math.max(0, document.documentElement.scrollHeight - innerHeight) - 1) return { complete: true, steps }
-        }
-        return { complete: false, steps }
+      result.scroll = await visitScrolledPage(page, async () => {
+        const snapshot = await settleTransfers(ledger, { quiet: SCROLLED_TRANSFER_PROTOCOL.settleQuietMs, timeout: SCROLLED_TRANSFER_PROTOCOL.settleTimeoutMs })
+        assertScrolledTransfer(snapshot, { route, profile, buildSettings })
+        return snapshot
       })
       assert(result.scroll.complete, "Full-page scroll exceeded its bounded step count")
       result.fullPageTransfer = await settleTransfers(ledger)
