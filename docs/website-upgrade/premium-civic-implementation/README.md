@@ -23,6 +23,8 @@ The [a3e399c qualification disposition](evidence/a3e399c-qualification.md) prese
 
 The [ac3bf52 qualification disposition](evidence/ac3bf52-qualification.md) records passing local startup/full-scroll evidence, the remaining CI mobile LCP failures, and the narrowly authorized parser-deferred navigation bootstrap correction. Every valid performance sample remains retained.
 
+The [65208e3 qualification disposition](evidence/65208e3-qualification.md) preserves the module-aware unit-harness failure and the bounded correction. Its unchanged application and passing visual captures do not override failed unit qualification.
+
 The [artwork record](editorial-artwork.md) documents the Cycles Metal pipeline, 128/256-sample comparison, color management and its measurement limits. The [research review](research-publication-review.md) preserves actual review dates, source access and limitations. The [participant protocol](participant-validation-protocol.md) and [session template](session-record-template.md) are ready for actual readers; no sessions have been fabricated or replaced by agent simulations.
 
 Physical iPhone/Safari is available but untested. Reader recruitment, physical-device and assistive-technology evidence, final independent reviews, production-configured performance and deployment verification remain release dependencies. Business outcomes require private records and follow-up; diagnostic click counts are not session conversion rates.

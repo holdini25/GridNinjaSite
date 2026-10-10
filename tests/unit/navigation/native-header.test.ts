@@ -53,11 +53,20 @@ describe("native header modal cleanup", () => {
   })
 
   it("preserves an explicit accordion choice on same-path history updates and refreshes active groups on a real route change", () => {
-    // Execute the actual server bootstrap in an isolated DOM. No resource
-    // loader is enabled, and no summary event requests optional enhancement.
-    const dom = new JSDOM(renderToStaticMarkup(createElement(SiteHeader, { logo: "GridNinja" })), { url: "https://gridninja.test/platform/dispatch-envelope", runScripts: "dangerously" })
+    // JSDOM does not execute module scripts. Run the actual rendered bootstrap
+    // once in its isolated strict-mode realm; browser tests own module timing.
+    // No resource loader or summary event requests optional enhancement here.
+    const dom = new JSDOM(renderToStaticMarkup(createElement(SiteHeader, { logo: "GridNinja" })), { url: "https://gridninja.test/platform/dispatch-envelope", runScripts: "outside-only" })
     try {
       const { document, history } = dom.window
+      const scripts = document.querySelectorAll<HTMLScriptElement>("#site-header > script")
+      expect(scripts).toHaveLength(1)
+      const bootstrap = scripts[0]
+      const bootstrapText = bootstrap.textContent ?? ""
+      expect(bootstrap.type).toBe("module")
+      expect(bootstrap.textContent).toMatch(/\S/)
+      expect(document.querySelector('a[aria-current="page"]')).toBeNull()
+      dom.window.eval(`"use strict";\n${bootstrapText}`)
       const menu = document.querySelector<HTMLDetailsElement>("[data-mobile-menu]")!
       const groups = [...menu.querySelectorAll<HTMLDetailsElement>("[data-header-group]")]
       const platform = groups[0], solutions = groups[1]
