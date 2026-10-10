@@ -7,10 +7,24 @@ const publicRoutes = seoRoutes.map(route => getSeoRoute(route.path))
 
 test.describe("public route browser health", () => {
   for (const route of publicRoutes) {
-    test(`${route.path} renders primary content without client failures or overflow`, async ({ page, clientHealth }, testInfo) => {
+    test(`${route.path} renders primary content without client failures or overflow`, async ({ page, clientHealth, browserName, baseURL }, testInfo) => {
+      const publication = route.presentation === "publication"
+      const expectedBlockedResources: string[] = []
+      let expectedFaviconDiagnostic: string | undefined
+      if (browserName === "firefox" && publication && /^\/evidence\/assessments\/demo-01-[a-d]\/v1\.0\.0$/.test(route.path)) {
+        // Firefox's own favicon loader attempts this resource even though the
+        // immutable document has no image request. Its strict CSP must still block it.
+        const faviconUrl = new URL("/favicon.ico", baseURL).href
+        expectedFaviconDiagnostic = `console: [JavaScript Error: "Content-Security-Policy: The page’s settings blocked the loading of a resource (img-src) at ${faviconUrl} because it violates the following directive: “default-src 'none'”" {file: "resource:///modules/FaviconLoader.sys.mjs" line: 224}]`
+        clientHealth.allowError(new RegExp(`^${expectedFaviconDiagnostic.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`))
+        page.on("console", message => {
+          const diagnostic = `console: ${message.text()}`
+          if (message.type() === "error" && diagnostic === expectedFaviconDiagnostic) expectedBlockedResources.push(diagnostic)
+        })
+      }
       const response = await page.goto(route.path, { waitUntil: "domcontentloaded" })
       expect(response?.status(), `${route.path} should return its document`).toBe(200)
-      const publication = route.presentation === "publication"
+      if (expectedFaviconDiagnostic) expect(response?.headers()["content-security-policy"]).toBe("default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'")
       const content = publication ? page.locator("body") : page.locator("main#main-content")
       await expect(content).toBeVisible()
       await expect(content.locator("h1")).toHaveCount(1)
@@ -38,6 +52,7 @@ test.describe("public route browser health", () => {
         .filter(image => !image.complete || image.naturalWidth === 0)
         .map(image => image.currentSrc || image.src)), { message: "Visible images should decode after the reader visits every section" }).toEqual([])
       await clientHealth.expectNoHorizontalOverflow()
+      if (expectedFaviconDiagnostic) await testInfo.attach("expected-blocked-browser-resource.json", { contentType: "application/json", body: JSON.stringify({ path: route.path, browser: testInfo.project.name, resource: new URL("/favicon.ico", page.url()).href, classification: "Firefox FaviconLoader request blocked by the immutable publication's strict CSP; no publication or policy changes", policy: response?.headers()["content-security-policy"], expectedDiagnostic: expectedFaviconDiagnostic, observedDiagnostics: expectedBlockedResources }, null, 2) })
       await testInfo.attach("route-acceptance.json", { contentType: "application/json", body: JSON.stringify({ path: route.path, status: response?.status(), indexable: route.indexable, presentation: route.presentation ?? "page", viewport: page.viewportSize(), browser: testInfo.project.name, coverage: "document semantics, initial client health and full-scroll image/overflow checks; not accessibility conformance or physical-device evidence" }, null, 2) })
     })
   }

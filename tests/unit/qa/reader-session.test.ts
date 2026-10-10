@@ -9,9 +9,9 @@ const cleanup: (() => Promise<unknown>)[] = []
 afterEach(async () => { for (const close of cleanup.reverse()) await close(); cleanup.length = 0 })
 
 async function fixture(lifetimeMs = 60_000) {
-  const seen: { method?: string; path?: string; cookie?: string; authorization?: string }[] = []
+  const seen: { method?: string; path?: string; cookie?: string; authorization?: string; segmentPrefetch?: string | string[] }[] = []
   const upstream = createServer((request, response) => {
-    seen.push({ method: request.method, path: request.url, cookie: request.headers.cookie, authorization: request.headers.authorization })
+    seen.push({ method: request.method, path: request.url, cookie: request.headers.cookie, authorization: request.headers.authorization, segmentPrefetch: request.headers["next-router-segment-prefetch"] })
     if (request.url === "/redirect") { response.writeHead(302, { Location: "https://example.com/" }); response.end(); return }
     const asset = request.url === "/asset.webp", publication = request.url?.startsWith("/evidence/assessments/")
     response.writeHead(200, { "Content-Type": asset ? "image/webp" : "text/html", "Cache-Control": "public, max-age=0, must-revalidate", ETag: '"fixture"', "Content-Security-Policy": publication ? "default-src 'none'" : "default-src 'self'", "Set-Cookie": "private=never-forward" })
@@ -75,6 +75,8 @@ describe("isolated reader-session request boundary", () => {
     expect([...new Uint8Array(await asset.arrayBuffer())]).toEqual([1, 2, 3, 4])
     expect(asset.headers.get("etag")).toBe('"fixture"')
     expect((await fetch(proxy.origin + "/redirect")).status).toBe(502)
+    await fetch(proxy.origin + "/contact?_rsc=fixture", { headers: { RSC: "1", "Next-Router-Prefetch": "1", "Next-Router-Segment-Prefetch": "/_tree" } })
+    expect(seen.at(-1)).toMatchObject({ path: "/contact?_rsc=fixture", segmentPrefetch: "/_tree" })
     expect(seen.every(request => request.method === "GET" && !request.cookie && !request.authorization)).toBe(true)
   })
 })

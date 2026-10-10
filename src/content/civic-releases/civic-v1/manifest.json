@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "civic.v1",
+  "release": "civic-v1",
+  "environment": "synthetic",
+  "source": {
+    "kind": "generated-illustration",
+    "tool": "image_gen.imagegen",
+    "mode": "built-in",
+    "model": "not reported by tool",
+    "generationRecordSha256": "742c0a2bb09522d11f36c9d1a56fede1c0b14b8fa86b5cc163144bfa473fb799",
+    "packagerSha256": "4eafd24376f8e4bf07ca350160ff91674f6c751189648785422ee08fbe0f52db",
+    "nodeVersion": "v22.23.2",
+    "sharpVersion": "0.35.5",
+    "webpVersion": "1.6.0"
+  },
+  "compositions": {
+    "landscape": {
+      "width": 1672,
+      "height": 941,
+      "masterPngSha256": "307904d581d501987eba8da02d355adfda7a7e63464991806093a9f3b6384669",
+      "masterPngBytes": 2258800,
+      "promptSha256": "b4bb93c6831b0d1141725e2f942a003da98d3f3fb895ecfce654a6830fcde3e2",
+      "transformation": {
+        "fit": "cover",
+        "position": "centre",
+        "aspectRatio": "16:9",
+        "colourSpace": "srgb"
+      }
+    },
+    "portrait": {
+      "width": 1145,
+      "height": 1374,
+      "masterPngSha256": "9278b2e0decbf52ad5fc6f26ef9ba987b56347d113b488d8d22cd73746372a90",
+      "masterPngBytes": 2595469,
+      "promptSha256": "3a99fade4d3a8732c66bbf5c983ef72ee224fc7d94ca1e02bcd885d952bb78f7",
+      "transformation": {
+        "fit": "cover",
+        "position": "centre",
+        "aspectRatio": "5:6",
+        "colourSpace": "srgb"
+      }
+    }
+  },
+  "files": [
+    {
+      "file": "landscape-640.webp",
+      "composition": "landscape",
+      "width": 640,
+      "height": 360,
+      "bytes": 41720,
+      "sha256": "57f1054d67c2fd5eda7605453f986beb728c63f34fc2d2b4ef7f6e0ad7ef5a1c",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "landscape-960.webp",
+      "composition": "landscape",
+      "width": 960,
+      "height": 540,
+      "bytes": 88688,
+      "sha256": "4bfc467656bdfb81c30f725d58cca0dde8180881b43d16523cdabcdca1cbe214",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "landscape-1280.webp",
+      "composition": "landscape",
+      "width": 1280,
+      "height": 720,
+      "bytes": 142384,
+      "sha256": "f038f3d70767525ffffcca92495c16b35a598116cef0a7465c220ab740373f50",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "portrait-400.webp",
+      "composition": "portrait",
+      "width": 400,
+      "height": 480,
+      "bytes": 51442,
+      "sha256": "410d326479b21d15ac8b85e1c05cec8d8b0febae02d69d8584915f8be56a5f8f",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "portrait-640.webp",
+      "composition": "portrait",
+      "width": 640,
+      "height": 768,
+      "bytes": 123808,
+      "sha256": "2c545bb259869bf8cdf5bd24c8ab8e2b1ef048843e39fca96109613e430a2b6c",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "portrait-800.webp",
+      "composition": "portrait",
+      "width": 800,
+      "height": 960,
+      "bytes": 181394,
+      "sha256": "84a794e4ba164753826b2a067924bfa97c1856821672f482ef65368f9a275bc3",
+      "mimeType": "image/webp",
+      "quality": 90
+    }
+  ]
+}

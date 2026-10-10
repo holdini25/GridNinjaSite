@@ -15,6 +15,7 @@ import { getCinematicRelease } from "@/lib/cinematic/releases"
 import { selectedCinematicReleaseId } from "@/lib/cinematic/selection.mjs"
 import { getFacilityRelease } from "@/lib/facility/releases"
 import { getEditorialRelease } from "@/lib/editorial/releases"
+import { getCivicRelease } from "@/lib/civic/releases"
 import { assessmentScopeHref, sampleBriefHref } from "@/lib/marketing-journeys"
 import { createPageMetadata } from "@/lib/seo"
 import { getSeoRoute } from "@/seo/route-manifest"
@@ -23,7 +24,7 @@ import "@/components/marketing/cinematic-home.css"
 export async function generateMetadata(): Promise<Metadata> { return createPageMetadata({ path: "/" }) }
 
 export default async function HomePage() {
-  const [release, editorial] = await Promise.all([getCinematicRelease(), getEditorialRelease()])
+  const [release, editorial, civic] = await Promise.all([getCinematicRelease(), getEditorialRelease(), getCivicRelease()])
   const fallback = release ? null : await getFacilityRelease()
   const record = assessmentFixtures.b
   const view = selectAssessment(record)
@@ -32,7 +33,7 @@ export default async function HomePage() {
     <SeoPageJsonLd path="/" includeSiteIdentity />
     <div className="gn-home" data-seo-related-source="/" data-seo-related-paths={JSON.stringify(seoRoute.relatedPaths)} data-seo-route-tier={seoRoute.tier}>
       <FacilityHero record={record} release={release} fallback={fallback} cinematicUnavailable={Boolean(selectedCinematicReleaseId()) && !release} />
-      <CivicComposition />
+      <CivicComposition release={civic} />
 
       <section className="gn-home-section gn-home-mechanism" aria-labelledby="mechanism-heading">
         <div className="gn-home-container">
@@ -52,7 +53,7 @@ export default async function HomePage() {
             <h2 id="worked-heading">The limit is a finding. The commitment is a decision.</h2>
             <p>Fixture B records a proposed increment and a smaller modeled revision. The next question belongs to the service and commercial decision owner.</p>
             <p className="gn-home-inline-boundary">A useful assessment can also return a negative result or identify missing evidence.</p>
-            <Link href={sampleBriefHref()} prefetch={false} className="gn-home-text-link">Compare the four scenarios <span aria-hidden="true">→</span></Link>
+            <Link href={sampleBriefHref()} prefetch={false} className="gn-home-text-link">Explore the four scenarios <span aria-hidden="true">→</span></Link>
           </div>
           <article className="gn-home-brief" aria-labelledby="brief-question">
             <div className="gn-home-brief-heading"><span>{record.publication.id.toUpperCase()} / v{record.publication.version}</span><span>Model screen · {view.screeningOutcome}</span></div>

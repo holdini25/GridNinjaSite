@@ -2,6 +2,8 @@
 
 The browser implementation is the current design reference. The user explicitly approved proceeding with browser review while Figma synchronization remains pending. The [focused Figma file](https://www.figma.com/design/NwWJIF0no26vNQPZ1sDkeF) is a draft with the known corrections listed in [figma-state.json](figma-state.json), not a locked design or production sign-off.
 
+The subsequent user-supplied architectural reference reopens the civic composition: a static photographic-style landscape and separately composed mobile scene replace the primary outline illustration. These two civic images were produced with the built-in image-generation tool; two native render studies were rejected for insufficient realism. The existing illustration remains a non-JavaScript media fallback. Shared type, color, materials, section transitions and complete visitor paths govern integration. The reference's outcome claims and navigation are not approved copy. Prior candidate `fa933dc` checks remain historical; affected acceptance must bind to the replacement build. See the [civic artwork record](civic-artwork.md) for sources, exact prompts and limitations.
+
 ## Implemented scope
 
 - Predominantly dark shared palette and typography, distinct orange/semantic colors, aligned content, mobile actions and selective light document surfaces.

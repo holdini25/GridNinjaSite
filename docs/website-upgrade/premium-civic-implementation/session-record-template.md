@@ -13,7 +13,9 @@
 | Device / OS / browser / viewport / input / connection | Pending |
 | Reduced motion / access method | Pending |
 | Consent and retention record location (private) | Pending |
-| Mock endpoint verified; production delivery blocked | Pending |
+| Mock endpoint verified; proxy mutations blocked; exact study origin confirmed | Pending |
+| Synthetic-only instruction; frozen brief production-link / browser-Back warning delivered | Pending |
+| Frozen-brief navigation intervention, original next action and excluded environment-recovery time | Pending; affected task cannot count as unassisted seamless completion |
 | Moderator / observer | Pending |
 
 ### First 60 seconds — separate from task timing

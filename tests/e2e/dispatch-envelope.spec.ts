@@ -174,7 +174,9 @@ test.describe("dispatch envelope page", () => {
     await expect(page.getByTestId("dispatch-accepted-path")).toHaveAttribute("d", /M/)
     await expect(page.getByTestId("dispatch-repair-delta")).toHaveAttribute("d", /M/)
 
-    await page.getByTestId("dispatch-scenario-normal").click()
+    const normalScenario = page.getByTestId("dispatch-scenario-normal")
+    await centerLocatorInViewport(normalScenario)
+    await normalScenario.click()
     await expect(page.getByTestId("dispatch-decision-pill")).toContainText("ALLOW")
     await expect(page.getByTestId("dispatch-accepted-path")).toHaveAttribute("d", /M/)
     await expect(page.getByTestId("dispatch-repair-delta")).toHaveCount(0)

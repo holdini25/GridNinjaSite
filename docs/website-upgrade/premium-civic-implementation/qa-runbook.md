@@ -9,10 +9,11 @@ This is the execution contract for the new harness, not a record that the candid
 | Source and typing | `npm run brand:check`, `npm run lint`, `npm run typecheck` | Targeted harness lint passes; final integrated checks pending |
 | Unit contracts | `npm run test:unit` with existing coverage thresholds | Focused harness tests pass; full suite pending |
 | Database integration | `TEST_DATABASE_URL=… npm run test:integration:required` using disposable PostgreSQL 16 | Pending; the optional suite cannot substitute for required DB coverage |
-| Production build | `npm run build` including CSS, assessment, SEO, facility, cinematic, editorial, byte/trace checks | Original baseline passed; patched candidate pending |
+| Production build | `npm run build` including CSS, assessment, SEO, facility, cinematic, editorial, civic, byte/trace checks | Original baseline passed; patched candidate pending |
 | Browser functionality | `CINEMATIC_E2E=1 PLAYWRIGHT_PREBUILT=1 npm run test:e2e` across all six existing projects, serial workers for measurement stability | Candidate pending; count skips separately, especially opt-in cinematic tests |
 | Route acceptance | `tests/e2e/public-routes.spec.ts`: all 38 manifest documents + /roi redirect in every existing browser project | New manifest-derived test discovered; execution pending |
 | Editorial HTTP delivery | `tests/e2e/editorial-delivery.spec.ts`: nine GET/hash + HEAD/header + 304 responses and unknown/private 404 probes | New test discovered; execution pending |
+| Civic HTTP delivery | `tests/e2e/civic-delivery.spec.ts`: six generated-art derivatives, exact hashes, conditional/HEAD delivery and private-source boundaries; unit contracts cover unavailable, withdrawn and integrity failures | Replacement civic candidate pending |
 | SEO | `PLAYWRIGHT_PREBUILT=1 npm run test:seo`; source/evidence validators; deployed `test:seo:smoke` at candidate URL | Pending; preserves noindex gates, immutable publications and link graph |
 | Existing generic Lighthouse CI | `npm run lighthouse`, configured 13 routes; three runs normally, five with `LHCI_RELEASE_CANDIDATE=1` | Pending; this alone is not provenance-aware qualification |
 | Final performance | Premium matrix below: 13 routes × two profiles × five valid captures | Pending; 100 reviewed-route samples + 30 additional mandatory samples = 130, never 160 |
@@ -20,6 +21,8 @@ This is the execution contract for the new harness, not a record that the candid
 | Manual and reader gates | Physical iPhone Safari + Android Chrome; keyboard, assistive tech, actual 200%/400% zoom, failed assets; responsive 320/390/768/1440 capture; target-reader sessions | Separate pending records; browser geometry/axe is not full conformance or participant evidence |
 
 The route acceptance suite distinguishes 18 indexable routes, 15 gated status routes, four frozen brief documents and one receipt. It checks exact status, H1, robots policy, publication shell separation, client errors, full-scroll image decoding and overflow. The existing SEO suite owns metadata/schema/canonical/link-graph and raw-HTML/reduced-motion parity; its work is not relabeled as new coverage. Default browser project viewports do not themselves cover every manual review width.
+
+The user-supplied civic reference reopened artwork after `fa933dc`. Preserve that candidate's receipts as historical. Recheck complete desktop and portrait civic compositions, the shared Home/About/Platform implementation, no-JavaScript and failed-media reading, and all three solution hero CTAs in actual built HTML. `premium-journeys.spec.ts` covers sample → Back → scoping → Back without submitting inquiries. Composed reviews must inspect headline/caption separation under enlarged text as well as ordinary viewport screenshots. Generated civic art and locally ray-traced editorial thumbnails have distinct source records.
 
 The original failing Linux test is `enterprise-experience.spec.ts` (“a hypothetical minimum…”), not the no-JS assessment test. Keep normal pointer activation, assertions and real browser outcome; do not force-click, remove WebKit, increase retries, or count a skipped case as passed. CI Ubuntu WebKit on the final SHA is a release gate.
 

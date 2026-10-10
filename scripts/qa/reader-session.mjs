@@ -88,7 +88,7 @@ export async function startReaderSession(options) {
     const target = new URL(path.url.pathname + path.url.search, config.upstream)
     const headers = { "accept-encoding": "identity" }
     // Do not forward cookies, authorization, bodies, client identities or Next actions.
-    for (const field of ["accept", "range", "if-range", "if-none-match", "if-modified-since", "rsc", "next-router-state-tree", "next-router-prefetch", "next-url"]) if (request.headers[field]) headers[field] = request.headers[field]
+    for (const field of ["accept", "range", "if-range", "if-none-match", "if-modified-since", "rsc", "next-router-state-tree", "next-router-prefetch", "next-router-segment-prefetch", "next-url"]) if (request.headers[field]) headers[field] = request.headers[field]
     const upstream = (target.protocol === "https:" ? httpsRequest : httpRequest)(target, { method: request.method, headers }, incoming => {
       const outgoingHeaders = { ...incoming.headers }
       delete outgoingHeaders["set-cookie"]; delete outgoingHeaders.connection; delete outgoingHeaders["keep-alive"]

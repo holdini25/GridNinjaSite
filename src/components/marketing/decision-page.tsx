@@ -14,13 +14,14 @@ import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { assessmentFixtures } from "@/content/assessments/fixtures"
 import { assessmentScopeHref, decisionPageJourney, sampleBriefHref } from "@/lib/marketing-journeys"
 import type { PublicPath } from "@/seo/route-manifest"
+import type { CivicRelease } from "@/types/civic"
 
 export type DecisionPageContent = {
   eyebrow: string; headline: string; body: string
   sections: readonly { title: string; body: string; items?: readonly { title: string; body: string }[]; link?: { label: string; href: string } }[]
 }
 
-export function DecisionPage({ path, content, facilityEntry }: { path: PublicPath; content: DecisionPageContent; facilityEntry?: ReactNode }) {
+export function DecisionPage({ path, content, facilityEntry, civicRelease }: { path: PublicPath; content: DecisionPageContent; facilityEntry?: ReactNode; civicRelease?: CivicRelease | null }) {
   const journey = decisionPageJourney[path] ?? {}
   const scopeHref = assessmentScopeHref(journey.source, journey.topic)
   const sampleHref = sampleBriefHref(journey.topic)
@@ -43,14 +44,14 @@ export function DecisionPage({ path, content, facilityEntry }: { path: PublicPat
         </div>
       </SectionShell>
       {path === "/about" && section.title === "The offer today" && <>
-        <CivicComposition />
+        <CivicComposition release={civicRelease} />
         <SectionShell deferRendering={false}><p className="gn-civic-local-boundary">GridNinja&apos;s current assessment does not establish community acceptance or public benefit. Those judgments require their own participants, evidence and scope.</p></SectionShell>
       </>}
       {path === "/proof" && section.title === "What each result means" && <SectionShell className="gn-proof-authority" deferRendering={false}><AuthorityComposition /></SectionShell>}
       {path === "/platform" && section.title === "The intended decision loop" && <SectionShell className="gn-platform-context" deferRendering={false}>
         <div className="space-y-6">
           <SectionHeader headline="Inside-the-fence decisions have an outside context." body="The development direction is to examine facility decisions within explicit technical limits while making relevant grid and local constraints visible. Any future grid-facing service would require separately validated capability, agreements and operating authority." />
-          <CivicIllustration />
+          <CivicIllustration release={civicRelease} />
           <p className="gn-platform-context-boundary">The current offer remains a paid, bounded assessment of authorized historical inputs. No live connection or equipment control.</p>
         </div>
       </SectionShell>}

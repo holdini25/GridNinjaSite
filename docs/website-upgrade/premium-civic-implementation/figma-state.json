@@ -13,7 +13,8 @@
     "Secondary button shared property needs correction",
     "Poster fill propagation not visible in screenshot",
     "Mobile civic crop must use uncropped corrected browser composition",
-    "Canonical research copy requires synchronization"
+    "Canonical research copy requires synchronization",
+    "New cinematic civic landscape and portrait need synchronization after browser approval"
   ],
   "userDisposition": "Proceed with browser design review; Figma sync pending",
   "browserReference": "http://localhost:3101/",

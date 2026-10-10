@@ -1,7 +1,7 @@
 {
   "schema": "gridninja.implementation-run.v1",
   "task": "premium-civic-upgrade",
-  "status": "candidate-freeze-preparation",
+  "status": "civic-art-direction-revision",
   "recordStarted": "2026-10-10",
   "historicalAccounting": "Partial. Prior commands, other-agent activity and provisional checks outside the bounded qualification wrapper are unmetered; unknown values are not zero. The four-hour/40-command budget measures instrumented qualification commands only.",
   "lead": {
@@ -23,7 +23,7 @@
   "branch": "codex/premium-civic-upgrade",
   "baseRevision": "e980000ea458f50662c268218791f6087f9e8ca3",
   "candidateRevision": null,
-  "candidateState": "Candidate source is being frozen. Exact commit, source digest and build identity will be recorded in build/qa/premium-civic-candidate.json; earlier mutable passes are provisional.",
+  "candidateState": "The fa933dc candidate and its clean qualified receipts remain preserved. The user supplied a new architectural civic reference and requested seamless integration; civic artwork, affected UI and the corrected study proxy require a new freeze/build and renewed affected evidence. The durable command budget continues unchanged.",
   "workers": [
     {
       "owner": "/root/site_architecture_review",
@@ -34,7 +34,11 @@
         "tests/support/facility-viewer.ts",
         "focused QA tests",
         "scripts/qa bounded command runner",
-        "baseline and QA evidence"
+        "baseline and QA evidence",
+        "src/lib/civic and civic GET/HEAD delivery",
+        "civic types/schema/registry/validation/tests",
+        "coordinated civic build validation and tracing",
+        "scripts/civic generated-art packager and provenance"
       ],
       "sharedFileWindow": "Owns package-lock/package.json only for explicitly coordinated minimal dependency fixes; release window before another owner edits.",
       "dependencies": [
@@ -49,14 +53,14 @@
         "130-run qualification evidence",
         "bounded QA receipts"
       ],
-      "separateVerifier": "Lead and research worker for implementation/coverage; final review record must identify exact candidate.",
+      "separateVerifier": "Lead independently reviews civic delivery. Research worker reviews QA coverage. Technical worker final sign-off excludes own delivery and QA implementation.",
       "acceptanceCommands": [
         "npm run typecheck",
         "focused Vitest tests",
         "npm run test:e2e",
         "documented premium-civic performance matrix"
       ],
-      "status": "baseline and harness complete; final candidate checks pending",
+      "status": "new civic immutable delivery; performance held until new candidate",
       "stoppingBudget": "At most3 repair cycles per failing phase; runner deadlines and4-hour/40-command qualification cap apply."
     },
     {
@@ -69,7 +73,9 @@
         "DecisionPage",
         "SeoResourceHub",
         "Evidence page",
-        "participant protocol and research review docs"
+        "participant protocol and research review docs",
+        "QA-only reader proxy and boundary tests",
+        "complete-journey narrative review"
       ],
       "dependencies": [
         "root art component interfaces",
@@ -89,7 +95,7 @@
         "targeted ESLint",
         "tsc --noEmit --incremental false"
       ],
-      "status": "implementation and author checks complete; final candidate review pending",
+      "status": "study header defect corrected and actual mock browser dry run passed; real sessions remain pending; independent narrative and art review continues",
       "stoppingBudget": "No new source-search loops without a new uncertainty; at most3 repairs per failing final gate."
     },
     {
@@ -102,7 +108,9 @@
         "src/lib/editorial",
         "src/types/editorial.ts",
         "src/app/assets/editorial",
-        "editorial tests/runbook"
+        "editorial tests/runbook",
+        "independent generated civic composition review",
+        "private rejected-native-study preservation"
       ],
       "sharedFileWindow": "Coordinated package build validators and next.config tracing only; other owners notified.",
       "dependencies": [
@@ -124,8 +132,8 @@
         "focused editorial contract/supervisor tests",
         "build trace validation"
       ],
-      "status": "assets and author checks complete; retry enforcement in progress; final review pending",
-      "stoppingBudget": "One evidence-linked Metal fallback retry per job identity, bounded child timeout/log size; no further speculative render families."
+      "status": "editorial-v1 complete; independent generated civic art review; rejected native studies preserved privately",
+      "stoppingBudget": "Existing bounded editorial supervisor and shared compute lock remain unchanged. Two native civic studies were rejected after inspection; no final or reference civic render is claimed."
     }
   ],
   "coordination": {
@@ -159,7 +167,8 @@
       "secondary shared button label",
       "poster fill propagation",
       "mobile civic crop",
-      "pending exact canonical research synchronization"
+      "pending exact canonical research synchronization",
+      "New user-requested cinematic civic composition awaits Figma synchronization"
     ],
     "userDisposition": "Proceed with browser design review; Figma sync pending",
     "productionFonts": "Existing system-ui stack. Inter is a documented editable Figma-only surrogate because exposed SF Pro instances report missing fonts."
@@ -171,7 +180,6 @@
     "separate2gridand2communityreaders",
     "physical iPhone/Safari check (available, not tested)",
     "other required device/screen-reader/zoom checks",
-    "reviewable PR and preview",
     "production deployment and verification"
   ],
   "metering": {
@@ -202,6 +210,53 @@
       "result": "No document overflow or failed images; preview contrast harness error explicitly not a pass.",
       "evidence": "build/premium-civic/journey-review/report.json",
       "status": "provisional"
+    },
+    {
+      "finding": "fa933dc six browser CI projects failed despite passing build, unit, SEO, audit and Lighthouse jobs",
+      "evidence": "build/qa/ci-fa933dc/diagnosis.md",
+      "status": "Diagnosed current source repairs; replacement-candidate browser runs pending",
+      "dispositions": [
+        "Scope site-chrome and repeated-authority selectors to their semantic regions.",
+        "Keep cinematic annotations tied to the selected rendition after rotation.",
+        "Visit the player before asserting a visible reduced-motion state.",
+        "Inspect actual document, authority and raster media branches with unchanged containment and overlap assertions.",
+        "Correct enlarged-text wrapping and compact desktop hero height.",
+        "Retain immutable brief bytes/CSP; classify only the exact Firefox internal favicon-block diagnostic.",
+        "Use existing stable hit-tested centering for the traced WebKit normal-scenario control, preserving one click and result assertions."
+      ]
     }
-  ]
+  ],
+  "priorCandidates": [
+    {
+      "revision": "fa933dc35e0868a0ec22ec039e59df00ec4a28b3",
+      "buildId": "LIXE5H-r2PLHUDT_hn9Gg",
+      "sourceRevision": "19620d0f7bd3379a061fb3deba00a9c35f6d312ceb1a07bca3a205a8159478cc",
+      "ledger": "build/qa/premium-civic-candidate.json",
+      "qualifiedCommands": [
+        "quality",
+        "unit (1168 tests)",
+        "required integration (3 tests)",
+        "production dependency audit"
+      ],
+      "status": "superseded for final release by newly authorized civic artwork; not production deployed"
+    }
+  ],
+  "pullRequest": "https://github.com/holdini25/GridNinjaSite/pull/4",
+  "localAgent": {
+    "bestFit": "Bounded copy consistency, supplied-source claim critique, small contract/log triage; tool-enabled lead validates all suggestions. No browser, independent research verification or release authority.",
+    "actualProbe": "Routine civic-copy review routed to small model but returned MODEL_NOT_VERIFIED; no model output or sign-off produced.",
+    "record": "build/qa/local-agent-delegation.json",
+    "isolation": "No model downloads/settings changes; inference kept out of render and performance windows."
+  },
+  "civicArtwork": {
+    "provenance": "Built-in image_gen.imagegen; tool-reported model unavailable. Not represented as local ray tracing.",
+    "sourceRecord": "assets-source/civic/generation-record.json",
+    "masters": [
+      "assets-source/civic/generated-v1/landscape.png",
+      "assets-source/civic/generated-v1/portrait.png"
+    ],
+    "nativeStudies": "Two rejected composition studies retained privately; not registered or published.",
+    "integration": "Second homepage section, shared About/Platform illustration; static responsive markup and HTML context.",
+    "review": "Independent art and narrative reviewers accepted pair for integration; final composed browser and release checks remain pending."
+  }
 }

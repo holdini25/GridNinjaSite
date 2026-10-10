@@ -1,0 +1,43 @@
+{
+  "schema": "gridninja.civic-generation.v1",
+  "createdDate": "2026-10-10",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "model": "not reported by tool",
+  "environment": "synthetic",
+  "purpose": "Premium conceptual civic scene; not a real facility, engineering diagram or evidence of delivered services.",
+  "referenceArt": {
+    "source": "User-supplied GridNinja_ Data Centers for Resilient Grids.png",
+    "use": "Art-direction reference only; no copy/navigation/outcome claims adopted.",
+    "includedInGenerationTool": false
+  },
+  "images": [
+    {
+      "composition": "landscape",
+      "master": "assets-source/civic/generated-v1/landscape.png",
+      "originalToolOutput": "/Users/holdenchung/.codex/generated_images/01a1273d-82a5-7942-9752-101f08fabc53/exec-fee513b2-eac7-4194-a5ce-62ad1a1f70e1.png",
+      "arguments": {
+        "prompt": "Use case: stylized-concept, photoreal architectural visualization. Asset type: a premium editorial website's civic-infrastructure landscape, a clean image plate with ABSOLUTELY NO text, letters, UI, typography, logos, symbols or watermarks. Create a realistic cinematic aerial-oblique architectural scene at blue hour: a refined large low-rise data center with intricately believable horizontal rooftop cooling equipment, graphite metal fins, stone/concrete foundations, finely detailed glazing, subtle warm entrance and perimeter lighting. The main facility occupies the center-right foreground. A clearly separate electrical substation and 2 slender transmission pylons stand behind/left of the facility, all on the RIGHT HALF of the frame. Beyond and right, a small established neighborhood of realistic varied low-rise pitched-roof houses, roads and mature trees. Keep all three subjects fully in-frame with clear physical separation. A visible physical site fence/property edge surrounds only the data center; it does not encompass the substation or community. These are neighboring entities in a fictional landscape, no directed flows, no energy arrows, no glowing power lines, no apparent exported energy or community services. Dark natural rolling terrain and realistically irregular fine foliage, coherent architectural scale, subtle cool charcoal atmosphere and amber light pools, restrained reflections, rich physically plausible surface detail and shadow depth. Long elegant ground-level architectural lights, not orange neon outlines. Composition: widescreen 16:9, elevated camera looking down about 30 degrees, grounded natural perspective, main facility lower-right, grid equipment mid-right upper-left of facility, neighborhood upper-right. LEFT 38 percent is calm nearly black #080808 atmospheric negative space for future HTML copy, containing no required subjects. The subjects must all remain discernible in the right 60 percent. Fade the scene naturally into almost-black at every perimeter for seamless dark webpage integration; no hard rectangular image boundary, no card border. Premium architecture-journal photographic realism, crisp but restrained, no toy model, no low-poly geometry, no repeated identical trees, no vaporwave, no exaggerated sci-fi, no cyan neon, no skyline or extra facilities. Landscape only; do not render a website mockup. Intended as explicitly labeled synthetic conceptual artwork, not evidence of an existing location or delivered community benefits.",
+        "transparent_background": false
+      }
+    },
+    {
+      "composition": "portrait",
+      "master": "assets-source/civic/generated-v1/portrait.png",
+      "originalToolOutput": "/Users/holdenchung/.codex/generated_images/01a1273d-82a5-7942-9752-101f08fabc53/exec-95dab6ec-286e-471b-86ca-3ee738afd983.png",
+      "arguments": {
+        "prompt": "Use case: precise-object-edit / architectural reframing. Asset type: portrait mobile companion to the supplied landscape civic-infrastructure artwork. Edit target: the supplied image. Recompose the SAME fictional location into a portrait 5:6 composition, ideally 1600 by 1920 pixels. Keep the same premium photoreal blue-hour architectural treatment, graphite facade, fine roof cooling details, restrained amber entrance lights, natural forest texture and spatial relationships. Main data center occupies the lower-middle foreground and remains fully in frame including its visible physical perimeter fence. Separate electrical substation and slender transmission pylons remain fully discernible in the upper-left/middle distance, and the established neighborhood of varied small houses remains clearly visible upper-right beyond the facility boundary. Adjust camera framing/elevation and terrain to show all three entities in a balanced, cohesive vertical scene; do NOT simply crop away the grid or neighborhood. No large empty left area is needed: mobile headline will be ABOVE the image in HTML. Preserve some dark breathing room and a natural fade into almost-black #080808 at the perimeter for seamless dark website integration. Preserve physically plausible fine architectural detail and realistic scale, no toy model. Keep fence around data center only, clearly outside substation and neighborhood. NO text, letters, captions, logos, watermarks, interface, symbols, arrows, flowing energy, glowing cables, exported services or claim graphics. Warm light is only physical architectural luminaires. Maintain the same building design/material identity as closely as possible, not a different architectural concept. This is explicitly labeled synthetic conceptual artwork, not a real site or evidence of delivered benefits.",
+        "referenced_image_paths": [
+          "/Users/holdenchung/.codex/generated_images/01a1273d-82a5-7942-9752-101f08fabc53/exec-fee513b2-eac7-4194-a5ce-62ad1a1f70e1.png"
+        ],
+        "transparent_background": false
+      }
+    }
+  ],
+  "delivery": "Responsive sRGB WebP compression and minimal aspect reconciliation only. No creative raster edits outside image_gen.",
+  "limitations": [
+    "Generated details are illustrative, not verified engineering.",
+    "No claim of Blender, Cycles, Metal, measured ray tracing or local rendering for this civic release.",
+    "Existing editorial-v1 thumbnails retain their separate native Cycles/Metal provenance."
+  ]
+}
