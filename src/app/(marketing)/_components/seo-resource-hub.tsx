@@ -34,7 +34,7 @@ export function SeoResourceHub({
   return (
     <div className="space-y-16 pb-20 sm:space-y-20 sm:pb-24">
       <header className="border-b border-border/70 py-10 sm:py-14">
-        <SectionShell>
+        <SectionShell deferRendering={path !== "/evidence"}>
           <p className="gn-eyebrow">{eyebrow}</p>
           <h1 className="mt-5 max-w-[15ch] text-balance text-[2.25rem] leading-[0.98] font-medium tracking-tight text-foreground sm:text-[3rem] lg:text-[3.5rem]">
             {title}

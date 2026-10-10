@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "gridninja-performance-correction-plan.v1",
+  "recordedAt": "2026-10-10T23:35:41.764893+00:00",
+  "baselineHead": "6a43b307397083cfb8c0a49761d10bb6443fe336",
+  "evidenceProvenance": "User-supplied release audit and retained raw reports/traces. The subsequently delivered 9B review repeats the saved measurements but incorrectly assigns the deferred class to the downstream library. Its broad fixed-height/global-CSS suggestions are rejected. The narrow header fix originates in independent source/trace analysis.",
+  "changes": [
+    {
+      "scope": "Evidence opening header",
+      "change": "Disable SectionShell content-visibility deferral only when path is /evidence.",
+      "basis": "All five retained desktop traces identify the following brief-library wrapper moving after initial layout; deferred header has 960px intrinsic placeholder.",
+      "status": "Targeted source hypothesis with SSR regression; causation/outcome must be assessed on a new build."
+    },
+    {
+      "scope": "Contact and confirmation logo",
+      "change": "Use existing StaticGridNinjaMark instead of importing the static placement through the animated logo composition.",
+      "basis": "Prior built Contact linked the 6415-byte animation stylesheet with zero animated-logo instances.",
+      "preserve": "Canonical proof-core asset, size, empty alt, eager loading; no inquiry or assessment interface change."
+    },
+    {
+      "scope": "Shared initial CSS delivery",
+      "change": "Enable Next16.3.8 experimental.inlineCss.",
+      "basis": "Home and Contact have text LCP elements; their opening paint depends on external stylesheets. Deliver the styles in the initial server document.",
+      "tradeoff": "Experimental global Next option; larger SSR/RSC payloads and loss of independently cached CSS on full navigation. RSC client navigation retains stylesheet links. No claimed savings until measured.",
+      "source": "https://nextjs.org/docs/app/api-reference/config/next-config-js/inlineCss",
+      "checks": "All13routes, original transfer limits, no-JavaScript reading, CSP/style order, client navigation and Back/revisit. Existing CSP already allows inline styles; no policy changes."
+    }
+  ],
+  "harnessScope": "Explicit additive correction authorization/profile. Original budget, failed reports and release thresholds remain unchanged. Preserve controlled slow-stylesheet parser assertions using an explicit injected test fixture now that initial production CSS is inline; separately assert untampered style delivery.",
+  "qualification": {
+    "initialChecks": [
+      "brand/lint/typecheck/build via existing validate script",
+      "full unit suite with unchanged coverage",
+      "six existing browser projects, serial local workers and zero retry override",
+      "SEO, publication/media integrity, production dependency audit"
+    ],
+    "performance": "Five fresh runs for each of13routes and2profiles (130), plus20startup/playback and130full-scroll observations; shared compute lock. Preserve all valid poor results and invalid captures.",
+    "hardLimits": "General LCP2500ms/FCP1800ms/TBT200ms/CLS0.1; Contact LCP2000ms/CLS0.05. Existing transfer, image, initialJS and category-score gates unchanged.",
+    "notQualifiedByThis": "Human readers, physical devices, remaining native/manual checks, hosted production configuration and delivery/recovery still require their own evidence."
+  },
+  "stoppingRule": "At most20commands,2attempts/phase,2candidatebuilds within a new2h correction window. No automatic retries or reset of the original ledger. A failed new candidate remains failed. No production promotion unless all release gates are evidenced.",
+  "localModelDisposition": {
+    "verificationPath": "/Users/holdenchung/Documents/Codex/2026-10-10/task/website-local-assistance/9b-claim-verification.json",
+    "sha256": "9fd0b8f99966d3a13eeb17f1c15f45dc6ee3484a6dfe3dc349c92a0a39e1c502",
+    "adopted": "Verified rejection of CSS association, wrapper type, invented report citation and broad interventions. Restated measurements and causal limitations accepted; no novel actionable finding, no 27B escalation.",
+    "qualification": "No model output establishes before/after causation or passes a release gate."
+  }
+}

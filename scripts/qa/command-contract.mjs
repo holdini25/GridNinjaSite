@@ -17,6 +17,25 @@ const projects = Object.freeze({
   "browser-chromium-mobile": "chromium-mobile", "browser-webkit-mobile": "webkit-mobile",
 })
 
+/** Both commands invoke the production build; correction allowances count them together. */
+export function isCandidateBuildPhase(phase) {
+  return phase === "quality" || phase === "build"
+}
+
+/** The correction allowance may not hide builds inside Playwright's webServer.
+ * @param {string} phase
+ * @param {Record<string, string | undefined>} env
+ */
+export function assertCorrectionEnvironment(phase, env = process.env) {
+  const key = projects[phase] ? "PLAYWRIGHT_BASE_URL" : phase === "seo" ? "SEO_TEST_BASE_URL" : null
+  if (!key) return {}
+  assert(env.PLAYWRIGHT_PREBUILT === "1", "Correction browser checks require PLAYWRIGHT_PREBUILT=1")
+  assert(typeof env[key] === "string" && env[key].length > 0, `Correction browser checks require an explicit ${key}`)
+  const url = new URL(env[key])
+  assert(["http:", "https:"].includes(url.protocol) && ["127.0.0.1", "[::1]", "localhost"].includes(url.hostname) && !url.username && !url.password && url.pathname === "/" && !url.search && !url.hash, "Correction browser checks require a loopback external server origin")
+  return { PLAYWRIGHT_PREBUILT: "1", [key]: url.origin }
+}
+
 export function assertSupportedCommand(phase, command, args) {
   assert.equal(command, "npm", "Unsupported cleanup contract: only reviewed finite npm checks may qualify")
   if (projects[phase]) {

@@ -1,8 +1,11 @@
 import { expect, test } from "@playwright/test"
 
 for (const route of ["/", "/assessment"] as const) {
-  test(`hero parses through held stylesheets on ${route}`, async ({ page }, testInfo) => {
+  test(`hero parses through a held stylesheet fixture on ${route}`, async ({ page, baseURL }, testInfo) => {
     await page.setViewportSize({ width: 390, height: 844 })
+    const documentURL = new URL(route, baseURL).href
+    const fixturePath = "/__qa__/header-parser-stylesheet-gate.css"
+    const fixtureURL = new URL(fixturePath, documentURL).href
     const heldStylesheets: string[] = []
     const releasedStylesheets: string[] = []
     const clientErrors: string[] = []
@@ -15,12 +18,31 @@ for (const route of ["/", "/assessment"] as const) {
     page.on("console", message => {
       if (message.type() === "error" && /hydrat|server rendered|did not match/i.test(message.text())) clientErrors.push(message.text())
     })
-    await page.route("**/_next/static/css/*.css", async request => {
-      const response = await request.fetch()
+    await page.route(fixtureURL, async request => {
       heldStylesheets.push(request.request().url())
       await stylesGate
-      await request.fulfill({ response })
+      await request.fulfill({
+        contentType: "text/css",
+        body: "/* Test-only parser gate. No application style rules. */",
+      })
       releasedStylesheets.push(request.request().url())
+    })
+    await page.route(documentURL, async request => {
+      if (request.request().resourceType() !== "document") {
+        await request.continue()
+        return
+      }
+      const response = await request.fetch()
+      expect(response.status()).toBe(200)
+      const html = await response.text()
+      expect(html.match(/<\/head>/g)).toHaveLength(1)
+      // Preserve the actual production response and styles. The additional
+      // no-op stylesheet recreates a parser barrier even when production CSS
+      // is inlined. This is controlled regression evidence, not load timing.
+      await request.fulfill({
+        response,
+        body: html.replace("</head>", `<link rel="stylesheet" href="${fixturePath}"></head>`),
+      })
     })
     await page.route("**/header-controls.mjs", async request => {
       enhancementRequests += 1
@@ -30,9 +52,9 @@ for (const route of ["/", "/assessment"] as const) {
 
     try {
       await page.goto(route, { waitUntil: "commit" })
-      await expect.poll(() => heldStylesheets.length).toBeGreaterThan(0)
-      // Attachment, not visibility: CSS is deliberately unavailable. A classic
-      // inline script before <main> prevents the parser from reaching this text.
+      await expect.poll(() => heldStylesheets).toEqual([fixtureURL])
+      // Attachment, not visibility: the fixture stylesheet is unavailable. A
+      // classic inline script before <main> blocks on it even if app CSS exists.
       const heading = page.locator("main h1")
       const body = page.locator(route === "/" ? "main .gn-home-lead" : "main [data-hero-body]")
       await expect(heading, "main heading must parse before stylesheet release").toBeAttached({ timeout: 3_000 })
@@ -41,7 +63,7 @@ for (const route of ["/", "/assessment"] as const) {
       expect(releasedStylesheets).toEqual([])
       expect(enhancementRequests).toBe(0)
       await testInfo.attach("stylesheet-gated-parser", {
-        body: Buffer.from(JSON.stringify({ route, heldStylesheets, releasedStylesheets, heading: await heading.textContent(), body: await body.textContent() }, null, 2)),
+        body: Buffer.from(JSON.stringify({ evidence: "controlled-document-fixture; additional no-op stylesheet, production CSS unchanged; not performance qualification", route, fixtureURL, heldStylesheets, releasedStylesheets, heading: await heading.textContent(), body: await body.textContent() }, null, 2)),
         contentType: "application/json",
       })
 
