@@ -3,6 +3,7 @@ import { createHash } from "node:crypto"
 import { readFileSync } from "node:fs"
 import { describe, expect, it } from "vitest"
 import { assessCanvasObservation, type CanvasObservation } from "../../support/canvas-mutation-window"
+import { cappedDpr } from "../../../src/lib/facility/frame-policy"
 
 const budgets = { desktopPixels: 1_500_000, mobilePixels: 650_000 }
 const state = (at: number, quality = "balanced", width = 902, height = 531) => ({ at, quality, width, height, x: 638, y: 330, cssWidth: 722.1875, cssHeight: 424.8125, hook: "undefined", framesAttribute: false, connected: true, ready: true })
@@ -11,6 +12,11 @@ const resize = (): CanvasObservation => ({ ...baseline(), samples: [state(0), st
   { at: 18, sample: 1, name: "width", oldValue: "902", value: "722" }, { at: 18, sample: 1, name: "height", oldValue: "531", value: "424" },
   { at: 18, sample: 1, name: "width", oldValue: "722", value: "722" }, { at: 18, sample: 1, name: "height", oldValue: "424", value: "424" },
 ] })
+// Reduced boundary samples from quality-remediation-02/c2 invocation 5:
+// the retained report has 183 samples, no writes, and this label change at2853ms.
+// This fixture preserves those timings/values; it is not the complete raw report.
+const lateLabel = (): CanvasObservation => ({ ...baseline(), deviceDpr: 3, desktop: false,
+  samples: [0, 2853, 3000].map((at, index) => ({ ...state(at, index ? "still" : "economy", 353, 264), x: 20, y: 196.390625, cssWidth: 353, cssHeight: 264.75 })) })
 const rejected = (report: CanvasObservation) => expect(assessCanvasObservation(report, budgets).failures.length).toBeGreaterThan(0)
 
 describe("ordered production canvas observation", () => {
@@ -28,6 +34,25 @@ describe("ordered production canvas observation", () => {
     expect(result.initialReconciliation !== null).toBe(attempt === 1)
     expect(saved).toEqual(before)
     if (attempt === 0) expect(saved.assessment.failures).toContain("Unexplained or sustained canvas mutations")
+  })
+  it("preserves the exact 183-sample c2 attachment while assessing its no-write economy-to-still commit", () => {
+    const bytes = readFileSync(new URL("./fixtures/canvas-quality-remediation-02-c2.json", import.meta.url))
+    expect(createHash("sha256").update(bytes).digest("hex")).toBe("a1d2917d881c45484b40eb3fc1bbcf6b10faacfe5aeafce317bd167a69d03b80")
+    const saved = JSON.parse(bytes.toString()) as { observation: CanvasObservation; assessment: { failures: string[] } }
+    const before = structuredClone(saved)
+    expect(saved.observation.samples).toHaveLength(183)
+    expect(saved.observation.mutations).toEqual([])
+    expect([...new Set(saved.observation.samples.map(sample => JSON.stringify([sample.cssWidth, sample.cssHeight, sample.width, sample.height])))])
+      .toEqual([JSON.stringify([353, 264.75, 353, 264])])
+    expect([...new Set(saved.observation.samples.map(sample => sample.quality))]).toEqual(["economy", "still"])
+    for (const sample of saved.observation.samples) {
+      expect(cappedDpr(sample.quality as "economy" | "still", saved.observation.deviceDpr, sample.cssWidth, sample.cssHeight,
+        saved.observation.desktop ? budgets.desktopPixels : budgets.mobilePixels)).toBe(1)
+    }
+    expect(saved.assessment.failures).toEqual(["No uninterrupted350ms stable observation before the deadline"])
+    expect(assessCanvasObservation(saved.observation, budgets)).toMatchObject({ failures: [], transitions: [], initialReconciliation: null,
+      strictWindow: { start: 2650, end: 3000, duration: 350 }, diagnostics: { mutations: [] } })
+    expect(saved).toEqual(before)
   })
   it("preserves zero writes and full quiet observation for valid stable pixels", () => {
     expect(assessCanvasObservation(baseline(), budgets)).toMatchObject({ failures: [], transitions: [], initialReconciliation: null,
@@ -57,6 +82,76 @@ describe("ordered production canvas observation", () => {
     const report = baseline()
     report.samples = [state(0, "economy", 722, 424), state(100, "still", 722, 424), state(3000, "still", 722, 424)]
     expect(assessCanvasObservation(report, budgets).failures).toEqual([])
+  })
+  it("retains the full quiet window across the observed late label-only commit", () => {
+    const report = lateLabel(), before = structuredClone(report)
+    expect(assessCanvasObservation(report, budgets)).toMatchObject({ failures: [], transitions: [], initialReconciliation: null,
+      correlationMs: 100, maximumTransitionGroups: 2, strictWindow: { start: 2650, end: 3000, duration: 350 },
+      diagnostics: { hook: "undefined", framesAttribute: false, mutations: [] } })
+    expect(report).toEqual(before)
+  })
+  it("still rejects an actual resize late in the final quiet window", () => {
+    const report = resize()
+    report.samples[1].at = 2800; report.samples[2].at = 2810; report.samples[3].at = 2853
+    report.mutations.forEach(mutation => { mutation.at = 2800 })
+    const result = assessCanvasObservation(report, budgets)
+    expect(result.transitions).toHaveLength(1)
+    expect(result.failures).toContain("No uninterrupted350ms stable observation before the deadline")
+    expect(result.diagnostics.mutations).toHaveLength(4)
+  })
+  it("a same-value canvas write still resets the quiet window beside a label-only commit", () => {
+    const report = lateLabel()
+    report.mutations = [{ at: 2853, sample: 1, name: "width", oldValue: "353", value: "353" }]
+    const result = assessCanvasObservation(report, budgets)
+    expect(result.failures).toContain("No uninterrupted350ms stable observation before the deadline")
+    expect(result.diagnostics.mutations).toEqual(report.mutations)
+  })
+  it.each(["before", "after"] as const)("does not exempt a label change with an invalid %s pixel policy", side => {
+    const report = lateLabel()
+    if (side === "before") report.samples[0].quality = "balanced"
+    else report.samples.slice(1).forEach(sample => { sample.quality = "balanced" })
+    expect(assessCanvasObservation(report, budgets).failures).toContain("No uninterrupted350ms stable observation before the deadline")
+  })
+  it("does not exempt different effective DPR values that floor to identical tiny buffers", () => {
+    const report = lateLabel()
+    report.samples.forEach((sample, index) => {
+      sample.cssWidth = sample.cssHeight = sample.width = sample.height = 1
+      sample.quality = index ? "balanced" : "economy"
+    })
+    expect(assessCanvasObservation(report, budgets).failures).toContain("No uninterrupted350ms stable observation before the deadline")
+  })
+  it("does not exempt a quality commit accompanied by canvas-origin movement", () => {
+    const report = lateLabel()
+    report.samples.slice(1).forEach(sample => { sample.x += 1 })
+    expect(assessCanvasObservation(report, budgets).failures).toContain("No uninterrupted350ms stable observation before the deadline")
+  })
+  it("does not exempt a late subpixel CSS resize even when backing floors stay identical", () => {
+    const report = lateLabel()
+    report.samples.slice(1).forEach(sample => { sample.cssWidth += .1; sample.cssHeight += .1 })
+    expect(assessCanvasObservation(report, budgets).failures).toEqual(["No uninterrupted350ms stable observation before the deadline"])
+  })
+  it.each([
+    ["balanced", "high"], ["high", "balanced"], ["balanced", "economy"], ["economy", "balanced"],
+  ] as const)("does not exempt a device-clamped %s-to-%s commit", (before, after) => {
+    const report = lateLabel(); report.deviceDpr = 1
+    report.samples.forEach((sample, index) => { sample.quality = index ? after : before })
+    expect(assessCanvasObservation(report, budgets).failures).toEqual(["No uninterrupted350ms stable observation before the deadline"])
+  })
+  it.each([
+    ["balanced", "high"], ["high", "balanced"], ["balanced", "economy"], ["economy", "balanced"],
+  ] as const)("does not exempt a pixel-budget-clamped %s-to-%s commit", (before, after) => {
+    const report = lateLabel()
+    report.samples.forEach((sample, index) => {
+      sample.quality = index ? after : before
+      sample.cssWidth = sample.cssHeight = 1000
+      sample.width = sample.height = 806
+    })
+    expect(assessCanvasObservation(report, budgets).failures).toEqual(["No uninterrupted350ms stable observation before the deadline"])
+  })
+  it("still counts otherwise-valid no-write label commits against the two-change limit", () => {
+    const report = lateLabel()
+    report.samples = [report.samples[0], { ...report.samples[1], at: 100 }, { ...report.samples[0], at: 200 }, { ...report.samples[1], at: 300 }, report.samples[2]]
+    expect(assessCanvasObservation(report, budgets).failures).toContain("Sustained or repeated canvas/quality/layout changes")
   })
   it("validates device DPR and mobile pixel-budget-limited steady states", () => {
     const report = baseline(); report.desktop = false

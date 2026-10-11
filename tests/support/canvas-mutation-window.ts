@@ -55,11 +55,14 @@ export function assessCanvasObservation(report: CanvasObservation, pixelBudgets:
   const changed = (a: CanvasState, b: CanvasState) => a.quality !== b.quality || !sameGeometry(a, b)
   const sameBuffer = (a: CanvasState, b: CanvasState) => a.width === b.width && a.height === b.height
   const caps: Record<string, number> = { still: 1, economy: 1, balanced: 1.25, high: 1.5 }
-  const validPixels = (state: CanvasState) => {
+  const policyDpr = (state: CanvasState) => {
     const cap = state.quality && Object.hasOwn(caps, state.quality) && caps[state.quality]
-    if (!cap || state.cssWidth <= 0 || state.cssHeight <= 0) return false
-    const dpr = Math.min(Math.max(.1, report.deviceDpr), cap, Math.sqrt((report.desktop ? pixelBudgets.desktopPixels : pixelBudgets.mobilePixels) / (state.cssWidth * state.cssHeight)))
-    return state.width === Math.floor(state.cssWidth * dpr) && state.height === Math.floor(state.cssHeight * dpr)
+    if (!cap || state.cssWidth <= 0 || state.cssHeight <= 0) return null
+    return Math.min(Math.max(.1, report.deviceDpr), cap, Math.sqrt((report.desktop ? pixelBudgets.desktopPixels : pixelBudgets.mobilePixels) / (state.cssWidth * state.cssHeight)))
+  }
+  const validPixels = (state: CanvasState) => {
+    const dpr = policyDpr(state)
+    return dpr !== null && state.width === Math.floor(state.cssWidth * dpr) && state.height === Math.floor(state.cssHeight * dpr)
   }
   let lastChange = 0
   const changes: { index: number; at: number }[] = []
@@ -82,7 +85,17 @@ export function assessCanvasObservation(report: CanvasObservation, pixelBudgets:
       state.cssWidth <= 0 || state.cssHeight <= 0 || !Number.isInteger(state.width) || state.width <= 0 || !Number.isInteger(state.height) || state.height <= 0 ||
       !state.quality || !Object.hasOwn(caps, state.quality)) fail("Malformed or unordered canvas observation")
     if (state.hook !== "undefined" || state.framesAttribute || !state.connected || !state.ready) fail("Diagnostic exposure or lost ready canvas during observation")
-    if (previous && changed(previous, state)) { changes.push({ index, at: state.at }); lastChange = state.at }
+    if (previous && changed(previous, state)) {
+      changes.push({ index, at: state.at })
+      // Only economy/still's equivalent sizing policy can preserve the quiet
+      // window. Count every commit for ownership/limits; other quality pairs,
+      // changed origins, or merely identical floored pixels are not exempt.
+      const equivalentPair = (previous.quality === "economy" && state.quality === "still") ||
+        (previous.quality === "still" && state.quality === "economy")
+      const labelOnly = equivalentPair && sameGeometry(previous, state) && sameBuffer(previous, state) &&
+        previous.x === state.x && previous.y === state.y && validPixels(previous) && validPixels(state) && policyDpr(previous) === policyDpr(state)
+      if (!labelOnly) lastChange = state.at
+    }
     if (previous && !sameBuffer(previous, state)) lastChange = state.at
   }
   let previousMutation: CanvasMutation | undefined
