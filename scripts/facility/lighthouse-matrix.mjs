@@ -17,6 +17,16 @@ export function performanceMatrix(name = "core") {
   })
 }
 
+/** Prioritize the two known mobile LCP gates without reducing release coverage.
+ * Each group still owns its five runs; all other groups retain their order. */
+export function lighthouseGroups(name = "core") {
+  const matrix = performanceMatrix(name)
+  const groups = matrix.profiles.flatMap(profile => matrix.routes.map(route => Object.freeze({ profile, route })))
+  if (matrix.name !== "premium-civic") return Object.freeze(groups)
+  const priority = group => group.profile === "mobile" && ["/", "/contact"].includes(group.route)
+  return Object.freeze([...groups.filter(priority), ...groups.filter(group => !priority(group))])
+}
+
 export function lighthouseRoutePolicy(route) {
   return Object.freeze({
     lcp: route === "/contact" ? 2000 : 2500,

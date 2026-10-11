@@ -7,7 +7,7 @@ import lighthouse, { desktopConfig } from "lighthouse"
 import { launch } from "chrome-launcher"
 import { provenance, verifiedBuildIdentity } from "./performance-contract.mjs"
 import { captureValidLighthouseReport } from "./lighthouse-capture.mjs"
-import { performanceMatrix, lighthouseSlug } from "./lighthouse-matrix.mjs"
+import { performanceMatrix, lighthouseGroups, lighthouseSlug } from "./lighthouse-matrix.mjs"
 import { acquireComputeLock } from "./compute-lock.mjs"
 import { evaluateLighthouseGroup } from "./lighthouse-group-budget.mjs"
 
@@ -62,85 +62,87 @@ try {
     const directory = `${outputRoot}/lighthouse-${profile}${diagnostic ? "-throttled" : ""}`
     if (!process.env.FACILITY_PERFORMANCE_DIR) await rm(directory, { recursive: true, force: true })
     await mkdir(directory, { recursive: true })
-    for (const route of matrix.routes) {
-      const group = []
-      for (let run = 1; run <= matrix.runs; run++) {
-        const slug = lighthouseSlug(route)
-        const output = `${directory}/${slug}-${run}.json`
-        const attempt = { route, profile, run, output, complete: false, captures: [] }
-        index.runs.push(attempt)
-        const chromeFlags = ["--headless", ...(angle ? ["--use-angle=metal", "--use-gl=angle"] : [])]
-        let browser, graphics
-        const result = await captureValidLighthouseReport(async number => {
-          const capture = { number, freshBrowserProfile: true, startedAt: new Date().toISOString(), result: "incomplete" }
-          attempt.captures.push(capture)
-          const userDataDir = await mkdtemp(join(tmpdir(), "gridninja-lighthouse-"))
-          let chrome
-          try {
-            chrome = await launch({ chromeFlags, userDataDir })
-            const versionResponse = await fetch(`http://localhost:${chrome.port}/json/version`)
-            const version = await versionResponse.json()
-            browser = String(version.Browser).replace(/^Chrome\//, "")
-            capture.browser = browser
-            const settings = { ...config.ci.collect.settings, ...(profile === "desktop" ? desktopConfig.settings : { formFactor: "mobile" }) }
-            if (diagnostic) settings.throttlingMethod = "devtools"
-            delete settings.chromeFlags
-            delete settings.preset
-            const result = await lighthouse(baseURL + route, { port: chrome.port, output: "json", logLevel: "error" }, { extends: "lighthouse:default", settings })
-            capture.result = result?.lhr && !result.lhr.runtimeError ? "valid" : "invalid"
-            capture.runtimeError = result?.lhr?.runtimeError ?? null
-            if (capture.result === "valid") {
-              try { graphics = { status: "available", ...await graphicsBackend(version.webSocketDebuggerUrl) } }
-              catch (error) { graphics = { status: "unavailable", renderer: "unavailable", error: error instanceof Error ? error.message : String(error) } }
-            }
-            return result
-          } catch (error) {
-            capture.result = "error"
-            capture.error = error instanceof Error ? error.message : String(error)
-            throw error
-          } finally {
-            capture.finishedAt = new Date().toISOString()
-            try { await chrome?.kill() } finally { await rm(userDataDir, { recursive: true, force: true }) }
-          }
-        }, async (invalid, number) => {
-          const prefix = `${directory}/invalid-captures/${slug}-${run}-attempt-${number}`
-          await mkdir(`${directory}/invalid-captures`, { recursive: true })
-          await writeFile(`${prefix}-report.json`, `${JSON.stringify(invalid?.lhr ?? { missingReport: true }, null, 2)}\n`)
-          await writeFile(`${prefix}-trace.json`, JSON.stringify(invalid?.artifacts?.Trace ?? null))
-          await writeFile(`${prefix}-network.json`, JSON.stringify(invalid?.artifacts?.DevtoolsLog ?? null))
-          const capture = attempt.captures.at(-1)
-          capture.preserved = { report: `${prefix}-report.json`, trace: `${prefix}-trace.json`, network: `${prefix}-network.json` }
-          capture.provenance = await provenance(browser, { profile, settings: invalid?.lhr?.configSettings ?? null, freshBrowserProfile: true, chromeFlags })
-        })
-        await mkdir(`${directory}/artifacts`, { recursive: true })
-        await writeFile(`${directory}/artifacts/${slug}-${run}-trace.json`, JSON.stringify(result.artifacts.Trace))
-        await writeFile(`${directory}/artifacts/${slug}-${run}-network.json`, JSON.stringify(result.artifacts.DevtoolsLog))
-        const hardwareAccepted = !angle || (graphics.status === "available" && /Apple M5.*Metal|Metal.*Apple M5/i.test(graphics.renderer) && !/SwiftShader|llvmpipe|software/i.test(graphics.renderer))
-        const evidence = { provenance: await provenance(browser, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }), graphics, route, run, measuredAt: new Date().toISOString(), measurementComplete: true, complete: hardwareAccepted }
-        harnessRevision ??= evidence.provenance.harnessRevision
-        assert.equal(evidence.provenance.harnessRevision, harnessRevision, "Harness changed during Lighthouse collection")
-        const report = { ...result.lhr, facilityEvidence: evidence }
-        await writeFile(output, `${JSON.stringify(report, null, 2)}\n`)
-        if (stopOnFailure) group.push(report)
-        attempt.graphics = graphics; attempt.complete = hardwareAccepted
-        assert(hardwareAccepted, `M5 Metal requested; actual backend: ${graphics.renderer}; ${graphics.error ?? ""}`)
-        console.log(JSON.stringify({ route, profile, run, lcp: result.lhr.audits["largest-contentful-paint"].numericValue, output }))
-      }
-      if (stopOnFailure) {
-        const check = { route, profile, runs: group.map(report => report.facilityEvidence.run), result: "incomplete", failures: [] }
-        index.groupBudgetChecks.push(check)
+  }
+  for (const { profile, route } of lighthouseGroups(matrix.name)) {
+    if (diagnostic && profile !== "mobile") continue
+    const directory = `${outputRoot}/lighthouse-${profile}${diagnostic ? "-throttled" : ""}`
+    const group = []
+    for (let run = 1; run <= matrix.runs; run++) {
+      const slug = lighthouseSlug(route)
+      const output = `${directory}/${slug}-${run}.json`
+      const attempt = { route, profile, run, output, complete: false, captures: [] }
+      index.runs.push(attempt)
+      const chromeFlags = ["--headless", ...(angle ? ["--use-angle=metal", "--use-gl=angle"] : [])]
+      let browser, graphics
+      const result = await captureValidLighthouseReport(async number => {
+        const capture = { number, freshBrowserProfile: true, startedAt: new Date().toISOString(), result: "incomplete" }
+        attempt.captures.push(capture)
+        const userDataDir = await mkdtemp(join(tmpdir(), "gridninja-lighthouse-"))
+        let chrome
         try {
-          const budget = evaluateLighthouseGroup(group, { route, profile, buildSettings: initialIdentity.buildSettings })
-          check.medians = budget.medians
-          check.failures = budget.failures
-          assert.equal(budget.failures.length, 0, `Lighthouse group failed unchanged release gates: ${budget.failures.join("; ")}`)
-          check.result = "pass"
+          chrome = await launch({ chromeFlags, userDataDir })
+          const versionResponse = await fetch(`http://localhost:${chrome.port}/json/version`)
+          const version = await versionResponse.json()
+          browser = String(version.Browser).replace(/^Chrome\//, "")
+          capture.browser = browser
+          const settings = { ...config.ci.collect.settings, ...(profile === "desktop" ? desktopConfig.settings : { formFactor: "mobile" }) }
+          if (diagnostic) settings.throttlingMethod = "devtools"
+          delete settings.chromeFlags
+          delete settings.preset
+          const result = await lighthouse(baseURL + route, { port: chrome.port, output: "json", logLevel: "error" }, { extends: "lighthouse:default", settings })
+          capture.result = result?.lhr && !result.lhr.runtimeError ? "valid" : "invalid"
+          capture.runtimeError = result?.lhr?.runtimeError ?? null
+          if (capture.result === "valid") {
+            try { graphics = { status: "available", ...await graphicsBackend(version.webSocketDebuggerUrl) } }
+            catch (error) { graphics = { status: "unavailable", renderer: "unavailable", error: error instanceof Error ? error.message : String(error) } }
+          }
+          return result
         } catch (error) {
-          check.result = "fail"
-          if (!check.failures.length) check.failures.push(error instanceof Error ? error.message : String(error))
-          index.stoppedAfterGroup = { route, profile, completedRuns: group.length, reason: "decisive-lighthouse-group-failure" }
+          capture.result = "error"
+          capture.error = error instanceof Error ? error.message : String(error)
           throw error
+        } finally {
+          capture.finishedAt = new Date().toISOString()
+          try { await chrome?.kill() } finally { await rm(userDataDir, { recursive: true, force: true }) }
         }
+      }, async (invalid, number) => {
+        const prefix = `${directory}/invalid-captures/${slug}-${run}-attempt-${number}`
+        await mkdir(`${directory}/invalid-captures`, { recursive: true })
+        await writeFile(`${prefix}-report.json`, `${JSON.stringify(invalid?.lhr ?? { missingReport: true }, null, 2)}\n`)
+        await writeFile(`${prefix}-trace.json`, JSON.stringify(invalid?.artifacts?.Trace ?? null))
+        await writeFile(`${prefix}-network.json`, JSON.stringify(invalid?.artifacts?.DevtoolsLog ?? null))
+        const capture = attempt.captures.at(-1)
+        capture.preserved = { report: `${prefix}-report.json`, trace: `${prefix}-trace.json`, network: `${prefix}-network.json` }
+        capture.provenance = await provenance(browser, { profile, settings: invalid?.lhr?.configSettings ?? null, freshBrowserProfile: true, chromeFlags })
+      })
+      await mkdir(`${directory}/artifacts`, { recursive: true })
+      await writeFile(`${directory}/artifacts/${slug}-${run}-trace.json`, JSON.stringify(result.artifacts.Trace))
+      await writeFile(`${directory}/artifacts/${slug}-${run}-network.json`, JSON.stringify(result.artifacts.DevtoolsLog))
+      const hardwareAccepted = !angle || (graphics.status === "available" && /Apple M5.*Metal|Metal.*Apple M5/i.test(graphics.renderer) && !/SwiftShader|llvmpipe|software/i.test(graphics.renderer))
+      const evidence = { provenance: await provenance(browser, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }), graphics, route, run, measuredAt: new Date().toISOString(), measurementComplete: true, complete: hardwareAccepted }
+      harnessRevision ??= evidence.provenance.harnessRevision
+      assert.equal(evidence.provenance.harnessRevision, harnessRevision, "Harness changed during Lighthouse collection")
+      const report = { ...result.lhr, facilityEvidence: evidence }
+      await writeFile(output, `${JSON.stringify(report, null, 2)}\n`)
+      if (stopOnFailure) group.push(report)
+      attempt.graphics = graphics; attempt.complete = hardwareAccepted
+      assert(hardwareAccepted, `M5 Metal requested; actual backend: ${graphics.renderer}; ${graphics.error ?? ""}`)
+      console.log(JSON.stringify({ route, profile, run, lcp: result.lhr.audits["largest-contentful-paint"].numericValue, output }))
+    }
+    if (stopOnFailure) {
+      const check = { route, profile, runs: group.map(report => report.facilityEvidence.run), result: "incomplete", failures: [] }
+      index.groupBudgetChecks.push(check)
+      try {
+        const budget = evaluateLighthouseGroup(group, { route, profile, buildSettings: initialIdentity.buildSettings })
+        check.medians = budget.medians
+        check.failures = budget.failures
+        assert.equal(budget.failures.length, 0, `Lighthouse group failed unchanged release gates: ${budget.failures.join("; ")}`)
+        check.result = "pass"
+      } catch (error) {
+        check.result = "fail"
+        if (!check.failures.length) check.failures.push(error instanceof Error ? error.message : String(error))
+        index.stoppedAfterGroup = { route, profile, completedRuns: group.length, reason: "decisive-lighthouse-group-failure" }
+        throw error
       }
     }
   }
