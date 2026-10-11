@@ -1,0 +1,15 @@
+{
+  "reviewDate": "2026-10-10",
+  "source": "GitHub PR #3 metadata retrieved via connected GitHub",
+  "url": "https://github.com/holdini25/GridNinjaSite/pull/3",
+  "mergeCommit": "e980000ea458f50662c268218791f6087f9e8ca3",
+  "approvedSourceCommit": "bcd960db52057d768feccdefe393d6986fb9bf84",
+  "recordedDeployment": "E2w6oLVgMVzpoxX4TjVXqQzA8n8s",
+  "recordedBuild": "4x9zp1Zusx59GVCtWyvPt",
+  "recordedProductionOrigin": "https://gridninja.ai",
+  "recordedPostMergeConcerns": [
+    "WebKit disclosure-control test failed two attempts",
+    "Mobile Home median LCP 2503.1661 ms vs 2500 ms gate"
+  ],
+  "verificationScope": "Release record; live build and asset comparison collected separately."
+}

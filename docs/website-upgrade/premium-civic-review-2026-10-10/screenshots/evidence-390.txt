@@ -1,0 +1,136 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - generic "Open navigation":
+- main:
+  - paragraph: GridNinja evidence
+  - heading "Inspect the evidence behind a capacity decision." [level=1]
+  - paragraph: Start with a versioned decision brief. Check its requested increment, modeled result, conditions, and unresolved question, then inspect the matching technical record. These synthetic examples explain the assessment method; they do not establish customer results or physical validation.
+  - region "Published synthetic decision briefs":
+    - heading "Published synthetic decision briefs" [level=2]
+    - paragraph: Four authored scenarios show how a request, its conditions, and missing evidence change the decision. Each brief has a matched PDF and technical record. These are illustrative assessments, not customer outcomes or operating permission.
+    - article:
+      - paragraph: Synthetic · Fixture A · v1.0.0
+      - heading "Request fits the modeled conditions" [level=3]:
+        - link "Request fits the modeled conditions":
+          - /url: /evidence/assessments/demo-01-a/v1.0.0
+      - paragraph: Do the workload’s service requirements and the site’s operating conditions support this commitment?
+      - link "Read fixture A brief":
+        - /url: /evidence/assessments/demo-01-a/v1.0.0
+      - link "Download fixture A PDF":
+        - /url: /downloads/assessment/demo-01-a/v1.0.0/pdf
+      - link "Download fixture A technical record":
+        - /url: /downloads/assessment/demo-01-a/v1.0.0/json
+    - article:
+      - paragraph: Synthetic · Fixture B · v1.0.0
+      - heading "A smaller commitment needs review" [level=3]:
+        - link "A smaller commitment needs review":
+          - /url: /evidence/assessments/demo-01-b/v1.0.0
+      - paragraph: Would the reduced 5.8 MW profile still meet the service and commercial requirement?
+      - link "Read fixture B brief":
+        - /url: /evidence/assessments/demo-01-b/v1.0.0
+      - link "Download fixture B PDF":
+        - /url: /downloads/assessment/demo-01-b/v1.0.0/pdf
+      - link "Download fixture B technical record":
+        - /url: /downloads/assessment/demo-01-b/v1.0.0/json
+    - article:
+      - paragraph: Synthetic · Fixture C · v1.0.0
+      - heading "No admissible revision under the stated minimum" [level=3]:
+        - link "No admissible revision under the stated minimum":
+          - /url: /evidence/assessments/demo-01-c/v1.0.0
+      - paragraph: Which assumption or investment option should be investigated before this capacity commitment is reconsidered?
+      - link "Read fixture C brief":
+        - /url: /evidence/assessments/demo-01-c/v1.0.0
+      - link "Download fixture C PDF":
+        - /url: /downloads/assessment/demo-01-c/v1.0.0/pdf
+      - link "Download fixture C technical record":
+        - /url: /downloads/assessment/demo-01-c/v1.0.0/json
+    - article:
+      - paragraph: Synthetic · Fixture D · v1.0.0
+      - heading "Missing evidence prevents assessment" [level=3]:
+        - link "Missing evidence prevents assessment":
+          - /url: /evidence/assessments/demo-01-d/v1.0.0
+      - paragraph: Can authorized cooling evidence be obtained for the same facility boundary and time window?
+      - link "Read fixture D brief":
+        - /url: /evidence/assessments/demo-01-d/v1.0.0
+      - link "Download fixture D PDF":
+        - /url: /downloads/assessment/demo-01-d/v1.0.0/pdf
+      - link "Download fixture D technical record":
+        - /url: /downloads/assessment/demo-01-d/v1.0.0/json
+    - link "Inspect the assessment and equipment relationships →":
+      - /url: /demo#decision-brief
+  - paragraph: How to use this evidence
+  - heading "Read the scope with the result" [level=2]
+  - paragraph: The synthetic assessment has a versioned decision brief, PDF, and technical record. Other resources remain unavailable until their evidence, accountable reviewers, and publication approval are established.
+  - generic "Resources awaiting publication (4)"
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - link "Evidence informs a decision. Authority stays explicit. Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.":
+        - /url: /proof
+        - text: Evidence informs a decision. Authority stays explicit.
+        - generic: Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.
+      - link "Virtual capacity insights for constrained AI infrastructure See planned articles on capacity constraints and runtime assurance, their publication status, and the current synthetic assessment example.":
+        - /url: /insights
+        - text: Virtual capacity insights for constrained AI infrastructure
+        - generic: See planned articles on capacity constraints and runtime assurance, their publication status, and the current synthetic assessment example.
+      - link "Methods for claims that operators can defend Understand the evidence stages for capacity claims and check the publication status of planned assessment and review methods.":
+        - /url: /methodology
+        - text: Methods for claims that operators can defend
+        - generic: Understand the evidence stages for capacity claims and check the publication status of planned assessment and review methods.
+  - paragraph: Capacity assessment
+  - heading "Bring the operator question before the capacity claim" [level=2]
+  - paragraph: A bounded assessment reviews one capacity question, its evidence, constraints, and unresolved commercial decisions.
+  - link "Scope an assessment":
+    - /url: /assessment?source=evidence-hub#scope
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

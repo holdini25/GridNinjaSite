@@ -1,0 +1,422 @@
+{
+  "version": "editorial-render.v1",
+  "mode": "reference",
+  "source": {
+    "masterSha256": "47b60bb7112df7be958779aaf61cd44c135917b6f665590fe61cc38fcbc02a87",
+    "settingsSha256": "00b74b84ba07485f286843285e3a96cd04ef48b9c6f297f7efd9dbc91f0db54b",
+    "rendererSha256": "125ac822be65569a7822d2d0c0dae2602ca609868f3a84abbd6f454ff3041e86",
+    "device": {
+      "requested": "metal",
+      "cyclesDevice": "GPU",
+      "computeBackend": "METAL",
+      "cpuThreadLimit": 4,
+      "metalRT": "AUTO",
+      "kernelOptimization": "FULL",
+      "enabledDevices": [
+        {
+          "name": "Apple M5 Pro (GPU - 20 cores)",
+          "type": "METAL"
+        }
+      ],
+      "blender": "5.2.2 LTS",
+      "blenderBuild": "d13f752e3b9c",
+      "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+      "savedPreferences": false,
+      "metalBinaryArchivesDisabled": false,
+      "note": "Enabled devices are configuration evidence; task timing does not establish CPU/GPU work split."
+    },
+    "equipmentIds": [
+      "air-cooling-plenum",
+      "air-return-trunk",
+      "air-row-0",
+      "air-row-1",
+      "cooler-0",
+      "cooler-1",
+      "cooler-2",
+      "cooler-3",
+      "cooling-collector-return",
+      "cooling-collector-supply",
+      "cooling-header-return",
+      "cooling-header-supply",
+      "rack-00",
+      "rack-01",
+      "rack-02",
+      "rack-03",
+      "rack-04",
+      "rack-05",
+      "rack-06",
+      "rack-07",
+      "rack-08",
+      "rack-09",
+      "rack-10",
+      "rack-11",
+      "reserve-0",
+      "reserve-1",
+      "row-0-bus",
+      "row-1-bus",
+      "switchgear-0",
+      "switchgear-1",
+      "switchgear-2"
+    ],
+    "rotorIds": [
+      "GN_FAN_ROTOR_00",
+      "GN_FAN_ROTOR_01",
+      "GN_FAN_ROTOR_02",
+      "GN_FAN_ROTOR_03"
+    ],
+    "ledCount": 48,
+    "lights": [
+      [
+        "KEY",
+        [
+          -4.8,
+          -5.6,
+          10.5
+        ],
+        2600,
+        7.0,
+        4.5,
+        [
+          1,
+          0.94,
+          0.87
+        ]
+      ],
+      [
+        "FILL",
+        [
+          5.0,
+          -6.5,
+          5.0
+        ],
+        650,
+        6.0,
+        4.0,
+        [
+          0.82,
+          0.9,
+          1
+        ]
+      ],
+      [
+        "RIM",
+        [
+          3.0,
+          6.2,
+          8.0
+        ],
+        1900,
+        5.0,
+        2.5,
+        [
+          0.88,
+          0.93,
+          1
+        ]
+      ],
+      [
+        "STRIP",
+        [
+          -6.5,
+          1.3,
+          4.5
+        ],
+        850,
+        1.5,
+        5.0,
+        [
+          1,
+          0.94,
+          0.88
+        ]
+      ]
+    ],
+    "originalMasterUnmodified": true,
+    "color": {
+      "transform": "AgX",
+      "look": "Medium High Contrast",
+      "exposure": 0,
+      "delivery": "SDR"
+    },
+    "editorialRendererSha256": "51b426e72224eaa7cddea3e8a111ec104fb6c6bd12502f49732113ad784806e8",
+    "supervisorSha256": "d08007eb8991a6e2d7a17c83320acb82e866f8646def1c9897f32ef9f78b458f",
+    "computeSourceSha256": "afb5e7096c76086825b6f071ba7c1de557359f2113ddb0bb4fc44f070c907649",
+    "blenderVersion": "5.2.2 LTS",
+    "blenderBuildHash": "d13f752e3b9c",
+    "sourceMaster": "assets-source/facility/facility-master.blend"
+  },
+  "settings": {
+    "version": "editorial-authoring.v1",
+    "release": "editorial-v1",
+    "seed": 192809,
+    "samples": 128,
+    "adaptiveThreshold": 0.005,
+    "frameCount": 300,
+    "fps": 30,
+    "shutterFrames": 0,
+    "rotorTurns": [
+      17,
+      19,
+      21,
+      23
+    ],
+    "rotorPhase": [
+      0,
+      1.57,
+      3.14,
+      4.71
+    ],
+    "studyDimensions": [
+      800,
+      500
+    ],
+    "masterDimensions": [
+      1600,
+      1000
+    ],
+    "deliveryWidths": [
+      480,
+      800,
+      1280
+    ],
+    "families": {
+      "A-instrument": {
+        "ai-workload": [
+          28,
+          15,
+          1.15
+        ],
+        "colocation-hall": [
+          46,
+          22,
+          1.13
+        ],
+        "platform-systems": [
+          42,
+          28,
+          1.1
+        ]
+      },
+      "B-architectural": {
+        "ai-workload": [
+          36,
+          21,
+          1.15
+        ],
+        "colocation-hall": [
+          58,
+          26,
+          1.13
+        ],
+        "platform-systems": [
+          34,
+          30,
+          1.1
+        ]
+      },
+      "C-frontal": {
+        "ai-workload": [
+          18,
+          12,
+          1.15
+        ],
+        "colocation-hall": [
+          22,
+          16,
+          1.13
+        ],
+        "platform-systems": [
+          24,
+          24,
+          1.1
+        ]
+      }
+    }
+  },
+  "samples": 256,
+  "threads": 4,
+  "adaptiveThreshold": 0.005,
+  "frame": 0,
+  "motionBlur": false,
+  "frames": [
+    {
+      "frame": 0,
+      "seconds": 6.50736520800001,
+      "identity": "b19d556d556cdf47ff7ce980c895eae98b10dc1a59119609aa92f21f465ceffa",
+      "width": 1600,
+      "height": 1000,
+      "peakProcessRssBytes": 1872248832,
+      "files": [
+        {
+          "file": "0000.exr",
+          "bytes": 2777497,
+          "sha256": "08484d1e7cd1b14362e2ca2df464dce99b4928876850b92b8c61373bbec7959c"
+        },
+        {
+          "file": "0000.png",
+          "bytes": 1365345,
+          "sha256": "1c4c03ccce72aa465f854328b3765b3fa980c5f40a982cc9a0c8cc048149c10c"
+        }
+      ],
+      "cacheHit": false,
+      "subject": "ai-workload",
+      "family": "C-frontal",
+      "camera": {
+        "position": [
+          8.492887496948242,
+          -21.90455436706543,
+          6.327515602111816
+        ],
+        "rotation": [
+          1.3613567352294922,
+          1.8826870729071743e-08,
+          0.3141592741012573
+        ],
+        "orthographicSpan": 3.6818199336528776,
+        "width": 1600,
+        "height": 1000,
+        "azimuth": 18,
+        "elevation": 12,
+        "padding": 1.15
+      },
+      "equipmentIds": [
+        "rack-04",
+        "rack-05"
+      ]
+    },
+    {
+      "frame": 0,
+      "seconds": 9.149266250000437,
+      "identity": "a24df8348d330c742a2932073e21c814be1f79ad956fd1e91b013e8e0253a030",
+      "width": 1600,
+      "height": 1000,
+      "peakProcessRssBytes": 1875083264,
+      "files": [
+        {
+          "file": "0000.exr",
+          "bytes": 4205826,
+          "sha256": "44469259cea74708458be77cb72aabcb3efc989fec3fb6783471567b8e7ebb06"
+        },
+        {
+          "file": "0000.png",
+          "bytes": 1552449,
+          "sha256": "7e2d447b46c948dc4a06e542eff8a8620d02cd2a77d346019a64197a618a5489"
+        }
+      ],
+      "cacheHit": false,
+      "subject": "colocation-hall",
+      "family": "C-frontal",
+      "camera": {
+        "position": [
+          8.51180362701416,
+          -21.309825897216797,
+          8.29626178741455
+        ],
+        "rotation": [
+          1.2915436029434204,
+          -4.3003907990168955e-08,
+          0.3839724063873291
+        ],
+        "orthographicSpan": 4.865045573711395,
+        "width": 1600,
+        "height": 1000,
+        "azimuth": 22,
+        "elevation": 16,
+        "padding": 1.13
+      },
+      "equipmentIds": [
+        "rack-00",
+        "rack-01",
+        "rack-02",
+        "rack-03",
+        "rack-04",
+        "rack-05",
+        "rack-06",
+        "rack-07",
+        "rack-08",
+        "rack-09",
+        "rack-10",
+        "rack-11"
+      ]
+    },
+    {
+      "frame": 0,
+      "seconds": 7.647576209000363,
+      "identity": "77b35981cefab4698e0795aca1c9e7d2a422eff8989215657a27d9e81a425cbd",
+      "width": 1600,
+      "height": 1000,
+      "peakProcessRssBytes": 1917681664,
+      "files": [
+        {
+          "file": "0000.exr",
+          "bytes": 3557249,
+          "sha256": "ae1a27eca885d63e07fbe1a1cb3f3da8c92fdff82641e3b60922f6f3cd10e1a4"
+        },
+        {
+          "file": "0000.png",
+          "bytes": 1667486,
+          "sha256": "40259a31df66d6a852af96fbf96248f58d6aed577203d511c5f049e149ed6198"
+        }
+      ],
+      "cacheHit": false,
+      "subject": "platform-systems",
+      "family": "C-frontal",
+      "camera": {
+        "position": [
+          8.910054206848145,
+          -20.01230239868164,
+          11.054126739501953
+        ],
+        "rotation": [
+          1.151917576789856,
+          5.6328122610693754e-08,
+          0.4188791513442993
+        ],
+        "orthographicSpan": 8.96273535490036,
+        "width": 1600,
+        "height": 1000,
+        "azimuth": 24,
+        "elevation": 24,
+        "padding": 1.1
+      },
+      "equipmentIds": [
+        "air-cooling-plenum",
+        "air-return-trunk",
+        "air-row-0",
+        "air-row-1",
+        "cooler-0",
+        "cooler-00",
+        "cooler-01",
+        "cooler-02",
+        "cooler-03",
+        "cooler-1",
+        "cooler-2",
+        "cooler-3",
+        "cooling-collector-return",
+        "cooling-collector-supply",
+        "cooling-header-return",
+        "cooling-header-supply",
+        "rack-00",
+        "rack-01",
+        "rack-02",
+        "rack-03",
+        "rack-04",
+        "rack-05",
+        "rack-06",
+        "rack-07",
+        "rack-08",
+        "rack-09",
+        "rack-10",
+        "rack-11",
+        "reserve-0",
+        "reserve-1",
+        "row-0-bus",
+        "row-1-bus",
+        "switchgear-0",
+        "switchgear-1",
+        "switchgear-2"
+      ]
+    }
+  ],
+  "status": "complete"
+}

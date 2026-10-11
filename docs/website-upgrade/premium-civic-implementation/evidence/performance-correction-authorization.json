@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "gridninja-correction-authorization.v1",
+  "id": "premium-civic-performance-correction-01",
+  "authorizedBy": "/root",
+  "authorizedAt": "2026-10-10T23:33:30.172345+00:00",
+  "userRequest": {
+    "text": "Use the verified local-model findings to fix the Evidence layout shift and Home and Contact loading failures, then validate a new candidate without weakening the release gates.",
+    "reference": "Current human message, 2026-10-10, thread01a1273d-82a5-7942-9752-101f08fabc53"
+  },
+  "baselineHead": "6a43b307397083cfb8c0a49761d10bb6443fe336",
+  "priorBudget": {
+    "path": "/Users/holdenchung/repos/GridNinjaSite/.git/gridninja-qa/premium-civic-upgrade/budget.json",
+    "sha256": "017372540850ee1377d5f820d70a5e665933956d0ef0bbee6aa6987cf347f007",
+    "attemptCount": 26,
+    "deadlineAt": 1791679032359
+  },
+  "limits": {
+    "commands": 20,
+    "attemptsPerPhase": 2,
+    "windowMs": 7200000,
+    "maxCommandMs": 3600000,
+    "logBytesPerStream": 1048576,
+    "candidateBuilds": 2
+  }
+}

@@ -4,10 +4,14 @@ import { assertQualificationScope, measurementScope } from "./measurement-scope.
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises"
 import { validateLighthouseReport } from "../seo/validate-lighthouse-budgets.mjs"
 import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertLighthouseProfile, assertSameBuild, canonicalJson, provenance, routeTransferBudget } from "./performance-contract.mjs"
+import { assertScrolledTransfer } from "./scrolled-transfer.mjs"
+import { performanceMatrix, assertLighthouseMatrixIndex, lighthouseRoutePolicy } from "./lighthouse-matrix.mjs"
 
 const scope = measurementScope(process.env.FACILITY_MEASUREMENT_SCOPE)
+const matrix = performanceMatrix(process.env.FACILITY_PERFORMANCE_MATRIX)
+const outputRoot = process.env.FACILITY_PERFORMANCE_DIR ?? "build/facility"
 const median = values => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
-const summary = { scope: scope.name, hardwareQualification: scope.hardwareQualification, measuredAt: new Date().toISOString(), result: "incomplete", profiles: [], failures: [], mobileEvidence: "Browser device emulation; physical mobile validation remains separate" }
+const summary = { scope: scope.name, matrix: matrix.name, hardwareQualification: scope.hardwareQualification, measuredAt: new Date().toISOString(), result: "incomplete", profiles: [], failures: [], mobileEvidence: "Browser device emulation; physical mobile validation remains separate" }
 try {
   const pages = JSON.parse(await readFile(scope.output, "utf8"))
   if (scope.functional) {
@@ -21,21 +25,31 @@ try {
   assertSameBuild(pages.provenance, expected)
   if(pages.result!=="pass")summary.failures.push(`Page measurements failed: ${pages.failure ?? "incomplete measurement"}`)
   assert.equal(pages.provenance.settings.runCount, 5, "Release validation requires five fresh profiles")
+  assert.equal(pages.provenance.settings.performanceMatrix ?? "core", matrix.name, "Page and Lighthouse measurement matrices differ")
+  if (matrix.name === "premium-civic") {
+    assertLighthouseMatrixIndex({ matrix: matrix.name, result: pages.result, runs: pages.scrolledTransfers ?? [] }, matrix)
+    for (const result of pages.scrolledTransfers) {
+      assert(result.freshContext && result.scroll?.complete, "Full-scroll evidence is incomplete or reused")
+      for (const transfer of [result.initialTransfer, result.fullPageTransfer]) assertScrolledTransfer(transfer, { route: result.route, profile: result.profile, buildSettings: pages.provenance.buildSettings })
+      assert(result.fullPageTransfer.bytes >= result.initialTransfer.bytes, "Full-scroll transfer omitted initial bytes")
+    }
+    summary.scrolledTransfers = pages.scrolledTransfers.map(({ route, profile, run, initialTransfer, fullPageTransfer }) => ({ route, profile, run, initialBytes: initialTransfer.bytes, fullPageBytes: fullPageTransfer.bytes, cumulativeNotAdditive: true }))
+  }
   summary.provenance = expected
   const build = JSON.parse(await readFile(".next/facility-build.json", "utf8"))
   const fresh = timestamp => {
     assert(Number.isFinite(Date.parse(timestamp)) && Date.parse(timestamp) >= Date.parse(build.recordedAt) && Date.parse(timestamp) <= Date.now() + 60_000, "Report predates this build or has an invalid measurement time")
   }
   fresh(pages.measuredAt)
-  const index = JSON.parse(await readFile("build/facility/lighthouse-index.json", "utf8"))
-  assert.equal(index.result, "pass", "Lighthouse collection did not complete")
-  assert.equal(index.runs.length, 30, "Missing Lighthouse fresh-profile runs for home, demo, and assessment")
+  const index = JSON.parse(await readFile(`${outputRoot}/lighthouse-index.json`, "utf8"))
+  assertLighthouseMatrixIndex(index, matrix)
+  assert(!index.diagnostic, "A diagnostic collection cannot qualify a release matrix")
   for (const profile of ["desktop", "mobile"]) {
-    const directory = `build/facility/lighthouse-${profile}`
+    const directory = `${outputRoot}/lighthouse-${profile}`
     const reports = []
     for (const file of await readdir(directory)) if (file.endsWith(".json")) reports.push(JSON.parse(await readFile(`${directory}/${file}`, "utf8")))
-    assert.equal(reports.length, 15, `${profile}: expected exactly fifteen Lighthouse reports`)
-    for (const route of ["/", "/demo", "/assessment"]) {
+    assert.equal(reports.length, matrix.routes.length * matrix.runs, `${profile}: incomplete Lighthouse route matrix`)
+    for (const route of matrix.routes) {
       const group = reports.filter(report => new URL(report.finalUrl).pathname === route)
       assert.equal(group.length, 5, `${profile} ${route}: expected five runs`)
       assert.deepEqual(group.map(report => report.facilityEvidence?.run).sort(), [1, 2, 3, 4, 5], "Duplicated or missing Lighthouse run IDs")
@@ -53,6 +67,7 @@ try {
           performance: report.categories.performance.score * 100,
           accessibility: report.categories.accessibility.score * 100,
           bestPractices: report.categories["best-practices"].score * 100,
+          seo: report.categories.seo.score * 100,
           lcp: report.audits["largest-contentful-paint"].numericValue,
           fcp: report.audits["first-contentful-paint"].numericValue,
           tbt: report.audits["total-blocking-time"].numericValue,
@@ -61,14 +76,16 @@ try {
         }
         assert(Object.values(sample).every(Number.isFinite), "Missing Lighthouse metric")
         summary.failures.push(...validateLighthouseReport(report))
+        for (const audit of ["heading-order", "color-contrast"]) if (report.audits[audit]?.score !== 1 && report.audits[audit]?.scoreDisplayMode !== "notApplicable") summary.failures.push(`${profile} ${route} run ${evidence.run}: ${audit} failed or is missing`)
         return sample
       })
       const medians = Object.fromEntries(Object.keys(samples[0]).map(key => [key, median(samples.map(sample => sample[key]))]))
-      for (const [key, ceiling] of [["lcp", 2500], ["fcp", 1800], ["tbt", 200], ["cls", 0.1], ["transferBytes", routeTransferBudget(route, profile, pages.provenance.buildSettings)]]) if (medians[key] > ceiling) summary.failures.push(`${profile} ${route}: ${key} ${medians[key]} exceeds ${ceiling}`)
-      for (const [key, floor] of [["performance", 90], ["accessibility", 95], ["bestPractices", 95]]) if (medians[key] < floor) summary.failures.push(`${profile} ${route}: ${key} ${medians[key]} below ${floor}`)
+      const policy = lighthouseRoutePolicy(route)
+      for (const [key, ceiling] of [["lcp", policy.lcp], ["fcp", policy.fcp], ["tbt", policy.tbt], ["cls", policy.cls], ["transferBytes", routeTransferBudget(route, profile, pages.provenance.buildSettings)]]) if (medians[key] > ceiling) summary.failures.push(`${profile} ${route}: ${key} ${medians[key]} exceeds ${ceiling}`)
+      for (const [key, floor] of [["performance", policy.performance], ["accessibility", policy.accessibility], ["bestPractices", policy.bestPractices], ...(policy.seo === null ? [] : [["seo", policy.seo]])]) if (medians[key] < floor) summary.failures.push(`${profile} ${route}: ${key} ${medians[key]} below ${floor}`)
       const pageProfile = profile === "mobile" ? "mobile-emulation" : "desktop"
       const transfers = pages.results.filter(result => result.route === route && result.profile === pageProfile)
-      if (route !== "/assessment") {
+      if (route === "/" || route === "/demo") {
         assert.equal(transfers.length, 5, "Missing five complete through-readiness transfer measurements")
         assert.deepEqual(transfers.map(result => result.run).sort(), [1, 2, 3, 4, 5], "Duplicate page-measurement run IDs")
       }
@@ -114,7 +131,7 @@ try {
         }
         }catch(error){summary.failures.push(`${profile} ${route} run ${result.run}: ${error instanceof Error?error.message:String(error)}`)}
       }
-      summary.profiles.push({ profile, route, lighthouseVersion: group[0].lighthouseVersion, settings: group[0].configSettings, medians, samples, throughReadyTransfers: transfers.map(result => ({ bytes: result.transfer?.bytes, automaticBytes: result.automaticTransfer?.bytes, automaticAcquisition: result.automaticAcquisition, manualThroughReady: result.manualThroughReady, cinematic: result.cinematic, renderingClass: result.renderingClass, frameP95: result.renderer?.frameP95, capabilityP95:result.capability?.frameP95, complete:result.complete, ambientCadence:result.ambientCadence, settlementMode:result.settlement?.mode ?? "legacy-explicit-pause", budgetFailures:result.budgetFailures })) })
+      summary.profiles.push({ profile, route, lighthouseVersion: group[0].lighthouseVersion, settings: group[0].configSettings, medians, samples, improvementAim: { lcp: policy.lcpAim, met: medians.lcp <= policy.lcpAim, releaseGate: false }, throughReadyTransfers: transfers.map(result => ({ bytes: result.transfer?.bytes, automaticBytes: result.automaticTransfer?.bytes, automaticAcquisition: result.automaticAcquisition, manualThroughReady: result.manualThroughReady, cinematic: result.cinematic, renderingClass: result.renderingClass, frameP95: result.renderer?.frameP95, capabilityP95:result.capability?.frameP95, complete:result.complete, ambientCadence:result.ambientCadence, settlementMode:result.settlement?.mode ?? "legacy-explicit-pause", budgetFailures:result.budgetFailures })) })
     }
   }
   summary.result = summary.failures.length ? "fail" : "pass"
@@ -122,10 +139,10 @@ try {
   summary.result = "fail"
   summary.failures.push(error instanceof Error ? error.message : String(error))
 }
-await mkdir("build/facility", { recursive: true })
-await writeFile(`build/facility/${scope.functional ? "ci-performance-summary" : "performance-summary"}.json`, `${JSON.stringify(summary, null, 2)}\n`)
+await mkdir(outputRoot, { recursive: true })
+await writeFile(`${outputRoot}/${scope.functional ? "ci-performance-summary" : "performance-summary"}.json`, `${JSON.stringify(summary, null, 2)}\n`)
 const activeRelease = summary.provenance?.buildSettings?.selectedRelease ?? "facility-v3"
-const evidenceDirectory = process.env.FACILITY_REPORT_DIR ?? (scope.functional ? "build/facility/ci-evidence" : `docs/website-upgrade/facility-validation-${activeRelease.replace(/^facility-/, "")}`)
+const evidenceDirectory = process.env.FACILITY_REPORT_DIR ?? (matrix.name === "premium-civic" ? outputRoot : scope.functional ? "build/facility/ci-evidence" : `docs/website-upgrade/facility-validation-${activeRelease.replace(/^facility-/, "")}`)
 await mkdir(evidenceDirectory, { recursive: true })
 await writeFile(`${evidenceDirectory}/lighthouse.json`, `${JSON.stringify(summary, null, 2)}\n`)
 console.log(JSON.stringify({ result: summary.result, profiles: summary.profiles.map(({ profile, route, medians }) => ({ profile, route, medians })), failures: summary.failures }, null, 2))

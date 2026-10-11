@@ -1,0 +1,117 @@
+- link "Skip to content":
+  - /url: "#main-content"
+- banner:
+  - link "GridNinja home":
+    - /url: /
+    - generic: GridNinja
+  - navigation "Primary":
+    - generic "How it works":
+      - text: How it works
+    - generic "Solutions":
+      - text: Solutions
+    - link "Sample brief":
+      - /url: /demo#decision-brief
+    - generic "Evidence":
+      - text: Evidence
+    - generic "Company":
+      - text: Company
+  - link "Scope an assessment":
+    - /url: /assessment?source=header#scope
+- main:
+  - region "About GridNinja":
+    - paragraph: About GridNinja
+    - heading "Building a defensible basis for capacity decisions." [level=1]
+    - paragraph: "Our ambition is for growing data centers to be better neighbors and responsible stewards of shared infrastructure. GridNinja starts with a bounded capacity decision: how a proposed workload or commitment relates to facility limits, evidence quality, and commercial requirements."
+    - link "Scope an assessment":
+      - /url: /assessment?source=about-hero#scope
+    - link "See a sample decision brief":
+      - /url: /demo?scenario=b&version=1.0.0&perspective=business#decision-brief
+  - heading "The offer today" [level=2]
+  - paragraph: A bounded, paid capacity decision assessment using authorized historical inputs. Scope, availability, reviewers, price, schedule, and deliverables are agreed before work begins.
+  - link "Review the assessment":
+    - /url: /assessment
+    - text: Review the assessment
+    - generic: →
+  - heading "Demonstrated work and its limits" [level=2]
+  - paragraph: The public sample shows a synthetic assessment record, model screening outcomes, explicit unknowns, and a versioned decision brief. It is not evidence of site deployment, customer performance, independent certification, or operating authority.
+  - link "Inspect the synthetic example":
+    - /url: /demo
+    - text: Inspect the synthetic example
+    - generic: →
+  - heading "Establish the delivery team during scoping" [level=2]
+  - paragraph: Named team biographies and verified customer case studies are not yet published. Before a paid engagement, establish the accountable delivery lead, technical reviewer, relevant experience, availability, and customer decision owner. Public credentials will be added only with supporting evidence and permission.
+  - heading "The development direction" [level=2]
+  - paragraph: GridNinja is developing an AI Data Center Virtual Capacity Control Plane, a runtime-assured virtual capacity engine. The aim is safe, usable, auditable capacity through inside-the-fence orchestration. Live integration, Shadow Mode operations, and bounded autonomy remain separate steps requiring demonstrated capability, site evidence, and explicit authority.
+  - link "Understand the platform direction":
+    - /url: /platform
+    - text: Understand the platform direction
+    - generic: →
+  - region "Continue the proof path":
+    - paragraph: Related operator resources
+    - heading "Continue the proof path" [level=2]
+    - list:
+      - link "A control-plane direction, with evidence before authority. Explore the intended virtual capacity control-plane architecture, its evidence and authority boundaries, and the current bounded assessment offer.":
+        - /url: /platform
+        - text: A control-plane direction, with evidence before authority.
+        - generic: Explore the intended virtual capacity control-plane architecture, its evidence and authority boundaries, and the current bounded assessment offer.
+      - link "Evidence informs a decision. Authority stays explicit. Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.":
+        - /url: /proof
+        - text: Evidence informs a decision. Authority stays explicit.
+        - generic: Understand the evidence and permissions needed before Shadow Mode, advisory review or bounded autonomy, and the limits of the public synthetic sample.
+      - link "Tell us where capacity is constrained. Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.":
+        - /url: /contact
+        - text: Tell us where capacity is constrained.
+        - generic: Start a scoping conversation about a bounded capacity assessment, input readiness, deliverables, decision responsibilities, or a partner investigation.
+  - paragraph: Proof before autonomy
+  - heading "Start with one capacity question." [level=2]
+  - paragraph: Agree the decision, evidence boundary, responsibilities, and paid scope before work begins.
+  - link "Scope an assessment":
+    - /url: /assessment?source=about-hero#scope
+    - text: Scope an assessment
+- contentinfo:
+  - generic: GridNinja
+  - generic: Infrastructure · Intelligence · Control
+  - heading "Capacity decisions with a reviewable basis." [level=2]
+  - paragraph: A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
+  - link "Scope an assessment":
+    - /url: /assessment?source=footer#scope
+    - text: Scope an assessment
+    - generic: →
+  - navigation "Footer":
+    - heading "Start here" [level=3]
+    - list:
+      - link "Capacity assessment":
+        - /url: /assessment
+      - link "Sample decision brief":
+        - /url: /demo#decision-brief
+      - link "Platform direction":
+        - /url: /platform
+    - heading "Solutions" [level=3]
+    - list:
+      - link "AI Cloud":
+        - /url: /solutions/ai-cloud
+      - link "Colocation & REITs":
+        - /url: /solutions/colocation
+      - link "Bridge Power & DER":
+        - /url: /solutions/bridge-power
+    - heading "Evidence" [level=3]
+    - list:
+      - link "Evidence library":
+        - /url: /evidence
+      - link "Review the proof pack":
+        - /url: /proof/proof-pack
+      - link "Methodology":
+        - /url: /methodology
+      - link "Insights":
+        - /url: /insights
+    - heading "Company" [level=3]
+    - list:
+      - link "About":
+        - /url: /about
+      - link "Why GridNinja":
+        - /url: /why-gridninja
+      - link "Contact":
+        - /url: /contact
+      - link "Data handling":
+        - /url: /data-handling
+- alert

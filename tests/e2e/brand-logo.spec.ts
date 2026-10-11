@@ -8,13 +8,13 @@ test.describe("GridNinja brand placements", () => {
     clientHealth,
   }) => {
     await page.goto("/")
-    await expect(page.locator("header").getByRole("link", { name: "GridNinja home", exact: true })
+    await expect(page.getByRole("banner").getByRole("link", { name: "GridNinja home", exact: true })
       .filter({ visible: true }).getByText("GridNinja", { exact: true })).toBeVisible()
 
     for (const width of widths) {
       await page.setViewportSize({ width, height: 900 })
 
-      const header = page.locator("header")
+      const header = page.getByRole("banner")
       const home = header.getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
       const mark = home.locator('[data-logo-motion="micro-response"] svg')
       const wordmark = home.getByText("GridNinja", { exact: true })
@@ -45,15 +45,15 @@ test.describe("GridNinja brand placements", () => {
     await page.goto("/")
 
     const footerMark = page
-      .locator("footer")
+      .getByRole("contentinfo")
       .locator('img[src*="gridninja-emblem-detailed-dark.svg"]')
 
     await expect(footerMark).toBeVisible()
-    await expect(page.locator("footer")).toContainText(
+    await expect(page.getByRole("contentinfo")).toContainText(
       "Infrastructure · Intelligence · Control"
     )
     expect((await footerMark.boundingBox())?.height).toBeGreaterThanOrEqual(72)
-    await expect(page.locator("footer [data-logo-motion]")).toHaveCount(0)
+    await expect(page.getByRole("contentinfo").locator("[data-logo-motion]")).toHaveCount(0)
 
     await page.goto("/about")
     await expect(page.locator('[data-logo-motion="guardian-wake"]')).toHaveCount(0)
@@ -92,7 +92,7 @@ test.describe("GridNinja brand placements", () => {
       await page.setViewportSize({ width, height: 900 })
 
       const signature = page
-        .locator("footer")
+        .getByRole("contentinfo")
         .getByText("Infrastructure · Intelligence · Control", { exact: true })
 
       await signature.scrollIntoViewIfNeeded()
@@ -120,7 +120,7 @@ test.describe("GridNinja brand placements", () => {
   test("navigates functionally from the header logo", async ({ page }) => {
     await page.goto("/about")
 
-    const home = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
+    const home = page.getByRole("banner").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     await home.click()
 
     await expect(page).toHaveURL(/\/$/)
@@ -132,7 +132,7 @@ test.describe("GridNinja brand placements", () => {
   }) => {
     await page.goto("/")
 
-    const trigger = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
+    const trigger = page.getByRole("banner").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     const core = trigger.locator('[data-part="proof-core"]')
     const glow = trigger.locator('[data-part="proof-glow"]')
     const sweep = trigger.locator('[data-part="proof-sweep"]')
@@ -166,7 +166,7 @@ test.describe("GridNinja brand placements", () => {
   }) => {
     await page.goto("/")
 
-    const trigger = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
+    const trigger = page.getByRole("banner").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     const logo = trigger.locator('[data-logo-motion="micro-response"]')
     const parts = logo.locator("[data-part]")
     const guardians = logo.locator(
@@ -209,7 +209,7 @@ test.describe("GridNinja brand placements", () => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.goto("/")
 
-    const trigger = page.locator("header").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
+    const trigger = page.getByRole("banner").getByRole("link", { name: "GridNinja home", exact: true }).filter({ visible: true })
     const microParts = trigger.locator("[data-part]")
     await trigger.hover()
     await trigger.focus()

@@ -40,8 +40,15 @@ test("native animation presents frames, pauses, and resumes without changing the
   await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBeGreaterThan(.2)
   await player.getByRole("button", { name: "Pause facility animation" }).click()
   await expect(player).toHaveAttribute("data-state", "paused")
-  await page.evaluate(() => window.scrollTo(0, 0))
-  await page.screenshot({ path: testInfo.outputPath("homepage-paused.png"), fullPage: isMobile })
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }))
+  await page.screenshot({ path: testInfo.outputPath("homepage-paused.png"), fullPage: false })
+  if (isMobile) {
+    // A full-page capture can exceed WebKit's 32767-device-pixel limit.
+    // Keep ordinary top/player viewport evidence without changing page paint.
+    await player.scrollIntoViewIfNeeded()
+    await page.screenshot({ path: testInfo.outputPath("homepage-paused-player.png"), fullPage: false })
+    await testInfo.attach("paused-capture-scope", { contentType: "application/json", body: JSON.stringify({ scope: "Two ordinary viewports: page top and paused player. Not a full-page review.", fullPage: false, viewport: page.viewportSize() }) })
+  }
   const paused = await video.evaluate(element => ({ time: (element as HTMLVideoElement).currentTime, paused: (element as HTMLVideoElement).paused }))
   expect(paused.paused).toBe(true)
   await page.locator(".gn-home-invitation").scrollIntoViewIfNeeded()

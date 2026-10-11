@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "editorial.v1",
+  "release": "editorial-v1",
+  "environment": "synthetic",
+  "family": "C-frontal",
+  "source": {
+    "masterIdentity": "gridninja-facility-shared-master",
+    "masterSha256": "47b60bb7112df7be958779aaf61cd44c135917b6f665590fe61cc38fcbc02a87",
+    "settingsSha256": "00b74b84ba07485f286843285e3a96cd04ef48b9c6f297f7efd9dbc91f0db54b",
+    "cinematicRendererSha256": "125ac822be65569a7822d2d0c0dae2602ca609868f3a84abbd6f454ff3041e86",
+    "editorialRendererSha256": "51b426e72224eaa7cddea3e8a111ec104fb6c6bd12502f49732113ad784806e8",
+    "computeSourceSha256": "afb5e7096c76086825b6f071ba7c1de557359f2113ddb0bb4fc44f070c907649",
+    "supervisorSha256": "d08007eb8991a6e2d7a17c83320acb82e866f8646def1c9897f32ef9f78b458f",
+    "finalReportSha256": "f8315f5178c2d4b8d7cdb23856d6659b47bec83ada04a9b1585fb31eb0f165a2",
+    "referenceReportSha256": "c3f8d247a0453262e092ebbeab63c4f1b501f4e6b70ad1bc49b0a168a03dea61",
+    "packagerSha256": "3ba65691abd7279f36cf593c7b7f379cdce82507de3c09cb6ae597fa547c772a",
+    "blenderVersion": "5.2.2 LTS",
+    "blenderBuildHash": "d13f752e3b9c",
+    "nodeVersion": "v22.23.2",
+    "sharpVersion": "0.35.5",
+    "webpVersion": "1.6.0"
+  },
+  "render": {
+    "width": 1600,
+    "height": 1000,
+    "samples": 128,
+    "referenceSamples": 256,
+    "adaptiveThreshold": 0.005,
+    "threads": 4,
+    "device": "METAL",
+    "colorTransform": "AgX",
+    "look": "Medium High Contrast",
+    "delivery": "sRGB",
+    "motionBlur": false
+  },
+  "subjects": {
+    "ai-workload": {
+      "camera": {
+        "position": [
+          8.492887496948242,
+          -21.90455436706543,
+          6.327515602111816
+        ],
+        "rotation": [
+          1.3613567352294922,
+          1.8826870729071743e-8,
+          0.3141592741012573
+        ],
+        "orthographicSpan": 3.6818199336528776,
+        "width": 1600,
+        "height": 1000,
+        "azimuth": 18,
+        "elevation": 12,
+        "padding": 1.15
+      },
+      "equipmentIds": [
+        "rack-04",
+        "rack-05"
+      ],
+      "masterPngSha256": "c91a4cf49d553da738c666fb6f3542a5f8b53e1f677e955a3fa73974002c6adf",
+      "masterExrSha256": "3a467e04808afeb9c6da0bf6b6b23d5b0d9490019b82ab5a1a1bf31378cb0b08",
+      "referencePngSha256": "1c4c03ccce72aa465f854328b3765b3fa980c5f40a982cc9a0c8cc048149c10c"
+    },
+    "colocation-hall": {
+      "camera": {
+        "position": [
+          8.51180362701416,
+          -21.309825897216797,
+          8.29626178741455
+        ],
+        "rotation": [
+          1.2915436029434204,
+          -4.3003907990168955e-8,
+          0.3839724063873291
+        ],
+        "orthographicSpan": 4.865045573711395,
+        "width": 1600,
+        "height": 1000,
+        "azimuth": 22,
+        "elevation": 16,
+        "padding": 1.13
+      },
+      "equipmentIds": [
+        "rack-00",
+        "rack-01",
+        "rack-02",
+        "rack-03",
+        "rack-04",
+        "rack-05",
+        "rack-06",
+        "rack-07",
+        "rack-08",
+        "rack-09",
+        "rack-10",
+        "rack-11"
+      ],
+      "masterPngSha256": "1da43260e3689db1e0aca063d79dda57e413e8d3ada23687a23b982de37d949d",
+      "masterExrSha256": "1d3e64464684cb8e45b3644ff7e3fc5b76c40513dd526f924a0ce68e32b78ce7",
+      "referencePngSha256": "7e2d447b46c948dc4a06e542eff8a8620d02cd2a77d346019a64197a618a5489"
+    },
+    "platform-systems": {
+      "camera": {
+        "position": [
+          8.910054206848145,
+          -20.01230239868164,
+          11.054126739501953
+        ],
+        "rotation": [
+          1.151917576789856,
+          5.6328122610693754e-8,
+          0.4188791513442993
+        ],
+        "orthographicSpan": 8.96273535490036,
+        "width": 1600,
+        "height": 1000,
+        "azimuth": 24,
+        "elevation": 24,
+        "padding": 1.1
+      },
+      "equipmentIds": [
+        "air-cooling-plenum",
+        "air-return-trunk",
+        "air-row-0",
+        "air-row-1",
+        "cooler-0",
+        "cooler-00",
+        "cooler-01",
+        "cooler-02",
+        "cooler-03",
+        "cooler-1",
+        "cooler-2",
+        "cooler-3",
+        "cooling-collector-return",
+        "cooling-collector-supply",
+        "cooling-header-return",
+        "cooling-header-supply",
+        "rack-00",
+        "rack-01",
+        "rack-02",
+        "rack-03",
+        "rack-04",
+        "rack-05",
+        "rack-06",
+        "rack-07",
+        "rack-08",
+        "rack-09",
+        "rack-10",
+        "rack-11",
+        "reserve-0",
+        "reserve-1",
+        "row-0-bus",
+        "row-1-bus",
+        "switchgear-0",
+        "switchgear-1",
+        "switchgear-2"
+      ],
+      "masterPngSha256": "0e61590ba592cc2334cc58c29d65fb3f70a16d45484a1159151648faebac59b6",
+      "masterExrSha256": "28eb8cf7189226421ab88b8e2d8ab652856f1bc9ea0dc70a0eaddeb3d0d5fa50",
+      "referencePngSha256": "40259a31df66d6a852af96fbf96248f58d6aed577203d511c5f049e149ed6198"
+    }
+  },
+  "files": [
+    {
+      "file": "ai-workload-480.webp",
+      "subject": "ai-workload",
+      "width": 480,
+      "height": 300,
+      "bytes": 6504,
+      "sha256": "51ec43c36d29356060625f7e260bff1aadf35cde2de5fddcff4336388a1315a8",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "ai-workload-800.webp",
+      "subject": "ai-workload",
+      "width": 800,
+      "height": 500,
+      "bytes": 13864,
+      "sha256": "7ce8d6808dadb8e5448a2abbadfef468c96e7b065739ac70942e3b85d189be49",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "ai-workload-1280.webp",
+      "subject": "ai-workload",
+      "width": 1280,
+      "height": 800,
+      "bytes": 23992,
+      "sha256": "6e6d83cc5f8d782c8d32b7a0a7721efbe20381fa49c8dff79bda4497519bb2eb",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "colocation-hall-480.webp",
+      "subject": "colocation-hall",
+      "width": 480,
+      "height": 300,
+      "bytes": 18278,
+      "sha256": "a37d7a8e1067bb5f7cc88a75e6cc295c75f95d499ee4c7e56005dad0a067e0b9",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "colocation-hall-800.webp",
+      "subject": "colocation-hall",
+      "width": 800,
+      "height": 500,
+      "bytes": 37468,
+      "sha256": "2fe19d490bdd493af47c4eda7e5c3e7ae4004661fd6d713172f123587e2160c8",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "colocation-hall-1280.webp",
+      "subject": "colocation-hall",
+      "width": 1280,
+      "height": 800,
+      "bytes": 66008,
+      "sha256": "c0b3f0798b76dacac9221a2f3746aa0400c008597dbf68bcf4b0c2baf9969f15",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "platform-systems-480.webp",
+      "subject": "platform-systems",
+      "width": 480,
+      "height": 300,
+      "bytes": 18672,
+      "sha256": "b202429d90509566bf9cd0dd204140659902db8f4c4d6651959d0038c14f5c95",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "platform-systems-800.webp",
+      "subject": "platform-systems",
+      "width": 800,
+      "height": 500,
+      "bytes": 40674,
+      "sha256": "dedb8978447ebae1540b4fd1b4a47e5ea5e9410acb6e88fac3b3d9ee9998b37a",
+      "mimeType": "image/webp",
+      "quality": 90
+    },
+    {
+      "file": "platform-systems-1280.webp",
+      "subject": "platform-systems",
+      "width": 1280,
+      "height": 800,
+      "bytes": 77520,
+      "sha256": "76c6758a9f1b6955dc6222ea8d9174a5391794bf3d7d688f02c0beab0f1b35e3",
+      "mimeType": "image/webp",
+      "quality": 90
+    }
+  ]
+}

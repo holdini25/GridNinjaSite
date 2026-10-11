@@ -10,8 +10,10 @@ for (const size of [{width:1366,height:768},{width:390,height:844}]) {
     await page.emulateMedia({reducedMotion:"reduce"})
     await page.goto("/")
     const player=page.getByTestId("cinematic-facility"),stage=player.locator(".cinematic-stage")
-    await expect(player).toHaveAttribute("data-reason","reduced-motion")
+    // Visibility is evaluated before motion preference; visit the player whose
+    // reduced-motion behavior is being inspected, including the stacked hero.
     await stage.scrollIntoViewIfNeeded()
+    await expect(player).toHaveAttribute("data-reason","reduced-motion")
     await player.locator("img").evaluate(image=>(image as HTMLImageElement).decode())
     const posterCapture=await stage.screenshot({path:testInfo.outputPath("poster-stage.png")})
     await player.getByRole("button",{name:"Play facility animation"}).click()
@@ -65,8 +67,8 @@ for (const size of [{width:1366,height:768},{width:390,height:844}]) {
   })
 }
 
-for (const width of [320, 390, 819, 1366]) {
-  test(`evidence images and copy remain within ordered, non-overlapping cards at ${width}px`, async ({ page }, testInfo) => {
+for (const width of [320, 390, 819, 960, 1366]) {
+  test(`evidence media, qualifications and copy remain within ordered, non-overlapping cards at ${width}px`, async ({ page }, testInfo) => {
     await page.setViewportSize({ width, height: width === 1366 ? 768 : 844 })
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.goto("/")
@@ -87,19 +89,37 @@ for (const width of [320, 390, 819, 1366]) {
         const rect = element.getBoundingClientRect()
         return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height }
       }
-      return elements.map(element => ({
-        card: bounds(element),
-        image: bounds(element.querySelector(".gn-home-evidence-image")!),
-        photo: element.querySelector("img") ? bounds(element.querySelector("img")!) : null,
-        caption: bounds(element.querySelector(".gn-home-evidence-caption")!),
-        copy: bounds(element.querySelector(".gn-home-evidence-copy")!),
-        label: bounds(element.querySelector(".gn-home-card-label")!),
-        title: bounds(element.querySelector("h3")!),
-        body: bounds(element.querySelector(".gn-home-evidence-copy > p:not(.gn-home-card-label)")!),
-        link: bounds(element.querySelector(".gn-home-text-link")!),
-      }))
+      return elements.map(element => {
+        const media = element.querySelector("[data-artwork-slot]")!
+        const slot = media.getAttribute("data-artwork-slot")
+        const art = media.querySelector(slot === "brief" ? ".gn-home-paper" : slot === "proof" ? "svg" : "img")!
+        const qualification = media.querySelector(slot === "brief" ? "small" : "figcaption")!
+        return {
+          slot,
+          card: bounds(element),
+          media: bounds(media),
+          art: bounds(art),
+          qualification: bounds(qualification),
+          qualificationText: qualification.textContent,
+          briefFields: slot === "brief" ? [...art.querySelectorAll("div, p, strong, small")].map(field => ({ bounds: bounds(field), text: field.textContent })) : [],
+          photo: slot === "platform" ? { src: (art as HTMLImageElement).currentSrc, width: (art as HTMLImageElement).naturalWidth, height: (art as HTMLImageElement).naturalHeight } : null,
+          copy: bounds(element.querySelector(".gn-home-evidence-copy")!),
+          label: bounds(element.querySelector(".gn-home-card-label")!),
+          title: bounds(element.querySelector("h3")!),
+          body: bounds(element.querySelector(".gn-home-evidence-copy > p:not(.gn-home-card-label)")!),
+          link: bounds(element.querySelector(".gn-home-text-link")!),
+        }
+      })
     })
     expect(cards).toHaveLength(3)
+    expect(cards.map(card => card.slot)).toEqual(["brief", "proof", "platform"])
+    expect(cards[0].qualificationText).toBe("Synthetic example · No operational authority")
+    expect(cards[0].briefFields.map(field => field.text).join(" ")).toContain("DEMO-01-B · v1.0.0")
+    expect(cards[1].qualificationText?.replace(/\s+/g, " ")).toBe("Modeled result → review Gate operating permission")
+    expect(cards[2].qualificationText).toBe("Illustrative facility · declared boundary")
+    expect(cards[2].photo?.src).toMatch(/\/assets\/editorial\/editorial-v1\/platform-systems-\d+\.webp$/)
+    expect(cards[2].photo?.width).toBeGreaterThan(0)
+    expect(cards[2].photo?.height).toBeGreaterThan(0)
     const contained = (inner: typeof cards[number]["card"], outer: typeof cards[number]["card"], label: string) => {
       expect(inner.width, `${label}: positive width`).toBeGreaterThan(0)
       expect(inner.height, `${label}: positive height`).toBeGreaterThan(0)
@@ -109,16 +129,21 @@ for (const width of [320, 390, 819, 1366]) {
       expect(inner.bottom, `${label}: bottom edge`).toBeLessThanOrEqual(outer.bottom + 1)
     }
     cards.forEach((card, index) => {
-      for (const part of ["image", "copy", "label", "title", "body", "link"] as const) contained(card[part], card.card, `Card ${index} ${part}`)
-      contained(card.caption, card.image, `Card ${index} caption`)
-      if (card.photo) contained(card.photo, card.image, `Card ${index} photo`)
+      for (const part of ["media", "copy", "label", "title", "body", "link"] as const) contained(card[part], card.card, `Card ${index} ${part}`)
+      contained(card.art, card.media, `Card ${index} artwork`)
+      contained(card.qualification, card.media, `Card ${index} qualification`)
+      if (card.slot === "brief") {
+        for (const field of card.briefFields) contained(field.bounds, card.art, `Card ${index} document field`)
+      } else {
+        expect(card.art.bottom, `Card ${index} artwork before qualification`).toBeLessThanOrEqual(card.qualification.top + 1)
+      }
       expect(card.label.bottom, `Card ${index} label before title`).toBeLessThanOrEqual(card.title.top + 1)
       expect(card.title.bottom, `Card ${index} title before body`).toBeLessThanOrEqual(card.body.top + 1)
       expect(card.body.bottom, `Card ${index} body before link`).toBeLessThanOrEqual(card.link.top + 1)
-      if (width < 640 || width >= 820) {
-        expect(card.image.bottom, `Card ${index} image before copy`).toBeLessThanOrEqual(card.label.top + 1)
+      if (width <= 819 || width >= 1120) {
+        expect(card.media.bottom, `Card ${index} media before copy`).toBeLessThanOrEqual(card.label.top + 1)
       } else {
-        expect(card.image.right, `Card ${index} tablet image beside copy`).toBeLessThanOrEqual(card.copy.left + 1)
+        expect(card.media.right, `Card ${index} tablet media beside copy`).toBeLessThanOrEqual(card.copy.left + 1)
       }
       for (const other of cards.slice(index + 1)) {
         const horizontalOverlap = Math.min(card.card.right, other.card.right) - Math.max(card.card.left, other.card.left)

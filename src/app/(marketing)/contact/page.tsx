@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { GridNinjaMark } from "@/components/brand/gridninja-logo"
+import { StaticGridNinjaMark } from "@/components/brand/gridninja-mark"
 import { ContactForm } from "@/components/forms/contact-form"
 import { SectionShell } from "@/components/layout/section-shell"
 import { SeoPageJsonLd } from "@/components/seo/json-ld"
@@ -34,10 +34,11 @@ export default function ContactPage() {
           <div className="contents lg:col-span-5 lg:block lg:pt-5">
             <div className="order-1 min-w-0 [overflow-wrap:anywhere]">
               <div className="flex items-center gap-3">
-                <GridNinjaMark
+                <StaticGridNinjaMark
                   variant="proof-core"
                   className="size-7"
-                  priority
+                  loading="eager"
+                  fetchPriority="high"
                 />
                 <p className="gn-eyebrow">{contactHero.eyebrow}</p>
               </div>

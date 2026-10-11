@@ -314,7 +314,7 @@ export function SiteHeader({ logo }: { logo: ReactNode }) {
         </div>
       </div>
       <div hidden data-header-enhancement-status role="status" className="absolute inset-x-3 top-[70px] z-50 rounded-xl border border-input bg-surface-2 p-4 text-sm leading-6"><p>Navigation enhancements could not load. The menu links still work.</p><button type="button" data-header-retry className="mr-5 inline-flex min-h-11 items-center text-primary underline">Retry navigation</button><a href="#footer-navigation" data-header-fallback className="inline-flex min-h-11 items-center text-primary underline">Use footer navigation</a></div>
-      <script dangerouslySetInnerHTML={{ __html: headerBootstrap }} />
+      <script type="module" dangerouslySetInnerHTML={{ __html: headerBootstrap }} />
     </header>
   )
 }

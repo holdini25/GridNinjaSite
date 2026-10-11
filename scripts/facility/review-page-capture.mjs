@@ -1,7 +1,67 @@
 import assert from "node:assert/strict"
+import { extname } from "node:path"
 
 const reviewPaintSelector = ".gn-content-auto, .gn-home > :is(.gn-home-fit, .gn-home-evidence)"
 const paintOpportunity = page => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+const screenshotOptions = { fullPage: true, animations: "disabled", caret: "hide" }
+const screenshotSideLimit = 32767
+const tileSideLimit = 16000
+
+/** Clip the document, never the viewport: no extra scrolling, resizing or
+ * positional-style changes are needed between tiles. Keep native device pixels.
+ * @param {import('@playwright/test').Page} page
+ * @param {string} path
+ */
+async function captureReviewImage(page, path) {
+  const dimensions = await page.evaluate(() => ({
+    width: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, document.body.offsetWidth, document.documentElement.offsetWidth, document.body.clientWidth, document.documentElement.clientWidth),
+    height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight, document.body.clientHeight, document.documentElement.clientHeight),
+    scale: devicePixelRatio,
+  }))
+  const { width, height, scale } = dimensions
+  assert(width > 0 && height > 0 && Number.isFinite(scale) && scale > 0, "Review capture has invalid document dimensions or device scale")
+  const pixelWidth = Math.ceil(width * scale), pixelHeight = Math.ceil(height * scale)
+  if (pixelWidth <= screenshotSideLimit && pixelHeight <= screenshotSideLimit) {
+    await page.screenshot({ path, ...screenshotOptions })
+    return { screenshotOptions }
+  }
+  assert(pixelWidth <= screenshotSideLimit, "Review capture exceeds the supported device-pixel width")
+  // Whole CSS-pixel boundaries that also land on whole device pixels avoid
+  // repeating/dropping a raster row at fractional DPR (e.g. 1.5 or 2.75).
+  let alignment = 1
+  while (alignment <= 1000 && Math.abs(alignment * scale - Math.round(alignment * scale)) > 1e-7) alignment++
+  assert(alignment <= 1000, "Review capture cannot align tiles at this device scale")
+  const tileHeight = Math.floor(tileSideLimit / scale / alignment) * alignment
+  assert(tileHeight > 0, "Review capture device scale exceeds the tile budget")
+  const { default: sharp } = await import("sharp")
+  const inputs = [], tiles = []
+  let pixelTop = 0
+  for (let y = 0; y < height; y += tileHeight) {
+    const clip = { x: 0, y, width, height: Math.min(tileHeight, height - y) }
+    const input = await page.screenshot({ ...screenshotOptions, type: "png", clip })
+    const metadata = await sharp(input).metadata()
+    const expectedHeight = Math.ceil(clip.height * scale)
+    assert.equal(metadata.width, pixelWidth, "Review tile width differs from the native device-pixel width")
+    assert.equal(metadata.height, expectedHeight, "Review tile height differs from its document clip")
+    assert(metadata.height <= tileSideLimit, "Review tile exceeds the device-pixel budget")
+    inputs.push({ input, left: 0, top: pixelTop })
+    tiles.push({ clip, pixels: { top: pixelTop, width: metadata.width, height: metadata.height } })
+    pixelTop += metadata.height
+  }
+  assert.equal(pixelTop, pixelHeight, "Review tiles do not cover the complete document exactly")
+  const format = [".jpg", ".jpeg"].includes(extname(path).toLowerCase()) ? "jpeg" : "png"
+  await sharp({ create: { width: pixelWidth, height: pixelHeight, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite(inputs).toFormat(format).toFile(path)
+  return {
+    screenshotOptions,
+    tiledCapture: {
+      method: "document-coordinate-png-tiles-stitched-with-sharp", trigger: "device-pixel-height-exceeds-32767",
+      interpretation: "Serial document clips preserve the conditioned layout and native scale; the stitched image is review paint evidence, not a simultaneous frame or performance evidence.",
+      document: dimensions, pixels: { width: pixelWidth, height: pixelHeight }, tileDevicePixelLimit: tileSideLimit,
+      tileScreenshotOptions: { ...screenshotOptions, type: "png" }, outputFormat: format, tiles,
+    },
+  }
+}
 
 /** Review images need offscreen paint, which a full-page screenshot does not
  * request from content-visibility:auto. Visit the real page first, then change
@@ -72,8 +132,7 @@ export async function captureVisitedReviewPage(page, path, { scrollMethod = "whe
       for (const key of ["top", "left", "width", "height"]) assert(Math.abs(section.before[key] - section.after[key]) <= 1, `Review conditioning changed section${section.index} ${key}`)
     }
     await paintOpportunity(page)
-    await page.screenshot({ path, fullPage: true, animations: "disabled", caret: "hide" })
-    result.screenshotOptions = { fullPage: true, animations: "disabled", caret: "hide" }
+    Object.assign(result, await captureReviewImage(page, path))
     result.scrollSteps = steps
     result.warmupScrollMethod = scrollMethod
     result.image = path

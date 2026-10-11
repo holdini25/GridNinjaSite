@@ -9,9 +9,9 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run css:validate && npm run assessment:validate && npm run seo:validate && npm run facility:validate && npm run cinematic:validate",
+    "prebuild": "npm run css:validate && npm run assessment:validate && npm run seo:validate && npm run facility:validate && npm run cinematic:validate && npm run editorial:validate && npm run civic:validate",
     "build": "next build --webpack",
-    "postbuild": "node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build && node scripts/cinematic/validate.mjs --build && node scripts/facility/record-build.mjs",
+    "postbuild": "node scripts/validate-contact-build.mjs && node scripts/assessment/validate-build.mjs && node scripts/facility/validate-release.mjs --build && node scripts/cinematic/validate.mjs --build && node scripts/editorial/validate.mjs --build && node scripts/civic/validate.mjs --build && node scripts/facility/record-build.mjs",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
@@ -48,7 +48,9 @@
     "facility:measure": "node scripts/facility/measure-page.mjs",
     "facility:lighthouse": "node scripts/facility/collect-lighthouse.mjs",
     "facility:performance:validate": "node scripts/facility/summarize-performance.mjs",
-    "cinematic:validate": "node scripts/cinematic/validate.mjs"
+    "cinematic:validate": "node scripts/cinematic/validate.mjs",
+    "editorial:validate": "node scripts/editorial/validate.mjs",
+    "civic:validate": "node scripts/civic/validate.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -69,7 +71,7 @@
     "echarts-for-react": "^3.0.6",
     "lucide-react": "^1.7.0",
     "motion": "^12.38.0",
-    "next": "16.3.6",
+    "next": "16.3.8",
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -98,18 +100,19 @@
     "@vitest/coverage-v8": "^4.1.11",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
-    "eslint-config-next": "16.3.6",
+    "eslint-config-next": "16.3.8",
     "fast-check": "^4.8.0",
     "gltf-validator": "2.0.0-dev.3.10",
     "jsdom": "^29.1.1",
     "pg": "^8.22.0",
     "png-to-ico": "^3.0.2",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.11"
   },
   "overrides": {
+    "@radix-ui/react-slot": "1.2.4",
     "tmp@<0.2.6": "0.2.7",
     "@lhci/cli": {
       "uuid": "11.1.1"

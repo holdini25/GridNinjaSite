@@ -5,18 +5,27 @@ import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertR
 import { measureCinematicPage } from "../cinematic/measure-page.mjs"
 import { CINEMATIC_MOTION_LIMITS } from "../cinematic/motion-evidence.mjs"
 import { measurementScope } from "./measurement-scope.mjs"
+import { acquireComputeLock } from "./compute-lock.mjs"
+import { performanceMatrix } from "./lighthouse-matrix.mjs"
+import { measureScrolledRoutes, SCROLLED_TRANSFER_PROTOCOL } from "./scrolled-transfer.mjs"
 
+const releaseCompute = await acquireComputeLock("page-performance")
+let browser
+try {
 const baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000"
 const scope = measurementScope(process.env.FACILITY_MEASUREMENT_SCOPE)
+const matrix = performanceMatrix(process.env.FACILITY_PERFORMANCE_MATRIX)
 await rm(scope.output, { force: true })
 const runCount = Number(process.env.FACILITY_RUNS ?? 5)
 assert(Number.isInteger(runCount) && runCount >= 1 && runCount <= 5)
 const headed = process.env.FACILITY_HEADED === "1"
 const angle = process.env.FACILITY_ANGLE
 const launchSettings = { headless: !headed, channel: process.env.FACILITY_CHROME_CHANNEL ?? "chrome", ...(angle === "metal" ? { args: ["--use-angle=metal", "--use-gl=angle"], ignoreDefaultArgs: ["--use-angle=swiftshader", "--disable-gpu"] } : {}) }
-const browser = await chromium.launch(launchSettings)
+browser = await chromium.launch(launchSettings)
 const settings = { baseURL, runCount, freshContextEveryRun: true, cacheDisabled: true, settleQuietMs: 750, settleTimeoutMs: 15_000, readinessTimeoutMs: 12_000, pauseSettleTimeoutMs: 1_000, pauseIdleQuietMs: 250, pauseObservationMs: 500, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", capabilityFps: 60, ambientFps: 30, capabilityFrameLimitsMs: { desktop: 20, mobile: 34 }, launch: launchSettings }
 settings.measurementScope = scope.name
+settings.performanceMatrix = matrix.name
+settings.fullScrollTransfer = matrix.name === "premium-civic" ? { routes: matrix.routes, profiles: matrix.profiles, runs: matrix.runs, cumulativeNotAdditive: true, ...SCROLLED_TRANSFER_PROTOCOL } : null
 settings.cinematic = { ...CINEMATIC_MOTION_LIMITS, readinessTimeoutMs: 18_000, loopExtraDeadlineMs: 15_000, maximumUnexpectedWaitingEvents: 0, continuouslyVisible: true, firstMotionTimingBasis: "Element Timing poster paint to first native callback after visible CSS; compositor display proxy, separate decode timing" }
 settings.cinematic.loopBoundaryTimingBasis = "Full compositor expectedDisplayTime endpoint interval, never divided by missed callbacks; legacy evidence uses the callback clock. Separate callback stall ceiling remains enforced."
 const report = { measuredAt: new Date().toISOString(), hardwareQualification: scope.hardwareQualification, provenance: await provenance(browser.version(), settings), results: [], result: "incomplete" }
@@ -296,8 +305,10 @@ try {
       console.log(JSON.stringify({route,profile,run,failure:result.failure}))
     } finally { await context.close() }
   }
+  if (matrix.name === "premium-civic") report.scrolledTransfers = await measureScrolledRoutes(browser, { matrix, baseURL, buildSettings: report.provenance.buildSettings, desktopViewport: settings.desktopViewport })
   assert.deepEqual(await verifiedBuildIdentity(), { sourceRevision: report.provenance.sourceRevision, buildId: report.provenance.buildId, releases: report.provenance.releases, buildSettings: report.provenance.buildSettings })
   report.failures=report.results.flatMap(result=>[...(result.failure?[result.failure]:[]),...result.budgetFailures].map(reason=>`${result.route} ${result.profile} run ${result.run}: ${reason}`))
+  report.failures.push(...(report.scrolledTransfers ?? []).filter(result => !result.complete).map(result => `Full scroll ${result.profile} ${result.route} run ${result.run}: ${result.failure}`))
   report.result = report.failures.length ? "fail" : "pass"
   if(report.result==="fail"){report.failure=report.failures.join("; ");process.exitCode=1}
 } catch (error) {
@@ -306,5 +317,7 @@ try {
   process.exitCode = 1
 } finally {
   await writeFile(scope.output, `${JSON.stringify(report, null, 2)}\n`)
-  await browser.close()
+}
+} finally {
+  try { await browser?.close() } finally { await releaseCompute() }
 }

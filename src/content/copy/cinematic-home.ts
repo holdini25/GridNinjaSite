@@ -16,7 +16,7 @@ export const cinematicHome = {
   ],
   evidence: [
     { title: "A versioned decision brief", status: "Sample output · Synthetic", body: "A requested profile, modeled revision and unresolved question in a traceable record.", href: "/demo#decision-brief", link: "See a sample decision brief", image: "brief" },
-    { title: "Proof before autonomy", status: "Method and authority boundaries", body: "Why a modeled result, a business decision and permission to operate remain distinct.", href: "/proof", link: "Understand the boundaries", image: "cooling" },
-    { title: "Physical constraints", status: "Platform direction · In development", body: "The intended relationship between workloads, facility limits and inside-the-fence orchestration.", href: "/platform", link: "Explore the platform direction", image: "construction" },
+    { title: "Proof before autonomy", status: "Method and authority boundaries", body: "Why a modeled result, a business decision and permission to operate remain distinct.", href: "/proof", link: "Understand the boundaries", image: "proof" },
+    { title: "Physical constraints", status: "Platform direction · In development", body: "The intended relationship between workloads, facility limits and inside-the-fence orchestration.", href: "/platform", link: "Explore the platform direction", image: "platform" },
   ],
 } as const

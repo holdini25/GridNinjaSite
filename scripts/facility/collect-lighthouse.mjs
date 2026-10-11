@@ -2,16 +2,22 @@ import assert from "node:assert/strict"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { dirname, join, resolve } from "node:path"
 import lighthouse, { desktopConfig } from "lighthouse"
 import { launch } from "chrome-launcher"
 import { provenance, verifiedBuildIdentity } from "./performance-contract.mjs"
 import { captureValidLighthouseReport } from "./lighthouse-capture.mjs"
+import { performanceMatrix, lighthouseSlug } from "./lighthouse-matrix.mjs"
+import { acquireComputeLock } from "./compute-lock.mjs"
 
 const require = createRequire(import.meta.url)
 const config = require("./lighthouse.cjs")
 const baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000"
 const diagnostic = process.env.FACILITY_LIGHTHOUSE_DIAGNOSTIC === "1"
+const matrix = performanceMatrix(process.env.FACILITY_PERFORMANCE_MATRIX)
+const outputRoot = process.env.FACILITY_PERFORMANCE_DIR ?? "build/facility"
+assert(resolve(outputRoot) === resolve("build/facility") || resolve(outputRoot).startsWith(`${resolve("build/facility")}/`), "Performance output must remain under build/facility")
+assert(matrix.name !== "premium-civic" || process.env.FACILITY_PERFORMANCE_DIR, "The premium release matrix requires a fresh FACILITY_PERFORMANCE_DIR")
 const angle = process.env.FACILITY_ANGLE
 assert(!angle || angle === "metal", "FACILITY_ANGLE supports only metal")
 // Browser-level diagnostics avoid introducing a probe canvas into the measured
@@ -41,15 +47,21 @@ async function graphicsBackend(endpoint) {
   })
 }
 const initialIdentity = await verifiedBuildIdentity()
-const index = { measuredAt: new Date().toISOString(), result: "incomplete", runs: [] }
-await mkdir("build/facility", { recursive: true })
+const index = { measuredAt: new Date().toISOString(), matrix: matrix.name, diagnostic, reviewedRouteCaptures: matrix.reviewedRoutes.length * matrix.profiles.length * matrix.runs, requiredCaptures: matrix.routes.length * matrix.profiles.length * matrix.runs, result: "incomplete", runs: [] }
+const releaseCompute = await acquireComputeLock("lighthouse-performance")
+let outputReady = false
+let harnessRevision
 try {
+  await mkdir(dirname(outputRoot), { recursive: true })
+  await mkdir(outputRoot, { recursive: !process.env.FACILITY_PERFORMANCE_DIR })
+  outputReady = true
   for (const profile of diagnostic ? ["mobile"] : ["desktop", "mobile"]) {
-    const directory = `build/facility/lighthouse-${profile}${diagnostic ? "-throttled" : ""}`
-    await rm(directory, { recursive: true, force: true })
+    const directory = `${outputRoot}/lighthouse-${profile}${diagnostic ? "-throttled" : ""}`
+    if (!process.env.FACILITY_PERFORMANCE_DIR) await rm(directory, { recursive: true, force: true })
     await mkdir(directory, { recursive: true })
-    for (const route of ["/", "/demo", "/assessment"]) for (let run = 1; run <= 5; run++) {
-      const output = `${directory}/${route === "/" ? "home" : route.slice(1)}-${run}.json`
+    for (const route of matrix.routes) for (let run = 1; run <= matrix.runs; run++) {
+      const slug = lighthouseSlug(route)
+      const output = `${directory}/${slug}-${run}.json`
       const attempt = { route, profile, run, output, complete: false, captures: [] }
       index.runs.push(attempt)
       const chromeFlags = ["--headless", ...(angle ? ["--use-angle=metal", "--use-gl=angle"] : [])]
@@ -86,7 +98,7 @@ try {
           try { await chrome?.kill() } finally { await rm(userDataDir, { recursive: true, force: true }) }
         }
       }, async (invalid, number) => {
-        const prefix = `${directory}/invalid-captures/${route === "/" ? "home" : route.slice(1)}-${run}-attempt-${number}`
+        const prefix = `${directory}/invalid-captures/${slug}-${run}-attempt-${number}`
         await mkdir(`${directory}/invalid-captures`, { recursive: true })
         await writeFile(`${prefix}-report.json`, `${JSON.stringify(invalid?.lhr ?? { missingReport: true }, null, 2)}\n`)
         await writeFile(`${prefix}-trace.json`, JSON.stringify(invalid?.artifacts?.Trace ?? null))
@@ -96,10 +108,12 @@ try {
         capture.provenance = await provenance(browser, { profile, settings: invalid?.lhr?.configSettings ?? null, freshBrowserProfile: true, chromeFlags })
       })
       await mkdir(`${directory}/artifacts`, { recursive: true })
-      await writeFile(`${directory}/artifacts/${route === "/" ? "home" : route.slice(1)}-${run}-trace.json`, JSON.stringify(result.artifacts.Trace))
-      await writeFile(`${directory}/artifacts/${route === "/" ? "home" : route.slice(1)}-${run}-network.json`, JSON.stringify(result.artifacts.DevtoolsLog))
+      await writeFile(`${directory}/artifacts/${slug}-${run}-trace.json`, JSON.stringify(result.artifacts.Trace))
+      await writeFile(`${directory}/artifacts/${slug}-${run}-network.json`, JSON.stringify(result.artifacts.DevtoolsLog))
       const hardwareAccepted = !angle || (graphics.status === "available" && /Apple M5.*Metal|Metal.*Apple M5/i.test(graphics.renderer) && !/SwiftShader|llvmpipe|software/i.test(graphics.renderer))
       const evidence = { provenance: await provenance(browser, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }), graphics, route, run, measuredAt: new Date().toISOString(), measurementComplete: true, complete: hardwareAccepted }
+      harnessRevision ??= evidence.provenance.harnessRevision
+      assert.equal(evidence.provenance.harnessRevision, harnessRevision, "Harness changed during Lighthouse collection")
       await writeFile(output, `${JSON.stringify({ ...result.lhr, facilityEvidence: evidence }, null, 2)}\n`)
       attempt.graphics = graphics; attempt.complete = hardwareAccepted
       assert(hardwareAccepted, `M5 Metal requested; actual backend: ${graphics.renderer}; ${graphics.error ?? ""}`)
@@ -112,4 +126,7 @@ try {
   index.result = "fail"
   index.failure = error instanceof Error ? error.message : String(error)
   process.exitCode = 1
-} finally { await writeFile(diagnostic ? "build/facility/lighthouse-throttled-index.json" : "build/facility/lighthouse-index.json", `${JSON.stringify(index, null, 2)}\n`) }
+} finally {
+  try { if (outputReady) await writeFile(`${outputRoot}/${diagnostic ? "lighthouse-throttled-index.json" : "lighthouse-index.json"}`, `${JSON.stringify(index, null, 2)}\n`) }
+  finally { await releaseCompute() }
+}

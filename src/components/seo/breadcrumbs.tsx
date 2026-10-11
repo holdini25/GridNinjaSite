@@ -7,7 +7,7 @@ export function SeoBreadcrumbs({ path }: { path: PublicPath }) {
   if (route.breadcrumbs.length === 0) return null
 
   return (
-    <nav aria-label="Breadcrumb" className="mx-auto w-full max-w-7xl px-5 pt-6 sm:px-8 lg:px-10">
+    <nav aria-label="Breadcrumb" className="gn-breadcrumbs mx-auto w-full pt-6">
       <ol className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
         <li><Link href="/" prefetch={false} className="hover:text-foreground">Home</Link></li>
         {route.breadcrumbs.map((crumb) => (
@@ -18,7 +18,7 @@ export function SeoBreadcrumbs({ path }: { path: PublicPath }) {
         ))}
         <li className="flex items-center gap-2 text-foreground" aria-current="page">
           <span aria-hidden="true">/</span>
-          <span>{route.h1}</span>
+          <span>{({ "/solutions/ai-cloud": "AI Cloud", "/solutions/colocation": "Colocation & REITs", "/solutions/bridge-power": "Bridge Power & DER", "/platform": "Platform", "/proof": "Proof", "/about": "About", "/proof/proof-pack": "Proof pack" } as Partial<Record<PublicPath, string>>)[path] ?? route.h1}</span>
         </li>
       </ol>
     </nav>

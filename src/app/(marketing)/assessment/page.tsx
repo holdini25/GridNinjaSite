@@ -14,8 +14,7 @@ export default function AssessmentPage() { return <div className="space-y-10 pb-
 <SectionShell deferRendering={false}>
   <div className="grid items-start gap-8 lg:grid-cols-[0.8fr_1.2fr]">
     <aside aria-labelledby="assessment-offer-heading" className="min-w-0 space-y-3">
-      <h2 id="assessment-offer-heading" className="text-2xl font-medium">A reviewable answer, with an agreed scope.</h2>
-      <p className="text-base leading-7 text-muted-foreground">Receive a concise decision brief, a supporting model record, and a review of assumptions, evidence gaps, and unresolved questions.</p>
+      <h2 id="assessment-offer-heading" className="text-2xl font-medium">Start with your decision.</h2>
       <p className="text-sm leading-6 text-muted-foreground">This inquiry starts a conversation; it does not buy an assessment or authorize operational work.</p>
       <div className="flex flex-wrap gap-x-6">
         <a href="#deliverables" className="inline-flex min-h-11 items-center text-primary underline underline-offset-4">Review the deliverables</a>

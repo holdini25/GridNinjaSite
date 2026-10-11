@@ -48,10 +48,10 @@ export function Hero({
   const containerClassName = layout === "facility"
     ? "grid grid-cols-[minmax(0,1fr)] gap-8 pt-6 pb-7 sm:gap-10 lg:grid-cols-[minmax(0,.88fr)_minmax(0,1.12fr)] lg:items-start lg:gap-8 lg:pt-8 lg:pb-8"
     : compact
-    ? "max-w-3xl pt-6 pb-6 sm:pt-8 sm:pb-8 lg:max-w-4xl"
+    ? "pt-6 pb-6 sm:pt-8 sm:pb-8"
     : hasVisual
     ? "grid grid-cols-[minmax(0,1fr)] gap-8 pt-4 pb-7 sm:gap-10 sm:pt-6 sm:pb-8 lg:min-h-[34rem] lg:grid-cols-[minmax(0,1fr)_minmax(340px,520px)] lg:items-center lg:gap-14"
-    : "max-w-3xl pt-8 pb-10 sm:pt-12 sm:pb-14 lg:max-w-4xl lg:pt-14 lg:pb-16"
+    : "pt-8 pb-10 sm:pt-12 sm:pb-14 lg:pt-14 lg:pb-16"
   const headlineClassName = hasVisual
     ? "max-w-[17ch] text-balance text-[2.25rem] leading-[1.05] font-medium tracking-tight text-foreground sm:text-[3rem] lg:text-[3.125rem]"
     : "max-w-[19ch] text-balance text-[2.25rem] leading-[1.05] font-medium tracking-tight text-foreground sm:text-[3rem] lg:text-[3.125rem]"
@@ -63,7 +63,7 @@ export function Hero({
     <div
       role="region"
       aria-label={eyebrow ?? "Page introduction"}
-      className={`relative overflow-hidden border-b border-divider ${compact ? "" : "pb-6"}`}
+      className={`gn-premium-hero relative overflow-hidden border-b border-divider ${compact ? "" : "pb-6"}`}
     >
       {proofGrid ? <ProofGridBackground labels={proofGridLabels} /> : null}
       <SectionShell
@@ -71,7 +71,7 @@ export function Hero({
         containerClassName={containerClassName}
         deferRendering={false}
       >
-        <div className={hasVisual ? "min-w-0 max-w-2xl [overflow-wrap:anywhere]" : "min-w-0 max-w-3xl [overflow-wrap:anywhere]"}>
+        <div data-hero-copy className={hasVisual ? "min-w-0 max-w-2xl [overflow-wrap:anywhere]" : "min-w-0 [overflow-wrap:anywhere]"}>
           {eyebrow ? (
             <p className="mb-4 text-xs leading-6 tracking-[0.16em] text-primary uppercase">
               {eyebrow}
@@ -80,11 +80,11 @@ export function Hero({
           <h1 className={headlineClassName}>
             {headline}
           </h1>
-          <p className={bodyClassName}>
+          <p data-hero-body className={bodyClassName}>
             {body}
           </p>
           {(primaryCta || secondaryCta) && (
-            <div className={`${compact ? "mt-5" : "mt-7"} flex flex-wrap gap-3`}>
+            <div className={`gn-hero-actions ${compact ? "mt-5" : "mt-7"} flex flex-wrap gap-3`}>
               {primaryCta ? (
                 <Button asChild size="lg" className="h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
                   <Link

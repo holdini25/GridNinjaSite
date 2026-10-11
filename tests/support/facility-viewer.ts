@@ -68,7 +68,28 @@ export async function settleFacilityActivity(page: Page, inspector: Locator, tes
 export async function openAssessmentControls(page: Page) {
   const controls = page.locator("[data-assessment-controls]")
   await expect(controls.locator("button").filter({ hasText: /^Reset example$/ })).toHaveCount(1)
-  if (await controls.getAttribute("open") === null) await controls.locator(":scope > summary").click()
+  if (await controls.getAttribute("open") === null) {
+    const summary = controls.locator(":scope > summary")
+    // The Linux WebKit release trace shows a click crossing an active native
+    // scroll and the sticky header. Position the actual target, then require
+    // stable unobscured geometry; retain an ordinary pointer click and outcome.
+    await summary.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }))
+    let previous: { x: number; y: number } | undefined
+    let stable = 0
+    await expect.poll(async () => {
+      const target = await summary.evaluate(element => {
+        const box = element.getBoundingClientRect()
+        const x = box.x + box.width / 2, y = box.y + box.height / 2
+        const hit = document.elementFromPoint(x, y)
+        return { x, y, unobscured: box.width > 0 && box.height > 0 && x > 0 && y > 0 && x < innerWidth && y < innerHeight && Boolean(hit && element.contains(hit)) }
+      })
+      stable = target.unobscured && previous && Math.abs(target.x - previous.x) < .25 && Math.abs(target.y - previous.y) < .25 ? stable + 1 : 0
+      previous = target
+      return stable >= 3
+    }, { timeout: 2_000, intervals: [50], message: "Scenario disclosure must settle clear of the sticky header before pointer activation" }).toBe(true)
+    await summary.click()
+  }
+  await expect(controls).toHaveAttribute("open", "")
   await expect(page.getByRole("combobox", { name: "Scenario", exact: true })).toBeVisible()
 }
 

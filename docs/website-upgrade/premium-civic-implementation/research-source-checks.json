@@ -1,0 +1,343 @@
+{
+  "checkedOn": "2026-10-10",
+  "purpose": "Pre-publication bibliographic and notice review; not a reproduction of the papers or evidence of GridNinja outcomes",
+  "limitations": "Crossref relations and Crossmark are publisher-deposited and may be incomplete. An empty relation set or current status does not prove that no update exists. Direct publisher access, indexed primary-source review and targeted searches are described in research-publication-review.md.",
+  "sources": [
+    {
+      "doi": "10.1038/s41560-025-01927-1",
+      "checkedOn": "2026-10-10",
+      "crossref": {
+        "url": "https://api.crossref.org/works/10.1038/s41560-025-01927-1",
+        "httpStatus": 200,
+        "responseSha256": "b8166fc2df2cad5ba9ad7a487aad8a7d035cd1eb63292a7d6a7f232a911a007b",
+        "title": [
+          "AI data centres as grid-interactive assets"
+        ],
+        "authors": [
+          "Philip Colangelo",
+          "Ayse K. Coskun",
+          "Jack Megrue",
+          "Ciaran Roberts",
+          "Shayan Sengupta",
+          "Varun Sivaram",
+          "Ethan Tiao",
+          "Aroon Vijaykar",
+          "Chris Williams",
+          "Daniel C. Wilson",
+          "Brandon Records",
+          "Zack MacFarland",
+          "Daniel Dreiling",
+          "Nathan Morey",
+          "Anuja Ratnayake",
+          "Baskar Vairamohan"
+        ],
+        "publishedOnline": {
+          "date-parts": [
+            [
+              2025,
+              12,
+              5
+            ]
+          ]
+        },
+        "publishedPrint": null,
+        "venue": [
+          "Nature Energy"
+        ],
+        "volume": "11",
+        "issue": "2",
+        "pages": "254-261",
+        "articleNumber": null,
+        "updateTo": null,
+        "updatedBy": null,
+        "relations": {}
+      },
+      "crossmark": {
+        "url": "https://crossmark.crossref.org/dialog-content?doi=10.1038%2Fs41560-025-01927-1&domain=pdf",
+        "httpStatus": 200,
+        "responseSha256": "163d2290d6c97028c634cb62efd392a263052434e856a71858099195b85870b7",
+        "reportedStatus": "current",
+        "quote": "Document is current"
+      }
+    },
+    {
+      "doi": "10.1016/j.isci.2026.116497",
+      "checkedOn": "2026-10-10",
+      "crossref": {
+        "url": "https://api.crossref.org/works/10.1016/j.isci.2026.116497",
+        "httpStatus": 200,
+        "responseSha256": "1e760a8e09f62f47cd0922898e16be10c4de62103042e4cca50769b6f7f596ea",
+        "title": [
+          "Flexible data centers reduce power system costs but can increase emissions"
+        ],
+        "authors": [
+          "Juan Ramon L. Senga",
+          "Shen Wang",
+          "Christopher R. Knittel"
+        ],
+        "publishedOnline": null,
+        "publishedPrint": {
+          "date-parts": [
+            [
+              2026,
+              7
+            ]
+          ]
+        },
+        "venue": [
+          "iScience"
+        ],
+        "volume": "29",
+        "issue": "7",
+        "pages": "116497",
+        "articleNumber": "116497",
+        "updateTo": null,
+        "updatedBy": null,
+        "relations": {}
+      },
+      "crossmark": {
+        "url": "https://crossmark.crossref.org/dialog-content?doi=10.1016%2Fj.isci.2026.116497&domain=pdf",
+        "httpStatus": 200,
+        "responseSha256": "5d7bb6acdb9aafb1a97f07d169bd2d03df62fca51a85e88643f83a3f68a62042",
+        "reportedStatus": "current",
+        "quote": "Document is current"
+      }
+    },
+    {
+      "doi": "10.1088/1748-9326/abfba1",
+      "checkedOn": "2026-10-10",
+      "crossref": {
+        "url": "https://api.crossref.org/works/10.1088/1748-9326/abfba1",
+        "httpStatus": 200,
+        "responseSha256": "942cf710b5872d22edf39068861a8afaf9bdc1efcf0c3092ab89543bd5b9a7a8",
+        "title": [
+          "The environmental footprint of data centers in the United States"
+        ],
+        "authors": [
+          "Md Abu Bakar Siddik",
+          "Arman Shehabi",
+          "Landon Marston"
+        ],
+        "publishedOnline": {
+          "date-parts": [
+            [
+              2021,
+              5,
+              21
+            ]
+          ]
+        },
+        "publishedPrint": {
+          "date-parts": [
+            [
+              2021,
+              6,
+              1
+            ]
+          ]
+        },
+        "venue": [
+          "Environmental Research Letters"
+        ],
+        "volume": "16",
+        "issue": "6",
+        "pages": "064017",
+        "articleNumber": null,
+        "updateTo": null,
+        "updatedBy": null,
+        "relations": {}
+      },
+      "crossmark": {
+        "url": "https://crossmark.crossref.org/dialog-content?doi=10.1088%2F1748-9326%2Fabfba1&domain=pdf",
+        "httpStatus": 200,
+        "responseSha256": "e8b6100a10f9f58ae2c0102e1baa180bfb59d78248a180f76f06463bd6482d5e",
+        "reportedStatus": "current",
+        "quote": "Document is current"
+      }
+    },
+    {
+      "doi": "10.1109/TPWRS.2022.3173250",
+      "checkedOn": "2026-10-10",
+      "crossref": {
+        "url": "https://api.crossref.org/works/10.1109/TPWRS.2022.3173250",
+        "httpStatus": 200,
+        "responseSha256": "c9d79dc0409d22a5e260fc434c98af83e0b15934de56ba0c4f354d01cbb0b24e",
+        "title": [
+          "Carbon-Aware Computing for Datacenters"
+        ],
+        "authors": [
+          "Ana Radovanović",
+          "Ross Koningstein",
+          "Ian Schneider",
+          "Bokan Chen",
+          "Alexandre Duarte",
+          "Binz Roy",
+          "Diyue Xiao",
+          "Maya Haridasan",
+          "Patrick Hung",
+          "Nick Care",
+          "Saurav Talukdar",
+          "Eric Mullen",
+          "Kendal Smith",
+          "MariEllen Cottman",
+          "Walfredo Cirne"
+        ],
+        "publishedOnline": null,
+        "publishedPrint": {
+          "date-parts": [
+            [
+              2023,
+              3
+            ]
+          ]
+        },
+        "venue": [
+          "IEEE Transactions on Power Systems"
+        ],
+        "volume": "38",
+        "issue": "2",
+        "pages": "1270-1280",
+        "articleNumber": null,
+        "updateTo": null,
+        "updatedBy": null,
+        "relations": {}
+      },
+      "crossmark": {
+        "url": "https://crossmark.crossref.org/dialog-content?doi=10.1109%2FTPWRS.2022.3173250&domain=pdf",
+        "httpStatus": 200,
+        "responseSha256": "5f4a430abaeb22fd6e7427a5a55d8cff27400c94c6b7c86f0932e7f39a9159b3",
+        "reportedStatus": "unavailable",
+        "quote": "CrossMark data for this content is not currently available."
+      }
+    },
+    {
+      "doi": "10.1038/s41467-026-76500-9",
+      "checkedOn": "2026-10-10",
+      "crossref": {
+        "url": "https://api.crossref.org/works/10.1038/s41467-026-76500-9",
+        "httpStatus": 200,
+        "responseSha256": "1cb0d37e9cf482e935c65ae5bf7a8f72df385e5873452f14065592619e6aad07",
+        "title": [
+          "How sovereign control, decarbonization and energy costs shape public support for data centers"
+        ],
+        "authors": [
+          "Jonas Heering",
+          "Erik Voeten"
+        ],
+        "publishedOnline": {
+          "date-parts": [
+            [
+              2026,
+              8,
+              10
+            ]
+          ]
+        },
+        "publishedPrint": null,
+        "venue": [
+          "Nature Communications"
+        ],
+        "volume": "17",
+        "issue": "1",
+        "pages": null,
+        "articleNumber": "9576",
+        "updateTo": null,
+        "updatedBy": null,
+        "relations": {}
+      },
+      "crossmark": {
+        "url": "https://crossmark.crossref.org/dialog-content?doi=10.1038%2Fs41467-026-76500-9&domain=pdf",
+        "httpStatus": 200,
+        "responseSha256": "3bc03eecdb3715706deb7251efe333fdd3c0f4775c292d71a654e5aa79b793e8",
+        "reportedStatus": "current",
+        "quote": "Document is current"
+      }
+    },
+    {
+      "doi": "10.1016/j.energy.2017.08.078",
+      "checkedOn": "2026-10-10",
+      "crossref": {
+        "url": "https://api.crossref.org/works/10.1016/j.energy.2017.08.078",
+        "httpStatus": 200,
+        "responseSha256": "b04855b426d4d706f4804f5a50c44ec77250ae95b9be18922ffa70d2fe9fc284",
+        "title": [
+          "Utilizing data center waste heat in district heating – Impacts on energy efficiency and prospects for low-temperature district heating networks"
+        ],
+        "authors": [
+          "Mikko Wahlroos",
+          "Matti Pärssinen",
+          "Jukka Manner",
+          "Sanna Syri"
+        ],
+        "publishedOnline": null,
+        "publishedPrint": {
+          "date-parts": [
+            [
+              2017,
+              12
+            ]
+          ]
+        },
+        "venue": [
+          "Energy"
+        ],
+        "volume": "140",
+        "issue": null,
+        "pages": "1228-1238",
+        "articleNumber": null,
+        "updateTo": null,
+        "updatedBy": null,
+        "relations": {}
+      },
+      "crossmark": {
+        "url": "https://crossmark.crossref.org/dialog-content?doi=10.1016%2Fj.energy.2017.08.078&domain=pdf",
+        "httpStatus": 200,
+        "responseSha256": "5cd5469fd061114fd6b95edfd3ef8ba5c0a633a24f21e86921e926408d589fd3",
+        "reportedStatus": "current",
+        "quote": "Document is current"
+      }
+    },
+    {
+      "doi": "10.1016/j.automatica.2021.109597",
+      "checkedOn": "2026-10-10",
+      "crossref": {
+        "url": "https://api.crossref.org/works/10.1016/j.automatica.2021.109597",
+        "httpStatus": 200,
+        "responseSha256": "aa009c3b238186907892c5173010027f1dd05ee8d19657c91a162f315cea478f",
+        "title": [
+          "A predictive safety filter for learning-based control of constrained nonlinear dynamical systems"
+        ],
+        "authors": [
+          "Kim Peter Wabersich",
+          "Melanie N. Zeilinger"
+        ],
+        "publishedOnline": null,
+        "publishedPrint": {
+          "date-parts": [
+            [
+              2021,
+              7
+            ]
+          ]
+        },
+        "venue": [
+          "Automatica"
+        ],
+        "volume": "129",
+        "issue": null,
+        "pages": "109597",
+        "articleNumber": "109597",
+        "updateTo": null,
+        "updatedBy": null,
+        "relations": {}
+      },
+      "crossmark": {
+        "url": "https://crossmark.crossref.org/dialog-content?doi=10.1016%2Fj.automatica.2021.109597&domain=pdf",
+        "httpStatus": 200,
+        "responseSha256": "6d17aec09f18fa42895914c4d8db6af8d6aff7858464baeafbcb2852a2f084f5",
+        "reportedStatus": "current",
+        "quote": "Document is current"
+      }
+    }
+  ]
+}

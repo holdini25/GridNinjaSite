@@ -1,5 +1,6 @@
 import { SectionShell } from "@/components/layout/section-shell"
 import { PublishedAssessmentLibrary } from "@/components/assessment/published-assessment-library"
+import { ResearchBibliography } from "@/components/research/research-bibliography"
 import type { Metadata } from "next"
 
 import { SeoResourceHub } from "@/app/(marketing)/_components/seo-resource-hub"
@@ -18,6 +19,7 @@ export default function EvidencePage() {
 
       <SeoResourceHub
         introduction={<SectionShell deferRendering={false}><PublishedAssessmentLibrary /></SectionShell>}
+        research={<SectionShell deferRendering={false}><ResearchBibliography /></SectionShell>}
         path="/evidence"
         eyebrow="GridNinja evidence"
         title="Inspect the evidence behind a capacity decision."

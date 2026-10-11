@@ -5,6 +5,8 @@ import { PRODUCTION_ORIGIN } from "./src/seo/policy";
 import assessmentRegistry from "./src/content/assessment-publications/registry.json";
 import facilityRegistry from "./src/content/facility-releases/registry.json";
 import cinematicRegistry from "./src/content/cinematic-releases/registry.json";
+import editorialRegistry from "./src/content/editorial-releases/registry.json";
+import civicRegistry from "./src/content/civic-releases/registry.json";
 import { contentSecurityPolicy, cspMode, PUBLICATION_CSP } from "./src/lib/security/csp";
 
 const privateCandidate = existsSync(".gridninja-private-candidate.json");
@@ -21,6 +23,16 @@ const facilityFiles = facilityRegistry.filter((entry: {status: string}) => entry
 });
 const cinematicFiles = cinematicRegistry.filter((entry: {status: string}) => entry.status === "available").flatMap((entry: {release: string}) => {
   const base = `./src/content/cinematic-releases/${entry.release}`;
+  const manifest = JSON.parse(readFileSync(`${base}/manifest.json`, "utf8")) as { files: { file: string }[] };
+  return ["manifest.json", ...manifest.files.map(item => item.file)].map(file => `${base}/${file}`);
+});
+const editorialFiles = editorialRegistry.filter((entry: {status: string}) => entry.status === "available").flatMap((entry: {release: string}) => {
+  const base = `./src/content/editorial-releases/${entry.release}`;
+  const manifest = JSON.parse(readFileSync(`${base}/manifest.json`, "utf8")) as { files: { file: string }[] };
+  return ["manifest.json", ...manifest.files.map(item => item.file)].map(file => `${base}/${file}`);
+});
+const civicFiles = civicRegistry.filter((entry: {status: string}) => entry.status === "available").flatMap((entry: {release: string}) => {
+  const base = `./src/content/civic-releases/${entry.release}`;
   const manifest = JSON.parse(readFileSync(`${base}/manifest.json`, "utf8")) as { files: { file: string }[] };
   return ["manifest.json", ...manifest.files.map(item => item.file)].map(file => `${base}/${file}`);
 });
@@ -61,12 +73,21 @@ const noindexHeaders = [
 
 const nextConfig: NextConfig = {
   agentRules: false,
+  // Deliver first-paint styles with the server-rendered document, avoiding a
+  // stylesheet request waterfall for text-first pages on high-latency links.
+  // This trades independent CSS caching for larger HTML; qualify both route
+  // transfers and navigation, with the existing performance ceilings intact.
+  experimental: { inlineCss: true },
   outputFileTracingIncludes: {
     "/evidence/assessments/*/*": assessmentFiles,
     "/downloads/assessment/*/*/*": assessmentFiles,
     "/assets/facility/*/*": facilityFiles,
     "/assets/cinematic/*/*": ["./src/content/cinematic-releases/registry.json", ...cinematicFiles],
-    "/": [...facilityFiles, ...cinematicFiles],
+    "/assets/editorial/*/*": ["./src/content/editorial-releases/registry.json", ...editorialFiles],
+    "/assets/civic/*/*": ["./src/content/civic-releases/registry.json", ...civicFiles],
+    "/": [...facilityFiles, ...cinematicFiles, ...editorialFiles, ...civicFiles],
+    "/about": civicFiles,
+    "/platform": civicFiles,
     "/demo": facilityFiles,
   },
   outputFileTracingExcludes: {

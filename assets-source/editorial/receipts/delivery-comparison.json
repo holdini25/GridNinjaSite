@@ -1,0 +1,33 @@
+{
+  "family": "C-frontal",
+  "comparison": [
+    {
+      "subject": "ai-workload",
+      "meanAbsoluteError8Bit": 0.11035645833333334,
+      "rootMeanSquareError8Bit": 0.5270189354599447,
+      "maximumError8Bit": 45,
+      "referencePngSha256": "1c4c03ccce72aa465f854328b3765b3fa980c5f40a982cc9a0c8cc048149c10c",
+      "finalSeconds": 5.452955334000762,
+      "referenceSeconds": 6.50736520800001
+    },
+    {
+      "subject": "colocation-hall",
+      "meanAbsoluteError8Bit": 0.34511708333333335,
+      "rootMeanSquareError8Bit": 1.0173675179927195,
+      "maximumError8Bit": 54,
+      "referencePngSha256": "7e2d447b46c948dc4a06e542eff8a8620d02cd2a77d346019a64197a618a5489",
+      "finalSeconds": 6.566705166999782,
+      "referenceSeconds": 9.149266250000437
+    },
+    {
+      "subject": "platform-systems",
+      "meanAbsoluteError8Bit": 0.4150772916666667,
+      "rootMeanSquareError8Bit": 1.4262764020343321,
+      "maximumError8Bit": 72,
+      "referencePngSha256": "40259a31df66d6a852af96fbf96248f58d6aed577203d511c5f049e149ed6198",
+      "finalSeconds": 5.007644082999832,
+      "referenceSeconds": 7.647576209000363
+    }
+  ],
+  "manifestSha256": "f4098e8536db3361517ffa196aab7e6a694b989152dc7b0e16559d377490abc5"
+}
