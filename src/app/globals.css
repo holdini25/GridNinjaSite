@@ -88,7 +88,8 @@
     "Liberation Mono", monospace;
   --font-heading: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
-  --color-background: var(--background);
+  /* Keep critical canvases opaque if an inherited token is unavailable. */
+  --color-background: var(--background, #080808);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
