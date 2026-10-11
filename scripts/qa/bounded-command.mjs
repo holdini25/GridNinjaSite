@@ -10,6 +10,7 @@ import { acquireComputeLock } from "../facility/compute-lock.mjs"
 import { qaHarnessRevision } from "./candidate-contract.mjs"
 import { COMMAND_LIMITS, COMMAND_PHASES, newCommandBudget, reserveCommand, newCorrectionBudget, reserveCorrectionCommand, validateCorrectionAuthorization } from "./command-budget.mjs"
 import { assertSupportedCommand, assertCorrectionEnvironment } from "./command-contract.mjs"
+import { REPAIR_PHASES, readRepairAdmission, newRepairBudget, reserveRepairCommand, assertRepairCommand, assertRepairEnvironment, validateRepairBrowserReport } from "./repair-profile.mjs"
 
 const execFileAsync = promisify(execFile)
 const hash = value => createHash("sha256").update(value).digest("hex")
@@ -150,24 +151,41 @@ export async function executeOwned(command, args, { cwd, timeoutMs, signal, logL
   return { ...result, reason, cleanup, cleanupScope: "owned-process-group-and-live-verified-descendants", detachedAfterSuccess: "unverified; unsupported by qualification contract", pid: child.pid ?? null, elapsedMs: Date.now() - started, stdout: Buffer.concat(logs.stdout.chunks), stderr: Buffer.concat(logs.stderr.chunks), logBytes: { stdout: logs.stdout.total, stderr: logs.stderr.total }, truncated: { stdout: logs.stdout.total > logLimit, stderr: logs.stderr.total > logLimit } }
 }
 
-/** @param {{phase: string, command: string, args?: string[], timeoutMs: number, cwd?: string, stateDirectory: string, snapshot?: typeof commandCandidate, signal?: AbortSignal, correction?: {dispositionPath: string, dispositionSha256: string, priorBudgetPath: string, candidateEntryPath?: string}}} options */
-export async function runBoundedCommand({ phase, command, args = [], timeoutMs, cwd = process.cwd(), stateDirectory, snapshot = commandCandidate, signal, correction }) {
-  assert(COMMAND_PHASES.includes(phase), "Unknown qualification phase")
+/** @param {{phase: string, command: string, args?: string[], timeoutMs: number, cwd?: string, stateDirectory: string, snapshot?: typeof commandCandidate, signal?: AbortSignal, correction?: {dispositionPath: string, dispositionSha256: string, priorBudgetPath: string, candidateEntryPath?: string}, repair?: {authorizationPath: string, authorizationSha256: string, admissionPath: string, admissionSha256: string, priorBudgetPath: string}}} options */
+export async function runBoundedCommand({ phase, command, args = [], timeoutMs, cwd = process.cwd(), stateDirectory, snapshot = commandCandidate, signal, correction, repair }) {
+  assert(!correction || !repair, "Qualification profiles cannot be combined")
+  assert((repair ? REPAIR_PHASES : COMMAND_PHASES).includes(phase), "Unknown qualification phase")
   assert(typeof command === "string" && command.length > 0 && args.every(arg => typeof arg === "string") && JSON.stringify([command, ...args]).length <= 8192, "Invalid or oversized command arguments")
-  const commandContract = assertSupportedCommand(phase, command, args)
+  const commandContract = repair ? assertRepairCommand(phase, command, args) : assertSupportedCommand(phase, command, args)
   const correctionEnvironment = correction ? assertCorrectionEnvironment(phase) : null
+  const repairEnvironment = repair ? assertRepairEnvironment(phase) : null
+  if (repair) await readRepairAdmission(repair) // No state directory/reservation before independent admission.
   await mkdir(stateDirectory, { recursive: true })
   // Corrections share the original reservation lock, preventing concurrent old/new checks.
-  const lockDirectory = correction ? dirname(correction.priorBudgetPath) : stateDirectory
+  const lockDirectory = repair ? dirname(repair.priorBudgetPath) : correction ? dirname(correction.priorBudgetPath) : stateDirectory
   const release = await acquireComputeLock("qa-command-runner", { path: join(lockDirectory, "budget.lock"), task: "bounded-application-check" })
   try {
     const disposition = correction ? await readCorrectionDisposition(correction) : null
+    const admission = repair ? await readRepairAdmission(repair) : null
     if (disposition) assert.equal(resolve(stateDirectory), resolve(dirname(correction.priorBudgetPath), "corrections", disposition.record.id), "Correction state directory must derive from its authorization id")
+    if (admission) assert.equal(resolve(stateDirectory), resolve(dirname(repair.priorBudgetPath), "repairs", admission.record.id), "Repair state directory must derive from its authorization id")
     const budgetPath = join(stateDirectory, "budget.json")
     let budget
-    try { budget = JSON.parse(await readFile(budgetPath, "utf8")) } catch (error) { if (error.code !== "ENOENT") throw error; budget = disposition ? newCorrectionBudget(Date.now(), disposition.binding) : newCommandBudget(Date.now()) }
-    const frozenCandidate = disposition ? await snapshot(cwd) : null
-    const attempt = disposition
+    try { budget = JSON.parse(await readFile(budgetPath, "utf8")) } catch (error) { if (error.code !== "ENOENT") throw error; budget = admission ? newRepairBudget(admission.binding) : disposition ? newCorrectionBudget(Date.now(), disposition.binding) : newCommandBudget(Date.now()) }
+    const frozenCandidate = disposition || admission ? await snapshot(cwd) : null
+    let repairReportPath = null
+    if (admission && repairEnvironment.PLAYWRIGHT_JSON_OUTPUT_NAME) {
+      repairReportPath = resolve(cwd, repairEnvironment.PLAYWRIGHT_JSON_OUTPUT_NAME)
+      assert(repairReportPath.startsWith(`${resolve(cwd, "build/qa", admission.record.id)}/`), "Repair browser report must be inside its dedicated ignored evidence directory")
+      try { await readFile(repairReportPath); assert.fail("Repair browser report already exists; no overwrite or rerun") } catch (error) { if (error.code !== "ENOENT") throw error }
+    }
+    if (admission && ["page-performance", "lighthouse", "performance-summary"].includes(phase)) {
+      if (budget.performanceEnvironment) assert.deepEqual(repairEnvironment, budget.performanceEnvironment, "Repair performance settings/output directory changed")
+      else budget.performanceEnvironment = repairEnvironment
+    }
+    const attempt = admission
+      ? reserveRepairCommand(budget, phase, Date.now(), timeoutMs, { authorization: admission.binding, candidate: frozenCandidate })
+      : disposition
       ? reserveCorrectionCommand(budget, phase, Date.now(), timeoutMs, { authorization: disposition.binding, candidate: frozenCandidate, candidateEntry: disposition.candidateEntry })
       : reserveCommand(budget, phase, Date.now(), timeoutMs)
     const directory = join(stateDirectory, `${String(attempt.sequence).padStart(2, "0")}-${phase}-${attempt.phaseAttempt}`)
@@ -178,6 +196,7 @@ export async function runBoundedCommand({ phase, command, args = [], timeoutMs, 
     await mkdir(directory)
     let receipt = { ...attempt, directory, command: [command, ...args], commandContract, cwd, before: null, after: null, identityUnchanged: false, qualification: "not-qualified" }
     if (disposition) receipt.correction = { ...disposition.binding, candidateEntry: disposition.candidateEntry, environment: correctionEnvironment }
+    if (admission) receipt.repair = { ...admission.binding, environment: repairEnvironment }
     try {
       receipt.before = frozenCandidate ?? await snapshot(cwd)
       const result = await executeOwned(command, args, { cwd, timeoutMs: Math.min(attempt.timeoutMs, budget.deadlineAt - Date.now()), signal })
@@ -191,7 +210,18 @@ export async function runBoundedCommand({ phase, command, args = [], timeoutMs, 
         receipt.priorBudgetUnchanged = hash(await readFile(correction.priorBudgetPath)) === disposition.binding.priorBudgetSha256
         receipt.dispositionUnchanged = hash(await readFile(correction.dispositionPath)) === disposition.binding.dispositionSha256
       }
-      receipt.status = result.reason === "exit" && result.code === 0 && result.cleanup !== "failed" && receipt.identityUnchanged && (!disposition || (receipt.priorBudgetUnchanged && receipt.dispositionUnchanged && receipt.after.dirty === false && receipt.after.dirtyPaths?.length === 0)) ? "pass" : "fail"
+      if (admission) {
+        const afterAdmission = await readRepairAdmission(repair)
+        assert.deepEqual(afterAdmission.binding, admission.binding, "Repair authorization, admission or historical ledgers changed during command")
+        receipt.repairBindingUnchanged = true
+        if (repairReportPath) {
+          const bytes = await readFile(repairReportPath)
+          assert(bytes.length <= 32 * 1024 * 1024, "Oversized repair browser report")
+          await writeFile(join(directory, "browser-report.json"), bytes, { flag: "wx", mode: 0o600 })
+          receipt.browserReport = { path: repairReportPath, sha256: hash(bytes), ...validateRepairBrowserReport(JSON.parse(bytes.toString("utf8")), phase === "headed-visibility") }
+        }
+      }
+      receipt.status = result.reason === "exit" && result.code === 0 && result.cleanup !== "failed" && receipt.identityUnchanged && (!disposition || (receipt.priorBudgetUnchanged && receipt.dispositionUnchanged && receipt.after.dirty === false && receipt.after.dirtyPaths?.length === 0)) && (!admission || (receipt.repairBindingUnchanged && receipt.after.dirty === false && receipt.after.dirtyPaths?.length === 0 && Date.now() < budget.deadlineAt)) ? "pass" : "fail"
       receipt.qualification = receipt.status === "pass" && !receipt.before.dirty && !receipt.after.dirty ? "clean-candidate-command" : "provisional-or-failed"
     } catch (error) { receipt.status = "fail"; receipt.error = error.message }
     receipt.finishedAt = Date.now()
@@ -209,13 +239,16 @@ export function parseCommandArguments(argv) {
   const options = new Map()
   for (let index = 0; index < divider; index += 2) {
     const name = arguments_[index], value = arguments_[index + 1]
-    assert(["--timeout-ms", "--correction-disposition", "--disposition-sha256", "--candidate-entry"].includes(name) && !options.has(name) && value, "Unknown, duplicate or empty qualification option")
+    assert(["--timeout-ms", "--correction-disposition", "--disposition-sha256", "--candidate-entry", "--repair-authorization", "--authorization-sha256", "--repair-admission", "--admission-sha256"].includes(name) && !options.has(name) && value, "Unknown, duplicate or empty qualification option")
     options.set(name, value)
   }
   assert(options.has("--timeout-ms"), "Explicit command timeout is required")
   assert(options.has("--correction-disposition") === options.has("--disposition-sha256"), "Correction disposition and hash must be supplied together")
   assert(!options.has("--candidate-entry") || options.has("--correction-disposition"), "Candidate entries require a correction disposition")
-  return { phase, command: arguments_[divider + 1], args: arguments_.slice(divider + 2), timeoutMs: Number(options.get("--timeout-ms")), dispositionPath: options.get("--correction-disposition"), dispositionSha256: options.get("--disposition-sha256"), candidateEntryPath: options.get("--candidate-entry") }
+  const repairKeys = ["--repair-authorization", "--authorization-sha256", "--repair-admission", "--admission-sha256"]
+  assert(!repairKeys.some(key => options.has(key)) || repairKeys.every(key => options.has(key)), "Repair authorization/admission paths and hashes must all be supplied")
+  assert(!options.has("--repair-authorization") || !options.has("--correction-disposition"), "Qualification profiles cannot be combined")
+  return { phase, command: arguments_[divider + 1], args: arguments_.slice(divider + 2), timeoutMs: Number(options.get("--timeout-ms")), dispositionPath: options.get("--correction-disposition"), dispositionSha256: options.get("--disposition-sha256"), candidateEntryPath: options.get("--candidate-entry"), authorizationPath: options.get("--repair-authorization"), authorizationSha256: options.get("--authorization-sha256"), admissionPath: options.get("--repair-admission"), admissionSha256: options.get("--admission-sha256") }
 }
 
 async function main() {
@@ -225,12 +258,14 @@ async function main() {
   const originalStateDirectory = resolve(common, "gridninja-qa/premium-civic-upgrade")
   const correction = parsed.dispositionPath ? { dispositionPath: parsed.dispositionPath, dispositionSha256: parsed.dispositionSha256, candidateEntryPath: parsed.candidateEntryPath, priorBudgetPath: join(originalStateDirectory, "budget.json") } : undefined
   const disposition = correction ? await readCorrectionDisposition(correction) : null
-  const stateDirectory = disposition ? join(originalStateDirectory, "corrections", disposition.record.id) : originalStateDirectory
+  const repair = parsed.authorizationPath ? { authorizationPath: parsed.authorizationPath, authorizationSha256: parsed.authorizationSha256, admissionPath: parsed.admissionPath, admissionSha256: parsed.admissionSha256, priorBudgetPath: join(originalStateDirectory, "budget.json") } : undefined
+  const admission = repair ? await readRepairAdmission(repair) : null
+  const stateDirectory = admission ? join(originalStateDirectory, "repairs", admission.record.id) : disposition ? join(originalStateDirectory, "corrections", disposition.record.id) : originalStateDirectory
   const controller = new AbortController()
   const interrupt = () => controller.abort()
   process.once("SIGTERM", interrupt); process.once("SIGINT", interrupt)
   try {
-    const receipt = await runBoundedCommand({ phase, command, args, timeoutMs, stateDirectory, correction, signal: controller.signal })
+    const receipt = await runBoundedCommand({ phase, command, args, timeoutMs, stateDirectory, correction, repair, signal: controller.signal })
     console.log(JSON.stringify({ status: receipt.status, qualification: receipt.qualification, phase, attempt: receipt.phaseAttempt, reason: receipt.reason, receipt: join(receipt.directory, "receipt.json") }))
     if (receipt.status !== "pass") process.exitCode = 1
   } finally { process.removeListener("SIGTERM", interrupt); process.removeListener("SIGINT", interrupt) }
