@@ -5,6 +5,34 @@ Status: implemented and available in a protected Vercel preview through
 incomplete; production promotion is not approved. Raw failed attempts remain in
 the evidence directories.
 
+## Current status
+
+Candidate12 commit `1cf6286` is Ready in its
+[protected Preview](https://gridninja-carzg4oli-holdini25s-projects.vercel.app/),
+build `6PISLZoVbyYx9i6E0ez_E`. All fourteen jobs in its main CI workflow pass,
+including all six browser projects. The separate facility performance workflow
+still fails mobile Home LCP at **2641.35 ms** against 2500 ms; the retained local
+Contact result remains **2310.33 ms** against 2000 ms. CI success is not a complete
+performance or release pass.
+
+The isolated hosted-source diagnostic explains the hash discrepancy solely as
+compact `vercel.json` whitespace serialization with a trailing newline. Parsed
+configuration is unchanged. Its full inventory belongs to that diagnostic
+deployment; the original candidate12 Preview records the same source prefix.
+No application-source or attestation-policy change was needed.
+
+Native Safari access resumed, its temporarily enabled developer preference was
+restored, and a foreground Retry renders the candidate13 model. This is a bounded
+recovery observation, not full Safari lifecycle qualification or an explanation
+of the earlier failures. The combined startup repairs now pass scoped validation on local build
+`yApRBzAaswkgQ43RIXZBO`: full lint/typecheck, 652 facility unit tests,
+production build, twelve foreground boundary cases across six engines and three
+real headed Chrome visibility cases. Candidate15 tightens the new recovery test
+to await mounted inspection controls and passes that case once without retries.
+Its independent pixel review confirms clean recovery; details follow below. Historical results below retain their original candidate identities.
+Human visual approval, physical-device/manual-accessibility checks and configured
+staging delivery remain incomplete; production promotion is not approved.
+
 ## Selected artwork
 
 The user selected the best built-in generated finish with a maximum desktop
@@ -29,7 +57,7 @@ The [hybrid source README](../../assets-source/civic/hybrid-v2/README.md) owns
 the v2 production and packaging instructions. `scripts/civic/README.md` explicitly
 describes the older generated-v1 packager and its six WebP files.
 
-## Local candidate identities
+## Retained local candidate identities
 
 - Candidate: `candidate-11` (canonical visual harness updated for the current Home).
 - Build: `RWkRSqEzFV3owz6bkQHVy`.
@@ -210,12 +238,13 @@ optimization is exhausted. The next supported investigation is delivery of this
 exact candidate through its intended hosting configuration, with actual transport,
 compression, HTTPS, observability and live verification measured separately.
 
-The fresh prerequisite inventory confirms that this workspace has no linked
+The historical candidate11 prerequisite inventory recorded no locally linked
 Vercel project or configured staging/provider environment. A Vercel integration
-was discovered and suggested but is not confirmed installed or connected. Native
-Safari access was also retried and still reports the Mac locked. The exact
-current `qualification-environment.json` is attached to the build gate; it was
-generated from verified current identity rather than copying a prior candidate.
+was discovered and suggested but was not confirmed installed or connected. Native
+Safari access then reported the Mac locked. Its `qualification-environment.json`
+remains attached to that build gate. Later verified Preview access and restored
+Mac access supersede those access blockers; they do not supply the still-missing
+staging/provider configuration or complete native qualification.
 
 A later read-only hosting check identifies the existing Vercel project as
 `holdini25s-projects/gridninja`. GitHub reports a successful Vercel status for
@@ -356,9 +385,33 @@ separate reviews do not imply human approval or a new golden baseline.
 
 Earlier native Safari attempts could not start while the Mac was locked. The
 two later candidate11 sessions made the partial progress recorded above before
-access was lost again. Simulator devices remain untested because their GUI app
-is missing; no physical-device result is claimed. Remaining Safari investigation
-requires an unlocked Mac and a diagnosis of the observed 3D fallback.
+access was lost again. That access blocker was subsequently superseded by the
+resumed inspection below. Simulator devices remain untested because their GUI
+app is missing; no physical-device result is claimed. The earlier Safari failures
+remain preserved, with their causes unproven.
+
+During the resumed native diagnosis, the user authorized temporarily enabling
+Safari's developer features. The original failed tab was no longer available;
+a fresh candidate12 attempt recorded `timeout`, with hidden visibility observed
+after failure. Those readings do not establish visibility throughout startup,
+and context loss may be teardown after timeout. The developer preference was
+restored to its original disabled state and verified. A later foreground Retry
+renders the candidate13 model and exposes the ready controls. The raw
+`candidate-12/native-safari-resume-01/foreground-retry-ready.png` and `.txt` capture
+that later observation despite their historical directory name;
+`fresh-attempt-receipt.json` and `inspector-preference-restored.txt` retain the
+diagnostic and restoration record. This does not complete Safari qualification.
+
+The startup repair now gives import and first-frame staging one eight-second
+foreground budget per generation, suspending it while the document is hidden.
+Normal visibility events debit elapsed foreground time; if an event is missing,
+the last-accounted remainder is conservatively retained. Candidate13's headed
+recovery checks passed their functional assertions, but pixel review found a
+secondary assembly-timeout warning on the initial overview. That finding remains
+in `candidate-13/startup-visual-finding.json`. The second narrow repair removes
+only the redundant initial plain-overview timer, preserving its readiness and
+metadata notifications and genuine replacement/swap deadlines. Candidate14 validates the combined repair, followed by the stronger
+candidate15 settled-controls assertion described below.
 
 The older artwork-only results in the hybrid README and `build/civic/` describe
 the prior CSS/source state. They remain useful provenance and comparison history,
@@ -410,13 +463,22 @@ no inherited shared variables. Values were not revealed. A public verification
 site key is absent; database isolation, provider settings and approved test
 recipients must be established before any staging inquiry canary.
 
-The Vercel build logs attest source prefix `29baaa77955c`, which differs from the
-frozen local hash. All 550 Git source-input files at `c713a94` reproduce the local
-hash exactly; Linux CI logs the matching `a6ad73564442` prefix. Vercel logs confirm Node22,
-Next16.3.8, a restored cache, two changed installed packages and Vercel config hooks;
-these observations do not identify which input bytes changed. Hosted postbuild
-source equivalence remains unresolved. A paths-and-hashes diagnostic proposal is
-preserved locally and has not been applied.
+The original Vercel build logs attest source prefix `29baaa77955c`, differing
+from the frozen local hash. The initial unresolved diagnosis is superseded by
+the isolated protected diagnostic deployment at commit `a15795c`. Its postbuild
+comparison finds exactly one changed input among 550: `vercel.json`, serialized
+compactly with a trailing newline. Parsed JSON is unchanged, and substituting
+only those bytes reproduces the complete hosted digest
+`29baaa77955c6d454b47c9bbc963be48b858cbc080b5e4ade9aa38bb806f2bdc`.
+The diagnostic matches its normal attestation. Its complete inventory applies
+to the isolated diagnostic build; the original release Preview logged only the
+same twelve-character prefix, not a full inventory. The exact Vercel component
+that performed serialization is not established. Evidence is under
+`candidate-12/hosted-source-diagnostic-proposal-01/`, particularly
+`diagnostic-conclusion.json`, `hosted-comparison.json` and
+`vercel-json-serialization-review-01.json`. No application source, canonical
+hash policy or candidate ledger was changed, and this finding does not qualify
+hosted runtime or performance.
 
 The first remote CI run passes build, quality, unit, integration, audit, SEO,
 general Lighthouse, Chromium and WebKit jobs. Firefox's sole test failure is the
@@ -427,3 +489,72 @@ The separate facility job completes its 30 captures but fails mobile Home LCP at
 2500.8936ms against 2500ms; this valid result is retained. Hardware qualification
 is skipped and is not a pass. Remote CI and the local matrix describe different
 builds and settings and are not substituted for one another.
+
+The later candidate12 commit `1cf6286` has a separate Ready protected Preview,
+build `6PISLZoVbyYx9i6E0ez_E`; desktop and mobile Civic images decode, authentication
+protection and noindex are verified, and assessment verification remains
+unavailable. The limited smoke receipt is
+`candidate-12/hosted-preview-01/receipt.json`; its original source-mismatch hold
+is superseded by the diagnostic above, within that diagnostic's stated scope.
+
+All fourteen main-workflow jobs in
+[run 38286664065](https://github.com/holdini25/GridNinjaSite/actions/runs/38286664065)
+pass. The six remote browser projects reconcile 1554 selected cases to 1450
+passes and 104 project-specific skips, with no failures or observed retries;
+the corrected reservation case passes once in every project. The original
+Firefox and installer failures remain in their earlier records. Saved evidence
+is `candidate-12/remote-ci-01/final-ci-jobs.json` and
+`completed-browser-matrix-final.json`.
+
+The separate
+[facility performance run 38286663980](https://github.com/holdini25/GridNinjaSite/actions/runs/38286663980)
+still fails: its thirty captures include mobile Home median LCP **2641.35 ms**
+against 2500 ms. The raw reports and independent diagnosis are preserved in
+`candidate-12/remote-performance-review-01/`; its functional checks do not waive
+that performance result. Neither main-workflow success nor the formatting-only
+source finding supersedes the local Contact failure, missing staging delivery,
+or human and operational approval gates.
+
+## Startup repair validation — candidates 14/15
+
+Application source is `7221082cb59b0452ac329d35d4015aaa7e789efa5f74ea1c4a72f78babe892f4`
+and build is `yApRBzAaswkgQ43RIXZBO`. Candidate14 passes full lint, typecheck,
+652 facility unit tests and the production build with all pre/postbuild validators.
+It also passes three headed Chrome visibility cases and ten foreground-boundary
+cases on Chrome, Chromium desktop/mobile and WebKit desktop/mobile.
+
+The candidate13 Firefox run failed during browser launch before any application
+assertion. A separate candidate14 check uses the repository's established fresh
+`MOZ_APP_DATA`/`MOZ_LOCAL_APP_DATA` directories, with unchanged binary, HOME and
+security settings. Its two selected Firefox cases pass once, with local and served
+identity verification and owned cleanup. This does not relabel the failed launch
+or prove that missing isolation alone caused it. Evidence remains under
+`candidate-14/firefox-startup-diagnosis-01.json` and `firefox-01/`.
+
+Candidate14's recovered model screenshot still displayed the lazy-controls loading
+message. Candidate15 adds only a wait for the authored-connections button to be
+visible and enabled before capturing and checking absence of Retry assembly and
+the eight-second warning. Its single affected headed Chrome case passes without
+retry or a second GLB request, after more than nine seconds continuously hidden.
+Independent review confirms the controls and model are rendered without a warning.
+Targeted lint and full typecheck pass. The application, build, settings, toolchain
+and publications are identical; only QA hash changes from
+`46b5ed1ee603ce9a3fd9665a3dfee6f52aeb974a43a4e65a5f70d974cd69928b` to
+`ec8983547a3f2802d90e6cca0dd829907e464c82cb8e86e75d676d23d0986469`.
+Candidate14 outcomes remain under their original identity; the fresh case
+strengthens an overlapping case and is not a sixteenth unique outcome.
+
+Receipts: `candidate-14/validation-01/report.json`, `browser-01/report.json`,
+`firefox-01/report.json`, and `candidate-15/input-review.json`,
+`validation-01/report.json`, `browser-01/report.json`,
+`independent-startup-review.json`. These scoped results do not qualify the full
+new-source browser matrix or supersede performance and external release holds.
+
+A further native Safari session renders the reloaded local model, opens the rack
+door, extends its tray after Resume, and reaches the service cutaway. Native
+pointer control again becomes unavailable during the return sequence; completion
+of whole-assembly/facility return is unverified. Home navigation succeeds and ends
+the inspection. Mechanical closure/reopen, deliberate background/resume and 400%
+zoom remain unqualified. `candidate-15/native-safari-01/receipt.json` preserves
+the partial results and limitations; no full Safari pass or historical cause is
+claimed. The temporary developer preference remains restored.
