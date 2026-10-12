@@ -1,7 +1,9 @@
 # Civic v2 and release preparation — 12 October 2026
 
-Status: implemented locally; qualification is incomplete. This record does not
-approve a public release. Raw failed attempts remain in the evidence directories.
+Status: implemented and available in a protected Vercel preview through
+[draft PR 5](https://github.com/holdini25/GridNinjaSite/pull/5). Qualification is
+incomplete; production promotion is not approved. Raw failed attempts remain in
+the evidence directories.
 
 ## Selected artwork
 
@@ -27,7 +29,7 @@ The [hybrid source README](../../assets-source/civic/hybrid-v2/README.md) owns
 the v2 production and packaging instructions. `scripts/civic/README.md` explicitly
 describes the older generated-v1 packager and its six WebP files.
 
-## Frozen local candidate
+## Local candidate identities
 
 - Candidate: `candidate-11` (canonical visual harness updated for the current Home).
 - Build: `RWkRSqEzFV3owz6bkQHVy`.
@@ -42,6 +44,16 @@ Evidence root: `build/qa/release-level-20261012/candidate-11/`. The candidate
 ledger binds evidence to source, build, harness, toolchain and immutable published
 brief hashes. Build artifacts remain local; this document does not embed them in
 the deployed site.
+
+The subsequent candidate12 changes only a test assertion. Linux Firefox measured
+the 140px verification reservation as 139.9998779296875px. The correction verifies
+the exact `min-height: 140px` CSS and applies the existing 0.01px geometric
+tolerance; widget dimensions, containment and layout-shift assertions remain.
+All six affected local project cases pass without retries, and targeted ESLint
+and typecheck pass. Application/build identity is unchanged; the new QA hash is
+`fe9640e81fe26199cdcdc8698343ba889001b23f8af94de0a3bcae19d4f2d222`.
+Candidate11 receipts retain their original identity and outcomes. The original
+Linux Firefox failure is not relabeled by the corrected local checks.
 
 ## Completed checks and retained failures
 
@@ -67,6 +79,16 @@ is unverified. Remaining Safari checks and all three Simulator profiles remain
 blocked; no Simulator was booted. The partial action, accessibility-tree and
 image evidence is preserved under `candidate-11/native-ui-01/`. Its session
 completion records identity verification and lock cleanup, not a Safari pass.
+
+The second native session (`candidate-11/native-ui-02/`) verifies scenario
+navigation, Assessment scoping, keyboard focus, unsent synthetic form retention
+through data-handling and Contact navigation, About/Platform visuals, and actual
+200% Safari zoom. A fresh 3D activation and one retry both entered the readable
+fallback. Mechanical closure, background/resume and 400% remain unqualified.
+Simulator.app is absent despite the installed device inventory; no Simulator was
+booted and all eleven available devices remained shut down. The Mac locked during
+tab cleanup, so tab closure is unknown. The helper's before/after identity and
+compute-lock cleanup pass; all seventeen original JPEG captures fully decode.
 
 Candidate11 changes only `scripts/qa/visual-baselines.mjs`: Home now waits for
 its decoded cinematic poster and Civic v2 still, while Demo retains the existing
@@ -161,6 +183,19 @@ artifacts, recorded M5 Metal backend and exact local build identity. Lighthouse
 has no separately saved served-HTML receipt for this phase; its success-path
 final identity assertion is bypassed by the group failure, so the audit records
 a separate post-collection local identity check instead.
+
+An explicitly reviewed continuation completes exactly the 120 previously unrun
+captures, retaining the original ten without repeating them. The reconciled
+130-capture matrix covers thirteen routes, two profiles and five runs per group.
+Twenty-five of twenty-six groups pass; Contact mobile remains the sole local
+budget failure at 2310.33ms against 2000ms. Collection takes 770.046 seconds;
+before/after application, build, harness, served identity and original budget
+hashes remain unchanged, and owned processes and the compute lock are cleaned
+up. Reports and traces are under
+`build/facility/release-level-20261012-candidate-11-completion-01/`; the immutable
+reconciliation and receipt are under
+`candidate-11/performance-completion-execution-01/`. Complete capture coverage
+does not waive the failed budget or qualify hosted performance.
 
 Two independent read-only investigations of the current reports confirm that
 the LCP element is the server-rendered introduction paragraph. All five saved
@@ -320,9 +355,10 @@ candidate09. The capture manifest retains its original `unreviewed` state;
 separate reviews do not imply human approval or a new golden baseline.
 
 Earlier native Safari attempts could not start while the Mac was locked. The
-later candidate11 session made the partial progress recorded above before access
-was lost again. Simulator devices remain untested; no physical-device result is
-claimed. Completing native UI checks requires the Mac to be unlocked again.
+two later candidate11 sessions made the partial progress recorded above before
+access was lost again. Simulator devices remain untested because their GUI app
+is missing; no physical-device result is claimed. Remaining Safari investigation
+requires an unlocked Mac and a diagnosis of the observed 3D fallback.
 
 The older artwork-only results in the hybrid README and `build/civic/` describe
 the prior CSS/source state. They remain useful provenance and comparison history,
@@ -348,13 +384,46 @@ local tests do not establish live provider behavior.
 
 Assessment-first copy, synthetic examples, unestimated economics and immutable
 published briefs remain unchanged. New monitoring and its scheduler remain
-deferred under the existing release decision. Current-candidate hosted delivery,
-production configuration, physical devices, manual accessibility and reader
-judgments are not established by this local work. No real inquiry, provider
-rehearsal, credential change, migration or deployment has been performed here.
+deferred. Physical devices, manual accessibility, reader judgments, live delivery
+and operational recovery remain separate gates. No real inquiry, provider
+rehearsal, credential change, migration, merge or production promotion occurred.
 
-The user authorized a draft PR and non-production preview after target verification,
-then asked to leave that preview pending while Vercel sign-in is unavailable.
-Authorization is retained for that scope. Before any branch push, verify the
-project's production/custom-environment branch mapping, preview protection and
-normal root Next.js `npm run build` lifecycle. No push, PR or deployment has occurred.
+The user resumed the authorized preview and completed Vercel sign-in. Target
+verification confirmed production on `main`, Preview for all unassigned branches,
+no custom environments or Preview domains, and the root Next.js build with its
+normal prebuild/postbuild validation. Standard Protection was enabled and its
+saved state verified. This protects preview deployments while leaving production
+custom domains outside that authentication setting.
+
+Commit `c713a94` was pushed and draft PR5 opened. Its
+[protected preview](https://gridninja-fo763p78r-holdini25s-projects.vercel.app/#shared-infrastructure)
+is Ready in the Preview environment, build `vNyHcPGf9-A149UlRN5uC`. Desktop and
+mobile Civic imagery decode and pass agent visual inspection; Home → fixture B
+sample → Assessment navigation works. The Assessment document declares
+`noindex, nofollow, noarchive`; an unauthenticated HEAD redirects to Vercel
+authentication and carries `X-Robots-Tag: noindex`. This is a read-only smoke,
+not a deployed performance or intake-delivery qualification.
+
+The hosted assessment reports unavailable security verification. Current Preview
+metadata lists only `DATABASE_URL`, scoped to both Production and Preview, and
+no inherited shared variables. Values were not revealed. A public verification
+site key is absent; database isolation, provider settings and approved test
+recipients must be established before any staging inquiry canary.
+
+The Vercel build logs attest source prefix `29baaa77955c`, which differs from the
+frozen local hash. All 550 Git source-input files at `c713a94` reproduce the local
+hash exactly; Linux CI logs the matching `a6ad73564442` prefix. Vercel logs confirm Node22,
+Next16.3.8, a restored cache, two changed installed packages and Vercel config hooks;
+these observations do not identify which input bytes changed. Hosted postbuild
+source equivalence remains unresolved. A paths-and-hashes diagnostic proposal is
+preserved locally and has not been applied.
+
+The first remote CI run passes build, quality, unit, integration, audit, SEO,
+general Lighthouse, Chromium and WebKit jobs. Firefox's sole test failure is the
+fractional reservation described above. The Chrome installer failed before tests
+with an HTTP/2 download error; its one targeted retry passed installation, build
+and browser functionality. The original installation failure remains recorded.
+The separate facility job completes its 30 captures but fails mobile Home LCP at
+2500.8936ms against 2500ms; this valid result is retained. Hardware qualification
+is skipped and is not a pass. Remote CI and the local matrix describe different
+builds and settings and are not substituted for one another.

@@ -127,7 +127,12 @@ test.describe("contact intake layout", () => {
         const form = page.locator("form")
         const container = form.locator("[data-turnstile-container]")
         const initialFormBox = await form.boundingBox()
-        expect((await container.boundingBox())!.height).toBeGreaterThanOrEqual(140)
+        await expect(container).toHaveCSS("min-height", "140px")
+        // Firefox bounding boxes can undershoot by a fraction of a CSS pixel.
+        // Match the 0.01px precision used by the containment checks below.
+        expect((await container.boundingBox())!.height,
+          `${route} at ${width}px must reserve the compact verification slot`
+        ).toBeGreaterThanOrEqual(140 - 0.01)
 
         // Engage the optional topic without changing the inquiry or submitting it.
         await page.getByLabel("Topic (optional)", { exact: true }).focus()
