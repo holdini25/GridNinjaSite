@@ -1,3 +1,5 @@
+import "@/components/marketing/premium-visuals.css"
+
 import { Fragment, type ReactNode } from "react"
 import Link from "next/link"
 import { SectionShell } from "@/components/layout/section-shell"

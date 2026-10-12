@@ -6,7 +6,7 @@ on:
         description: Exact registered visual candidate (must exist and pass validation)
         type: string
         required: true
-        default: facility-v11
+        default: facility-v12
       graphics_mode:
         description: Adaptive candidate required by the complete functional suite (rollback modes use separate smoke checks)
         type: choice

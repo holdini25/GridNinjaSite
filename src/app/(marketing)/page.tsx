@@ -24,7 +24,7 @@ import "@/components/marketing/cinematic-home.css"
 export async function generateMetadata(): Promise<Metadata> { return createPageMetadata({ path: "/" }) }
 
 export default async function HomePage() {
-  const [release, editorial, civic] = await Promise.all([getCinematicRelease(), getEditorialRelease(), getCivicRelease()])
+  const [release, editorial, civic] = await Promise.all([getCinematicRelease(), getEditorialRelease(), getCivicRelease("civic-v2")])
   const fallback = release ? null : await getFacilityRelease()
   const record = assessmentFixtures.b
   const view = selectAssessment(record)

@@ -6,7 +6,7 @@ vi.mock("@/lib/civic/files.mjs", async importOriginal => {
 })
 import { readCivicDirectory, readCivicRegistry, sha256 } from "@/lib/civic/files.mjs"
 import { civicAssetResponse, getCivicRelease } from "@/lib/civic/releases"
-import { civicFixture } from "./fixtures"
+import { civicFixture, civicV2Fixture } from "./fixtures"
 
 const bytes = Buffer.from("civic illustration"), digest = sha256(bytes), manifest = civicFixture(bytes)
 const request = (method = "GET", headers = {}) => new Request("https://gridninja.ai/assets/civic/civic-v1/landscape-960.webp", { method, headers })
@@ -55,4 +55,25 @@ it("hides unregistered releases, private paths, and corrupt bundles without leak
   const response = await civicAssetResponse("civic-v1", "landscape-960.webp", request("HEAD", { "If-None-Match": `"${digest}"` }))
   expect(response.status).toBe(503); expect(response.headers.get("cache-control")).toBe("no-store")
   expect(await response.text()).toBe(""); expect(await getCivicRelease()).toBeNull()
+})
+
+it("selects v2 explicitly with AVIF sources while default callers retain v1", async () => {
+  const nextManifest = civicV2Fixture(bytes)
+  vi.mocked(readCivicRegistry).mockResolvedValue(["civic-v1", "civic-v2"].map(release => ({ release, status: "available", manifestSha256: digest })))
+  vi.mocked(readCivicDirectory).mockImplementation(async (_directory, id) => {
+    const selected = id === "civic-v2" ? nextManifest : manifest
+    return { manifest: selected, manifestBytes: Buffer.from("{}"), artifacts: new Map(selected.files.map(file => [file.file, bytes])) } as unknown as Awaited<ReturnType<typeof readCivicDirectory>>
+  })
+  const legacy = await getCivicRelease(), next = await getCivicRelease("civic-v2")
+  expect(legacy?.release).toBe("civic-v1")
+  expect(legacy?.images.landscape.avif).toBeUndefined()
+  expect(next?.images.landscape.src).toBe("/assets/civic/civic-v2/landscape-960.webp")
+  expect(next?.images.landscape.variants.map(file => file.width)).toEqual([640, 960, 1280, 1600])
+  expect(next?.images.portrait.avif?.src).toBe("/assets/civic/civic-v2/portrait-640.avif")
+  expect(next?.images.portrait.avif?.variants.map(file => file.width)).toEqual([400, 640, 800])
+  const response = await civicAssetResponse("civic-v2", "landscape-1600.avif", request())
+  expect(response.status).toBe(200)
+  expect(response.headers.get("content-type")).toBe("image/avif")
+  expect((await civicAssetResponse("civic-v1", "landscape-1600.avif", request())).status).toBe(404)
+  expect((await civicAssetResponse("civic-v2", "landscape-3840.avif", request())).status).toBe(404)
 })
