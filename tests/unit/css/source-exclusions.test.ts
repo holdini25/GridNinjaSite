@@ -87,3 +87,55 @@ describe("Tailwind component-source exclusions", () => {
     expect(() => validateCssSources(fixture({ "src/app/page.tsx": statement }))).toThrow(/unresolved local import|nonliteral module loader|unsupported/)
   })
 })
+
+describe("route-owned visual styles", () => {
+  const visualFiles = {
+    "src/components/visual.tsx": 'export const Visual = () => <div className="scene" />',
+    "src/components/visual.css": '.scene { display: grid; }',
+    "scripts/css/style-boundaries.json": JSON.stringify([
+      { component: "src/components/visual.tsx", stylesheet: "src/components/visual.css" },
+    ]),
+  }
+
+  it("accepts a grouped stylesheet imported by the page without leaking it into other routes", () => {
+    const result = validateCssSources(fixture({
+      ...visualFiles,
+      "src/app/page.tsx": 'import "../components/visual"; import "./home.css"; export {}',
+      "src/app/home.css": '@import "../components/visual.css"; .home { margin: 0; }',
+      "src/app/contact/page.tsx": 'export default function Page() { return null }',
+    }))
+    expect(result.routeStyles["src/app/page.tsx"]).toContain("src/components/visual.css")
+    expect(result.routeStyles["src/app/contact/page.tsx"]).not.toContain("src/components/visual.css")
+  })
+
+  it("accepts an owning component import and ancestor layout styles", () => {
+    const root = fixture({
+      ...visualFiles,
+      "src/components/owner.tsx": 'import "./visual"; export const Owner = () => null',
+      "src/app/nested/page.tsx": 'import "../../components/owner"; export {}',
+      "src/app/layout.tsx": 'import "../components/visual.css"; export {}',
+    })
+    expect(validateCssSources(root).routeStyles["src/app/nested/page.tsx"]).toContain("src/components/visual.css")
+    writeFileSync(join(root, "src/app/layout.tsx"), 'export {}')
+    writeFileSync(join(root, "src/components/owner.tsx"), 'import "./visual"; import "./visual.css"; export const Owner = () => null')
+    expect(validateCssSources(root).routeStyles["src/app/nested/page.tsx"]).toContain("src/components/visual.css")
+  })
+
+  it("rejects a direct visit that only receives styles after another route was visited", () => {
+    expect(() => validateCssSources(fixture({
+      ...visualFiles,
+      "src/app/page.tsx": 'import "../components/visual"; export {}',
+      "src/app/other/page.tsx": 'import "../../components/visual.css"; export {}',
+    }))).toThrow(/src\/app\/page.tsx reaches .*visual.tsx without .*visual.css/)
+  })
+
+  it("rejects missing and conditional local CSS imports instead of assuming they load", () => {
+    for (const css of ['@import "../components/missing.css";', '@import "../components/visual.css" screen and (min-width: 800px);']) {
+      expect(() => validateCssSources(fixture({
+        ...visualFiles,
+        "src/app/page.tsx": 'import "../components/visual"; import "./home.css"; export {}',
+        "src/app/home.css": css,
+      }))).toThrow(/invalid local CSS import|unsupported CSS import/)
+    }
+  })
+})

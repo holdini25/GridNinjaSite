@@ -7,13 +7,15 @@ import lighthouse, { desktopConfig } from "lighthouse"
 import { launch } from "chrome-launcher"
 import { provenance, verifiedBuildIdentity } from "./performance-contract.mjs"
 import { captureValidLighthouseReport } from "./lighthouse-capture.mjs"
-import { performanceMatrix, lighthouseSlug } from "./lighthouse-matrix.mjs"
+import { performanceMatrix, lighthouseGroups, lighthouseSlug } from "./lighthouse-matrix.mjs"
 import { acquireComputeLock } from "./compute-lock.mjs"
+import { evaluateLighthouseGroup } from "./lighthouse-group-budget.mjs"
 
 const require = createRequire(import.meta.url)
 const config = require("./lighthouse.cjs")
 const baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000"
 const diagnostic = process.env.FACILITY_LIGHTHOUSE_DIAGNOSTIC === "1"
+const stopOnFailure = process.env.FACILITY_LIGHTHOUSE_STOP_ON_FAILURE === "1"
 const matrix = performanceMatrix(process.env.FACILITY_PERFORMANCE_MATRIX)
 const outputRoot = process.env.FACILITY_PERFORMANCE_DIR ?? "build/facility"
 assert(resolve(outputRoot) === resolve("build/facility") || resolve(outputRoot).startsWith(`${resolve("build/facility")}/`), "Performance output must remain under build/facility")
@@ -48,6 +50,7 @@ async function graphicsBackend(endpoint) {
 }
 const initialIdentity = await verifiedBuildIdentity()
 const index = { measuredAt: new Date().toISOString(), matrix: matrix.name, diagnostic, reviewedRouteCaptures: matrix.reviewedRoutes.length * matrix.profiles.length * matrix.runs, requiredCaptures: matrix.routes.length * matrix.profiles.length * matrix.runs, result: "incomplete", runs: [] }
+if (stopOnFailure) index.groupBudgetChecks = []
 const releaseCompute = await acquireComputeLock("lighthouse-performance")
 let outputReady = false
 let harnessRevision
@@ -59,7 +62,12 @@ try {
     const directory = `${outputRoot}/lighthouse-${profile}${diagnostic ? "-throttled" : ""}`
     if (!process.env.FACILITY_PERFORMANCE_DIR) await rm(directory, { recursive: true, force: true })
     await mkdir(directory, { recursive: true })
-    for (const route of matrix.routes) for (let run = 1; run <= matrix.runs; run++) {
+  }
+  for (const { profile, route } of lighthouseGroups(matrix.name)) {
+    if (diagnostic && profile !== "mobile") continue
+    const directory = `${outputRoot}/lighthouse-${profile}${diagnostic ? "-throttled" : ""}`
+    const group = []
+    for (let run = 1; run <= matrix.runs; run++) {
       const slug = lighthouseSlug(route)
       const output = `${directory}/${slug}-${run}.json`
       const attempt = { route, profile, run, output, complete: false, captures: [] }
@@ -114,10 +122,28 @@ try {
       const evidence = { provenance: await provenance(browser, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }), graphics, route, run, measuredAt: new Date().toISOString(), measurementComplete: true, complete: hardwareAccepted }
       harnessRevision ??= evidence.provenance.harnessRevision
       assert.equal(evidence.provenance.harnessRevision, harnessRevision, "Harness changed during Lighthouse collection")
-      await writeFile(output, `${JSON.stringify({ ...result.lhr, facilityEvidence: evidence }, null, 2)}\n`)
+      const report = { ...result.lhr, facilityEvidence: evidence }
+      await writeFile(output, `${JSON.stringify(report, null, 2)}\n`)
+      if (stopOnFailure) group.push(report)
       attempt.graphics = graphics; attempt.complete = hardwareAccepted
       assert(hardwareAccepted, `M5 Metal requested; actual backend: ${graphics.renderer}; ${graphics.error ?? ""}`)
       console.log(JSON.stringify({ route, profile, run, lcp: result.lhr.audits["largest-contentful-paint"].numericValue, output }))
+    }
+    if (stopOnFailure) {
+      const check = { route, profile, runs: group.map(report => report.facilityEvidence.run), result: "incomplete", failures: [] }
+      index.groupBudgetChecks.push(check)
+      try {
+        const budget = evaluateLighthouseGroup(group, { route, profile, buildSettings: initialIdentity.buildSettings })
+        check.medians = budget.medians
+        check.failures = budget.failures
+        assert.equal(budget.failures.length, 0, `Lighthouse group failed unchanged release gates: ${budget.failures.join("; ")}`)
+        check.result = "pass"
+      } catch (error) {
+        check.result = "fail"
+        if (!check.failures.length) check.failures.push(error instanceof Error ? error.message : String(error))
+        index.stoppedAfterGroup = { route, profile, completedRuns: group.length, reason: "decisive-lighthouse-group-failure" }
+        throw error
+      }
     }
   }
   assert.deepEqual(await verifiedBuildIdentity(), initialIdentity, "Build changed during Lighthouse collection")

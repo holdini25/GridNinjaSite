@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element -- Immutable, responsive civic art; no image or client runtime. */
+/* Immutable, responsive civic art; no image service or client runtime. */
 import type { ReactNode } from "react"
 import { civicCopy } from "@/content/copy/civic"
 import type { CivicRelease } from "@/types/civic"
@@ -49,14 +49,19 @@ function CivicFallback() {
 
 /** Static illustration: no arrows, energy quantities, control lines or claimed benefits. */
 export function CivicIllustration({ release = null, immersive = false, intro }: { release?: CivicRelease | null; immersive?: boolean; intro?: ReactNode }) {
+  const portraitSizes = immersive ? "(min-width: 680px) 680px, 100vw" : "calc(100vw - 48px)"
+  const landscapeMaxWidth = release?.release === "civic-v2" ? 1600 : 1920
+  const landscapeSizes = immersive ? `(min-width: ${landscapeMaxWidth}px) ${landscapeMaxWidth}px, 100vw` : "(min-width: 1376px) 1280px, calc(100vw - 96px)"
   return <figure className={`gn-civic-figure${immersive ? " gn-civic-figure--immersive" : ""}`} data-civic-release={release?.release ?? "unavailable"}>
     <div className={immersive ? "gn-civic-scene" : undefined}>
       {intro}
       <div className="gn-civic-artwork" data-has-artwork={Boolean(release)}>
         <CivicFallback />
         {release && <picture>
-          <source media="(max-width: 819px)" srcSet={release.images.portrait.srcSet} sizes={immersive ? "100vw" : "calc(100vw - 48px)"} width={release.images.portrait.width} height={release.images.portrait.height} />
-          <img src={release.images.landscape.src} srcSet={release.images.landscape.srcSet} sizes={immersive ? "(min-width: 1920px) 1920px, 100vw" : "(min-width: 1376px) 1280px, calc(100vw - 96px)"} width={release.images.landscape.width} height={release.images.landscape.height} alt="" loading="lazy" decoding="async" />
+          {release.images.portrait.avif && <source media="(max-width: 819px)" type="image/avif" srcSet={release.images.portrait.avif.srcSet} sizes={portraitSizes} width={release.images.portrait.width} height={release.images.portrait.height} />}
+          <source media="(max-width: 819px)" type="image/webp" srcSet={release.images.portrait.srcSet} sizes={portraitSizes} width={release.images.portrait.width} height={release.images.portrait.height} />
+          {release.images.landscape.avif && <source media="(min-width: 820px)" type="image/avif" srcSet={release.images.landscape.avif.srcSet} sizes={landscapeSizes} width={release.images.landscape.width} height={release.images.landscape.height} />}
+          <img src={release.images.landscape.src} srcSet={release.images.landscape.srcSet} sizes={landscapeSizes} width={release.images.landscape.width} height={release.images.landscape.height} alt="" loading="lazy" decoding="async" />
         </picture>}
       </div>
     </div>

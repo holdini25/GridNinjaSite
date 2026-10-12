@@ -6,6 +6,7 @@ import {
   and,
   asc,
   eq,
+  gt,
   inArray,
   isNull,
   lte,
@@ -29,6 +30,16 @@ import {
 const REDACTION_AGE_MS = 180 * 24 * 60 * 60 * 1_000
 const DELETION_AGE_MS = 365 * 24 * 60 * 60 * 1_000
 const DEFAULT_RETENTION_BATCH_SIZE = 500
+
+// Reserved durable state within the deployed schema. Only dead_letter rows may
+// use this prefix; provider error codes are normalized without ':' elsewhere.
+// 14 prefix characters + the provider's maximum 64 characters fit varchar(80).
+export const TERMINAL_ALERT_PREFIX = "alert_pending:"
+
+export function pendingTerminalError(errorCode: string) {
+  if (!/^[a-z0-9_-]{1,64}$/.test(errorCode)) throw new Error("InvalidTerminalErrorCode")
+  return `${TERMINAL_ALERT_PREFIX}${errorCode}`
+}
 
 export type AcceptLeadInput = {
   requestId: string
@@ -134,16 +145,30 @@ export function deriveLeadStatus(
   return "queued"
 }
 
+function activeLead(now: Date) {
+  return sql`EXISTS (SELECT 1 FROM ${leadSubmissions}
+    WHERE ${leadSubmissions.id} = ${leadDeliveryOutbox.leadId}
+      AND ${leadSubmissions.redactedAt} IS NULL
+      AND ${leadSubmissions.redactAfter} > ${now.toISOString()}::timestamptz
+      AND ${leadSubmissions.deleteAfter} > ${now.toISOString()}::timestamptz)`
+}
+
+function pendingTerminalAlert() {
+  return and(eq(leadDeliveryOutbox.status, "dead_letter"), sql`left(${leadDeliveryOutbox.lastErrorCode}, ${TERMINAL_ALERT_PREFIX.length}) = ${TERMINAL_ALERT_PREFIX}`)
+}
+
 function dueOrLeaseExpired(now: Date) {
   return or(
-    and(
+    and(activeLead(now), or(and(
       inArray(leadDeliveryOutbox.status, ["pending", "retry_scheduled"]),
       lte(leadDeliveryOutbox.nextAttemptAt, now)
     ),
     and(
       eq(leadDeliveryOutbox.status, "processing"),
       lte(leadDeliveryOutbox.leaseExpiresAt, now)
-    )
+    ))),
+    and(pendingTerminalAlert(), lte(leadDeliveryOutbox.nextAttemptAt, now),
+      or(isNull(leadDeliveryOutbox.leaseExpiresAt), lte(leadDeliveryOutbox.leaseExpiresAt, now)))
   )
 }
 
@@ -349,6 +374,9 @@ export function createLeadRepository(database: LeadDatabase) {
     const candidate = database
       .select({ id: leadDeliveryOutbox.id })
       .from(leadDeliveryOutbox)
+      // Lock both rows with SKIP LOCKED. Retention locks leads before retiring
+      // their outboxes; claims must not wait while holding the opposite lock.
+      .innerJoin(leadSubmissions, eq(leadSubmissions.id, leadDeliveryOutbox.leadId))
       .where(
         outboxId
           ? and(eq(leadDeliveryOutbox.id, outboxId), eligibility)
@@ -364,11 +392,11 @@ export function createLeadRepository(database: LeadDatabase) {
     const [delivery] = await database
       .update(leadDeliveryOutbox)
       .set({
-        status: "processing",
+        status: sql`CASE WHEN ${leadDeliveryOutbox.status} = 'dead_letter' THEN 'dead_letter'::lead_delivery_status ELSE 'processing'::lead_delivery_status END`,
         leaseToken,
         leaseExpiresAt,
-        lastAttemptAt: now,
-        attemptCount: sql`${leadDeliveryOutbox.attemptCount} + 1`,
+        lastAttemptAt: sql`CASE WHEN ${leadDeliveryOutbox.status} = 'dead_letter' THEN ${leadDeliveryOutbox.lastAttemptAt} ELSE ${now.toISOString()}::timestamptz END`,
+        attemptCount: sql`CASE WHEN ${leadDeliveryOutbox.status} = 'dead_letter' THEN ${leadDeliveryOutbox.attemptCount} ELSE ${leadDeliveryOutbox.attemptCount} + 1 END`,
         updatedAt: now,
       })
       .where(sql`${leadDeliveryOutbox.id} = (${candidate})`)
@@ -389,7 +417,9 @@ export function createLeadRepository(database: LeadDatabase) {
     const lead = leads[0]
 
     if (!lead) {
-      throw new Error("Claimed outbox delivery has no associated lead.")
+      // A concurrent retention deletion cascades the claimed outbox. There is
+      // no remaining lease or work to recover, and no provider may be called.
+      return null
     }
 
     return { delivery, lead }
@@ -407,13 +437,32 @@ export function createLeadRepository(database: LeadDatabase) {
     return claimOutbox(now, leaseMs, outboxId)
   }
 
+  async function isOutboxSendAllowed(outboxId: string, leaseToken: string, now = new Date()) {
+    const rows = await database.select({ id: leadDeliveryOutbox.id }).from(leadDeliveryOutbox).where(and(
+      eq(leadDeliveryOutbox.id, outboxId), eq(leadDeliveryOutbox.status, "processing"),
+      eq(leadDeliveryOutbox.leaseToken, leaseToken), gt(leadDeliveryOutbox.leaseExpiresAt, now), activeLead(now)
+    )).limit(1)
+    // This is the final local authorization check, not a cancellation mechanism
+    // for a request already handed to an external provider.
+    return rows.length === 1
+  }
+
+  async function isOutboxAlertAllowed(outboxId: string, leaseToken: string, now = new Date()) {
+    const rows = await database.select({ id: leadDeliveryOutbox.id }).from(leadDeliveryOutbox).where(and(
+      eq(leadDeliveryOutbox.id, outboxId), pendingTerminalAlert(),
+      eq(leadDeliveryOutbox.leaseToken, leaseToken), gt(leadDeliveryOutbox.leaseExpiresAt, now)
+    )).limit(1)
+    return rows.length === 1
+  }
+
   async function markOutboxDelivered(
     outboxId: string,
     leaseToken: string,
     providerMessageId?: string | null,
     now = new Date()
   ): Promise<OutboxMutationResult> {
-    const [updatedRows, refreshedLeads] = await database.batch([
+    const [, updatedRows, refreshedLeads] = await database.batch([
+      lockLeadForOutbox(outboxId),
       database
         .update(leadDeliveryOutbox)
         .set({
@@ -429,7 +478,8 @@ export function createLeadRepository(database: LeadDatabase) {
           and(
             eq(leadDeliveryOutbox.id, outboxId),
             eq(leadDeliveryOutbox.status, "processing"),
-            eq(leadDeliveryOutbox.leaseToken, leaseToken)
+            eq(leadDeliveryOutbox.leaseToken, leaseToken),
+            gt(leadDeliveryOutbox.leaseExpiresAt, now)
           )
         )
         .returning({ leadId: leadDeliveryOutbox.leadId }),
@@ -453,7 +503,8 @@ export function createLeadRepository(database: LeadDatabase) {
     input: RetryOutboxInput,
     now = new Date()
   ): Promise<OutboxMutationResult> {
-    const [updatedRows, refreshedLeads] = await database.batch([
+    const [, updatedRows, refreshedLeads] = await database.batch([
+      lockLeadForOutbox(outboxId),
       database
         .update(leadDeliveryOutbox)
         .set({
@@ -468,7 +519,8 @@ export function createLeadRepository(database: LeadDatabase) {
           and(
             eq(leadDeliveryOutbox.id, outboxId),
             eq(leadDeliveryOutbox.status, "processing"),
-            eq(leadDeliveryOutbox.leaseToken, leaseToken)
+            eq(leadDeliveryOutbox.leaseToken, leaseToken),
+            gt(leadDeliveryOutbox.leaseExpiresAt, now)
           )
         )
         .returning({ leadId: leadDeliveryOutbox.leadId }),
@@ -492,22 +544,25 @@ export function createLeadRepository(database: LeadDatabase) {
     input: DeadLetterOutboxInput,
     now = new Date()
   ): Promise<OutboxMutationResult> {
-    const [updatedRows, refreshedLeads] = await database.batch([
+    const [, updatedRows, refreshedLeads] = await database.batch([
+      lockLeadForOutbox(outboxId),
       database
         .update(leadDeliveryOutbox)
         .set({
           status: "dead_letter",
           deadLetteredAt: now,
-          lastErrorCode: input.errorCode,
-          leaseToken: null,
-          leaseExpiresAt: null,
+          lastErrorCode: pendingTerminalError(input.errorCode),
+          // Keep this worker's lease for the alert-only phase. Failed publication
+          // remains recoverable after lease expiry, but can never resume sending.
+          nextAttemptAt: now,
           updatedAt: now,
         })
         .where(
           and(
             eq(leadDeliveryOutbox.id, outboxId),
             eq(leadDeliveryOutbox.status, "processing"),
-            eq(leadDeliveryOutbox.leaseToken, leaseToken)
+            eq(leadDeliveryOutbox.leaseToken, leaseToken),
+            gt(leadDeliveryOutbox.leaseExpiresAt, now)
           )
         )
         .returning({ leadId: leadDeliveryOutbox.leadId }),
@@ -523,6 +578,24 @@ export function createLeadRepository(database: LeadDatabase) {
           leadStatus: refreshedLead?.status,
         }
       : { updated: false }
+  }
+
+  async function markTerminalAlertPublished(outboxId: string, leaseToken: string, now = new Date()) {
+    const rows = await database.update(leadDeliveryOutbox).set({
+      lastErrorCode: sql`substring(${leadDeliveryOutbox.lastErrorCode} from ${TERMINAL_ALERT_PREFIX.length + 1}::integer)`,
+      leaseToken: null, leaseExpiresAt: null, updatedAt: now,
+    }).where(and(eq(leadDeliveryOutbox.id, outboxId), pendingTerminalAlert(),
+      eq(leadDeliveryOutbox.leaseToken, leaseToken), gt(leadDeliveryOutbox.leaseExpiresAt, now)
+    )).returning({ id: leadDeliveryOutbox.id })
+    return rows.length === 1
+  }
+
+  function lockLeadForOutbox(outboxId: string) {
+    // All multi-row transactions take the lead lock before the outbox lock,
+    // matching retention and avoiding opposing completion/retention lock order.
+    return database.select({ id: leadSubmissions.id }).from(leadSubmissions)
+      .where(sql`${leadSubmissions.id} = (SELECT ${leadDeliveryOutbox.leadId} FROM ${leadDeliveryOutbox} WHERE ${leadDeliveryOutbox.id} = ${outboxId})`)
+      .for("update")
   }
 
   function refreshLeadStatusForOutbox(outboxId: string, now: Date) {
@@ -629,46 +702,39 @@ export function createLeadRepository(database: LeadDatabase) {
     cutoff: Date,
     limit = DEFAULT_RETENTION_BATCH_SIZE
   ): Promise<string[]> {
-    const candidates = database
-      .select({ id: leadSubmissions.id })
-      .from(leadSubmissions)
-      .where(
-        and(
-          isNull(leadSubmissions.redactedAt),
-          lte(leadSubmissions.redactAfter, cutoff)
-        )
+    /* Retire work and redact in one statement/transaction. A provider call that
+     * already passed its last lease check may finish externally; its invalidated
+     * lease cannot restore fields or commit delivery state after this transaction.
+     * Pending terminal alerts contain no inquiry body and retain their event data.
+     */
+    const result = await database.execute<{ id: string }>(sql`
+      WITH candidates AS MATERIALIZED (
+        SELECT id FROM lead_submissions l
+        WHERE (redacted_at IS NULL AND (redact_after <= ${cutoff.toISOString()}::timestamptz OR delete_after <= ${cutoff.toISOString()}::timestamptz))
+          OR (redacted_at IS NOT NULL AND EXISTS (SELECT 1 FROM lead_delivery_outbox o WHERE o.lead_id = l.id AND o.status IN ('pending', 'retry_scheduled', 'processing')))
+        ORDER BY redact_after LIMIT ${Math.max(1, Math.min(limit, 5_000))}
+        FOR UPDATE SKIP LOCKED
+      ), retired AS (
+        UPDATE lead_delivery_outbox o SET status = 'dead_letter',
+          dead_lettered_at = COALESCE(o.dead_lettered_at, ${cutoff.toISOString()}::timestamptz),
+          last_error_code = CASE WHEN o.status = 'dead_letter' THEN o.last_error_code ELSE 'retention_expired' END,
+          lease_token = NULL, lease_expires_at = NULL, updated_at = ${cutoff.toISOString()}::timestamptz
+        FROM candidates c WHERE o.lead_id = c.id AND o.status <> 'delivered'
+        RETURNING o.id
       )
-      .orderBy(asc(leadSubmissions.redactAfter))
-      .limit(Math.max(1, Math.min(limit, 5_000)))
-      .for("update", { skipLocked: true })
-
-    const redacted = await database
-      .update(leadSubmissions)
-      .set({
-        requestFingerprint: null,
-        name: null,
-        company: null,
-        email: null,
-        normalizedEmail: null,
-        role: null,
-        buyerType: null,
-        siteType: null,
-        timeline: null,
-        capacityRange: null,
-        constraints: null,
-        message: null,
-        source: null,
-        ipHash: null,
-        turnstileHostname: null,
-        turnstileAction: null,
-        turnstileChallengeAt: null,
-        redactedAt: sql`now()`,
-        updatedAt: sql`now()`,
-      })
-      .where(sql`${leadSubmissions.id} IN (${candidates})`)
-      .returning({ id: leadSubmissions.id })
-
-    return redacted.map(({ id }) => id)
+      UPDATE lead_submissions l SET
+        request_fingerprint = NULL, name = NULL, company = NULL, email = NULL, normalized_email = NULL,
+        role = NULL, buyer_type = NULL, site_type = NULL, timeline = NULL, capacity_range = NULL,
+        constraints = NULL, message = NULL, source = NULL, ip_hash = NULL, turnstile_hostname = NULL,
+        turnstile_action = NULL, turnstile_challenge_at = NULL,
+        redacted_at = COALESCE(l.redacted_at, ${cutoff.toISOString()}::timestamptz), updated_at = ${cutoff.toISOString()}::timestamptz,
+        status = CASE
+          WHEN NOT EXISTS (SELECT 1 FROM lead_delivery_outbox o WHERE o.lead_id = l.id AND o.status <> 'delivered') THEN 'delivered'::lead_status
+          WHEN EXISTS (SELECT 1 FROM lead_delivery_outbox o WHERE o.lead_id = l.id AND o.status = 'delivered') THEN 'partially_delivered'::lead_status
+          ELSE 'dead_letter'::lead_status END
+      FROM candidates c WHERE l.id = c.id RETURNING l.id
+    `)
+    return result.rows.map(row => row.id)
   }
 
   async function deleteExpiredLeads(
@@ -697,9 +763,12 @@ export function createLeadRepository(database: LeadDatabase) {
     getLeadDeliveryContext,
     claimNextDueOutbox,
     claimOutboxById,
+    isOutboxSendAllowed,
+    isOutboxAlertAllowed,
     markOutboxDelivered,
     rescheduleOutbox,
     markOutboxDeadLetter,
+    markTerminalAlertPublished,
     listDueOrLeaseExpiredOutbox,
     getOldestDueOutboxAge,
     redactExpiredLeads,
@@ -728,6 +797,10 @@ export const claimOutboxById = (
   now: Date,
   leaseMs: number
 ) => repository().claimOutboxById(outboxId, now, leaseMs)
+
+export const isOutboxSendAllowed = (outboxId: string, leaseToken: string, now?: Date) => repository().isOutboxSendAllowed(outboxId, leaseToken, now)
+export const isOutboxAlertAllowed = (outboxId: string, leaseToken: string, now?: Date) => repository().isOutboxAlertAllowed(outboxId, leaseToken, now)
+export const markTerminalAlertPublished = (outboxId: string, leaseToken: string, now?: Date) => repository().markTerminalAlertPublished(outboxId, leaseToken, now)
 
 export const markOutboxDelivered = (
   outboxId: string,

@@ -412,9 +412,12 @@ export function EngineeringSession(props: FacilityCanvasProps & { onDpr: (value:
       configure(); scheduler.current?.request()
     }
     state.assetFailure = fail
+    // The outer startup deadline owns the initial plain overview through its
+    // first visible frame. It is not a separately requested assembly change.
+    const initialOverview = !state.initialPresented && requested.kind === "overview" && !requested.system && !requested.section && !requested.detail && !requested.equipmentId
     // Loaded rack joints use visible active time. A hidden tab must not roll
     // their transforms back merely because an asset-transfer deadline elapsed.
-    if (!state.rackMotion || viewAsset(requested) !== viewAsset(state.view)) state.deadlineTimer = setTimeout(() => fail("The requested view did not become ready within eight seconds."), 8_000)
+    if (!initialOverview && (!state.rackMotion || viewAsset(requested) !== viewAsset(state.view))) state.deadlineTimer = setTimeout(() => fail("The requested view did not become ready within eight seconds."), 8_000)
     if (viewAsset(requested) === viewAsset(state.view)) {
       const model = state.model!
       const parts = requested.kind === "specimen" && !state.rackMotion ? model.metadata.specimen!.poses[requested.pose].transforms.map(transform => ({ object: model.ids.get(transform.id)!, from: model.ids.get(transform.id)!.position.clone(), to: new Vector3(...transform.position), fromVisible: model.ids.get(transform.id)!.visible, visible: transform.visible })) : []

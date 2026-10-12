@@ -15,9 +15,9 @@ Finish source/test/harness changes, serialize the production build, then initial
 ```sh
 # Local qualification uses the documented public test site key from .env.example.
 # External-base-URL Playwright runs do not inject this into an existing build.
-export FACILITY_ASSET_RELEASE=facility-v10 FACILITY_3D_MODE=auto-adaptive
-NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA \
-  npm run build
+export FACILITY_ASSET_RELEASE=facility-v12 FACILITY_3D_MODE=auto-adaptive
+export NEXT_PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA
+npm run build
 node scripts/qa/candidate.mjs init --ledger build/qa/rc-01.json
 node scripts/qa/candidate.mjs record --ledger build/qa/rc-01.json --gate source-quality --owner engineering --status pass --evidence build/qa/local/summary.json
 node scripts/qa/candidate.mjs check --ledger build/qa/rc-01.json --scope local
@@ -29,7 +29,7 @@ Initialization requires the existing production build attestation. Identity incl
 
 Harness hashing excludes generated Python `__pycache__` directories and adjacent `.pyc`/`.pyo` bytecode files. Running the Blender/Python tools must not change candidate identity merely by creating interpreter caches. Python source, ordinary fixture files, scripts, workflows and test configuration remain hashed; changing them still invalidates qualification.
 
-Keep the explicit release/mode environment for every qualification command. The enterprise candidate aligns the repository's unconfigured default with v10; v11 remains an unregistered art candidate. An environment that differs from the attested release, mode, verification, CSP or observability configuration correctly fails the identity guard. Selecting a local candidate does not change a deployment's existing rollback setting.
+Keep the explicit release/mode environment for every qualification command. The current repository default and enterprise workflow select registered `facility-v12`; older release selections belong to their historical candidates. An environment that differs from the attested release, mode, verification, CSP or observability configuration correctly fails the identity guard. Selecting a local candidate does not change a deployment's existing rollback setting.
 
 Every gate has an owner and one of `pass`, `fail`, `not-run`, `blocked`, or `superseded`. Each recording appends an attempt and hashes its artifacts; previous failed evidence remains required and checked. A failing/blocked gate needs `--resolution` before a passing attempt. Evidence must be immutable per attempt: save new paths instead of overwriting a prior log. A local-only ledger cannot mark external qualification passed. Local readiness and public readiness are separate outputs; a green command is not a blanket release approval.
 
@@ -69,8 +69,10 @@ The reviewer inspects composition, text, focus/controls, seams, grille depth, hi
 
 ## Performance and operational boundaries
 
-Use the existing five-run full performance protocol with unchanged metric settings and thresholds. Preserve 180KiB initial Brotli JS, 1.5MiB through-ready transfer, LCP≤2.5s, TBT≤200ms, CLS≤0.1 and renderer/asset budgets. Measure explicit specimen transfer separately; count every automatic request. Keep raw failures and traces. M5 mobile-size runs are not phone GPU evidence.
+Use the existing five-run full performance protocol with unchanged metric settings and thresholds. Preserve 180KiB initial Brotli JS, LCP≤2.5s, TBT≤200ms, CLS≤0.1 and renderer/asset budgets. Contact has stricter LCP≤2.0s and CLS≤0.05 limits. Ordinary automatic transfer is capped at 1.5MiB; cinematic Home retains its 4MiB desktop and 2MiB mobile ceilings. The [premium matrix runbook](premium-civic-implementation/qa-runbook.md) specifies the full 130-capture and cumulative full-scroll protocol. Measure explicit specimen transfer separately; count every automatic request. Keep raw failures and traces. M5 mobile-size runs are not phone GPU evidence.
 
 For this M5 Pro qualification, explicitly select `FACILITY_ANGLE=metal` for the Lighthouse collector, and `FACILITY_HEADED=1 FACILITY_ANGLE=metal` for graphics measurement and poster capture. Verify the actual Apple M5 Pro/Metal backend in the report. The Lighthouse addition preserves its simulated throttling, viewports, five-run counts and budget thresholds; backend diagnostics are collected after each audit without adding a canvas or request to the measured document. A missing or wrong requested backend fails qualification while retaining the completed report and traces. Record these launch settings when comparing historical runs that used a default backend. Native WebKit and Simulator evidence use their platform backend and identify diagnostic APIs that are unavailable.
 
 The contact staging workflow now requires explicit matching origin authorization, a database and test recipient; missing configuration fails instead of skipping. Current field labels are used and artifacts retained. **It was not executed in local preparation.** Real delivery, actual processor/retention configuration, signing-key rotation, deployment rollback, physical phones, manual assistive technology, and representative visitors remain external gates. Native local Safari and Simulator have their own local ledger entries and cannot be inferred from Chrome screenshots.
+
+Verification of the existing providers and approved delivery/retention repairs remains separate from the new monitoring service and scheduler explicitly deferred in [the release decision](cinematic-production-release.md). The generic enterprise ledger does not change that scope decision. Keep unperformed evidence explicit; do not add the deferred monitoring system merely to complete a ledger entry.

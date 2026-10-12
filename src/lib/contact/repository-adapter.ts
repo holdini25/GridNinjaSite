@@ -9,6 +9,10 @@ import {
   listDueOrLeaseExpiredOutbox,
   markOutboxDeadLetter,
   markOutboxDelivered,
+  isOutboxSendAllowed,
+  isOutboxAlertAllowed,
+  markTerminalAlertPublished,
+  TERMINAL_ALERT_PREFIX,
   redactExpiredLeads,
   rescheduleOutbox,
 } from "@/server/leads/repository"
@@ -25,6 +29,9 @@ export const deliveryOperationsRepository: DeliveryOperationsRepository = {
   async claimOutboxById(id, now, leaseMs) {
     return mapClaim(await claimOutboxById(id, now, leaseMs))
   },
+  isOutboxSendAllowed,
+  isOutboxAlertAllowed,
+  markTerminalAlertPublished,
   async markOutboxDelivered(id, leaseToken, providerMessageId) {
     const result = await markOutboxDelivered(
       id,
@@ -37,8 +44,8 @@ export const deliveryOperationsRepository: DeliveryOperationsRepository = {
     const result = await rescheduleOutbox(id, leaseToken, update)
     return result.updated
   },
-  async markOutboxDeadLetter(id, leaseToken, update) {
-    const result = await markOutboxDeadLetter(id, leaseToken, update)
+  async markOutboxDeadLetter(id, leaseToken, update, now) {
+    const result = await markOutboxDeadLetter(id, leaseToken, update, now)
     return result.updated
   },
   async getOldestDueOutboxAge(now) {
@@ -56,7 +63,7 @@ export const deliveryOperationsRepository: DeliveryOperationsRepository = {
   },
 }
 
-function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
+export function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
   if (!context) return null
 
   const { delivery, lead } = context
@@ -65,12 +72,25 @@ function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
     throw new Error("ClaimedDeliveryMissingLeaseToken")
   }
 
+  const lease = {
+    id: delivery.id, leadId: delivery.leadId, channel: delivery.channel,
+    attemptCount: delivery.attemptCount, leaseToken: delivery.leaseToken,
+    idempotencyKey: delivery.idempotencyKey,
+  }
+  if (delivery.status === "dead_letter") {
+    if (!delivery.deadLetteredAt || !delivery.lastErrorCode?.startsWith(TERMINAL_ALERT_PREFIX)) throw new Error("ClaimedDeliveryMissingTerminalAlert")
+    return { kind: "alert", delivery: lease, errorCode: delivery.lastErrorCode.slice(TERMINAL_ALERT_PREFIX.length), terminalAt: delivery.deadLetteredAt }
+  }
+
   if (
     !lead.name ||
     !lead.company ||
     !lead.email ||
     !lead.source
   ) {
+    // Retention may commit between the claim statement and context read. It has
+    // already invalidated this lease and retired the work; do not poison-retry it.
+    if (lead.redactedAt) return null
     throw new Error("ClaimedDeliveryLeadWasRedacted")
   }
 
@@ -89,14 +109,8 @@ function mapClaim(context: LeadDeliveryContext | null): ClaimedDelivery | null {
   }
 
   return {
-    delivery: {
-      id: delivery.id,
-      leadId: delivery.leadId,
-      channel: delivery.channel,
-      attemptCount: delivery.attemptCount,
-      leaseToken: delivery.leaseToken,
-      idempotencyKey: delivery.idempotencyKey,
-    },
+    kind: "send",
+    delivery: lease,
     lead: {
       id: lead.id,
       schemaVersion: lead.schemaVersion,
