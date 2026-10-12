@@ -45,6 +45,29 @@ the deployed site.
 
 ## Completed checks and retained failures
 
+After local commit `c713a94`, the canonical native Chrome observation completed
+on the unchanged candidate11 application, build and harness. All 181 samples
+cover 900.004 seconds of visible, active operation on the actual Apple M5 Pro
+Metal renderer. Cadence-compliant intervals total 890.003 seconds, exceeding the
+required 95%; two intervals around a quality-tier transition lack a full rolling
+window and receive no cadence credit. No browser errors, visibility/context
+events or retained geometry/texture growth occurred. Normal background policies
+remained enabled; owned browser cleanup and compute-lock release are verified.
+Independent raw-sample and start/end pixel reviews pass. This closes the bounded
+local assets/mechanics/lifecycle gate when combined with the explicitly reviewed
+historical checks below. It does not qualify other browsers, physical devices,
+hosted performance or public release. Evidence is under
+`candidate-11/native-chrome-sustained-01/`, `native-sustained-execution-01/` and
+`native-sustained-audit-01/`; `native-lifecycle-qualification-01.json` binds them.
+
+Native Safari 27 also completed a partial current-build inspection: Home/Civic
+rendering and caption, Pause, sample navigation, rack door/tray/service inspection,
+and focus return. The Mac locked during attempted tray retraction, whose outcome
+is unverified. Remaining Safari checks and all three Simulator profiles remain
+blocked; no Simulator was booted. The partial action, accessibility-tree and
+image evidence is preserved under `candidate-11/native-ui-01/`. Its session
+completion records identity verification and lock cleanup, not a Safari pass.
+
 Candidate11 changes only `scripts/qa/visual-baselines.mjs`: Home now waits for
 its decoded cinematic poster and Civic v2 still, while Demo retains the existing
 facility readiness checks. The fixture comment now documents compact geometry.
@@ -81,8 +104,9 @@ does not provide human golden-baseline approval or live-provider appearance chec
 The separate headed visibility and renderer/resource results remain explicitly
 reviewed historical evidence. Home static HTML and Home/Demo application chunks
 support the bounded source/delivery review; Demo is dynamic and has no static HTML
-snapshot. No new cadence, memory or native sustained measurement is claimed.
-The required 900-second genuinely foreground native check remains outstanding.
+snapshot. These retained results are not fresh candidate11 executions. The new
+900-second native observation above supplies the previously missing sustained
+evidence; its application allocation/JavaScript heap data is not GPU residency.
 
 Candidate10 passes brand validation, lint, typecheck, the complete 1327-test unit
 suite (including all 57 form tests), twelve disposable PostgreSQL integration
@@ -169,8 +193,8 @@ Contact document is also a different build. These observations establish a hosti
 reference, not current-candidate performance, production configuration or rollback
 qualification. No scripts were executed, provider endpoints contacted or forms
 submitted during the HTTP reads. Evidence is under
-`candidate-11/hosting-reference-01/`. Native Safari was retried and still reports
-the Mac locked; the existing unlock request remains pending.
+`candidate-11/hosting-reference-01/`. Native access was locked at this point;
+the later partial Safari session is recorded above.
 
 Historical candidate08 brand validation, lint, typecheck, 1327 unit tests, twelve disposable PostgreSQL
 integration tests, production dependency audit and production build pass. No
@@ -295,10 +319,10 @@ mobile model states. They found the Assessment link-spacing issue fixed in
 candidate09. The capture manifest retains its original `unreviewed` state;
 separate reviews do not imply human approval or a new golden baseline.
 
-Native Safari inspection could not start because the computer-control tool
-reported that the Mac was locked. Simulator devices are available but remain
-shut down; no Simulator or physical-device result is claimed. Native UI checks
-require the user to unlock the Mac.
+Earlier native Safari attempts could not start while the Mac was locked. The
+later candidate11 session made the partial progress recorded above before access
+was lost again. Simulator devices remain untested; no physical-device result is
+claimed. Completing native UI checks requires the Mac to be unlocked again.
 
 The older artwork-only results in the hybrid README and `build/civic/` describe
 the prior CSS/source state. They remain useful provenance and comparison history,
@@ -328,3 +352,9 @@ deferred under the existing release decision. Current-candidate hosted delivery,
 production configuration, physical devices, manual accessibility and reader
 judgments are not established by this local work. No real inquiry, provider
 rehearsal, credential change, migration or deployment has been performed here.
+
+The user authorized a draft PR and non-production preview after target verification,
+then asked to leave that preview pending while Vercel sign-in is unavailable.
+Authorization is retained for that scope. Before any branch push, verify the
+project's production/custom-environment branch mapping, preview protection and
+normal root Next.js `npm run build` lifecycle. No push, PR or deployment has occurred.
