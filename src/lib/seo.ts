@@ -10,7 +10,7 @@ import {
 import { getSeoRoute, type PublicPath } from "@/seo/route-manifest"
 
 export const socialImageAlt =
-  "GridNinja — proof-backed virtual capacity for AI data centers"
+  "GridNinja emblem and wordmark on a dark card introducing bounded capacity decision assessments"
 
 export const openGraphImage = {
   url: "/opengraph-image",

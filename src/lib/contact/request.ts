@@ -17,7 +17,7 @@ export class ContactPayloadTimeoutError extends Error {
 }
 
 export async function readBodyLimited(
-  request: Request,
+  request: Pick<Request, "headers" | "body">,
   maximum = CONTACT_MAX_BODY_BYTES,
   timeoutMs = 5_000
 ) {

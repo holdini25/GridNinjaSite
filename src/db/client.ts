@@ -3,7 +3,10 @@ import "server-only"
 import { neon } from "@neondatabase/serverless"
 import { drizzle } from "drizzle-orm/neon-http"
 
-import * as schema from "@/db/schema"
+import * as coreSchema from "@/db/schema"
+import * as observationsSchema from "@/db/observations-schema"
+
+const schema = { ...coreSchema, ...observationsSchema }
 
 export function createDatabase(databaseUrl: string) {
   const client = neon(databaseUrl)

@@ -9,6 +9,7 @@ const describeWithPostgres = connectionString ? describe : describe.skip
 
 describeWithPostgres("contact intake PostgreSQL migration", () => {
   const client = new Client({ connectionString })
+  const attemptedLead = randomUUID(), attemptedOutbox = randomUUID(), acceptedLead = randomUUID(), acceptedOutbox = randomUUID()
 
   beforeAll(async () => {
     await client.connect()
@@ -19,10 +20,24 @@ describeWithPostgres("contact intake PostgreSQL migration", () => {
       )
       await client.query(migration)
     }
+    await insertLead(client, attemptedLead)
+    await insertLead(client, acceptedLead)
+    await client.query("INSERT INTO lead_delivery_outbox(id,lead_id,channel,idempotency_key,status,attempt_count) VALUES ($1,$2,'internal_email',$3,'retry_scheduled',1),($4,$5,'internal_email',$6,'delivered',1)", [attemptedOutbox, attemptedLead, `legacy/${attemptedLead}`, acceptedOutbox, acceptedLead, `legacy/${acceptedLead}`])
+    await client.query(await readFile(new URL("../../drizzle/0002_delivery_safeguards.sql", import.meta.url), "utf8"))
   })
 
   afterAll(async () => {
     await client.end()
+  })
+
+  it("quarantines unresolved historical sends without inventing clocks or recipient evidence", async () => {
+    const attempted = (await client.query("SELECT * FROM lead_delivery_outbox WHERE id = $1", [attemptedOutbox])).rows[0]
+    expect(attempted).toMatchObject({ status: "dead_letter", attempt_count: 1, first_provider_attempt_at: null,
+      provider_request_body: null, provider_account_ref: null, review_reason: "legacy_attempt_unknown", last_error_code: "alert_pending:legacy_attempt_unknown" })
+    expect(attempted.review_required_at).toBeInstanceOf(Date)
+    const accepted = (await client.query("SELECT * FROM lead_delivery_outbox WHERE id = $1", [acceptedOutbox])).rows[0]
+    expect(accepted).toMatchObject({ status: "delivered", review_required_at: null, first_provider_attempt_at: null })
+    expect((await client.query("SELECT count(*) FROM lead_provider_events")).rows[0].count).toBe("0")
   })
 
   it("rolls back a lead when its required outbox insert fails", async () => {

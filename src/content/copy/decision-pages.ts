@@ -6,7 +6,7 @@ export const decisionPages = {
     sections: [
       { title: "The offer today", body: "A bounded, paid capacity decision assessment using authorized historical inputs. Scope, availability, reviewers, price, schedule, and deliverables are agreed before work begins.", link: { label: "Review the assessment", href: "/assessment" } },
       { title: "Demonstrated work and its limits", body: "The public sample shows a synthetic assessment record, model screening outcomes, explicit unknowns, and a versioned decision brief. It is not evidence of site deployment, customer performance, independent certification, or operating authority.", link: { label: "Inspect the synthetic example", href: "/demo" } },
-      { title: "Establish the delivery team during scoping", body: "Named team biographies and verified customer case studies are not yet published. Before a paid engagement, establish the accountable delivery lead, technical reviewer, relevant experience, availability, and customer decision owner. Public credentials will be added only with supporting evidence and permission." },
+      { id: "delivery-team", title: "Delivery responsibility", body: "Confirm the accountable delivery lead, technical reviewer and customer decision owner before a paid engagement." },
       { title: "The development direction", body: "GridNinja is developing an AI Data Center Virtual Capacity Control Plane, a runtime-assured virtual capacity engine. The aim is safe, usable, auditable capacity through inside-the-fence orchestration. Live integration, Shadow Mode operations, and bounded autonomy remain separate steps requiring demonstrated capability, site evidence, and explicit authority.", link: { label: "Understand the platform direction", href: "/platform" } },
     ],
   },

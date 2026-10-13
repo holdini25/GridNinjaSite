@@ -127,6 +127,16 @@ export const leadDeliveryOutbox = pgTable(
       withTimezone: true,
       mode: "date",
     }),
+    preparedRequestVersion: integer("prepared_request_version"),
+    providerRequestBody: text("provider_request_body"),
+    providerRequestBodySha256: varchar("provider_request_body_sha256", { length: 64 }),
+    providerTargetUrl: text("provider_target_url"),
+    providerAccountRef: varchar("provider_account_ref", { length: 64 }),
+    providerDestinationRef: varchar("provider_destination_ref", { length: 64 }),
+    firstProviderAttemptAt: timestamp("first_provider_attempt_at", { withTimezone: true, mode: "date" }),
+    reviewRequiredAt: timestamp("review_required_at", { withTimezone: true, mode: "date" }),
+    reviewReason: varchar("review_reason", { length: 64 }),
+    // Legacy transport status means provider acceptance, never recipient delivery.
     deliveredAt: timestamp("delivered_at", {
       withTimezone: true,
       mode: "date",
@@ -172,3 +182,22 @@ export type LeadStatus = (typeof leadStatus.enumValues)[number]
 export type LeadDeliveryChannel =
   (typeof leadDeliveryChannel.enumValues)[number]
 export type LeadDeliveryStatus = (typeof leadDeliveryStatus.enumValues)[number]
+
+// A reservation records a possible external attempt, not proof that HTTP occurred.
+// It contains no inquiry body; retention clears snapshots, deletion cascades this evidence.
+export const leadProviderAttempts = pgTable("lead_provider_attempts", {
+  id: uuid("id").primaryKey(),
+  outboxId: uuid("outbox_id").notNull().references(() => leadDeliveryOutbox.id, { onDelete: "cascade" }),
+  leaseToken: uuid("lease_token").notNull(),
+  claimOrdinal: integer("claim_ordinal").notNull(),
+  reservedAt: timestamp("reserved_at", { withTimezone: true, mode: "date" }).notNull(),
+  providerAccountRef: varchar("provider_account_ref", { length: 64 }).notNull(),
+  resultCategory: varchar("result_category", { length: 32 }),
+  providerMessageId: varchar("provider_message_id", { length: 128 }),
+  resultCode: varchar("result_code", { length: 64 }),
+  resultHttpStatus: integer("result_http_status"),
+  completedAt: timestamp("completed_at", { withTimezone: true, mode: "date" }),
+}, (table) => [
+  uniqueIndex("lead_provider_attempts_lease_uidx").on(table.outboxId, table.leaseToken),
+  index("lead_provider_attempts_message_idx").on(table.providerAccountRef, table.providerMessageId),
+])

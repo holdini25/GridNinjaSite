@@ -19,14 +19,14 @@ export function sampleBriefHref(topic?: PublicTopic) {
   return `${url.pathname}${url.search}${url.hash}`
 }
 
-export const decisionPageJourney: Partial<Record<string, { source?: LeadSource; topic?: PublicTopic }>> = {
-  "/platform": { source: "platform-hero" },
-  "/proof": { source: "proof-hero" },
-  "/proof/proof-pack": { source: "proof-pack-hero" },
-  "/about": { source: "about-hero" },
-  "/why-gridninja": { source: "why-gridninja-contextual" },
+export const decisionPageJourney: Partial<Record<string, { source?: LeadSource; finalSource?: LeadSource; topic?: PublicTopic }>> = {
+  "/platform": { source: "platform-hero", finalSource: "platform-final" },
+  "/proof": { source: "proof-hero", finalSource: "proof-final" },
+  "/proof/proof-pack": { source: "proof-pack-hero", finalSource: "proof-pack-final" },
+  "/about": { source: "about-hero", finalSource: "about-final" },
+  "/why-gridninja": { source: "why-gridninja-contextual", finalSource: "why-gridninja-final" },
   "/solutions/ai-cloud": { source: "ai-cloud-page", topic: "ai-cloud" },
   "/solutions/colocation": { source: "colocation-page", topic: "colocation" },
-  "/solutions/bridge-power": { source: "bridge-power-page", topic: "power" },
-  "/dcii": { source: "dcii-hero" },
+  "/solutions/bridge-power": { source: "bridge-power-page", finalSource: "bridge-power-final", topic: "power" },
+  "/dcii": { source: "dcii-hero", finalSource: "dcii-final" },
 }

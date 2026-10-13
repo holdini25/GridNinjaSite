@@ -3,15 +3,18 @@ import { readFile } from "node:fs/promises"
 import { Pool, type PoolClient } from "pg"
 import { drizzle } from "drizzle-orm/neon-http"
 import type { NeonQueryFunction } from "@neondatabase/serverless"
-import * as databaseSchema from "@/db/schema"
+import * as leadSchema from "@/db/schema"
+import * as observationsSchema from "@/db/observations-schema"
+const databaseSchema = { ...leadSchema, ...observationsSchema }
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest"
 import { createLeadRepository } from "@/server/leads/repository"
 import { mapClaim } from "@/lib/contact/repository-adapter"
 import { processOneLeadDelivery, type DeliveryOperationsRepository } from "@/lib/contact/operations"
-import { deliverToConfiguredProvider } from "@/lib/contact/providers"
+import { requestDigest } from "@/lib/contact/provider-request"
+import { deliverToConfiguredProvider, prepareProviderRequest } from "@/lib/contact/providers"
 
 vi.mock("server-only", () => ({}))
-vi.mock("@/lib/contact/providers", () => ({ deliverToConfiguredProvider: vi.fn() }))
+vi.mock("@/lib/contact/providers", async (original) => ({ ...await original<typeof import("@/lib/contact/providers")>(), deliverToConfiguredProvider: vi.fn() }))
 vi.mock("@/lib/contact/log", () => ({ logContactEvent: vi.fn() }))
 
 const connectionString = process.env.TEST_DATABASE_URL
@@ -50,24 +53,31 @@ function localDatabase(pool: Pool) {
 describeDatabase("deployed-schema delivery retirement and retention", () => {
   const schema = `contact_delivery_${randomUUID().replaceAll("-", "")}`
   const admin = new Pool({ connectionString })
-  const pool = new Pool({ connectionString, options: `-c search_path=${schema},public -c statement_timeout=10000` })
+  const pool = new Pool({ connectionString, application_name: schema, options: `-c search_path=${schema},public -c statement_timeout=10000` })
   const database = localDatabase(pool)
   const repository = createLeadRepository(database)
-  const now = new Date("2026-10-11T12:00:00Z")
+  const now = new Date()
   const later = new Date(now.getTime() + 31_000)
 
   beforeAll(async () => {
     await admin.query(`CREATE SCHEMA "${schema}"`)
-    for (const name of ["0000_contact_intake.sql", "0001_contact_intake_v2.sql"]) {
+    for (const name of ["0000_contact_intake.sql", "0001_contact_intake_v2.sql", "0002_delivery_safeguards.sql"]) {
       const migration = (await readFile(new URL(`../../drizzle/${name}`, import.meta.url), "utf8")).replaceAll('"public".', `"${schema}".`)
       await pool.query(migration)
     }
   })
   beforeEach(async () => {
     vi.clearAllMocks()
+    vi.stubEnv("RESEND_API_KEY", "synthetic-token")
+    vi.stubEnv("RESEND_ACCOUNT_BINDING_REF", "verified-fixture")
+    vi.stubEnv("RESEND_APPROVED_KEY_SHA256", requestDigest("synthetic-token"))
+    vi.stubEnv("RESEND_ACCOUNT_REF", "test-account")
+    vi.stubEnv("LEAD_EMAIL_FROM", "test@example.test")
+    vi.stubEnv("LEAD_EMAIL_TO", "recipient@example.test")
     await pool.query("TRUNCATE lead_submissions CASCADE")
   })
   afterAll(async () => {
+    vi.unstubAllEnvs()
     await pool.end()
     await admin.query(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`)
     await admin.end()
@@ -91,6 +101,7 @@ describeDatabase("deployed-schema delivery retirement and retention", () => {
     return {
       claimNextDueOutbox: async (time, duration) => mapClaim(await repository.claimNextDueOutbox(time, duration)),
       claimOutboxById: async (id, time, duration) => mapClaim(await repository.claimOutboxById(id, time, duration)),
+      prepareAndReserveProviderAttempt: repository.prepareAndReserveProviderAttempt, recordProviderAttemptResult: repository.recordProviderAttemptResult,
       isOutboxSendAllowed: repository.isOutboxSendAllowed, isOutboxAlertAllowed: repository.isOutboxAlertAllowed,
       markTerminalAlertPublished: repository.markTerminalAlertPublished,
       markOutboxDelivered: async (id, token, providerId) => (await repository.markOutboxDelivered(id, token, providerId, clock)).updated,
@@ -197,6 +208,22 @@ describeDatabase("deployed-schema delivery retirement and retention", () => {
     }
   })
 
+  it("rolls back frozen-snapshot erasure together with lead PII if retirement fails", async () => {
+    const { id, leadId } = await fixture()
+    const { request } = await reserve(id)
+    await pool.query("UPDATE lead_submissions SET redact_after = now() - interval '1 second' WHERE id = $1", [leadId])
+    await pool.query("CREATE FUNCTION deny_snapshot_retirement() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'test retirement failure'; END $$")
+    await pool.query("CREATE TRIGGER deny_snapshot_retirement BEFORE UPDATE ON lead_delivery_outbox FOR EACH ROW EXECUTE FUNCTION deny_snapshot_retirement()")
+    try {
+      await expect(repository.redactExpiredLeads(new Date())).rejects.toThrow()
+      expect((await pool.query("SELECT name, redacted_at FROM lead_submissions WHERE id = $1", [leadId])).rows[0]).toEqual({ name: "Test Operator", redacted_at: null })
+      expect(await row(id)).toMatchObject({ status: "processing", provider_request_body: request.bodyUtf8, provider_request_body_sha256: request.bodySha256, provider_target_url: request.targetUrl })
+    } finally {
+      await pool.query("DROP TRIGGER deny_snapshot_retirement ON lead_delivery_outbox")
+      await pool.query("DROP FUNCTION deny_snapshot_retirement()")
+    }
+  })
+
   it("claim and retention contend without returning sendable expired work", async () => {
     const { id, leadId } = await fixture({ expires: now })
     const [claim] = await Promise.all([repository.claimOutboxById(id, now, 30_000), repository.redactExpiredLeads(now)])
@@ -220,4 +247,121 @@ describeDatabase("deployed-schema delivery retirement and retention", () => {
       retention.release()
     }
   })
+  async function reserve(id: string) {
+    const claim = await repository.claimOutboxById(id, now, 30_000)
+    const mapped = mapClaim(claim)
+    if (!mapped || mapped.kind !== "send") throw new Error("Expected send claim")
+    const request = prepareProviderRequest({ channel: mapped.delivery.channel, eventId: id, idempotencyKey: mapped.delivery.idempotencyKey, lead: mapped.lead })
+    return { claim: mapped, request, reservation: await repository.prepareAndReserveProviderAttempt(id, mapped.delivery.leaseToken, request) }
+  }
+
+  it("does not freeze a request when expiry commits while preparation waits on the lead lock", async () => {
+    const { id, leadId } = await fixture()
+    const claim = mapClaim(await repository.claimOutboxById(id, now, 30_000))
+    if (!claim || claim.kind !== "send") throw new Error("Expected send claim")
+    const request = prepareProviderRequest({ channel: claim.delivery.channel, eventId: id, idempotencyKey: claim.delivery.idempotencyKey, lead: claim.lead })
+    const retention = await pool.connect()
+    let preparation: ReturnType<typeof repository.prepareAndReserveProviderAttempt> | undefined
+    try {
+      await retention.query("begin")
+      await retention.query("UPDATE lead_submissions SET redact_after = now() - interval '1 second' WHERE id = $1", [leadId])
+      preparation = repository.prepareAndReserveProviderAttempt(id, claim.delivery.leaseToken, request)
+      let waiting = false
+      for (let attempt = 0; attempt < 200; attempt++) {
+        const result = await admin.query("SELECT 1 FROM pg_stat_activity WHERE application_name = $1 AND wait_event_type = 'Lock' AND query LIKE '%WITH eligible_lead AS MATERIALIZED%'", [schema])
+        if (result.rows.length) { waiting = true; break }
+        await new Promise(resolve => setTimeout(resolve, 10))
+      }
+      expect(waiting).toBe(true)
+      // A concurrent retention pass skips the locked lead, then recovers it on
+      // the next pass. Preparation must re-evaluate expiry after the commit.
+      expect(await repository.redactExpiredLeads(new Date())).toEqual([])
+      await retention.query("commit")
+      expect(await preparation).toEqual({ kind: "stale" })
+      expect(await repository.redactExpiredLeads(new Date())).toEqual([leadId])
+      expect(await row(id)).toMatchObject({ provider_request_body: null, provider_target_url: null, lease_token: null, status: "dead_letter" })
+      expect((await pool.query("SELECT count(*) FROM lead_provider_attempts WHERE outbox_id = $1", [id])).rows[0].count).toBe("0")
+    } finally {
+      await retention.query("rollback")
+      await preparation?.catch(() => {})
+      retention.release()
+    }
+  })
+
+  it("only the first same-lease preparation permits a send and preserves original bytes", async () => {
+    const { id } = await fixture()
+    const { claim, request, reservation } = await reserve(id)
+    expect(reservation.kind).toBe("ready")
+    const results = await Promise.all([
+      repository.prepareAndReserveProviderAttempt(id, claim.delivery.leaseToken, request),
+      repository.prepareAndReserveProviderAttempt(id, claim.delivery.leaseToken, request),
+    ])
+    expect(results).toEqual([{ kind: "already_reserved" }, { kind: "already_reserved" }])
+    expect((await pool.query("SELECT count(*) FROM lead_provider_attempts WHERE outbox_id = $1", [id])).rows[0].count).toBe("1")
+    expect((await row(id)).provider_request_body).toBe(request.bodyUtf8)
+  })
+
+  it("grants one permission when two preparations race for the same first lease", async () => {
+    const { id } = await fixture()
+    const claimed = mapClaim(await repository.claimOutboxById(id, now, 30_000))
+    if (!claimed || claimed.kind !== "send") throw new Error("Missing claim")
+    const request = prepareProviderRequest({ channel: claimed.delivery.channel, eventId: id, idempotencyKey: claimed.delivery.idempotencyKey, lead: claimed.lead })
+    const results = await Promise.all([
+      repository.prepareAndReserveProviderAttempt(id, claimed.delivery.leaseToken, request),
+      repository.prepareAndReserveProviderAttempt(id, claimed.delivery.leaseToken, request),
+    ])
+    expect(results.map(result => result.kind).sort()).toEqual(["already_reserved", "ready"])
+  })
+
+  it("keeps original request bytes and clock across a fresh lease after templates change", async () => {
+    const { id } = await fixture(); const first = await reserve(id)
+    if (first.reservation.kind !== "ready") throw new Error("Missing reservation")
+    await repository.rescheduleOutbox(id, first.claim.delivery.leaseToken, { nextAttemptAt: now, errorCode: "provider_timeout" }, now)
+    const next = mapClaim(await repository.claimOutboxById(id, now, 30_000))
+    if (!next || next.kind !== "send") throw new Error("Missing next claim")
+    const body = JSON.stringify({ changedTemplate: true })
+    const second = await repository.prepareAndReserveProviderAttempt(id, next.delivery.leaseToken, { ...first.request, bodyUtf8: body, bodySha256: requestDigest(body) })
+    expect(second.kind).toBe("ready")
+    if (second.kind === "ready") {
+      expect(second.firstAttemptAt).toEqual(first.reservation.firstAttemptAt)
+      expect(second.request).toEqual(first.request)
+    }
+  })
+
+  it("stops stale-clock, changed-account and changed-destination attempts durably", async () => {
+    for (const reason of ["clock", "account", "destination"] as const) {
+      const { id } = await fixture()
+      const { claim, request } = await reserve(id)
+      if (reason === "clock") await pool.query("UPDATE lead_delivery_outbox SET first_provider_attempt_at = now() - interval '23 hours' WHERE id = $1", [id])
+      const changed = { ...request, ...(reason === "account" ? { accountRef: "other-account" } : {}), ...(reason === "destination" ? { destinationRef: "f".repeat(64) } : {}) }
+      const result = await repository.prepareAndReserveProviderAttempt(id, claim.delivery.leaseToken, changed)
+      expect(result.kind).toBe("stopped")
+      expect(await row(id)).toMatchObject({ status: "dead_letter", review_reason: reason === "clock" ? "provider_retry_window_expired" : reason === "account" ? "provider_account_changed" : "provider_destination_changed" })
+    }
+  })
+
+  it("rejects a future database clock and incomplete snapshot", async () => {
+    for (const corruption of ["future", "partial"]) {
+      const { id } = await fixture(); const { claim, request } = await reserve(id)
+      await pool.query(corruption === "future" ? "UPDATE lead_delivery_outbox SET first_provider_attempt_at = now() + interval '1 hour' WHERE id = $1" : "UPDATE lead_delivery_outbox SET provider_request_body = NULL WHERE id = $1", [id])
+      expect((await repository.prepareAndReserveProviderAttempt(id, claim.delivery.leaseToken, request)).kind).toBe("stopped")
+    }
+  })
+
+  it("erases snapshots at retention but preserves bounded late-result evidence without requeue", async () => {
+    const { id, leadId } = await fixture(); const { claim, request, reservation } = await reserve(id)
+    if (reservation.kind !== "ready") throw new Error("Missing reservation")
+    // PostgreSQL stores microseconds; JS Date has milliseconds. Use an explicit
+    // past deadline rather than occasionally asking retention to run before it.
+    await pool.query("UPDATE lead_submissions SET redact_after = now() - interval '1 second' WHERE id = $1", [leadId])
+    expect(await repository.redactExpiredLeads(new Date())).toEqual([leadId])
+    expect(await row(id)).toMatchObject({ provider_request_body: null, provider_target_url: null, lease_token: null, status: "dead_letter" })
+    expect(await repository.prepareAndReserveProviderAttempt(id, claim.delivery.leaseToken, request)).toEqual({ kind: "stale" })
+    expect(await repository.recordProviderAttemptResult(reservation.reservationId, { ok: true, status: 200, providerMessageId: "late-id" })).toBe(true)
+    expect((await pool.query("SELECT provider_message_id FROM lead_provider_attempts WHERE id = $1", [reservation.reservationId])).rows[0].provider_message_id).toBe("late-id")
+    expect((await repository.markOutboxDelivered(id, claim.delivery.leaseToken, "late-id")).updated).toBe(false)
+    await pool.query("DELETE FROM lead_submissions WHERE id = $1", [leadId])
+    expect(await repository.recordProviderAttemptResult(reservation.reservationId, { ok: true, status: 200, providerMessageId: "late-id" })).toBe(false)
+  })
+
 })

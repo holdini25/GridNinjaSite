@@ -1,5 +1,7 @@
 import "server-only"
 
+import { qualifiedCrmConfiguration } from "@/lib/contact/provider-request"
+
 import { canonicalSiteUrl } from "@/content/site"
 
 export class ContactConfigurationError extends Error {
@@ -102,21 +104,11 @@ export function getContactRuntimeConfig(): ContactRuntimeConfig {
       : [...allowedOrigins].map((origin) => new URL(origin).hostname)
   )
 
-  const crmWebhookUrl = optionalHttpUrl("LEAD_WEBHOOK_URL")
-  const crmWebhookSigningSecret =
-    process.env.LEAD_WEBHOOK_SIGNING_SECRET?.trim() || undefined
-
-  if (Boolean(crmWebhookUrl) !== Boolean(crmWebhookSigningSecret)) {
-    throw new ContactConfigurationError(
-      "LEAD_WEBHOOK_URL and LEAD_WEBHOOK_SIGNING_SECRET must be configured together."
-    )
-  }
-
-  if (crmWebhookSigningSecret && crmWebhookSigningSecret.length < 32) {
-    throw new ContactConfigurationError(
-      "LEAD_WEBHOOK_SIGNING_SECRET must be at least 32 characters."
-    )
-  }
+  // Optional CRM delivery is created only for an explicitly qualified receiver.
+  // Existing outboxes are stopped by the worker if this contract is removed.
+  const crm = qualifiedCrmConfiguration()
+  const crmWebhookUrl = crm?.targetUrl
+  const crmWebhookSigningSecret = crm?.secret
 
   const alertWebhookUrl = optionalHttpUrl("LEAD_ALERT_WEBHOOK_URL")
 

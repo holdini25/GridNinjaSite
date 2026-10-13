@@ -12,15 +12,15 @@ afterEach(async () => {
   await Promise.all(temporaryDirectories.splice(0).map(path => rm(path, { recursive: true, force: true })))
 })
 
-function fixture(options: { sizeChange?: number; screenshotError?: boolean; mutationError?: boolean; documentHeight?: number; scale?: number; tileErrorAt?: number; wrongTileHeight?: boolean } = {}) {
-  const documentHeight = options.documentHeight ?? 2000, scale = options.scale ?? 1, maxScroll = documentHeight - 1000
+function fixture(options: { sizeChange?: number; screenshotError?: boolean; mutationError?: boolean; documentHeight?: number; documentWidth?: number; scale?: number; tileErrorAt?: number; wrongTileHeight?: boolean } = {}) {
+  const documentHeight = options.documentHeight ?? 2000, documentWidth = options.documentWidth ?? 20, scale = options.scale ?? 1, maxScroll = documentHeight - 1000
   vi.stubGlobal("innerHeight", 1000); vi.stubGlobal("scrollX", 0); vi.stubGlobal("scrollY", 125)
   vi.stubGlobal("devicePixelRatio", scale)
   vi.stubGlobal("scrollTo", (position: { top: number; left: number }) => { globalThis.scrollY = Math.max(0, Math.min(maxScroll, position.top)); globalThis.scrollX = position.left })
   vi.stubGlobal("scrollBy", (position: { top: number }) => { globalThis.scrollY = Math.min(maxScroll, scrollY + position.top) })
   vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => { callback(0); return 1 })
   vi.spyOn(document.documentElement, "scrollHeight", "get").mockReturnValue(documentHeight)
-  vi.spyOn(document.documentElement, "scrollWidth", "get").mockReturnValue(20)
+  vi.spyOn(document.documentElement, "scrollWidth", "get").mockReturnValue(documentWidth)
   const original = [null, "", "color: red; --verbatim: 1;"]
   // JSDOM does not implement content-visibility layout. Model only whether the
   // owned stylesheet is present; native capture verifies the real CSS engine.
@@ -47,7 +47,13 @@ function fixture(options: { sizeChange?: number; screenshotError?: boolean; muta
     if (capture.clip) {
       tile++
       if (options.tileErrorAt === tile) throw new Error("later tile interrupted")
-      return sharp({ create: { width: Math.ceil(capture.clip.width * scale), height: Math.ceil(capture.clip.height * scale) + (options.wrongTileHeight ? 1 : 0), channels: 3, background: { r: tile * 40, g: 0, b: 0 } } }).png().toBuffer()
+      const width = Math.round(capture.clip.width * scale)
+      const height = Math.round(capture.clip.height * scale) + (options.wrongTileHeight ? 1 : 0)
+      // Encode the absolute native document row in every pixel. This models
+      // actual source coordinates independently of the stitcher's tile plan.
+      const data = Buffer.alloc(width * height * 3), top = Math.round(capture.clip.y * scale)
+      for (let row = 0; row < height; row++) for (let column = 0; column < width; column++) data.writeUIntBE(top + row, (row * width + column) * 3, 3)
+      return sharp(data, { raw: { width, height, channels: 3 } }).png().toBuffer()
     }
     return Buffer.from("image")
   })
@@ -112,28 +118,43 @@ it("keeps the native full-page call unchanged at the device-pixel side limit", a
   expect(result).toHaveProperty("exactStylesRestored", true)
 })
 
-it.each([3, 2.75])("stitches complete native-scale document coverage beyond the limit at DPR %s without changing layout or styles", async scale => {
+it.each([[3, 12003], [2.75, 12003], [2.75, 13103], [1.5, 24003]])("stitches complete native-scale document coverage at DPR %s and CSS height %s without changing layout or styles", async (scale, documentHeight) => {
   const directory = await mkdtemp(join(tmpdir(), "review-page-capture-")); temporaryDirectories.push(directory)
-  const path = join(directory, "page.png"), documentHeight = 12003
-  const f = fixture({ documentHeight, scale })
+  const path = join(directory, "page.png"), documentWidth = 22
+  const f = fixture({ documentHeight, documentWidth, scale })
   const result = await captureVisitedReviewPage(f.page, path, { scrollMethod: "programmatic" })
-  expect(result).toMatchObject({ beforeDocumentHeight: documentHeight, afterDocumentHeight: documentHeight, exactStylesRestored: true, tiledCapture: { method: "document-coordinate-png-tiles-stitched-with-sharp", document: { scale }, pixels: { width: Math.ceil(20 * scale), height: Math.ceil(documentHeight * scale) } } })
+  expect(result).toMatchObject({ beforeDocumentHeight: documentHeight, afterDocumentHeight: documentHeight, exactStylesRestored: true, tiledCapture: { method: "document-coordinate-png-tiles-stitched-with-sharp", document: { scale }, pixels: { width: Math.round(documentWidth * scale), height: Math.round(documentHeight * scale) } } })
+  // Object.assign adds this runtime-validated evidence to the JavaScript
+  // helper's return value; its inferred type does not include that extension.
+  const tiledCapture = (result as typeof result & { tiledCapture?: {
+    tiles: Array<{ pixels: { top: number; bottom: number; width: number; height: number } }>
+  } }).tiledCapture
   expect(f.screenshot).toHaveBeenCalledTimes(3)
   const { data, info } = await sharp(path).removeAlpha().raw().toBuffer({ resolveWithObject: true })
-  expect(info.height).toBe(Math.ceil(documentHeight * scale))
+  expect(info.width).toBe(Math.round(documentWidth * scale))
+  expect(info.height).toBe(Math.round(documentHeight * scale))
   let row = 0, cssY = 0
   for (const [index, call] of f.screenshot.mock.calls.entries()) {
     const options = call[0], clip = options.clip!
     expect(options).toMatchObject({ fullPage: true, animations: "disabled", caret: "hide", type: "png" })
-    expect(clip).toMatchObject({ x: 0, y: cssY, width: 20 })
-    const rows = Math.ceil(clip.height * scale)
+    expect(clip).toMatchObject({ x: 0, y: cssY, width: documentWidth })
+    const rows = Math.round(clip.height * scale)
+    expect(tiledCapture?.tiles[index].pixels).toEqual({ top: row, bottom: row + rows, width: info.width, height: rows })
+    expect(Number.isInteger(row)).toBe(true)
+    expect(row).toBe(Math.round(clip.y * scale))
     expect(rows).toBeLessThanOrEqual(16000)
     // Inspect every stitched row, including both sides of each join. Resizing,
     // missed rows, duplicated padding and a missing final tile cannot pass.
-    for (let y = row; y < row + rows; y++) expect(data[y * info.width * info.channels]).toBe((index + 1) * 40)
+    expect(data.readUIntBE(row * info.width * info.channels, 3)).toBe(row)
+    expect(data.readUIntBE(((row + rows) * info.width - 1) * info.channels, 3)).toBe(row + rows - 1)
     row += rows; cssY += clip.height
   }
   expect(row).toBe(info.height); expect(cssY).toBe(documentHeight)
+  const expected = Buffer.alloc(data.length)
+  for (let y = 0; y < info.height; y++) expected.fill(Buffer.from([y >>> 16, (y >>> 8) & 255, y & 255]), y * info.width * 3, (y + 1) * info.width * 3)
+  expect(data.equals(expected), "Every native pixel must retain its original document row").toBe(true)
+  expect(data.readUIntBE(data.length - 3, 3)).toBe(info.height - 1)
+  if (scale === 2.75 && documentHeight === 13103) expect(tiledCapture?.tiles.at(-1)?.pixels.height).toBe(4045)
   expect(f.sections.map(section => section.getAttribute("style"))).toEqual(f.original)
   expect(scrollY).toBe(125); expect(f.disposed).toHaveBeenCalledOnce()
 })

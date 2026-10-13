@@ -2,6 +2,8 @@ import "server-only"
 
 import type { LeadDeliveryContext } from "@/server/leads/repository"
 import {
+  prepareAndReserveProviderAttempt,
+  recordProviderAttemptResult,
   claimNextDueOutbox,
   claimOutboxById,
   deleteExpiredLeads,
@@ -29,6 +31,8 @@ export const deliveryOperationsRepository: DeliveryOperationsRepository = {
   async claimOutboxById(id, now, leaseMs) {
     return mapClaim(await claimOutboxById(id, now, leaseMs))
   },
+  prepareAndReserveProviderAttempt,
+  recordProviderAttemptResult,
   isOutboxSendAllowed,
   isOutboxAlertAllowed,
   markTerminalAlertPublished,

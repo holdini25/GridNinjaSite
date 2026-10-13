@@ -17,6 +17,7 @@ import {
 import { getDatabase, type LeadDatabase } from "@/db/client"
 import {
   leadDeliveryOutbox,
+  leadProviderAttempts,
   leadSubmissions,
   type LeadDeliveryChannel,
   type LeadDeliveryOutboxRow,
@@ -26,6 +27,10 @@ import {
   type LeadSubmissionRow,
   type NewLeadDeliveryOutboxRow,
 } from "@/db/schema"
+
+import { reserveProviderAttemptQuery } from "@/lib/contact/provider-attempt-query"
+import { parseReviewReason, validPreparedRequest, type PreparedProviderRequest, type ProviderReservation } from "@/lib/contact/provider-request"
+import type { DeliveryProviderResult } from "@/lib/contact/delivery-core"
 
 const REDACTION_AGE_MS = 180 * 24 * 60 * 60 * 1_000
 const DELETION_AGE_MS = 365 * 24 * 60 * 60 * 1_000
@@ -101,6 +106,7 @@ export type RetryOutboxInput = {
 }
 
 export type DeadLetterOutboxInput = {
+  reviewReason?: string
   errorCode: string
 }
 
@@ -437,10 +443,46 @@ export function createLeadRepository(database: LeadDatabase) {
     return claimOutbox(now, leaseMs, outboxId)
   }
 
+  async function prepareAndReserveProviderAttempt(outboxId: string, leaseToken: string, request: PreparedProviderRequest): Promise<ProviderReservation> {
+    if (!validPreparedRequest(request)) throw new Error("InvalidPreparedProviderRequest")
+    const result = await database.execute(reserveProviderAttemptQuery(outboxId, leaseToken, randomUUID(), request))
+    const row = result.rows[0]
+    if (!row) return { kind: "stale" }
+    // Only SQL NULL means sending was not stopped. Unknown/empty values from a
+    // mismatched database deployment must never fall through to send permission.
+    if (row.stop_reason !== null) return { kind: "stopped", reason: parseReviewReason(row.stop_reason), terminalAt: row.dead_lettered_at instanceof Date ? row.dead_lettered_at : new Date(String(row.dead_lettered_at)) }
+    if (!row.reservation_id) return { kind: "already_reserved" }
+    return { kind: "ready", reservationId: String(row.reservation_id), firstAttemptAt: row.first_provider_attempt_at instanceof Date ? row.first_provider_attempt_at : new Date(String(row.first_provider_attempt_at)),
+      request: { version: 1, channel: row.channel as PreparedProviderRequest["channel"], idempotencyKey: String(row.idempotency_key), bodyUtf8: String(row.provider_request_body), bodySha256: String(row.provider_request_body_sha256),
+        targetUrl: String(row.provider_target_url), accountRef: String(row.provider_account_ref), destinationRef: String(row.provider_destination_ref) } }
+  }
+
+  async function recordProviderAttemptResult(reservationId: string, result: DeliveryProviderResult) {
+    // A late result is evidence only: it cannot alter the outbox or recreate PII.
+    // FK deletion and the deadline predicate prevent resurrecting deleted work.
+    const rows = await database.update(leadProviderAttempts).set({
+      resultCategory: result.ok ? "provider_accepted" : result.retryable ? "uncertain" : "rejected",
+      providerMessageId: result.ok ? result.providerMessageId ?? null : null,
+      resultCode: result.ok ? null : result.errorCode,
+      resultHttpStatus: result.status,
+      completedAt: sql`clock_timestamp()`,
+    }).where(and(eq(leadProviderAttempts.id, reservationId), isNull(leadProviderAttempts.completedAt), sql`EXISTS (
+      SELECT 1 FROM lead_delivery_outbox o JOIN lead_submissions l ON l.id = o.lead_id
+      WHERE o.id = ${leadProviderAttempts.outboxId} AND l.delete_after > clock_timestamp()
+    )`)).returning({ id: leadProviderAttempts.id })
+    return rows.length === 1
+  }
+
   async function isOutboxSendAllowed(outboxId: string, leaseToken: string, now = new Date()) {
     const rows = await database.select({ id: leadDeliveryOutbox.id }).from(leadDeliveryOutbox).where(and(
       eq(leadDeliveryOutbox.id, outboxId), eq(leadDeliveryOutbox.status, "processing"),
-      eq(leadDeliveryOutbox.leaseToken, leaseToken), gt(leadDeliveryOutbox.leaseExpiresAt, now), activeLead(now)
+      eq(leadDeliveryOutbox.leaseToken, leaseToken), gt(leadDeliveryOutbox.leaseExpiresAt, now), activeLead(now),
+      sql`${leadDeliveryOutbox.leaseExpiresAt} > clock_timestamp()`,
+      sql`${leadDeliveryOutbox.firstProviderAttemptAt} <= clock_timestamp() AND ${leadDeliveryOutbox.firstProviderAttemptAt} > clock_timestamp() - interval '23 hours'`,
+      isNull(leadDeliveryOutbox.reviewRequiredAt),
+      sql`EXISTS (SELECT 1 FROM lead_submissions l WHERE l.id = ${leadDeliveryOutbox.leadId}
+        AND l.redacted_at IS NULL AND l.redact_after > clock_timestamp() AND l.delete_after > clock_timestamp())`,
+      sql`EXISTS (SELECT 1 FROM lead_provider_attempts a WHERE a.outbox_id = ${leadDeliveryOutbox.id} AND a.lease_token = ${leaseToken}::uuid)`
     )).limit(1)
     // This is the final local authorization check, not a cancellation mechanism
     // for a request already handed to an external provider.
@@ -552,6 +594,8 @@ export function createLeadRepository(database: LeadDatabase) {
           status: "dead_letter",
           deadLetteredAt: now,
           lastErrorCode: pendingTerminalError(input.errorCode),
+          reviewRequiredAt: input.reviewReason ? now : leadDeliveryOutbox.reviewRequiredAt,
+          reviewReason: input.reviewReason ?? leadDeliveryOutbox.reviewReason,
           // Keep this worker's lease for the alert-only phase. Failed publication
           // remains recoverable after lease expiry, but can never resume sending.
           nextAttemptAt: now,
@@ -711,15 +755,16 @@ export function createLeadRepository(database: LeadDatabase) {
       WITH candidates AS MATERIALIZED (
         SELECT id FROM lead_submissions l
         WHERE (redacted_at IS NULL AND (redact_after <= ${cutoff.toISOString()}::timestamptz OR delete_after <= ${cutoff.toISOString()}::timestamptz))
-          OR (redacted_at IS NOT NULL AND EXISTS (SELECT 1 FROM lead_delivery_outbox o WHERE o.lead_id = l.id AND o.status IN ('pending', 'retry_scheduled', 'processing')))
+          OR (redacted_at IS NOT NULL AND EXISTS (SELECT 1 FROM lead_delivery_outbox o WHERE o.lead_id = l.id AND (o.status IN ('pending', 'retry_scheduled', 'processing') OR o.provider_request_body IS NOT NULL OR o.provider_target_url IS NOT NULL)))
         ORDER BY redact_after LIMIT ${Math.max(1, Math.min(limit, 5_000))}
         FOR UPDATE SKIP LOCKED
       ), retired AS (
-        UPDATE lead_delivery_outbox o SET status = 'dead_letter',
-          dead_lettered_at = COALESCE(o.dead_lettered_at, ${cutoff.toISOString()}::timestamptz),
-          last_error_code = CASE WHEN o.status = 'dead_letter' THEN o.last_error_code ELSE 'retention_expired' END,
+        UPDATE lead_delivery_outbox o SET status = CASE WHEN o.status = 'delivered' THEN o.status ELSE 'dead_letter'::lead_delivery_status END,
+          provider_request_body = NULL, provider_target_url = NULL, provider_request_body_sha256 = NULL, provider_destination_ref = NULL,
+          dead_lettered_at = CASE WHEN o.status = 'delivered' THEN o.dead_lettered_at ELSE COALESCE(o.dead_lettered_at, ${cutoff.toISOString()}::timestamptz) END,
+          last_error_code = CASE WHEN o.status IN ('dead_letter','delivered') THEN o.last_error_code ELSE 'retention_expired' END,
           lease_token = NULL, lease_expires_at = NULL, updated_at = ${cutoff.toISOString()}::timestamptz
-        FROM candidates c WHERE o.lead_id = c.id AND o.status <> 'delivered'
+        FROM candidates c WHERE o.lead_id = c.id
         RETURNING o.id
       )
       UPDATE lead_submissions l SET
@@ -763,6 +808,8 @@ export function createLeadRepository(database: LeadDatabase) {
     getLeadDeliveryContext,
     claimNextDueOutbox,
     claimOutboxById,
+    prepareAndReserveProviderAttempt,
+    recordProviderAttemptResult,
     isOutboxSendAllowed,
     isOutboxAlertAllowed,
     markOutboxDelivered,
@@ -840,3 +887,6 @@ export const redactExpiredLeads = (cutoff: Date, limit?: number) =>
 
 export const deleteExpiredLeads = (cutoff: Date, limit?: number) =>
   repository().deleteExpiredLeads(cutoff, limit)
+
+export const prepareAndReserveProviderAttempt = (outboxId: string, leaseToken: string, request: PreparedProviderRequest) => repository().prepareAndReserveProviderAttempt(outboxId, leaseToken, request)
+export const recordProviderAttemptResult = (reservationId: string, result: DeliveryProviderResult) => repository().recordProviderAttemptResult(reservationId, result)
