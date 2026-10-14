@@ -4,13 +4,34 @@ Prepared against `481bb8d` on `codex/assessment-yield-upgrade`. This is a local 
 
 | State | Meaning tonight |
 | --- | --- |
-| Ready locally | Read-only inventory and offline count-reconciliation helpers; rehearsal sequence; compatible rollback requirements. |
-| Unperformed | Actual deployed build/runtime verification, database inspection, broker inventory, backup/restore, migration, provider rehearsal, holds and production deployment. |
+| Ready locally | Read-only inventory and offline count-reconciliation helpers; synthetic migration/backup/restore and role-fence rehearsals passed; compatible rollback requirements prepared. |
+| Unperformed | Deployed build attestation, production database inspection, broker inventory, production backup/restore/migration, provider rehearsal, holds and production deployment. |
 | Blocked pending evidence | Actual database/service identities and credentials; host/broker hold controls; named primary/backup and commercial owner; recipient/alert authorization and operational thresholds; existing performance/manual release gates. |
 
 Read-only Vercel API evidence at `build/qa/release-tonight-2026-10-13/vercel-production.json` identifies production project `prj_9JSTjPiUBQEC6VTv363zVm7EA54S`, deployment `dpl_DEjFoYdrgHQHRKPohyhau6VRJrzy`, Git SHA `bbeb94bd98ee76b1aab149ad3b4ce92622e47f01`, and immutable host `gridninja-6k04milzg-holdini25s-projects.vercel.app`. Collection time is 2026-10-14 01:14 UTC (13 October locally). The project is Git-linked and currently configured for Node 24.x, but the subsequent deployment-specific receipt `vercel-deployment.json` at 01:16 UTC identifies this actual deployment as Node **22.x**, matching that commit's package. Current project settings do not retroactively identify the deployed runtime. The separate candidate project `prj_hH2kKfAMVQxoxUSRzLdVGxBptt8k` was created with Node 22.x, no Git linkage and an initially empty environment; this is not production promotion or service isolation evidence.
 
-The recorded project configuration exposes `DATABASE_URL` for Production and Preview plus four production verification/origin keys, without values. The actual deployment receipt also lists no application QStash, Redis, Resend or alert configuration keys and no Vercel crons. These observations do **not** establish distinct databases, broker emptiness, all-path holds, or configuration of every old deployment. Historical source inspection at `bbeb94b` finds journal `0000`/`0001` and the old delivery/sweep/retention/alert endpoints. `vercel-deployments.json` at 01:16 UTC records the complete hosting deployment/URL inventory; use every retained old URL in the hold ledger, not only the current production alias. Actual applied migrations, broker retries and old-worker authority still require inspection. No live database query or send was performed by this package. No people are available for tonight's remaining human checks; those records remain unperformed. The public delivery profile stays unpublished; CRM stays off. Do not recruit or add research requirements through this runbook.
+The recorded project configuration exposes `DATABASE_URL` for Production and Preview plus four production verification/origin keys, without values. The actual deployment receipt also lists no application QStash, Redis, Resend or alert configuration keys and no Vercel crons. The subsequent complete `vercel-historical-config.json` at 01:18 UTC confirms this absence across all **34 READY deployments**: their combined application-service names are only `DATABASE_URL` and those four verification/origin keys, with no Vercel crons. These observations narrow the configured hosting paths; they do **not** establish distinct databases, external broker emptiness, manual-caller authority or an active all-path hold. Historical source inspection at `bbeb94b` finds journal `0000`/`0001` and the old delivery/sweep/retention/alert endpoints. `vercel-deployments.json` at 01:16 UTC records the complete hosting deployment/URL inventory; use every retained old URL in the hold ledger, not only the current production alias. Actual applied migrations, broker retries and old-worker authority still require inspection. No live database query or send was performed by this package. No people are available for tonight's remaining human checks; those records remain unperformed. The public delivery profile stays unpublished; CRM stays off. Do not recruit or add research requirements through this runbook.
+
+### Executed isolated rehearsal
+
+At 2026-10-14 01:20:36 UTC, Node **22.23.2** and PostgreSQL/`pg_dump`/`pg_restore` **16.15** completed the explicitly assigned disposable target `127.0.0.1:55483/gridninja_cutover_rehearsal`, user `gridninja_release`. Only synthetic fixtures were used; HTTP, provider and broker actions were zero. The production credential retrieval remained blocked (`decrypted:false`); no production database was contacted. The root operator owns the cluster and cleanup; the migrated synthetic database was retained for inspection.
+
+```sh
+node build/qa/release-tonight-2026-10-13/cutover-rehearsal.mjs
+```
+
+The retained script first asserted an empty exclusive database, copied the exact `0000`/`0001` SQL bytes and first two journal entries into a temporary migration directory, and applied them through the normal Drizzle PostgreSQL migrator. It seeded eight synthetic inquiries/outboxes covering untouched pending work, previously attempted pending/retry work, processing with an expired lease, provider-accepted work, a dead letter and a redacted inquiry. It backed up the baseline, deleted **only these synthetic inquiries**, restored the dump and asserted exact equality of every restored inquiry/outbox/journal row with the pre-backup state. It then applied repository `0002` through Drizzle, executed the actual read-only inventory helper before/after, and passed all 21 offline reconciliation checks.
+
+The exact PostgreSQL subprocess commands were:
+
+```sh
+pg_dump -h 127.0.0.1 -p 55483 -U gridninja_release -d gridninja_cutover_rehearsal --format=custom --no-owner --no-privileges --file=build/qa/release-tonight-2026-10-13/cutover-local-rehearsal/synthetic-baseline.dump
+pg_restore -h 127.0.0.1 -p 55483 -U gridninja_release -d gridninja_cutover_rehearsal --clean --if-exists --exit-on-error --single-transaction --no-owner --no-privileges build/qa/release-tonight-2026-10-13/cutover-local-rehearsal/synthetic-baseline.dump
+```
+
+`--clean` was authorized **only for this exclusive disposable synthetic database**; it is not a production recovery command. The script refuses a nonempty starting database and must not be blindly rerun against the now-migrated target. Exact script, commands, redacted inventories, reconciliation, backup and result are retained under `build/qa/release-tonight-2026-10-13/cutover-local-rehearsal/` with the script/log in its parent. The backup there is exclusively synthetic; real backups remain outside the repository.
+
+Results: eight inquiries and eight outboxes restored; three exact legacy outbox IDs quarantined; zero live leases; zero fabricated attempts/events/acknowledgements or frozen request bodies. Separate exact comparisons confirmed preservation of outbox IDs, lead IDs, idempotency keys, claim counts, creation clocks and existing provider-acceptance clocks. Backup SHA-256: `03da33d1d5e5c89b909e33496a8f84343571b0fc97e410edc218f0f5b06c9f66`; restored full-state SHA-256: `0b3f0f1fd5bdc30d79f9fd15ef5d7a13e02d8d99584edd0bd31c7c38a7e46138`. These are local synthetic receipts, not deployed database, operational hold, retention execution, recipient delivery or rollback-build qualification.
 
 ## 1. Establish the private inventory before connecting
 
@@ -54,16 +75,102 @@ The helper uses one repeatable-read/read-only transaction, five-second statement
 
 Review the output rather than its exit status alone. `observed-not-qualified` is an observation, including possible journal mismatch. A matching `0001` prefix and column snapshot are necessary for this rehearsal, **not sufficient**: independently review the complete schema and migration effects. Constraint/index fingerprints permit comparison but do not prove expected semantics. Catalog identity hashes can change under role, proxy or server changes; record the owning-console identity separately. The helper deliberately cannot prove all-path holds or that zero live leases means no provider call remains in flight.
 
-## 3. Prove the hold, then drain
+## 3. Fence database claims across all URLs, then drain external executions
 
-Before any live claim/migration, the operator must establish a hold with actual **host and broker controls**. There is no application global maintenance flag in this implementation. Write the exact control and verification for every inventory row; a paused schedule alone fails this gate.
+There is no application global maintenance flag. The concrete proposed fence is **disable every application login role, commit that change, then terminate its existing database sessions**, using a separate operator credential. It prevents new database claims only after the complete authentication inventory is verified. It does not revoke an already issued provider request or a claim already held in a function's memory. No production fence has been applied.
 
-1. Block every old/new worker and sweep entry point at all deployment-specific URLs, including queued retries and manual callers. Suspend schedules and replay access; prevent already queued broker deliveries from bypassing the host restriction. Keep callback observation available where it can safely persist evidence.
-2. Hold intake-triggered delivery wakes. Keep durable intake open only if every old send path is demonstrably held; otherwise use an honest temporary failure that does not claim receipt. Disable production intake in study/restore environments. Pause retention during the schema cutover.
-3. Drain old function executions and started provider requests. Observe hosting/broker/provider evidence for outstanding executions, acknowledged or unknown attempts and delayed retries; do not estimate drain solely from database lease expiry. Record start/end times, reviewers and late outcomes. Reconcile uncertain sends without new keys or reset counters/clocks.
-4. Take read-only inventory snapshots after the controls are effective and draining has completed. Verify no old URL can acquire send authority, including after deployment/alias changes. If a hold or drain cannot be demonstrated, stop: **no in-place migration**.
+Vercel's [pause API](https://vercel.com/docs/rest-api/projects/pause-a-project) documents blocking the active Production Deployment. That is not evidence that all 34 READY historical deployments or their immutable URLs are blocked. Future operators may pause the approved production project through its authenticated console/API and verify the result, but must retain the old-URL inventory and the database fence below. Do not invoke delivery endpoints merely to test a hosting restriction.
 
-This package supplies no automatic pause/cancel command because the actual hosting and broker resources are still unknown. Do not describe proposed controls as active controls. A failed hold means sends remain held by a verified alternative or rollout remains blocked, never “probably drained.”
+### 3a. Verify every credential path and an independent operator
+
+Before executing the template, privately map **every** production/preview/old/new deployment, direct and pooled URL, manual/CI script, console action, HTTP database gateway and broker destination to its actual PostgreSQL authentication role. Include login roles that can `SET ROLE` or inherit application grants: disabling only a NOLOGIN writer/group role is insufficient. Inventory all roles, memberships and sessions, not just currently active app sessions. Review provider-specific proxy authentication: if a gateway retains a privileged shared login, can create replacement sessions independently, or bypasses PostgreSQL LOGIN checks, this template alone is insufficient. The provider must supply and demonstrate an equivalent deny rule covering that gateway and all endpoints, or migration stays blocked.
+
+Use the separately approved operator connection for this private, read-only inventory (no query text or password hashes):
+
+```sql
+SELECT current_database(), d.oid AS database_oid, inet_server_addr(),
+       inet_server_port(), session_user, r.oid AS operator_oid
+FROM pg_database d JOIN pg_roles r ON r.rolname = session_user
+WHERE d.datname = current_database();
+SELECT oid, rolname, rolcanlogin, rolsuper, rolcreaterole, rolbypassrls,
+       has_database_privilege(oid, current_database(), 'CONNECT') AS can_connect
+FROM pg_roles ORDER BY oid;
+SELECT roleid, member, grantor, admin_option, inherit_option, set_option
+FROM pg_auth_members ORDER BY roleid, member;
+SELECT pid, datname, usesysid, usename, backend_start, state
+FROM pg_stat_activity ORDER BY usesysid, pid;
+SELECT owner, database, count(*) FROM pg_prepared_xacts GROUP BY owner, database;
+```
+
+Reconcile the full list against the owning-console database/branch identity and every credential source. Record an explicit disposition for each login role, including provider administration roles. **Before changing LOGIN, stop connection initiators and retries**: suspend broker schedules/replays/manual triggers and use host/proxy controls to prevent old/new functions or gateway pools from beginning more connections. Freeze concurrent credential creation/rotation, role grants, automated provisioning and operator changes during the hold. Unknown or excluded roles capable of application writes invalidate an all-path claim. Role changes are cluster-wide; verify and authorize effects on every database using a selected role. Shared unrelated workloads need a separately reviewed fence.
+
+The fence/migration operator must be a distinct login unavailable to every app, old deployment, broker and manual sender. Verify it can alter the selected roles and terminate their sessions while remaining connected; a managed provider may not grant these capabilities. PostgreSQL [role alteration](https://www.postgresql.org/docs/16/sql-alterrole.html) has role-administration restrictions. [Session termination](https://www.postgresql.org/docs/16/functions-admin.html#FUNCTIONS-ADMIN-SIGNAL) with a positive timeout waits for termination; insufficient privileges or a timeout must leave the fence closed. Do not give the new operator credential to workers to get around the fence.
+
+### 3b. Execute the reviewed role fence
+
+Copy the independently verified values into a **new private plan**, preserving original LOGIN states and role OIDs. For example, the following illustrates the required SQL shape; the sample names/OIDs are not production values:
+
+```sql
+INSERT INTO cutover_target VALUES
+  ('reviewed_database', 42000, '127.0.0.1', 5432, 'independent_operator', 42001);
+INSERT INTO cutover_roles VALUES
+  (42002, 'reviewed_application_login', true),
+  (42003, 'reviewed_manual_login', true),
+  (42004, 'reviewed_already_disabled_role', false);
+```
+
+The plan is executable SQL, so it must be reviewed, owner-controlled and contain only the two INSERTs. Store it and receipts outside the repository with `umask 077`; preserve its checksum. The protected libpq service below must resolve to the independently verified target/operator using certificate-verified TLS. A matching server address is an additional check, not provider identity proof.
+
+```sh
+psql -X -w --dbname="service=$CUTOVER_OPERATOR_SERVICE" \
+  -v plan_file="$CUTOVER_PRIVATE_DIR/role-plan.sql" \
+  -v operation=fence \
+  -v receipt_file="$CUTOVER_PRIVATE_DIR/role-fence-intent.json" \
+  -f scripts/qa/cutover-role-fence.sql \
+  > "$CUTOVER_PRIVATE_DIR/role-fence.log" 2>&1
+```
+
+The template rejects database/operator mismatch, missing/renamed roles, changed original login state and a plan containing its own operator. It writes a private original-state receipt **before** altering roles. A receipt records validated intent, not completion. It changes only LOGIN, commits NOLOGIN before termination, terminates sessions authenticated under the selected role OIDs across all databases, and rejects remaining sessions or prepared transactions. Later failure never automatically reopens logins; inspect the exit code and log and keep the fence closed. Missing receipt storage aborts before mutation. Use unique receipt paths and never overwrite the original fence record.
+
+Afterward, use private credentials to attempt fresh harmless `SELECT 1` connections through **each direct, pooled and HTTP database access path**. Each app identity must fail before a query executes, while the independent operator remains usable. A connection whose startup overlapped the role change may appear after the first scan. Read the actual server `SHOW authentication_timeout`, but do not use it alone as the drain bound: [PostgreSQL 16 startup code](https://raw.githubusercontent.com/postgres/postgres/REL_16_STABLE/src/backend/utils/init/postinit.c) disables it before later startup work and activity registration, so post-authentication startup/locks need separate coverage. Obtain provider-specific bounds covering **post-authentication startup and locks**, gateway queues and pool retries; account for the full combined maximum after initiators stopped. An unknown or unbounded path blocks completion and requires a provider-level connection drain with evidence. After that bounded drain, repeat termination and verification with the original private plan and a new receipt:
+
+```sh
+psql -X -w --dbname="service=$CUTOVER_OPERATOR_SERVICE" \
+  -v plan_file="$CUTOVER_PRIVATE_DIR/role-plan.sql" \
+  -v operation=verify-held \
+  -v receipt_file="$CUTOVER_PRIVATE_DIR/role-fence-delayed-check.json" \
+  -f scripts/qa/cutover-role-fence.sql \
+  > "$CUTOVER_PRIVATE_DIR/role-fence-delayed-check.log" 2>&1
+```
+
+`verify-held` requires all selected roles still NOLOGIN; it performs no role alteration, repeats termination, clears the statistics snapshot and checks zero sessions/prepared transactions. Repeat this check after the controlled denied retries and retain timing evidence. Reconcile every path in the inventory. One zero-session snapshot or one refused direct connection is insufficient; the local template cannot attest remote gateway behavior or inventory completeness.
+
+### 3c. Drain old work and preserve observations
+
+Keep the previously established broker, retry, manual-trigger and host holds active. Keep intake closed with an honest temporary failure while its database role is fenced. Pause retention. Callback requests sharing fenced roles cannot persist observations: arrange a provider-supported retry/retention window and reconcile the signed event history afterward, or establish a separately reviewed observation-only identity with no claim/send authority. Do not silently drop callbacks or claim observations were retained.
+
+Drain **all already running old/new/manual sender executions**, including a process paused between its successful claim and its HTTP call. Inspect host execution and provider/broker evidence; wait for verified execution completion or terminate it and reconcile uncertainty. A lease expiring, terminating its DB session or pausing future wakes does not stop an external HTTP request. If execution drain cannot be proved, keep claims fenced and use an independently approved provider-key/egress revocation that covers those callers; provider acceptance already in flight still needs reconciliation. No backup/migration until the all-path claim fence and external-execution drain are both evidenced.
+
+### 3d. Reopen only qualified identities
+
+Keep the fence throughout backup, restore rehearsal and migration. Before reopening a role, qualify the safeguard-compatible worker and ensure old deployments/manual callers can no longer authenticate under it. Rotate/retire every credential exposed to an old worker, including pooled/API variants, and provide replacements only to the approved worker. Otherwise restoring LOGIN would reopen historical URLs. Roles still used by unsafe callers remain NOLOGIN. Keep broker/host holds during this transition.
+
+Use the preserved original receipt to make a reviewed restore plan for only the approved subset, with unchanged role OIDs and original LOGIN booleans; retain the original complete plan separately. Never infer original state from the now-fenced catalog. For the same verified database/operator, run:
+
+```sh
+psql -X -w --dbname="service=$CUTOVER_OPERATOR_SERVICE" \
+  -v plan_file="$CUTOVER_PRIVATE_DIR/approved-role-restore-plan.sql" \
+  -v operation=restore \
+  -v receipt_file="$CUTOVER_PRIVATE_DIR/role-restore-intent.json" \
+  -f scripts/qa/cutover-role-fence.sql \
+  > "$CUTOVER_PRIVATE_DIR/role-restore.log" 2>&1
+```
+
+Restore rejects identity drift and any selected role already reenabled; it restores only the original LOGIN boolean, retaining NOLOGIN for originally disabled roles. Verify old credentials still fail, approved credentials reach only the qualified workers, and unchanged counters/keys and callback reconciliation remain sound before resuming schedules. This is a future authorized operation, not a hold or restoration already performed.
+
+### Executed synthetic role-fence verification
+
+At 2026-10-14 01:29:05 UTC the final SQL template passed eight checks on the assigned local disposable database, using four unique synthetic application roles and a separate non-superuser operator. Wrong target and unwritable receipt aborted without role changes; existing direct and `SET ROLE` sessions terminated; an uncommitted synthetic claim rolled back; all four new connections failed with SQLSTATE `28000`; repeated `verify-held` retained NOLOGIN; the operator stayed usable; restore exactly preserved the two originally disabled roles. The isolated probe schema and every temporary role were removed, with zero existing application-fixture changes or other-database queries. No HTTP/provider/broker action occurred. Script and final receipts: `build/qa/release-tonight-2026-10-13/cutover-role-rehearsal.mjs` and `cutover-role-rehearsal-2/report.json`; the earlier seven-check attempt remains preserved separately. This validates native PostgreSQL mechanics, not a delayed-startup race, an uninspected production proxy or completed all-path hold.
 
 ## 4. Back up and restore into isolated infrastructure
 
