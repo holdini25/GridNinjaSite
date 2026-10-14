@@ -1,28 +1,28 @@
 # Upload source and validators only. Never upload local evidence or credentials.
-.git
-.vercel
-.next
-node_modules
-build
-coverage
-test-results*
-playwright-report
-.lighthouseci
-.codex-temp
+/.git
+/.vercel
+/.next
+/node_modules
+/build
+/coverage
+/test-results*
+/playwright-report
+/.lighthouseci
+/.codex-temp
 .env*
 *.tsbuildinfo
-next-env.d.ts
+/next-env.d.ts
 *.pem
 *.log
 **/__pycache__
 **/*.pyc
 
 # Authoring archives are not deployment inputs. Facility validators remain.
-docs
-lighthouse
-evidence-candidates
+/docs
+/lighthouse
+/evidence-candidates
 assets-source/civic
 assets-source/editorial
 assets-source/facility/*
 !assets-source/facility/*.mjs
-assets
+/assets
