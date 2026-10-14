@@ -121,6 +121,31 @@ describe("route-owned visual styles", () => {
     expect(validateCssSources(root).routeStyles["src/app/nested/page.tsx"]).toContain("src/components/visual.css")
   })
 
+  it.each(["_app", "_document"])("includes Pages %s ownership on direct route visits", owner => {
+    const result = validateCssSources(fixture({
+      ...visualFiles,
+      "src/pages/contact.tsx": 'import "../components/visual"; export default function Contact() { return null }',
+      [`src/pages/${owner}.tsx`]: 'import "../components/visual.css"; export default function Owner() { return null }',
+    }))
+    expect(result.routeStyles["src/pages/contact.tsx"]).toContain("src/components/visual.css")
+    expect(result.routeStyles["src/app/page.tsx"]).not.toContain("src/components/visual.css")
+  })
+
+  it("does not borrow App layout or sibling page styles for a Pages direct visit", () => {
+    expect(() => validateCssSources(fixture({
+      ...visualFiles,
+      "src/pages/contact.tsx": 'import "../components/visual"; export default function Contact() { return null }',
+      "src/pages/other.tsx": 'import "../components/visual.css"; export default function Other() { return null }',
+      "src/app/layout.tsx": 'import "../components/visual.css"; export default function Layout() { return null }',
+    }))).toThrow(/src\/pages\/contact.tsx reaches .*visual.tsx without .*visual.css/)
+  })
+
+  it.each(["contact", "_app", "_document"])("preserves excluded component reachability from Pages %s", entry => {
+    expect(() => validateCssSources(fixture({
+      [`src/pages/${entry}.tsx`]: 'import "../components/orphan"; export default function Page() { return null }',
+    }))).toThrow(/orphan\.tsx is reachable/)
+  })
+
   it("rejects a direct visit that only receives styles after another route was visited", () => {
     expect(() => validateCssSources(fixture({
       ...visualFiles,

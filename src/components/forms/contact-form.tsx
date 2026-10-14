@@ -609,6 +609,8 @@ export function ContactForm({
       <a href="/data-handling" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 text-sm text-primary underline underline-offset-4">
         How we handle inquiry data <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span>
       </a>
+      {/* Keep this native cross-router link usable before hydration. */}
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
       {variant === "assessment" && <a className="mt-2 flex min-h-11 w-fit items-center text-sm text-primary underline underline-offset-4" href="/contact?intent=other&source=assessment-page">Contact us about something else</a>}
     </form>
   )

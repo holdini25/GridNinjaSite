@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { StaticGridNinjaMark } from "@/components/brand/gridninja-mark"
 import { footerGroups } from "@/content/nav"
-import { siteConfig } from "@/content/site"
+import { footerCopy } from "@/content/footer"
 import { assessmentScopeHref } from "@/lib/marketing-journeys"
 
 import { SectionShell } from "./section-shell"
@@ -26,7 +26,7 @@ export function SiteFooter() {
               </span>
             </div>
             <h2 className="max-w-md text-[1.9rem] font-medium text-foreground">
-              {siteConfig.footerCopy}
+              {footerCopy}
             </h2>
             <p className="max-w-md text-base leading-8 text-muted-foreground">
               A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.

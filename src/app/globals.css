@@ -2,6 +2,14 @@
 @import "tw-animate-css";
 @import "./premium-civic.css";
 
+/* Static primitive defaults stay below utilities so callers can override them
+   without sending a Tailwind class-merging engine to the browser. */
+@layer components {
+  .gn-section-container { margin-inline: auto; width: 100%; max-width: var(--container-7xl, 80rem); }
+  .gn-static-mark { flex-shrink: 0; object-fit: contain; }
+  .gn-monochrome-mark { display: inline-block; aspect-ratio: 1; width: 512px; max-width: 100%; flex-shrink: 0; background-color: currentColor; }
+}
+
 /* Keep automatic scanning for current and new views; omit unreachable legacy components. */
 @source not "../components/assessment/assessment-decision-brief.tsx";
 @source not "../components/charts/kpi-line-chart.tsx";

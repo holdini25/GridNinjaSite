@@ -271,15 +271,42 @@
   "exceptions": {
     "next.config.ts": "Only inlineCss delivery toggle changes; preserve all security/header configuration.",
     "vercel.json": "Disable automatic preview deployments for candidate branches; main deployment behavior unchanged.",
-    ".github/workflows/website-route-qualification.yml": "Additional read-only software qualification of all14routes/140captures; existing workflows unchanged."
+    ".github/workflows/website-route-qualification.yml": "Additional read-only software qualification of all14routes/140captures; existing workflows unchanged.",
+    "tests/unit/contact/contact-brand-boundary.test.tsx": "Frontend-only static brand assertion follows the Contact content relocation and CSS defaults; operational contact tests remain production bytes."
   },
   "integrationAdditions": [
     "tests/e2e/founders.spec.ts",
     "docs/website-upgrade/website-ui-release-manifest-2026-10-14.json",
     "docs/website-upgrade/website-ui-release-2026-10-14.md",
-    ".github/workflows/website-route-qualification.yml"
+    ".github/workflows/website-route-qualification.yml",
+    "scripts/validate-contact-build.mjs",
+    "src/app/(marketing)/contact/page.tsx",
+    "src/components/brand/gridninja-mark.tsx",
+    "src/components/layout/nav-drawer.tsx",
+    "src/components/layout/section-shell.tsx",
+    "src/components/marketing/contact-page.tsx",
+    "src/content/footer.ts",
+    "src/content/site.ts",
+    "src/pages/_app.tsx",
+    "src/pages/_document.tsx",
+    "src/pages/contact.tsx",
+    "tests/e2e/contact-router-parity.spec.ts",
+    "tests/unit/contact/contact-brand-boundary.test.tsx",
+    "tests/unit/seo/initial-javascript-budget.test.ts"
   ],
   "postImportCorrections": {
-    "src/app/(marketing)/about/founders/page.tsx": "Render required manifest-derived RelatedSeoLinks after fresh CI detected missing contextual link graph."
+    "src/app/(marketing)/about/founders/page.tsx": "Render required manifest-derived RelatedSeoLinks after fresh CI detected missing contextual link graph.",
+    "src/app/(marketing)/contact/page.tsx": "Relocate original static Contact content to a supported Pages Router SSG route; the App receipt route remains unchanged.",
+    "src/pages/contact.tsx": "Build the same metadata/schema from shared source registries in getStaticProps, preserving privacy, indexing and original form contracts.",
+    "src/pages/_app.tsx": "Share global styling and existing optional privacy-sanitized Vercel observability; no global marketing wrapper on error pages.",
+    "src/pages/_document.tsx": "Document structure only; shared header/footer remain in the normal Contact component tree.",
+    "src/components/layout/section-shell.tsx": "Place static layout defaults in the CSS component layer so caller utilities override them without runtime class merging.",
+    "src/components/brand/gridninja-mark.tsx": "Place static brand defaults in the CSS component layer, preserving sizing and utility overrides.",
+    "src/components/layout/nav-drawer.tsx": "Handle nullable pathname under supported mixed-router types; this legacy component remains unreachable from public routes.",
+    "src/components/layout/site-footer.tsx": "Use the same footerCopy constant through a small content module, avoiding client import of the SEO registry.",
+    "src/components/forms/contact-form.tsx": "Document the existing native cross-router anchor for the newly applicable lint rule; no behavior or payload change.",
+    "scripts/validate-contact-build.mjs": "Charge actual emitted Pages scripts, shared runtime and low-priority files under unchanged JavaScript budgets.",
+    "scripts/facility/hosted-attestation.mjs": "Resolve exact static Pages output ownership as well as App output; reject stale, ambiguous or dynamic producers.",
+    "scripts/css/validate-sources.mjs": "Include Pages routes, _app and _document in the conservative CSS dependency closure without weakening exclusions."
   }
 }

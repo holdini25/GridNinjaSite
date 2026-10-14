@@ -7,7 +7,7 @@ import type { DrawerDialogProps } from "./nav-drawer-dialog"
 import { loadNavigationDrawer } from "./nav-drawer-loader"
 
 export function NavDrawer() {
-  const pathname = usePathname()
+  const pathname = usePathname() ?? ""
   return <DrawerTrigger key={pathname} pathname={pathname} />
 }
 

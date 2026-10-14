@@ -31,17 +31,23 @@ async function filesAt(directory) {
  * config keeps adapterPath as a presence marker even when its value is omitted. */
 export async function hostedPrerenderPath(route, nextDirectory = ".next") {
   const readJson = async path => JSON.parse(await readFile(join(nextDirectory, path), "utf8"))
-  const [{ config }, prerender, appRoutes] = await Promise.all([
+  const [{ config }, prerender, appRoutes, pagesRoutes] = await Promise.all([
     readJson("required-server-files.json"), readJson("prerender-manifest.json"), readJson("app-path-routes-manifest.json"),
+    readJson("server/pages-manifest.json").catch(error => { if (error.code === "ENOENT") return {}; throw error }),
   ])
   assert(config && config.output !== "export", "Unsupported hosted output layout")
   const entry = prerender.routes?.[route]
-  assert(entry && entry.initialRevalidateSeconds === false && entry.response === "complete" && entry.routeType === "page", `Missing complete static prerender: ${route}`)
-  const sources = Object.entries(appRoutes).filter(([source, pathname]) => source.endsWith("/page") && pathname === (entry.srcRoute ?? route)).map(([source]) => source)
-  assert.equal(sources.length, 1, `Missing or ambiguous source module: ${route}`)
+  const sourceRoute = entry?.srcRoute ?? route
+  const sources = Object.entries(appRoutes).filter(([source, pathname]) => source.endsWith("/page") && pathname === sourceRoute).map(([source]) => source)
+  const pagesSource = pagesRoutes[sourceRoute]
+  if (!entry) assert(typeof pagesSource === "string" && pagesSource === `pages${normalizePagePath(route)}.html`, `Missing complete static prerender: ${route}`)
+  else assert(entry.initialRevalidateSeconds === false && entry.response === "complete" && entry.routeType === "page", `Missing complete static prerender: ${route}`)
+  assert.equal(sources.length + (pagesSource ? 1 : 0), 1, `Missing or ambiguous source module: ${route}`)
+  const kind = pagesSource ? "PAGES" : "APP_PAGE"
+  if (pagesSource && entry) assert(typeof entry.dataRoute === "string" && entry.dataRoute.endsWith(".json"), `Missing Pages static prerender data route: ${route}`)
   const filename = config.adapterPath
-    ? getRouteCacheKey(route, { kind: "APP_PAGE", sourceRoute: sources[0] })
-    : `app${normalizePagePath(route)}`
+    ? getRouteCacheKey(route, { kind, sourceRoute: pagesSource ? sourceRoute : sources[0] })
+    : `${pagesSource ? "pages" : "app"}${normalizePagePath(route)}`
   return join(nextDirectory, "server", `${filename}.html`)
 }
 

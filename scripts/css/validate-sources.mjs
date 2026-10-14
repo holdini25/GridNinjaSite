@@ -155,7 +155,11 @@ export function validateCssSources(projectRoot = process.cwd()) {
       const stylesheet = resolve(root, boundary.stylesheet)
       if (!inside(components, component) || !inside(src, stylesheet) || !sourceExtension.test(component) || !stylesheet.endsWith(".css") || !existsSync(component) || !existsSync(stylesheet)) fail("style boundary must name existing component and CSS files")
     }
-    for (const page of roots.filter(file => inside(join(src, "app"), file) && /(?:^|\/)page\.[cm]?[jt]sx?$/.test(display(file)))) {
+    const appDirectory = join(src, "app"), pagesDirectory = join(src, "pages")
+    const pagesEntries = roots.filter(file => inside(pagesDirectory, file) && !inside(join(pagesDirectory, "api"), file) && !file.endsWith(".json") && !/^_(?:app|document)\.[cm]?[jt]sx?$/.test(file.split(sep).at(-1)))
+    const pagesOwners = roots.filter(file => dirname(file) === pagesDirectory && /^_(?:app|document)\.[cm]?[jt]sx?$/.test(file.split(sep).at(-1)))
+    const appEntries = roots.filter(file => inside(appDirectory, file) && /(?:^|\/)page\.[cm]?[jt]sx?$/.test(display(file)))
+    for (const page of [...appEntries, ...pagesEntries]) {
       const closure = new Set()
       function include(file) {
         if (closure.has(file)) return
@@ -163,7 +167,8 @@ export function validateCssSources(projectRoot = process.cwd()) {
         for (const dependency of dependencies.get(file) ?? []) include(dependency)
       }
       include(page)
-      for (let directory = dirname(page); inside(src, directory); directory = dirname(directory)) {
+      if (inside(pagesDirectory, page)) pagesOwners.forEach(include)
+      else for (let directory = dirname(page); inside(src, directory); directory = dirname(directory)) {
         for (const layout of sourceFiles.filter(file => dirname(file) === directory && /^layout\.[cm]?[jt]sx?$/.test(file.split(sep).at(-1)))) include(layout)
       }
       routeStyles[display(page)] = [...closure].filter(file => file.endsWith(".css")).map(display).sort()

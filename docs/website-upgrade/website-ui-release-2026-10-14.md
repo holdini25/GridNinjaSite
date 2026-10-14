@@ -105,3 +105,57 @@ Protected hosting authentication/noindex remains a distinct environment limitati
 
 Corrected local build `guaagM2DXAUKNNhF9A8dD` passed; source prefix `323c8d8a5867`.
 SEO source validation passed 66 tests in 12 files; lint/typecheck passed.
+
+## Contact performance correction
+
+The completed expanded run for `a51cf350519870982979ba5476201c311b224060`
+retained all 140 Lighthouse captures, 140 full-scroll observations and 20 readiness
+observations. Its only hard failure was Contact mobile median LCP: 2,396.796 ms
+against the unchanged 2,000 ms limit. Standard CI passed, but did not supersede
+that failure. The associated staged deployment remains unpromoted.
+
+Local CSS consolidation and below-fold rendering trials did not close the gap and
+were reverted. Trace/model replay identified framework transfer as the critical
+path; the simulated delay was not evidence of comparable layout/paint CPU work.
+
+The bounded correction keeps Next.js and the existing Contact form, moving only
+`/contact` into supported Pages Router static generation. Original content, native
+header/footer, form attribution, validation, verification, receipts and recovery
+remain. Metadata and schema use the existing registries at build time. The App
+Router receipt route remains in place. Shared static primitive defaults now live
+below utility classes in CSS, and footer text no longer brings the SEO registry
+into the browser. The form itself gains only a lint explanation for its existing
+native link. This is not the earlier static Contact prototype.
+
+Build and validation remain strict: initial JavaScript accounting includes Pages
+shared runtime, page code, low-priority files and actual emitted scripts; hosted
+attestation resolves the exact static producer; CSS validation includes Pages
+entry/layout roots. The 180 KiB JavaScript cap, 2,000 ms Contact LCP gate and full
+14-route release matrix are unchanged.
+
+Isolated local evidence is retained in the Contact runtime trial worktree under
+`build/qa/contact-runtime-trial/` and `build/facility/pages-contact-trial-{01,02}/`.
+The first Pages trial failed at 2,103.815 ms. The second passed the ten-capture
+priority preflight: Contact median 1,954.082 ms, Home 2,311.218 ms; Contact
+accessibility/best-practices/SEO 100, CLS 0 and TBT 0. Its build is
+`g9sSxonz4-iM8xu_THxFU`, with source prefix `24886516e852`, test verification key
+and observability disabled. One Contact sample remained above 2,000 ms; policy
+uses the five-run median. These ten captures are not full release qualification.
+
+Focused unit checks passed 223 tests after retaining an earlier sandbox loopback
+failure and updating static-brand class assertions. The first browser run passed
+28 of 30; two new no-JavaScript navigation-helper failures are retained. Diagnosis
+confirmed that animation-frame callbacks do not run with JavaScript disabled;
+normal, non-forced browser clicks navigate correctly. The corrected tests use
+native actionability for those no-JavaScript link actions. All 20 new parity
+checks passed across Chrome stable, Chromium desktop/mobile and WebKit
+desktop/mobile. Local Firefox startup stalled and its run was interrupted; its
+independent CI result remains required. Checks cover cross-router attribution,
+Back/Forward/refresh, raw/hydrated metadata, disabled no-JavaScript intake, mocked
+submission and computed primitive geometry at narrow/wide viewports.
+
+The source review reconciled all 197 changed paths (179 original imports plus 18
+integration additions), all 65 exclusions, sole Contact route ownership and
+preserved production contracts. Full corrected browser/CI/performance and hosted
+production-settings qualification remain pending. Production release remains
+held until those gates are bound to the final selected source.

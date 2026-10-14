@@ -168,6 +168,43 @@ describe("hosted build attestation", () => {
       }
     } finally { await rm(root, { recursive: true, force: true }) }
   })
+  it("hashes the exact Pages static producer and never falls back to stale App or legacy HTML", async () => {
+    const root = await mkdtemp(join(tmpdir(), "gridninja-hosted-pages-"))
+    const save = async (path: string, value: string) => { await mkdir(dirname(join(root, path)), { recursive: true }); await writeFile(join(root, path), value) }
+    const cache = `server/route-cache/PAGES/${sha("/contact")}/$/contact.html`
+    const entry = { srcRoute: null, response: "complete", routeType: "page", initialRevalidateSeconds: false, dataRoute: "/_next/data/build/contact.json" }
+    try {
+      await save("required-server-files.json", JSON.stringify({ config: { adapterPath: "adapter" } }))
+      await save("app-path-routes-manifest.json", "{}")
+      await save("server/pages-manifest.json", JSON.stringify({ "/contact": "pages/contact.js" }))
+      await save("prerender-manifest.json", JSON.stringify({ routes: { "/contact": entry } }))
+      await save(cache, "actual-pages-adapter-build")
+      await save("server/pages/contact.html", "stale-pages-build")
+      await save("server/app/contact.html", "stale-app-build")
+      expect(await hostedPrerenderPath("/contact", root)).toBe(join(root, cache))
+      expect(sha(await readFile(await hostedPrerenderPath("/contact", root), "utf8"))).toBe(sha("actual-pages-adapter-build"))
+      await rm(join(root, cache))
+      await expect(readFile(await hostedPrerenderPath("/contact", root))).rejects.toThrow(/ENOENT/)
+      for (const mutation of [{ response: "partial" }, { initialRevalidateSeconds: 60 }, { dataRoute: "/contact.rsc" }]) {
+        await save("prerender-manifest.json", JSON.stringify({ routes: { "/contact": { ...entry, ...mutation } } }))
+        await expect(hostedPrerenderPath("/contact", root)).rejects.toThrow(/static prerender/)
+      }
+      await save("prerender-manifest.json", JSON.stringify({ routes: { "/contact": entry } }))
+      await save("app-path-routes-manifest.json", JSON.stringify({ "/(marketing)/contact/page": "/contact" }))
+      await expect(hostedPrerenderPath("/contact", root)).rejects.toThrow(/ambiguous/)
+      await save("app-path-routes-manifest.json", "{}")
+      await save("required-server-files.json", JSON.stringify({ config: {} }))
+      expect(await hostedPrerenderPath("/contact", root)).toBe(join(root, "server/pages/contact.html"))
+      // Automatic static optimization is represented by a .html pages manifest
+      // owner, whereas getServerSideProps remains .js and must fail closed.
+      await save("prerender-manifest.json", JSON.stringify({ routes: {} }))
+      await expect(hostedPrerenderPath("/contact", root)).rejects.toThrow(/static prerender/)
+      await save("server/pages-manifest.json", JSON.stringify({ "/contact": "pages/contact.html" }))
+      expect(await hostedPrerenderPath("/contact", root)).toBe(join(root, "server/pages/contact.html"))
+      await save("required-server-files.json", JSON.stringify({ config: { adapterPath: "adapter" } }))
+      expect(await hostedPrerenderPath("/contact", root)).toBe(join(root, cache))
+    } finally { await rm(root, { recursive: true, force: true }) }
+  })
   it("reports exact source file hashes without changing the existing path-and-byte source digest", async () => {
     const root = await mkdtemp(join(tmpdir(), "gridninja-hosted-source-"))
     try {
