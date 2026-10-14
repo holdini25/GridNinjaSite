@@ -1,0 +1,77 @@
+.page { color: var(--gn-body); padding-bottom: var(--gn-section-space); }
+.page :is(h1,h2,p,dl,dd) { margin: 0; }
+.page a:focus-visible, .page summary:focus-visible { outline: 2px solid var(--gn-orange); outline-offset: 6px; border-radius: 2px; }
+.eyebrow { color: var(--gn-orange); font: 500 .75rem/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+.hero { padding-top: 64px; }
+.heroGrid { display: grid; grid-template-columns: 1.3fr 1fr; align-items: end; gap: 80px; margin-top: 24px; }
+.hero h1 { color: var(--gn-heading); font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 500; letter-spacing: -.065em; line-height: .99; }
+.hero h1 span { display: block; color: var(--gn-orange); }
+.introduction { max-width: 440px; padding-bottom: 4px; font-size: 1.125rem; line-height: 1.75; }
+.textLink { display: inline-flex; align-items: center; gap: 16px; min-height: 44px; max-width: 100%; color: var(--gn-heading); font-size: .9375rem; font-weight: 500; text-decoration: underline; text-decoration-color: var(--gn-control-edge); text-underline-offset: 6px; }
+.textLink:hover { text-decoration-color: var(--gn-orange); }
+.textLink svg, .primaryLink svg { width: 18px; height: 18px; flex-shrink: 0; }
+.introduction .textLink { margin-top: 24px; }
+.heroRule { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px 24px; border-top: 1px solid var(--gn-divider); padding-top: 20px; margin-top: 56px; color: var(--gn-support); font: .6875rem/1.5 var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
+.profiles { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 64px; margin-top: 40px; scroll-margin-top: 108px; }
+.profile { min-width: 0; scroll-margin-top: 108px; }
+.portrait { position: relative; width: 100%; aspect-ratio: 1.2; overflow: hidden; background: var(--gn-surface); }
+.portrait img { object-fit: cover; }
+.portraitIndex { position: absolute; left: 20px; bottom: 20px; display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--gn-control-edge); background: var(--gn-canvas); color: var(--gn-heading); font: .75rem/1 var(--font-mono); }
+.profileHeader { padding-block: 28px 24px; }
+.role { color: var(--gn-orange); font: 500 .8125rem/1.6 var(--font-mono); }
+.profileHeader h2 { margin-top: 10px; color: var(--gn-heading); font-size: clamp(1.875rem, 3vw, 2.75rem); line-height: 1.16; font-weight: 500; letter-spacing: -.04em; }
+.background { border-top: 1px solid var(--gn-divider); }
+.background > div { display: grid; grid-template-columns: 100px minmax(0,1fr); gap: 20px; padding-block: 22px; border-bottom: 1px solid var(--gn-divider); }
+.background dt { color: var(--gn-support); font: .6875rem/1.8 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; padding-top: 3px; }
+.background dd { font-size: 1rem; line-height: 1.65; min-height: 3.3em; }
+.experience { border-bottom: 1px solid var(--gn-divider); }
+.experience summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 68px; cursor: pointer; list-style: none; color: var(--gn-heading); font-size: .9375rem; }
+.experience summary::-webkit-details-marker { display: none; }
+.experience summary:hover { color: var(--gn-orange); }
+.experience summary svg { width: 18px; height: 18px; flex-shrink: 0; color: var(--gn-orange); }
+.experience[open] summary svg { transform: rotate(45deg); }
+.experience p { padding: 0 36px 24px 0; font-size: 1rem; line-height: 1.75; }
+.source { margin-top: 28px; color: var(--gn-support); font-size: .75rem; line-height: 1.7; }
+.approach { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; padding-block: var(--gn-section-space); }
+.approach h2, .contact h2 { margin-top: 20px; color: var(--gn-heading); font-size: clamp(2rem,3.4vw,3rem); font-weight: 500; line-height: 1.13; letter-spacing: -.04em; }
+.approach .textLink { margin-top: 24px; }
+.approachCopy { padding-top: 36px; font-size: 1.125rem; line-height: 1.8; }
+.approachCopy .boundary { margin-top: 24px; font-size: .875rem; line-height: 1.8; color: var(--gn-support); }
+.contact { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: end; gap: 48px; padding: 40px; border: 1px solid var(--gn-divider); border-top-color: var(--gn-orange); background: var(--gn-surface); }
+.contact h2 { font-size: clamp(1.875rem,3vw,2.625rem); }
+.contact h2 + p { max-width: 54ch; margin-top: 20px; font-size: 1rem; line-height: 1.75; }
+.actions { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.primaryLink { display: inline-flex; justify-content: center; align-items: center; gap: 20px; min-height: 48px; padding: 14px 20px; border-radius: var(--gn-radius-button); background: var(--gn-orange); color: var(--gn-canvas); font-size: .9375rem; font-weight: 600; }
+.primaryLink:hover { background: var(--gn-orange-hover); }
+@media (prefers-reduced-motion: no-preference) {
+  .textLink svg, .primaryLink svg, .experience summary svg { transition: transform 160ms ease; }
+  .textLink:hover svg, .primaryLink:hover svg { transform: translateX(3px); }
+  .introduction .textLink:hover svg { transform: translateY(3px); }
+}
+@media (max-width: 1023px) {
+  .heroGrid { gap: 40px; }
+  .profiles, .approach { gap: 32px; }
+  .background > div { grid-template-columns: 1fr; gap: 8px; }
+  .contact { padding: 32px; grid-template-columns: 1fr; gap: 28px; }
+  .actions { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 12px 24px; }
+}
+@media (max-width: 759px) {
+  .hero { padding-top: 40px; }
+  .heroGrid { grid-template-columns: 1fr; gap: 28px; }
+  .hero h1 { font-size: clamp(3.5rem,12vw,5.5rem); }
+  .introduction { max-width: 52ch; font-size: 1rem; }
+  .introduction .textLink { margin-top: 16px; }
+  .heroRule { margin-top: 36px; }
+  .profiles { grid-template-columns: 1fr; gap: 56px; margin-top: 28px; }
+  .portrait { aspect-ratio: 1.14; }
+  .profileHeader h2 { font-size: clamp(2rem,7vw,2.75rem); }
+  .background > div { grid-template-columns: 92px minmax(0,1fr); gap: 20px; }
+  .background dd { min-height: 0; }
+  .approach { grid-template-columns: 1fr; gap: 24px; }
+  .approachCopy { padding-top: 0; font-size: 1rem; }
+  .contact { padding: 28px 24px; }
+}
+@media (max-width: 359px) {
+  .background > div { grid-template-columns: 1fr; gap: 8px; }
+  .contact { padding: 24px 20px; }
+}
