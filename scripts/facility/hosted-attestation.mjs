@@ -50,6 +50,27 @@ export async function hostedOutputDiagnostics(nextDirectory = ".next") {
   return { adapter: Boolean(config?.adapterPath), htmlFiles: (await filesAt(join(nextDirectory, "server"))).filter(file => file.endsWith(".html")).map(file => relative(nextDirectory, file).replaceAll("\\", "/")) }
 }
 
+/** Diagnostic only: this never substitutes a canonical digest for source-byte
+ * equality. Exact bytes are disclosed only for the known public repository
+ * config and an independently supplied matching canonical SHA-256. */
+export function hostedConfigDiagnostics(bytes, expectedCanonicalSha256) {
+  const config = JSON.parse(bytes.toString("utf8"))
+  assert(config && typeof config === "object" && !Array.isArray(config), "Invalid hosted project configuration")
+  const canonical = value => JSON.stringify(value, (_, item) => item && typeof item === "object" && !Array.isArray(item) ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item)
+  const approved = { $schema: "https://openapi.vercel.sh/vercel.json", git: { deploymentEnabled: { "codex/assessment-yield-upgrade": false } } }
+  const canonicalSha256 = hash(canonical(config)), expectedMatches = sha256(expectedCanonicalSha256) && canonicalSha256 === expectedCanonicalSha256
+  const knownPublicConfig = canonical(config) === canonical(approved)
+  const fields = Object.entries(config).map(([key, value]) => {
+    const safe = key === "$schema" && value === approved.$schema
+      || key === "git" && canonical(value) === canonical(approved.git)
+      || key === "version" && [1, 2].includes(value)
+      || key === "framework" && [null, "nextjs"].includes(value)
+    return { key, type: value === null ? "null" : Array.isArray(value) ? "array" : typeof value, sha256: hash(canonical(value)), ...(safe ? { value } : {}) }
+  })
+  return { bytes: bytes.length, sha256: hash(bytes), canonicalSha256, expectedCanonicalSha256: sha256(expectedCanonicalSha256) ? expectedCanonicalSha256 : null, expectedMatches, knownPublicConfig, fields,
+    ...(expectedMatches && knownPublicConfig ? { encodedBytes: bytes.toString("base64") } : {}) }
+}
+
 /** Produced inside the actual Vercel build, never synthesized from local .next. */
 export async function createHostedAttestation(identity, harnessRevision, env = process.env) {
   assert(env.VERCEL === "1" && env.VERCEL_URL && ["preview", "production"].includes(env.VERCEL_ENV), "Hosted attestation requires the actual Vercel build environment")

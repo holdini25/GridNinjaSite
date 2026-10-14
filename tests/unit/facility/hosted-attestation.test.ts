@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { describe, expect, it, vi } from "vitest"
-import { assertHostedServingPair, hostedAttestationLogLines, hostedBinding, hostedOrigin, hostedOutputDiagnostics, hostedPrerenderPath, parseHostedAttestationLogs, validateHostedAttestation, verifyHostedServing } from "../../../scripts/facility/hosted-attestation.mjs"
+import { assertHostedServingPair, hostedAttestationLogLines, hostedBinding, hostedConfigDiagnostics, hostedOrigin, hostedOutputDiagnostics, hostedPrerenderPath, parseHostedAttestationLogs, validateHostedAttestation, verifyHostedServing } from "../../../scripts/facility/hosted-attestation.mjs"
 import { createHostedAuth, hostedCookie, redactHostedSecrets } from "../../../scripts/facility/hosted-auth.mjs"
 import { assertLighthouseMatrixIndex, lighthousePriorityGroups, performanceMatrix } from "../../../scripts/facility/lighthouse-matrix.mjs"
 import { assertLocalMeasurementOrigin, assertSameBuild, settingsDigest, sourceSnapshot } from "../../../scripts/facility/performance-contract.mjs"
@@ -30,6 +30,26 @@ const cleanFetch = async (url: string | URL | Request) => {
 }
 
 describe("hosted build attestation", () => {
+  it("discloses exact config bytes only for the approved public shape and matching expected canonical digest", () => {
+    const approved = { $schema: "https://openapi.vercel.sh/vercel.json", git: { deploymentEnabled: { "codex/assessment-yield-upgrade": false } } }
+    const bytes = Buffer.from(`${JSON.stringify(approved, null, 4)}\n`), canonicalHash = sha(JSON.stringify(approved))
+    const result = hostedConfigDiagnostics(bytes, canonicalHash)
+    expect(result.expectedMatches).toBe(true)
+    expect(result.encodedBytes).toBe(bytes.toString("base64"))
+    expect(result.sha256).toBe(createHash("sha256").update(bytes).digest("hex"))
+    expect(hostedConfigDiagnostics(bytes, sha("wrong"))).not.toHaveProperty("encodedBytes")
+    expect(hostedConfigDiagnostics(bytes, undefined)).not.toHaveProperty("encodedBytes")
+    const unknown = Buffer.from(JSON.stringify({ ...approved, env: { KEY: "synthetic-private-value" }, buildCommand: "synthetic-secret-command", version: 2, framework: "nextjs" }))
+    const unknownCanonicalHash = hostedConfigDiagnostics(unknown, undefined).canonicalSha256
+    const diagnostic = hostedConfigDiagnostics(unknown, unknownCanonicalHash)
+    expect(diagnostic.expectedMatches).toBe(true)
+    expect(diagnostic.knownPublicConfig).toBe(false)
+    expect(diagnostic).not.toHaveProperty("encodedBytes")
+    expect(JSON.stringify(diagnostic)).not.toMatch(/synthetic-private-value|synthetic-secret-command/)
+    expect(diagnostic.fields.find(field => field.key === "env")).toEqual({ key: "env", type: "object", sha256: sha('{"KEY":"synthetic-private-value"}') })
+    expect(diagnostic.fields.find(field => field.key === "version")?.value).toBe(2)
+    expect(diagnostic.fields.find(field => field.key === "framework")?.value).toBe("nextjs")
+  })
   it("selects the emitted adapter cache identity even when a stale legacy HTML file also exists", async () => {
     const root = await mkdtemp(join(tmpdir(), "gridninja-hosted-output-"))
     const save = async (path: string, value: string) => { await mkdir(dirname(join(root, path)), { recursive: true }); await writeFile(join(root, path), value) }
