@@ -44,6 +44,7 @@ jobs:
           PY
       - run: npm run test:staging:contact
         env:
+          PLAYWRIGHT_NO_COPY_PROMPT: "1"
           STAGING_CANARY_MODE: ${{ inputs.mode }}
           STAGING_BASE_URL: ${{ secrets.STAGING_BASE_URL }}
           STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}

@@ -1,18 +1,19 @@
 // @vitest-environment node
 import { createHash } from "node:crypto"
-import { describe, expect, it } from "vitest"
+import { Client } from "pg"
+import { describe, expect, it, vi } from "vitest"
 import {
   assertStagingApproval, assertStagingDatabaseIdentity, assertStagingMonitorHealthy,
   assertStagingRequestTarget, assertStagingResponseStatus, evaluateStagingDelivery,
-  stagingIntakeConfig, stagingCanaryConfig, stagingDatabaseTargetSha256,
-  stagingFrozenPayloadEvidence, stagingRehearsalMode,
+  stagingIntakeConfig, stagingCanaryConfig, stagingDatabaseConnection, stagingDatabaseTargetSha256,
+  stagingFrozenPayloadEvidence, stagingRehearsalMode, withStagingFailurePrivacy,
 } from "../../../scripts/qa/staging-contract.mjs"
 
 const sha = (value: string) => createHash("sha256").update(value).digest("hex")
 const now = Date.parse("2026-10-13T12:00:00.500Z")
 const env = {
   STAGING_BASE_URL: "https://preview.example.test", STAGING_CANARY_AUTHORIZED_ORIGIN: "https://preview.example.test",
-  STAGING_CANARY_AUTHORIZED: "staging-only", STAGING_DATABASE_URL: "postgresql://reader:secret@staging.example.test/staging",
+  STAGING_CANARY_AUTHORIZED: "staging-only", STAGING_DATABASE_URL: "postgresql://reader:secret@staging.example.test/staging?sslmode=require",
   STAGING_CANARY_EMAIL: "sink@example.test", STAGING_CANARY_DELIVERY_EMAIL: "notification-sink@example.test",
   STAGING_CANARY_APPROVAL_FILE: "/private/staging-approval.json", STAGING_CANARY_APPROVAL_SHA256: "a".repeat(64),
   STAGING_CANARY_EXPECTED_ATTESTATION_SHA256: "b".repeat(64), STAGING_CANARY_DEPLOYMENT_BYPASS: "x".repeat(32),
@@ -110,7 +111,70 @@ describe("independently reviewed private isolation record", () => {
     for (const change of [{ database_name: "production" }, { database_user: "writer" }, { transaction_read_only: "off" }]) {
       expect(() => assertStagingDatabaseIdentity({ database_name: "staging", database_user: "reader", transaction_read_only: "on", ...change }, approval)).toThrow()
     }
-    expect(stagingDatabaseTargetSha256(env.STAGING_DATABASE_URL)).toBe(stagingDatabaseTargetSha256("postgresql://other:different@staging.example.test:5432/staging?secret=hidden"))
+    expect(stagingDatabaseTargetSha256(env.STAGING_DATABASE_URL)).toBe(stagingDatabaseTargetSha256("postgresql://other:different@staging.example.test:5432/staging?sslmode=verify-full&channel_binding=require"))
+  })
+})
+
+describe("staging database connection boundary", () => {
+  it.each([
+    "host=other-database.invalid&options=-c%20default_transaction_read_only%3Doff",
+    "%68ost=other-database.invalid", "port=5433", "database=production", "dbname=production",
+    "user=writer", "password=other", "options=-c%20default_transaction_read_only%3Doff",
+    "sslmode=disable", "sslmode=require", "channel_binding=disable", "service=production",
+    "sslcert=private-file", "sslkey=private-file", "unknown=value", "SSLmode=require",
+    "channel_binding=require&channel_binding=require",
+  ])("rejects URL overrides before approval hashing and client creation: %s", query => {
+    const malicious = `${env.STAGING_DATABASE_URL}&${query}`
+    expect(() => stagingDatabaseConnection(malicious)).toThrow(/forbidden/)
+    expect(() => stagingDatabaseTargetSha256(malicious)).toThrow(/forbidden/)
+    expect(() => stagingIntakeConfig({ ...env, STAGING_DATABASE_URL: malicious })).toThrow(/forbidden/)
+  })
+  it("passes only explicit pinned driver fields and defeats inherited routing/read-only overrides", () => {
+    for (const [key, value] of Object.entries({ PGHOST: "other-database.invalid", PGPORT: "5433", PGDATABASE: "production", PGUSER: "writer", PGPASSWORD: "inherited-secret", PGOPTIONS: "-c default_transaction_read_only=off", PGSSLMODE: "disable" })) vi.stubEnv(key, value)
+    try {
+      const connection = stagingIntakeConfig(env).databaseConnection
+      expect(connection).not.toHaveProperty("connectionString")
+      const client = new Client(connection) // Inspect the actual driver; never connect.
+      for (const [key, value] of Object.entries({ host: "staging.example.test", port: 5432, database: "staging", user: "reader", ssl: { rejectUnauthorized: true } })) expect(client).toHaveProperty(`connectionParameters.${key}`, value)
+      expect(client).toHaveProperty("connectionParameters.options", "-c default_transaction_read_only=on -c statement_timeout=5000 -c lock_timeout=1000 -c idle_in_transaction_session_timeout=10000")
+      expect(connection.password()).toBe("secret")
+      expect(JSON.stringify(connection)).not.toContain("secret")
+    } finally { vi.unstubAllEnvs() }
+  })
+  it("requires remote verified TLS and rejects malformed identities without disclosing credentials", () => {
+    for (const url of [
+      "postgresql://reader:private-secret@staging.example.test/staging",
+      "postgresql://reader:private-secret@localhost/staging",
+      "postgresql://reader:private-secret@staging.example.test./staging?sslmode=require",
+      `${env.STAGING_DATABASE_URL}#private-secret`,
+      "postgresql://reader:private-secret@staging.example.test/staging%2Fproduction?sslmode=require",
+      "postgresql://reader:private-secret@staging.example.test/%00staging?sslmode=require",
+    ]) {
+      expect(() => stagingDatabaseConnection(url)).toThrow()
+      try { stagingDatabaseConnection(url) } catch (error) { expect(String(error)).not.toContain("private-secret") }
+    }
+    expect(stagingDatabaseConnection("postgresql://reader:secret@127.0.0.1/staging").ssl).toBe(false)
+    expect(stagingDatabaseConnection("postgresql://reader:secret@[::1]/staging").host).toBe("::1")
+  })
+})
+
+describe("staging failure privacy", () => {
+  it("removes underlying browser/driver values and cause from a reported failure", async () => {
+    const privateError = new Error("locator.fill private-recipient@example.test Bearer private-token private-database-password")
+    const result = await withStagingFailurePrivacy(async () => { throw privateError }).catch(error => error)
+    expect(result.message).toBe("StagingCanaryFailed")
+    expect(result.cause).toBeUndefined()
+    expect(String(result.stack)).not.toMatch(/private-recipient|private-token|private-database-password/)
+    await expect(withStagingFailurePrivacy(async () => "safe-result")).resolves.toBe("safe-result")
+  })
+  it("disables Playwright DOM failure snapshots before worker startup and all automatic captures", async () => {
+    for (const [key, value] of Object.entries(env)) vi.stubEnv(key, value)
+    vi.stubEnv("PLAYWRIGHT_NO_COPY_PROMPT", "")
+    try {
+      const { default: config } = await import("../../../playwright.staging.config")
+      expect(process.env.PLAYWRIGHT_NO_COPY_PROMPT).toBe("1")
+      expect(config.use).toMatchObject({ trace: "off", screenshot: "off", video: "off" })
+    } finally { vi.unstubAllEnvs() }
   })
 })
 

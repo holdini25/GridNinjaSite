@@ -19,7 +19,8 @@ function requiredValue(env, name) {
 export function stagingIntakeConfig(env) {
   const required = name => requiredValue(env, name)
   const baseURL = required("STAGING_BASE_URL")
-  const url = new URL(baseURL)
+  let url
+  try { url = new URL(baseURL) } catch { throw new Error("STAGING_BASE_URL must be a clean HTTP(S) origin") }
   if (!["https:", "http:"].includes(url.protocol) || url.username || url.password || url.pathname !== "/" || url.search || url.hash) throw new Error("STAGING_BASE_URL must be a clean HTTP(S) origin")
   // DNS treats a final dot as an equivalent fully qualified hostname. Keep one
   // spelling of an explicitly authorized staging target; never bypass the
@@ -30,8 +31,7 @@ export function stagingIntakeConfig(env) {
   if (required("STAGING_CANARY_AUTHORIZED_ORIGIN") !== url.origin) throw new Error("The staging origin must match explicit canary authorization")
   if (required("STAGING_CANARY_AUTHORIZED") !== "staging-only") throw new Error("Explicit staging-only canary authorization is required")
   const databaseUrl = required("STAGING_DATABASE_URL")
-  const database = new URL(databaseUrl)
-  if (!["postgres:", "postgresql:"].includes(database.protocol)) throw new Error("STAGING_DATABASE_URL must name PostgreSQL")
+  const databaseConnection = stagingDatabaseConnection(databaseUrl)
   const email = required("STAGING_CANARY_EMAIL")
   if (!emailPattern.test(email)) throw new Error("STAGING_CANARY_EMAIL must name one approved test email")
   const deliveryEmail = required("STAGING_CANARY_DELIVERY_EMAIL")
@@ -42,7 +42,7 @@ export function stagingIntakeConfig(env) {
   if (!digest.test(approvalSha256) || !digest.test(expectedAttestationSha256)) throw new Error("Staging approval and qualified build hashes are required")
   const deploymentBypass = required("STAGING_CANARY_DEPLOYMENT_BYPASS")
   if (deploymentBypass.length < 32) throw new Error("Staging deployment authentication must be configured")
-  return { baseURL: url.origin, databaseUrl, email, deliveryEmail, approvalFile, approvalSha256, expectedAttestationSha256, deploymentBypass }
+  return { baseURL: url.origin, databaseUrl, databaseConnection, email, deliveryEmail, approvalFile, approvalSha256, expectedAttestationSha256, deploymentBypass }
 }
 
 /** This runner has no acknowledgement credential and cannot fabricate handling. */
@@ -64,12 +64,47 @@ export function stagingRehearsalMode(env) {
   return mode
 }
 
+/** Validate before hashing or connecting. pg connectionString parameters override
+ * explicit options, so never pass the URL to the driver. Only literal loopback
+ * targets may omit verified TLS. Credentials remain private to this runner. */
+export function stagingDatabaseConnection(connectionString) {
+  let url
+  try { url = new URL(connectionString) } catch { throw new Error("STAGING_DATABASE_URL must explicitly name a PostgreSQL target") }
+  if (!["postgres:", "postgresql:"].includes(url.protocol) || !url.hostname || url.hash || !url.username || !/^\/[^/]+$/.test(url.pathname)) throw new Error("Invalid staging PostgreSQL target shape")
+  if (url.hostname.endsWith(".")) throw new Error("Staging database hostname aliases are not accepted")
+  const parameters = [...url.searchParams.entries()]
+  if (new Set(parameters.map(([key]) => key)).size !== parameters.length || parameters.some(([key, value]) => !(key === "sslmode" && ["require", "verify-full"].includes(value) || key === "channel_binding" && value === "require"))) throw new Error("Staging database routing and unsupported URL options are forbidden")
+  let database, user, password
+  try { database = decodeURIComponent(url.pathname.slice(1)); user = decodeURIComponent(url.username); password = decodeURIComponent(url.password) } catch { throw new Error("Invalid staging database target encoding") }
+  if ([database, user, password].some(value => /[\u0000-\u001f\u007f]/.test(value)) || database.includes("/")) throw new Error("Invalid staging database target fields")
+  const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "")
+  const local = ["127.0.0.1", "::1"].includes(host)
+  const port = Number(url.port || 5432)
+  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error("Invalid staging database target port")
+  const verifiedTls = parameters.some(([key]) => key === "sslmode")
+  if (!local && !verifiedTls) throw new Error("Remote staging database requires verified TLS")
+  return {
+    host, port, database, user, password: () => password,
+    options: "-c default_transaction_read_only=on -c statement_timeout=5000 -c lock_timeout=1000 -c idle_in_transaction_session_timeout=10000",
+    ssl: verifiedTls ? { rejectUnauthorized: true } : false,
+    enableChannelBinding: parameters.some(([key]) => key === "channel_binding"),
+    application_name: "gridninja-staging-read-only", sslnegotiation: "postgres",
+    connectionTimeoutMillis: 5000, query_timeout: 7000,
+  }
+}
+
 /** No passwords or query tokens in the comparison. A distinct hostname is NOT
  * proof of isolation: the separately reviewed evidence must resolve aliases and
  * verify the actual hosted environment, DB branch and provider account. */
 export function stagingDatabaseTargetSha256(connectionString) {
-  const url = new URL(connectionString)
-  return sha256(JSON.stringify({ host: url.hostname.toLowerCase(), port: url.port || "5432", database: decodeURIComponent(url.pathname.slice(1)) }))
+  const { host, port, database } = stagingDatabaseConnection(connectionString)
+  return sha256(JSON.stringify({ host, port: String(port), database }))
+}
+
+/** Never include the triggering exception or its cause: browser/driver messages
+ * can contain recipients, credentials, DOM content or private SQL parameters. */
+export async function withStagingFailurePrivacy(operation) {
+  try { return await operation() } catch { throw new Error("StagingCanaryFailed") }
 }
 
 /** A hash pins the reviewed private record; it is not a signature, permission

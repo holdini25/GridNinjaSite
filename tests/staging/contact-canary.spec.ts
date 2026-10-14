@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test"
 import {
   assertStagingDatabaseIdentity, assertStagingMonitorHealthy,
   assertStagingRequestTarget, assertStagingResponseStatus, evaluateStagingDelivery,
-  readStagingApproval, readStagingDeliveryEvidence, stagingCanaryConfig, stagingIntakeConfig, stagingRehearsalMode,
+  readStagingApproval, readStagingDeliveryEvidence, stagingCanaryConfig, stagingIntakeConfig, stagingRehearsalMode, withStagingFailurePrivacy,
 } from "../../scripts/qa/staging-contract.mjs"
 
 const mode = stagingRehearsalMode(process.env)
@@ -14,13 +14,13 @@ const config = full ? stagingCanaryConfig(process.env) : stagingIntakeConfig(pro
 test.use({ trace: "off", screenshot: "off", video: "off" })
 
 test(full ? "staffed staging observation chain requires recipient delivery and a real human acknowledgement"
-  : "staging intake smoke proves durable receipt and provider acceptance only", async ({ page }, testInfo) => {
+  : "staging intake smoke proves durable receipt and provider acceptance only", async ({ page }, testInfo) => withStagingFailurePrivacy(async () => {
   const fullConfig = full ? stagingCanaryConfig(process.env) : null
   test.setTimeout(120_000 + (fullConfig?.acknowledgementTimeoutMs ?? 0))
   const approval = await readStagingApproval(config, mode)
   // Read-only at the connection level. This runner never writes SQL, posts an
   // acknowledgement, forges a callback or resets a delivery for another try.
-  const client = new Client({ connectionString: config.databaseUrl, options: "-c default_transaction_read_only=on", connectionTimeoutMillis: 5000, query_timeout: 5000 })
+  const client = new Client(config.databaseConnection)
   let stage = "preflight", outboxId: string | undefined, submissionId: string | undefined
   let result = "incomplete"
   let frozenRequestSha256: string | undefined
@@ -104,4 +104,4 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
       limitations: ["Private approval must independently establish hosted build/configuration, database/account isolation and authenticated callback/ack write paths.", "No provider key or raw callback signature is retained in database evidence.", "This chain does not replace outage, rotation, duplicate-callback, scheduler-loss, sink-failure, restore/rollback or manual release gates."],
     }, null, 2)) })
   }
-})
+}))
