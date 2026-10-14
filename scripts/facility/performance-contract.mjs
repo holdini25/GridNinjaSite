@@ -6,6 +6,8 @@ import { readApprovedManifest, readFacilityRegistry, validateSelectedFacility } 
 import { selectedCinematicIdentity } from "../../src/lib/cinematic/files.mjs"
 import { BASE_TRANSFER_BUDGET, CINEMATIC_PERFORMANCE_VERSION, routeTransferBudget } from "../../src/lib/cinematic/performance.mjs"
 import { privateCandidateIdentity } from "../qa/private-candidate-contract.mjs"
+import { hostedBinding, validateHostedAttestation, verifyHostedServing } from "./hosted-attestation.mjs"
+import { hostedFetch } from "./hosted-auth.mjs"
 
 export const TRANSFER_BUDGET = BASE_TRANSFER_BUDGET
 export { routeTransferBudget }
@@ -50,21 +52,46 @@ export async function currentBuildIdentity() {
   return { sourceRevision: await sourceRevision(), buildId: (await readFile(".next/BUILD_ID", "utf8")).trim(), releases: await releaseIdentity(), buildSettings }
 }
 export async function verifiedBuildIdentity() {
+  if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) return (await hostedBuildAttestation()).identity
+  assertLocalMeasurementOrigin()
   const recorded = JSON.parse(await readFile(".next/facility-build.json", "utf8"))
   const current = await currentBuildIdentity()
   assert.deepEqual(current, recorded.identity, "Source, build, or release changed after the recorded production build; rebuild before measuring")
   return current
 }
 export async function provenance(browser, settings) {
+  const hosted = process.env.FACILITY_HOSTED_ATTESTATION_FILE ? await hostedBuildAttestation() : null
+  return { schemaVersion: "facility-performance.v2", ...await verifiedBuildIdentity(), harnessRevision: await harnessRevision(), ...(hosted ? { hosted: hostedBinding(hosted) } : {}), browser, settings, settingsSha256: settingsDigest(settings) }
+}
+export async function harnessRevision() {
   const harnessFiles = (await Promise.all(["scripts/facility", "scripts/cinematic", "lighthouserc.cjs", "scripts/seo/validate-lighthouse-budgets.mjs"].map(filesAt))).flat().sort()
   const hash = createHash("sha256")
   for (const path of harnessFiles.sort()) hash.update(path).update(await readFile(path))
-  return { schemaVersion: "facility-performance.v2", ...await verifiedBuildIdentity(), harnessRevision: hash.digest("hex"), browser, settings, settingsSha256: settingsDigest(settings) }
+  return hash.digest("hex")
+}
+export async function hostedBuildAttestation() {
+  assert(process.env.FACILITY_HOSTED_ATTESTATION_FILE && process.env.FACILITY_BASE_URL, "Hosted evidence requires explicit attestation file and deployment origin")
+  return validateHostedAttestation(JSON.parse(await readFile(process.env.FACILITY_HOSTED_ATTESTATION_FILE, "utf8")), { baseURL: process.env.FACILITY_BASE_URL, sourceRevision: await sourceRevision(), harnessRevision: await harnessRevision() })
+}
+export async function recordedBuild() {
+  return process.env.FACILITY_HOSTED_ATTESTATION_FILE ? hostedBuildAttestation() : JSON.parse(await readFile(".next/facility-build.json", "utf8"))
+}
+export async function verifyMeasurementServing() {
+  if (!process.env.FACILITY_HOSTED_ATTESTATION_FILE) {
+    assertLocalMeasurementOrigin()
+    return null
+  }
+  return verifyHostedServing(await hostedBuildAttestation(), { baseURL: process.env.FACILITY_BASE_URL, fetcher: hostedFetch })
+}
+export function assertLocalMeasurementOrigin(baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000") {
+  const url = new URL(baseURL)
+  assert(["http:", "https:"].includes(url.protocol) && !url.username && !url.password && ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname), "Remote collection requires actual hosted build attestation; local .next cannot identify a hosted build")
 }
 export function assertSameBuild(actual, expected) {
   for (const key of ["schemaVersion", "sourceRevision", "buildId", "harnessRevision"]) assert.equal(actual?.[key], expected?.[key], `Missing or mixed provenance: ${key}`)
   assert.deepEqual(actual.releases, expected.releases, "Mixed release manifests")
   assert.deepEqual(actual.buildSettings, expected.buildSettings, "Mixed facility release/mode settings")
+  assert.deepEqual(actual.hosted, expected.hosted, "Mixed local/hosted deployment provenance")
   assert.equal(actual.settingsSha256, settingsDigest(actual.settings), "Report settings digest mismatch")
   assert.equal(typeof actual.browser, "string", "Missing browser identity")
 }

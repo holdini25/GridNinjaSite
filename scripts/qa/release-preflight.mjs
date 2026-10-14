@@ -31,7 +31,7 @@ const report = {
   attestation,
   externalEvidence: {
     status: "not-verified",
-    required: ["isolated-staging-origin-and-accounts", "authorized-controlled-recipients", "named-primary-backup-and-independent-reviewer", "actual-https-analytics-and-live-verification-measurements", "observed-minute-scheduler-and-alert-recovery", "all-trigger-worker-hold-and-drain", "recipient-delivery-and-operator-acknowledgement", "restore-retention-and-safe-rollback", "physical-devices-manual-accessibility-and-participant-research"],
+    required: ["isolated-staging-origin-database-and-accounts-not-inferred-from-preview-scope", "authorized-controlled-recipients", "private-provider-account-key-and-destination-approval", "named-primary-backup-and-independent-reviewer", "owner-selected-recipient-handling-and-watchdog-thresholds", "actual-https-analytics-and-live-verification-measurements", "observed-minute-scheduler-direct-alert-recovery-and-external-watchdog", "all-trigger-worker-hold-and-drain-including-old-deployments", "authenticated-account-bound-recipient-observation-and-human-acknowledgement", "restore-retention-and-safe-rollback", "physical-devices-manual-accessibility-and-participant-research"],
   },
   releaseApproved: false,
 }

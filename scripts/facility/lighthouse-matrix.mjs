@@ -27,6 +27,12 @@ export function lighthouseGroups(name = "core") {
   return Object.freeze([...groups.filter(priority), ...groups.filter(group => !priority(group))])
 }
 
+/** A ten-capture preflight is explicitly incomplete release evidence. */
+export function lighthousePriorityGroups(name) {
+  assert.equal(name, "premium-civic", "Priority preflight requires the premium release matrix")
+  return lighthouseGroups(name).filter(group => group.profile === "mobile" && ["/", "/contact"].includes(group.route))
+}
+
 export function lighthouseRoutePolicy(route) {
   return Object.freeze({
     lcp: route === "/contact" ? 2000 : 2500,

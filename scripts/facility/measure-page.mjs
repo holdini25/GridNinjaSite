@@ -1,7 +1,8 @@
 import assert from "node:assert/strict"
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { chromium, devices } from "@playwright/test"
-import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, collectTransfers, provenance, settleTransfers, verifiedBuildIdentity } from "./performance-contract.mjs"
+import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, collectTransfers, provenance, settleTransfers, verifiedBuildIdentity, verifyMeasurementServing } from "./performance-contract.mjs"
+import { authorizeHostedContext, redactHostedSecrets } from "./hosted-auth.mjs"
 import { measureCinematicPage } from "../cinematic/measure-page.mjs"
 import { CINEMATIC_MOTION_LIMITS } from "../cinematic/motion-evidence.mjs"
 import { measurementScope } from "./measurement-scope.mjs"
@@ -73,8 +74,11 @@ function presentationSnapshot() {
 }
 
 try {
+  const before = await verifyMeasurementServing()
+  if (before) report.hostedServing = { before, after: null, collectionStartedAt: new Date().toISOString(), collectionFinishedAt: null }
   for (const route of ["/", "/demo"]) for (const profile of ["desktop", "mobile-emulation"]) for (let run = 1; run <= runCount; run++) {
     const context = await browser.newContext(profile === "desktop" ? { viewport: settings.desktopViewport } : devices["Pixel 5"])
+    if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) await authorizeHostedContext(context, new URL(baseURL).origin)
     const page = await context.newPage()
     const cdp = await context.newCDPSession(page)
     const ledger = await collectTransfers(cdp)
@@ -316,7 +320,12 @@ try {
   report.failure = error instanceof Error ? error.message : String(error)
   process.exitCode = 1
 } finally {
-  await writeFile(scope.output, `${JSON.stringify(report, null, 2)}\n`)
+  if (report.hostedServing) {
+    report.hostedServing.collectionFinishedAt = new Date().toISOString()
+    try { report.hostedServing.after = await verifyMeasurementServing() }
+    catch (error) { report.hostedServing.after = { result: "fail", failure: error instanceof Error ? error.message : String(error) }; report.result = "fail"; process.exitCode = 1 }
+  }
+  await writeFile(scope.output, `${JSON.stringify(process.env.FACILITY_HOSTED_ATTESTATION_FILE ? redactHostedSecrets(report) : report, null, 2)}\n`)
 }
 } finally {
   try { await browser?.close() } finally { await releaseCompute() }

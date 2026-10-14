@@ -3,7 +3,8 @@ import { assertCinematicMotion } from "../cinematic/motion-evidence.mjs"
 import { assertQualificationScope, measurementScope } from "./measurement-scope.mjs"
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises"
 import { assertReadinessRunCount, evaluateLighthouseGroup } from "./lighthouse-group-budget.mjs"
-import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertLighthouseProfile, assertSameBuild, canonicalJson, provenance } from "./performance-contract.mjs"
+import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertLighthouseProfile, assertSameBuild, canonicalJson, provenance, recordedBuild, hostedBuildAttestation, verifyMeasurementServing } from "./performance-contract.mjs"
+import { assertHostedServingPair } from "./hosted-attestation.mjs"
 import { assertScrolledTransfer } from "./scrolled-transfer.mjs"
 import { performanceMatrix, assertLighthouseMatrixIndex } from "./lighthouse-matrix.mjs"
 
@@ -35,12 +36,18 @@ try {
     summary.scrolledTransfers = pages.scrolledTransfers.map(({ route, profile, run, initialTransfer, fullPageTransfer }) => ({ route, profile, run, initialBytes: initialTransfer.bytes, fullPageBytes: fullPageTransfer.bytes, cumulativeNotAdditive: true }))
   }
   summary.provenance = expected
-  const build = JSON.parse(await readFile(".next/facility-build.json", "utf8"))
+  const build = await recordedBuild()
   const fresh = timestamp => {
     assert(Number.isFinite(Date.parse(timestamp)) && Date.parse(timestamp) >= Date.parse(build.recordedAt) && Date.parse(timestamp) <= Date.now() + 60_000, "Report predates this build or has an invalid measurement time")
   }
   fresh(pages.measuredAt)
   const index = JSON.parse(await readFile(`${outputRoot}/lighthouse-index.json`, "utf8"))
+  if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) {
+    const attestation = await hostedBuildAttestation()
+    assertHostedServingPair(pages.hostedServing, attestation)
+    assertHostedServingPair(index.hostedServing, attestation)
+    summary.hostedServing = await verifyMeasurementServing()
+  } else assert(!pages.hostedServing && !index.hostedServing, "Hosted receipts require explicit hosted attestation")
   assertLighthouseMatrixIndex(index, matrix)
   assert(!index.diagnostic, "A diagnostic collection cannot qualify a release matrix")
   for (const profile of ["desktop", "mobile"]) {
@@ -57,6 +64,11 @@ try {
         const evidence = report.facilityEvidence
         assertLighthouseProfile(report, profile)
         assert(evidence?.complete && evidence.route === route, "Missing complete Lighthouse evidence")
+        if (expected.hosted) {
+          assert.equal(new URL(report.finalUrl).origin, expected.hosted.origin, "Lighthouse measured another deployment origin")
+          assert.equal(new URL(report.requestedUrl).origin, expected.hosted.origin, "Lighthouse requested another deployment origin")
+          assert(Date.parse(evidence.measuredAt) >= Date.parse(index.hostedServing.collectionStartedAt) && Date.parse(evidence.measuredAt) <= Date.parse(index.hostedServing.collectionFinishedAt), "Lighthouse sample lies outside hosted serving verification window")
+        }
         assertSameBuild(evidence.provenance, expected)
         assert.equal(evidence.provenance.browser, pages.provenance.browser, "Mixed Chrome versions between transfer and Lighthouse evidence")
         assert.equal(canonicalJson(evidence.provenance.settings), profileSettings, "Mixed Lighthouse settings within a profile")
