@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { chromium, devices } from "@playwright/test"
-import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, collectTransfers, provenance, settleTransfers, verifiedBuildIdentity, verifyMeasurementServing } from "./performance-contract.mjs"
+import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertMeasurementServingPair, assertRendererBudget, assertSettlementEvidence, collectTransfers, isProtectedMeasurement, measurementEnvironment, provenance, settleTransfers, verifiedBuildIdentity, verifyMeasurementDocument, verifyMeasurementServing } from "./performance-contract.mjs"
 import { authorizeHostedContext, redactHostedSecrets } from "./hosted-auth.mjs"
 import { measureCinematicPage } from "../cinematic/measure-page.mjs"
 import { CINEMATIC_MOTION_LIMITS } from "../cinematic/motion-evidence.mjs"
@@ -16,20 +16,23 @@ try {
 const baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000"
 const scope = measurementScope(process.env.FACILITY_MEASUREMENT_SCOPE)
 const matrix = performanceMatrix(process.env.FACILITY_PERFORMANCE_MATRIX)
-await rm(scope.output, { force: true })
+const qualificationEnvironment = await measurementEnvironment()
 const runCount = Number(process.env.FACILITY_RUNS ?? 5)
 assert(Number.isInteger(runCount) && runCount >= 1 && runCount <= 5)
 const headed = process.env.FACILITY_HEADED === "1"
 const angle = process.env.FACILITY_ANGLE
 const launchSettings = { headless: !headed, channel: process.env.FACILITY_CHROME_CHANNEL ?? "chrome", ...(angle === "metal" ? { args: ["--use-angle=metal", "--use-gl=angle"], ignoreDefaultArgs: ["--use-angle=swiftshader", "--disable-gpu"] } : {}) }
+await rm(scope.output, { force: true })
 browser = await chromium.launch(launchSettings)
-const settings = { baseURL, runCount, freshContextEveryRun: true, cacheDisabled: true, settleQuietMs: 750, settleTimeoutMs: 15_000, readinessTimeoutMs: 12_000, pauseSettleTimeoutMs: 1_000, pauseIdleQuietMs: 250, pauseObservationMs: 500, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", capabilityFps: 60, ambientFps: 30, capabilityFrameLimitsMs: { desktop: 20, mobile: 34 }, launch: launchSettings }
+const settings = { baseURL, runCount, qualificationEnvironment, freshContextEveryRun: true, cacheDisabled: true, settleQuietMs: 750, settleTimeoutMs: 15_000, readinessTimeoutMs: 12_000, pauseSettleTimeoutMs: 1_000, pauseIdleQuietMs: 250, pauseObservationMs: 500, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", capabilityFps: 60, ambientFps: 30, capabilityFrameLimitsMs: { desktop: 20, mobile: 34 }, launch: launchSettings }
 settings.measurementScope = scope.name
 settings.performanceMatrix = matrix.name
 settings.fullScrollTransfer = matrix.name === "premium-civic" ? { routes: matrix.routes, profiles: matrix.profiles, runs: matrix.runs, cumulativeNotAdditive: true, ...SCROLLED_TRANSFER_PROTOCOL } : null
 settings.cinematic = { ...CINEMATIC_MOTION_LIMITS, readinessTimeoutMs: 18_000, loopExtraDeadlineMs: 15_000, maximumUnexpectedWaitingEvents: 0, continuouslyVisible: true, firstMotionTimingBasis: "Element Timing poster paint to first native callback after visible CSS; compositor display proxy, separate decode timing" }
 settings.cinematic.loopBoundaryTimingBasis = "Full compositor expectedDisplayTime endpoint interval, never divided by missed callbacks; legacy evidence uses the callback clock. Separate callback stall ceiling remains enforced."
-const report = { measuredAt: new Date().toISOString(), hardwareQualification: scope.hardwareQualification, provenance: await provenance(browser.version(), settings), results: [], result: "incomplete" }
+const captureProvenance = await provenance(browser.version(), settings)
+assert.deepEqual(captureProvenance.qualificationEnvironment, qualificationEnvironment, "Qualification environment changed before page measurement")
+const report = { measuredAt: new Date().toISOString(), hardwareQualification: scope.hardwareQualification, qualificationEnvironment: captureProvenance.qualificationEnvironment, provenance: captureProvenance, results: [], result: "incomplete" }
 await mkdir("build/facility", { recursive: true })
 
 async function revealStage(page, inspector) {
@@ -78,11 +81,18 @@ try {
   if (before) report.hostedServing = { before, after: null, collectionStartedAt: new Date().toISOString(), collectionFinishedAt: null }
   for (const route of ["/", "/demo"]) for (const profile of ["desktop", "mobile-emulation"]) for (let run = 1; run <= runCount; run++) {
     const context = await browser.newContext(profile === "desktop" ? { viewport: settings.desktopViewport } : devices["Pixel 5"])
-    if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) await authorizeHostedContext(context, new URL(baseURL).origin)
+    if (isProtectedMeasurement()) await authorizeHostedContext(context, new URL(baseURL).origin)
     const page = await context.newPage()
     const cdp = await context.newCDPSession(page)
     const ledger = await collectTransfers(cdp)
-    const result = { route, profile, run, freshContext: true, complete: false, phase: "navigation", budgetFailures: [], pageErrors: [] }
+    const result = { route, profile, run, qualificationEnvironment: report.provenance.qualificationEnvironment, documentIdentity: null, freshContext: true, complete: false, phase: "navigation", budgetFailures: [], pageErrors: [] }
+    const verifyDocument = async response => {
+      if (report.qualificationEnvironment.name !== "public-production") return
+      result.phase = "document-identity"
+      assert(response, "Missing navigation response for public document proof")
+      result.documentIdentity = await verifyMeasurementDocument(await response.body(), { url: response.url(), status: response.status(), headers: await response.allHeaders() })
+      assert(result.documentIdentity, "Missing public document identity")
+    }
     page.on("pageerror", error => result.pageErrors.push({ phase: result.phase, message: error.message }))
     const checkBudget = check => { try { check() } catch(error) { result.budgetFailures.push(error instanceof Error ? error.message : String(error)) } }
     report.results.push(result)
@@ -134,13 +144,14 @@ try {
         new PerformanceObserver(list => { for (const entry of list.getEntries()) window.__facilityVitals.lcp = entry.startTime }).observe({ type: "largest-contentful-paint", buffered: true })
         new PerformanceObserver(list => { for (const entry of list.getEntries()) if (!entry.hadRecentInput) window.__facilityVitals.cls += entry.value }).observe({ type: "layout-shift", buffered: true })
       })
-      await page.goto(baseURL + route, { waitUntil: "load", timeout: 30_000 })
+      const response = await page.goto(baseURL + route, { waitUntil: "load", timeout: 30_000 })
       if (route === "/" && report.provenance.buildSettings.cinematic?.selectedRelease) {
         result.phase = "cinematic-loop-readiness"
         const cinematic = await measureCinematicPage(page, ledger, { identity: report.provenance, profile })
         Object.assign(result, { cinematic, transfer: cinematic.transfer, throughReady: cinematic.throughReady, release: cinematic.release })
         result.vitals = await page.evaluate(() => window.__facilityVitals)
         assert.deepEqual(result.pageErrors, [], "Page errors occurred during cinematic measurement")
+        await verifyDocument(response)
         result.phase = "complete"; result.complete = true
         console.log(JSON.stringify({ route, profile, run, transferBytes: result.transfer.bytes, cinematic: cinematic.status, decodedPosterToFirstFrameMs: cinematic.first?.decodedPosterToFirstFrameMs }))
         continue
@@ -296,6 +307,7 @@ try {
       assertSettlementEvidence(result.settlement, settings)
       checkBudget(()=>assertRendererBudget(after, false))
       assert.deepEqual(result.pageErrors, [], "Page errors occurred during measurement")
+      await verifyDocument(response)
       result.phase = "complete"
       result.complete = true
       console.log(JSON.stringify({ route, profile, run, scope: scope.name, transferBytes: result.transfer.bytes, renderer: result.renderingClass, frameP95: result.renderer.frameP95, capabilityP95:result.capability?.frameP95 ?? null, budgetFailures:result.budgetFailures }))
@@ -309,7 +321,7 @@ try {
       console.log(JSON.stringify({route,profile,run,failure:result.failure}))
     } finally { await context.close() }
   }
-  if (matrix.name === "premium-civic") report.scrolledTransfers = await measureScrolledRoutes(browser, { matrix, baseURL, buildSettings: report.provenance.buildSettings, desktopViewport: settings.desktopViewport })
+  if (matrix.name === "premium-civic") report.scrolledTransfers = await measureScrolledRoutes(browser, { matrix, baseURL, buildSettings: report.provenance.buildSettings, desktopViewport: settings.desktopViewport, qualificationEnvironment: report.provenance.qualificationEnvironment })
   assert.deepEqual(await verifiedBuildIdentity(), { sourceRevision: report.provenance.sourceRevision, buildId: report.provenance.buildId, releases: report.provenance.releases, buildSettings: report.provenance.buildSettings })
   report.failures=report.results.flatMap(result=>[...(result.failure?[result.failure]:[]),...result.budgetFailures].map(reason=>`${result.route} ${result.profile} run ${result.run}: ${reason}`))
   report.failures.push(...(report.scrolledTransfers ?? []).filter(result => !result.complete).map(result => `Full scroll ${result.profile} ${result.route} run ${result.run}: ${result.failure}`))
@@ -322,10 +334,17 @@ try {
 } finally {
   if (report.hostedServing) {
     report.hostedServing.collectionFinishedAt = new Date().toISOString()
-    try { report.hostedServing.after = await verifyMeasurementServing() }
-    catch (error) { report.hostedServing.after = { result: "fail", failure: error instanceof Error ? error.message : String(error) }; report.result = "fail"; process.exitCode = 1 }
+    try {
+      report.hostedServing.after = await verifyMeasurementServing()
+      await assertMeasurementServingPair(report.hostedServing)
+    }
+    catch (error) {
+      report.hostedServing.validationFailure = error instanceof Error ? error.message : String(error)
+      report.hostedServing.after ??= { result: "fail", failure: report.hostedServing.validationFailure }
+      report.result = "fail"; process.exitCode = 1
+    }
   }
-  await writeFile(scope.output, `${JSON.stringify(process.env.FACILITY_HOSTED_ATTESTATION_FILE ? redactHostedSecrets(report) : report, null, 2)}\n`)
+  await writeFile(scope.output, `${JSON.stringify(isProtectedMeasurement() ? redactHostedSecrets(report) : report, null, 2)}\n`)
 }
 } finally {
   try { await browser?.close() } finally { await releaseCompute() }

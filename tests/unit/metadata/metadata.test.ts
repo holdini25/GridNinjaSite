@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import manifest from "@/app/manifest"
+import manifest from "@/lib/web-app-manifest"
 import robots from "@/app/robots"
 import sitemap from "@/app/sitemap"
 import {

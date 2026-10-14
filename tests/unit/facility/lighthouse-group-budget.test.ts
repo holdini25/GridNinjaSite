@@ -1,13 +1,15 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest"
+import lighthouseConfig from "lighthouse/core/config/default-config.js"
 import { assertReadinessRunCount, evaluateLighthouseGroup } from "../../../scripts/facility/lighthouse-group-budget.mjs"
 
-const options = (route = "/", profile = "mobile", buildSettings = {}) => ({ route, profile, buildSettings })
+const environment = { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: "http://localhost:3101" }
+const options = (route = "/", profile = "mobile", buildSettings = {}) => ({ route, profile, buildSettings, environment })
 function reports(route = "/", profile = "mobile", buildSettings = {}) {
   return Array.from({ length: 5 }, (_, index) => ({
     finalUrl: `http://localhost:3101${route}`,
     configSettings: { formFactor: profile },
-    facilityEvidence: { route, run: index + 1, complete: true, provenance: { buildSettings, settings: { profile, settings: { formFactor: profile } } } },
+    facilityEvidence: { route, run: index + 1, complete: true, provenance: { qualificationEnvironment: environment, buildSettings, settings: { profile, settings: { formFactor: profile } } } },
     categories: { performance: { score: .9 }, accessibility: { score: .95 }, "best-practices": { score: .95 }, seo: { score: 1 } },
     audits: {
       "largest-contentful-paint": { numericValue: route === "/contact" ? 2000 : 2500 },
@@ -22,6 +24,38 @@ function reports(route = "/", profile = "mobile", buildSettings = {}) {
     },
   }))
 }
+
+describe("environment-specific group qualification", () => {
+  const staging = { ...environment, name: "protected-staging", measurementOrigin: "https://candidate-123.vercel.app" }
+  const protectedReports = () => reports("/contact").map(report => ({
+    ...report, lighthouseVersion: "12.6.1", finalUrl: `${staging.measurementOrigin}/contact`,
+    categories: { ...report.categories, seo: { score: .69, auditRefs: structuredClone(lighthouseConfig.categories!.seo.auditRefs) } },
+    audits: { ...report.audits, ...Object.fromEntries(lighthouseConfig.categories!.seo.auditRefs.map(({ id }) => [id, { id, score: id === "structured-data" ? null : id === "is-crawlable" ? 0 : 1, scoreDisplayMode: id === "structured-data" ? "manual" : "binary" }])) },
+    facilityEvidence: { ...report.facilityEvidence, provenance: { ...report.facilityEvidence.provenance, qualificationEnvironment: staging }, documentResponse: { url: `${staging.measurementOrigin}/contact`, status: 200, headers: { "content-type": "text/html", "x-robots-tag": "noindex, nofollow" } } },
+  }))
+  const opts = { ...options("/contact"), environment: staging }
+  it("retains raw SEO/public failures and every unchanged performance/BP/transfer gate", () => {
+    const group = protectedReports(), original = structuredClone(group)
+    const result = evaluateLighthouseGroup(group, opts)
+    expect(result.failures).toEqual([])
+    expect(result.medians.seo).toBe(69)
+    expect(result.publicAcceptanceFailures).toHaveLength(5)
+    expect(group).toEqual(original)
+    for (const report of group) report.categories["best-practices"].score = .93
+    expect(evaluateLighthouseGroup(group, opts).failures).toContainEqual(expect.stringContaining("bestPractices 93 below 95"))
+    for (const report of group) report.audits["largest-contentful-paint"].numericValue = 2001
+    expect(evaluateLighthouseGroup(group, opts).failures).toContainEqual(expect.stringContaining("lcp 2001 exceeds 2000"))
+    for (const report of group) report.audits["total-byte-weight"].numericValue = 1_572_865
+    expect(evaluateLighthouseGroup(group, opts).failures).toContainEqual(expect.stringContaining("transferBytes"))
+  })
+  it("rejects mixed environments and cannot relabel protected samples as public/local", () => {
+    const group = protectedReports()
+    expect(() => evaluateLighthouseGroup(group, options("/contact"))).toThrow("environment")
+    expect(() => evaluateLighthouseGroup(group, { ...opts, environment: { ...staging, name: "public-production", measurementOrigin: "https://gridninja.ai" } })).toThrow("environment")
+    group[0].facilityEvidence.provenance.qualificationEnvironment = { ...staging, name: "local", measurementOrigin: "http://localhost:3101" }
+    expect(() => evaluateLighthouseGroup(group, opts)).toThrow("environment")
+  })
+})
 
 describe("completed Lighthouse group release gates", () => {
   it("accepts exact unchanged ceilings/floors without turning the design aim into a gate", () => {

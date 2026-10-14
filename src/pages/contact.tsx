@@ -68,7 +68,7 @@ export default function ContactPage({ title, canonical, meta, jsonLd }: InferGet
     <Head>
       <title>{title}</title>
       <link rel="canonical" href={canonical} />
-      <link rel="manifest" href="/manifest.webmanifest" />
+      <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
       <link rel="icon" href="/favicon.ico" sizes="any" />
       <link rel="icon" href="/gridninja-icon-192.png" type="image/png" sizes="192x192" />
       <link rel="apple-touch-icon" href="/gridninja-apple-touch-icon-180.png" />

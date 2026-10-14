@@ -126,8 +126,16 @@ function metaValues(document: Document, selector: string) {
 
 function shellLinks(document: Document) {
   return [...document.querySelectorAll('link[rel="manifest"],link[rel="icon"],link[rel="apple-touch-icon"]')]
-    .map(element => ["rel", "href", "sizes", "type"].map(attribute => element.getAttribute(attribute)))
+    .map(element => ["rel", "href", "sizes", "type", "crossorigin"].map(attribute => element.getAttribute(attribute)))
     .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)))
+}
+
+function expectCredentialedManifest(document: Document) {
+  const links = [...document.querySelectorAll('link[rel~="manifest"]')]
+  expect(links).toHaveLength(1)
+  expect(document.head.contains(links[0])).toBe(true)
+  expect(links[0].getAttribute("href")).toBe("/manifest.webmanifest")
+  expect(links[0].getAttribute("crossorigin")).toBe("use-credentials")
 }
 
 function schemaDocuments(document: Document) {
@@ -174,9 +182,11 @@ test("Contact emits the App shell metadata and manifest schema before hydration 
   const appResponse = await request.get("/assessment")
   expect(appResponse.status()).toBe(200)
   const appDocument = new JSDOM(await appResponse.text()).window.document
+  expectCredentialedManifest(appDocument)
   const response = await page.goto(`${assessmentContactHref}&utm_source=router-parity#form`, { waitUntil: "domcontentloaded" })
   expect(response?.status()).toBe(200)
   const initial = new JSDOM(await response!.text()).window.document
+  expectCredentialedManifest(initial)
   expect(initial.title).toBe(contactRoute.title)
   expect([...initial.querySelectorAll('link[rel="canonical"]')].map(link => link.getAttribute("href"))).toEqual([absoluteUrl("/contact")])
   expect(metaValues(initial, 'meta[name="description"]')).toEqual([["description", contactRoute.description]])
@@ -199,6 +209,7 @@ test("Contact emits the App shell metadata and manifest schema before hydration 
   await expect(page.getByLabel("Name", { exact: true })).toBeEnabled()
   await expect(page.getByRole("radio", { name: "Other", exact: true })).toBeChecked()
   const hydrated = new JSDOM(await page.content()).window.document
+  expectCredentialedManifest(hydrated)
   expect(hydrated.title).toBe(initial.title)
   expect(metaValues(hydrated, identityMetaSelector)).toEqual(metaValues(initial, identityMetaSelector))
   expect(shellLinks(hydrated)).toEqual(shellLinks(initial))

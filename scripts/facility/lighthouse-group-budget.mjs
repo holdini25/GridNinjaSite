@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { validateLighthouseReport } from "../seo/validate-lighthouse-budgets.mjs"
 import { assertLighthouseProfile, routeTransferBudget } from "./performance-contract.mjs"
 import { lighthouseRoutePolicy } from "./lighthouse-matrix.mjs"
+import { qualificationEnvironment, assertQualificationEnvironment, evaluateEnvironmentSeo } from "./qualification-environment.mjs"
 
 const median = values => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
 
@@ -14,16 +15,22 @@ export function assertReadinessRunCount(transfers) {
 /** Evaluate only an entire five-capture Lighthouse group. Page readiness,
  * through-readiness transfer, source identity and full-matrix coverage remain
  * separate mandatory qualification checks in summarize-performance.mjs. */
-export function evaluateLighthouseGroup(group, { route, profile, buildSettings }) {
+export function evaluateLighthouseGroup(group, { route, profile, buildSettings, environment = qualificationEnvironment() }) {
   assert.equal(group.length, 5, `${profile} ${route}: expected five runs`)
   assert.deepEqual(group.map(report => report.facilityEvidence?.run).sort(), [1, 2, 3, 4, 5], "Duplicated or missing Lighthouse run IDs")
   const failures = []
+  const publicAcceptanceFailures = []
+  const policy = lighthouseRoutePolicy(route)
   const samples = group.map(report => {
     const evidence = report.facilityEvidence
     assert(new URL(report.finalUrl).pathname === route && evidence?.complete && evidence.route === route, "Missing complete Lighthouse evidence")
     // Includes the existing strict per-run heading-order and color-contrast
     // requirement; notApplicable is not a passing result for these audits.
     assertLighthouseProfile(report, profile)
+    assertQualificationEnvironment(evidence.provenance.qualificationEnvironment, environment)
+    const seo = evaluateEnvironmentSeo(report, { environment, route, seoFloor: policy.seo })
+    failures.push(...seo.failures)
+    publicAcceptanceFailures.push(...seo.publicAcceptanceFailures)
     const sample = {
       performance: report.categories.performance.score * 100,
       accessibility: report.categories.accessibility.score * 100,
@@ -40,8 +47,7 @@ export function evaluateLighthouseGroup(group, { route, profile, buildSettings }
     return sample
   })
   const medians = Object.fromEntries(Object.keys(samples[0]).map(key => [key, median(samples.map(sample => sample[key]))]))
-  const policy = lighthouseRoutePolicy(route)
   for (const [key, ceiling] of [["lcp", policy.lcp], ["fcp", policy.fcp], ["tbt", policy.tbt], ["cls", policy.cls], ["transferBytes", routeTransferBudget(route, profile, buildSettings)]]) if (medians[key] > ceiling) failures.push(`${profile} ${route}: ${key} ${medians[key]} exceeds ${ceiling}`)
-  for (const [key, floor] of [["performance", policy.performance], ["accessibility", policy.accessibility], ["bestPractices", policy.bestPractices], ...(policy.seo === null ? [] : [["seo", policy.seo]])]) if (medians[key] < floor) failures.push(`${profile} ${route}: ${key} ${medians[key]} below ${floor}`)
-  return { samples, medians, policy, failures }
+  for (const [key, floor] of [["performance", policy.performance], ["accessibility", policy.accessibility], ["bestPractices", policy.bestPractices], ...(policy.seo === null || environment.name === "protected-staging" ? [] : [["seo", policy.seo]])]) if (medians[key] < floor) failures.push(`${profile} ${route}: ${key} ${medians[key]} below ${floor}`)
+  return { samples, medians, policy, failures, publicAcceptanceFailures }
 }

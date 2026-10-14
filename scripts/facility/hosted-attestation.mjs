@@ -4,6 +4,7 @@ import { readFile, readdir } from "node:fs/promises"
 import { join, relative } from "node:path"
 import { createRequire } from "node:module"
 import { performanceMatrix } from "./lighthouse-matrix.mjs"
+import { GIT_SOURCE_MODE, productionGitIdentity, gitConfigBinding, validateGitConfigBinding, validateGitPlatformIdentity } from "./git-source-binding.mjs"
 
 export const HOSTED_SCHEMA = "gridninja-hosted-build.v1"
 const hash = bytes => createHash("sha256").update(bytes).digest("hex")
@@ -103,15 +104,26 @@ export function attestHostedConfig(builtBytes, pins) {
   return expected.transformation
 }
 
-/** Produced inside the actual Vercel build, never synthesized from local .next. */
-export async function createHostedAttestation(identity, harnessRevision, env = process.env) {
+/** The explicit CLI variant is unchanged. Automatic Git production builds bind
+ * the exact raw checkout and the platform's nonsecret built-in identity. */
+export function hostedSourceBinding(identity, configBytes, env = process.env) {
   assert(env.VERCEL === "1" && env.VERCEL_URL && ["preview", "production"].includes(env.VERCEL_ENV), "Hosted attestation requires the actual Vercel build environment")
-  const origin = hostedOrigin(`https://${env.VERCEL_URL}`)
+  const platformIdentity = productionGitIdentity(env)
+  if (platformIdentity) {
+    assert(sha256(identity.sourceRevision), "Missing actual Git build source digest")
+    return { repositorySourceRevision: identity.sourceRevision, hostedSourceRevision: identity.sourceRevision, configTransformation: gitConfigBinding(configBytes), platformIdentity }
+  }
   assert(sha256(env.FACILITY_REPOSITORY_SOURCE_REVISION), "Hosted build requires a pinned repository source identity")
-  const configTransformation = attestHostedConfig(await readFile("vercel.json"), { projectName: env.FACILITY_HOSTED_PROJECT_NAME, originalCanonicalSha256: env.FACILITY_EXPECTED_VERCEL_CONFIG_SHA256 })
+  const configTransformation = attestHostedConfig(configBytes, { projectName: env.FACILITY_HOSTED_PROJECT_NAME, originalCanonicalSha256: env.FACILITY_EXPECTED_VERCEL_CONFIG_SHA256 })
   // The repository digest is an input pin, independently recomputed by the
   // consumer. identity.sourceRevision is measured from the actual built tree.
-  const sourceBinding = { repositorySourceRevision: env.FACILITY_REPOSITORY_SOURCE_REVISION, hostedSourceRevision: identity.sourceRevision, configTransformation }
+  return { repositorySourceRevision: env.FACILITY_REPOSITORY_SOURCE_REVISION, hostedSourceRevision: identity.sourceRevision, configTransformation }
+}
+
+/** Produced inside the actual Vercel build, never synthesized from local .next. */
+export async function createHostedAttestation(identity, harnessRevision, env = process.env) {
+  const sourceBinding = hostedSourceBinding(identity, await readFile("vercel.json"), env)
+  const origin = hostedOrigin(`https://${env.VERCEL_URL}`)
   const resources = []
   for (const route of performanceMatrix("premium-civic").routes) {
     // Demo reads searchParams and is rendered by Vercel at request time. Never
@@ -133,8 +145,9 @@ export async function createHostedAttestation(identity, harnessRevision, env = p
   return { schemaVersion: HOSTED_SCHEMA, recordedAt: new Date().toISOString(), origin, environment: env.VERCEL_ENV, identity, sourceBinding, harnessRevision, resources }
 }
 
-/** Small numbered lines survive private build-log line limits. No environment
- * values, headers, credentials, source bodies or lead data enter the log. */
+/** Small numbered lines survive private build-log line limits. Only the selected
+ * nonsecret platform identity is included; no credentials, headers, arbitrary
+ * environment values, source bodies or lead data enter the log. */
 export function hostedAttestationLogLines(attestation) {
   const bytes = Buffer.from(JSON.stringify(attestation))
   const encoded = bytes.toString("base64"), count = Math.ceil(encoded.length / 1800), digest = hash(bytes)
@@ -156,7 +169,7 @@ export function parseHostedAttestationLogs(logs) {
   return JSON.parse(bytes.toString("utf8"))
 }
 
-export function validateHostedAttestation(attestation, { baseURL, sourceRevision, hostedSourceRevision, configTransformation, harnessRevision }) {
+export function validateHostedAttestation(attestation, { baseURL, sourceRevision, hostedSourceRevision, configTransformation, harnessRevision, platformIdentity = null }) {
   assert.equal(attestation.schemaVersion, HOSTED_SCHEMA, "Unknown hosted attestation")
   assert.equal(hostedOrigin(baseURL), attestation.origin, "Hosted attestation origin differs from requested deployment")
   assert.equal(baseURL, attestation.origin, "Hosted base URL must be the exact origin without a trailing slash")
@@ -164,9 +177,19 @@ export function validateHostedAttestation(attestation, { baseURL, sourceRevision
   assert(["preview", "production"].includes(attestation.environment), "Missing hosted environment")
   assert(Number.isFinite(Date.parse(attestation.recordedAt)) && Date.parse(attestation.recordedAt) <= Date.now() + 60000, "Invalid hosted build timestamp")
   assert(sha256(sourceRevision) && sha256(hostedSourceRevision) && sha256(harnessRevision), "Missing local repository/expected hosted source/harness identity")
-  assert(configTransformation?.kind === "vercel-project-metadata.v1" && typeof configTransformation.projectName === "string" && /^[a-z0-9][a-z0-9-]{0,99}$/.test(configTransformation.projectName)
-    && configTransformation.version === 2 && sha256(configTransformation.originalCanonicalSha256) && sha256(configTransformation.builtConfigSha256) && Number.isSafeInteger(configTransformation.builtConfigBytes) && configTransformation.builtConfigBytes > 0, "Missing independently computed hosted config transformation")
-  assert.deepEqual(attestation.sourceBinding, { repositorySourceRevision: sourceRevision, hostedSourceRevision, configTransformation }, "Hosted source binding differs from repository and project pins")
+  if (configTransformation?.kind === GIT_SOURCE_MODE) {
+    validateGitConfigBinding(configTransformation)
+    validateGitPlatformIdentity(platformIdentity)
+    assert.equal(sourceRevision, hostedSourceRevision, "Unmodified Git source must equal repository source")
+    assert.equal(attestation.environment, "production", "Git attestation requires production environment")
+    assert.equal(platformIdentity.origin, attestation.origin, "Git platform origin differs from immutable attestation")
+    assert.deepEqual(attestation.sourceBinding, { repositorySourceRevision: sourceRevision, hostedSourceRevision, configTransformation, platformIdentity }, "Hosted Git source binding differs from independent platform pins")
+  } else {
+    assert.equal(platformIdentity, null, "CLI source must not claim a Git platform binding")
+    assert(configTransformation?.kind === "vercel-project-metadata.v1" && typeof configTransformation.projectName === "string" && /^[a-z0-9][a-z0-9-]{0,99}$/.test(configTransformation.projectName)
+      && configTransformation.version === 2 && sha256(configTransformation.originalCanonicalSha256) && sha256(configTransformation.builtConfigSha256) && Number.isSafeInteger(configTransformation.builtConfigBytes) && configTransformation.builtConfigBytes > 0, "Missing independently computed hosted config transformation")
+    assert.deepEqual(attestation.sourceBinding, { repositorySourceRevision: sourceRevision, hostedSourceRevision, configTransformation }, "Hosted source binding differs from repository and project pins")
+  }
   assert.equal(attestation.identity?.sourceRevision, hostedSourceRevision, "Hosted source differs from the exact expected built source")
   assert.equal(attestation.harnessRevision, harnessRevision, "Hosted harness differs from local harness")
   assert(typeof attestation.identity.buildId === "string" && /^[A-Za-z0-9_-]+$/.test(attestation.identity.buildId), "Missing hosted build ID")

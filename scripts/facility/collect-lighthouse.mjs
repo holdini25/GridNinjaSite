@@ -5,12 +5,13 @@ import { tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
 import lighthouse, { desktopConfig } from "lighthouse"
 import { launch } from "chrome-launcher"
-import { provenance, verifiedBuildIdentity, verifyMeasurementServing } from "./performance-contract.mjs"
+import { provenance, verifiedBuildIdentity, verifyMeasurementServing, measurementEnvironment, isProtectedMeasurement, verifyMeasurementDocument, assertMeasurementServingPair } from "./performance-contract.mjs"
 import { authorizeHostedChrome, redactHostedSecrets } from "./hosted-auth.mjs"
 import { captureValidLighthouseReport } from "./lighthouse-capture.mjs"
 import { performanceMatrix, lighthouseGroups, lighthousePriorityGroups, lighthouseSlug } from "./lighthouse-matrix.mjs"
 import { acquireComputeLock } from "./compute-lock.mjs"
 import { evaluateLighthouseGroup } from "./lighthouse-group-budget.mjs"
+import { lighthouseDocumentResponse } from "./measurement-document.mjs"
 
 const require = createRequire(import.meta.url)
 const config = require("./lighthouse.cjs")
@@ -54,7 +55,8 @@ async function graphicsBackend(endpoint) {
   })
 }
 const initialIdentity = await verifiedBuildIdentity()
-const index = { measuredAt: new Date().toISOString(), matrix: matrix.name, diagnostic: diagnostic || priorityOnly, priorityOnly, reviewedRouteCaptures: matrix.reviewedRoutes.length * matrix.profiles.length * matrix.runs, requiredCaptures: matrix.routes.length * matrix.profiles.length * matrix.runs, result: "incomplete", runs: [] }
+const environment = await measurementEnvironment()
+const index = { measuredAt: new Date().toISOString(), qualificationEnvironment: environment, matrix: matrix.name, diagnostic: diagnostic || priorityOnly, priorityOnly, reviewedRouteCaptures: matrix.reviewedRoutes.length * matrix.profiles.length * matrix.runs, requiredCaptures: matrix.routes.length * matrix.profiles.length * matrix.runs, result: "incomplete", runs: [] }
 if (stopOnFailure || priorityOnly) index.groupBudgetChecks = []
 const releaseCompute = await acquireComputeLock("lighthouse-performance")
 let outputReady = false
@@ -92,7 +94,7 @@ try {
           const version = await versionResponse.json()
           browser = String(version.Browser).replace(/^Chrome\//, "")
           capture.browser = browser
-          if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) await authorizeHostedChrome(version.webSocketDebuggerUrl, new URL(baseURL).origin)
+          if (isProtectedMeasurement()) await authorizeHostedChrome(version.webSocketDebuggerUrl, new URL(baseURL).origin)
           const settings = { ...config.ci.collect.settings, ...(profile === "desktop" ? desktopConfig.settings : { formFactor: "mobile" }) }
           if (diagnostic) settings.throttlingMethod = "devtools"
           delete settings.chromeFlags
@@ -128,22 +130,31 @@ try {
       await writeFile(`${directory}/artifacts/${slug}-${run}-network.json`, evidenceJson(result.artifacts.DevtoolsLog))
       const hardwareAccepted = !angle || (graphics.status === "available" && /Apple M5.*Metal|Metal.*Apple M5/i.test(graphics.renderer) && !/SwiftShader|llvmpipe|software/i.test(graphics.renderer))
       const evidence = { provenance: await provenance(browser, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }), graphics, route, run, measuredAt: new Date().toISOString(), measurementComplete: true, complete: hardwareAccepted }
+      try {
+        evidence.documentResponse = lighthouseDocumentResponse(result)
+        evidence.documentIdentity = await verifyMeasurementDocument(result.artifacts.MainDocumentContent, evidence.documentResponse)
+      } catch (error) {
+        evidence.complete = false
+        evidence.documentFailure = error instanceof Error ? error.message : String(error)
+      }
       harnessRevision ??= evidence.provenance.harnessRevision
       assert.equal(evidence.provenance.harnessRevision, harnessRevision, "Harness changed during Lighthouse collection")
       const report = { ...result.lhr, facilityEvidence: evidence }
       await writeFile(output, `${evidenceJson(report, 2)}\n`)
       if (stopOnFailure || priorityOnly) group.push(report)
-      attempt.graphics = graphics; attempt.complete = hardwareAccepted
+      attempt.graphics = graphics; attempt.complete = evidence.complete
       assert(hardwareAccepted, `M5 Metal requested; actual backend: ${graphics.renderer}; ${graphics.error ?? ""}`)
+      assert(evidence.complete, evidence.documentFailure)
       console.log(JSON.stringify({ route, profile, run, lcp: result.lhr.audits["largest-contentful-paint"].numericValue, output }))
     }
     if (stopOnFailure || priorityOnly) {
       const check = { route, profile, runs: group.map(report => report.facilityEvidence.run), result: "incomplete", failures: [] }
       index.groupBudgetChecks.push(check)
       try {
-        const budget = evaluateLighthouseGroup(group, { route, profile, buildSettings: initialIdentity.buildSettings })
+        const budget = evaluateLighthouseGroup(group, { route, profile, buildSettings: initialIdentity.buildSettings, environment })
         check.medians = budget.medians
         check.failures = budget.failures
+        check.publicAcceptanceFailures = budget.publicAcceptanceFailures
         if (stopOnFailure) assert.equal(budget.failures.length, 0, `Lighthouse group failed unchanged release gates: ${budget.failures.join("; ")}`)
         check.result = budget.failures.length ? "fail" : "pass"
       } catch (error) {
@@ -168,8 +179,13 @@ try {
   try {
     if (index.hostedServing) {
       index.hostedServing.collectionFinishedAt = new Date().toISOString()
-      try { index.hostedServing.after = await verifyMeasurementServing() }
-      catch (error) { index.hostedServing.after = { result: "fail", failure: error instanceof Error ? error.message : String(error) }; index.result = "fail"; process.exitCode = 1 }
+      try { index.hostedServing.after = await verifyMeasurementServing(); await assertMeasurementServingPair(index.hostedServing) }
+      catch (error) {
+        const failure = error instanceof Error ? error.message : String(error)
+        index.hostedServing.after ??= { result: "fail", failure }
+        index.hostedServing.validationFailure = failure
+        index.result = "fail"; process.exitCode = 1
+      }
     }
     if (outputReady) await writeFile(`${outputRoot}/${diagnostic ? "lighthouse-throttled-index.json" : "lighthouse-index.json"}`, `${evidenceJson(index, 2)}\n`)
   }

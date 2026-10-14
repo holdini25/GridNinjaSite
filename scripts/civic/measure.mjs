@@ -11,7 +11,7 @@ import { launch } from "chrome-launcher"
 import { acquireComputeLock } from "../facility/compute-lock.mjs"
 import { captureValidLighthouseReport } from "../facility/lighthouse-capture.mjs"
 import { evaluateLighthouseGroup } from "../facility/lighthouse-group-budget.mjs"
-import { provenance, verifiedBuildIdentity } from "../facility/performance-contract.mjs"
+import { assertLocalMeasurementOrigin, measurementEnvironment, provenance, verifiedBuildIdentity } from "../facility/performance-contract.mjs"
 import { measureScrolledRoutes, SCROLLED_TRANSFER_PROTOCOL } from "../facility/scrolled-transfer.mjs"
 
 const { values } = parseArgs({ options: {
@@ -25,13 +25,18 @@ assert(/^civic-v[1-9][0-9]*$/.test(values.release), "Expected civic release must
 const directory = resolve(values.out)
 assert(directory.startsWith(`${resolve("build")}/`), "Civic performance evidence must remain under build/")
 const baseURL = new URL(values["base-url"])
-assert(baseURL.pathname === "/" && !baseURL.search && !baseURL.hash, "Base URL must identify the homepage origin")
+assert(baseURL.pathname === "/" && !baseURL.search && !baseURL.hash && !baseURL.username && !baseURL.password, "Base URL must identify the homepage origin without credentials")
+assertLocalMeasurementOrigin(baseURL.origin)
+assert(process.env.FACILITY_BASE_URL === undefined || process.env.FACILITY_BASE_URL === baseURL.origin, "Civic base URL differs from FACILITY_BASE_URL")
+process.env.FACILITY_BASE_URL = baseURL.origin
+const qualificationEnvironment = await measurementEnvironment()
+assert.equal(qualificationEnvironment.name, "local", "Civic regression collection supports local qualification only")
 const identity = await verifiedBuildIdentity()
 const releaseCompute = await acquireComputeLock("civic-homepage-performance")
 const matrix = { routes: ["/"], profiles: ["desktop", "mobile"], runs: 5 }
 const report = {
   schemaVersion: "civic-homepage-performance.v1", scope: "homepage civic still regression; not whole-site or graphics qualification",
-  startedAt: new Date().toISOString(), phase: values.phase, baseURL: baseURL.origin, identity,
+  startedAt: new Date().toISOString(), phase: values.phase, baseURL: baseURL.origin, qualificationEnvironment, identity,
   collectorSha256: createHash("sha256").update(await readFile(new URL(import.meta.url))).digest("hex"),
   expectedCivicRelease: values.release, servedIdentity: [], matrix, lighthouse: [], scrolledTransfer: [], failures: [], result: "incomplete",
 }
@@ -84,7 +89,7 @@ try {
         }, async (invalid, attempt) => {
           await writeFile(join(directory, `${profile}-${run}-invalid-${attempt}.json`), `${JSON.stringify(invalid?.lhr ?? { missingReport: true }, null, 2)}\n`)
         })
-        const evidence = { route: "/", run, complete: true, measurementComplete: true, provenance: await provenance(browserVersion, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }) }
+        const evidence = { route: "/", run, complete: true, measurementComplete: true, qualificationEnvironment, provenance: await provenance(browserVersion, { profile, qualificationEnvironment, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }) }
         const capture = { ...result.lhr, facilityEvidence: evidence }
         const file = `${profile}-${run}.json`
         await writeFile(join(directory, file), `${JSON.stringify(capture, null, 2)}\n`)
@@ -95,7 +100,7 @@ try {
         process.stdout.write(`${profile} ${run}/5: LCP ${Math.round(capture.audits["largest-contentful-paint"].numericValue)}ms\n`)
       }
       try {
-        groupRecord.budget = evaluateLighthouseGroup(group, { route: "/", profile, buildSettings: identity.buildSettings })
+        groupRecord.budget = evaluateLighthouseGroup(group, { route: "/", profile, buildSettings: identity.buildSettings, environment: qualificationEnvironment })
         report.failures.push(...groupRecord.budget.failures)
       } catch (error) { report.failures.push(`${profile}: ${error instanceof Error ? error.message : String(error)}`) }
     }
@@ -104,8 +109,8 @@ try {
     const launchSettings = process.env.PLAYWRIGHT_CHROME_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_CHROME_EXECUTABLE_PATH } : { channel: "chrome" }
     const browser = await chromium.launch({ headless: true, ...launchSettings })
     try {
-      report.transferProvenance = await provenance(browser.version(), { scope: "homepage", matrix, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", freshContextEveryRun: true, cacheDisabled: true, cumulativeNotAdditive: true, ...SCROLLED_TRANSFER_PROTOCOL })
-      report.scrolledTransfer = await measureScrolledRoutes(browser, { matrix, baseURL: baseURL.origin, buildSettings: identity.buildSettings, desktopViewport: { width: 1440, height: 1100 } })
+      report.transferProvenance = await provenance(browser.version(), { scope: "homepage", qualificationEnvironment, matrix, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", freshContextEveryRun: true, cacheDisabled: true, cumulativeNotAdditive: true, ...SCROLLED_TRANSFER_PROTOCOL })
+      report.scrolledTransfer = await measureScrolledRoutes(browser, { matrix, baseURL: baseURL.origin, buildSettings: identity.buildSettings, desktopViewport: { width: 1440, height: 1100 }, qualificationEnvironment })
       for (const run of report.scrolledTransfer) if (!run.complete) report.failures.push(`${run.profile} full-scroll run ${run.run}: ${run.failure}`)
       assert.equal(report.scrolledTransfer.length, 10, "Missing homepage transfer measurements")
     } finally { await browser.close() }

@@ -3,15 +3,15 @@ import { assertCinematicMotion } from "../cinematic/motion-evidence.mjs"
 import { assertQualificationScope, measurementScope } from "./measurement-scope.mjs"
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises"
 import { assertReadinessRunCount, evaluateLighthouseGroup } from "./lighthouse-group-budget.mjs"
-import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertLighthouseProfile, assertSameBuild, canonicalJson, provenance, recordedBuild, hostedBuildAttestation, verifyMeasurementServing } from "./performance-contract.mjs"
-import { assertHostedServingPair } from "./hosted-attestation.mjs"
+import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertLighthouseProfile, assertSameBuild, canonicalJson, provenance, recordedBuild, verifyMeasurementServing, assertMeasurementServingPair, assertMeasurementDocument } from "./performance-contract.mjs"
+import { assertQualificationEnvironment, qualificationOutcome } from "./qualification-environment.mjs"
 import { assertScrolledTransfer } from "./scrolled-transfer.mjs"
 import { performanceMatrix, assertLighthouseMatrixIndex } from "./lighthouse-matrix.mjs"
 
 const scope = measurementScope(process.env.FACILITY_MEASUREMENT_SCOPE)
 const matrix = performanceMatrix(process.env.FACILITY_PERFORMANCE_MATRIX)
 const outputRoot = process.env.FACILITY_PERFORMANCE_DIR ?? "build/facility"
-const summary = { scope: scope.name, matrix: matrix.name, hardwareQualification: scope.hardwareQualification, measuredAt: new Date().toISOString(), result: "incomplete", profiles: [], failures: [], mobileEvidence: "Browser device emulation; physical mobile validation remains separate" }
+const summary = { scope: scope.name, matrix: matrix.name, hardwareQualification: scope.hardwareQualification, measuredAt: new Date().toISOString(), result: "incomplete", publicReady: false, publicAcceptance: "pending", profiles: [], failures: [], publicAcceptanceFailures: [], mobileEvidence: "Browser device emulation; physical mobile validation remains separate" }
 try {
   const pages = JSON.parse(await readFile(scope.output, "utf8"))
   if (scope.functional) {
@@ -23,6 +23,14 @@ try {
   } else assertQualificationScope(pages.provenance?.settings)
   const expected = await provenance(pages.provenance?.browser, pages.provenance?.settings)
   assertSameBuild(pages.provenance, expected)
+  const environment = expected.qualificationEnvironment
+  summary.qualificationEnvironment = environment
+  assertQualificationEnvironment(pages.qualificationEnvironment, environment)
+  assertQualificationEnvironment(pages.provenance.settings.qualificationEnvironment, environment)
+  if (environment.name !== "local") {
+    assert.equal(matrix.name, "premium-civic", "Hosted acceptance requires the complete 14-route matrix")
+    assert(!scope.functional, "Software CI cannot establish hosted hardware acceptance")
+  }
   if(pages.result!=="pass")summary.failures.push(`Page measurements failed: ${pages.failure ?? "incomplete measurement"}`)
   assert.equal(pages.provenance.settings.runCount, 5, "Release validation requires five fresh profiles")
   assert.equal(pages.provenance.settings.performanceMatrix ?? "core", matrix.name, "Page and Lighthouse measurement matrices differ")
@@ -30,6 +38,8 @@ try {
     assertLighthouseMatrixIndex({ matrix: matrix.name, result: pages.result, runs: pages.scrolledTransfers ?? [] }, matrix)
     for (const result of pages.scrolledTransfers) {
       assert(result.freshContext && result.scroll?.complete, "Full-scroll evidence is incomplete or reused")
+      assertQualificationEnvironment(result.qualificationEnvironment, environment)
+      await assertMeasurementDocument(result.documentIdentity, { route: result.route, after: pages.hostedServing?.collectionStartedAt, before: pages.hostedServing?.collectionFinishedAt })
       for (const transfer of [result.initialTransfer, result.fullPageTransfer]) assertScrolledTransfer(transfer, { route: result.route, profile: result.profile, buildSettings: pages.provenance.buildSettings })
       assert(result.fullPageTransfer.bytes >= result.initialTransfer.bytes, "Full-scroll transfer omitted initial bytes")
     }
@@ -42,10 +52,11 @@ try {
   }
   fresh(pages.measuredAt)
   const index = JSON.parse(await readFile(`${outputRoot}/lighthouse-index.json`, "utf8"))
-  if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) {
-    const attestation = await hostedBuildAttestation()
-    assertHostedServingPair(pages.hostedServing, attestation)
-    assertHostedServingPair(index.hostedServing, attestation)
+  assertQualificationEnvironment(index.qualificationEnvironment, environment)
+  fresh(index.measuredAt)
+  if (environment.name !== "local") {
+    await assertMeasurementServingPair(pages.hostedServing)
+    await assertMeasurementServingPair(index.hostedServing)
     summary.hostedServing = await verifyMeasurementServing()
   } else assert(!pages.hostedServing && !index.hostedServing, "Hosted receipts require explicit hosted attestation")
   assertLighthouseMatrixIndex(index, matrix)
@@ -65,18 +76,20 @@ try {
         assertLighthouseProfile(report, profile)
         assert(evidence?.complete && evidence.route === route, "Missing complete Lighthouse evidence")
         if (expected.hosted) {
-          assert.equal(new URL(report.finalUrl).origin, expected.hosted.origin, "Lighthouse measured another deployment origin")
-          assert.equal(new URL(report.requestedUrl).origin, expected.hosted.origin, "Lighthouse requested another deployment origin")
+          assert.equal(new URL(report.finalUrl).origin, environment.measurementOrigin, "Lighthouse measured another deployment origin")
+          assert.equal(new URL(report.requestedUrl).origin, environment.measurementOrigin, "Lighthouse requested another deployment origin")
           assert(Date.parse(evidence.measuredAt) >= Date.parse(index.hostedServing.collectionStartedAt) && Date.parse(evidence.measuredAt) <= Date.parse(index.hostedServing.collectionFinishedAt), "Lighthouse sample lies outside hosted serving verification window")
         }
+        await assertMeasurementDocument(evidence.documentIdentity, { route, after: index.hostedServing?.collectionStartedAt, before: index.hostedServing?.collectionFinishedAt })
         assertSameBuild(evidence.provenance, expected)
         assert.equal(evidence.provenance.browser, pages.provenance.browser, "Mixed Chrome versions between transfer and Lighthouse evidence")
         assert.equal(canonicalJson(evidence.provenance.settings), profileSettings, "Mixed Lighthouse settings within a profile")
         assert(evidence.provenance.settings.freshBrowserProfile, "Lighthouse profile was reused")
         fresh(evidence.measuredAt)
       }
-      const { samples, medians, policy, failures } = evaluateLighthouseGroup(group, { route, profile, buildSettings: pages.provenance.buildSettings })
+      const { samples, medians, policy, failures, publicAcceptanceFailures } = evaluateLighthouseGroup(group, { route, profile, buildSettings: pages.provenance.buildSettings, environment })
       summary.failures.push(...failures)
+      summary.publicAcceptanceFailures.push(...publicAcceptanceFailures)
       const pageProfile = profile === "mobile" ? "mobile-emulation" : "desktop"
       const transfers = pages.results.filter(result => result.route === route && result.profile === pageProfile)
       if (route === "/" || route === "/demo") {
@@ -85,6 +98,8 @@ try {
       for (const result of transfers) {
         try {
         assert(result.complete && result.freshContext, "Incomplete or reused page measurement")
+        assertQualificationEnvironment(result.qualificationEnvironment, environment)
+        await assertMeasurementDocument(result.documentIdentity, { route, after: pages.hostedServing?.collectionStartedAt, before: pages.hostedServing?.collectionFinishedAt })
         if (route === "/" && pages.provenance.buildSettings.cinematic?.selectedRelease) {
           const movie = result.cinematic
           assert(movie?.kind === "cinematic" && movie.throughReady && movie.release === pages.provenance.buildSettings.cinematic.selectedRelease, "Missing cinematic readiness/identity")
@@ -127,7 +142,8 @@ try {
       summary.profiles.push({ profile, route, lighthouseVersion: group[0].lighthouseVersion, settings: group[0].configSettings, medians, samples, improvementAim: { lcp: policy.lcpAim, met: medians.lcp <= policy.lcpAim, releaseGate: false }, throughReadyTransfers: transfers.map(result => ({ bytes: result.transfer?.bytes, automaticBytes: result.automaticTransfer?.bytes, automaticAcquisition: result.automaticAcquisition, manualThroughReady: result.manualThroughReady, cinematic: result.cinematic, renderingClass: result.renderingClass, frameP95: result.renderer?.frameP95, capabilityP95:result.capability?.frameP95, complete:result.complete, ambientCadence:result.ambientCadence, settlementMode:result.settlement?.mode ?? "legacy-explicit-pause", budgetFailures:result.budgetFailures })) })
     }
   }
-  summary.result = summary.failures.length ? "fail" : "pass"
+  const outcome = qualificationOutcome(environment, summary.failures)
+  Object.assign(summary, outcome, { result: environment.name === "local" && !summary.failures.length ? "pass" : outcome.result })
 } catch (error) {
   summary.result = "fail"
   summary.failures.push(error instanceof Error ? error.message : String(error))
@@ -139,4 +155,4 @@ const evidenceDirectory = process.env.FACILITY_REPORT_DIR ?? (matrix.name === "p
 await mkdir(evidenceDirectory, { recursive: true })
 await writeFile(`${evidenceDirectory}/lighthouse.json`, `${JSON.stringify(summary, null, 2)}\n`)
 console.log(JSON.stringify({ result: summary.result, profiles: summary.profiles.map(({ profile, route, medians }) => ({ profile, route, medians })), failures: summary.failures }, null, 2))
-if (summary.result !== "pass") process.exitCode = 1
+if (!["pass", "protected-pass", "public-pass"].includes(summary.result)) process.exitCode = 1

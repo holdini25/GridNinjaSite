@@ -239,3 +239,96 @@ capture because the collector lacked the build's public test verification settin
 that failure log is retained. The correctly pinned run is
 `build/facility/pages-contact-trial-03/`, still explicitly 10/140 and incomplete
 release qualification. No valid unfavorable sample was discarded or replaced.
+
+## Completed 108 evidence and environment correction
+
+Frozen `108f4f50b3c5a98f0d25dfb70e9edc09b4a1a5d3` subsequently passed standard CI
+`38515385710` (all 14 jobs): 1,442 unit tests, three PostgreSQL integration tests,
+and 1,509 browser passes with 110 skips and one retained Firefox first-attempt
+failure that passed its configured retry. SEO checks passed 36 with 104 audited
+skips. The separate core Facility run `38515385731` passed 30 software captures;
+hardware was skipped. Expanded run `38515385794` passed 140 Lighthouse captures,
+140 full-scroll observations and 20 readiness observations under software scope.
+Its mobile LCP medians were Home 2,419.953 ms, Contact 1,949.756 ms and Founders
+2,292.556 ms. Independent local M5 Metal coverage also passed that full matrix,
+with medians 2,306.735 ms, 1,953.909 ms and 2,307.966 ms respectively. These remain
+evidence for their exact source and settings, not the next correction.
+
+Protected isolated deployment `dpl_8BW7nubz6BdjYFAYmhFJRTb4C6d5`, build
+`tGepTu8QCtuu3ykKHkaq3`, passed initial verification of all 100 resources. Its
+priority collection retained eight valid captures, followed by an invalid fourth
+Contact run (`CHROME_INTERSTITIAL_ERROR`) and an unattempted fifth run. The invalid
+trace and network files contain literal null placeholders. Final serving failed
+with a generic root fetch error. No DNS, TLS, outage or protection cause is
+established. The entire collection remains failed, despite a later separate
+GET-only 100-resource verification passing. The eight valid reports retained
+Best Practices 93 and SEO 69, including noindex, the protected manifest's SSO/CSP
+failure and actual CSP-report 503 responses. No failure was waived or replaced.
+
+The next correction makes the manifest credential request explicit and adds an
+environment-specific qualification contract. It preserves the manifest payload,
+all numeric thresholds, production backend exclusions, provider/security settings
+and the existing intentional published-brief SEO exception. Protected noindex is
+positively verified; raw public SEO failures remain visible and public acceptance
+stays pending. The public adapter separately binds authoritative production
+aliases and every measured document to the actual producer build. It cannot
+qualify absent producer evidence, earlier samples, a priority subset or software
+CI as public hardware acceptance.
+
+See [environment qualification](environment-qualification.md) for exact modes,
+remaining producer/live-widget prerequisites, the minimum Turnstile handoff and
+cutover sequence. No new indexable staging site, widget, bypass credential or
+backend service configuration is required merely to complete the code work.
+Merge and deployment remain held pending fresh applicable qualification.
+
+The environment/manifest correction passed the production build and all build
+validators, ESLint and typecheck. The final full unit run passed 1,531 tests in
+149 files. Earlier failures from stale generated Contact types, new fixture
+typing and missing environment fields remain in the local evidence directory;
+they were corrected without lowering assertions. Focused browser validation
+passed 62 tests with no retries or flakes; four WebKit cases explicitly skip the
+Chromium-only native manifest protocol. Both Chrome native manifest requests
+(About and Contact) sent the synthetic local HttpOnly host-only cookie, with
+unchanged manifest bytes and successful responses. Form interactions used local
+fixtures, not real submissions.
+
+Local build `IfMi2o-vV6d--IitA8qBH` has runtime source
+`1e52d18d508947f3a24238721a819af6f32ac076e40f822ba240697ff9529bfd`.
+The fresh Chrome `155.0.8059.40` M5 Metal priority diagnostic passed both unchanged
+five-run median groups: Home LCP 2,312.957 ms and Contact 1,953.919 ms, with
+accessibility/Best Practices/SEO all 100 and CLS 0. Two individual Contact samples
+exceeded 2,000 ms and remain recorded. The index stays `incomplete`, diagnostic
+and 10/140; this does not establish full local, protected or public qualification.
+Its harness digest is
+`8b784344605635aab2ec0be50059181204b4c8d17d78be7c73596d5905cb8cf2`.
+
+Evidence is under `build/qa/manifest-auth-20261014/` and
+`build/facility/manifest-auth-priority-01/`. The complete split manifest accounts
+for 222 changed paths (179 original imports and 43 integration additions), while
+all 65 exclusions remain intact: 30 production-identical files and 35 absent
+deferred files. No dependency, production backend, credential or security-setting
+change accompanies this correction. Fresh full CI, complete hosted coverage,
+live verification and public production acceptance remain pending.
+
+
+## Completed Git attestation correction
+
+The automatic production Git build now emits its own attestation using existing
+nonsecret platform metadata for the exact GridNinja project, repository and main
+branch. Independent consumer pins explicitly select the Git mode, bind checkout
+HEAD, and require matching raw source/configuration/harness and deployment
+identity. The existing CLI transformation remains a distinct supported mode.
+There is no new environment setting, credential read or public attestation route.
+Two independent read-only reviews found no concrete blocker in this extension;
+actual platform metadata and emitted output still require verification on the
+future authorized Git deployment.
+
+The final combined unit suite passed 1,575 tests in 151 files. A subsequent
+fixture-only lint cleanup passed its six focused entrypoint tests. The fresh
+production build `Uk4xqpPoQNYAKunogtGR4` passed compilation, TypeScript and all
+postbuild validators, with the same runtime source digest as the preceding
+manifest build. Its new harness is distinct from the earlier 10-capture priority
+diagnostic above. The earlier 62 browser passes remain product validation for
+unchanged manifest/runtime source; they are not a new hosted or full performance
+claim. Fresh candidate qualification remains required. All previous failed logs,
+raw reports and incomplete runs remain retained.

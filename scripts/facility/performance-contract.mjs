@@ -6,13 +6,17 @@ import { readApprovedManifest, readFacilityRegistry, validateSelectedFacility } 
 import { selectedCinematicIdentity } from "../../src/lib/cinematic/files.mjs"
 import { BASE_TRANSFER_BUDGET, CINEMATIC_PERFORMANCE_VERSION, routeTransferBudget } from "../../src/lib/cinematic/performance.mjs"
 import { privateCandidateIdentity } from "../qa/private-candidate-contract.mjs"
-import { expectedHostedConfig, hostedBinding, validateHostedAttestation, verifyHostedServing } from "./hosted-attestation.mjs"
+import { expectedHostedConfig, hostedBinding, validateHostedAttestation, verifyHostedServing, assertHostedServingPair } from "./hosted-attestation.mjs"
 import { hostedFetch } from "./hosted-auth.mjs"
+import { qualificationEnvironment, assertQualificationBuild, assertQualificationEnvironment, assertEnvironmentServing } from "./qualification-environment.mjs"
+import { validatePublicAttestation, validatePublicProductionPins, publicBinding, verifyPublicServing, assertPublicServingPair, publicDocumentProof, assertPublicDocumentProof } from "./public-production.mjs"
+import { GIT_SOURCE_MODE, gitConfigBinding, assertGitCheckoutCommit } from "./git-source-binding.mjs"
 
 export const TRANSFER_BUDGET = BASE_TRANSFER_BUDGET
 export { routeTransferBudget }
 export const SOURCE_PATHS = ["src", "public", "drizzle", "package.json", "package-lock.json", "next.config.ts", "vercel.json", "tsconfig.json", "postcss.config.mjs"]
 const digest = bytes => createHash("sha256").update(bytes).digest("hex")
+let documentContext
 export const canonicalJson = value => JSON.stringify(value, (_, entry) => entry && !Array.isArray(entry) && typeof entry === "object" ? Object.fromEntries(Object.entries(entry).sort(([a], [b]) => a.localeCompare(b))) : entry)
 export const settingsDigest = value => digest(canonicalJson(value))
 
@@ -42,6 +46,20 @@ export async function expectedHostedSource(env = process.env, directory = ".", p
   const snapshot = await sourceSnapshot(paths, directory, config.bytes)
   return { sourceRevision: snapshot.sourceRevision, hostedSourceRevision: snapshot.hostedSourceRevision, configTransformation: config.transformation }
 }
+/** Independent Git consumer pins come from the checkout, never the attestation
+ * or served HTML. Both dirty source bytes and HEAD participate in validation.
+ * @param {{deploymentCommit:string}} pins
+ * @param {string} directory
+ * @param {string[]} paths
+ * @param {{run?: import("./git-source-binding.mjs").GitRunner}} options
+ */
+export async function expectedGitSource(pins, directory = ".", paths = SOURCE_PATHS, { run } = {}) {
+  assertGitCheckoutCommit(directory, pins.deploymentCommit, run)
+  const configTransformation = gitConfigBinding(await readFile(join(directory, "vercel.json")))
+  const snapshot = await sourceSnapshot(paths, directory)
+  assert(snapshot.files.some(file => file.path === "vercel.json"), "Git source must include vercel.json")
+  return { sourceRevision: snapshot.sourceRevision, hostedSourceRevision: snapshot.sourceRevision, configTransformation }
+}
 export async function sourceRevision() {
   return (await sourceSnapshot()).sourceRevision
 }
@@ -69,7 +87,12 @@ export async function currentBuildIdentity() {
   return { sourceRevision: await sourceRevision(), buildId: (await readFile(".next/BUILD_ID", "utf8")).trim(), releases: await releaseIdentity(), buildSettings }
 }
 export async function verifiedBuildIdentity() {
-  if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) return (await hostedBuildAttestation()).identity
+  const environment = qualificationEnvironment()
+  if (environment.name !== "local") {
+    const identity = (await hostedBuildAttestation()).identity
+    assertQualificationBuild(environment, identity)
+    return identity
+  }
   assertLocalMeasurementOrigin()
   const recorded = JSON.parse(await readFile(".next/facility-build.json", "utf8"))
   const current = await currentBuildIdentity()
@@ -77,8 +100,24 @@ export async function verifiedBuildIdentity() {
   return current
 }
 export async function provenance(browser, settings) {
-  const hosted = process.env.FACILITY_HOSTED_ATTESTATION_FILE ? await hostedBuildAttestation() : null
-  return { schemaVersion: "facility-performance.v2", ...await verifiedBuildIdentity(), harnessRevision: await harnessRevision(), ...(hosted ? { hosted: hostedBinding(hosted) } : {}), browser, settings, settingsSha256: settingsDigest(settings) }
+  const environment = await measurementEnvironment()
+  const hosted = environment.name === "local" ? null : await hostedBuildAttestation()
+  return { schemaVersion: "facility-performance.v2", qualificationEnvironment: environment, ...await verifiedBuildIdentity(), harnessRevision: await harnessRevision(), ...(hosted ? { hosted: hostedBinding(hosted) } : {}), ...(environment.name === "public-production" ? { publicTarget: publicBinding(hosted, await publicProductionPins()) } : {}), browser, settings, settingsSha256: settingsDigest(settings) }
+}
+export async function measurementEnvironment() {
+  const environment = qualificationEnvironment()
+  assertQualificationBuild(environment, await verifiedBuildIdentity())
+  if (environment.name === "public-production") documentContext = { environment, attestation: await hostedBuildAttestation(), pins: await publicProductionPins() }
+  return environment
+}
+export function isProtectedMeasurement() { return qualificationEnvironment().name === "protected-staging" }
+export async function publicProductionPins() {
+  assert(process.env.FACILITY_PUBLIC_PRODUCTION_PINS_FILE, "Public measurement requires independent production pins")
+  const pins = JSON.parse(await readFile(process.env.FACILITY_PUBLIC_PRODUCTION_PINS_FILE, "utf8"))
+  validatePublicProductionPins(pins)
+  const expectedSource = pins.sourceMode === GIT_SOURCE_MODE ? await expectedGitSource(pins) : await expectedHostedSource()
+  for (const [key, value] of Object.entries({ ...expectedSource, harnessRevision: await harnessRevision() })) assert.deepEqual(pins[key], value, `Public pins differ from measured source/harness: ${key}`)
+  return pins
 }
 export async function harnessRevision() {
   const harnessFiles = (await Promise.all(["scripts/facility", "scripts/cinematic", "lighthouserc.cjs", "scripts/seo/validate-lighthouse-budgets.mjs"].map(filesAt))).flat().sort()
@@ -88,17 +127,41 @@ export async function harnessRevision() {
 }
 export async function hostedBuildAttestation() {
   assert(process.env.FACILITY_HOSTED_ATTESTATION_FILE && process.env.FACILITY_BASE_URL, "Hosted evidence requires explicit attestation file and deployment origin")
-  return validateHostedAttestation(JSON.parse(await readFile(process.env.FACILITY_HOSTED_ATTESTATION_FILE, "utf8")), { baseURL: process.env.FACILITY_BASE_URL, ...await expectedHostedSource(), harnessRevision: await harnessRevision() })
+  const attestation = JSON.parse(await readFile(process.env.FACILITY_HOSTED_ATTESTATION_FILE, "utf8"))
+  if (qualificationEnvironment().name === "public-production") return validatePublicAttestation(attestation, await publicProductionPins())
+  return validateHostedAttestation(attestation, { baseURL: process.env.FACILITY_BASE_URL, ...await expectedHostedSource(), harnessRevision: await harnessRevision() })
 }
 export async function recordedBuild() {
   return process.env.FACILITY_HOSTED_ATTESTATION_FILE ? hostedBuildAttestation() : JSON.parse(await readFile(".next/facility-build.json", "utf8"))
 }
 export async function verifyMeasurementServing() {
-  if (!process.env.FACILITY_HOSTED_ATTESTATION_FILE) {
+  const environment = await measurementEnvironment()
+  if (environment.name === "local") {
     assertLocalMeasurementOrigin()
     return null
   }
+  if (environment.name === "public-production") return verifyPublicServing(await hostedBuildAttestation(), { pins: await publicProductionPins() })
   return verifyHostedServing(await hostedBuildAttestation(), { baseURL: process.env.FACILITY_BASE_URL, fetcher: hostedFetch })
+}
+export async function assertMeasurementServingPair(pair) {
+  const environment = await measurementEnvironment()
+  if (environment.name === "local") return assert(!pair, "Local measurements cannot contain hosted serving receipts")
+  const attestation = await hostedBuildAttestation()
+  if (environment.name === "public-production") assertPublicServingPair(pair, attestation, await publicProductionPins())
+  else assertHostedServingPair(pair, attestation)
+  assertEnvironmentServing(pair, environment, attestation)
+}
+export async function verifyMeasurementDocument(body, { url, status, headers }) {
+  if (qualificationEnvironment().name !== "public-production") return null
+  assert(documentContext, "Public document capture requires a validated measurement environment before navigation")
+  assertQualificationEnvironment(qualificationEnvironment(), documentContext.environment)
+  return publicDocumentProof({ url, status, body: Buffer.isBuffer(body) ? body.toString("base64") : body, base64Encoded: Buffer.isBuffer(body), headers, observedAt: new Date().toISOString() }, documentContext.attestation, documentContext.pins)
+}
+export async function assertMeasurementDocument(proof, { route, after, before }) {
+  if (qualificationEnvironment().name !== "public-production") return assert(!proof, "Unexpected public document proof")
+  assert(documentContext, "Public document validation requires a validated measurement environment")
+  assertQualificationEnvironment(qualificationEnvironment(), documentContext.environment)
+  assertPublicDocumentProof(proof, documentContext.attestation, documentContext.pins, { route, after, before })
 }
 export function assertLocalMeasurementOrigin(baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000") {
   const url = new URL(baseURL)
@@ -109,6 +172,9 @@ export function assertSameBuild(actual, expected) {
   assert.deepEqual(actual.releases, expected.releases, "Mixed release manifests")
   assert.deepEqual(actual.buildSettings, expected.buildSettings, "Mixed facility release/mode settings")
   assert.deepEqual(actual.hosted, expected.hosted, "Mixed local/hosted deployment provenance")
+  assertQualificationEnvironment(actual.qualificationEnvironment, expected.qualificationEnvironment)
+  if (expected.qualificationEnvironment.name === "public-production") assert(expected.publicTarget?.origin === expected.qualificationEnvironment.measurementOrigin && actual.publicTarget?.origin === expected.qualificationEnvironment.measurementOrigin, "Missing public alias deployment provenance")
+  assert.deepEqual(actual.publicTarget, expected.publicTarget, "Mixed public alias deployment provenance")
   assert.equal(actual.settingsSha256, settingsDigest(actual.settings), "Report settings digest mismatch")
   assert.equal(typeof actual.browser, "string", "Missing browser identity")
 }

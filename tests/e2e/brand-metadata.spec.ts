@@ -1,4 +1,7 @@
+import { readFileSync } from "node:fs"
+import { join } from "node:path"
 import { expect, test } from "@playwright/test"
+import { JSDOM } from "jsdom"
 
 import {
   HOMEPAGE_PRIMARY_IMAGE,
@@ -10,6 +13,7 @@ const socialImageAlt =
   "GridNinja emblem and wordmark on a dark card introducing bounded capacity decision assessments"
 const canonicalSiteUrl = "https://gridninja.ai/"
 const homepageRoute = getSeoRoute("/")
+const previousManifestBody = readFileSync(join(__dirname, "../fixtures/web-app-manifest.json"), "utf8")
 
 function expectHomepageUrl(value: string | null) {
   expect(value).not.toBeNull()
@@ -35,9 +39,9 @@ test.describe("production brand metadata routes", () => {
     const response = await request.get("/manifest.webmanifest")
 
     expect(response.status()).toBe(200)
-    expect(response.headers()["content-type"]).toContain(
-      "application/manifest+json"
-    )
+    expect(response.headers()["content-type"]).toBe("application/manifest+json")
+    expect(response.headers()["cache-control"]).toBe("public, max-age=0, must-revalidate")
+    expect(await response.text()).toBe(previousManifestBody)
     const manifest = await response.json()
     expect(manifest).toMatchObject({
       name: "GridNinja",
@@ -120,12 +124,21 @@ test.describe("production brand metadata routes", () => {
   test("publishes complete social, icon, manifest, and theme metadata in the root head", async ({
     page,
   }) => {
-    await page.goto("/")
+    const response = await page.goto("/")
+    expect(response?.status()).toBe(200)
+    const initial = new JSDOM(await response!.text()).window.document
+    const initialManifests = [...initial.querySelectorAll('link[rel~="manifest"]')]
+    expect(initialManifests).toHaveLength(1)
+    expect(initial.head.contains(initialManifests[0])).toBe(true)
+    expect(initialManifests[0].getAttribute("href")).toBe("/manifest.webmanifest")
+    expect(initialManifests[0].getAttribute("crossorigin")).toBe("use-credentials")
 
+    await expect(page.locator('link[rel="manifest"]')).toHaveCount(1)
     await expect(page.locator('link[rel="manifest"]')).toHaveAttribute(
       "href",
       "/manifest.webmanifest"
     )
+    await expect(page.locator('link[rel="manifest"]')).toHaveAttribute("crossorigin", "use-credentials")
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute(
       "content",
       "#080808"
