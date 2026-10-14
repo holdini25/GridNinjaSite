@@ -21,6 +21,7 @@ function makeReport(profile: string, route: string, run: number) {
   const settings = { ...collectorSettings[profile as keyof typeof collectorSettings], throttlingMethod: "simulate" }
   const provenance = {
     schemaVersion: "facility-performance.v2", ...identity, harnessRevision: "harness", browser: "154.0",
+    qualificationEnvironment: { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: baseURL },
     settings: { profile, settings, freshBrowserProfile: true },
     settingsSha256: settingsDigest({ profile, settings, freshBrowserProfile: true }),
   }
@@ -88,6 +89,17 @@ describe("focused startup gate", () => {
     const summary = summarizeStartupEvidence(duplicate)
     expect(summary.collection.result).toBe("incomplete")
     expect(summary.collection.failures.join(" ")).toMatch(/duplicate|missing/i)
+  })
+
+  it("does not evaluate startup thresholds with absent or mixed qualification environments", () => {
+    for (const environment of [undefined, { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: "http://localhost:3001" }]) {
+      const input = fixture()
+      Object.assign(input.reports[19].report.facilityEvidence.provenance, { qualificationEnvironment: environment })
+      const summary = summarizeStartupEvidence(input)
+      expect(summary.collection.result).toBe("incomplete")
+      expect(summary.collection.failures.join(" ")).toMatch(/qualification environment/)
+      expect(summary.threshold.result).toBe("not-evaluated")
+    }
   })
 
   it("rejects mixed source, build, harness, browser, and Lighthouse settings", () => {

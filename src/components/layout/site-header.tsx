@@ -1,10 +1,52 @@
 /* eslint-disable @next/next/no-html-link-for-pages -- Native links keep header navigation available without client hydration. */
 import type { ReactNode } from "react"
 
-import { ChevronDownIcon, MenuIcon } from "lucide-react"
-
 import { MicroMark } from "@/components/brand/micro-gridninja-mark"
 import { headerCapacityAuditHref, navItems } from "@/content/nav"
+
+/*! @license
+ * Menu and ChevronDown geometry from lucide-react 1.7.0, ISC License.
+ * Copyright (c) 2026 Lucide Icons and Contributors
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
+ * ChevronDown is derived from Feather, MIT License.
+ * Copyright (c) 2013-present Cole Bemis
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+/** These decorative icons need no context, refs or client hydration. */
+function HeaderIcon({ name, className }: { name: "menu" | "chevron-down"; className: string }) {
+  return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`lucide lucide-${name} ${className}`} aria-hidden="true">
+    {name === "menu" ? <><path d="M4 5h16" /><path d="M4 12h16" /><path d="M4 19h16" /></> : <path d="m6 9 6 6 6-6" />}
+  </svg>
+}
 
 const menuId = (label: string, prefix: string) =>
   `${prefix}-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
@@ -45,7 +87,11 @@ const headerBootstrap = `(() => {
     for (const group of header.querySelectorAll("[data-header-group]")) {
       const activeChildren = [...group.querySelectorAll("[data-nav-child]")]
         .filter((link) => matches(pathname, link.getAttribute("href")))
-        .sort((left, right) => right.getAttribute("href").length - left.getAttribute("href").length)
+        .sort((left, right) => {
+          const leftHref = left.getAttribute("href"), rightHref = right.getAttribute("href")
+          const leftPath = leftHref.split(/[?#]/, 1)[0], rightPath = rightHref.split(/[?#]/, 1)[0]
+          return rightPath.length - leftPath.length || Number(leftHref !== leftPath) - Number(rightHref !== rightPath)
+        })
       if (!activeChildren.length) continue
       const summary = group.querySelector("summary")
       summary.dataset.navActive = "true"
@@ -152,7 +198,7 @@ function DesktopNavigation() {
               className="relative flex h-11 cursor-pointer list-none items-center gap-1 whitespace-nowrap rounded-lg px-3 py-2 text-[15px] font-medium text-muted-foreground transition-colors duration-150 hover:bg-surface-hover hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring group-open:bg-surface-hover group-open:text-foreground data-[nav-active=true]:text-foreground [&::-webkit-details-marker]:hidden"
             >
               {item.label}
-              <ChevronDownIcon className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+              <HeaderIcon name="chevron-down" className="size-4 transition-transform group-open:rotate-180" />
               <ActiveIndicator />
             </summary>
             <div className="absolute top-full left-1/2 w-[360px] -translate-x-1/2 pt-[15px]">
@@ -198,7 +244,7 @@ function MobileNavigation() {
         aria-controls="mobile-site-navigation"
         className="inline-flex size-11 cursor-pointer list-none items-center justify-center rounded-lg border border-border bg-surface-2 text-foreground transition-colors duration-150 hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary [&::-webkit-details-marker]:hidden"
       >
-        <MenuIcon className="size-4" aria-hidden="true" />
+        <HeaderIcon name="menu" className="size-4" />
       </summary>
       <div aria-hidden="true" className="fixed inset-x-0 top-[70px] bottom-0 z-0 bg-black/65" />
       <div
@@ -249,7 +295,7 @@ function MobileNavigation() {
                     {item.label}
                     <ActiveIndicator mobile />
                   </span>
-                  <ChevronDownIcon className="size-4 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
+                  <HeaderIcon name="chevron-down" className="size-4 transition-transform duration-150 group-open:rotate-180" />
                 </summary>
                 <div id={id} className="mt-1 flex flex-col gap-1 border-l border-divider py-1 pl-3">
                   {item.children.map((child) => (

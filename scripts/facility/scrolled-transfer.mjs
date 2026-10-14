@@ -1,7 +1,8 @@
 import assert from "node:assert/strict"
 import { devices } from "@playwright/test"
-import { assertCompleteTransfer, collectTransfers, settleTransfers } from "./performance-contract.mjs"
+import { assertCompleteTransfer, collectTransfers, isProtectedMeasurement, measurementEnvironment, settleTransfers, verifyMeasurementDocument } from "./performance-contract.mjs"
 import { LIGHTHOUSE_RESOURCE_BUDGETS } from "../seo/validate-lighthouse-budgets.mjs"
+import { authorizeHostedContext } from "./hosted-auth.mjs"
 
 export const SCROLLED_TRANSFER_PROTOCOL = Object.freeze({ protocol: "settled-viewport-visits", maximumSteps: 100, settleQuietMs: 750, settleTimeoutMs: 15_000 })
 
@@ -41,17 +42,21 @@ export async function visitScrolledPage(page, settle) {
 /** Separate transfer observations, not additional Lighthouse/LCP samples.
  * Each fresh context accounts for initial loading and every scroll-triggered
  * resource with one ledger, so the two cumulative totals must not be added. */
-export async function measureScrolledRoutes(browser, { matrix, baseURL, buildSettings, desktopViewport }) {
+export async function measureScrolledRoutes(browser, { matrix, baseURL, buildSettings, desktopViewport, qualificationEnvironment = /** @type {Record<string, string> | undefined} */ (undefined) }) {
+  const environment = await measurementEnvironment()
+  if (qualificationEnvironment !== undefined) assert.deepEqual(environment, qualificationEnvironment, "Full-scroll qualification environment differs from page provenance")
+  assert.equal(baseURL, environment.measurementOrigin, "Full-scroll URL differs from qualification environment")
   const results = []
   for (const route of matrix.routes) for (const profile of matrix.profiles) for (let run = 1; run <= matrix.runs; run++) {
     const context = await browser.newContext(profile === "desktop" ? { viewport: desktopViewport } : devices["Pixel 5"])
+    if (isProtectedMeasurement()) await authorizeHostedContext(context, new URL(baseURL).origin)
     const page = await context.newPage()
     const ledger = await collectTransfers(await context.newCDPSession(page))
-    const result = { route, profile, run, freshContext: true, complete: false, pageErrors: [] }
+    const result = { route, profile, run, qualificationEnvironment: environment, documentIdentity: null, freshContext: true, complete: false, failure: null, pageErrors: [] }
     results.push(result)
     page.on("pageerror", error => result.pageErrors.push(error.message))
     try {
-      await page.goto(baseURL + route, { waitUntil: "load", timeout: 30_000 })
+      const response = await page.goto(baseURL + route, { waitUntil: "load", timeout: 30_000 })
       result.initialTransfer = await settleTransfers(ledger)
       assertScrolledTransfer(result.initialTransfer, { route, profile, buildSettings })
       result.scroll = await visitScrolledPage(page, async () => {
@@ -67,6 +72,11 @@ export async function measureScrolledRoutes(browser, { matrix, baseURL, buildSet
       assert(result.images.every(image => image.complete && image.width > 0 && image.height > 0), "A visible page image failed or remained undecoded after full scrolling")
       if (route === "/") assert(!result.fullPageTransfer.requests.some(request => /\.glb$/.test(new URL(request.url).pathname)), "Cinematic homepage acquired a 3D model")
       assert.deepEqual(result.pageErrors, [], "Page errors occurred during full-scroll observation")
+      if (environment.name === "public-production") {
+        assert(response, "Missing navigation response for public full-scroll document proof")
+        result.documentIdentity = await verifyMeasurementDocument(await response.body(), { url: response.url(), status: response.status(), headers: await response.allHeaders() })
+        assert(result.documentIdentity, "Missing public full-scroll document identity")
+      }
       result.complete = true
     } catch (error) {
       result.failure = error instanceof Error ? error.message : String(error)

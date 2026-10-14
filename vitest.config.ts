@@ -29,7 +29,7 @@ export default defineConfig({
       reporter: ["text", "html", "lcov"],
       include: [
         "src/schemas/dispatch-envelope.schema.ts",
-        "src/lib/dispatch-envelope/{compile-demo-envelope,invariants,normalize,geometry,export}.ts",
+        "src/lib/dispatch-envelope/{compile-demo-envelope,invariants,normalize,geometry,export,curves,evidence}.ts",
       ],
       thresholds: { statements: 90, lines: 90, functions: 90, branches: 85 },
     },

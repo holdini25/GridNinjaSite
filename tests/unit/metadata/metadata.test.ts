@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import manifest from "@/app/manifest"
+import manifest from "@/lib/web-app-manifest"
 import robots from "@/app/robots"
 import sitemap from "@/app/sitemap"
 import {
@@ -75,12 +75,19 @@ describe("public metadata", () => {
     })
   })
 
-  it("uses proof-first accessible text for both social cards", () => {
+  it("describes the actual social card and present assessment offer without claiming proven capacity", () => {
     expect(socialImageAlt).toBe(
-      "GridNinja — proof-backed virtual capacity for AI data centers"
+      "GridNinja emblem and wordmark on a dark card introducing bounded capacity decision assessments"
     )
     expect(openGraphImage.alt).toBe(socialImageAlt)
     expect(twitterImage.alt).toBe(socialImageAlt)
+  })
+
+  it("keeps standalone search snippets within assessment and development boundaries", () => {
+    expect(getSeoRoute("/platform").title).toContain("in Development")
+    expect(getSeoRoute("/platform").description).toContain("in development")
+    expect(getSeoRoute("/platform/dispatch-envelope").description).toMatch(/synthetic.*in development/i)
+    expect(getSeoRoute("/solutions/colocation").title).toBe("Capacity Decision Assessment for Colocation | GridNinja")
   })
 
   it("appends the square search candidate only to homepage Open Graph metadata", () => {

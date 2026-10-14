@@ -20,7 +20,10 @@ async function captureReviewImage(page, path) {
   }))
   const { width, height, scale } = dimensions
   assert(width > 0 && height > 0 && Number.isFinite(scale) && scale > 0, "Review capture has invalid document dimensions or device scale")
-  const pixelWidth = Math.ceil(width * scale), pixelHeight = Math.ceil(height * scale)
+  // Chromium rasterizes an integer CSS extent to the nearest device pixel
+  // (1471px at DPR 2.75 is 4045px, not 4046px). Plan in that integer
+  // raster space, with aligned internal boundaries and one native final edge.
+  const pixelWidth = Math.round(width * scale), pixelHeight = Math.round(height * scale)
   if (pixelWidth <= screenshotSideLimit && pixelHeight <= screenshotSideLimit) {
     await page.screenshot({ path, ...screenshotOptions })
     return { screenshotOptions }
@@ -37,16 +40,19 @@ async function captureReviewImage(page, path) {
   const inputs = [], tiles = []
   let pixelTop = 0
   for (let y = 0; y < height; y += tileHeight) {
-    const clip = { x: 0, y, width, height: Math.min(tileHeight, height - y) }
+    const cssBottom = Math.min(y + tileHeight, height)
+    const pixelBottom = Math.round(cssBottom * scale)
+    const expectedHeight = pixelBottom - pixelTop
+    assert.equal(pixelTop, Math.round(y * scale), "Review tile starts outside its integer device-pixel boundary")
+    const clip = { x: 0, y, width, height: cssBottom - y }
     const input = await page.screenshot({ ...screenshotOptions, type: "png", clip })
     const metadata = await sharp(input).metadata()
-    const expectedHeight = Math.ceil(clip.height * scale)
     assert.equal(metadata.width, pixelWidth, "Review tile width differs from the native device-pixel width")
     assert.equal(metadata.height, expectedHeight, "Review tile height differs from its document clip")
     assert(metadata.height <= tileSideLimit, "Review tile exceeds the device-pixel budget")
     inputs.push({ input, left: 0, top: pixelTop })
-    tiles.push({ clip, pixels: { top: pixelTop, width: metadata.width, height: metadata.height } })
-    pixelTop += metadata.height
+    tiles.push({ clip, pixels: { top: pixelTop, bottom: pixelBottom, width: pixelWidth, height: expectedHeight } })
+    pixelTop = pixelBottom
   }
   assert.equal(pixelTop, pixelHeight, "Review tiles do not cover the complete document exactly")
   const format = [".jpg", ".jpeg"].includes(extname(path).toLowerCase()) ? "jpeg" : "png"
@@ -57,6 +63,7 @@ async function captureReviewImage(page, path) {
     tiledCapture: {
       method: "document-coordinate-png-tiles-stitched-with-sharp", trigger: "device-pixel-height-exceeds-32767",
       interpretation: "Serial document clips preserve the conditioned layout and native scale; the stitched image is review paint evidence, not a simultaneous frame or performance evidence.",
+      rasterBoundaries: "nearest-device-pixel-edges-with-aligned-interior-clips",
       document: dimensions, pixels: { width: pixelWidth, height: pixelHeight }, tileDevicePixelLimit: tileSideLimit,
       tileScreenshotOptions: { ...screenshotOptions, type: "png" }, outputFormat: format, tiles,
     },

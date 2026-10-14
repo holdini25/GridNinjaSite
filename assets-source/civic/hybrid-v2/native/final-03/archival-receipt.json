@@ -1,0 +1,97 @@
+{
+  "schema": "gridninja.civic-native-archive.v1",
+  "createdUtc": "2026-10-11T22:06:54.953699+00:00",
+  "purpose": "Byte-identical archival copy. Original Blender receipts are unchanged; retained paths do not claim original render destinations.",
+  "originalReceiptPath": "build/civic-hybrid/final-03/render-record.json",
+  "originalReceiptSha256": "66b8ab5e37d3b80dc3ee15c02c8081c233aa18c65f31024e0f0fdfd970188434",
+  "originalProcessReceiptPath": "build/civic-hybrid/final-03/process-record.json",
+  "originalProcessReceiptSha256": "52a50c97a3fe78e6422475cae78a6420cdef094b063b84780dddfb02a3c57c09",
+  "restorePolicy": "Restore original paths byte-for-byte before rerunning exact-path native provenance verification. Do not rewrite original receipts.",
+  "files": [
+    {
+      "originalPath": "build/civic-hybrid/final-03/A-shared-landscape/landscape.exr",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/A-shared-landscape/landscape.exr",
+      "sha256": "ef890ac6333a0d28fcb11c2f111bb58756a9f3fbccb02a97418a5e5d8c34fbc7",
+      "bytes": 58336334
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/A-shared-landscape/landscape.png",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/A-shared-landscape/landscape.png",
+      "sha256": "70ee7ab8711398295c8bcc2233be9a6f50b32d9b8056effe8be4c21a94b90631",
+      "bytes": 29244702
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/A-shared-landscape/portrait.exr",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/A-shared-landscape/portrait.exr",
+      "sha256": "c92b5fa91f9fb175bbc7ecd425aaeb6450533704d4066f6fe414e6abefc40e7d",
+      "bytes": 15867155
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/A-shared-landscape/portrait.png",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/A-shared-landscape/portrait.png",
+      "sha256": "f90b042f446dc852dddd088d3cc75ecbe6b2fdbab14e553deaa359d2bc072bc4",
+      "bytes": 8176593
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/blender.log",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/blender.log",
+      "sha256": "705f23a76cc70d23764564966eea33f8627b75c8ae0dd904f773a67d856bbf8b",
+      "bytes": 1859
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/civic-scene.blend",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/civic-scene.blend",
+      "sha256": "385fb3baf968c42096eb0fcfb1c3442d5399583bc4254dd9682b8b96eee7acd3",
+      "bytes": 2690141
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/process-record.json",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/process-record.json",
+      "sha256": "52a50c97a3fe78e6422475cae78a6420cdef094b063b84780dddfb02a3c57c09",
+      "bytes": 1316
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/render-record.json",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/render-record.json",
+      "sha256": "66b8ab5e37d3b80dc3ee15c02c8081c233aa18c65f31024e0f0fdfd970188434",
+      "bytes": 4608
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/source/assets-source/civic/hybrid-v2/scene.py",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/source/assets-source/civic/hybrid-v2/scene.py",
+      "sha256": "46215c81ce61a7b11c6e6526b62fbccfa2ad04342817b2ba8a08ab3613ca113c",
+      "bytes": 27930
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/source/assets-source/facility/compute.py",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/source/assets-source/facility/compute.py",
+      "sha256": "afb5e7096c76086825b6f071ba7c1de557359f2113ddb0bb4fc44f070c907649",
+      "bytes": 2311
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/source/scripts/civic/render-hybrid.py",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/source/scripts/civic/render-hybrid.py",
+      "sha256": "d4e09a84bbf131b05cd16a872c64f235c9cf4810e6adbcdf58b15792a28fb7fb",
+      "bytes": 6218
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/source/scripts/civic/run-hybrid.py",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/source/scripts/civic/run-hybrid.py",
+      "sha256": "d825810647b0495deddbf11fa35530b86751c571e9c60dac16d35f1ef6083c0e",
+      "bytes": 4760
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/source/scripts/editorial/run.py",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/source/scripts/editorial/run.py",
+      "sha256": "e04c3ff5ba0dd33a1513f349cab357126b6b098fa0514c71f8d2e37fc1682cab",
+      "bytes": 15758
+    },
+    {
+      "originalPath": "build/civic-hybrid/final-03/source-snapshot.json",
+      "retainedPath": "assets-source/civic/hybrid-v2/native/final-03/source-snapshot.json",
+      "sha256": "7e8f6d590db8b79e2e256ad14b9c7907a4483b30b7af3e73c33dc0858c1e415c",
+      "bytes": 1380
+    }
+  ],
+  "totalBytes": 114381065
+}

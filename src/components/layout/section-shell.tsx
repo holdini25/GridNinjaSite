@@ -1,7 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react"
 
-import { cn } from "@/lib/utils"
-
 type SectionShellProps = ComponentPropsWithoutRef<"section"> & {
   containerClassName?: string
   deferRendering?: boolean
@@ -9,22 +7,18 @@ type SectionShellProps = ComponentPropsWithoutRef<"section"> & {
 }
 
 export function SectionShell({
-  className,
-  containerClassName,
+  className = "",
+  containerClassName = "",
   deferRendering = true,
   children,
   ...props
 }: SectionShellProps) {
   return (
     <section
-      className={cn(
-        "gn-section-shell",
-        deferRendering && "gn-content-auto",
-        className
-      )}
+      className={`gn-section-shell ${deferRendering ? "gn-content-auto" : ""} ${className}`}
       {...props}
     >
-      <div className={cn("gn-section-container mx-auto w-full max-w-7xl", containerClassName)}>
+      <div className={`gn-section-container ${containerClassName}`}>
         {children}
       </div>
     </section>

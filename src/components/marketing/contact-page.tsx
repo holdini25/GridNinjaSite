@@ -1,0 +1,140 @@
+import Link from "next/link"
+
+import { StaticGridNinjaMark } from "@/components/brand/gridninja-mark"
+import { ContactForm } from "@/components/forms/contact-form"
+import { SectionShell } from "@/components/layout/section-shell"
+import {
+  contactHero,
+  contactNextSteps,
+  contactTrustCommitments,
+} from "@/content/copy/contact"
+
+export function ContactPageContent() {
+  return (
+    <div className="relative overflow-hidden bg-background pb-20 sm:pb-24">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[52rem] opacity-[0.16] [background-image:linear-gradient(rgba(184,184,184,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(184,184,184,0.16)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"
+      />
+
+      <SectionShell
+        deferRendering={false}
+        className="relative pt-7 sm:pt-12 lg:pt-14"
+        containerClassName="max-w-[73.75rem]"
+      >
+        <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-6 sm:gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-16">
+          <div className="contents lg:col-span-5 lg:block lg:pt-5">
+            <div className="order-1 min-w-0 [overflow-wrap:anywhere]">
+              <div className="flex items-center gap-3">
+                <StaticGridNinjaMark
+                  variant="proof-core"
+                  className="size-7"
+                  loading="eager"
+                  fetchPriority="high"
+                />
+                <p className="gn-eyebrow">{contactHero.eyebrow}</p>
+              </div>
+
+              <h1 className="mt-5 max-w-[11ch] text-balance text-[2.25rem] leading-[1.05] font-medium tracking-tight text-foreground sm:mt-6 sm:text-[3rem] lg:text-[3.125rem]">
+                {contactHero.headline}
+              </h1>
+              <p className="mt-3 max-w-xl text-base leading-7 text-muted-foreground sm:mt-5">
+                {contactHero.body}
+              </p>
+            </div>
+
+            <section
+              aria-labelledby="contact-safeguards"
+              className="order-3 mt-5 min-w-0 rounded-xl border border-border bg-surface p-4 [overflow-wrap:anywhere] sm:mt-8 sm:p-5"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="min-w-0 flex-1 basis-40">
+                  <p className="gn-eyebrow">Assessment safeguards</p>
+                  <h2
+                    id="contact-safeguards"
+                    className="mt-2 text-base font-medium tracking-tight text-foreground"
+                  >
+                    Agree the scope before sharing data.
+                  </h2>
+                </div>
+              </div>
+
+              <ul
+                className="mt-4 grid gap-2 sm:grid-cols-2"
+                aria-label="Intake commitments"
+              >
+                {contactTrustCommitments.map((commitment) => (
+                  <li
+                    key={commitment}
+                    className="flex min-h-16 min-w-0 items-center gap-3 py-3 text-sm font-medium leading-5 text-foreground"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="grid size-7 shrink-0 place-items-center rounded-lg border border-signal/30 bg-signal/10 text-signal"
+                    >
+                      <svg
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        className="size-3.5"
+                      >
+                        <path d="m3.25 8.25 2.9 2.9 6.6-6.45" />
+                      </svg>
+                    </span>
+                    <span className="min-w-0">{commitment}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div
+                className="mt-4 border-t border-divider pt-3"
+                data-seo-related-source="/contact"
+                data-seo-related-paths='["/proof"]'
+                data-seo-route-tier="0"
+              >
+                <Link
+                  href="/proof"
+                  prefetch={false}
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-primary underline underline-offset-4 transition-colors duration-150 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none"
+                  data-seo-related-target="/proof"
+                >
+                  View proof before autonomy
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </section>
+          </div>
+
+          <div className="order-2 min-w-0 lg:col-span-7">
+            <ContactForm />
+          </div>
+        </div>
+
+        <section
+          aria-labelledby="contact-next-steps"
+          className="mt-12 border-t border-divider pt-7 sm:mt-16"
+        >
+          <h2 id="contact-next-steps" className="sr-only">
+            What happens next
+          </h2>
+          <ol className="grid gap-6 md:grid-cols-3">
+            {contactNextSteps.map((step, index) => (
+              <li key={step.title} className="grid grid-cols-[auto_minmax(0,1fr)] gap-3">
+                <span className="font-mono text-sm text-primary">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0 [overflow-wrap:anywhere]">
+                  <h3 className="font-medium text-foreground">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {step.body}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </SectionShell>
+    </div>
+  )
+}
