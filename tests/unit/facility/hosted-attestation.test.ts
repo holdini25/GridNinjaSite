@@ -3,22 +3,27 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { describe, expect, it, vi } from "vitest"
-import { assertHostedServingPair, hostedAttestationLogLines, hostedBinding, hostedConfigDiagnostics, hostedOrigin, hostedOutputDiagnostics, hostedPrerenderPath, parseHostedAttestationLogs, validateHostedAttestation, verifyHostedServing } from "../../../scripts/facility/hosted-attestation.mjs"
+import { assertHostedServingPair, attestHostedConfig, expectedHostedConfig, hostedAttestationLogLines, hostedBinding, hostedConfigDiagnostics, hostedOrigin, hostedOutputDiagnostics, hostedPrerenderPath, parseHostedAttestationLogs, validateHostedAttestation, verifyHostedServing } from "../../../scripts/facility/hosted-attestation.mjs"
 import { createHostedAuth, hostedCookie, redactHostedSecrets } from "../../../scripts/facility/hosted-auth.mjs"
 import { assertLighthouseMatrixIndex, lighthousePriorityGroups, performanceMatrix } from "../../../scripts/facility/lighthouse-matrix.mjs"
-import { assertLocalMeasurementOrigin, assertSameBuild, settingsDigest, sourceSnapshot } from "../../../scripts/facility/performance-contract.mjs"
+import { assertLocalMeasurementOrigin, assertSameBuild, expectedHostedSource, settingsDigest, sourceSnapshot } from "../../../scripts/facility/performance-contract.mjs"
 
 const origin = "https://gridninja-build-abc.vercel.app"
 const sha = (value: string) => createHash("sha256").update(value).digest("hex")
 const body = "<!doctype html><h1>GridNinja</h1>"
 const asset = "console.log('GridNinja')"
+const originalConfig = { $schema: "https://openapi.vercel.sh/vercel.json", git: { deploymentEnabled: { "codex/assessment-yield-upgrade": false } } }
+const repositoryConfig = Buffer.from(`${JSON.stringify(originalConfig, null, 2)}\n`)
+const configPins = { projectName: "synthetic-isolated-project", originalCanonicalSha256: sha(JSON.stringify(originalConfig)) }
+const configTransformation = expectedHostedConfig(repositoryConfig, configPins).transformation
 const fixture = () => ({
   schemaVersion: "gridninja-hosted-build.v1", recordedAt: "2026-01-01T00:00:00.000Z", origin, environment: "preview",
   identity: { sourceRevision: sha("source"), buildId: "remote-build-id", releases: [{ release: "facility-v1", manifestSha256: sha("release") }], buildSettings: { observability: true, httpsPolicy: true } },
   harnessRevision: sha("harness"),
+  sourceBinding: { repositorySourceRevision: sha("repository-source"), hostedSourceRevision: sha("source"), configTransformation: { ...configTransformation } },
   resources: [...performanceMatrix("premium-civic").routes.map(path => ({ path, kind: "html", sha256: sha(body), bytes: Buffer.byteLength(body) })), { path: "/_next/static/chunk.js", kind: "asset", sha256: sha(asset), bytes: Buffer.byteLength(asset) }],
 })
-const options = { baseURL: origin, sourceRevision: sha("source"), harnessRevision: sha("harness") }
+const options = { baseURL: origin, sourceRevision: sha("repository-source"), hostedSourceRevision: sha("source"), configTransformation, harnessRevision: sha("harness") }
 const response = (url: string, text: string, headers: Record<string, string> = {}, status = 200) => {
   const result = new Response(text, { status, headers })
   Object.defineProperty(result, "url", { value: url })
@@ -30,6 +35,82 @@ const cleanFetch = async (url: string | URL | Request) => {
 }
 
 describe("hosted build attestation", () => {
+  it("permits only the explicitly pinned project metadata and exact provider serialization", () => {
+    const expected = expectedHostedConfig(repositoryConfig, configPins)
+    expect(expected.bytes.toString()).toBe(`${JSON.stringify({ ...originalConfig, name: configPins.projectName, version: 2 })}\n`)
+    expect(attestHostedConfig(expected.bytes, configPins)).toEqual(expected.transformation)
+    expect(expected.transformation.builtConfigSha256).toBe(sha(expected.bytes.toString()))
+    for (const pins of [{ ...configPins, projectName: undefined }, { ...configPins, projectName: "wrong-project" }, { ...configPins, originalCanonicalSha256: undefined }, { ...configPins, originalCanonicalSha256: sha("wrong") }]) {
+      expect(() => attestHostedConfig(expected.bytes, pins)).toThrow()
+    }
+    for (const rewrite of [
+      expected.bytes.toString().trimEnd(),
+      `${expected.bytes.toString()}\n`,
+      `${JSON.stringify({ ...originalConfig, name: configPins.projectName, version: 2 }, null, 2)}\n`,
+      `${JSON.stringify({ name: configPins.projectName, ...originalConfig, version: 2 })}\n`,
+      `${JSON.stringify({ ...originalConfig, name: configPins.projectName, version: 1 })}\n`,
+      `${JSON.stringify({ ...originalConfig, name: configPins.projectName, version: 2, framework: "nextjs" })}\n`,
+      `${JSON.stringify({ ...originalConfig, git: {}, name: configPins.projectName, version: 2 })}\n`,
+    ]) expect(() => attestHostedConfig(Buffer.from(rewrite), configPins)).toThrow()
+    for (const metadata of [{ name: configPins.projectName }, { version: 2 }]) expect(() => expectedHostedConfig(Buffer.from(JSON.stringify({ ...originalConfig, ...metadata })), configPins)).toThrow("already contains")
+    expect(() => expectedHostedConfig(Buffer.from(JSON.stringify({ ...originalConfig, git: {} })), configPins)).toThrow("differs from its pin")
+  })
+  it("hashes every source byte while replacing only vercel.json and preserves both identities in receipts", async () => {
+    const root = await mkdtemp(join(tmpdir(), "gridninja-hosted-transformation-"))
+    const env: NodeJS.ProcessEnv = { NODE_ENV: "test", FACILITY_HOSTED_PROJECT_NAME: configPins.projectName, FACILITY_EXPECTED_VERCEL_CONFIG_SHA256: configPins.originalCanonicalSha256 }
+    const paths = ["src", "package.json", "vercel.json"]
+    try {
+      await mkdir(join(root, "src"))
+      await writeFile(join(root, "src/page.ts"), "application source")
+      await writeFile(join(root, "package.json"), "{}")
+      await writeFile(join(root, "vercel.json"), repositoryConfig)
+      const local = await sourceSnapshot(paths, root), expected = await expectedHostedSource(env, root, paths)
+      expect(expected.sourceRevision).toBe(local.sourceRevision)
+      expect(expected.hostedSourceRevision).not.toBe(local.sourceRevision)
+      await writeFile(join(root, "vercel.json"), expectedHostedConfig(repositoryConfig, configPins).bytes)
+      expect((await sourceSnapshot(paths, root)).sourceRevision).toBe(expected.hostedSourceRevision)
+      await writeFile(join(root, "vercel.json"), repositoryConfig)
+      const record = fixture()
+      record.identity.sourceRevision = expected.hostedSourceRevision!
+      record.sourceBinding = { repositorySourceRevision: expected.sourceRevision, hostedSourceRevision: expected.hostedSourceRevision!, configTransformation: expected.configTransformation }
+      expect(validateHostedAttestation(record, { ...options, ...expected })).toBe(record)
+      expect(hostedBinding(record)).toMatchObject(record.sourceBinding)
+      const receipt = JSON.parse(JSON.stringify(await verifyHostedServing(record, { baseURL: origin, fetcher: cleanFetch })))
+      expect(receipt.repositorySourceRevision).toBe(local.sourceRevision)
+      expect(receipt.hostedSourceRevision).toBe(expected.hostedSourceRevision)
+      for (const [file, value] of [["src/page.ts", "changed application source"], ["package.json", '{"changed":true}'], ["src/new.ts", "new unexpected source"]]) {
+        await writeFile(join(root, file), value)
+        const changed = await expectedHostedSource(env, root, paths)
+        expect(changed.hostedSourceRevision).not.toBe(expected.hostedSourceRevision)
+        expect(() => validateHostedAttestation(record, { ...options, ...changed })).toThrow("source")
+      }
+      await expect(expectedHostedSource({ NODE_ENV: "test" }, root, paths)).rejects.toThrow("pinned hosted project")
+      await expect(expectedHostedSource({ ...env, FACILITY_HOSTED_PROJECT_NAME: "other-project" }, root, paths).then(changed => validateHostedAttestation(record, { ...options, ...changed }))).rejects.toThrow("source")
+    } finally { await rm(root, { recursive: true, force: true }) }
+  })
+  it("rejects forged or missing transformation and repository identities even with matching built source", () => {
+    for (const mutation of [
+      { projectName: "other-project" }, { originalCanonicalSha256: sha("other") }, { builtConfigSha256: sha("other") }, { builtConfigBytes: 1 }, { version: 1 },
+    ]) {
+      const record = fixture()
+      Object.assign(record.sourceBinding.configTransformation, mutation)
+      expect(() => validateHostedAttestation(record, options)).toThrow("source binding")
+    }
+    const otherRepository = fixture(); otherRepository.sourceBinding.repositorySourceRevision = sha("other")
+    expect(() => validateHostedAttestation(otherRepository, options)).toThrow("source binding")
+    expect(() => validateHostedAttestation(fixture(), { ...options, hostedSourceRevision: sha("changed-built-file") })).toThrow("source binding")
+    expect(() => validateHostedAttestation({ ...fixture(), sourceBinding: undefined }, options)).toThrow("source binding")
+    expect(() => validateHostedAttestation(fixture(), { ...options, configTransformation: undefined })).toThrow("independently computed")
+    // The producer can recover canonical contents after provider metadata is
+    // added, but only the consumer has the repository's original key order.
+    // Equal canonical JSON never excuses different built bytes at that boundary.
+    const reordered = Buffer.from(`${JSON.stringify({ git: originalConfig.git, $schema: originalConfig.$schema, name: configPins.projectName, version: 2 })}\n`)
+    const record = fixture()
+    record.sourceBinding.configTransformation = attestHostedConfig(reordered, configPins)
+    expect(record.sourceBinding.configTransformation.originalCanonicalSha256).toBe(configTransformation.originalCanonicalSha256)
+    expect(record.sourceBinding.configTransformation.builtConfigSha256).not.toBe(configTransformation.builtConfigSha256)
+    expect(() => validateHostedAttestation(record, options)).toThrow("source binding")
+  })
   it("discloses exact config bytes only for the approved public shape and matching expected canonical digest", () => {
     const approved = { $schema: "https://openapi.vercel.sh/vercel.json", git: { deploymentEnabled: { "codex/assessment-yield-upgrade": false } } }
     const bytes = Buffer.from(`${JSON.stringify(approved, null, 4)}\n`), canonicalHash = sha(JSON.stringify(approved))

@@ -14,6 +14,7 @@ if (process.env.FACILITY_HOSTED_ATTESTATION === "1") {
   for (const file of source.files) console.log(`GRIDNINJA_HOSTED_SOURCE_FILE_V1 ${JSON.stringify(file)}`)
   console.log(`GRIDNINJA_HOSTED_OUTPUT_V1 ${JSON.stringify(await hostedOutputDiagnostics())}`)
   const attestation = await createHostedAttestation(identity, await harnessRevision())
+  console.log(`GRIDNINJA_HOSTED_SOURCE_BINDING_V1 ${JSON.stringify(attestation.sourceBinding)}`)
   await writeFile(".next/hosted-build-attestation.json", `${JSON.stringify(attestation, null, 2)}\n`)
   for (const line of hostedAttestationLogLines(attestation)) console.log(line)
 }

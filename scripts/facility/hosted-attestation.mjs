@@ -8,6 +8,7 @@ import { performanceMatrix } from "./lighthouse-matrix.mjs"
 export const HOSTED_SCHEMA = "gridninja-hosted-build.v1"
 const hash = bytes => createHash("sha256").update(bytes).digest("hex")
 const sha256 = value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value)
+const canonicalConfig = value => JSON.stringify(value, (_, item) => item && typeof item === "object" && !Array.isArray(item) ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item)
 const marker = "GRIDNINJA_HOSTED_ATTESTATION_V1"
 const require = createRequire(import.meta.url)
 const { getRouteCacheKey } = require("next/dist/server/lib/route-cache-key")
@@ -56,7 +57,7 @@ export async function hostedOutputDiagnostics(nextDirectory = ".next") {
 export function hostedConfigDiagnostics(bytes, expectedCanonicalSha256) {
   const config = JSON.parse(bytes.toString("utf8"))
   assert(config && typeof config === "object" && !Array.isArray(config), "Invalid hosted project configuration")
-  const canonical = value => JSON.stringify(value, (_, item) => item && typeof item === "object" && !Array.isArray(item) ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item)
+  const canonical = canonicalConfig
   const approved = { $schema: "https://openapi.vercel.sh/vercel.json", git: { deploymentEnabled: { "codex/assessment-yield-upgrade": false } } }
   const canonicalSha256 = hash(canonical(config)), expectedMatches = sha256(expectedCanonicalSha256) && canonicalSha256 === expectedCanonicalSha256
   const knownPublicConfig = canonical(config) === canonical(approved)
@@ -71,10 +72,40 @@ export function hostedConfigDiagnostics(bytes, expectedCanonicalSha256) {
     ...(expectedMatches && knownPublicConfig ? { encodedBytes: bytes.toString("base64") } : {}) }
 }
 
+/** The only permitted provider source rewrite. Canonical equality pins the
+ * original configuration; the built file must also match the exact serialized
+ * bytes. No unknown provider fields, ordering or whitespace are normalized. */
+export function expectedHostedConfig(repositoryBytes, { projectName, originalCanonicalSha256 }) {
+  assert(typeof projectName === "string" && /^[a-z0-9][a-z0-9-]{0,99}$/.test(projectName), "Missing or invalid independently pinned hosted project name")
+  assert(sha256(originalCanonicalSha256), "Missing independently pinned original config digest")
+  const original = JSON.parse(repositoryBytes.toString("utf8"))
+  assert(original && typeof original === "object" && !Array.isArray(original), "Invalid original project configuration")
+  assert(!Object.hasOwn(original, "name") && !Object.hasOwn(original, "version"), "Repository config already contains provider project metadata")
+  assert.equal(hash(canonicalConfig(original)), originalCanonicalSha256, "Original project configuration differs from its pin")
+  const bytes = Buffer.from(`${JSON.stringify({ ...original, name: projectName, version: 2 })}\n`)
+  return { bytes, transformation: { kind: "vercel-project-metadata.v1", projectName, version: 2, originalCanonicalSha256, builtConfigSha256: hash(bytes), builtConfigBytes: bytes.length } }
+}
+
+export function attestHostedConfig(builtBytes, pins) {
+  const built = JSON.parse(builtBytes.toString("utf8"))
+  assert(built && typeof built === "object" && !Array.isArray(built), "Invalid built project configuration")
+  const { name, version, ...original } = built
+  assert.equal(name, pins.projectName, "Hosted configuration project differs from its pin")
+  assert.equal(version, 2, "Unexpected hosted configuration version")
+  const expected = expectedHostedConfig(Buffer.from(JSON.stringify(original)), pins)
+  assert(builtBytes.equals(expected.bytes), "Hosted configuration has an unapproved byte rewrite")
+  return expected.transformation
+}
+
 /** Produced inside the actual Vercel build, never synthesized from local .next. */
 export async function createHostedAttestation(identity, harnessRevision, env = process.env) {
   assert(env.VERCEL === "1" && env.VERCEL_URL && ["preview", "production"].includes(env.VERCEL_ENV), "Hosted attestation requires the actual Vercel build environment")
   const origin = hostedOrigin(`https://${env.VERCEL_URL}`)
+  assert(sha256(env.FACILITY_REPOSITORY_SOURCE_REVISION), "Hosted build requires a pinned repository source identity")
+  const configTransformation = attestHostedConfig(await readFile("vercel.json"), { projectName: env.FACILITY_HOSTED_PROJECT_NAME, originalCanonicalSha256: env.FACILITY_EXPECTED_VERCEL_CONFIG_SHA256 })
+  // The repository digest is an input pin, independently recomputed by the
+  // consumer. identity.sourceRevision is measured from the actual built tree.
+  const sourceBinding = { repositorySourceRevision: env.FACILITY_REPOSITORY_SOURCE_REVISION, hostedSourceRevision: identity.sourceRevision, configTransformation }
   const resources = []
   for (const route of performanceMatrix("premium-civic").routes) {
     // Demo reads searchParams and is rendered by Vercel at request time. Never
@@ -93,7 +124,7 @@ export async function createHostedAttestation(identity, harnessRevision, env = p
   const demoAssets = resources.filter(resource => /^\/_next\/static\/chunks\/app\/\(marketing\)\/demo\/page-[a-f0-9]+\.js$/.test(resource.path))
   assert.equal(demoAssets.length, 1, "Missing unique emitted demo page chunk")
   resources.push({ path: "/demo", kind: "html", verification: "dynamic-build-id-and-asset", requiredAsset: demoAssets[0].path, sha256: null, bytes: null })
-  return { schemaVersion: HOSTED_SCHEMA, recordedAt: new Date().toISOString(), origin, environment: env.VERCEL_ENV, identity, harnessRevision, resources }
+  return { schemaVersion: HOSTED_SCHEMA, recordedAt: new Date().toISOString(), origin, environment: env.VERCEL_ENV, identity, sourceBinding, harnessRevision, resources }
 }
 
 /** Small numbered lines survive private build-log line limits. No environment
@@ -119,15 +150,18 @@ export function parseHostedAttestationLogs(logs) {
   return JSON.parse(bytes.toString("utf8"))
 }
 
-export function validateHostedAttestation(attestation, { baseURL, sourceRevision, harnessRevision }) {
+export function validateHostedAttestation(attestation, { baseURL, sourceRevision, hostedSourceRevision, configTransformation, harnessRevision }) {
   assert.equal(attestation.schemaVersion, HOSTED_SCHEMA, "Unknown hosted attestation")
   assert.equal(hostedOrigin(baseURL), attestation.origin, "Hosted attestation origin differs from requested deployment")
   assert.equal(baseURL, attestation.origin, "Hosted base URL must be the exact origin without a trailing slash")
   assert.equal(hostedOrigin(attestation.origin), attestation.origin, "Noncanonical hosted origin")
   assert(["preview", "production"].includes(attestation.environment), "Missing hosted environment")
   assert(Number.isFinite(Date.parse(attestation.recordedAt)) && Date.parse(attestation.recordedAt) <= Date.now() + 60000, "Invalid hosted build timestamp")
-  assert(sha256(sourceRevision) && sha256(harnessRevision), "Missing local source/harness identity")
-  assert.equal(attestation.identity?.sourceRevision, sourceRevision, "Hosted source differs from local source")
+  assert(sha256(sourceRevision) && sha256(hostedSourceRevision) && sha256(harnessRevision), "Missing local repository/expected hosted source/harness identity")
+  assert(configTransformation?.kind === "vercel-project-metadata.v1" && typeof configTransformation.projectName === "string" && /^[a-z0-9][a-z0-9-]{0,99}$/.test(configTransformation.projectName)
+    && configTransformation.version === 2 && sha256(configTransformation.originalCanonicalSha256) && sha256(configTransformation.builtConfigSha256) && Number.isSafeInteger(configTransformation.builtConfigBytes) && configTransformation.builtConfigBytes > 0, "Missing independently computed hosted config transformation")
+  assert.deepEqual(attestation.sourceBinding, { repositorySourceRevision: sourceRevision, hostedSourceRevision, configTransformation }, "Hosted source binding differs from repository and project pins")
+  assert.equal(attestation.identity?.sourceRevision, hostedSourceRevision, "Hosted source differs from the exact expected built source")
   assert.equal(attestation.harnessRevision, harnessRevision, "Hosted harness differs from local harness")
   assert(typeof attestation.identity.buildId === "string" && /^[A-Za-z0-9_-]+$/.test(attestation.identity.buildId), "Missing hosted build ID")
   assert(attestation.identity.buildSettings?.observability === true && attestation.identity.buildSettings?.httpsPolicy === true, "Attestation does not describe a Vercel build")
@@ -148,7 +182,7 @@ export function validateHostedAttestation(attestation, { baseURL, sourceRevision
 }
 
 export function hostedBinding(attestation) {
-  return { origin: attestation.origin, environment: attestation.environment, attestationSha256: hash(JSON.stringify(attestation)) }
+  return { origin: attestation.origin, environment: attestation.environment, repositorySourceRevision: attestation.sourceBinding.repositorySourceRevision, hostedSourceRevision: attestation.sourceBinding.hostedSourceRevision, configTransformation: attestation.sourceBinding.configTransformation, attestationSha256: hash(JSON.stringify(attestation)) }
 }
 
 /** Never attach global browser headers: Lighthouse would forward them to third
@@ -195,7 +229,7 @@ export function assertHostedServingPair(pair, attestation) {
   for (const phase of ["before", "after"]) {
     const receipt = pair?.[phase]
     assert.equal(receipt?.result, "pass", `Missing hosted ${phase} serving verification`)
-    for (const [key, value] of Object.entries(hostedBinding(attestation))) assert.equal(receipt[key], value, "Mixed hosted serving identity")
+    for (const [key, value] of Object.entries(hostedBinding(attestation))) assert.deepEqual(receipt[key], value, "Mixed hosted serving identity")
     assert.deepEqual(receipt.resources.map(resource => resource.path), attestation.resources.map(resource => resource.path), "Hosted serving resource coverage changed")
     for (const [index, resource] of attestation.resources.entries()) {
       const observed = receipt.resources[index]

@@ -6,7 +6,7 @@ import { readApprovedManifest, readFacilityRegistry, validateSelectedFacility } 
 import { selectedCinematicIdentity } from "../../src/lib/cinematic/files.mjs"
 import { BASE_TRANSFER_BUDGET, CINEMATIC_PERFORMANCE_VERSION, routeTransferBudget } from "../../src/lib/cinematic/performance.mjs"
 import { privateCandidateIdentity } from "../qa/private-candidate-contract.mjs"
-import { hostedBinding, validateHostedAttestation, verifyHostedServing } from "./hosted-attestation.mjs"
+import { expectedHostedConfig, hostedBinding, validateHostedAttestation, verifyHostedServing } from "./hosted-attestation.mjs"
 import { hostedFetch } from "./hosted-auth.mjs"
 
 export const TRANSFER_BUDGET = BASE_TRANSFER_BUDGET
@@ -23,15 +23,24 @@ async function filesAt(path) {
   if (entry.isFile()) return [path]
   return (await Promise.all((await readdir(path)).sort().map(name => filesAt(join(path, name))))).flat()
 }
-export async function sourceSnapshot(paths = SOURCE_PATHS, directory = ".") {
+export async function sourceSnapshot(paths = SOURCE_PATHS, directory = ".", builtVercelConfig = null) {
   const hash = createHash("sha256")
+  assert(builtVercelConfig === null || Buffer.isBuffer(builtVercelConfig), "Invalid hosted config bytes")
+  const hostedHash = builtVercelConfig === null ? null : createHash("sha256")
   const files = []
   for (const file of (await Promise.all(paths.map(path => filesAt(join(directory, path))))).flat().sort()) {
     const path = relative(directory, file).replaceAll("\\", "/"), bytes = await readFile(file)
     hash.update(path).update("\0").update(bytes).update("\0")
+    hostedHash?.update(path).update("\0").update(path === "vercel.json" ? builtVercelConfig : bytes).update("\0")
     files.push({ path, sha256: digest(bytes), bytes: bytes.length })
   }
-  return { sourceRevision: hash.digest("hex"), files }
+  assert(!hostedHash || files.some(file => file.path === "vercel.json"), "Hosted source must include vercel.json")
+  return { sourceRevision: hash.digest("hex"), files, ...(hostedHash ? { hostedSourceRevision: hostedHash.digest("hex") } : {}) }
+}
+export async function expectedHostedSource(env = process.env, directory = ".", paths = SOURCE_PATHS) {
+  const config = expectedHostedConfig(await readFile(join(directory, "vercel.json")), { projectName: env.FACILITY_HOSTED_PROJECT_NAME, originalCanonicalSha256: env.FACILITY_EXPECTED_VERCEL_CONFIG_SHA256 })
+  const snapshot = await sourceSnapshot(paths, directory, config.bytes)
+  return { sourceRevision: snapshot.sourceRevision, hostedSourceRevision: snapshot.hostedSourceRevision, configTransformation: config.transformation }
 }
 export async function sourceRevision() {
   return (await sourceSnapshot()).sourceRevision
@@ -79,7 +88,7 @@ export async function harnessRevision() {
 }
 export async function hostedBuildAttestation() {
   assert(process.env.FACILITY_HOSTED_ATTESTATION_FILE && process.env.FACILITY_BASE_URL, "Hosted evidence requires explicit attestation file and deployment origin")
-  return validateHostedAttestation(JSON.parse(await readFile(process.env.FACILITY_HOSTED_ATTESTATION_FILE, "utf8")), { baseURL: process.env.FACILITY_BASE_URL, sourceRevision: await sourceRevision(), harnessRevision: await harnessRevision() })
+  return validateHostedAttestation(JSON.parse(await readFile(process.env.FACILITY_HOSTED_ATTESTATION_FILE, "utf8")), { baseURL: process.env.FACILITY_BASE_URL, ...await expectedHostedSource(), harnessRevision: await harnessRevision() })
 }
 export async function recordedBuild() {
   return process.env.FACILITY_HOSTED_ATTESTATION_FILE ? hostedBuildAttestation() : JSON.parse(await readFile(".next/facility-build.json", "utf8"))
