@@ -7,6 +7,7 @@ import { sweepLeadDeliveryQueue } from "@/lib/contact/operations"
 import { withVerifiedQstashSignature } from "@/lib/contact/qstash-receiver"
 import { publishLeadDeliveryWake } from "@/lib/contact/queue"
 import { deliveryOperationsRepository } from "@/lib/contact/repository-adapter"
+import { observationsRepository } from "@/server/leads/observations-repository"
 
 export const runtime = "nodejs"
 
@@ -18,6 +19,7 @@ export const POST = withVerifiedQstashSignature(async () => {
       publishWake: (outboxIds) => publishLeadDeliveryWake(config, outboxIds),
       publishAlert: (alert) => publishOperatorAlert(config, alert),
     })
+    await observationsRepository().recordHeartbeat("sweep")
 
     return Response.json({ ok: true, ...result })
   } catch (error) {

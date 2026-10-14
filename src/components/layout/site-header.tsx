@@ -45,7 +45,11 @@ const headerBootstrap = `(() => {
     for (const group of header.querySelectorAll("[data-header-group]")) {
       const activeChildren = [...group.querySelectorAll("[data-nav-child]")]
         .filter((link) => matches(pathname, link.getAttribute("href")))
-        .sort((left, right) => right.getAttribute("href").length - left.getAttribute("href").length)
+        .sort((left, right) => {
+          const leftHref = left.getAttribute("href"), rightHref = right.getAttribute("href")
+          const leftPath = leftHref.split(/[?#]/, 1)[0], rightPath = rightHref.split(/[?#]/, 1)[0]
+          return rightPath.length - leftPath.length || Number(leftHref !== leftPath) - Number(rightHref !== rightPath)
+        })
       if (!activeChildren.length) continue
       const summary = group.querySelector("summary")
       summary.dataset.navActive = "true"

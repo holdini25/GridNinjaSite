@@ -1,4 +1,5 @@
 import { selectAssessment } from "@/lib/assessment/selectors"
+import { assessmentOutcomeExplanations } from "@/content/copy/assessment-outcomes"
 import type { AssessmentRecord } from "@/types/assessment"
 import { AssessmentCapacityComparison } from "./assessment-capacity-comparison"
 
@@ -7,6 +8,7 @@ export function AssessmentSummary({ record, compact = false, showLinks = true }:
   if (compact) return <section className="assessment-decision rounded-xl border border-border bg-surface p-4 sm:p-5" data-testid="assessment-summary" data-scenario={record.scenario} aria-label={`Fixture ${record.scenario.toUpperCase()} decision`}>
     <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-sm"><p className="font-medium text-primary">Synthetic · Fixture {record.scenario.toUpperCase()}</p><p>Model screen: {record.screeningOutcome}</p></div>
     <h2 className="sr-only">{record.title}</h2>
+    <p className="mt-3 text-sm leading-6" data-assessment-outcome-explanation>{assessmentOutcomeExplanations[record.screeningOutcome]}</p>
     <dl className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,8em),1fr))] gap-4"><div className="flex flex-col justify-between"><dt className="text-sm leading-5 text-muted-foreground">Requested increment</dt><dd className="mt-1 text-2xl font-medium tabular-nums">{view.requested}</dd></div><div className="flex flex-col justify-between"><dt className="text-sm leading-5 text-muted-foreground">Modeled eligible increment</dt><dd className="mt-1 text-2xl font-medium tabular-nums">{view.modeled}</dd></div></dl>
     <p className="mt-3 text-sm leading-5 text-muted-foreground">Additional to the {view.reference} reference. {view.interval}.</p>
     <div className="mt-4 border-l-2 border-primary pl-3" data-decision-question><h3 className="text-base font-medium">Decision still to make</h3><p className="mt-1 text-base leading-6 text-muted-foreground">{record.commercial.question}</p></div>

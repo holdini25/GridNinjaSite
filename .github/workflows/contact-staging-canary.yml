@@ -2,6 +2,13 @@ name: Contact staging canary
 
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "Intake smoke or staffed observation chain (neither is release approval)"
+        type: choice
+        options: [intake-smoke, observation-chain]
+        default: intake-smoke
+        required: true
 
 permissions:
   contents: read
@@ -10,16 +17,57 @@ jobs:
   contact-canary:
     runs-on: ubuntu-latest
     environment: staging
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with: { node-version: "22.23.2", cache: npm }
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      # The protected staging environment must require the responsible owner's
+      # approval. Do not grant this job production/provider-write or ACK secrets.
+      - name: Materialize independently reviewed private staging approval
+        shell: bash
+        env:
+          STAGING_CANARY_APPROVAL_JSON: ${{ secrets.STAGING_CANARY_APPROVAL_JSON }}
+        run: |
+          python3 - <<'PY'
+          import os
+          from pathlib import Path
+          raw = os.environ.get("STAGING_CANARY_APPROVAL_JSON", "")
+          if not raw:
+              raise SystemExit("Private staging approval is required; no canary traffic authorized.")
+          target = Path(os.environ["RUNNER_TEMP"]) / "gridninja-staging-approval.json"
+          descriptor = os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+          with os.fdopen(descriptor, "w") as output:
+              output.write(raw)
+          PY
       - run: npm run test:staging:contact
         env:
+          PLAYWRIGHT_NO_COPY_PROMPT: "1"
+          STAGING_CANARY_MODE: ${{ inputs.mode }}
           STAGING_BASE_URL: ${{ secrets.STAGING_BASE_URL }}
           STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
           STAGING_CANARY_AUTHORIZED_ORIGIN: ${{ vars.STAGING_CANARY_AUTHORIZED_ORIGIN }}
           STAGING_CANARY_AUTHORIZED: ${{ vars.STAGING_CANARY_AUTHORIZED }}
           STAGING_CANARY_EMAIL: ${{ secrets.STAGING_CANARY_EMAIL }}
+          STAGING_CANARY_DELIVERY_EMAIL: ${{ secrets.STAGING_CANARY_DELIVERY_EMAIL }}
+          STAGING_CANARY_APPROVAL_FILE: ${{ runner.temp }}/gridninja-staging-approval.json
+          STAGING_CANARY_APPROVAL_SHA256: ${{ vars.STAGING_CANARY_APPROVAL_SHA256 }}
+          STAGING_CANARY_EXPECTED_ATTESTATION_SHA256: ${{ vars.STAGING_CANARY_EXPECTED_ATTESTATION_SHA256 }}
+          STAGING_CANARY_DEPLOYMENT_BYPASS: ${{ secrets.STAGING_CANARY_DEPLOYMENT_BYPASS }}
+          STAGING_CANARY_MONITOR_SECRET: ${{ secrets.STAGING_CANARY_MONITOR_SECRET }}
+          STAGING_CANARY_OPERATOR_REFERENCE: ${{ vars.STAGING_CANARY_OPERATOR_REFERENCE }}
+          STAGING_CANARY_ACK_TIMEOUT_SECONDS: ${{ vars.STAGING_CANARY_ACK_TIMEOUT_SECONDS }}
+      - name: Retain sanitized canary outcome only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: staging-canary-sanitized-evidence
+          path: test-results/**/attachments/staging-sanitized-evidence-*.json
+          if-no-files-found: ignore
+          retention-days: 14
+      - name: Remove private approval
+        if: always()
+        shell: bash
+        run: rm -f "$RUNNER_TEMP/gridninja-staging-approval.json"

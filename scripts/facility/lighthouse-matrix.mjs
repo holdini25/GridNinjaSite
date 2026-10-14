@@ -17,6 +17,22 @@ export function performanceMatrix(name = "core") {
   })
 }
 
+/** Prioritize the two known mobile LCP gates without reducing release coverage.
+ * Each group still owns its five runs; all other groups retain their order. */
+export function lighthouseGroups(name = "core") {
+  const matrix = performanceMatrix(name)
+  const groups = matrix.profiles.flatMap(profile => matrix.routes.map(route => Object.freeze({ profile, route })))
+  if (matrix.name !== "premium-civic") return Object.freeze(groups)
+  const priority = group => group.profile === "mobile" && ["/", "/contact"].includes(group.route)
+  return Object.freeze([...groups.filter(priority), ...groups.filter(group => !priority(group))])
+}
+
+/** A ten-capture preflight is explicitly incomplete release evidence. */
+export function lighthousePriorityGroups(name) {
+  assert.equal(name, "premium-civic", "Priority preflight requires the premium release matrix")
+  return lighthouseGroups(name).filter(group => group.profile === "mobile" && ["/", "/contact"].includes(group.route))
+}
+
 export function lighthouseRoutePolicy(route) {
   return Object.freeze({
     lcp: route === "/contact" ? 2000 : 2500,

@@ -2,13 +2,14 @@
 import { createServer } from "node:http"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { sendOperatorAlert } from "@/lib/contact/alerts"
-import { deliverToConfiguredProvider, type DeliveryRequest } from "@/lib/contact/providers"
+import { deliverToConfiguredProvider, prepareProviderRequest } from "@/lib/contact/providers"
+import { requestDigest } from "@/lib/contact/provider-request"
 import { verifyTurnstile } from "@/lib/contact/turnstile"
 
 const nativeFetch = globalThis.fetch
-const request: DeliveryRequest = {
-  channel: "internal_email", eventId: "event", idempotencyKey: "original-key",
-  lead: { id: "lead", schemaVersion: 2, formType: "contact", acceptedAt: new Date("2026-09-24T12:00:00Z"), name: "Test", company: "Fixture", email: "fixture@example.test", buyerType: null, siteType: null, timeline: null, capacityRange: null, intent: "other", source: "contact", role: null, constraints: [], message: "Synthetic fixture" },
+const request = {
+  channel: "internal_email" as const, eventId: "event", idempotencyKey: "original-key",
+  lead: { id: "lead", schemaVersion: 2 as const, formType: "contact" as const, acceptedAt: new Date("2026-09-24T12:00:00Z"), name: "Test", company: "Fixture", email: "fixture@example.test", buyerType: null, siteType: null, timeline: null, capacityRange: null, intent: "other", source: "contact", role: null, constraints: [], message: "Synthetic fixture" },
 }
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals() })
 
@@ -26,12 +27,20 @@ describe("sensitive outbound redirect containment", () => {
     const fetcher = vi.fn<typeof fetch>((_url, init) => nativeFetch(origin, init))
     try {
       vi.stubEnv("RESEND_API_KEY", "fixture-api-secret")
+      vi.stubEnv("RESEND_ACCOUNT_BINDING_REF", "fixture-binding")
+      vi.stubEnv("RESEND_APPROVED_KEY_SHA256", requestDigest("fixture-api-secret"))
+      vi.stubEnv("RESEND_ACCOUNT_REF", "test-account")
+      vi.stubEnv("LEAD_WEBHOOK_ENABLED", "true")
+      vi.stubEnv("LEAD_WEBHOOK_ACCOUNT_REF", "test-crm")
+      vi.stubEnv("LEAD_WEBHOOK_CONTRACT_REF", "test-contract")
+      vi.stubEnv("LEAD_WEBHOOK_DEDUPLICATION_HOURS", "24")
       vi.stubEnv("LEAD_EMAIL_FROM", "GridNinja <no-reply@gridninja.ai>")
       vi.stubEnv("LEAD_EMAIL_TO", "leads@example.test")
       vi.stubEnv("LEAD_WEBHOOK_URL", "https://crm.example.test")
-      vi.stubEnv("LEAD_WEBHOOK_SIGNING_SECRET", "fixture-signing-secret")
+      vi.stubEnv("LEAD_WEBHOOK_SIGNING_SECRET", "fixture-signing-secret-32-characters")
       if (channel === "resend" || channel === "crm") {
-        const result = await deliverToConfiguredProvider({ ...request, channel: channel === "resend" ? "internal_email" : "crm_webhook" }, fetcher)
+        const preparedInput = { ...request, channel: channel === "resend" ? "internal_email" as const : "crm_webhook" as const }
+        const result = await deliverToConfiguredProvider({ ...preparedInput, preparedRequest: prepareProviderRequest(preparedInput) }, fetcher)
         expect(result).toMatchObject({ ok: false, retryable: true })
         if (channel === "crm") expect(fetcher.mock.calls[0][1]?.headers).toEqual(expect.objectContaining({ "X-GridNinja-Signature": expect.stringMatching(/^v1=[a-f0-9]{64}$/) }))
       } else if (channel === "alert") {

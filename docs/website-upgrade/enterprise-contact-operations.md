@@ -1,3 +1,5 @@
+> **Historical implementation, superseded for the assessment-yield upgrade.** Use [Assessment inquiry operations and controlled cutover](assessment-yield-operations.md) for the current migration chain, account guards, routes and activation gates. The migration numbers and deployment instructions below describe removed enterprise work and must not be applied to the current civic baseline.
+
 # Enterprise inquiry operations — implementation and rehearsal
 
 ## Meaning of each state

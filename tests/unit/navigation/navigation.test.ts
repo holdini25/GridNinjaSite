@@ -64,6 +64,16 @@ describe("primary navigation contract", () => {
 })
 
 describe("navigation path matching", () => {
+  it("ranks matching path depth before fragments and prefers the canonical page link", () => {
+    expect(getMostSpecificActiveHref("/evidence", [
+      "/evidence#research", "/evidence?source=navigation", "/evidence",
+    ])).toBe("/evidence")
+    expect(getMostSpecificActiveHref("/platform/dispatch-envelope", [
+      "/platform?source=a-long-attribution-value#research-and-limits", "/platform/dispatch-envelope",
+    ])).toBe("/platform/dispatch-envelope")
+    expect(getMostSpecificActiveHref("/demo", ["/demo#decision-brief"])).toBe("/demo#decision-brief")
+  })
+
   it("matches route boundaries and rejects similarly prefixed paths", () => {
     expect(isNavPathActive("/platform", "/platform")).toBe(true)
     expect(isNavPathActive("/platform/dispatch-envelope", "/platform")).toBe(true)

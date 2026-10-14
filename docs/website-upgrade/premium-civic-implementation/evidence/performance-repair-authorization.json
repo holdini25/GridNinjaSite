@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "gridninja-repair-authorization.v1",
+  "id": "premium-civic-repair-01",
+  "authorizedBy": "/root",
+  "coordinatorThreadId": "01a128b5-bd1a-708d-80fb-60a39bbba025",
+  "baselineHead": "bbeb94bd98ee76b1aab149ad3b4ce92622e47f01",
+  "startUtc": "2026-10-11T02:06:13Z",
+  "deadlineUtc": "2026-10-11T04:06:13Z",
+  "userRequest": {
+    "text": "yes",
+    "reference": "Fresh human response in source thread01a11897-2250-70d2-9cb8-972d9be150d8, verified/relayed by independent coordinator thread01a128b5-bd1a-708d-80fb-60a39bbba025; later human follow-up: prpceed. This is preparation scope; independent execution admission remains required.",
+    "inResponseTo": "May I have the lead implement these bounded code/test corrections and validate one new candidate, with up to 12 instrumented commands over two hours, including the headed checks? Thresholds would stay unchanged, and work would stop on a decisive failure. Deployment, configuration changes and form submissions are excluded. The Mac will need to reconnect.",
+    "laterFollowup": "prpceed",
+    "sourceThreadId": "01a11897-2250-70d2-9cb8-972d9be150d8"
+  },
+  "limits": {
+    "commands": 12,
+    "candidates": 1,
+    "attemptsPerPhase": 1,
+    "windowMs": 7200000,
+    "maxCommandMs": 3600000,
+    "logBytesPerStream": 1048576
+  },
+  "phases": [
+    "unit",
+    "quality",
+    "browser-webkit-mobile",
+    "browser-webkit",
+    "browser-chrome",
+    "browser-chromium",
+    "browser-firefox",
+    "browser-chromium-mobile",
+    "page-performance",
+    "lighthouse",
+    "performance-summary",
+    "headed-visibility"
+  ],
+  "priorBudgets": [
+    {
+      "path": "/Users/holdenchung/repos/GridNinjaSite/.git/gridninja-qa/premium-civic-upgrade/budget.json",
+      "sha256": "017372540850ee1377d5f820d70a5e665933956d0ef0bbee6aa6987cf347f007",
+      "attemptCount": 26,
+      "deadlineAt": 1791679032359
+    },
+    {
+      "path": "/Users/holdenchung/repos/GridNinjaSite/.git/gridninja-qa/premium-civic-upgrade/corrections/premium-civic-performance-correction-01/budget.json",
+      "sha256": "09eaeb10ee24f911aff87af2c27747ddaa9a421b06f67ec385cdbb7315c8c309",
+      "attemptCount": 6,
+      "deadlineAt": 1791683032829
+    }
+  ],
+  "conditions": [
+    "Prepare and independently review the complete source diff before any qualification command.",
+    "Require a separate hash-pinned actual coordinator admission message and clean candidate identity.",
+    "Stop after any failed, interrupted, timed-out, or unfinished phase; do not reset budgets or change candidate.",
+    "No push, remote CI, deployment, provider changes, form submissions, downloads, new benchmarks or local inference.",
+    "Quality includes brand, lint, typecheck and one production build; prebuild also runs existing source/asset/publication validators and the existing SEO unit subset.",
+    "One Lighthouse invocation contains130 nominal samples; existing NO_NAVSTART-only invalid-capture retry permits at most260 actual capture attempts, all preserved; no valid poor sample is repeated.",
+    "Performance summary only combines existing saved page/full-scroll and Lighthouse evidence; it runs no measurements.",
+    "All prior performance and CI failures remain retained; completion of these local phases does not satisfy outstanding external release gates.",
+    "The rejected 9B local-model advice supplies no accepted novel fix; no inference or model execution is in this scope."
+  ]
+}

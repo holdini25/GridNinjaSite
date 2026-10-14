@@ -10,23 +10,48 @@ import {
   isRetryableProviderStatus,
   type LeadDeliveryPayload,
   PROVIDER_TIMEOUT_MS,
-  sanitizeProviderErrorCode,
   signWebhookBody,
 } from "@/lib/contact/delivery-core"
 
-const RESEND_API_URL = "https://api.resend.com/emails"
+import { ContactPayloadTimeoutError, readBodyLimited } from "@/lib/contact/request"
+import { providerIdentity, ProviderConfigurationError, requestDigest, validPreparedRequest, qualifiedCrmConfiguration, type PreparedProviderRequest } from "@/lib/contact/provider-request"
+export { ProviderConfigurationError } from "@/lib/contact/provider-request"
 
 export type DeliveryRequest = {
   channel: DeliveryChannel
   eventId: string
   idempotencyKey: string
-  lead: LeadDeliveryPayload
+  preparedRequest: PreparedProviderRequest
+}
+
+export function prepareProviderRequest(request: { channel: DeliveryChannel; eventId: string; idempotencyKey: string; lead: LeadDeliveryPayload }): PreparedProviderRequest {
+  const identity = providerIdentity(request.channel)
+  const body = request.channel === "internal_email" ? JSON.stringify({
+    from: identity.from, to: identity.to, reply_to: request.lead.email,
+    subject: buildLeadEmailSubject(request.lead), text: buildLeadEmailText(request.lead), html: buildLeadEmailHtml(request.lead),
+  }) : JSON.stringify(buildLeadAcceptedEvent(request.lead, request.eventId))
+  return { version: 1, channel: request.channel, idempotencyKey: request.idempotencyKey, bodyUtf8: body, bodySha256: requestDigest(body), targetUrl: identity.targetUrl,
+    accountRef: identity.accountRef, destinationRef: identity.destinationRef }
+}
+
+export function preparedRequestAuthorization(channel: DeliveryChannel, prepared: PreparedProviderRequest): string | null {
+  if (channel !== prepared.channel) return "provider_request_identity_changed"
+  if (!validPreparedRequest(prepared)) return "provider_snapshot_invalid"
+  try {
+    const current = providerIdentity(channel)
+    if (current.accountRef !== prepared.accountRef) return "provider_account_changed"
+    if (current.targetUrl !== prepared.targetUrl || current.destinationRef !== prepared.destinationRef) return "provider_destination_changed"
+    return null
+  } catch (error) { return error instanceof ProviderConfigurationError ? error.errorCode : "provider_not_configured" }
 }
 
 export async function deliverToConfiguredProvider(
   request: DeliveryRequest,
   fetcher: typeof fetch = fetch
 ): Promise<DeliveryProviderResult> {
+  if (request.channel !== request.preparedRequest.channel || request.idempotencyKey !== request.preparedRequest.idempotencyKey) return configurationFailure("provider_request_identity_changed")
+  const authorizationError = preparedRequestAuthorization(request.channel, request.preparedRequest)
+  if (authorizationError) return configurationFailure(authorizationError)
   if (request.channel === "internal_email") {
     return deliverToResend(request, fetcher)
   }
@@ -38,31 +63,18 @@ async function deliverToResend(
   request: DeliveryRequest,
   fetcher: typeof fetch
 ): Promise<DeliveryProviderResult> {
-  const apiKey = process.env.RESEND_API_KEY?.trim()
-  const to = process.env.LEAD_EMAIL_TO?.trim()
-  const from = process.env.LEAD_EMAIL_FROM?.trim()
-
-  if (!apiKey || !to || !from) {
-    return configurationFailure("resend_not_configured")
-  }
+  const apiKey = process.env.RESEND_API_KEY!.trim()
 
   try {
-    const response = await fetcher(RESEND_API_URL, {
+    const response = await fetcher(request.preparedRequest.targetUrl, {
       method: "POST",
       redirect: "error",
       headers: {
         Authorization: `Bearer ${apiKey}`,
         "Content-Type": "application/json",
-        "Idempotency-Key": request.idempotencyKey,
+        "Idempotency-Key": request.preparedRequest.idempotencyKey,
       },
-      body: JSON.stringify({
-        from,
-        to,
-        reply_to: request.lead.email,
-        subject: buildLeadEmailSubject(request.lead),
-        text: buildLeadEmailText(request.lead),
-        html: buildLeadEmailHtml(request.lead),
-      }),
+      body: request.preparedRequest.bodyUtf8,
       signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS),
     })
 
@@ -82,11 +94,8 @@ async function deliverToResend(
       }
     }
 
-    return {
-      ok: true,
-      status: response.status,
-      ...(providerResponse.id ? { providerMessageId: providerResponse.id } : {}),
-    }
+    if (!providerResponse.id) return { ok: false, status: response.status, errorCode: "resend_invalid_success", retryable: true }
+    return { ok: true, status: response.status, providerMessageId: providerResponse.id }
   } catch (error) {
     return transportFailure(error, "resend_transport_error")
   }
@@ -96,15 +105,10 @@ async function deliverToCrmWebhook(
   request: DeliveryRequest,
   fetcher: typeof fetch
 ): Promise<DeliveryProviderResult> {
-  const url = process.env.LEAD_WEBHOOK_URL?.trim()
-  const secret = process.env.LEAD_WEBHOOK_SIGNING_SECRET?.trim()
-
-  if (!url || !secret) {
-    return configurationFailure("crm_webhook_not_configured")
-  }
-
-  const event = buildLeadAcceptedEvent(request.lead, request.eventId)
-  const exactBody = JSON.stringify(event)
+  const crm = qualifiedCrmConfiguration()
+  if (!crm) return configurationFailure("crm_contract_not_configured")
+  const url = request.preparedRequest.targetUrl, secret = crm.secret
+  const exactBody = request.preparedRequest.bodyUtf8
   const timestamp = Math.floor(Date.now() / 1000).toString()
   const signature = signWebhookBody(timestamp, exactBody, secret)
 
@@ -114,7 +118,7 @@ async function deliverToCrmWebhook(
       redirect: "error",
       headers: {
         "Content-Type": "application/json",
-        "Idempotency-Key": request.idempotencyKey,
+        "Idempotency-Key": request.preparedRequest.idempotencyKey,
         "X-GridNinja-Event-Id": request.eventId,
         "X-GridNinja-Timestamp": timestamp,
         "X-GridNinja-Signature": `v1=${signature}`,
@@ -141,22 +145,21 @@ async function deliverToCrmWebhook(
 
 async function readResendResponse(response: Response) {
   try {
-    const payload = (await response.json()) as {
+    const payload = JSON.parse(await readBodyLimited(response, 64 * 1024, PROVIDER_TIMEOUT_MS)) as {
       id?: unknown
       name?: unknown
       error?: { name?: unknown }
     }
-    const id = typeof payload.id === "string" ? payload.id.slice(0, 128) : undefined
+    const id = typeof payload.id === "string" && /^[A-Za-z0-9_-]{1,128}$/.test(payload.id) ? payload.id : undefined
     const providerCode = payload.name ?? payload.error?.name
 
     return {
       id,
-      errorCode: sanitizeProviderErrorCode(
-        providerCode,
-        `resend_http_${response.status}`
-      ),
+      errorCode: providerCode === "concurrent_idempotent_requests" || providerCode === "invalid_idempotent_request"
+        ? providerCode : `resend_http_${response.status}`,
     }
-  } catch {
+  } catch (error) {
+    if (error instanceof ContactPayloadTimeoutError || (error instanceof DOMException && ["AbortError", "TimeoutError"].includes(error.name))) throw error
     return { errorCode: `resend_http_${response.status}` }
   }
 }
@@ -169,9 +172,8 @@ function transportFailure(
   error: unknown,
   fallback: string
 ): DeliveryProviderResult {
-  const timedOut =
-    error instanceof DOMException &&
-    (error.name === "AbortError" || error.name === "TimeoutError")
+  const timedOut = error instanceof ContactPayloadTimeoutError || (
+    error instanceof DOMException && (error.name === "AbortError" || error.name === "TimeoutError"))
 
   return {
     ok: false,

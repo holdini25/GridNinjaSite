@@ -2,7 +2,7 @@ import { waitForFacilityReady, expectFacilityAutomaticAcquisition } from "../sup
 import { mkdtemp, rm } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
-import { chromium, expect, test, type Browser } from "@playwright/test"
+import { chromium, expect, test, type Browser, type Page } from "@playwright/test"
 import { Launcher } from "chrome-launcher"
 
 test("real background-tab explicit deep link waits past its deadline then activates on foreground", async ({ baseURL }, testInfo) => {
@@ -58,6 +58,105 @@ test("real background-tab explicit deep link waits past its deadline then activa
   } finally {
     try { await browser?.close() } finally {
       try { await chrome?.kill() } finally { if (userDataDir) await rm(userDataDir, { recursive: true, force: true }) }
+    }
+  }
+})
+
+test("real background-tab startup retains its model past the deadline and becomes ready on foreground", async ({ baseURL }, testInfo) => {
+  test.skip(testInfo.project.name !== "chrome-stable" || testInfo.project.use.headless !== false, "Requires an isolated headed Chrome default context without focus emulation")
+  let userDataDir: string | undefined
+  let chrome: Launcher | undefined
+  let browser: Browser | undefined
+  let page: Page | undefined
+  let releaseModel = () => {}
+  try {
+    userDataDir = await mkdtemp(join(tmpdir(), "gridninja-startup-visibility-"))
+    chrome = new Launcher({ userDataDir, chromeFlags: ["--window-size=1440,1100", "--no-first-run"] })
+    await chrome.launch()
+    // Use the same real visibility owner as the other headed cases, not a
+    // Playwright context that makes background tabs appear visible.
+    browser = await chromium.connectOverCDP(`http://127.0.0.1:${chrome.port}`, { noDefaults: true })
+    const context = browser.contexts()[0]
+    const activePage = page = await context.newPage()
+    await activePage.setViewportSize({ width: 1440, height: 1100 })
+    await activePage.addInitScript(() => {
+      const changes = [document.visibilityState]
+      Object.assign(window, { __GN_STARTUP_VISIBILITY__: changes })
+      document.addEventListener("visibilitychange", () => changes.push(document.visibilityState))
+    })
+    const modelGate = new Promise<void>(resolve => { releaseModel = resolve })
+    await activePage.route("**/*.glb", async route => { await modelGate; await route.continue() })
+    const modelRequests: string[] = []
+    activePage.on("request", request => { if (new URL(request.url()).pathname.endsWith(".glb")) modelRequests.push(request.url()) })
+    const blocker = await context.newPage()
+    await activePage.bringToFront()
+    await expect.poll(() => activePage.evaluate(() => document.visibilityState)).toBe("visible")
+    await activePage.goto(new URL("/demo?activate=1#facility-construction", baseURL).href, { waitUntil: "domcontentloaded" })
+    const viewer = activePage.getByTestId("facility-inspection")
+    await expect(viewer.locator(".facility-systems button")).toHaveCount(4)
+    await expect.poll(() => modelRequests.length).toBe(1)
+    await expect(viewer).toHaveAttribute("data-phase", "loading")
+    await expect(viewer.locator("canvas[data-ready=true]")).toHaveCount(0)
+    expect(await activePage.evaluate(() => document.visibilityState)).toBe("visible")
+
+    await blocker.bringToFront()
+    await expect.poll(() => activePage.evaluate(() => document.visibilityState)).toBe("hidden")
+    const visibilityHistory = () => activePage.evaluate(() => (window as unknown as Window & { __GN_STARTUP_VISIBILITY__: string[] }).__GN_STARTUP_VISIBILITY__)
+    await expect.poll(async () => (await visibilityHistory()).at(-1)).toBe("hidden")
+    const hiddenStartIndex = (await visibilityHistory()).length - 1
+    const hiddenStartedAt = Date.now()
+    const modelResponse = activePage.waitForResponse(response => new URL(response.url()).pathname.endsWith(".glb"))
+    releaseModel()
+    const response = await modelResponse
+    expect(response.ok()).toBe(true)
+    expect(await response.finished()).toBeNull()
+    // The real asset completes in the background. Even after the entire old
+    // wall-clock deadline, the first-frame wait must retain this acquisition.
+    await activePage.waitForTimeout(9_000)
+    const hiddenVisibility = (await visibilityHistory()).slice(hiddenStartIndex)
+    const hiddenState = {
+      hiddenDurationMs: Date.now() - hiddenStartedAt,
+      hiddenVisibility,
+      visibility: await activePage.evaluate(() => document.visibilityState),
+      phase: await viewer.getAttribute("data-phase"),
+      failure: await viewer.getAttribute("data-failure"),
+      readyCanvases: await viewer.locator("canvas[data-ready=true]").count(),
+      modelRequests: [...modelRequests],
+      modelResponseStatus: response.status(),
+    }
+    await testInfo.attach("native-background-startup", { body: Buffer.from(JSON.stringify(hiddenState, null, 2)), contentType: "application/json" })
+    expect(hiddenVisibility.every(state => state === "hidden")).toBe(true)
+    expect(hiddenState.visibility).toBe("hidden")
+    expect(hiddenState.hiddenDurationMs).toBeGreaterThan(8_000)
+    expect(hiddenState.phase).toMatch(/^(loading|staging)$/)
+    expect(hiddenState.failure).toBeNull()
+    expect(hiddenState.readyCanvases).toBe(0)
+    expect(modelRequests).toHaveLength(1)
+
+    await activePage.bringToFront()
+    await expect.poll(() => activePage.evaluate(() => document.visibilityState)).toBe("visible")
+    // No readiness helper, Retry click, or second activation may recover it.
+    await expect(viewer).toHaveAttribute("data-phase", "ready")
+    await expect(viewer).not.toHaveAttribute("data-failure")
+    await expect(viewer.locator("canvas[data-ready=true]")).toHaveCount(1)
+    await expect(viewer.getByRole("button", { name: "Retry 3D", exact: true })).toHaveCount(0)
+    expect(modelRequests).toHaveLength(1)
+    const equipmentConnections = viewer.getByRole("button", { name: "Authored equipment connections", exact: true })
+    await expect(equipmentConnections).toBeVisible()
+    await expect(equipmentConnections).toBeEnabled()
+    await activePage.screenshot({ path: testInfo.outputPath("foreground-startup-ready.png") })
+    await expect(viewer.getByRole("button", { name: "Retry assembly", exact: true })).toHaveCount(0)
+    await expect(viewer.getByText("The requested view did not become ready within eight seconds.", { exact: false })).toHaveCount(0)
+    await testInfo.attach("native-background-startup-recovery", {
+      body: Buffer.from(JSON.stringify({ foregroundPhase: "ready", visibilityHistory: await visibilityHistory(), modelRequests }, null, 2)),
+      contentType: "application/json",
+    })
+  } finally {
+    releaseModel()
+    try { await page?.unrouteAll({ behavior: "wait" }) } finally {
+      try { await browser?.close() } finally {
+        try { await chrome?.kill() } finally { if (userDataDir) await rm(userDataDir, { recursive: true, force: true }) }
+      }
     }
   }
 })

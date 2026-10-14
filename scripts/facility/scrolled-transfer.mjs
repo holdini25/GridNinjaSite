@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { devices } from "@playwright/test"
 import { assertCompleteTransfer, collectTransfers, settleTransfers } from "./performance-contract.mjs"
 import { LIGHTHOUSE_RESOURCE_BUDGETS } from "../seo/validate-lighthouse-budgets.mjs"
+import { authorizeHostedContext } from "./hosted-auth.mjs"
 
 export const SCROLLED_TRANSFER_PROTOCOL = Object.freeze({ protocol: "settled-viewport-visits", maximumSteps: 100, settleQuietMs: 750, settleTimeoutMs: 15_000 })
 
@@ -45,6 +46,7 @@ export async function measureScrolledRoutes(browser, { matrix, baseURL, buildSet
   const results = []
   for (const route of matrix.routes) for (const profile of matrix.profiles) for (let run = 1; run <= matrix.runs; run++) {
     const context = await browser.newContext(profile === "desktop" ? { viewport: desktopViewport } : devices["Pixel 5"])
+    if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) await authorizeHostedContext(context, new URL(baseURL).origin)
     const page = await context.newPage()
     const ledger = await collectTransfers(await context.newCDPSession(page))
     const result = { route, profile, run, freshContext: true, complete: false, pageErrors: [] }

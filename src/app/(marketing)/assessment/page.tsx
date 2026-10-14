@@ -2,6 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ContactForm } from "@/components/forms/contact-form"
 import { SectionShell } from "@/components/layout/section-shell"
+import { AssessmentOfferSummary } from "@/components/marketing/assessment-offer-summary"
+import { DeliveryProfile } from "@/components/marketing/delivery-profile"
+import { getApprovedDeliveryProfile } from "@/content/delivery-profile"
 import { AssessmentCards } from "@/components/marketing/assessment-cards"
 import { Hero } from "@/components/marketing/hero"
 import { SectionHeader } from "@/components/marketing/section-header"
@@ -10,19 +13,13 @@ import { RelatedSeoLinks } from "@/components/seo/related-seo-links"
 import { assessmentDeliverables, assessmentInputs, assessmentSteps, assessmentOutcomes } from "@/content/copy/assessment"
 import { createPageMetadata } from "@/lib/seo"
 export async function generateMetadata(): Promise<Metadata> { return createPageMetadata({ path: "/assessment" }) }
-export default function AssessmentPage() { return <div className="space-y-10 pb-16 sm:space-y-14"><SeoPageJsonLd path="/assessment" /><Hero layout="compact" eyebrow="A bounded, paid assessment" headline="Scope your next capacity decision." body="Evaluate one capacity question using authorized historical inputs. Agree the facility boundary, workload profiles, conditions, and review criteria before analysis begins." primaryCta={{label:"Scope an assessment",href:"#scope"}} secondaryCta={{label:"See a sample decision brief",href:"/demo#decision-brief"}} trustLine="Scoping is a conversation. Work begins only under an agreed paid scope." />
+export default function AssessmentPage() { return <div className="space-y-10 pb-16 sm:space-y-14"><SeoPageJsonLd path="/assessment" /><Hero layout="compact" eyebrow="A bounded, paid assessment" headline="Scope your next capacity decision." body="Evaluate one capacity question using authorized historical inputs. Agree the facility boundary, workload profiles, conditions, and review criteria before analysis begins." primaryCta={{label:"Scope an assessment",href:"#scope",analyticsEvent:"assessment_cta_selected",analyticsSource:"assessment-hero"}} secondaryCta={{label:"See a sample decision brief",href:"/demo#decision-brief"}} trustLine="Scoping is a conversation. Work begins only under an agreed paid scope." />
 <SectionShell deferRendering={false}>
   <div className="grid items-start gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-    <aside aria-labelledby="assessment-offer-heading" className="min-w-0 space-y-3">
-      <h2 id="assessment-offer-heading" className="text-2xl font-medium">Start with your decision.</h2>
-      <p className="text-sm leading-6 text-muted-foreground">This inquiry starts a conversation; it does not buy an assessment or authorize operational work.</p>
-      <div className="flex flex-wrap gap-x-6">
-        <a href="#deliverables" className="inline-flex min-h-11 items-center text-primary underline underline-offset-4">Review the deliverables</a>
-        <Link prefetch={false} href="/demo#decision-brief" className="inline-flex min-h-11 items-center text-primary underline underline-offset-4">See a sample decision brief</Link>
-      </div>
-    </aside>
+    <AssessmentOfferSummary variant="full" headingId="assessment-offer-heading" />
     <div className="min-w-0"><ContactForm source="assessment-page" variant="assessment" /></div>
   </div>
+  <DeliveryProfile profile={getApprovedDeliveryProfile("assessment")} compact />
 </SectionShell>
 <SectionShell id="deliverables" deferRendering={false}><div className="space-y-8"><SectionHeader eyebrow="What you receive" headline="A decision brief with a traceable basis." body="The engagement defines one decision, a facility boundary, a historical window, agreed alternatives, reviewers, deliverables, and review rounds. Inputs and conclusions remain scoped to that agreement." /><AssessmentCards items={assessmentDeliverables} /></div></SectionShell>
 <SectionShell deferRendering={false}><div className="space-y-8"><SectionHeader eyebrow="Before modeling" headline="Confirm readiness, permissions, and responsibilities." body="The site or data owner must authorize the historical inputs and confirm the relevant operating context. A useful assessment depends on that evidence being available and interpretable." /><AssessmentCards items={assessmentInputs} /><p className="text-base leading-8 text-muted-foreground">Do not submit telemetry, facility diagrams, credentials, or commercially sensitive files through this website. Any operational-data exchange is agreed separately. <Link className="text-primary underline underline-offset-4" href="/data-handling">Review data handling.</Link></p></div></SectionShell>
