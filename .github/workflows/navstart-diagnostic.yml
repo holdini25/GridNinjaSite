@@ -1,0 +1,58 @@
+name: Navigation trace diagnostic (not qualification)
+
+on:
+  push:
+    branches: [codex/navstart-diagnostic]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: navstart-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  twelve-diagnostic-captures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with: { node-version: "22.23.2", cache: npm }
+      - run: npm ci
+      - name: Check passive observer invariants without a browser
+        run: node --test scripts/qa/navigation-diagnostic/observer.test.mjs
+      - run: npx playwright install --with-deps chrome chromium
+      - run: npm run build
+      - name: Collect the fixed twelve observations with no retries
+        env:
+          FACILITY_BASE_URL: http://localhost:3000
+          GN_NAVSTART_DIAGNOSTIC_OUTPUT: build/qa/navstart-diagnostic-01
+        shell: bash
+        run: |
+          mkdir -p build/qa/navstart-diagnostic-operator
+          npm run start -- --hostname 127.0.0.1 --port 3000 > build/qa/navstart-diagnostic-operator/server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent http://localhost:3000/ >/dev/null; then break; fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then cat build/qa/navstart-diagnostic-operator/server.log; exit 1; fi
+            sleep 1
+          done
+          curl --fail --silent http://localhost:3000/ >/dev/null
+          node scripts/qa/navigation-diagnostic/run.mjs
+      - name: Preserve all raw diagnostic evidence, including failures
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: navigation-trace-diagnostic-not-qualification-${{ github.sha }}
+          path: |
+            build/qa/navstart-diagnostic-01
+            build/qa/navstart-diagnostic-operator
+            .next/facility-build.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
