@@ -8,14 +8,14 @@ const completedIndex = (name = "premium-civic") => {
 }
 
 describe("release performance route coverage", () => {
-  it("includes the ten reviewed routes and preserves mandatory contact, insights and frozen-brief coverage without duplicates", () => {
+  it("adds founder coverage while preserving all thirteen existing release routes without duplicates", () => {
     const matrix = performanceMatrix("premium-civic")
     expect(matrix.reviewedRoutes).toHaveLength(10)
-    expect(matrix.routes).toHaveLength(13)
-    expect(new Set(matrix.routes).size).toBe(13)
-    expect(matrix.routes).toEqual(expect.arrayContaining(["/evidence", "/about", "/solutions/ai-cloud", "/solutions/colocation", "/solutions/bridge-power", "/contact", "/insights", "/evidence/assessments/demo-01-b/v1.0.0"]))
+    expect(matrix.routes).toHaveLength(14)
+    expect(new Set(matrix.routes).size).toBe(14)
+    expect(matrix.routes).toEqual(expect.arrayContaining(["/", "/assessment", "/demo", "/platform", "/proof", "/evidence", "/about", "/solutions/ai-cloud", "/solutions/colocation", "/solutions/bridge-power", "/contact", "/insights", "/evidence/assessments/demo-01-b/v1.0.0", "/about/founders"]))
     expect(matrix.reviewedRoutes.length * matrix.profiles.length * matrix.runs).toBe(100)
-    expect(matrix.routes.length * matrix.profiles.length * matrix.runs).toBe(130)
+    expect(matrix.routes.length * matrix.profiles.length * matrix.runs).toBe(140)
   })
 
   it("uses unambiguous output names for nested routes and frozen publication versions", () => {
@@ -32,18 +32,18 @@ describe("release performance route coverage", () => {
     expect(() => performanceMatrix("premium-civc")).toThrow("Unknown")
   })
 
-  it("runs complete mobile Home and Contact groups first while preserving the exact 130 release samples", () => {
+  it("runs complete mobile Home and Contact groups first while preserving the exact 140 release samples", () => {
     const matrix = performanceMatrix("premium-civic")
     const groups = lighthouseGroups(matrix.name)
-    expect(groups).toHaveLength(26)
+    expect(groups).toHaveLength(28)
     expect(groups.slice(0, 2)).toEqual([
       { profile: "mobile", route: "/" },
       { profile: "mobile", route: "/contact" },
     ])
     const runs = groups.flatMap(({ profile, route }) => Array.from({ length: matrix.runs }, (_, index) => ({ profile, route, run: index + 1, complete: true })))
     const key = ({ profile, route, run }: { profile: string; route: string; run: number }) => `${profile}|${route}|${run}`
-    expect(runs).toHaveLength(130)
-    expect(new Set(runs.map(key)).size).toBe(130)
+    expect(runs).toHaveLength(140)
+    expect(new Set(runs.map(key)).size).toBe(140)
     expect(runs.map(key).sort()).toEqual(completedIndex().runs.map(key).sort())
     expect(() => assertLighthouseMatrixIndex({ matrix: matrix.name, result: "pass", runs }, matrix)).not.toThrow()
     const originalGroups = matrix.profiles.flatMap(profile => matrix.routes.map(route => ({ profile, route })))
@@ -82,5 +82,6 @@ describe("release performance route coverage", () => {
     expect(lighthouseRoutePolicy("/contact")).toMatchObject({ lcp: 2000, cls: .05, seo: 100 })
     expect(lighthouseRoutePolicy("/evidence/assessments/demo-01-b/v1.0.0").seo).toBeNull()
     expect(lighthouseRoutePolicy("/evidence").seo).toBe(100)
+    expect(lighthouseRoutePolicy("/about/founders")).toMatchObject({ lcp: 2500, cls: .1, seo: 100 })
   })
 })

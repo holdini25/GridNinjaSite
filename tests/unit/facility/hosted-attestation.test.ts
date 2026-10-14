@@ -194,7 +194,7 @@ describe("hosted build attestation", () => {
     expect(() => parseHostedAttestationLogs(lines.map((line, index) => index ? line : line.replace(/[A-Za-z0-9]$/, "!")).join("\n"))).toThrow()
     expect(() => parseHostedAttestationLogs("no build attestation")).toThrow()
   })
-  it("requires exact source, harness, immutable origin, Vercel settings and all13 route hashes", () => {
+  it("requires exact source, harness, immutable origin, Vercel settings and all14 route hashes", () => {
     expect(validateHostedAttestation(fixture(), options).identity.buildId).toBe("remote-build-id")
     for (const replacement of [{ sourceRevision: sha("other") }, { harnessRevision: sha("other") }, { baseURL: "https://wrong.vercel.app" }]) expect(() => validateHostedAttestation(fixture(), { ...options, ...replacement })).toThrow()
     const local = fixture(); local.identity.buildSettings.observability = false
@@ -208,7 +208,7 @@ describe("hosted build attestation", () => {
     expect(() => hostedOrigin(value)).toThrow()
   })
   it.each(["//elsewhere.vercel.app/asset.js", "/_next/static/../asset.js", "/_next/static/x.js?token=secret", "/_next/static/%2e%2e/asset.js"])("rejects unsafe resource path %s", path => {
-    const record = fixture(); record.resources[13].path = path
+    const record = fixture(); record.resources.find(resource => resource.kind === "asset")!.path = path
     expect(() => validateHostedAttestation(record, options)).toThrow()
   })
   it("verifies decoded bytes and preserves noindex as evidence without saving secret headers", async () => {
@@ -217,13 +217,13 @@ describe("hosted build attestation", () => {
     const collectionStartedAt = new Date().toISOString(), collectionFinishedAt = new Date().toISOString()
     const after = await verifyHostedServing(record, { baseURL: origin, fetcher })
     const pair = { before, after, collectionStartedAt, collectionFinishedAt }
-    expect(before.resources).toHaveLength(14)
+    expect(before.resources).toHaveLength(record.resources.length)
     expect(before.resources.every(resource => resource.robots === "noindex" && resource.encoding === "br")).toBe(true)
     expect(JSON.stringify(before)).not.toContain("never-save")
     expect(fetcher.mock.calls.every(call => new URL(String(call[0])).origin === origin)).toBe(true)
     expect(() => assertHostedServingPair(pair, record)).not.toThrow()
     expect(() => assertHostedServingPair({ ...pair, collectionStartedAt: "2020-01-01" }, record)).toThrow("chronology")
-    after.resources[13].sha256 = sha("changed")
+    after.resources.find(resource => resource.path === "/_next/static/chunk.js")!.sha256 = sha("changed")
     expect(() => assertHostedServingPair(pair, record)).toThrow("coverage")
     expect(() => assertHostedServingPair({ before }, record)).toThrow("after")
   })
@@ -239,7 +239,7 @@ describe("hosted build attestation", () => {
     await expect(verifyHostedServing(record, { baseURL: "https://wrong.vercel.app", fetcher: cleanFetch })).rejects.toThrow("origin")
   })
   it("attests SSR Demo by emitted build and asset, then requires exact serving stability", async () => {
-    const original = fixture(), requiredAsset = original.resources[13].path
+    const original = fixture(), requiredAsset = original.resources.find(resource => resource.kind === "asset")!.path
     const record = { ...original, resources: original.resources.map(resource => resource.path === "/demo" ? { ...resource, sha256: null, bytes: null, verification: "dynamic-build-id-and-asset", requiredAsset } : resource) }
     expect(validateHostedAttestation(record, options)).toBe(record)
     const dynamicHtml = `${body}<script src="${requiredAsset}"></script><i>${record.identity.buildId}</i>`
@@ -252,11 +252,11 @@ describe("hosted build attestation", () => {
     after.resources.find(resource => resource.path === "/demo")!.sha256 = sha("different SSR response")
     expect(() => assertHostedServingPair({ before, after, collectionStartedAt, collectionFinishedAt }, record)).toThrow("changed during")
   })
-  it("priority mode selects precisely10 captures and cannot qualify the130-capture release", () => {
+  it("priority mode selects precisely10 captures and cannot qualify the140-capture release", () => {
     const matrix = performanceMatrix("premium-civic"), groups = lighthousePriorityGroups(matrix.name)
     expect(groups).toEqual([{ profile: "mobile", route: "/" }, { profile: "mobile", route: "/contact" }])
     expect(groups.length * matrix.runs).toBe(10)
-    expect(matrix.routes.length * matrix.profiles.length * matrix.runs).toBe(130)
+    expect(matrix.routes.length * matrix.profiles.length * matrix.runs).toBe(140)
     expect(() => lighthousePriorityGroups("core")).toThrow()
     expect(() => assertLighthouseMatrixIndex({ result: "incomplete", matrix: matrix.name, runs: [] }, matrix)).toThrow("did not complete")
   })

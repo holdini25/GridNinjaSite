@@ -1,10 +1,10 @@
 import assert from "node:assert/strict"
 
 export const REVIEWED_ROUTES = Object.freeze(["/", "/assessment", "/demo", "/platform", "/proof", "/evidence", "/about", "/solutions/ai-cloud", "/solutions/colocation", "/solutions/bridge-power"])
-export const MANDATORY_ADDITIONAL_ROUTES = Object.freeze(["/contact", "/insights", "/evidence/assessments/demo-01-b/v1.0.0"])
+export const MANDATORY_ADDITIONAL_ROUTES = Object.freeze(["/contact", "/insights", "/evidence/assessments/demo-01-b/v1.0.0", "/about/founders"])
 const coreRoutes = Object.freeze(["/", "/demo", "/assessment"])
 
-/** The 100 reviewed-route captures are a subset of the 130 release captures,
+/** The 100 reviewed-route captures are a subset of the 140 release captures,
  * never added a second time to the original 30 core-route captures. */
 export function performanceMatrix(name = "core") {
   assert(["core", "premium-civic"].includes(name), "Unknown performance matrix")

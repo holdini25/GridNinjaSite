@@ -34,10 +34,10 @@ export function getApprovedDeliveryProfile(surface: DeliveryProfileSurface, publ
 export function deliveryResponsibilityCopy(profile: PublicDeliveryProfile | null) {
   return profile
     ? `${profile.name} is the published delivery contact. Engagement responsibilities, relevant experience and reviewer availability are confirmed during scoping. Customer outcomes are not yet published.`
-    : "Delivery responsibilities, relevant experience and reviewer availability are established during scoping. Public team credentials and customer outcomes are not yet published."
+    : "Delivery responsibilities, relevant experience and reviewer availability are established during scoping. Founder profiles do not establish an engagement assignment. Customer outcomes are not yet published."
 }
 
 export const unpublishedDeliveryTeam = {
   title: "Establish the delivery team during scoping",
-  body: "Named team biographies and verified customer case studies are not yet published. Before a paid engagement, establish the accountable delivery lead, technical reviewer, relevant experience, availability, and customer decision owner. Public credentials will be added only with supporting evidence and permission.",
+  body: "Founder biographies describe the people behind GridNinja. Engagement staffing is agreed separately: before a paid engagement, establish the accountable delivery lead, technical reviewer, relevant experience, availability, and customer decision owner. A founder profile does not establish assignment or availability for a particular engagement. Verified customer case studies are not yet published.",
 } as const
