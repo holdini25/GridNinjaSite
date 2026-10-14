@@ -1,12 +1,13 @@
 // @vitest-environment node
 import { createHash } from "node:crypto"
+import { EventEmitter } from "node:events"
 import { Client } from "pg"
 import { describe, expect, it, vi } from "vitest"
 import {
   assertStagingApproval, assertStagingDatabaseIdentity, assertStagingMonitorHealthy,
   assertStagingRequestTarget, assertStagingResponseStatus, evaluateStagingDelivery,
   stagingIntakeConfig, stagingCanaryConfig, stagingDatabaseConnection, stagingDatabaseTargetSha256,
-  stagingFrozenPayloadEvidence, stagingRehearsalMode, withStagingFailurePrivacy,
+  stagingFrozenPayloadEvidence, stagingRehearsalMode, withStagingFailurePrivacy, guardStagingDatabaseErrors,
 } from "../../../scripts/qa/staging-contract.mjs"
 
 const sha = (value: string) => createHash("sha256").update(value).digest("hex")
@@ -159,6 +160,23 @@ describe("staging database connection boundary", () => {
 })
 
 describe("staging failure privacy", () => {
+  it("consumes asynchronous idle database errors and permanently blocks further requests or success", async () => {
+    const client = new EventEmitter()
+    const assertHealthy = guardStagingDatabaseErrors(client)
+    expect(assertHealthy).not.toThrow()
+    // Delivered outside an awaited database query, like pg's idle socket path.
+    await new Promise<void>(resolve => setImmediate(() => {
+      client.emit("error", new Error("private-host private-recipient@example.test private-token"))
+      resolve()
+    }))
+    for (let check = 0; check < 2; check++) {
+      const error = await withStagingFailurePrivacy(async () => { assertHealthy(); return "must-not-succeed" }).catch(value => value)
+      expect(error.message).toBe("StagingCanaryFailed")
+      expect(error.cause).toBeUndefined()
+      expect(String(error.stack)).not.toMatch(/private-host|private-recipient|private-token/)
+    }
+    expect(assertHealthy).toThrow("StagingDatabaseUnavailable")
+  })
   it("removes underlying browser/driver values and cause from a reported failure", async () => {
     const privateError = new Error("locator.fill private-recipient@example.test Bearer private-token private-database-password")
     const result = await withStagingFailurePrivacy(async () => { throw privateError }).catch(error => error)

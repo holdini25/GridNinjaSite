@@ -107,6 +107,16 @@ export async function withStagingFailurePrivacy(operation) {
   try { return await operation() } catch { throw new Error("StagingCanaryFailed") }
 }
 
+/** pg emits idle socket/backend errors outside awaited queries. Consume the
+ * event without retaining its sensitive payload, and permanently fail closed. */
+export function guardStagingDatabaseErrors(client) {
+  let unhealthy = false
+  client.on("error", () => { unhealthy = true })
+  return () => {
+    if (unhealthy) throw new Error("StagingDatabaseUnavailable")
+  }
+}
+
 /** A hash pins the reviewed private record; it is not a signature, permission
  * grant or independent proof merely because this JSON was supplied. The approved
  * deployment must restrict event/ack writes to its authenticated server paths. */

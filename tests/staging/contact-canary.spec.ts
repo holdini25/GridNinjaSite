@@ -2,7 +2,7 @@ import { Client } from "pg"
 import { expect, test } from "@playwright/test"
 import {
   assertStagingDatabaseIdentity, assertStagingMonitorHealthy,
-  assertStagingRequestTarget, assertStagingResponseStatus, evaluateStagingDelivery,
+  assertStagingRequestTarget, assertStagingResponseStatus, evaluateStagingDelivery, guardStagingDatabaseErrors,
   readStagingApproval, readStagingDeliveryEvidence, stagingCanaryConfig, stagingIntakeConfig, stagingRehearsalMode, withStagingFailurePrivacy,
 } from "../../scripts/qa/staging-contract.mjs"
 
@@ -21,6 +21,7 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
   // Read-only at the connection level. This runner never writes SQL, posts an
   // acknowledgement, forges a callback or resets a delivery for another try.
   const client = new Client(config.databaseConnection)
+  const assertDatabaseHealthy = guardStagingDatabaseErrors(client)
   let stage = "preflight", outboxId: string | undefined, submissionId: string | undefined
   let result = "incomplete"
   let frozenRequestSha256: string | undefined
@@ -31,6 +32,7 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
     assertStagingDatabaseIdentity(identity.rows[0], approval)
     // Verify actual host protection before supplying its bypass. Never follow
     // unauthenticated redirects, which may lead to an external login page.
+    assertDatabaseHealthy()
     const unauthorized = await page.request.get(`${config.baseURL}/contact`, { maxRedirects: 0, failOnStatusCode: false })
     if (![401, 403, 302, 307].includes(unauthorized.status())) throw new Error("StagingHostProtectionNotObserved")
     await page.route("**/*", async route => {
@@ -38,6 +40,7 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
       const mainNavigation = request.isNavigationRequest() && request.frame() === page.mainFrame()
       if (!mainNavigation && url.origin !== config.baseURL && url.pathname !== "/api/contact") { await route.continue(); return }
       try {
+        assertDatabaseHealthy()
         if (Date.now() >= Date.parse(approval.expiresAt)) throw new Error("StagingApprovalExpired")
         assertStagingRequestTarget(request.url(), config.baseURL)
         const response = await route.fetch({ maxRedirects: 0, maxRetries: 0, headers: { ...request.headers(), "x-vercel-protection-bypass": config.deploymentBypass } })
@@ -48,6 +51,7 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
     async function monitor() {
       if (!fullConfig) return
       await readStagingApproval(config, mode)
+      assertDatabaseHealthy()
       const response = await page.request.get(`${config.baseURL}/api/internal/lead-monitor`, {
         maxRedirects: 0, failOnStatusCode: false,
         headers: { "x-vercel-protection-bypass": config.deploymentBypass, authorization: `Bearer ${fullConfig.monitorSecret}` },
@@ -66,6 +70,7 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
     await expect(page.getByText("Security verification complete.")).toBeVisible()
     await expect.poll(() => Date.now() - formEngagedAt).toBeGreaterThanOrEqual(1_200)
     assertStagingRequestTarget(page.url(), config.baseURL)
+    assertDatabaseHealthy()
     await page.getByRole("button", { name: "Scope an assessment" }).click()
     await expect(page.getByRole("heading", { name: "Inquiry received" })).toBeVisible()
     const reference = page.getByText(/^Reference:/)
@@ -76,6 +81,7 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
     let accepted = false, complete = false, announced = false
     do {
       const evidence = await readStagingDeliveryEvidence(client, submissionId)
+      assertDatabaseHealthy()
       if (!evidence.lead || new Date(evidence.lead.accepted_at).getTime() < startedAt.getTime()) throw new Error("StagingDurableReceiptMismatch")
       const result = evaluateStagingDelivery(evidence, approval, fullConfig?.operatorReference)
       stage = result.stage
@@ -93,9 +99,11 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
     if (!accepted) throw new Error("StagingProviderAcceptanceNotObserved")
     if (full && !complete) throw new Error(stage === "recipient-observed" ? "StagingHumanAcknowledgementNotObserved" : "StagingRecipientDeliveryNotObserved")
     await monitor()
+    assertDatabaseHealthy()
     result = full ? "observation-chain-complete" : "intake-smoke-complete"
   } finally {
     await client.end().catch(() => undefined)
+    try { assertDatabaseHealthy() } catch { result = "incomplete" }
     await testInfo.attach("staging-sanitized-evidence", { contentType: "application/json", body: Buffer.from(JSON.stringify({
       schemaVersion: "gridninja-staging-canary.v2", mode, result, startedAt: startedAt.toISOString(), stage,
       submissionId, outboxId, frozenRequestSha256, approvalSha256: config.approvalSha256,
@@ -103,5 +111,6 @@ test(full ? "staffed staging observation chain requires recipient delivery and a
       productionReady: false, activationApproved: false,
       limitations: ["Private approval must independently establish hosted build/configuration, database/account isolation and authenticated callback/ack write paths.", "No provider key or raw callback signature is retained in database evidence.", "This chain does not replace outage, rotation, duplicate-callback, scheduler-loss, sink-failure, restore/rollback or manual release gates."],
     }, null, 2)) })
+    assertDatabaseHealthy()
   }
 }))
