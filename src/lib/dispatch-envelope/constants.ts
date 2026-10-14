@@ -1,5 +1,8 @@
 import type { DomainId } from "@/types/dispatch-envelope"
 
+/** Version of the authored teaching data; independent of the stable v1 wire schema. */
+export const DISPATCH_DATASET_VERSION = "2.0.0"
+
 export const DISPATCH_DOMAIN_IDS: DomainId[] = [
   "electrical",
   "storage",

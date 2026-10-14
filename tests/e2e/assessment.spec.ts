@@ -18,6 +18,10 @@ test.describe("capacity assessment", () => {
         const summary = page.getByTestId("assessment-summary")
         await expect(summary).toHaveAttribute("data-scenario", to)
         await expect(summary).toContainText(`Model screen: ${outcomes[to]}`)
+        const actions = page.getByRole("group", { name: "Current example actions" })
+        await expect(actions).toHaveCount(1)
+        await expect(actions.getByRole("link", { name: "Scope an assessment" })).toHaveAttribute("href", "/assessment?source=assessment-explorer#scope")
+        expect(await actions.evaluate(element => element.previousElementSibling?.getAttribute("data-testid"))).toBe("assessment-summary")
         const target = `/downloads/assessment/demo-01-${to}/v1.0.0/json`
         await expect(page.getByRole("link", { name: "Download this technical record" })).toHaveAttribute("href", target)
         await expect(page.getByRole("link", { name: "Download this PDF" })).toHaveAttribute("href", `/downloads/assessment/demo-01-${to}/v1.0.0/pdf`)
@@ -108,6 +112,7 @@ test.describe("capacity assessment", () => {
       await expect(page.getByRole("heading", { name: "Requested example unavailable" })).toBeVisible()
       await expect(page.getByTestId("assessment-summary")).toHaveCount(0)
       await expect(page.getByRole("link", { name: "Download this PDF" })).toHaveCount(0)
+      await expect(page.getByRole("group", { name: "Current example actions" })).toHaveCount(0)
     }
     await page.getByRole("link", { name: "Open the default example" }).click()
     await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "b")
@@ -138,6 +143,9 @@ test.describe("capacity assessment", () => {
       await page.getByRole("link", { name: "D", exact: true }).click()
       await expect(page.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "d")
       await expect(page.getByTestId("assessment-summary")).not.toContainText("5.8 MW")
+      const actions = page.getByRole("group", { name: "Current example actions" })
+      await expect(actions.getByRole("link", { name: "Download this PDF" })).toHaveAttribute("href", "/downloads/assessment/demo-01-d/v1.0.0/pdf")
+      await expect(actions.getByRole("link", { name: "Scope an assessment" })).toHaveAttribute("href", "/assessment?source=assessment-explorer#scope")
       // Native fragment scrolling is finite (~265 ms in the saved RC04 probe).
       // Sample from Node before asking Playwright's no-JS utility world to
       // establish actionability; preserve normal pointer activation afterwards.

@@ -1,3 +1,223 @@
+/* Dispatch-only foundations keep their original cascade layer and motion overrides. */
+@layer components {
+
+  .gn-status-allow {
+    --gn-state: var(--signal);
+    --gn-state-bg: rgba(72, 232, 154, 0.11);
+  }
+
+  .gn-status-repair {
+    --gn-state: var(--warning);
+    --gn-state-bg: rgba(224, 178, 74, 0.12);
+  }
+
+  .gn-status-reject {
+    --gn-state: var(--danger);
+    --gn-state-bg: rgba(255, 107, 107, 0.12);
+  }
+
+  .gn-status-no-proof {
+    --gn-state: #B8B8B8;
+    --gn-state-bg: rgba(184, 184, 184, 0.09);
+  }
+
+  .gn-rta-chip {
+    position: relative;
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
+    gap: 0.45rem;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--gn-state) 64%, transparent);
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(244, 244, 244, 0.04), transparent),
+      var(--gn-state-bg);
+    color: var(--gn-state);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  .gn-rta-chip::before {
+    content: "";
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: var(--gn-state);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--gn-state) 58%, transparent);
+  }
+
+  .gn-rta-chip[data-state="repair"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(244, 244, 244, 0.12),
+      transparent
+    );
+    transform: translateX(-110%);
+    animation: gn-chip-scan 2.8s ease-in-out infinite;
+  }
+
+  .gn-rta-chip[data-state="reject"] {
+    box-shadow: inset 0 -2px 0 var(--gn-state);
+  }
+
+  .gn-rta-chip[data-state="no-proof"] {
+    border-style: dashed;
+  }
+
+  .gn-rta-chip[data-state="no-proof"]::before {
+    opacity: 0.45;
+  }
+
+  .gn-hd-panel {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 1.35rem;
+    background: var(--surface);
+  }
+
+  .gn-hd-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(rgba(184, 184, 184, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(184, 184, 184, 0.055) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(180deg, black, transparent 88%);
+    opacity: 0.72;
+  }
+
+  .gn-hd-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .gn-scanline {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    z-index: 2;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(97, 228, 255, 0.72),
+      rgba(255, 159, 26, 0.48),
+      transparent
+    );
+    opacity: 0.7;
+    animation: gn-scanline-y 4.8s linear infinite;
+  }
+
+  .gn-rta-chip[data-state="allow"] {
+    box-shadow: inset 0 0 0 1px rgba(72, 232, 154, 0.12);
+  }
+
+  .gn-rta-chip[data-state="allow"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(72, 232, 154, 0.35);
+    border-radius: inherit;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: gn-allow-lock 1.8s ease-in-out infinite;
+  }
+
+  .gn-rta-chip[data-state="reject"] {
+    animation: gn-reject-stop 2.6s ease-in-out infinite;
+  }
+
+  .gn-rta-chip[data-state="no-proof"] {
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgba(184, 184, 184, 0.08) 0 6px,
+      transparent 6px 12px
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .gn-rta-chip::after,
+  .gn-scanline,
+  .gn-rta-chip[data-state="allow"]::after,
+  .gn-rta-chip[data-state="reject"] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@keyframes gn-chip-scan {
+  0%,
+  58% {
+    transform: translateX(-110%);
+  }
+
+  100% {
+    transform: translateX(110%);
+  }
+}
+
+@keyframes gn-scanline-y {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  8%,
+  72% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(42rem);
+  }
+}
+
+@keyframes gn-allow-lock {
+  0%,
+  56% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  72%,
+  100% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes gn-reject-stop {
+  0%,
+  82%,
+  100% {
+    transform: translateX(0);
+  }
+
+  86% {
+    transform: translateX(-1px);
+  }
+
+  90% {
+    transform: translateX(1px);
+  }
+}
+
 .gn-dispatch-shell {
   padding-bottom: env(safe-area-inset-bottom);
   box-shadow:

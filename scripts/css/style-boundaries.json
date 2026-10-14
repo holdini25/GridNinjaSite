@@ -1,0 +1,9 @@
+[
+  { "component": "src/components/marketing/civic-composition.tsx", "stylesheet": "src/components/marketing/premium-visuals.css" },
+  { "component": "src/components/marketing/authority-composition.tsx", "stylesheet": "src/components/marketing/premium-visuals.css" },
+  { "component": "src/components/marketing/editorial-thumbnail.tsx", "stylesheet": "src/components/marketing/premium-visuals.css" },
+  { "component": "src/components/research/research-notes.tsx", "stylesheet": "src/components/marketing/premium-visuals.css" },
+  { "component": "src/components/research/research-bibliography.tsx", "stylesheet": "src/components/marketing/premium-visuals.css" },
+  { "component": "src/components/marketing/dispatch-envelope/dispatch-envelope-visual.tsx", "stylesheet": "src/components/marketing/dispatch-envelope/dispatch-envelope.css" },
+  { "component": "src/components/marketing/dispatch-envelope/dispatch-decision-ribbon.tsx", "stylesheet": "src/components/marketing/dispatch-envelope/dispatch-envelope.css" }
+]

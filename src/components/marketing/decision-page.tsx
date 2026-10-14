@@ -1,3 +1,7 @@
+import "@/components/marketing/premium-visuals.css"
+
+import { DeliveryProfile } from "@/components/marketing/delivery-profile"
+import { getApprovedDeliveryProfile, unpublishedDeliveryTeam } from "@/content/delivery-profile"
 import { Fragment, type ReactNode } from "react"
 import Link from "next/link"
 import { SectionShell } from "@/components/layout/section-shell"
@@ -18,12 +22,15 @@ import type { CivicRelease } from "@/types/civic"
 
 export type DecisionPageContent = {
   eyebrow: string; headline: string; body: string
-  sections: readonly { title: string; body: string; items?: readonly { title: string; body: string }[]; link?: { label: string; href: string } }[]
+  sections: readonly { id?: string; title: string; body: string; items?: readonly { title: string; body: string }[]; link?: { label: string; href: string } }[]
 }
 
 export function DecisionPage({ path, content, facilityEntry, civicRelease }: { path: PublicPath; content: DecisionPageContent; facilityEntry?: ReactNode; civicRelease?: CivicRelease | null }) {
   const journey = decisionPageJourney[path] ?? {}
+  const deliveryProfile = path === "/about" ? getApprovedDeliveryProfile("about") : null
   const scopeHref = assessmentScopeHref(journey.source, journey.topic)
+  const finalSource = journey.finalSource ?? journey.source
+  const finalScopeHref = assessmentScopeHref(finalSource, journey.topic)
   const sampleHref = sampleBriefHref(journey.topic)
   const isSolutionPage = path === "/solutions/ai-cloud" || path === "/solutions/colocation" || path === "/solutions/bridge-power"
   return <div className="space-y-14 pb-16 sm:space-y-16">
@@ -38,7 +45,9 @@ export function DecisionPage({ path, content, facilityEntry, civicRelease }: { p
     {content.sections.map(section => <Fragment key={section.title}>
       <SectionShell deferRendering={false}>
         <div className="space-y-6">
-          <SectionHeader headline={section.title} body={section.body} />
+          {path === "/about" && section.id === "delivery-team"
+            ? deliveryProfile ? <DeliveryProfile profile={deliveryProfile} /> : <SectionHeader headline={unpublishedDeliveryTeam.title} body={unpublishedDeliveryTeam.body} />
+            : <SectionHeader headline={section.title} body={section.body} />}
           {section.items && <AssessmentCards items={section.items} variant="rows" />}
           {section.link && <Link prefetch={false} className="inline-flex min-h-11 items-center gap-2 text-primary underline underline-offset-4" href={journey.topic && section.link.href.startsWith("/demo") ? sampleHref : section.link.href}>{section.link.label}<span aria-hidden="true">→</span></Link>}
         </div>
@@ -57,6 +66,6 @@ export function DecisionPage({ path, content, facilityEntry, civicRelease }: { p
       </SectionShell>}
     </Fragment>)}
     <RelatedSeoLinks path={path} />
-    <SectionShell deferRendering={false}><CtaBand eyebrow="Proof before autonomy" headline="Start with one capacity question." body="Agree the decision, evidence boundary, responsibilities, and paid scope before work begins." label="Scope an assessment" href={scopeHref} /></SectionShell>
+    <SectionShell deferRendering={false}><CtaBand eyebrow="Proof before autonomy" headline="Start with one capacity question." body="Agree the decision, evidence boundary, responsibilities, and paid scope before work begins." label="Scope an assessment" href={finalScopeHref} analyticsEvent="assessment_cta_selected" analyticsSource={finalSource} /></SectionShell>
   </div>
 }

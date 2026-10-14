@@ -11,5 +11,11 @@ export function getMostSpecificActiveHref(
 ) {
   return hrefs
     .filter((href) => isNavPathActive(pathname, href))
-    .sort((left, right) => right.length - left.length)[0]
+    .sort((left, right) => {
+      const leftPath = left.split(/[?#]/, 1)[0]
+      const rightPath = right.split(/[?#]/, 1)[0]
+      // A fragment or attribution query does not make a page more specific.
+      // Prefer its canonical link when the matching path is otherwise equal.
+      return rightPath.length - leftPath.length || Number(left !== leftPath) - Number(right !== rightPath)
+    })[0]
 }

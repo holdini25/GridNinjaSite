@@ -421,7 +421,7 @@ export function DispatchEnvelopeVisual({
             />
             <InspectorRow
               label="confidence"
-              value={`${activeConstraint.confidencePct ?? "-"}%`}
+              value={activeConstraint.confidencePct == null ? "Not calibrated" : `${activeConstraint.confidencePct}%`}
             />
             <InspectorRow label="policy" value={activeScenario.dto.policyBundleVersion} />
             <InspectorRow label="topology" value={activeScenario.dto.topologyHash} />
