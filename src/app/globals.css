@@ -1,6 +1,9 @@
-@import "tailwindcss";
+@import "tailwindcss" source("../");
 @import "tw-animate-css";
 @import "./premium-civic.css";
+
+/* Scan application sources and the native runtime, not documentation or tests. */
+@source "../../public/header-controls.mjs";
 
 /* Static primitive defaults stay below utilities so callers can override them
    without sending a Tailwind class-merging engine to the browser. */

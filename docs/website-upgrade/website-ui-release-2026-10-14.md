@@ -84,9 +84,12 @@ submission or production database operation is authorized by this evidence recor
 
 At preparation time production is unchanged. The latest coordinating-session
 read-only hosting record identifies `dpl_DEjFoYdrgHQHRKPohyhau6VRJrzy`, immutable
-`gridninja-6k04milzg-holdini25s-projects.vercel.app`, Git `bbeb94bd`. Before promotion,
+`gridninja-6k04milzg-holdini25s-projects.vercel.app`, Git `bbeb94bd`. Before cutover,
 recheck alias/deployment identity and retain this unchanged-backend version as the
 rollback target. No migration is part of this release.
+
+The sole cutover path is merging the qualified website PR into `main`, followed by
+the existing automatic deployment. Do not separately promote any staged deployment.
 
 ## Fresh CI correction
 
@@ -159,3 +162,80 @@ integration additions), all 65 exclusions, sole Contact route ownership and
 preserved production contracts. Full corrected browser/CI/performance and hosted
 production-settings qualification remain pending. Production release remains
 held until those gates are bound to the final selected source.
+
+## Retained frozen-source results and next correction
+
+Frozen `f3bf9d99d828b6a46ab63bd9bf368b45748f9738` closes the initial Pages
+observability accounting omission: enabled builds charge the exact required
+dynamic module and all emitted JavaScript files once. Missing or malformed page
+data, loadable entries or chunk bytes fail. This correction received two independent
+read-only source reviews; their approval did not qualify runtime behavior.
+
+Its expanded CI run `38511535813` passed all 140 Lighthouse captures, 140 full-scroll
+observations and 20 readiness observations, under software-functional scope with
+hardware qualification explicitly not performed. Mobile medians were Home
+2,073.740 ms, Contact 1,969.160 ms and Founders 2,435.067 ms. All three had
+accessibility, best practices and SEO scores of 100. The artifact SHA-256 is
+`44663d83412e102a047ed4f42eb971612e7ae8bbfbbe2df58b588c62b7b437db`.
+These passing results coexist with the separate core Facility run `38511535816`,
+whose Home median failed at 2,501.889 ms against 2,500 ms. Neither run overwrites
+the other. Standard CI `38511535811` passed 12 of 14 jobs; both WebKit profiles
+retained failures. Unit CI passed 1,438 tests, integration passed three, and SEO
+browser checks passed 36 with 104 audited skips.
+
+The protected isolated deployment `dpl_7fbDPxDXDRKaEYjZQMbrvBDnFqt4`, build
+`4xxSpJ-VvLp7667zNel_W`, verified all 100 resources before and after its ten-capture
+priority diagnostic. Mobile Home LCP was 1,981.596 ms and Contact 1,526.509 ms.
+Both groups failed best practices (93) and SEO (69): explicit noindex, the protected
+manifest redirect toward SSO blocked by CSP, and real CSP-report 503 responses
+were retained. The isolated project has no application service configuration;
+the reports do not uniquely establish the reason for every 503. No unrelated
+React or Pages hydration failures appeared in the scored audits. Ten of 140
+captures remain incomplete qualification, and protected hosting is not public SEO
+equivalence. No full hosted collection or production promotion followed.
+
+The next source correction is deliberately narrow:
+
+- Tailwind scans the entire application source tree and the native header runtime,
+  eliminating documentation/test-only selectors while preserving all component
+  exclusions and required animation styles. The validator rejects narrower or
+  broader explicit Tailwind scopes.
+- Native header icons render the same SVG geometry on the server without a Lucide
+  client wrapper. The local build removes one initial JavaScript request and saves
+  742 gzip bytes of JavaScript, 266 of CSS and 41 of HTML. This artifact comparison
+  is not a measured performance improvement. Image priorities and budgets remain
+  unchanged.
+- The shared resource-hub assessment CTA disables optional prefetch, consistent
+  with existing CTA behavior. Retained WebKit traces show outgoing assessment
+  prefetch/CSS cancellation during Evidence-to-Contact navigation; the exact
+  rejected plain assessment request is absent from the network capture, so its
+  precise promise remains uncertain. The unchanged style test must validate this
+  product correction.
+- The Contact parity fixture focuses the assessment link and waits for its mocked
+  verification callback before native navigation. This prevents the fixture from
+  cancelling its own script; it tests settled verification, not cancellation
+  timing. Runtime-health guards, no-JavaScript behavior and real form contracts
+  remain unchanged.
+
+Local corrected build `YXy0gs9DiLrbE_I3aiMf4` passed all build validators, lint and
+typecheck. Its runtime source digest is
+`e895f091796cd260acb230a548c014288859ae9ae54e41115de46f494d4cf4ea`.
+The unit run retained sandbox loopback/process failures in four fixture files;
+all 21 tests in those files passed with the required local permissions. Combined
+results from the unchanged run and those four suites account for all 1,442 tests;
+this is not a single clean full-suite run. Focused WebKit desktop/mobile checks
+passed 24 of 24 without retries: eight Contact parity, 12 initial-style and four
+header-parser checks. All 24 traces retained zero runtime errors, failed scripts
+or styles, and assessment prefetches. The two API posts and four verification
+script requests were locally fulfilled test fixtures; no unmocked API request
+occurred. Fresh full CI, performance and hosting qualification for the corrected
+source remains required before cutover.
+
+The corrected local ten-capture preflight passed unchanged gates: Home mobile
+median LCP 2,309.519 ms and Contact 1,953.482 ms; both groups scored 100 for
+accessibility, best practices and SEO, with zero TBT and CLS. All samples used
+the same corrected build and M5 Metal. The first invocation was rejected before
+capture because the collector lacked the build's public test verification setting;
+that failure log is retained. The correctly pinned run is
+`build/facility/pages-contact-trial-03/`, still explicitly 10/140 and incomplete
+release qualification. No valid unfavorable sample was discarded or replaced.

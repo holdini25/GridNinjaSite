@@ -68,6 +68,11 @@ export function validateCssSources(projectRoot = process.cwd()) {
     if (styles.has(file)) return
     styles.add(file)
     postcss.parse(readFileSync(file, "utf8"), { from: file }).walkAtRules("import", rule => {
+      const scopedTailwind = /^(["'])tailwindcss\1\s+source\((["'])([^"']+)\2\)$/.exec(rule.params)
+      if (scopedTailwind) {
+        if (file !== cssFile || resolve(dirname(file), scopedTailwind[3]) !== src) fail("Tailwind automatic source scope must cover the entire src directory from globals.css")
+        return
+      }
       const match = /^(["'])([^"']+)\1$/.exec(rule.params)
       if (!match) fail(`unsupported CSS import in ${display(file)}: ${rule.params}`)
       if (!match[2].startsWith(".")) return // External packages remain build-owned.

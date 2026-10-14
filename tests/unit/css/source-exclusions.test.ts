@@ -26,6 +26,20 @@ function fixture(files: Record<string, string> = {}, directives = '@source not "
 afterEach(() => { for (const root of fixtures.splice(0)) rmSync(root, { recursive: true, force: true }) })
 
 describe("Tailwind component-source exclusions", () => {
+  it("accepts automatic scanning of the entire application source tree", () => {
+    const root = fixture({
+      "src/app/page.tsx": 'import "./globals.css"; export default function Page() { return null }',
+    }, '@import "tailwindcss" source("../"); @source not "../components/orphan.tsx";')
+    expect(validateCssSources(root).excluded).toEqual(["src/components/orphan.tsx"])
+  })
+
+  it.each(["./", "../components", "../../"])("rejects a narrowed or broadened automatic source scope: %s", scope => {
+    const root = fixture({
+      "src/app/page.tsx": 'import "./globals.css"; export default function Page() { return null }',
+    }, `@import "tailwindcss" source("${scope}");`)
+    expect(() => validateCssSources(root)).toThrow(/automatic source scope must cover the entire src/)
+  })
+
   it("keeps unused components while following cycles, CSS and JSON leaves", () => {
     const root = fixture({
       "src/app/page.tsx": 'import "../components/a"; import "@/app/globals.css"; import "../content.json"; export {}',

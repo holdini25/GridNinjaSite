@@ -292,7 +292,8 @@
     "src/pages/contact.tsx",
     "tests/e2e/contact-router-parity.spec.ts",
     "tests/unit/contact/contact-brand-boundary.test.tsx",
-    "tests/unit/seo/initial-javascript-budget.test.ts"
+    "tests/unit/seo/initial-javascript-budget.test.ts",
+    "src/app/(marketing)/_components/seo-resource-hub.tsx"
   ],
   "postImportCorrections": {
     "src/app/(marketing)/about/founders/page.tsx": "Render required manifest-derived RelatedSeoLinks after fresh CI detected missing contextual link graph.",
@@ -305,8 +306,12 @@
     "src/components/layout/nav-drawer.tsx": "Handle nullable pathname under supported mixed-router types; this legacy component remains unreachable from public routes.",
     "src/components/layout/site-footer.tsx": "Use the same footerCopy constant through a small content module, avoiding client import of the SEO registry.",
     "src/components/forms/contact-form.tsx": "Document the existing native cross-router anchor for the newly applicable lint rule; no behavior or payload change.",
-    "scripts/validate-contact-build.mjs": "Charge actual emitted Pages scripts, shared runtime and low-priority files under unchanged JavaScript budgets.",
+    "scripts/validate-contact-build.mjs": "Charge actual emitted Pages scripts, shared runtime, low-priority files and the required initial dynamic observability module when enabled; reject missing or malformed page data, loadable entries and chunk bytes under unchanged budgets.",
     "scripts/facility/hosted-attestation.mjs": "Resolve exact static Pages output ownership as well as App output; reject stale, ambiguous or dynamic producers.",
-    "scripts/css/validate-sources.mjs": "Include Pages routes, _app and _document in the conservative CSS dependency closure without weakening exclusions."
+    "scripts/css/validate-sources.mjs": "Include Pages routes, _app and _document in the conservative CSS dependency closure; validate the explicit Tailwind scope remains the entire src tree without weakening exclusions.",
+    "src/app/globals.css": "Scan all src plus the native header runtime, removing documentation/test-only utility selectors while preserving excluded components and required animation styles.",
+    "src/components/layout/site-header.tsx": "Render exact decorative Menu/ChevronDown SVG geometry on the server, preserving classes, accessible semantics and licenses without a client icon wrapper.",
+    "src/app/(marketing)/_components/seo-resource-hub.tsx": "Disable optional assessment CTA prefetch to avoid outgoing prefetch cancellation during cross-router navigation; href and native link behavior remain unchanged.",
+    "tests/e2e/contact-router-parity.spec.ts": "Wait for observable mocked verification completion after focusing the assessment Contact link; preserve normal clicks, no-JavaScript behavior and all runtime-health guards."
   }
 }

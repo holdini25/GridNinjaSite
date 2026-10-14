@@ -78,7 +78,18 @@ async function followAssessmentContactLink(page: Page, javaScriptEnabled = true)
   // The extra centering helper waits on page requestAnimationFrame callbacks,
   // which do not run with JavaScript disabled. Native click still performs its
   // own scrolling, stability and hit-target checks in the no-JS context.
-  if (javaScriptEnabled) await centerLocatorInViewport(contact)
+  if (javaScriptEnabled) {
+    await expect(page.getByLabel("Name", { exact: true })).toBeEnabled()
+    await centerLocatorInViewport(contact)
+    // This link is inside the assessment form: focusing it engages verification.
+    // Let the mocked script finish loading and its token callback reach the UI
+    // before the native navigation, instead of cancelling our own pending mock.
+    await contact.focus()
+    await expect(contact).toBeFocused()
+    const verification = page.getByText("Security verification complete.", { exact: true })
+    await expect(verification).toHaveRole("status")
+    await expect(verification).toBeVisible()
+  }
   await contact.click()
 }
 
