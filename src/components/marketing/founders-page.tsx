@@ -29,7 +29,7 @@ export function FoundersPage() {
       <section id="founders" aria-label="Founder profiles" className={`${styles.profiles} gn-home-container`}>
         {founders.map((founder, index) => (
           <article key={founder.id} id={founder.id} className={styles.profile} aria-labelledby={`${founder.id}-name`}>
-            <div className={styles.portrait}>
+            <div className={`${styles.portrait} ${founder.portrait.framing === "close" ? styles.portraitClose : ""}`}>
               <Image src={founder.portrait.src} alt={founder.name} fill sizes="(max-width: 759px) calc(100vw - 40px), (max-width: 1376px) calc((100vw - 128px) / 2), 608px" style={{ objectPosition: founder.portrait.position }} priority />
               <span className={styles.portraitIndex} aria-hidden="true">0{index + 1}</span>
             </div>

@@ -3,7 +3,7 @@
 .page a:focus-visible, .page summary:focus-visible { outline: 2px solid var(--gn-orange); outline-offset: 6px; border-radius: 2px; }
 .eyebrow { color: var(--gn-orange); font: 500 .75rem/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
 .hero { padding-top: 64px; }
-.heroGrid { display: grid; grid-template-columns: 1.3fr 1fr; align-items: end; gap: 80px; margin-top: 24px; }
+.heroGrid { display: grid; grid-template-columns: 1.3fr 1fr; align-items: start; gap: 80px; margin-top: 24px; }
 .hero h1 { color: var(--gn-heading); font-size: clamp(3.5rem, 7vw, 6.5rem); font-weight: 500; letter-spacing: -.065em; line-height: .99; }
 .hero h1 span { display: block; color: var(--gn-orange); }
 .introduction { max-width: 440px; padding-bottom: 4px; font-size: 1.125rem; line-height: 1.75; }
@@ -16,6 +16,7 @@
 .profile { min-width: 0; scroll-margin-top: 108px; }
 .portrait { position: relative; width: 100%; aspect-ratio: 1.2; overflow: hidden; background: var(--gn-surface); }
 .portrait img { object-fit: cover; }
+.portraitClose img { transform: scale(1.25); transform-origin: 50% 45%; }
 .portraitIndex { position: absolute; left: 20px; bottom: 20px; display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--gn-control-edge); background: var(--gn-canvas); color: var(--gn-heading); font: .75rem/1 var(--font-mono); }
 .profileHeader { padding-block: 28px 24px; }
 .role { color: var(--gn-orange); font: 500 .8125rem/1.6 var(--font-mono); }
@@ -56,12 +57,13 @@
   .actions { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 12px 24px; }
 }
 @media (max-width: 759px) {
-  .hero { padding-top: 40px; }
-  .heroGrid { grid-template-columns: 1fr; gap: 28px; }
+  .hero { padding-top: 24px; }
+  .heroGrid { grid-template-columns: 1fr; gap: 20px; }
   .hero h1 { font-size: clamp(3.5rem,12vw,5.5rem); }
   .introduction { max-width: 52ch; font-size: 1rem; }
-  .introduction .textLink { margin-top: 16px; }
-  .heroRule { margin-top: 36px; }
+  .introduction .textLink { margin-top: 12px; }
+  .heroRule { margin-top: 24px; padding-top: 16px; }
+  .heroRule span:first-child { display: none; }
   .profiles { grid-template-columns: 1fr; gap: 56px; margin-top: 28px; }
   .portrait { aspect-ratio: 1.14; }
   .profileHeader h2 { font-size: clamp(2rem,7vw,2.75rem); }
