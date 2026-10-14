@@ -1,13 +1,17 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { readFile, readdir } from "node:fs/promises"
-import { join } from "node:path"
+import { join, relative } from "node:path"
+import { createRequire } from "node:module"
 import { performanceMatrix } from "./lighthouse-matrix.mjs"
 
 export const HOSTED_SCHEMA = "gridninja-hosted-build.v1"
 const hash = bytes => createHash("sha256").update(bytes).digest("hex")
 const sha256 = value => typeof value === "string" && /^[a-f0-9]{64}$/.test(value)
 const marker = "GRIDNINJA_HOSTED_ATTESTATION_V1"
+const require = createRequire(import.meta.url)
+const { getRouteCacheKey } = require("next/dist/server/lib/route-cache-key")
+const { normalizePagePath } = require("next/dist/shared/lib/page-path/normalize-page-path")
 
 export function hostedOrigin(value) {
   const url = new URL(value)
@@ -21,6 +25,31 @@ async function filesAt(directory) {
   return (await Promise.all(entries.map(entry => entry.isDirectory() ? filesAt(join(directory, entry.name)) : [join(directory, entry.name)]))).flat().sort()
 }
 
+/** Resolve the producer's layout, not a stale legacy file left by another build.
+ * Next 16.3 adapters use source-module-namespaced route-cache files. The emitted
+ * config keeps adapterPath as a presence marker even when its value is omitted. */
+export async function hostedPrerenderPath(route, nextDirectory = ".next") {
+  const readJson = async path => JSON.parse(await readFile(join(nextDirectory, path), "utf8"))
+  const [{ config }, prerender, appRoutes] = await Promise.all([
+    readJson("required-server-files.json"), readJson("prerender-manifest.json"), readJson("app-path-routes-manifest.json"),
+  ])
+  assert(config && config.output !== "export", "Unsupported hosted output layout")
+  const entry = prerender.routes?.[route]
+  assert(entry && entry.initialRevalidateSeconds === false && entry.response === "complete" && entry.routeType === "page", `Missing complete static prerender: ${route}`)
+  const sources = Object.entries(appRoutes).filter(([source, pathname]) => source.endsWith("/page") && pathname === (entry.srcRoute ?? route)).map(([source]) => source)
+  assert.equal(sources.length, 1, `Missing or ambiguous source module: ${route}`)
+  const filename = config.adapterPath
+    ? getRouteCacheKey(route, { kind: "APP_PAGE", sourceRoute: sources[0] })
+    : `app${normalizePagePath(route)}`
+  return join(nextDirectory, "server", `${filename}.html`)
+}
+
+/** Only relative emitted paths and adapter presence, never config/env values. */
+export async function hostedOutputDiagnostics(nextDirectory = ".next") {
+  const { config } = JSON.parse(await readFile(join(nextDirectory, "required-server-files.json"), "utf8"))
+  return { adapter: Boolean(config?.adapterPath), htmlFiles: (await filesAt(join(nextDirectory, "server"))).filter(file => file.endsWith(".html")).map(file => relative(nextDirectory, file).replaceAll("\\", "/")) }
+}
+
 /** Produced inside the actual Vercel build, never synthesized from local .next. */
 export async function createHostedAttestation(identity, harnessRevision, env = process.env) {
   assert(env.VERCEL === "1" && env.VERCEL_URL && ["preview", "production"].includes(env.VERCEL_ENV), "Hosted attestation requires the actual Vercel build environment")
@@ -31,7 +60,7 @@ export async function createHostedAttestation(identity, harnessRevision, env = p
     // mislabel a locally invented HTML body as an emitted hosted build asset.
     if (route === "/demo") continue
     const publication = /^\/evidence\/assessments\/([a-z0-9-]+)\/([a-z0-9.]+)$/.exec(route)
-    const file = publication ? `src/content/assessment-publications/${publication[1]}/${publication[2]}/brief.html` : `.next/server/app/${route === "/" ? "index" : route.slice(1)}.html`
+    const file = publication ? `src/content/assessment-publications/${publication[1]}/${publication[2]}/brief.html` : await hostedPrerenderPath(route)
     const bytes = await readFile(file)
     if (!publication) assert(bytes.includes(Buffer.from(identity.buildId)), `Build ID absent from generated HTML: ${route}`)
     resources.push({ path: route, kind: "html", sha256: hash(bytes), bytes: bytes.length })

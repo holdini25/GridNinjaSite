@@ -1,9 +1,12 @@
 import { createHash } from "node:crypto"
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { dirname, join } from "node:path"
 import { describe, expect, it, vi } from "vitest"
-import { assertHostedServingPair, hostedAttestationLogLines, hostedBinding, hostedOrigin, parseHostedAttestationLogs, validateHostedAttestation, verifyHostedServing } from "../../../scripts/facility/hosted-attestation.mjs"
+import { assertHostedServingPair, hostedAttestationLogLines, hostedBinding, hostedOrigin, hostedOutputDiagnostics, hostedPrerenderPath, parseHostedAttestationLogs, validateHostedAttestation, verifyHostedServing } from "../../../scripts/facility/hosted-attestation.mjs"
 import { createHostedAuth, hostedCookie, redactHostedSecrets } from "../../../scripts/facility/hosted-auth.mjs"
 import { assertLighthouseMatrixIndex, lighthousePriorityGroups, performanceMatrix } from "../../../scripts/facility/lighthouse-matrix.mjs"
-import { assertLocalMeasurementOrigin, assertSameBuild, settingsDigest } from "../../../scripts/facility/performance-contract.mjs"
+import { assertLocalMeasurementOrigin, assertSameBuild, settingsDigest, sourceSnapshot } from "../../../scripts/facility/performance-contract.mjs"
 
 const origin = "https://gridninja-build-abc.vercel.app"
 const sha = (value: string) => createHash("sha256").update(value).digest("hex")
@@ -27,6 +30,61 @@ const cleanFetch = async (url: string | URL | Request) => {
 }
 
 describe("hosted build attestation", () => {
+  it("selects the emitted adapter cache identity even when a stale legacy HTML file also exists", async () => {
+    const root = await mkdtemp(join(tmpdir(), "gridninja-hosted-output-"))
+    const save = async (path: string, value: string) => { await mkdir(dirname(join(root, path)), { recursive: true }); await writeFile(join(root, path), value) }
+    const source = "/(marketing)/page", cache = `server/route-cache/APP_PAGE/${sha(source)}/$/index.html`
+    try {
+      await save("required-server-files.json", JSON.stringify({ config: { adapterPath: "<omitted but set>", env: { PRIVATE: "must-not-be-logged" } } }))
+      await save("app-path-routes-manifest.json", JSON.stringify({ [source]: "/" }))
+      await save("prerender-manifest.json", JSON.stringify({ routes: { "/": { srcRoute: "/", response: "complete", routeType: "page", initialRevalidateSeconds: false } } }))
+      await save(cache, "actual-adapter-build")
+      await save("server/app/index.html", "stale-other-build")
+      expect(await hostedPrerenderPath("/", root)).toBe(join(root, cache))
+      expect(await readFile(await hostedPrerenderPath("/", root), "utf8")).toBe("actual-adapter-build")
+      expect(await hostedOutputDiagnostics(root)).toEqual({ adapter: true, htmlFiles: ["server/app/index.html", cache] })
+      await rm(join(root, cache))
+      await expect(readFile(await hostedPrerenderPath("/", root))).rejects.toThrow(/ENOENT/)
+      await save("required-server-files.json", JSON.stringify({ config: {} }))
+      expect(await hostedPrerenderPath("/", root)).toBe(join(root, "server/app/index.html"))
+      await save("app-path-routes-manifest.json", JSON.stringify({ [source]: "/", "/(other)/page": "/" }))
+      await expect(hostedPrerenderPath("/", root)).rejects.toThrow(/ambiguous/)
+      await expect(hostedPrerenderPath("/missing", root)).rejects.toThrow(/static prerender/)
+    } finally { await rm(root, { recursive: true, force: true }) }
+  })
+  it("resolves nested adapter routes by the complete source module and rejects incomplete/dynamic output", async () => {
+    const root = await mkdtemp(join(tmpdir(), "gridninja-hosted-routes-"))
+    const entry = { srcRoute: "/platform/dispatch-envelope", response: "complete", routeType: "page", initialRevalidateSeconds: false }
+    try {
+      await writeFile(join(root, "required-server-files.json"), JSON.stringify({ config: { adapterPath: "adapter" } }))
+      await writeFile(join(root, "app-path-routes-manifest.json"), JSON.stringify({ "/(marketing)/platform/dispatch-envelope/page": "/platform/dispatch-envelope" }))
+      const manifest = async (value: object) => writeFile(join(root, "prerender-manifest.json"), JSON.stringify({ routes: { "/platform/dispatch-envelope": value } }))
+      await manifest(entry)
+      expect(await hostedPrerenderPath("/platform/dispatch-envelope", root)).toBe(join(root, `server/route-cache/APP_PAGE/${sha("/(marketing)/platform/dispatch-envelope/page")}/$/platform/dispatch-envelope.html`))
+      for (const mutation of [{ response: "partial" }, { initialRevalidateSeconds: 60 }, { routeType: "route" }]) {
+        await manifest({ ...entry, ...mutation })
+        await expect(hostedPrerenderPath("/platform/dispatch-envelope", root)).rejects.toThrow(/static prerender/)
+      }
+    } finally { await rm(root, { recursive: true, force: true }) }
+  })
+  it("reports exact source file hashes without changing the existing path-and-byte source digest", async () => {
+    const root = await mkdtemp(join(tmpdir(), "gridninja-hosted-source-"))
+    try {
+      await mkdir(join(root, "src"))
+      await writeFile(join(root, "src/page.ts"), "export const value = 1")
+      await writeFile(join(root, "package.json"), "{}")
+      const snapshot = await sourceSnapshot(["src", "package.json"], root)
+      const previousAlgorithm = createHash("sha256").update("package.json\0").update("{}").update("\0").update("src/page.ts\0").update("export const value = 1").update("\0").digest("hex")
+      expect(snapshot.sourceRevision).toBe(previousAlgorithm)
+      expect(snapshot.files).toEqual([{ path: "package.json", sha256: sha("{}"), bytes: 2 }, { path: "src/page.ts", sha256: sha("export const value = 1"), bytes: 22 }])
+      await writeFile(join(root, "src/page.ts"), "export const value = 2")
+      const changed = await sourceSnapshot(["src", "package.json"], root)
+      expect(changed.sourceRevision).not.toBe(snapshot.sourceRevision)
+      expect(changed.files[0]).toEqual(snapshot.files[0])
+      expect(changed.files[1].sha256).not.toBe(snapshot.files[1].sha256)
+      expect(JSON.stringify(snapshot)).not.toContain("export const")
+    } finally { await rm(root, { recursive: true, force: true }) }
+  })
   it("round-trips reordered private-log chunks and detects missing, duplicate, mixed and corrupted log data", () => {
     const record = fixture(), lines = hostedAttestationLogLines(record)
     expect(parseHostedAttestationLogs([...lines].reverse().join("\n"))).toEqual(record)

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { readdir, readFile, stat } from "node:fs/promises"
-import { join } from "node:path"
+import { join, relative } from "node:path"
 import { readApprovedManifest, readFacilityRegistry, validateSelectedFacility } from "./build-selection.mjs"
 import { selectedCinematicIdentity } from "../../src/lib/cinematic/files.mjs"
 import { BASE_TRANSFER_BUDGET, CINEMATIC_PERFORMANCE_VERSION, routeTransferBudget } from "../../src/lib/cinematic/performance.mjs"
@@ -23,10 +23,18 @@ async function filesAt(path) {
   if (entry.isFile()) return [path]
   return (await Promise.all((await readdir(path)).sort().map(name => filesAt(join(path, name))))).flat()
 }
-export async function sourceRevision() {
+export async function sourceSnapshot(paths = SOURCE_PATHS, directory = ".") {
   const hash = createHash("sha256")
-  for (const path of (await Promise.all(SOURCE_PATHS.map(filesAt))).flat().sort()) hash.update(path).update("\0").update(await readFile(path)).update("\0")
-  return hash.digest("hex")
+  const files = []
+  for (const file of (await Promise.all(paths.map(path => filesAt(join(directory, path))))).flat().sort()) {
+    const path = relative(directory, file).replaceAll("\\", "/"), bytes = await readFile(file)
+    hash.update(path).update("\0").update(bytes).update("\0")
+    files.push({ path, sha256: digest(bytes), bytes: bytes.length })
+  }
+  return { sourceRevision: hash.digest("hex"), files }
+}
+export async function sourceRevision() {
+  return (await sourceSnapshot()).sourceRevision
 }
 export async function releaseIdentity() {
   const registry = await readFacilityRegistry()
