@@ -270,11 +270,16 @@
   ],
   "exceptions": {
     "next.config.ts": "Only inlineCss delivery toggle changes; preserve all security/header configuration.",
-    "vercel.json": "Disable automatic preview deployments for candidate branches; main deployment behavior unchanged."
+    "vercel.json": "Disable automatic preview deployments for candidate branches; main deployment behavior unchanged.",
+    ".github/workflows/website-route-qualification.yml": "Additional read-only software qualification of all14routes/140captures; existing workflows unchanged."
   },
   "integrationAdditions": [
     "tests/e2e/founders.spec.ts",
     "docs/website-upgrade/website-ui-release-manifest-2026-10-14.json",
-    "docs/website-upgrade/website-ui-release-2026-10-14.md"
-  ]
+    "docs/website-upgrade/website-ui-release-2026-10-14.md",
+    ".github/workflows/website-route-qualification.yml"
+  ],
+  "postImportCorrections": {
+    "src/app/(marketing)/about/founders/page.tsx": "Render required manifest-derived RelatedSeoLinks after fresh CI detected missing contextual link graph."
+  }
 }

@@ -87,3 +87,21 @@ read-only hosting record identifies `dpl_DEjFoYdrgHQHRKPohyhau6VRJrzy`, immutabl
 `gridninja-6k04milzg-holdini25s-projects.vercel.app`, Git `bbeb94bd`. Before promotion,
 recheck alias/deployment identity and retain this unchanged-backend version as the
 rollback target. No migration is part of this release.
+
+## Fresh CI correction
+
+Selected `755116e` failed the contextual SEO graph in both browser/search profiles:
+`/about/founders` lacked the required related-resources section. The route now uses
+the existing server-rendered `RelatedSeoLinks` component. The failed job and staged
+deployment `dpl_9KxyDSVt6VryzDUSDmhyMeMWeFVm` remain historical evidence; neither
+qualifies the corrected source. No deployment was promoted.
+
+An additional read-only `Website route qualification` workflow runs the existing
+collector's full 14-route matrix (140 Lighthouse captures and 140 full-scroll
+observations, plus existing readiness checks) under explicit software-functional
+scope. It preserves all budgets and existing CI workflows and is not presented as
+physical-device qualification. Its 90-minute limit bounds the expanded collection.
+Protected hosting authentication/noindex remains a distinct environment limitation.
+
+Corrected local build `guaagM2DXAUKNNhF9A8dD` passed; source prefix `323c8d8a5867`.
+SEO source validation passed 66 tests in 12 files; lint/typecheck passed.
