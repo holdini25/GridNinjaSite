@@ -10,7 +10,7 @@ import { SectionShell } from "./section-shell"
 export function SiteFooter() {
   return (
     <footer className="gn-site-footer mt-24 border-t border-divider bg-background">
-      <SectionShell className="py-12">
+      <SectionShell deferRendering={false} className="py-12">
         <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,2fr)]">
           <div className="min-w-0 space-y-4 [overflow-wrap:anywhere]">
             <div className="grid w-fit max-w-full grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1">

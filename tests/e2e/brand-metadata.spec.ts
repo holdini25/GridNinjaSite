@@ -7,7 +7,7 @@ import {
 import { getSeoRoute } from "../../src/seo/route-manifest"
 
 const socialImageAlt =
-  "GridNinja — proof-backed virtual capacity for AI data centers"
+  "GridNinja emblem and wordmark on a dark card introducing bounded capacity decision assessments"
 const canonicalSiteUrl = "https://gridninja.ai/"
 const homepageRoute = getSeoRoute("/")
 

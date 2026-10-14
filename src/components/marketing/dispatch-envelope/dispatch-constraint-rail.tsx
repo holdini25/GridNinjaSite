@@ -137,7 +137,7 @@ export function DispatchConstraintRail({
             </span>
             <span className="mt-3 flex justify-between gap-3 font-mono text-[0.68rem] text-muted-foreground">
               <span>{formatMw(constraint.maxMw)}</span>
-              <span>{constraint.confidencePct}% conf.</span>
+              {constraint.confidencePct != null ? <span>{constraint.confidencePct}% conf.</span> : null}
               <span>{scoreLabel}</span>
             </span>
             <span className="mt-2 block truncate font-mono text-[0.64rem] text-proof-cyan">

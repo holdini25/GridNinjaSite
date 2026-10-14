@@ -23,6 +23,7 @@ describe("marketing journeys", () => {
 
   it("uses approved attribution sources for every shared decision page", () => {
     expect(Object.values(decisionPageJourney).every(journey => journey?.source && isLeadSource(journey.source))).toBe(true)
+    expect(Object.values(decisionPageJourney).every(journey => !journey?.finalSource || isLeadSource(journey.finalSource))).toBe(true)
     expect(decisionPageJourney["/solutions/ai-cloud"]?.topic).toBe("ai-cloud")
     expect(decisionPageJourney["/solutions/colocation"]?.topic).toBe("colocation")
   })

@@ -29,7 +29,7 @@ export const navItems = [
       { label: "Evidence library", href: "/evidence", description: "Published synthetic examples and their supporting records." },
       { label: "Proof before autonomy", href: "/proof", description: "How evidence, commercial usefulness, and authority stay distinct." },
       { label: "Methodology", href: "/methodology", description: "Evidence stages and the publication status of planned methods." },
-      { label: "Insights", href: "/insights", description: "Planned articles on capacity and runtime assurance; not yet published." },
+      { label: "Research and limits", href: "/evidence#research", description: "External research informing the direction, with each study's scope and limits." },
     ],
   },
   {
@@ -57,7 +57,7 @@ export const footerGroups = [
     { label: "Evidence library", href: "/evidence" },
     { label: "Review the proof pack", href: "/proof/proof-pack" },
     { label: "Methodology", href: "/methodology" },
-    { label: "Insights", href: "/insights" },
+    { label: "Research and limits", href: "/evidence#research" },
   ] },
   { title: "Company", links: [
     { label: "About", href: "/about" },

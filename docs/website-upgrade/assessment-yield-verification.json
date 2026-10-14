@@ -1,0 +1,852 @@
+{
+  "schemaVersion": "gridninja-assessment-yield-verification.v1",
+  "recordedAt": "2026-10-13T01:48:20.890Z",
+  "status": "local-software-verified-production-activation-held",
+  "productionPromoted": false,
+  "source": {
+    "baseCommit": "16bf45cc6bbe3b3e825ccea0cf2f4c7e887b1f51",
+    "comparisonCommit": "25ec9de",
+    "sourceRevision": "f0297fabf4fe1f941f2297ce5dc2d967ae34c57e4ecf64212003e1be7ffafa5b",
+    "buildId": "JhzmJKYTL9VZvB_HCDssa",
+    "releases": [
+      {
+        "release": "facility-v1",
+        "manifestSha256": "46f03551d4d997b612f2335c122165d51d0894c173ce6603b2a988736630421b"
+      },
+      {
+        "release": "facility-v2",
+        "manifestSha256": "8bfe57f6d258e8574ffbb5c486dfda3669412f80e25265f40342cc09ff247aad"
+      },
+      {
+        "release": "facility-v3",
+        "manifestSha256": "a03fc3df85ffbd0c468e5219ec3aa1eb529d4bc4eb6ffa3bc63f7dd0254b7525"
+      },
+      {
+        "release": "facility-v4",
+        "manifestSha256": "423237463ad87bdb2eddfc52404d59c63bf562b95cca8a8a13f600c204b673ef"
+      },
+      {
+        "release": "facility-v5",
+        "manifestSha256": "39ed510c59e1f290bee3905171ef3d37d51d6c3e791aa3ccb57ef6c527417be5"
+      },
+      {
+        "release": "facility-v6",
+        "manifestSha256": "b7a208983517c98adb653608d63283ceccd37adc7d6563d1ad5383091d40556b"
+      },
+      {
+        "release": "facility-v7",
+        "manifestSha256": "c6ccfae472adebef0af6a8a85104be2db9f0879019babec2e297d82a9f71ce37"
+      },
+      {
+        "release": "facility-v8",
+        "manifestSha256": "4b652220b7d2282d97b1782a72dce7d97ebccf84c4d76866dc660fe8cc2bfa8e"
+      },
+      {
+        "release": "facility-v9",
+        "manifestSha256": "5f5d0e7d6b0ebec2463aa09a40bf886548e09b143e16af62c238ea0e0a3d8269"
+      },
+      {
+        "release": "facility-v10",
+        "manifestSha256": "7a95fe6a859f11d074a7d4a38fb6d7de9ecefc956b19d899486d294f32a11712"
+      },
+      {
+        "release": "facility-v12",
+        "manifestSha256": "95e5b6394da9183cdc57d00992407ffec4fd6d55d1674ffd9bb8d13b6955658f"
+      }
+    ],
+    "buildSettings": {
+      "selectedRelease": "facility-v12",
+      "mode": "auto-adaptive",
+      "cinematic": {
+        "selectedRelease": "cinematic-v1",
+        "mode": "auto",
+        "preview": false,
+        "manifestSha256": "b19c53acb14dd4a0318696a18de6b706b97061f1887fcbbf4edca23190dd3a3c"
+      },
+      "cinematicPerformanceVersion": "cinematic-performance.v1",
+      "privateCandidate": null,
+      "observability": false,
+      "csp": "enforce",
+      "httpsPolicy": false,
+      "verification": "test",
+      "verificationSiteKeySha256": "4060ed0ca2678bf694d50fd48a9050b8715ca43629a540f471b9b13207c29cae"
+    },
+    "qaHarnessRevision": "13a49b54ae820dedecf209068c866dc5cb23b0b5a3df427b7e1d24db05051336"
+  },
+  "toolchain": {
+    "node": "v22.23.2",
+    "npm": "10.9.8",
+    "declaredPackageManager": "npm@10.9.8",
+    "platform": "darwin",
+    "arch": "arm64",
+    "osRelease": "27.0.0",
+    "packageLockSha256": "f3fb8273ac082c6e61c94df676e083f900eb2454f2a70a13c03b52a2eb60d7ac"
+  },
+  "publications": {
+    "registrySha256": "666e58728975e1193f4114fca060ecc285b58c36ab98a232732e1c510ded3539",
+    "filesSha256": "a8ba28005332fdde2040516e0d5ddc4962e63f85404c57bb086b42230a399ebb",
+    "files": 21,
+    "individualFiles": "build/qa/assessment-yield/frozen-identity.json"
+  },
+  "integrity": {
+    "sourceBuildSettings": "reverified-before-and-after",
+    "qaHarness": "reverified",
+    "packageLock": "reverified",
+    "publications": "reverified",
+    "reportBytes": "reverified",
+    "evidenceManifest": {
+      "path": "build/qa/assessment-yield/verification-evidence-manifest.json",
+      "bytes": 14869,
+      "sha256": "a1513ba63538b3b2e4ffd4a8cdde678e18e8080aabfef0ab6f0ca19c4c51ded3"
+    }
+  },
+  "software": {
+    "lint": "pass",
+    "typecheck": "pass",
+    "unit": {
+      "status": "pass",
+      "files": 147,
+      "passed": 1468,
+      "failed": 0,
+      "coveragePercent": {
+        "statements": 94.13,
+        "branches": 90.64,
+        "functions": 96.24,
+        "lines": 98.1
+      }
+    },
+    "database": {
+      "status": "pass",
+      "files": 3,
+      "passed": 32,
+      "failed": 0,
+      "scope": "disposable localhost PostgreSQL only; deployed schema not verified"
+    },
+    "build": "pass",
+    "migrationConsistency": "pass",
+    "productionDependencyVulnerabilities": 0,
+    "initialJavaScript": [
+      {
+        "route": "/",
+        "brotliKiB": 117.3,
+        "maximumKiB": 180
+      },
+      {
+        "route": "/assessment",
+        "brotliKiB": 136.7,
+        "maximumKiB": 180
+      },
+      {
+        "route": "/demo",
+        "brotliKiB": 129.7,
+        "maximumKiB": 180
+      },
+      {
+        "route": "/contact",
+        "brotliKiB": 127.8,
+        "maximumKiB": 180
+      }
+    ],
+    "browsers": {
+      "status": "pass",
+      "cases": 1578,
+      "passed": 1468,
+      "skipped": 110,
+      "failed": 0,
+      "interrupted": 0,
+      "missing": 0,
+      "retries": 0,
+      "flaky": 0,
+      "runnerErrors": 0,
+      "durationMs": 624575.843,
+      "byProject": {
+        "chrome-stable": {
+          "cases": 263,
+          "passed": 250,
+          "skipped": 13
+        },
+        "chromium-desktop": {
+          "cases": 263,
+          "passed": 254,
+          "skipped": 9
+        },
+        "firefox-desktop": {
+          "cases": 263,
+          "passed": 250,
+          "skipped": 13
+        },
+        "webkit-desktop": {
+          "cases": 263,
+          "passed": 250,
+          "skipped": 13
+        },
+        "chromium-mobile": {
+          "cases": 263,
+          "passed": 232,
+          "skipped": 31
+        },
+        "webkit-mobile": {
+          "cases": 263,
+          "passed": 232,
+          "skipped": 31
+        }
+      },
+      "skipCategories": {
+        "headed-separately-executed": 24,
+        "mobile-device-only": 4,
+        "desktop-dpr-matrix": 32,
+        "mobile-only": 16,
+        "desktop-only": 14,
+        "representative-chromium": 20
+      },
+      "skipAnnotationsAbsent": 0,
+      "identityAndSkipAudit": "pass; full case details retained in referenced audit"
+    },
+    "seo": {
+      "status": "pass",
+      "cases": 136,
+      "passed": 35,
+      "skipped": 101,
+      "failed": 0,
+      "interrupted": 0,
+      "missing": 0,
+      "retries": 0,
+      "flaky": 0,
+      "runnerErrors": 0,
+      "durationMs": 12675.809
+    },
+    "headedVisibility": {
+      "status": "pass",
+      "cases": 4,
+      "passed": 4,
+      "skipped": 0,
+      "failed": 0,
+      "interrupted": 0,
+      "missing": 0,
+      "retries": 0,
+      "flaky": 0,
+      "runnerErrors": 0,
+      "durationMs": 30974.037
+    },
+    "visual": {
+      "status": "agent-review-complete-no-actionable-findings",
+      "states": 27,
+      "automatedResults": {
+        "axeViolations": 0,
+        "geometryProblems": 0,
+        "horizontalOverflowStates": 0,
+        "pageErrors": 0,
+        "intakeRequests": 0,
+        "outboundRequests": 0,
+        "mediaCanvases": 0,
+        "activeVideos": 0,
+        "demoFocusedDownloadStates": 9,
+        "scopeHeaderAndFirstFieldWithinViewportStates": 9
+      },
+      "humanApproval": "not-performed",
+      "limitations": [
+        "200% text is computed font-size/line-height enlargement, not native browser text zoom.",
+        "400% reflow is a 320 CSS-pixel viewport corresponding to 1280px divided by four, not native browser zoom.",
+        "Reduced-motion and Save-Data keep existing still media; autoplay, 3D interaction, sustained GPU behavior and performance are outside this capture.",
+        "No physical-device, screen-reader, low-brightness, native zoom, participant research or human approval is claimed.",
+        "Axe and bounded geometry checks do not establish complete WCAG conformance.",
+        "OG review covers current manifest text. Future longer copy needs a fresh fit check; platform-specific social-image cropping is not tested."
+      ]
+    },
+    "socialImages": {
+      "status": "agent-review-complete-no-clipping-observed",
+      "originalPngs": 34,
+      "uniqueSocialImageKeys": 33,
+      "defaultImage": true,
+      "contactSheetsInspected": 6,
+      "fullResolutionInspected": [
+        "dispatch-envelope",
+        "colocation",
+        "default"
+      ],
+      "humanApproval": "not-performed"
+    }
+  },
+  "performance": {
+    "status": "fail",
+    "scope": "local Lighthouse collection; not production-configured performance",
+    "matrix": "premium-civic",
+    "collectionResult": "fail",
+    "requiredCaptures": 130,
+    "collectedCaptures": 10,
+    "collectionComplete": false,
+    "groups": [
+      {
+        "profile": "mobile",
+        "route": "/",
+        "captures": 5,
+        "status": "pass",
+        "medians": {
+          "performance": 98,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 2311.1941500000003,
+          "fcp": 1054.9098,
+          "tbt": 2,
+          "cls": 0,
+          "transferBytes": 642656
+        },
+        "failures": []
+      },
+      {
+        "profile": "mobile",
+        "route": "/contact",
+        "captures": 5,
+        "status": "fail",
+        "medians": {
+          "performance": 98,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 2311.3917500000002,
+          "fcp": 1053.9437,
+          "tbt": 3,
+          "cls": 0,
+          "transferBytes": 217615
+        },
+        "failures": [
+          "mobile /contact: lcp 2311.3917500000002 exceeds 2000"
+        ]
+      }
+    ],
+    "uncollected": [
+      {
+        "profile": "desktop",
+        "route": "/",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/assessment",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/demo",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/platform",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/proof",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/evidence",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/about",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/solutions/ai-cloud",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/solutions/colocation",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/solutions/bridge-power",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/contact",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/insights",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "desktop",
+        "route": "/evidence/assessments/demo-01-b/v1.0.0",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/assessment",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/demo",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/platform",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/proof",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/evidence",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/about",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/solutions/ai-cloud",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/solutions/colocation",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/solutions/bridge-power",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/insights",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "profile": "mobile",
+        "route": "/evidence/assessments/demo-01-b/v1.0.0",
+        "missingRuns": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "invalidOrFailedCaptureAttempts": [],
+    "broaderQualification": "not-qualified",
+    "remainingEvidence": [
+      "through-readiness and full-scroll transfer matrix",
+      "sustained native renderer/cinematic readiness and cadence",
+      "physical mobile devices",
+      "production-configured HTTPS, live verification and observability"
+    ],
+    "stoppedAfterGroup": {
+      "profile": "mobile",
+      "route": "/contact",
+      "completedRuns": 5,
+      "reason": "decisive-lighthouse-group-failure"
+    }
+  },
+  "performanceExecution": {
+    "command": "npm run facility:lighthouse",
+    "matrix": "premium-civic",
+    "runsPerGroup": 5,
+    "angle": "metal",
+    "stopOnFailure": true,
+    "outputDirectory": "build/facility/assessment-yield-final-01",
+    "thresholds": "unchanged"
+  },
+  "execution": {
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm run test:unit",
+      "npm run test:integration:required",
+      "npm run db:check",
+      "npm run build",
+      "npm run audit:prod",
+      "npm run test:e2e -- --config=build/qa/assessment-yield/playwright-stdio.config.ts --workers=3 --retries=0 --reporter=list,json",
+      "npm run test:seo"
+    ],
+    "chromeWorkaround": "Same installed Chrome binary/arguments/CDP; stdout/stderr redirected to retained files by the hashed executable shim. No forced worker exit or assertion suppression.",
+    "earlierIndependentChecks": "Integration, SEO, headed and visual checks retain their original per-run provenance; final browser run uses the frozen final harness. Relevant exercised application bytes are unchanged."
+  },
+  "reports": {
+    "frozen": {
+      "path": "build/qa/assessment-yield/frozen-identity.json",
+      "bytes": 7726,
+      "sha256": "6b42a8d360dedcf1741238afde80c17ac812b8b18af357d09be791eb75706d4c"
+    },
+    "unit": {
+      "path": "build/qa/assessment-yield/unit-final-07.log",
+      "bytes": 2082,
+      "sha256": "d6fa8023949346845879b659e44a81368f3ba7d08704897d687f5bbb831ac09e"
+    },
+    "database": {
+      "path": "build/qa/assessment-yield/isolated-database-04.json",
+      "bytes": 401,
+      "sha256": "4222d8b6c2c7b175756db8eb81ef76da587ceb1c327b0844dc2b905b532b69c4"
+    },
+    "databaseLog": {
+      "path": "build/qa/assessment-yield/isolated-database-04.log",
+      "bytes": 1473,
+      "sha256": "2cb83657bbe6ae30bcf9a7bcecde97652dc09434f3b4d636a5806a8c8524cbfe"
+    },
+    "build": {
+      "path": "build/qa/assessment-yield/build-05.log",
+      "bytes": 5943,
+      "sha256": "14a9ad083cce395dd6072539f850ec491ff305433e8d5320d4fea5d0f1da9eee"
+    },
+    "lint": {
+      "path": "build/qa/assessment-yield/lint-final-07.log",
+      "bytes": 31,
+      "sha256": "d9b1fcf7e0f0f117deb1ef8c67f535eb799e893ad647f5c0ff5e9bce9b83909a"
+    },
+    "typecheck": {
+      "path": "build/qa/assessment-yield/typecheck-final-07b.log",
+      "bytes": 42,
+      "sha256": "8034b165f65b327fa1c55c43dc1b89f0542bac2b2de36b2989cb16cf2cdc9397"
+    },
+    "dependencyAudit": {
+      "path": "build/qa/assessment-yield/audit-final-04.log",
+      "bytes": 94,
+      "sha256": "5da8c74091edf80cd99f42fa962ad386dfc25eb3ecfad34e32620d0b78ea3205"
+    },
+    "migrations": {
+      "path": "build/qa/assessment-yield/db-check-final-04.log",
+      "bytes": 247,
+      "sha256": "b935bc5c8292110629d5095f215b1b280dcaab2eda025a0cb0fe60152e5df686"
+    },
+    "browser": {
+      "path": "build/qa/assessment-yield/browser-matrix-07.json",
+      "bytes": 44806672,
+      "sha256": "23722c334487cb74ca4cccba8b0addafbe87c51dfb929f41d5e67168546a745d"
+    },
+    "browserAudit": {
+      "path": "build/qa/assessment-yield/browser-matrix-audit-07.json",
+      "bytes": 2168297,
+      "sha256": "4d4a5a515edb748aac3672611cd5a006f66a5781bb57d5f29007f1d773f625d7"
+    },
+    "seo": {
+      "path": "build/qa/assessment-yield/seo-05.json",
+      "bytes": 844058,
+      "sha256": "14da1367861952d3a20388b039fc91bd5c2f2baed834940337c0b010ccb4ce86"
+    },
+    "headed": {
+      "path": "build/qa/assessment-yield/headed-05.json",
+      "bytes": 12097,
+      "sha256": "ee0c72ca42e4f73e6c90208ee53bfe25cfbb0699c10856bf9462f88eadcb5c60"
+    },
+    "auxiliaryAudit": {
+      "path": "build/qa/assessment-yield/browser-auxiliary-audit.json",
+      "bytes": 119208,
+      "sha256": "39481730011e7ea49ccb71331607b057f82801b53f661c57e499e691ecbee167"
+    },
+    "visual": {
+      "path": "build/qa/assessment-yield/visual/review.json",
+      "bytes": 104849,
+      "sha256": "6d8b235f84380f558bf1ad0c71a8ba13ca43f18da04841704fa0e0a23358f00b"
+    },
+    "socialImages": {
+      "path": "build/qa/assessment-yield/visual/og-build05/review.json",
+      "bytes": 9162,
+      "sha256": "e4f51c75c39ea95fe58c2a9a146bed26f385208c58fe3457fd28126993bef02a"
+    },
+    "orchestration": {
+      "path": "build/qa/assessment-yield/chrome-stdio-orchestration.json",
+      "bytes": 3093,
+      "sha256": "18c2dbdff3b5dde531999e0be7ea800d1d8e9f68ec6a6e9b0192c51fb430d3e0"
+    },
+    "performance": {
+      "path": "build/facility/assessment-yield-final-01/lighthouse-index.json",
+      "bytes": 14521,
+      "sha256": "841b930bb30663109669b65bf08a217a99fd1b745bbb6b5bb6ed244210111c03"
+    }
+  },
+  "preservedAttempts": [
+    {
+      "status": "interrupted-with-runner-errors",
+      "disposition": "Chrome helper processes inherited worker output pipes; preserved, not passing.",
+      "report": {
+        "path": "build/qa/assessment-yield/browser-matrix-05.json",
+        "bytes": 6647153,
+        "sha256": "761787d14914bb27d104716412427b5037ed0106c9835292b36b9de69ec83525"
+      },
+      "counts": {
+        "cases": 1578,
+        "passed": 355,
+        "skipped": 19,
+        "failed": 1,
+        "interrupted": 1,
+        "missing": 1202,
+        "retries": 0,
+        "flaky": 0,
+        "runnerErrors": 2,
+        "durationMs": 564059.8829999999
+      }
+    },
+    {
+      "status": "failed",
+      "disposition": "Seven failures: six stale action-group locators and one fractional-DPR capture boundary. Preserved; QA corrections are included in final harness.",
+      "report": {
+        "path": "build/qa/assessment-yield/browser-matrix-06.json",
+        "bytes": 44081220,
+        "sha256": "c14d1859b09c30afee793c57255067b0a9be33d5c94f11cd9da873a5e60cdeac"
+      },
+      "counts": {
+        "cases": 1578,
+        "passed": 1461,
+        "skipped": 110,
+        "failed": 7,
+        "interrupted": 0,
+        "missing": 0,
+        "retries": 0,
+        "flaky": 0,
+        "runnerErrors": 0,
+        "durationMs": 687008.039
+      }
+    },
+    {
+      "status": "failed-detail",
+      "disposition": "Original assertion, trace and screenshot references retained.",
+      "report": {
+        "path": "build/qa/assessment-yield/browser-matrix-06-failures.json",
+        "bytes": 23934,
+        "sha256": "d3d3db4f0b3014f327cce37c9e5beeba8347f9909d534e149b5b3122d6b21a30"
+      }
+    },
+    {
+      "status": "interrupted",
+      "disposition": "Firefox launch lacked isolated application-data directories; first target attempt did not complete.",
+      "report": {
+        "path": "build/qa/assessment-yield/webgl-loss-07target.log",
+        "bytes": 1677,
+        "sha256": "8cf68308b820f2194e6ebb65a4cdf57c980eae849cf111f57f66901f541d8731"
+      }
+    },
+    {
+      "status": "passed-targeted",
+      "disposition": "All six projects passed with isolated Firefox directories; does not replace the full matrix.",
+      "report": {
+        "path": "build/qa/assessment-yield/webgl-loss-07target-attempt2.log",
+        "bytes": 2566,
+        "sha256": "370667bb26cae68c015d872508417b860f95d5e815e581b726acbf12dff36d01"
+      }
+    },
+    {
+      "status": "superseded-failed",
+      "disposition": "Initial inefficient byte assertion timed out; original evidence preserved.",
+      "report": {
+        "path": "build/qa/assessment-yield/capture-unit-07.log",
+        "bytes": 1614,
+        "sha256": "d44d27529fa778fc8a3235e9564814046446623d678a8eefb5abc851dc217173"
+      }
+    },
+    {
+      "status": "superseded-failed",
+      "disposition": "Type projection corrected before final typecheck.",
+      "report": {
+        "path": "build/qa/assessment-yield/typecheck-final-07.log",
+        "bytes": 776,
+        "sha256": "d84fa4edf99de1b39a62df7ee87b123d285fa19012729ae3e639e647f684bcbd"
+      }
+    },
+    {
+      "status": "superseded",
+      "disposition": "Build04 partial run superseded by shared social-card clipping correction and build05.",
+      "report": {
+        "path": "build/qa/assessment-yield/browser-matrix-final.log",
+        "bytes": 35492,
+        "sha256": "f209b2b3e6555617b09a7b8ad8ac355f217d6429f8c7c3d1d77bb996234000ab"
+      }
+    },
+    {
+      "status": "superseded-failed",
+      "disposition": "Expired-row fixture corrected for PostgreSQL microseconds versus JavaScript milliseconds.",
+      "report": {
+        "path": "build/qa/assessment-yield/isolated-database-01.log",
+        "bytes": 5588,
+        "sha256": "38ba25022c8e3a4f88e4726a1f936af9915e9b0214b6d13e7d7added6d0aa3cd"
+      }
+    },
+    {
+      "status": "superseded",
+      "disposition": "Earlier visual review retained; final page and social evidence belongs to build05.",
+      "report": {
+        "path": "build/qa/assessment-yield/visual/review-build04.json",
+        "bytes": 32067,
+        "sha256": "222b38525dbb15d169858a7589611a11a07cdbffc8135a3ec67ad19afc9f26ba"
+      }
+    }
+  ],
+  "ownership": {
+    "suppliedResponse": "n/a",
+    "publishedDeliveryProfile": false,
+    "primaryOperator": null,
+    "backupOperator": null,
+    "commercialOwner": null,
+    "activation": "held; no identities or credentials inferred"
+  },
+  "externalGates": [
+    "Deployed SHA, schema, migration journal/checksums and service ownership are unverified; no production migration executed.",
+    "All-send cutover pause, old-URL retry drain, backup/restore rehearsal, retention and uncertainty recovery remain unperformed.",
+    "Provider account/key binding and privately verified same-account credential rotation remain unverified; CRM remains optional and needs its qualified deduplication contract.",
+    "Callback signatures, designated-recipient delivery, direct alerts, independent monitor scheduling and external missing-heartbeat supervision remain unverified.",
+    "Primary/backup operators and owner-selected operational thresholds are absent; acknowledgement and escalation activation remain held.",
+    "Commercial owner and private qualified-opportunity/90-day paid-conversion measurement remain unassigned and inactive.",
+    "Approved profile text, consent, precise experience and engagement responsibility evidence are absent; profile stays unpublished.",
+    "Physical devices, native zoom, manual accessibility/screen-reader review, human visual approval and the six-person comprehension study remain unperformed.",
+    "Production-configured performance remains unqualified; local HTTP, test verification and absent production observability are not equivalent.",
+    "Deployment, provider sends, provisioning and production promotion have not been performed. Rollback must retain delivery safeguards."
+  ],
+  "evidenceRetention": "Referenced raw files are local ignored evidence. Preserve the complete release evidence directory; no external publication or durable hosting is claimed."
+}

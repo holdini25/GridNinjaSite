@@ -157,7 +157,7 @@ test.describe("facility failure boundaries", () => {
     const caption = page.getByRole("region", { name: "Fixture B decision", exact: true })
     const before = await caption.textContent()
     const scenario = await inspector.getAttribute("data-scenario")
-    const brief = page.locator('[aria-label="Current example downloads"]').getByRole("link", { name: "Read the versioned brief", exact: true })
+    const brief = page.locator("[data-assessment-result-actions]").getByRole("link", { name: "Read the versioned brief", exact: true })
     const publication = await brief.getAttribute("href")
     await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")

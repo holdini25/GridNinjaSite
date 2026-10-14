@@ -1,11 +1,13 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { readdir, readFile, stat } from "node:fs/promises"
-import { join } from "node:path"
+import { join, relative } from "node:path"
 import { readApprovedManifest, readFacilityRegistry, validateSelectedFacility } from "./build-selection.mjs"
 import { selectedCinematicIdentity } from "../../src/lib/cinematic/files.mjs"
 import { BASE_TRANSFER_BUDGET, CINEMATIC_PERFORMANCE_VERSION, routeTransferBudget } from "../../src/lib/cinematic/performance.mjs"
 import { privateCandidateIdentity } from "../qa/private-candidate-contract.mjs"
+import { expectedHostedConfig, hostedBinding, validateHostedAttestation, verifyHostedServing } from "./hosted-attestation.mjs"
+import { hostedFetch } from "./hosted-auth.mjs"
 
 export const TRANSFER_BUDGET = BASE_TRANSFER_BUDGET
 export { routeTransferBudget }
@@ -21,10 +23,27 @@ async function filesAt(path) {
   if (entry.isFile()) return [path]
   return (await Promise.all((await readdir(path)).sort().map(name => filesAt(join(path, name))))).flat()
 }
-export async function sourceRevision() {
+export async function sourceSnapshot(paths = SOURCE_PATHS, directory = ".", builtVercelConfig = null) {
   const hash = createHash("sha256")
-  for (const path of (await Promise.all(SOURCE_PATHS.map(filesAt))).flat().sort()) hash.update(path).update("\0").update(await readFile(path)).update("\0")
-  return hash.digest("hex")
+  assert(builtVercelConfig === null || Buffer.isBuffer(builtVercelConfig), "Invalid hosted config bytes")
+  const hostedHash = builtVercelConfig === null ? null : createHash("sha256")
+  const files = []
+  for (const file of (await Promise.all(paths.map(path => filesAt(join(directory, path))))).flat().sort()) {
+    const path = relative(directory, file).replaceAll("\\", "/"), bytes = await readFile(file)
+    hash.update(path).update("\0").update(bytes).update("\0")
+    hostedHash?.update(path).update("\0").update(path === "vercel.json" ? builtVercelConfig : bytes).update("\0")
+    files.push({ path, sha256: digest(bytes), bytes: bytes.length })
+  }
+  assert(!hostedHash || files.some(file => file.path === "vercel.json"), "Hosted source must include vercel.json")
+  return { sourceRevision: hash.digest("hex"), files, ...(hostedHash ? { hostedSourceRevision: hostedHash.digest("hex") } : {}) }
+}
+export async function expectedHostedSource(env = process.env, directory = ".", paths = SOURCE_PATHS) {
+  const config = expectedHostedConfig(await readFile(join(directory, "vercel.json")), { projectName: env.FACILITY_HOSTED_PROJECT_NAME, originalCanonicalSha256: env.FACILITY_EXPECTED_VERCEL_CONFIG_SHA256 })
+  const snapshot = await sourceSnapshot(paths, directory, config.bytes)
+  return { sourceRevision: snapshot.sourceRevision, hostedSourceRevision: snapshot.hostedSourceRevision, configTransformation: config.transformation }
+}
+export async function sourceRevision() {
+  return (await sourceSnapshot()).sourceRevision
 }
 export async function releaseIdentity() {
   const registry = await readFacilityRegistry()
@@ -50,21 +69,46 @@ export async function currentBuildIdentity() {
   return { sourceRevision: await sourceRevision(), buildId: (await readFile(".next/BUILD_ID", "utf8")).trim(), releases: await releaseIdentity(), buildSettings }
 }
 export async function verifiedBuildIdentity() {
+  if (process.env.FACILITY_HOSTED_ATTESTATION_FILE) return (await hostedBuildAttestation()).identity
+  assertLocalMeasurementOrigin()
   const recorded = JSON.parse(await readFile(".next/facility-build.json", "utf8"))
   const current = await currentBuildIdentity()
   assert.deepEqual(current, recorded.identity, "Source, build, or release changed after the recorded production build; rebuild before measuring")
   return current
 }
 export async function provenance(browser, settings) {
+  const hosted = process.env.FACILITY_HOSTED_ATTESTATION_FILE ? await hostedBuildAttestation() : null
+  return { schemaVersion: "facility-performance.v2", ...await verifiedBuildIdentity(), harnessRevision: await harnessRevision(), ...(hosted ? { hosted: hostedBinding(hosted) } : {}), browser, settings, settingsSha256: settingsDigest(settings) }
+}
+export async function harnessRevision() {
   const harnessFiles = (await Promise.all(["scripts/facility", "scripts/cinematic", "lighthouserc.cjs", "scripts/seo/validate-lighthouse-budgets.mjs"].map(filesAt))).flat().sort()
   const hash = createHash("sha256")
   for (const path of harnessFiles.sort()) hash.update(path).update(await readFile(path))
-  return { schemaVersion: "facility-performance.v2", ...await verifiedBuildIdentity(), harnessRevision: hash.digest("hex"), browser, settings, settingsSha256: settingsDigest(settings) }
+  return hash.digest("hex")
+}
+export async function hostedBuildAttestation() {
+  assert(process.env.FACILITY_HOSTED_ATTESTATION_FILE && process.env.FACILITY_BASE_URL, "Hosted evidence requires explicit attestation file and deployment origin")
+  return validateHostedAttestation(JSON.parse(await readFile(process.env.FACILITY_HOSTED_ATTESTATION_FILE, "utf8")), { baseURL: process.env.FACILITY_BASE_URL, ...await expectedHostedSource(), harnessRevision: await harnessRevision() })
+}
+export async function recordedBuild() {
+  return process.env.FACILITY_HOSTED_ATTESTATION_FILE ? hostedBuildAttestation() : JSON.parse(await readFile(".next/facility-build.json", "utf8"))
+}
+export async function verifyMeasurementServing() {
+  if (!process.env.FACILITY_HOSTED_ATTESTATION_FILE) {
+    assertLocalMeasurementOrigin()
+    return null
+  }
+  return verifyHostedServing(await hostedBuildAttestation(), { baseURL: process.env.FACILITY_BASE_URL, fetcher: hostedFetch })
+}
+export function assertLocalMeasurementOrigin(baseURL = process.env.FACILITY_BASE_URL ?? "http://localhost:3000") {
+  const url = new URL(baseURL)
+  assert(["http:", "https:"].includes(url.protocol) && !url.username && !url.password && ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname), "Remote collection requires actual hosted build attestation; local .next cannot identify a hosted build")
 }
 export function assertSameBuild(actual, expected) {
   for (const key of ["schemaVersion", "sourceRevision", "buildId", "harnessRevision"]) assert.equal(actual?.[key], expected?.[key], `Missing or mixed provenance: ${key}`)
   assert.deepEqual(actual.releases, expected.releases, "Mixed release manifests")
   assert.deepEqual(actual.buildSettings, expected.buildSettings, "Mixed facility release/mode settings")
+  assert.deepEqual(actual.hosted, expected.hosted, "Mixed local/hosted deployment provenance")
   assert.equal(actual.settingsSha256, settingsDigest(actual.settings), "Report settings digest mismatch")
   assert.equal(typeof actual.browser, "string", "Missing browser identity")
 }

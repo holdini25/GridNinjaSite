@@ -1,0 +1,34 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in",
+  "model": "not reported by tool",
+  "originalToolOutput": "/Users/holdenchung/.codex/generated_images/01a12c56-1e33-7a13-9d14-79ae7b0b9967/exec-0cce2b71-0c63-4926-ba17-ebcb634a4275.png",
+  "arguments": {
+    "referenced_image_paths": [
+      "/Users/holdenchung/.codex/worktrees/civic-hybrid-art/GridNinjaSite/build/civic-hybrid/final-02/A-shared-landscape/landscape.png",
+      "/Users/holdenchung/.codex/worktrees/civic-hybrid-art/GridNinjaSite/assets-source/civic/generated-v1/landscape.png"
+    ],
+    "transparent_background": false,
+    "prompt": "Use case: style-transfer / architectural finishing. Image 1 is the EXACT EDIT TARGET: a 3840x2160 Cycles render with an approved camera and architectural geometry. Image 2 is an aesthetic reference ONLY, not a replacement layout. Preserve the edit target's full 3840x2160 16:9 canvas and camera, and return a genuinely high-resolution finished image at those same dimensions. Preserve facility footprint, its FOUR long rooftop cooler banks and service lanes, low graphite facade, central glazed entrance, separate fenced grid yard with THREE transformer groups and TWO transmission pylons, separate neighborhood behind-right, roads and physical property fences. Keep all fixed architecture, silhouette and geographic relationships intact. All required subjects on right60%, quiet dark woodland on left40% for later HTML copy. This is a premium architectural website image, no text or interface. Convert the overly simple CG surfaces/vegetation into convincing photographic architecture: subtle metal/concrete/roof membrane roughness, believable cooler fan housings, natural irregular mature woodland and low vegetation, gravel and paved surfaces, real glass reflections, grounded contact shadows. Add fine-scale details only, not new buildings or differently arranged equipment. Use broad soft early-blue-hour daylight and restrained warm PHYSICAL luminaires, retain rich charcoal midtones and clear depth. Scene must look life-size, not a toy, game rendering or tilt-shift model. Avoid uniformly glowing windows, orange fence outlines, unreal neon, oversharpening, heavy haze, wetmirror asphalt. Separate facility, substation and community: no connecting energy arrows, flow graphics, numbers, logos, text, watermark, emission effects or demonstrated services. The generated outcome is a synthetic hybrid illustration, not engineering evidence. Keep meaningful subjects clear of perimeter fades. Treatment RICH EDITORIAL: Increase photographic material richness and layered forest atmosphere while keeping the exact architecture and camera. Cooler blue twilight ambient, warm amber-white entrance glass and selective practical light pools; soft luminous edge separation across the metal fins and roof cooler banks. Ground looks naturally textured and subtly uneven, with credible landscaping along access roads. Sparse light in a few residential windows adds distance. Make it beautiful at both thumbnail and full-page scale without fantasy effects. Do not alter architecture counts, physical fences or camera. Output3840x2160."
+  },
+  "review": {
+    "status": "candidate",
+    "notRegistered": true,
+    "nativeCoolingBanks": 3,
+    "promptCorrection": "The original prompt incorrectly requested four cooling banks. The native scene and retained generated candidates have three banks. Exact historical prompt retained.",
+    "resolution": "Returned 1672x941; no upscaling; below planned landscape delivery width.",
+    "finding": "Richer surfaces, but some service and road details change; building still lacks architectural depth."
+  },
+  "rawGeneratedOutput": {
+    "path": "assets-source/civic/hybrid-v2/generated/landscape-rich.png",
+    "sha256": "67654cb5b07e1cda097c195874ea0e48747da7f73804b9f2a91d72f2fc94bdad",
+    "width": 1672,
+    "height": 941,
+    "bytes": 3077210
+  },
+  "nativeReference": {
+    "originalPath": "/Users/holdenchung/.codex/worktrees/civic-hybrid-art/GridNinjaSite/build/civic-hybrid/final-02/A-shared-landscape/landscape.png",
+    "nativePath": "build/civic-hybrid/final-02/A-shared-landscape/landscape.png",
+    "sha256": "6c338c2f1d5c90506c76df4fef83d3e5266fdaff038f8262631216fb4102ffc2"
+  }
+}

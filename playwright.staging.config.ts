@@ -1,6 +1,10 @@
 import { defineConfig, devices } from "@playwright/test"
 import { stagingIntakeConfig } from "./scripts/qa/staging-contract.mjs"
 
+// Playwright's failure DOM snapshot is independent of trace/screenshot capture.
+// Set this before workers and fixtures start; recipient data must stay private.
+process.env.PLAYWRIGHT_NO_COPY_PROMPT = "1"
+
 const { baseURL } = stagingIntakeConfig(process.env)
 
 export default defineConfig({
@@ -11,8 +15,9 @@ export default defineConfig({
   reporter: [["list"]],
   use: {
     baseURL,
-    trace: "retain-on-failure",
-    screenshot: "only-on-failure",
+    trace: "off",
+    screenshot: "off",
+    video: "off",
     serviceWorkers: "block",
   },
   projects: [
