@@ -287,6 +287,7 @@
     "scripts/facility/vercel-production-metadata.mjs",
     "scripts/validate-contact-build.mjs",
     "src/app/(marketing)/_components/seo-resource-hub.tsx",
+    "src/app/(marketing)/contact/page.tsx",
     "src/app/layout.tsx",
     "src/app/manifest.ts",
     "src/app/manifest.webmanifest/route.ts",
@@ -349,5 +350,6 @@
     "scripts/facility/scrolled-transfer.mjs": "Bind full-scroll observations to exact environment and measured document; preserve complete transfer budgets.",
     "scripts/civic/measure.mjs": "Bind local-only civic regression origin explicitly; keep this route-only collector separate from hosted qualification.",
     "scripts/facility/record-build.mjs": "Automatically emit actual private build attestation for exact main-branch production Git identity; keep explicit CLI producer behavior unchanged."
-  }
+  },
+  "pathAccounting": "All changed source and destination endpoints, using git diff --no-renames --name-only against productionBase."
 }

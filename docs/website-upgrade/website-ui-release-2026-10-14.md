@@ -304,7 +304,7 @@ Its harness digest is
 
 Evidence is under `build/qa/manifest-auth-20261014/` and
 `build/facility/manifest-auth-priority-01/`. The complete split manifest accounts
-for 222 changed paths (179 original imports and 43 integration additions), while
+for 223 changed path endpoints (179 original imports and 44 integration additions), while
 all 65 exclusions remain intact: 30 production-identical files and 35 absent
 deferred files. No dependency, production backend, credential or security-setting
 change accompanies this correction. Fresh full CI, complete hosted coverage,
@@ -332,3 +332,11 @@ diagnostic above. The earlier 62 browser passes remain product validation for
 unchanged manifest/runtime source; they are not a new hosted or full performance
 claim. Fresh candidate qualification remains required. All previous failed logs,
 raw reports and incomplete runs remain retained.
+
+
+The final manifest uses explicit `git diff --no-renames` accounting, including
+both ends of the Contact and manifest relocations. A read-only frozen-commit
+review caught the earlier mixed rename convention; its 222-path checkpoint is
+retained, and the corrected union contains 223 endpoints. This inventory-only
+correction changes no application or harness bytes and does not replace any
+runtime evidence.
