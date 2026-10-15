@@ -7,6 +7,8 @@ import { qualificationRequire, QUALIFICATION_VERSIONS } from "../../../scripts/f
 
 const lighthouseConfig: { categories: { seo: { auditRefs: Array<{ id: string; weight: number; group?: string }> } } } = (await import(pathToFileURL(qualificationRequire.resolve("lighthouse/core/config/default-config.js")).href)).default
 
+type SeoAuditFixture = { id: string; score: number | null; scoreDisplayMode: string }
+
 const environment = { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: "http://localhost:3101" }
 const options = (route = "/", profile = "mobile", buildSettings = {}) => ({ route, profile, buildSettings, environment })
 function reports(route = "/", profile = "mobile", buildSettings = {}) {
@@ -38,7 +40,7 @@ describe("environment-specific group qualification", () => {
   const protectedReports = () => reports("/contact").map(report => ({
     ...report, lighthouseVersion: "13.5.0", finalUrl: `${staging.measurementOrigin}/contact`,
     categories: { ...report.categories, seo: { score: .69, auditRefs: structuredClone(lighthouseConfig.categories!.seo.auditRefs) } },
-    audits: { ...report.audits, ...Object.fromEntries(lighthouseConfig.categories!.seo.auditRefs.map(({ id }) => [id, { id, score: id === "structured-data" ? null : id === "is-crawlable" ? 0 : 1, scoreDisplayMode: id === "structured-data" ? "manual" : "binary" }])) },
+    audits: Object.assign({}, report.audits, Object.fromEntries<SeoAuditFixture>(lighthouseConfig.categories!.seo.auditRefs.map(({ id }) => [id, { id, score: id === "structured-data" ? null : id === "is-crawlable" ? 0 : 1, scoreDisplayMode: id === "structured-data" ? "manual" : "binary" }]))),
     facilityEvidence: { ...report.facilityEvidence, provenance: { ...report.facilityEvidence.provenance, qualificationEnvironment: staging }, documentResponse: { url: `${staging.measurementOrigin}/contact`, status: 200, headers: { "content-type": "text/html", "x-robots-tag": "noindex, nofollow" } } },
   }))
   const opts = { ...options("/contact"), environment: staging }
