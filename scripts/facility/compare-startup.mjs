@@ -8,6 +8,8 @@ import { launch } from "chrome-launcher"
 import { provenance, verifiedBuildIdentity } from "./performance-contract.mjs"
 import { STARTUP_PROFILES, STARTUP_ROUTES, STARTUP_RUN_COUNT, startupCollectorSettings, startupRunName, summarizeStartupEvidence } from "./startup-gate.mjs"
 
+// Experimental compatibility branch: legacy collectors cannot emit the new provenance.
+assert.fail("Outside the fixed compatibility evaluation; use the frozen e49 worktree for this diagnostic until its toolchain is independently migrated")
 const require = createRequire(import.meta.url)
 const config = require("./lighthouse.cjs")
 const label = process.argv[2]

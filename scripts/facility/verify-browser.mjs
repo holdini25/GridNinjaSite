@@ -4,6 +4,8 @@ import { mkdir, rm, writeFile } from "node:fs/promises"
 import { chromium } from "playwright"
 import { assertFrameBudget, assertRendererBudget, provenance, verifiedBuildIdentity } from "./performance-contract.mjs"
 
+// Experimental compatibility branch: legacy collectors cannot emit the new provenance.
+assert.fail("Outside the fixed compatibility evaluation; use the frozen e49 worktree for this diagnostic until its toolchain is independently migrated")
 if ((await verifiedBuildIdentity()).buildSettings.mode === "auto-adaptive") {
   await import("./verify-engineering-browser.mjs")
   process.exit(process.exitCode ?? 0)

@@ -4,6 +4,8 @@ import { chromium, expect } from "@playwright/test"
 import { assertFrameBudget, assertCadenceBudget, assertRendererBudget, provenance, verifiedBuildIdentity } from "./performance-contract.mjs"
 import { chooseAssembly, choosePose, chooseStillImage } from "./inspection-actions.mjs"
 
+// Experimental compatibility branch: legacy collectors cannot emit the new provenance.
+assert.fail("Outside the fixed compatibility evaluation; use the frozen e49 worktree for this diagnostic until its toolchain is independently migrated")
 const baseURL=process.env.FACILITY_BASE_URL ?? "http://localhost:3000"
 const headed=process.env.FACILITY_HEADED === "1", metal=process.env.FACILITY_ANGLE === "metal"
 const output=`build/facility/${(await verifiedBuildIdentity()).buildSettings.selectedRelease}`

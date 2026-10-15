@@ -220,6 +220,8 @@ export function assertPayloadParity(first, second) {
 }
 
 async function main() {
+  // This Node/legacy collector cannot claim the fixed Chrome qualification identity.
+  assert.fail("Outside the fixed compatibility evaluation; use the frozen e49 worktree for this diagnostic until its toolchain is independently migrated")
   assert.equal(process.argv.length, 2, "Usage: node scripts/facility/compare-transport.mjs (fixed loopback upstream; no CLI overrides)")
   const identity = await verifiedBuildIdentity()
   const release = identity.buildSettings.selectedRelease

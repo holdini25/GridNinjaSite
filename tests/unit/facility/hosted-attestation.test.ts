@@ -7,6 +7,7 @@ import { assertHostedServingPair, attestHostedConfig, expectedHostedConfig, host
 import { createHostedAuth, hostedCookie, redactHostedSecrets } from "../../../scripts/facility/hosted-auth.mjs"
 import { assertLighthouseMatrixIndex, lighthousePriorityGroups, performanceMatrix } from "../../../scripts/facility/lighthouse-matrix.mjs"
 import { assertLocalMeasurementOrigin, assertSameBuild, expectedHostedSource, settingsDigest, sourceSnapshot } from "../../../scripts/facility/performance-contract.mjs"
+import { qualificationToolchainFixture } from "./fixtures/qualification-toolchain"
 
 const origin = "https://gridninja-build-abc.vercel.app"
 const sha = (value: string) => createHash("sha256").update(value).digest("hex")
@@ -301,7 +302,7 @@ describe("hosted build attestation", () => {
     expect(() => assertLocalMeasurementOrigin(origin)).toThrow("local .next")
     expect(() => assertLocalMeasurementOrigin("http://localhost:3027")).not.toThrow()
     expect(() => assertLocalMeasurementOrigin("https://secret@localhost:3027")).toThrow()
-    const hosted = { schemaVersion: "facility-performance.v2", ...fixture().identity, harnessRevision: sha("harness"), browser: "155", settings: {}, settingsSha256: settingsDigest({}), hosted: hostedBinding(fixture()), qualificationEnvironment: { schemaVersion: "facility-qualification-environment.v1", name: "protected-staging", measurementOrigin: origin } }
+    const hosted = { schemaVersion: "facility-performance.v2", ...fixture().identity, harnessRevision: sha("harness"), toolchain: qualificationToolchainFixture(), browser: "155.0.8059.79", settings: {}, settingsSha256: settingsDigest({}), hosted: hostedBinding(fixture()), qualificationEnvironment: { schemaVersion: "facility-qualification-environment.v1", name: "protected-staging", measurementOrigin: origin } }
     expect(() => assertSameBuild(hosted, hosted)).not.toThrow()
     expect(() => assertSameBuild({ ...hosted, hosted: undefined }, hosted)).toThrow("hosted")
     expect(() => assertSameBuild({ ...hosted, hosted: { ...hosted.hosted, origin: "https://other.vercel.app" } }, hosted)).toThrow("hosted")

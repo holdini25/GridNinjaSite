@@ -10,10 +10,17 @@ export function isMissingNavigationCapture(result) {
 /** Each capture callback must own a fresh browser profile and close it before
  * returning. Preserve invalid evidence before deciding whether it is retryable.
  */
-export async function captureValidLighthouseReport(capture, preserveInvalid) {
+export async function captureValidLighthouseReport(capture, preserveInvalid, validateAccepted = () => {}) {
   for (let number = 1; number <= 2; number++) {
     const result = await capture(number)
-    if (result?.lhr && !result.lhr.runtimeError) return result
+    if (result?.lhr && !result.lhr.runtimeError) {
+      try { await validateAccepted(result) }
+      catch (error) {
+        await preserveInvalid(result, number, { policyFailure: error instanceof Error ? error.message : String(error) })
+        throw error
+      }
+      return result
+    }
     await preserveInvalid(result, number)
     if (number === 1 && isMissingNavigationCapture(result)) continue
     assert.fail(`Lighthouse failed: ${result?.lhr?.runtimeError?.message ?? "no report"}`)

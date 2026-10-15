@@ -5,6 +5,8 @@ import { join } from "node:path"
 import { desktopConfig } from "lighthouse"
 import { startupCollectorSettings, summarizeStartupEvidence } from "./startup-gate.mjs"
 
+// Experimental compatibility branch: legacy collectors cannot emit the new provenance.
+assert.fail("Outside the fixed compatibility evaluation; use the frozen e49 worktree for this diagnostic until its toolchain is independently migrated")
 const require = createRequire(import.meta.url)
 const config = require("./lighthouse.cjs")
 const directory = process.argv[2]

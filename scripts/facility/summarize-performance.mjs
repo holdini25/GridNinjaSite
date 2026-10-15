@@ -1,4 +1,5 @@
 import assert from "node:assert/strict"
+import { assertNativeLcpReceipt } from "./native-lcp-evidence.mjs"
 import { assertCinematicMotion } from "../cinematic/motion-evidence.mjs"
 import { assertQualificationScope, measurementScope } from "./measurement-scope.mjs"
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises"
@@ -73,6 +74,8 @@ try {
       const profileSettings = canonicalJson(group[0].facilityEvidence?.provenance.settings)
       for (const report of group) {
         const evidence = report.facilityEvidence
+        assert.equal(report.lighthouseVersion, expected.toolchain.versions.lighthouse, "Raw Lighthouse version differs from the qualified toolchain")
+        assertNativeLcpReceipt(report.facilityEvidence?.nativeLcpEvidence)
         assertLighthouseProfile(report, profile)
         assert(evidence?.complete && evidence.route === route, "Missing complete Lighthouse evidence")
         if (expected.hosted) {

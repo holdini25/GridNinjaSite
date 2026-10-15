@@ -3,6 +3,8 @@ import { mkdir,writeFile } from "node:fs/promises"
 import { execFileSync } from "node:child_process"
 import { chromium } from "@playwright/test"
 import { provenance,verifiedBuildIdentity } from "./performance-contract.mjs"
+// Experimental compatibility branch: legacy collectors cannot emit the new provenance.
+assert.fail("Outside the fixed compatibility evaluation; use the frozen e49 worktree for this diagnostic until its toolchain is independently migrated")
 const duration=Number(process.env.FACILITY_SUSTAIN_SECONDS ?? 900)
 assert(duration>=15 && duration<=1800)
 const output=`build/facility/${(await verifiedBuildIdentity()).buildSettings.selectedRelease}`

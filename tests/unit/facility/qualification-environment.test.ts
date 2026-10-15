@@ -1,14 +1,14 @@
 // @vitest-environment node
 import { readFileSync } from "node:fs"
-import { createRequire } from "node:module"
+import { pathToFileURL } from "node:url"
 import { describe, expect, it } from "vitest"
-import lighthouseConfig from "lighthouse/core/config/default-config.js"
+import { qualificationRequire, QUALIFICATION_VERSIONS } from "../../../scripts/facility/qualification-toolchain.mjs"
 import {
   assertEnvironmentServing, assertQualificationBuild, assertQualificationEnvironment,
   evaluateEnvironmentSeo, qualificationEnvironment, qualificationOutcome,
 } from "../../../scripts/facility/qualification-environment.mjs"
 
-const require = createRequire(import.meta.url)
+const lighthouseConfig = (await import(pathToFileURL(qualificationRequire.resolve("lighthouse/core/config/default-config.js")).href)).default
 const origin = "https://gridninja-release-6ii00t6s2-holdini25s-projects.vercel.app"
 const stagingEnv = { FACILITY_QUALIFICATION_ENVIRONMENT: "protected-staging", FACILITY_BASE_URL: origin, FACILITY_HOSTED_ATTESTATION_FILE: "/private/attestation.json" }
 const publicEnv = { ...stagingEnv, FACILITY_QUALIFICATION_ENVIRONMENT: "public-production", FACILITY_BASE_URL: "https://gridninja.ai", FACILITY_PUBLIC_PRODUCTION_PINS_FILE: "/private/pins.json" }
@@ -34,7 +34,7 @@ function report() {
     scoreDisplayMode: ref.id === "structured-data" ? "manual" : "binary",
   }]))
   return {
-    lighthouseVersion: "12.6.1", finalUrl: `${origin}/contact`,
+    lighthouseVersion: "13.5.0", finalUrl: `${origin}/contact`,
     categories: { seo: { score: .69, auditRefs: structuredClone(refs) } }, audits,
     facilityEvidence: { documentResponse: { url: `${origin}/contact`, status: 200, headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noindex, nofollow, noarchive" as string | null } } },
   }
@@ -89,7 +89,8 @@ describe("qualification environment identity and prerequisites", () => {
 
 describe("protected staging SEO policy", () => {
   it("pins the installed Lighthouse version and complete default SEO reference contract", () => {
-    expect(JSON.parse(readFileSync(require.resolve("lighthouse/package.json"), "utf8")).version).toBe("12.6.1")
+    expect(QUALIFICATION_VERSIONS.lighthouse).toBe("13.5.0")
+    expect(JSON.parse(readFileSync(qualificationRequire.resolve("lighthouse/package.json"), "utf8")).version).toBe("13.5.0")
     expect(lighthouseConfig.categories?.seo.auditRefs).toEqual(refs)
   })
 
@@ -122,8 +123,10 @@ describe("protected staging SEO policy", () => {
   })
 
   it("rejects changed Lighthouse version and missing/nonfinite raw scores", () => {
-    const value = report(); value.lighthouseVersion = "12.8.0"
-    expect(evaluate(value).failures).toContainEqual(expect.stringContaining("12.6.1"))
+    for (const lighthouseVersion of ["12.6.1", "13.4.0", "13.5.1", "", undefined]) {
+      const value = report(); Object.assign(value, { lighthouseVersion })
+      expect(evaluate(value).failures).toContainEqual(expect.stringContaining("requires Lighthouse 13.5.0"))
+    }
     for (const score of [Number.NaN, Number.POSITIVE_INFINITY, -1, 2, null, undefined]) {
       const value = report(); Object.assign(value.categories.seo, { score })
       expect(evaluate(value).failures).toContainEqual(expect.stringContaining("raw SEO score"))
@@ -149,7 +152,7 @@ describe("protected staging SEO policy", () => {
 
   it("requires all other weighted applicable audits to pass, never null or error", () => {
     for (const { id } of refs.filter(ref => ref.id !== "is-crawlable" && ref.weight > 0)) {
-      for (const replacement of [{ score: 0 }, { score: null }, { score: Number.NaN }, { scoreDisplayMode: "error" }, { scoreDisplayMode: "informative" }, { errorMessage: "failed" }]) {
+      for (const replacement of [{ id: "different-audit" }, { score: 0 }, { score: null }, { score: Number.NaN }, { scoreDisplayMode: "error" }, { scoreDisplayMode: "informative" }, { scoreDisplayMode: "numeric" }, { scoreDisplayMode: undefined }, { errorMessage: "failed" }]) {
         const value = report(); Object.assign(value.audits[id], replacement)
         expect(evaluate(value).failures).not.toEqual([])
       }
@@ -162,12 +165,26 @@ describe("protected staging SEO policy", () => {
     expect(evaluate(manual).failures).not.toEqual([])
   })
 
+  it("requires the protected exception itself to remain a successful binary crawl-blocking audit", () => {
+    for (const replacement of [{ score: null }, { scoreDisplayMode: "notApplicable" }, { scoreDisplayMode: "numeric" }, { scoreDisplayMode: "error" }, { errorMessage: "failed" }]) {
+      const value = report(); Object.assign(value.audits["is-crawlable"], replacement)
+      expect(evaluate(value).failures).not.toEqual([])
+    }
+    for (const replacement of [{ scoreDisplayMode: "notApplicable" }, { scoreDisplayMode: "informative" }, { scoreDisplayMode: "binary" }, { errorMessage: "failed" }]) {
+      const value = report(); Object.assign(value.audits["structured-data"], replacement)
+      expect(evaluate(value).failures).not.toEqual([])
+    }
+  })
+
   it("permits only Lighthouse's legitimate NA audits with retained zero-weight refs", () => {
     for (const id of ["canonical", "robots-txt", "image-alt"]) {
       const value = report(); Object.assign(value.audits[id], { score: null, scoreDisplayMode: "notApplicable" })
       expect(evaluate(value).failures).not.toEqual([])
       value.categories.seo.auditRefs.find(ref => ref.id === id)!.weight = 0
       expect(evaluate(value).failures).toEqual([])
+      value.audits[id].errorMessage = "audit failed"
+      expect(evaluate(value).failures).not.toEqual([])
+      delete value.audits[id].errorMessage
       value.audits[id].score = 1
       expect(evaluate(value).failures).not.toEqual([])
     }
@@ -176,6 +193,18 @@ describe("protected staging SEO policy", () => {
       value.categories.seo.auditRefs.find(ref => ref.id === id)!.weight = 0
       expect(evaluate(value).failures).not.toEqual([])
     }
+  })
+
+  it("retains the raw public failure when legitimate NA reweighting changes the protected score", () => {
+    const value = report()
+    for (const id of ["canonical", "robots-txt", "image-alt"]) {
+      Object.assign(value.audits[id], { score: null, scoreDisplayMode: "notApplicable" })
+      value.categories.seo.auditRefs.find(ref => ref.id === id)!.weight = 0
+    }
+    value.categories.seo.score = .60
+    const original = structuredClone(value)
+    expect(evaluate(value)).toEqual({ failures: [], publicAcceptanceFailures: ["/contact: raw SEO 60 below public floor 100"] })
+    expect(value).toEqual(original)
   })
 })
 

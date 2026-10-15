@@ -90,6 +90,8 @@ async function revealStage(page) {
 }
 
 async function main() {
+  // This Node/legacy collector cannot claim the fixed Chrome qualification identity.
+  assert.fail("Outside the fixed compatibility evaluation; use the frozen e49 worktree for this diagnostic until its toolchain is independently migrated")
   const baseURL = localQueryBase(process.env.QA_BASE_URL ?? process.env.FACILITY_BASE_URL ?? "http://127.0.0.1:3000")
   const at = process.argv.indexOf("--out"), output = at < 0 ? `build/qa/query-startup-${new Date().toISOString().replace(/[:.]/g, "-")}` : process.argv[at + 1]
   assert(output, "--out needs a fresh directory")

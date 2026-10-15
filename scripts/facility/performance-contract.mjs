@@ -11,6 +11,7 @@ import { hostedFetch } from "./hosted-auth.mjs"
 import { qualificationEnvironment, assertQualificationBuild, assertQualificationEnvironment, assertEnvironmentServing } from "./qualification-environment.mjs"
 import { validatePublicAttestation, validatePublicProductionPins, publicBinding, verifyPublicServing, assertPublicServingPair, publicDocumentProof, assertPublicDocumentProof } from "./public-production.mjs"
 import { GIT_SOURCE_MODE, gitConfigBinding, assertGitCheckoutCommit } from "./git-source-binding.mjs"
+import { qualificationToolchainIdentity, assertQualificationToolchainIdentity } from "./qualification-toolchain.mjs"
 
 export const TRANSFER_BUDGET = BASE_TRANSFER_BUDGET
 export { routeTransferBudget }
@@ -20,12 +21,13 @@ let documentContext
 export const canonicalJson = value => JSON.stringify(value, (_, entry) => entry && !Array.isArray(entry) && typeof entry === "object" ? Object.fromEntries(Object.entries(entry).sort(([a], [b]) => a.localeCompare(b))) : entry)
 export const settingsDigest = value => digest(canonicalJson(value))
 
-async function filesAt(path) {
-  if (path.split("/").includes("__pycache__") || /\.(?:pyc|pyo)$/.test(path)) return []
+async function filesAt(path, excludeNodeModules = false) {
+  if (path.split("/").includes("__pycache__") || /\.(?:pyc|pyo)$/.test(path)
+    || (excludeNodeModules && path.replaceAll("\\", "/").split("/").includes("node_modules"))) return []
   const entry = await stat(path).catch(() => null)
   if (!entry) return []
   if (entry.isFile()) return [path]
-  return (await Promise.all((await readdir(path)).sort().map(name => filesAt(join(path, name))))).flat()
+  return (await Promise.all((await readdir(path)).sort().map(name => filesAt(join(path, name), excludeNodeModules)))).flat()
 }
 export async function sourceSnapshot(paths = SOURCE_PATHS, directory = ".", builtVercelConfig = null) {
   const hash = createHash("sha256")
@@ -100,9 +102,10 @@ export async function verifiedBuildIdentity() {
   return current
 }
 export async function provenance(browser, settings) {
+  const toolchain = await qualificationToolchainIdentity()
   const environment = await measurementEnvironment()
   const hosted = environment.name === "local" ? null : await hostedBuildAttestation()
-  return { schemaVersion: "facility-performance.v2", qualificationEnvironment: environment, ...await verifiedBuildIdentity(), harnessRevision: await harnessRevision(), ...(hosted ? { hosted: hostedBinding(hosted) } : {}), ...(environment.name === "public-production" ? { publicTarget: publicBinding(hosted, await publicProductionPins()) } : {}), browser, settings, settingsSha256: settingsDigest(settings) }
+  return { schemaVersion: "facility-performance.v2", qualificationEnvironment: environment, ...await verifiedBuildIdentity(), harnessRevision: await harnessRevision(), toolchain, ...(hosted ? { hosted: hostedBinding(hosted) } : {}), ...(environment.name === "public-production" ? { publicTarget: publicBinding(hosted, await publicProductionPins()) } : {}), browser, settings, settingsSha256: settingsDigest(settings) }
 }
 export async function measurementEnvironment() {
   const environment = qualificationEnvironment()
@@ -119,10 +122,13 @@ export async function publicProductionPins() {
   for (const [key, value] of Object.entries({ ...expectedSource, harnessRevision: await harnessRevision() })) assert.deepEqual(pins[key], value, `Public pins differ from measured source/harness: ${key}`)
   return pins
 }
-export async function harnessRevision() {
-  const harnessFiles = (await Promise.all(["scripts/facility", "scripts/cinematic", "lighthouserc.cjs", "scripts/seo/validate-lighthouse-budgets.mjs"].map(filesAt))).flat().sort()
+export async function harnessRevision(directory = ".") {
+  const requiredFiles = ["tools/qualification/package.json", "tools/qualification/package-lock.json", ".github/workflows/qualification-compatibility.yml"]
+  for (const path of requiredFiles) assert((await stat(join(directory, path)).catch(() => null))?.isFile(), `Missing required qualification harness file: ${path}`)
+  const paths = ["scripts/facility", "scripts/cinematic", "lighthouserc.cjs", "scripts/seo/validate-lighthouse-budgets.mjs", ...requiredFiles]
+  const harnessFiles = (await Promise.all(paths.map(path => filesAt(join(directory, path), true)))).flat().sort()
   const hash = createHash("sha256")
-  for (const path of harnessFiles.sort()) hash.update(path).update(await readFile(path))
+  for (const path of harnessFiles) hash.update(relative(directory, path).replaceAll("\\", "/")).update(await readFile(path))
   return hash.digest("hex")
 }
 export async function hostedBuildAttestation() {
@@ -169,6 +175,8 @@ export function assertLocalMeasurementOrigin(baseURL = process.env.FACILITY_BASE
 }
 export function assertSameBuild(actual, expected) {
   for (const key of ["schemaVersion", "sourceRevision", "buildId", "harnessRevision"]) assert.equal(actual?.[key], expected?.[key], `Missing or mixed provenance: ${key}`)
+  assert(actual?.toolchain && expected?.toolchain, "Missing qualification toolchain identity")
+  assertQualificationToolchainIdentity(actual?.toolchain, expected?.toolchain)
   assert.deepEqual(actual.releases, expected.releases, "Mixed release manifests")
   assert.deepEqual(actual.buildSettings, expected.buildSettings, "Mixed facility release/mode settings")
   assert.deepEqual(actual.hosted, expected.hosted, "Mixed local/hosted deployment provenance")
@@ -176,7 +184,9 @@ export function assertSameBuild(actual, expected) {
   if (expected.qualificationEnvironment.name === "public-production") assert(expected.publicTarget?.origin === expected.qualificationEnvironment.measurementOrigin && actual.publicTarget?.origin === expected.qualificationEnvironment.measurementOrigin, "Missing public alias deployment provenance")
   assert.deepEqual(actual.publicTarget, expected.publicTarget, "Mixed public alias deployment provenance")
   assert.equal(actual.settingsSha256, settingsDigest(actual.settings), "Report settings digest mismatch")
-  assert.equal(typeof actual.browser, "string", "Missing browser identity")
+  for (const record of [actual, expected]) assert(typeof record.browser === "string" && record.browser.trim(), "Missing browser identity")
+  assert.equal(actual.browser, expected.browser, "Mixed browser identities")
+  assert.equal(actual.browser, actual.toolchain.versions.chrome, "Browser contradicts qualification toolchain")
 }
 
 /** Keeps each redirect hop; all HTTP origins and partial failures are included. */

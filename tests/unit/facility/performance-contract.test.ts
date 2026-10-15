@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest"
 import { TransferLedger, assertCompleteTransfer, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertCadenceBudget, assertLighthouseProfile, assertSameBuild, settingsDigest, settleTransfers } from "../../../scripts/facility/performance-contract.mjs"
+import { qualificationToolchainFixture } from "./fixtures/qualification-toolchain"
 
 function provenanceFixture() {
   const settings = { profile: "desktop", freshBrowserProfile: true }
@@ -8,7 +9,7 @@ function provenanceFixture() {
     schemaVersion: "facility-performance.v2", sourceRevision: "source", buildId: "build", harnessRevision: "harness",
     releases: [{ release: "facility-v2", manifestSha256: "hash" }], buildSettings: { selectedRelease: "facility-v2", mode: "auto-desktop" },
     qualificationEnvironment: { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: "http://localhost:3000" },
-    browser: "149.0", settings, settingsSha256: settingsDigest(settings),
+    toolchain: qualificationToolchainFixture(), browser: "155.0.8059.79", settings, settingsSha256: settingsDigest(settings),
   }
 }
 
@@ -128,6 +129,31 @@ describe("performance evidence gates", () => {
     const missing = { ...expected, qualificationEnvironment: undefined }
     for (const [actual, reference] of [[missing, expected], [expected, missing], [missing, missing]]) {
       expect(() => assertSameBuild(actual, reference)).toThrow("Missing qualification environment")
+    }
+  })
+  it("rejects absent or changed toolchain identity even when both records omit it", () => {
+    const expected = provenanceFixture(), missing = { ...expected, toolchain: undefined }
+    for (const [actual, reference] of [[missing, expected], [expected, missing], [missing, missing]]) {
+      expect(() => assertSameBuild(actual, reference)).toThrow("toolchain identity")
+    }
+    for (const replacement of [
+      { lockSha256: "c".repeat(64) }, { manifestSha256: "c".repeat(64) },
+      { versions: { ...expected.toolchain.versions, lighthouse: "12.6.1" } },
+      { actualNode: "24.0.0" }, { resolvedPackages: {} },
+    ]) {
+      expect(() => assertSameBuild({ ...expected, toolchain: { ...expected.toolchain, ...replacement } }, expected)).toThrow()
+    }
+  })
+  it("requires exact nonempty browser identity on both records", () => {
+    const expected = provenanceFixture()
+    expect(() => assertSameBuild({ ...expected, browser: "154.0.0.0" }, expected)).toThrow("Mixed browser")
+    for (const browser of [undefined, null, "", " "]) {
+      const missing = { ...expected, browser }
+      for (const [actual, reference] of [[missing, expected], [expected, missing], [missing, missing]]) expect(() => assertSameBuild(actual, reference)).toThrow("Missing browser")
+    }
+    for (const browser of ["154.0.0.0", "Chrome/155.0.8059.79", "Node v22.23.2"]) {
+      const contradiction = { ...expected, browser }
+      expect(() => assertSameBuild(contradiction, contradiction)).toThrow("Browser contradicts qualification toolchain")
     }
   })
   it("rejects a different qualification environment or measurement origin for the same build", () => {

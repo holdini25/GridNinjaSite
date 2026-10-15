@@ -1,7 +1,11 @@
 // @vitest-environment node
+import { readFileSync } from "node:fs"
+import { pathToFileURL } from "node:url"
 import { describe, expect, it } from "vitest"
-import lighthouseConfig from "lighthouse/core/config/default-config.js"
 import { assertReadinessRunCount, evaluateLighthouseGroup } from "../../../scripts/facility/lighthouse-group-budget.mjs"
+import { qualificationRequire, QUALIFICATION_VERSIONS } from "../../../scripts/facility/qualification-toolchain.mjs"
+
+const lighthouseConfig: { categories: { seo: { auditRefs: Array<{ id: string; weight: number; group?: string }> } } } = (await import(pathToFileURL(qualificationRequire.resolve("lighthouse/core/config/default-config.js")).href)).default
 
 const environment = { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: "http://localhost:3101" }
 const options = (route = "/", profile = "mobile", buildSettings = {}) => ({ route, profile, buildSettings, environment })
@@ -26,9 +30,13 @@ function reports(route = "/", profile = "mobile", buildSettings = {}) {
 }
 
 describe("environment-specific group qualification", () => {
+  it("uses the separately pinned Facility Lighthouse configuration", () => {
+    expect(QUALIFICATION_VERSIONS.lighthouse).toBe("13.5.0")
+    expect(JSON.parse(readFileSync(qualificationRequire.resolve("lighthouse/package.json"), "utf8")).version).toBe("13.5.0")
+  })
   const staging = { ...environment, name: "protected-staging", measurementOrigin: "https://candidate-123.vercel.app" }
   const protectedReports = () => reports("/contact").map(report => ({
-    ...report, lighthouseVersion: "12.6.1", finalUrl: `${staging.measurementOrigin}/contact`,
+    ...report, lighthouseVersion: "13.5.0", finalUrl: `${staging.measurementOrigin}/contact`,
     categories: { ...report.categories, seo: { score: .69, auditRefs: structuredClone(lighthouseConfig.categories!.seo.auditRefs) } },
     audits: { ...report.audits, ...Object.fromEntries(lighthouseConfig.categories!.seo.auditRefs.map(({ id }) => [id, { id, score: id === "structured-data" ? null : id === "is-crawlable" ? 0 : 1, scoreDisplayMode: id === "structured-data" ? "manual" : "binary" }])) },
     facilityEvidence: { ...report.facilityEvidence, provenance: { ...report.facilityEvidence.provenance, qualificationEnvironment: staging }, documentResponse: { url: `${staging.measurementOrigin}/contact`, status: 200, headers: { "content-type": "text/html", "x-robots-tag": "noindex, nofollow" } } },
@@ -54,6 +62,14 @@ describe("environment-specific group qualification", () => {
     expect(() => evaluateLighthouseGroup(group, { ...opts, environment: { ...staging, name: "public-production", measurementOrigin: "https://gridninja.ai" } })).toThrow("environment")
     group[0].facilityEvidence.provenance.qualificationEnvironment = { ...staging, name: "local", measurementOrigin: "http://localhost:3101" }
     expect(() => evaluateLighthouseGroup(group, opts)).toThrow("environment")
+  })
+  it("rejects one old-version or failed SEO audit even when the five-run score median is unchanged", () => {
+    const oldVersion = protectedReports(); oldVersion[0].lighthouseVersion = "12.6.1"
+    expect(evaluateLighthouseGroup(oldVersion, opts).failures).toContainEqual(expect.stringContaining("requires Lighthouse 13.5.0"))
+    const auditFailure = protectedReports(); auditFailure[0].audits["document-title"].score = 0
+    const result = evaluateLighthouseGroup(auditFailure, opts)
+    expect(result.medians.seo).toBe(69)
+    expect(result.failures).toContainEqual(expect.stringContaining("Required document-title audit did not pass"))
   })
 })
 

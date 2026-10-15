@@ -56,7 +56,7 @@ export function assertQualificationEnvironment(actual, expected) {
   assert.deepEqual(actual, expected, "Missing or mixed qualification environment")
 }
 
-// Pinned to installed lighthouse/core/config/default-config.js (12.6.1).
+// Pinned to tools/qualification's Lighthouse default-config.js (13.5.0).
 // Scoring forces legitimately notApplicable audits to weight 0 while retaining
 // their reference. No absent/extra/duplicated reference or arbitrary NA passes.
 const SEO_REFS = [
@@ -90,7 +90,7 @@ export function evaluateEnvironmentSeo(report, { environment, route, seoFloor })
   const score = report?.categories?.seo?.score
   if (!Number.isFinite(score) || score < 0 || score > 1) fail("Missing valid raw SEO score")
   else if (score * 100 < seoFloor) publicAcceptanceFailures.push(`${route}: raw SEO ${score * 100} below public floor ${seoFloor}`)
-  if (report?.lighthouseVersion !== "12.6.1") fail("Protected SEO contract requires Lighthouse 12.6.1")
+  if (report?.lighthouseVersion !== "13.5.0") fail("Protected SEO contract requires Lighthouse 13.5.0")
   const document = report?.facilityEvidence?.documentResponse
   const expectedUrl = `${environment.measurementOrigin}${route}`
   if (report?.finalUrl !== expectedUrl || document?.url !== expectedUrl || document?.status !== 200

@@ -1,6 +1,8 @@
 import assert from "node:assert/strict"
 import { mkdir, rm, writeFile } from "node:fs/promises"
 import { chromium, devices } from "@playwright/test"
+import { qualificationPlaywrightOptions } from "./qualification-playwright.mjs"
+import { assertQualificationBrowserVersion } from "./qualification-browser.mjs"
 import { assertCompleteTransfer, assertCadenceBudget, assertFrameBudget, assertMeasurementServingPair, assertRendererBudget, assertSettlementEvidence, collectTransfers, isProtectedMeasurement, measurementEnvironment, provenance, settleTransfers, verifiedBuildIdentity, verifyMeasurementDocument, verifyMeasurementServing } from "./performance-contract.mjs"
 import { authorizeHostedContext, redactHostedSecrets } from "./hosted-auth.mjs"
 import { measureCinematicPage } from "../cinematic/measure-page.mjs"
@@ -21,9 +23,10 @@ const runCount = Number(process.env.FACILITY_RUNS ?? 5)
 assert(Number.isInteger(runCount) && runCount >= 1 && runCount <= 5)
 const headed = process.env.FACILITY_HEADED === "1"
 const angle = process.env.FACILITY_ANGLE
-const launchSettings = { headless: !headed, channel: process.env.FACILITY_CHROME_CHANNEL ?? "chrome", ...(angle === "metal" ? { args: ["--use-angle=metal", "--use-gl=angle"], ignoreDefaultArgs: ["--use-angle=swiftshader", "--disable-gpu"] } : {}) }
+const launchSettings = await qualificationPlaywrightOptions({ headless: !headed, angle })
 await rm(scope.output, { force: true })
 browser = await chromium.launch(launchSettings)
+assertQualificationBrowserVersion(browser.version())
 const settings = { baseURL, runCount, qualificationEnvironment, freshContextEveryRun: true, cacheDisabled: true, settleQuietMs: 750, settleTimeoutMs: 15_000, readinessTimeoutMs: 12_000, pauseSettleTimeoutMs: 1_000, pauseIdleQuietMs: 250, pauseObservationMs: 500, desktopViewport: { width: 1440, height: 1100 }, mobileDevice: "Pixel 5", capabilityFps: 60, ambientFps: 30, capabilityFrameLimitsMs: { desktop: 20, mobile: 34 }, launch: launchSettings }
 settings.measurementScope = scope.name
 settings.performanceMatrix = matrix.name

@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest"
 import { settingsDigest } from "../../../scripts/facility/performance-contract.mjs"
 import { STARTUP_PROFILES, STARTUP_ROUTES, STARTUP_RUN_COUNT, startupRunName, summarizeStartupEvidence } from "../../../scripts/facility/startup-gate.mjs"
+import { qualificationToolchainFixture } from "./fixtures/qualification-toolchain"
 
 const measuredAt = "2026-09-24T12:00:00.000Z"
 const buildRecordedAt = "2026-09-24T11:55:00.000Z"
@@ -20,13 +21,13 @@ const collectorSettings = {
 function makeReport(profile: string, route: string, run: number) {
   const settings = { ...collectorSettings[profile as keyof typeof collectorSettings], throttlingMethod: "simulate" }
   const provenance = {
-    schemaVersion: "facility-performance.v2", ...identity, harnessRevision: "harness", browser: "154.0",
+    schemaVersion: "facility-performance.v2", ...identity, harnessRevision: "harness", toolchain: qualificationToolchainFixture(), browser: "155.0.8059.79",
     qualificationEnvironment: { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: baseURL },
     settings: { profile, settings, freshBrowserProfile: true },
     settingsSha256: settingsDigest({ profile, settings, freshBrowserProfile: true }),
   }
   return {
-    lighthouseVersion: "12.6.1",
+    lighthouseVersion: "13.5.0",
     requestedUrl: `${baseURL}${route}`, finalUrl: `${baseURL}${route}`, configSettings: settings,
     facilityEvidence: { provenance, route, run, measuredAt: "2026-09-24T12:01:00.000Z", complete: true },
     categories: { performance: { score: 0.98 }, accessibility: { score: 1 }, "best-practices": { score: 1 } },

@@ -3,11 +3,13 @@ import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
-import lighthouse, { desktopConfig } from "lighthouse"
-import { launch } from "chrome-launcher"
+import { loadQualificationToolchain, QUALIFICATION_CATEGORIES } from "./qualification-toolchain.mjs"
+import { launchQualifiedChrome, assertQualificationBrowserVersion } from "./qualification-browser.mjs"
+import { assertNativeLcpEvidence } from "./native-lcp-evidence.mjs"
 import { provenance, verifiedBuildIdentity, verifyMeasurementServing, measurementEnvironment, isProtectedMeasurement, verifyMeasurementDocument, assertMeasurementServingPair } from "./performance-contract.mjs"
 import { authorizeHostedChrome, redactHostedSecrets } from "./hosted-auth.mjs"
 import { captureValidLighthouseReport } from "./lighthouse-capture.mjs"
+import { preserveLighthouseArtifacts, lighthouseArtifactFailure } from "./lighthouse-artifacts.mjs"
 import { performanceMatrix, lighthouseGroups, lighthousePriorityGroups, lighthouseSlug } from "./lighthouse-matrix.mjs"
 import { acquireComputeLock } from "./compute-lock.mjs"
 import { evaluateLighthouseGroup } from "./lighthouse-group-budget.mjs"
@@ -54,6 +56,7 @@ async function graphicsBackend(endpoint) {
     })
   })
 }
+const { lighthouse, desktopConfig, launch, traceProcessor } = await loadQualificationToolchain()
 const initialIdentity = await verifiedBuildIdentity()
 const environment = await measurementEnvironment()
 const index = { measuredAt: new Date().toISOString(), qualificationEnvironment: environment, matrix: matrix.name, diagnostic: diagnostic || priorityOnly, priorityOnly, reviewedRouteCaptures: matrix.reviewedRoutes.length * matrix.profiles.length * matrix.runs, requiredCaptures: matrix.routes.length * matrix.profiles.length * matrix.runs, result: "incomplete", runs: [] }
@@ -82,24 +85,43 @@ try {
       const attempt = { route, profile, run, output, complete: false, captures: [] }
       index.runs.push(attempt)
       const chromeFlags = ["--headless", ...(angle ? ["--use-angle=metal", "--use-gl=angle"] : [])]
-      let browser, graphics
+      let browser, graphics, launchEvidence
+      const preserveCapture = async (invalid, number, policy = {}) => {
+        const capture = attempt.captures.find(item => item.number === number)
+        assert(capture?.rawEvidence?.complete, "Capture evidence must be saved before retry or policy validation")
+        Object.assign(capture, policy)
+        if (policy.policyFailure || policy.shutdownFailure) capture.result = "invalid-policy"
+        try {
+          capture.provenance = await provenance(browser, { profile, settings: invalid?.lhr?.configSettings ?? null, freshBrowserProfile: true, chromeFlags, launch: launchEvidence })
+        } catch (error) {
+          capture.provenanceFailure = error instanceof Error ? error.message : String(error)
+          // The capture policy helper will rethrow its original policy error.
+          // Failed provenance on an otherwise retryable capture stops collection.
+          if (!policy.policyFailure && !policy.shutdownFailure) throw error
+        }
+      }
       const result = await captureValidLighthouseReport(async number => {
         const capture = { number, freshBrowserProfile: true, startedAt: new Date().toISOString(), result: "incomplete" }
         attempt.captures.push(capture)
         const userDataDir = await mkdtemp(join(tmpdir(), "gridninja-lighthouse-"))
-        let chrome
+        let chrome, capturedResult, lighthouseReturned = false, collectionFailed = false
         try {
-          chrome = await launch({ chromeFlags, userDataDir })
+          chrome = await launchQualifiedChrome({ launch, chromePath: process.env.FACILITY_CHROME_EXECUTABLE_PATH, userDataDir, angle })
+          launchEvidence = chrome.qualificationLaunch
+          capture.launch = launchEvidence
           const versionResponse = await fetch(`http://localhost:${chrome.port}/json/version`)
           const version = await versionResponse.json()
-          browser = String(version.Browser).replace(/^Chrome\//, "")
+          browser = assertQualificationBrowserVersion(version.Browser)
           capture.browser = browser
           if (isProtectedMeasurement()) await authorizeHostedChrome(version.webSocketDebuggerUrl, new URL(baseURL).origin)
           const settings = { ...config.ci.collect.settings, ...(profile === "desktop" ? desktopConfig.settings : { formFactor: "mobile" }) }
           if (diagnostic) settings.throttlingMethod = "devtools"
+          settings.onlyCategories = [...QUALIFICATION_CATEGORIES]
           delete settings.chromeFlags
           delete settings.preset
           const result = await lighthouse(baseURL + route, { port: chrome.port, output: "json", logLevel: "error" }, { extends: "lighthouse:default", settings })
+          capturedResult = result
+          lighthouseReturned = true
           capture.result = result?.lhr && !result.lhr.runtimeError ? "valid" : "invalid"
           capture.runtimeError = result?.lhr?.runtimeError ?? null
           if (capture.result === "valid") {
@@ -108,28 +130,58 @@ try {
           }
           return result
         } catch (error) {
+          collectionFailed = true
           capture.result = "error"
           capture.error = error instanceof Error ? error.message : String(error)
           throw error
         } finally {
           capture.finishedAt = new Date().toISOString()
-          try { await chrome?.kill() } finally { await rm(userDataDir, { recursive: true, force: true }) }
+          let shutdownFailure, preservationFailure, cleanupFailure
+          try { await chrome?.kill() }
+          catch (error) {
+            shutdownFailure = error
+            capture.shutdownFailure = error instanceof Error ? error.message : String(error)
+            capture.result = "invalid-policy"
+          }
+          if (lighthouseReturned) {
+            const validReport = capturedResult?.lhr && !capturedResult.lhr.runtimeError
+            const prefix = validReport
+              ? `${directory}/artifacts/${slug}-${run}`
+              : `${directory}/invalid-captures/${slug}-${run}-attempt-${number}`
+            const paths = {
+              report: `${prefix}-${validReport ? "raw-report" : "report"}.json`,
+              trace: `${prefix}-trace.json`, network: `${prefix}-network.json`,
+            }
+            try {
+              capture.rawEvidence = await preserveLighthouseArtifacts(capturedResult, paths, evidenceJson)
+              capture.preserved = Object.fromEntries(Object.entries(capture.rawEvidence.files)
+                .filter(([, file]) => file.status === "written").map(([name, file]) => [name, file.path]))
+              preservationFailure = lighthouseArtifactFailure(capture.rawEvidence)
+            } catch (error) { preservationFailure = error instanceof Error ? error : new Error(String(error)) }
+            if (preservationFailure) {
+              capture.preservationFailure = preservationFailure instanceof Error ? preservationFailure.message : String(preservationFailure)
+              capture.result = "error"
+            }
+          }
+          // A rejected launch may own an unobserved child. Retain its profile.
+          if (chrome && !shutdownFailure) {
+            try { await rm(userDataDir, { recursive: true, force: true }) }
+            catch (error) {
+              cleanupFailure = error
+              capture.cleanupFailure = error instanceof Error ? error.message : String(error)
+            }
+          }
+          // Secondary disk/cleanup failures remain in the capture receipt and
+          // cannot replace the primary shutdown or collection failure.
+          if (shutdownFailure) throw shutdownFailure
+          if (!collectionFailed && preservationFailure) throw preservationFailure
+          if (!collectionFailed && cleanupFailure) throw cleanupFailure
         }
-      }, async (invalid, number) => {
-        const prefix = `${directory}/invalid-captures/${slug}-${run}-attempt-${number}`
-        await mkdir(`${directory}/invalid-captures`, { recursive: true })
-        await writeFile(`${prefix}-report.json`, `${evidenceJson(invalid?.lhr ?? { missingReport: true }, 2)}\n`)
-        await writeFile(`${prefix}-trace.json`, evidenceJson(invalid?.artifacts?.Trace ?? null))
-        await writeFile(`${prefix}-network.json`, evidenceJson(invalid?.artifacts?.DevtoolsLog ?? null))
-        const capture = attempt.captures.at(-1)
-        capture.preserved = { report: `${prefix}-report.json`, trace: `${prefix}-trace.json`, network: `${prefix}-network.json` }
-        capture.provenance = await provenance(browser, { profile, settings: invalid?.lhr?.configSettings ?? null, freshBrowserProfile: true, chromeFlags })
+      }, preserveCapture, result => {
+        result.nativeLcpEvidence = assertNativeLcpEvidence(result.artifacts.Trace, traceProcessor)
       })
-      await mkdir(`${directory}/artifacts`, { recursive: true })
-      await writeFile(`${directory}/artifacts/${slug}-${run}-trace.json`, evidenceJson(result.artifacts.Trace))
-      await writeFile(`${directory}/artifacts/${slug}-${run}-network.json`, evidenceJson(result.artifacts.DevtoolsLog))
       const hardwareAccepted = !angle || (graphics.status === "available" && /Apple M5.*Metal|Metal.*Apple M5/i.test(graphics.renderer) && !/SwiftShader|llvmpipe|software/i.test(graphics.renderer))
-      const evidence = { provenance: await provenance(browser, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags }), graphics, route, run, measuredAt: new Date().toISOString(), measurementComplete: true, complete: hardwareAccepted }
+      const evidence = { provenance: await provenance(browser, { profile, settings: result.lhr.configSettings, freshBrowserProfile: true, chromeFlags, launch: launchEvidence }), nativeLcpEvidence: result.nativeLcpEvidence, graphics, route, run, measuredAt: new Date().toISOString(), measurementComplete: true, complete: hardwareAccepted }
       try {
         evidence.documentResponse = lighthouseDocumentResponse(result)
         evidence.documentIdentity = await verifyMeasurementDocument(result.artifacts.MainDocumentContent, evidence.documentResponse)
@@ -140,7 +192,7 @@ try {
       harnessRevision ??= evidence.provenance.harnessRevision
       assert.equal(evidence.provenance.harnessRevision, harnessRevision, "Harness changed during Lighthouse collection")
       const report = { ...result.lhr, facilityEvidence: evidence }
-      await writeFile(output, `${evidenceJson(report, 2)}\n`)
+      await writeFile(output, `${evidenceJson(report, 2)}\n`, { flag: "wx" })
       if (stopOnFailure || priorityOnly) group.push(report)
       attempt.graphics = graphics; attempt.complete = evidence.complete
       assert(hardwareAccepted, `M5 Metal requested; actual backend: ${graphics.renderer}; ${graphics.error ?? ""}`)
