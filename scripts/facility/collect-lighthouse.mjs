@@ -1,7 +1,8 @@
 import assert from "node:assert/strict"
+import { serializeLaunchError } from "./qualification-launch-diagnostics.mjs"
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises"
 import { createRequire } from "node:module"
-import { tmpdir } from "node:os"
+import { homedir, tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
 import { loadQualificationToolchain, QUALIFICATION_CATEGORIES } from "./qualification-toolchain.mjs"
 import { launchQualifiedChrome, assertQualificationBrowserVersion } from "./qualification-browser.mjs"
@@ -133,6 +134,8 @@ try {
           collectionFailed = true
           capture.result = "error"
           capture.error = error instanceof Error ? error.message : String(error)
+          capture.errorDetails = serializeLaunchError(error, { paths: { profile: userDataDir, binary: process.env.FACILITY_CHROME_EXECUTABLE_PATH, workspace: process.cwd(), home: homedir() } })
+          if (error?.qualificationLaunchDiagnostics) capture.launchFailure = error.qualificationLaunchDiagnostics
           throw error
         } finally {
           capture.finishedAt = new Date().toISOString()
@@ -226,6 +229,7 @@ try {
 } catch (error) {
   index.result = "fail"
   index.failure = error instanceof Error ? error.message : String(error)
+  if (error?.qualificationLaunchDiagnostics) index.launchFailure = error.qualificationLaunchDiagnostics
   process.exitCode = 1
 } finally {
   try {

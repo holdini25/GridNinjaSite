@@ -140,6 +140,16 @@ describe("qualified launcher lifecycle without a real browser", () => {
     await expect(launchQualifiedChrome({ ...contract, launch })).rejects.toMatchObject({ qualificationShutdownUncertain: true })
     expect(launch).toHaveBeenCalledTimes(1)
   })
+  it.each([false, true])("preserves pre-readiness diagnostics and observed close=%s without retry", async closed => {
+    const diagnostics = { process: { closeObserved: closed }, error: { message: "original readiness error" } }
+    const cause = Object.assign(new Error("launch rejected"), { qualificationLaunchDiagnostics: diagnostics })
+    const launch = vi.fn(async () => { throw cause })
+    const error = await launchQualifiedChrome({ ...contract, launch }).catch(error => error)
+    expect(error.cause).toBe(cause)
+    expect(error.qualificationLaunchDiagnostics).toBe(diagnostics)
+    expect(error.qualificationShutdownUncertain).toBe(!closed)
+    expect(launch).toHaveBeenCalledTimes(1)
+  })
   it("checks canonical executable/profile paths and compatible explicit selectors", async () => {
     vi.mocked(realpath).mockImplementation(async value => value === "/alias/chrome" ? binary : value === "/alias/profile" ? profile : String(value))
     const { launch } = fixture()

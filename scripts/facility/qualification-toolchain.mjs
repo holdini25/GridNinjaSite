@@ -1,4 +1,5 @@
 import assert from "node:assert/strict"
+import { createQualificationLauncher } from "./qualification-launcher.mjs"
 import { createHash } from "node:crypto"
 import { readFile, realpath } from "node:fs/promises"
 import { createRequire } from "node:module"
@@ -68,5 +69,5 @@ export async function loadQualificationToolchain() {
     import(pathToFileURL(qualificationRequire.resolve("lighthouse/core/config/default-config.js")).href),
     import(pathToFileURL(qualificationRequire.resolve("lighthouse/core/lib/lh-trace-processor.js")).href),
   ])
-  return { lighthouse: lighthouse.default, desktopConfig: lighthouse.desktopConfig, launch: launcher.launch, puppeteerCore: puppeteer.default, defaultConfig: config.default, traceProcessor: traceProcessor.default, versions: QUALIFICATION_VERSIONS, identity }
+  return { lighthouse: lighthouse.default, desktopConfig: lighthouse.desktopConfig, launch: createQualificationLauncher(launcher.Launcher), puppeteerCore: puppeteer.default, defaultConfig: config.default, traceProcessor: traceProcessor.default, versions: QUALIFICATION_VERSIONS, identity }
 }

@@ -45,7 +45,7 @@ export function assertQualificationBrowserVersion(version, env = process.env) {
   return actual
 }
 
-/** @typedef {{pid: number, port: number, process: import('node:child_process').ChildProcess, kill: () => void}} LaunchedChrome */
+/** @typedef {{pid: number, port: number, process: import('node:child_process').ChildProcess, kill: () => void, qualificationProcess?: {closeObserved: boolean}}} LaunchedChrome */
 /** @typedef {FlagOptions & {chromePath: string, userDataDir: string}} ArgvContract */
 /** Check the actual spawned argv, not merely the options supplied to launch.
  * Paths must already be canonical. Dynamic fields are checked exactly once.
@@ -74,10 +74,10 @@ function shutdownError(message, cause, closed) {
  * or starting another capture. Repeated callers share the same terminal result.
  * @param {LaunchedChrome} chrome @param {number} timeoutMs
  */
-function observedShutdown(chrome, timeoutMs) {
+export function observedShutdown(chrome, timeoutMs) {
   const child = chrome?.process
   assert(child && typeof child.on === "function" && typeof child.off === "function", "Missing observable Chrome child process")
-  let closed = false, childError
+  let closed = chrome.qualificationProcess?.closeObserved === true, childError
   let notify = () => {}
   const onClose = () => { closed = true; notify() }
   const onError = error => { childError = error; notify() }
@@ -141,9 +141,10 @@ export async function launchQualifiedChrome({ launch, chromePath, userDataDir, a
     chrome = await launch({ ignoreDefaultFlags: true, chromePath: binary, userDataDir: profile,
       chromeFlags, startingUrl: "about:blank", port: 0 })
   } catch (error) {
-    // The public launch API does not expose a possibly spawned child on failure.
-    // Never retry or remove its profile while process ownership is uncertain.
-    throw shutdownError("Chrome launch failed without a confirmed process shutdown", error, false)
+    // The adapter supplies pre-readiness observation when available. Preserve its
+    // evidence and never treat a rejected launch alone as confirmed shutdown.
+    const failure = shutdownError("Chrome launch rejected before readiness", error, error?.qualificationLaunchDiagnostics?.process?.closeObserved === true)
+    throw Object.assign(failure, { qualificationLaunchDiagnostics: error?.qualificationLaunchDiagnostics })
   }
   let kill
   try { kill = observedShutdown(chrome, shutdownTimeoutMs) }
@@ -153,7 +154,7 @@ export async function launchQualifiedChrome({ launch, chromePath, userDataDir, a
   }
   try {
     const effectiveArgs = assertQualificationChromeArgv(chrome, { chromePath: binary, userDataDir: profile, platform, angle, env })
-    return { ...chrome, kill, qualificationLaunch: { platform, chromePath: binary, effectiveArgs } }
+    return { ...chrome, kill, qualificationLaunch: { platform, chromePath: binary, effectiveArgs, ...(chrome.qualificationProcess ? { process: chrome.qualificationProcess } : {}) } }
   } catch (error) {
     try { await kill() }
     catch (shutdownFailure) {
