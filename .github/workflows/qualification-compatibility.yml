@@ -1,350 +1,715 @@
-name: Qualification host policy diagnostic
+name: Scoped sandbox trial and fixed qualification
 
-# Diagnostic-only replacement. Original matrix workflow is preserved at 700228b.
-# One approved push; no automatic rerun or restoration of the measurement job.
+# One reviewed branch push authorizes one evaluation. Workflow reruns are refused.
+# This is software CI evidence, never hosted/public or physical-device acceptance.
 on:
   push:
     branches: [codex/qualification-compatibility]
 
-permissions: {}
+permissions:
+  contents: read
 
 concurrency:
   group: qualification-compatibility-codex-qualification-compatibility
   cancel-in-progress: false
 
 jobs:
-  host-policy-snapshot:
+  fixed-software-matrix:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 90
     env:
-      GN_PARENT: ${{ github.event.before }}
-      GN_WORKFLOW_SHA: ${{ github.workflow_sha }}
+      FACILITY_BASE_URL: http://localhost:3000
+      FACILITY_QUALIFICATION_ENVIRONMENT: local
+      FACILITY_MEASUREMENT_SCOPE: ci-functional
+      FACILITY_PERFORMANCE_MATRIX: premium-civic
+      FACILITY_RUNS: "5"
+      FACILITY_EXPECTED_CHROME_VERSION: "155.0.8059.79"
+      FACILITY_PERFORMANCE_DIR: build/facility/qualification-compatibility
+      FACILITY_REPORT_DIR: build/facility/qualification-compatibility
+      NEXT_PUBLIC_TURNSTILE_SITE_KEY: ""
+      GN_COMPATIBILITY_EVIDENCE: build/qa/qualification-compatibility
+      GN_TRIAL_PARENT: ${{ github.event.before }}
+      GN_TRIAL_WORKFLOW_SHA: ${{ github.workflow_sha }}
     steps:
-      - name: Read bounded and filtered host-policy facts once
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22.23.2"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            tools/qualification/package-lock.json
+      - name: Bind the one permitted run to its exact source
+        id: source
+        env:
+          EXPECTED_HEAD: ${{ github.sha }}
         shell: bash
         run: |
-          /usr/bin/python3 -I - <<'PY'
-          """One approved host-policy snapshot. No browser, policy write, or qualification."""
-          import collections
-          import hashlib
-          import json
-          import os
-          import re
-          import selectors
-          import signal
-          import subprocess
-          import sys
-          import time
-          from datetime import datetime, timezone
-
-          # Replaced by the builder with the exact reviewed argv, not workflow input.
-          COMMANDS = [{'id': 'kernel', 'argv': ['uname', '-srvmo'], 'maxOutputBytes': 16384}, {'id': 'uid', 'argv': ['id', '-u'], 'maxOutputBytes': 16384}, {'id': 'gid', 'argv': ['id', '-g'], 'maxOutputBytes': 16384}, {'id': 'groups', 'argv': ['id', '-G'], 'maxOutputBytes': 16384}, {'id': 'image-and-run', 'argv': ['printenv', 'ImageOS', 'ImageVersion', 'RUNNER_OS', 'RUNNER_ARCH', 'RUNNER_ENVIRONMENT', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'GITHUB_SHA', 'GITHUB_REF', 'GITHUB_EVENT_NAME'], 'maxOutputBytes': 16384}, {'id': 'os-release', 'argv': ['head', '-c', '8192', '--', '/etc/os-release'], 'maxOutputBytes': 8192}, {'id': 'apparmor-userns', 'argv': ['head', '-c', '4096', '--', '/proc/sys/kernel/apparmor_restrict_unprivileged_userns'], 'maxOutputBytes': 4096}, {'id': 'unprivileged-userns', 'argv': ['head', '-c', '4096', '--', '/proc/sys/kernel/unprivileged_userns_clone'], 'maxOutputBytes': 4096}, {'id': 'namespace-limit', 'argv': ['head', '-c', '4096', '--', '/proc/sys/user/max_user_namespaces'], 'maxOutputBytes': 4096}, {'id': 'apparmor-enabled', 'argv': ['head', '-c', '4096', '--', '/sys/module/apparmor/parameters/enabled'], 'maxOutputBytes': 4096}, {'id': 'active-lsm', 'argv': ['head', '-c', '8192', '--', '/sys/kernel/security/lsm'], 'maxOutputBytes': 8192}, {'id': 'self-profile', 'argv': ['head', '-c', '8192', '--', '/proc/self/attr/current'], 'maxOutputBytes': 8192}, {'id': 'self-apparmor-profile', 'argv': ['head', '-c', '8192', '--', '/proc/self/attr/apparmor/current'], 'maxOutputBytes': 8192}, {'id': 'loaded-profiles', 'argv': ['head', '-c', '262144', '--', '/sys/kernel/security/apparmor/profiles'], 'maxOutputBytes': 262144}, {'id': 'chrome-profile', 'argv': ['head', '-c', '65536', '--', '/etc/apparmor.d/chrome'], 'maxOutputBytes': 65536}, {'id': 'chrome-local-profile', 'argv': ['head', '-c', '65536', '--', '/etc/apparmor.d/local/chrome'], 'maxOutputBytes': 65536}, {'id': 'candidate-profile', 'argv': ['head', '-c', '65536', '--', '/etc/apparmor.d/gridninja-cft-155'], 'maxOutputBytes': 65536}, {'id': 'abi4', 'argv': ['head', '-c', '65536', '--', '/etc/apparmor.d/abi/4.0'], 'maxOutputBytes': 65536}, {'id': 'self-process-restrictions', 'argv': ['awk', '/^(Uid|Gid|Groups|Cap(Inh|Prm|Eff|Bnd|Amb)|NoNewPrivs|Seccomp|Seccomp_filters):/', '/proc/self/status'], 'maxOutputBytes': 16384}, {'id': 'aa-enabled', 'argv': ['aa-status', '--enabled'], 'maxOutputBytes': 16384}, {'id': 'parser-version', 'argv': ['apparmor_parser', '--version'], 'maxOutputBytes': 16384}, {'id': 'protected-path-stat', 'argv': ['stat', '-c', '%n|%F|%u:%g|%a', '--', '/', '/var', '/var/lib', '/var/lib/gridninja-cft', '/var/lib/gridninja-cft/155.0.8059.79', '/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64', '/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64/chrome'], 'maxOutputBytes': 16384}, {'id': 'protected-path-resolution', 'argv': ['namei', '-l', '-x', '--', '/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64/chrome'], 'maxOutputBytes': 16384}, {'id': 'protected-path-acl', 'argv': ['getfacl', '-p', '--', '/', '/var', '/var/lib', '/var/lib/gridninja-cft', '/var/lib/gridninja-cft/155.0.8059.79', '/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64', '/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64/chrome'], 'maxOutputBytes': 16384}, {'id': 'mount-root', 'argv': ['findmnt', '--kernel', '--json', '--target', '/', '--output', 'TARGET,SOURCE,FSTYPE,OPTIONS'], 'maxOutputBytes': 16384}, {'id': 'mount-var', 'argv': ['findmnt', '--kernel', '--json', '--target', '/var', '--output', 'TARGET,SOURCE,FSTYPE,OPTIONS'], 'maxOutputBytes': 16384}, {'id': 'mount-varlib', 'argv': ['findmnt', '--kernel', '--json', '--target', '/var/lib', '--output', 'TARGET,SOURCE,FSTYPE,OPTIONS'], 'maxOutputBytes': 16384}, {'id': 'elevated-loaded-profiles', 'argv': ['sudo', '-n', '/usr/bin/head', '-c', '262144', '--', '/sys/kernel/security/apparmor/profiles'], 'maxOutputBytes': 262144}, {'id': 'elevated-active-lsm', 'argv': ['sudo', '-n', '/usr/bin/head', '-c', '8192', '--', '/sys/kernel/security/lsm'], 'maxOutputBytes': 8192}]
-          ALLOWLIST_SHA256 = "4de3f5f1457164aedc326b302470efc3342d09eabf784ff1e4869f55b7a5edb5"
-          PARENT = "700228b0e04932ea01b72eef45ea205cae513ca2"
-          REF = "refs/heads/codex/qualification-compatibility"
-          LIMIT = 1048576
-          RESERVE = 4096
-          PATHS = ["/", "/var", "/var/lib", "/var/lib/gridninja-cft",
-                   "/var/lib/gridninja-cft/155.0.8059.79",
-                   "/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64",
-                   "/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64/chrome"]
-          META_RULES = {
-              "ImageOS": r"ubuntu[0-9]{2,4}", "ImageVersion": r"[0-9]{8}\.[0-9]{1,8}\.[0-9]{1,8}",
-              "RUNNER_OS": r"Linux", "RUNNER_ARCH": r"X64", "RUNNER_ENVIRONMENT": r"github-hosted",
-              "GITHUB_RUN_ID": r"[0-9]{1,20}", "GITHUB_RUN_ATTEMPT": r"1",
-              "GITHUB_SHA": r"[a-f0-9]{40}", "GITHUB_REF": re.escape(REF), "GITHUB_EVENT_NAME": r"push",
+          node --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+          import { execFileSync } from "node:child_process";
+          import { createHash } from "node:crypto";
+          import { mkdir, readFile, writeFile } from "node:fs/promises";
+          const directory = process.env.GN_COMPATIBILITY_EVIDENCE;
+          await mkdir("build/qa", { recursive: true });
+          await mkdir(directory);
+          const git = args => execFileSync("git", args, { encoding: "utf8" }).trim();
+          const baseline = "e49a16e9f7f5c5000eea56bafa1c7c3bf75fa1eb";
+          const receipt = {
+            classification: "prespecified-compatibility-software-evaluation",
+            publicAcceptance: false, hardwareQualification: false,
+            event: process.env.GITHUB_EVENT_NAME, ref: process.env.GITHUB_REF,
+            runId: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT,
+            expectedHead: process.env.EXPECTED_HEAD, head: git(["rev-parse", "HEAD"]),
+            baseline, tree: git(["rev-parse", "HEAD^{tree}"]), node: process.version,
+            requestedMatrix: { lighthouse: 140, fullScroll: 140, readiness: 20, runs: 5 },
+            replacementPolicy: "Existing capture policy unchanged; no workflow or collector rerun.",
+            recordedAt: new Date().toISOString(),
+          };
+          await writeFile(directory + "/source-request.json", JSON.stringify(receipt, null, 2) + "\n", { flag: "wx" });
+          assert.equal(receipt.event, "push");
+          assert.equal(receipt.ref, "refs/heads/codex/qualification-compatibility");
+          assert.equal(receipt.runAttempt, "1", "An unchanged workflow rerun is not authorized");
+          assert.match(receipt.expectedHead, /^[a-f0-9]{40}$/);
+          assert.equal(receipt.head, receipt.expectedHead);
+          assert.equal(process.env.GN_TRIAL_PARENT, "741c29f79bb3ead5ff832ff86ed813f59b31634d");
+          assert.equal(process.env.GN_TRIAL_WORKFLOW_SHA, receipt.head);
+          assert.equal(git(["rev-parse", "HEAD^"]), process.env.GN_TRIAL_PARENT);
+          assert.equal(process.version, "v22.23.2");
+          assert.equal(process.platform, "linux");
+          assert.equal(process.arch, "x64");
+          git(["merge-base", "--is-ancestor", baseline, "HEAD"]);
+          assert.equal(git(["diff", "--name-only", baseline, "--", "src", "public", "drizzle", "package.json", "package-lock.json", "next.config.ts", "tsconfig.json", "postcss.config.mjs"]), "", "Frozen application or root dependency inputs changed");
+          const workflowChanges = git(["diff", "--name-only", baseline, "--", ".github/workflows"]).split("\n").filter(Boolean);
+          assert.deepEqual(workflowChanges, [".github/workflows/qualification-compatibility.yml"], "Existing workflows changed");
+          const original = JSON.parse(execFileSync("git", ["show", baseline + ":vercel.json"], { encoding: "utf8" }));
+          original.git.deploymentEnabled["codex/qualification-compatibility"] = false;
+          assert.equal(await readFile("vercel.json", "utf8"), JSON.stringify(original, null, 2) + "\n", "Only the exact compatibility branch deployment disable is permitted");
+          for (const key of ["VERCEL", "FACILITY_ANGLE", "FACILITY_HOSTED_ATTESTATION_FILE", "FACILITY_PUBLIC_PRODUCTION_PINS_FILE", "FACILITY_HOSTED_BYPASS_SECRET", "VERCEL_AUTOMATION_BYPASS_SECRET", "FACILITY_LIGHTHOUSE_PRIORITY_ONLY", "FACILITY_LIGHTHOUSE_DIAGNOSTIC", "FACILITY_LIGHTHOUSE_STOP_ON_FAILURE"]) assert(!process.env[key], "Unexpected measurement configuration: " + key);
+          assert.equal(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY, "");
+          const files = {};
+          for (const path of ["package.json", "package-lock.json", "tools/qualification/package.json", "tools/qualification/package-lock.json", "vercel.json", ".github/workflows/qualification-compatibility.yml", "scripts/facility/qualification-sandbox-provision.py", "scripts/facility/qualification-sandbox-proof.mjs", "scripts/facility/qualification-playwright.mjs"]) {
+            const bytes = await readFile(path);
+            files[path] = { bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") };
           }
-          PROFILE_NAMES = {"chrome", "gridninja-cft-155", "/opt/google/chrome/chrome", PATHS[-1]}
-          PROFILE_MODES = {"enforce", "complain", "unconfined", "kill", "prompt"}
-          LSM_NAMES = {"capability", "landlock", "lockdown", "yama", "integrity", "apparmor", "bpf", "selinux", "smack", "tomoyo"}
-          SENSITIVE = re.compile(r"(?i)(?:gh[pousr]_[A-Za-z0-9]{10,}|github_pat_[A-Za-z0-9_]{10,}|AKIA[A-Z0-9]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|\bbearer\s+\S+|\b(?:bearer|authorization|password|secret|api[_-]?key)\s*[:=]\s*\S+|https?://[^\s\"]+[?@])")
+          await writeFile(directory + "/source-verified.json", JSON.stringify({ ...receipt, result: "verified", files }, null, 2) + "\n", { flag: "wx" });
+          NODE
+      - name: Install the unchanged application dependencies
+        shell: bash
+        run: npm ci --no-audit --no-fund 2>&1 | tee "$GN_COMPATIBILITY_EVIDENCE/npm-ci-root.log"
+      - name: Install the isolated qualification toolchain without lifecycle scripts
+        shell: bash
+        run: npm ci --prefix tools/qualification --ignore-scripts --no-audit --no-fund 2>&1 | tee "$GN_COMPATIBILITY_EVIDENCE/npm-ci-qualification.log"
+      - name: Install browser OS dependencies
+        shell: bash
+        run: npm exec --no -- playwright install-deps chromium 2>&1 | tee "$GN_COMPATIBILITY_EVIDENCE/browser-os-dependencies.log"
+      - name: Verify the reviewed pure sandbox guards before provisioning
+        timeout-minutes: 5
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --quiet HEAD --
+          python3 -I -B scripts/qa/qualification-sandbox-provision.test.py 2>&1 | tee "$GN_COMPATIBILITY_EVIDENCE/provision-guard-tests.log"
+          node --test scripts/qa/qualification-sandbox-proof.test.mjs 2>&1 | tee "$GN_COMPATIBILITY_EVIDENCE/proof-guard-tests.log"
+          node node_modules/vitest/vitest.mjs run tests/unit/facility/qualification-*.test.ts tests/unit/facility/native-lcp-evidence.test.ts --coverage.enabled=false 2>&1 | tee "$GN_COMPATIBILITY_EVIDENCE/qualification-unit-tests.log"
+      - name: Download and verify the exact official Chrome archive
+        timeout-minutes: 4
+        shell: bash
+        run: |
+          chrome_directory="$RUNNER_TEMP/gridninja-cft-155.0.8059.79"
+          mkdir "$chrome_directory"
+          chrome_archive="$chrome_directory/chrome-linux64.zip"
+          chrome_url="https://storage.googleapis.com/chrome-for-testing-public/155.0.8059.79/linux64/chrome-linux64.zip"
+          curl --fail --show-error --silent --proto '=https' --tlsv1.2 --max-time 120 --output "$chrome_archive" "$chrome_url"
+          export GN_CFT_ARCHIVE="$chrome_archive"
+          export GN_CFT_URL="$chrome_url"
+          node --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { appendFile, lstat, readFile, realpath, writeFile } from "node:fs/promises";
+          const archive = process.env.GN_CFT_ARCHIVE;
+          assert((await lstat(archive)).isFile());
+          assert.equal(await realpath(archive), archive);
+          const bytes = await readFile(archive);
+          const sha256 = createHash("sha256").update(bytes).digest("hex");
+          assert.equal(sha256, "bcd9a79130d7e44d70f93be87042e9bcee7fe0f0b3898e06b8c9bed5fb619dcd");
+          await writeFile(process.env.GN_COMPATIBILITY_EVIDENCE + "/browser-archive.json", JSON.stringify({ source: process.env.GN_CFT_URL, archive, bytes: bytes.length, sha256, recordedAt: new Date().toISOString(), executed: false }, null, 2) + "\n", { flag: "wx" });
+          assert(!/[\r\n]/.test(archive));
+          await appendFile(process.env.GITHUB_ENV, "GN_CFT_ARCHIVE=" + archive + "\n");
+          NODE
+      - name: Verify fresh host policy and provision only the protected pinned browser
+        id: provision
+        timeout-minutes: 5
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --quiet HEAD --
+          node --input-type=module <<'SOURCE_BINDING'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { readFile } from "node:fs/promises";
+          for (const [path,expected] of [["scripts/facility/qualification-sandbox-provision.py",process.env.GN_SANDBOX_PROVISION_SHA256],["scripts/facility/qualification-sandbox-proof.mjs",process.env.GN_SANDBOX_PROOF_SHA256]]) {
+            assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"),expected);
+          }
+          SOURCE_BINDING
+          sandbox_control() {
+            test ! -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json" || return 1
+            local call_directory status
+            call_directory=$(python3 -I - "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/control-calls" "$1" <<'CONTROL_INTENT'
+          import json,os,pathlib,sys,tempfile,time
+          root=pathlib.Path(sys.argv[1])
+          root.mkdir(exist_ok=True)
+          assert not root.is_symlink()
+          for prior in root.iterdir():
+              assert prior.is_dir() and not prior.is_symlink()
+              assert (prior/'terminal.json').is_file(), 'Earlier privileged helper closure is uncertain'
+              terminal=json.loads((prior/'terminal.json').read_text())
+              assert type(terminal.get('observedExitStatus')) is int and type(terminal.get('endedEpochMs')) is int
+          directory=pathlib.Path(tempfile.mkdtemp(prefix='call-',dir=root))
+          with (directory/'intent.json').open('x') as output:
+              json.dump({'action':sys.argv[2],'startedEpochNs':time.time_ns(),'head':os.environ['GITHUB_SHA'],'runId':os.environ['GITHUB_RUN_ID']},output)
+          print(directory)
+          CONTROL_INTENT
+            ) || return 1
+            status=0
+            if sudo -n /usr/bin/python3 -I - "$GN_SANDBOX_PROVISION_SHA256" "$GITHUB_WORKSPACE/scripts/facility/qualification-sandbox-provision.py" "$@" <<'VERIFIED_HELPER'
+          import hashlib
+          import os
+          import stat
+          import sys
 
+          try:
+              expected, source_path, *arguments = sys.argv[1:]
+              if len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+                  raise ValueError()
+              descriptor = os.open(source_path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(descriptor, "rb") as source:
+                  metadata = os.fstat(source.fileno())
+                  if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 262144:
+                      raise ValueError()
+                  payload = source.read(262145)
+              if len(payload) > 262144 or hashlib.sha256(payload).hexdigest() != expected:
+                  raise ValueError()
+              code = compile(payload, source_path, "exec")
+          except Exception:
+              sys.stderr.write("verified-helper-bootstrap-rejected\n")
+              sys.exit(1)
+          sys.argv = [source_path, *arguments]
+          namespace = {"__name__": "__main__", "__file__": source_path, "__package__": None, "__verified_helper_sha256__": hashlib.sha256(payload).hexdigest()}
+          exec(code, namespace, namespace)
+          VERIFIED_HELPER
+            then status=0; else status=$?; fi
+            python3 -I - "$call_directory/terminal.json" "$status" <<'CONTROL_TERMINAL'
+          import json,pathlib,sys,time
+          with pathlib.Path(sys.argv[1]).open('x') as output:
+              json.dump({'observedExitStatus':int(sys.argv[2]),'endedEpochMs':time.time_ns()//1000000},output)
+          CONTROL_TERMINAL
+            return "$status"
+          }
+          mkdir "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial"
+          sandbox_control prepare --archive "$GN_CFT_ARCHIVE" --head "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID" --runner-uid "$(id -u)" > "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/prepare-command.json"
+          node --input-type=module <<'BROWSER_BINDING'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { appendFile, readFile, realpath, writeFile } from "node:fs/promises";
+          const executable="/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64/chrome";
+          assert.equal(await realpath(executable),executable);
+          const bytes=await readFile(executable),sha256=createHash("sha256").update(bytes).digest("hex");
+          assert.equal(sha256,"58957d0e74a9073626131018aabf17d97318227cca9b5dbdf5dee16345f2d211");
+          await writeFile(process.env.GN_COMPATIBILITY_EVIDENCE+"/browser-download.json",JSON.stringify({recordedAt:new Date().toISOString(),executable,binary:{bytes:bytes.length,sha256},versionPin:"155.0.8059.79",versionVerification:"Requires subsequent actual-browser sandbox proof",archiveReceipt:"browser-archive.json",protectedProvisioningReceipt:"sandbox-trial/prepare-command.json"},null,2)+"\n",{flag:"wx"});
+          await appendFile(process.env.GITHUB_ENV,"CHROME_PATH="+executable+"\nFACILITY_CHROME_EXECUTABLE_PATH="+executable+"\n");
+          BROWSER_BINDING
+      - name: Establish the bounded denied baseline and owned process closure
+        id: baseline
+        timeout-minutes: 6
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --quiet HEAD --
+          node --input-type=module <<'SOURCE_BINDING'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { readFile } from "node:fs/promises";
+          for (const [path,expected] of [["scripts/facility/qualification-sandbox-provision.py",process.env.GN_SANDBOX_PROVISION_SHA256],["scripts/facility/qualification-sandbox-proof.mjs",process.env.GN_SANDBOX_PROOF_SHA256]]) {
+            assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"),expected);
+          }
+          SOURCE_BINDING
+          node scripts/facility/qualification-sandbox-proof.mjs baseline
+      - name: Load only the reviewed exact-executable userns profile
+        id: policy
+        timeout-minutes: 2
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          sandbox_control() {
+            test ! -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json" || return 1
+            local call_directory status
+            call_directory=$(python3 -I - "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/control-calls" "$1" <<'CONTROL_INTENT'
+          import json,os,pathlib,sys,tempfile,time
+          root=pathlib.Path(sys.argv[1])
+          root.mkdir(exist_ok=True)
+          assert not root.is_symlink()
+          for prior in root.iterdir():
+              assert prior.is_dir() and not prior.is_symlink()
+              assert (prior/'terminal.json').is_file(), 'Earlier privileged helper closure is uncertain'
+              terminal=json.loads((prior/'terminal.json').read_text())
+              assert type(terminal.get('observedExitStatus')) is int and type(terminal.get('endedEpochMs')) is int
+          directory=pathlib.Path(tempfile.mkdtemp(prefix='call-',dir=root))
+          with (directory/'intent.json').open('x') as output:
+              json.dump({'action':sys.argv[2],'startedEpochNs':time.time_ns(),'head':os.environ['GITHUB_SHA'],'runId':os.environ['GITHUB_RUN_ID']},output)
+          print(directory)
+          CONTROL_INTENT
+            ) || return 1
+            status=0
+            if sudo -n /usr/bin/python3 -I - "$GN_SANDBOX_PROVISION_SHA256" "$GITHUB_WORKSPACE/scripts/facility/qualification-sandbox-provision.py" "$@" <<'VERIFIED_HELPER'
+          import hashlib
+          import os
+          import stat
+          import sys
 
-          def stamp():
-              return datetime.now(timezone.utc).isoformat()
+          try:
+              expected, source_path, *arguments = sys.argv[1:]
+              if len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+                  raise ValueError()
+              descriptor = os.open(source_path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(descriptor, "rb") as source:
+                  metadata = os.fstat(source.fileno())
+                  if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 262144:
+                      raise ValueError()
+                  payload = source.read(262145)
+              if len(payload) > 262144 or hashlib.sha256(payload).hexdigest() != expected:
+                  raise ValueError()
+              code = compile(payload, source_path, "exec")
+          except Exception:
+              sys.stderr.write("verified-helper-bootstrap-rejected\n")
+              sys.exit(1)
+          sys.argv = [source_path, *arguments]
+          namespace = {"__name__": "__main__", "__file__": source_path, "__package__": None, "__verified_helper_sha256__": hashlib.sha256(payload).hexdigest()}
+          exec(code, namespace, namespace)
+          VERIFIED_HELPER
+            then status=0; else status=$?; fi
+            python3 -I - "$call_directory/terminal.json" "$status" <<'CONTROL_TERMINAL'
+          import json,pathlib,sys,time
+          with pathlib.Path(sys.argv[1]).open('x') as output:
+              json.dump({'observedExitStatus':int(sys.argv[2]),'endedEpochMs':time.time_ns()//1000000},output)
+          CONTROL_TERMINAL
+            return "$status"
+          }
+          sandbox_control activate --request "$GITHUB_WORKSPACE/$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/baseline-proof.json" --head "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID" > "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/activate-command.json"
+      - name: Verify Lighthouse browser namespace sandbox and process closure
+        id: lighthouse_sandbox
+        timeout-minutes: 6
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --quiet HEAD --
+          node --input-type=module <<'SOURCE_BINDING'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { readFile } from "node:fs/promises";
+          for (const [path,expected] of [["scripts/facility/qualification-sandbox-provision.py",process.env.GN_SANDBOX_PROVISION_SHA256],["scripts/facility/qualification-sandbox-proof.mjs",process.env.GN_SANDBOX_PROOF_SHA256]]) {
+            assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"),expected);
+          }
+          SOURCE_BINDING
+          node scripts/facility/qualification-sandbox-proof.mjs lighthouse
+      - name: Verify Playwright namespace sandbox and process closure
+        id: playwright_sandbox
+        timeout-minutes: 6
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --quiet HEAD --
+          node --input-type=module <<'SOURCE_BINDING'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { readFile } from "node:fs/promises";
+          for (const [path,expected] of [["scripts/facility/qualification-sandbox-provision.py",process.env.GN_SANDBOX_PROVISION_SHA256],["scripts/facility/qualification-sandbox-proof.mjs",process.env.GN_SANDBOX_PROOF_SHA256]]) {
+            assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"),expected);
+          }
+          SOURCE_BINDING
+          node scripts/facility/qualification-sandbox-proof.mjs playwright
+      - name: Record installed toolchain and unchanged collection settings
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+          import { createRequire } from "node:module";
+          import { createHash } from "node:crypto";
+          import { readFile, realpath, writeFile } from "node:fs/promises";
+          import { harnessRevision, sourceSnapshot } from "./scripts/facility/performance-contract.mjs";
+          const require = createRequire(import.meta.url);
+          const manifest = JSON.parse(await readFile("tools/qualification/package.json", "utf8"));
+          const isolated = {};
+          for (const name of ["lighthouse", "puppeteer-core", "chrome-launcher"]) {
+            const path = "tools/qualification/node_modules/" + name + "/package.json";
+            const bytes = await readFile(path), installed = JSON.parse(bytes);
+            assert.equal(installed.version, manifest.dependencies[name], "Installed isolated package differs from exact manifest pin: " + name);
+            isolated[name] = { version: installed.version, packageSha256: createHash("sha256").update(bytes).digest("hex") };
+          }
+          assert.deepEqual(manifest.dependencies, { lighthouse: "13.5.0", "puppeteer-core": "25.13.0", "chrome-launcher": "1.2.2" });
+          assert.equal(await realpath(process.env.CHROME_PATH), await realpath(process.env.FACILITY_CHROME_EXECUTABLE_PATH));
+          const rootLighthouse = JSON.parse(await readFile(require.resolve("lighthouse/package.json"), "utf8"));
+          assert.equal(rootLighthouse.version, "12.6.1", "Root application dependency changed");
+          const source = await sourceSnapshot();
+          const receipt = { recordedAt: new Date().toISOString(), node: process.version, rootLighthouse: rootLighthouse.version, isolated, browserExecutable: process.env.CHROME_PATH, source, harnessRevision: await harnessRevision(), lighthouseConfiguration: require("./scripts/facility/lighthouse.cjs").ci.collect, qualificationEnvironment: process.env.FACILITY_QUALIFICATION_ENVIRONMENT, measurementScope: process.env.FACILITY_MEASUREMENT_SCOPE, matrix: process.env.FACILITY_PERFORMANCE_MATRIX, runs: Number(process.env.FACILITY_RUNS), verification: "unconfigured-local", hardwareQualification: false, publicAcceptance: false };
+          await writeFile(process.env.GN_COMPATIBILITY_EVIDENCE + "/toolchain-settings.json", JSON.stringify(receipt, null, 2) + "\n", { flag: "wx" });
+          NODE
+      - name: Build the frozen application with the existing local CI configuration
+        shell: bash
+        run: npm run build 2>&1 | tee "$GN_COMPATIBILITY_EVIDENCE/build.log"
+      - name: Bind both sandbox proofs before the frozen matrix
+        id: sandbox_gate
+        timeout-minutes: 2
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git diff --quiet HEAD --
+          node --input-type=module <<'SOURCE_BINDING'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { readFile } from "node:fs/promises";
+          for (const [path,expected] of [["scripts/facility/qualification-sandbox-provision.py",process.env.GN_SANDBOX_PROVISION_SHA256],["scripts/facility/qualification-sandbox-proof.mjs",process.env.GN_SANDBOX_PROOF_SHA256]]) {
+            assert.equal(createHash("sha256").update(await readFile(path)).digest("hex"),expected);
+          }
+          SOURCE_BINDING
+          node --input-type=module <<'SANDBOX_GATE'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { access, readFile, writeFile } from "node:fs/promises";
+          const directory=process.env.GN_COMPATIBILITY_EVIDENCE+"/sandbox-trial";
+          assert.equal(await access(directory+"/helper-uncertain.json").then(()=>true,()=>false),false,"Privileged helper closure is uncertain");
+          const proofs={};
+          for (const phase of ["lighthouse","playwright"]) {
+            const bytes=await readFile(directory+"/"+phase+"-proof.json"),receipt=JSON.parse(bytes);
+            assert.equal(receipt.schemaVersion,"gridninja-sandbox-proof.v1");
+            assert.equal(receipt.phase,phase); assert.equal(receipt.headSha,process.env.GITHUB_SHA); assert.equal(receipt.runId,process.env.GITHUB_RUN_ID);
+            assert.equal(receipt.outcome,"PASS_SANDBOX_AND_CLOSURE");
+            assert.equal(receipt.chromePath,"/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64/chrome");
+            assert.equal(receipt.binarySha256,"58957d0e74a9073626131018aabf17d97318227cca9b5dbdf5dee16345f2d211");
+            proofs[phase]=createHash("sha256").update(bytes).digest("hex");
+          }
+          await writeFile(directory+"/matrix-proof-binding.json",JSON.stringify({head:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,proofs,requiredMatrix:{lighthouse:140,fullScroll:140,readiness:20},qualification:false},null,2)+"\n",{flag:"wx"});
+          SANDBOX_GATE
+          sandbox_control() {
+            test ! -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json" || return 1
+            local call_directory status
+            call_directory=$(python3 -I - "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/control-calls" "$1" <<'CONTROL_INTENT'
+          import json,os,pathlib,sys,tempfile,time
+          root=pathlib.Path(sys.argv[1])
+          root.mkdir(exist_ok=True)
+          assert not root.is_symlink()
+          for prior in root.iterdir():
+              assert prior.is_dir() and not prior.is_symlink()
+              assert (prior/'terminal.json').is_file(), 'Earlier privileged helper closure is uncertain'
+              terminal=json.loads((prior/'terminal.json').read_text())
+              assert type(terminal.get('observedExitStatus')) is int and type(terminal.get('endedEpochMs')) is int
+          directory=pathlib.Path(tempfile.mkdtemp(prefix='call-',dir=root))
+          with (directory/'intent.json').open('x') as output:
+              json.dump({'action':sys.argv[2],'startedEpochNs':time.time_ns(),'head':os.environ['GITHUB_SHA'],'runId':os.environ['GITHUB_RUN_ID']},output)
+          print(directory)
+          CONTROL_INTENT
+            ) || return 1
+            status=0
+            if sudo -n /usr/bin/python3 -I - "$GN_SANDBOX_PROVISION_SHA256" "$GITHUB_WORKSPACE/scripts/facility/qualification-sandbox-provision.py" "$@" <<'VERIFIED_HELPER'
+          import hashlib
+          import os
+          import stat
+          import sys
 
+          try:
+              expected, source_path, *arguments = sys.argv[1:]
+              if len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+                  raise ValueError()
+              descriptor = os.open(source_path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(descriptor, "rb") as source:
+                  metadata = os.fstat(source.fileno())
+                  if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 262144:
+                      raise ValueError()
+                  payload = source.read(262145)
+              if len(payload) > 262144 or hashlib.sha256(payload).hexdigest() != expected:
+                  raise ValueError()
+              code = compile(payload, source_path, "exec")
+          except Exception:
+              sys.stderr.write("verified-helper-bootstrap-rejected\n")
+              sys.exit(1)
+          sys.argv = [source_path, *arguments]
+          namespace = {"__name__": "__main__", "__file__": source_path, "__package__": None, "__verified_helper_sha256__": hashlib.sha256(payload).hexdigest()}
+          exec(code, namespace, namespace)
+          VERIFIED_HELPER
+            then status=0; else status=$?; fi
+            python3 -I - "$call_directory/terminal.json" "$status" <<'CONTROL_TERMINAL'
+          import json,pathlib,sys,time
+          with pathlib.Path(sys.argv[1]).open('x') as output:
+              json.dump({'observedExitStatus':int(sys.argv[2]),'endedEpochMs':time.time_ns()//1000000},output)
+          CONTROL_TERMINAL
+            return "$status"
+          }
+          sandbox_control gate --head "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID" > "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/pre-matrix-gate.json"
+      - name: Run each full-matrix collector and validator once, sequentially
+        shell: bash
+        run: |
+          GN_SANDBOX_PROVISION_SHA256="ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          sandbox_control() {
+            test ! -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json" || return 1
+            local call_directory status
+            call_directory=$(python3 -I - "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/control-calls" "$1" <<'CONTROL_INTENT'
+          import json,os,pathlib,sys,tempfile,time
+          root=pathlib.Path(sys.argv[1])
+          root.mkdir(exist_ok=True)
+          assert not root.is_symlink()
+          for prior in root.iterdir():
+              assert prior.is_dir() and not prior.is_symlink()
+              assert (prior/'terminal.json').is_file(), 'Earlier privileged helper closure is uncertain'
+              terminal=json.loads((prior/'terminal.json').read_text())
+              assert type(terminal.get('observedExitStatus')) is int and type(terminal.get('endedEpochMs')) is int
+          directory=pathlib.Path(tempfile.mkdtemp(prefix='call-',dir=root))
+          with (directory/'intent.json').open('x') as output:
+              json.dump({'action':sys.argv[2],'startedEpochNs':time.time_ns(),'head':os.environ['GITHUB_SHA'],'runId':os.environ['GITHUB_RUN_ID']},output)
+          print(directory)
+          CONTROL_INTENT
+            ) || return 1
+            status=0
+            if sudo -n /usr/bin/python3 -I - "$GN_SANDBOX_PROVISION_SHA256" "$GITHUB_WORKSPACE/scripts/facility/qualification-sandbox-provision.py" "$@" <<'VERIFIED_HELPER'
+          import hashlib
+          import os
+          import stat
+          import sys
 
-          def number(value):
-              return int(value) if re.fullmatch(r"[0-9]{1,20}", value) else None
+          try:
+              expected, source_path, *arguments = sys.argv[1:]
+              if len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+                  raise ValueError()
+              descriptor = os.open(source_path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(descriptor, "rb") as source:
+                  metadata = os.fstat(source.fileno())
+                  if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 262144:
+                      raise ValueError()
+                  payload = source.read(262145)
+              if len(payload) > 262144 or hashlib.sha256(payload).hexdigest() != expected:
+                  raise ValueError()
+              code = compile(payload, source_path, "exec")
+          except Exception:
+              sys.stderr.write("verified-helper-bootstrap-rejected\n")
+              sys.exit(1)
+          sys.argv = [source_path, *arguments]
+          namespace = {"__name__": "__main__", "__file__": source_path, "__package__": None, "__verified_helper_sha256__": hashlib.sha256(payload).hexdigest()}
+          exec(code, namespace, namespace)
+          VERIFIED_HELPER
+            then status=0; else status=$?; fi
+            python3 -I - "$call_directory/terminal.json" "$status" <<'CONTROL_TERMINAL'
+          import json,pathlib,sys,time
+          with pathlib.Path(sys.argv[1]).open('x') as output:
+              json.dump({'observedExitStatus':int(sys.argv[2]),'endedEpochMs':time.time_ns()//1000000},output)
+          CONTROL_TERMINAL
+            return "$status"
+          }
+          sandbox_gate_number=0
+          sandbox_gate() {
+            test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+            git diff --quiet HEAD --
+            test ! -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json"
+            sandbox_gate_number=$((sandbox_gate_number+1))
+            sandbox_control gate --head "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID" > "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/matrix-boundary-$sandbox_gate_number.json"
+          }
+          mkdir -p build/facility
+          npm run start -- --hostname 127.0.0.1 --port 3000 > "$GN_COMPATIBILITY_EVIDENCE/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl --fail --silent http://localhost:3000/ >/dev/null; then break; fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then cat "$GN_COMPATIBILITY_EVIDENCE/server.log"; exit 1; fi
+            sleep 1
+          done
+          curl --fail --silent http://localhost:3000/ >/dev/null
+          failed=0
+          run_once() {
+            label="$1"
+            shift
+            status=0
+            "$@" > "$GN_COMPATIBILITY_EVIDENCE/$label.log" 2>&1 || status=$?
+            printf '%s\t%s\n' "$label" "$status" >> "$GN_COMPATIBILITY_EVIDENCE/command-exit-status.tsv"
+            if [ "$status" -ne 0 ]; then failed=1; fi
+          }
+          sandbox_gate
+          run_once page-measurements npm run facility:measure
+          sandbox_gate
+          run_once functional-validation node scripts/facility/validate-ci-functional.mjs
+          run_once lighthouse npm run facility:lighthouse
+          sandbox_gate
+          run_once performance-summary npm run facility:performance:validate
+          exit "$failed"
+      - name: Close the scoped trial and unload only its unused profile
+        id: sandbox_cleanup
+        if: ${{ always() && steps.provision.outcome == 'success' }}
+        timeout-minutes: 2
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          if [ -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json" ]; then
+            printf '%s\n' '{"outcome":"FAIL_HELPER_CLOSURE_UNCERTAIN","policyUnloadAttempted":false,"containment":"Disposable runner teardown; no verified live rollback claim"}' > "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/finalize-command.json"
+            exit 1
+          fi
+          sandbox_control() {
+            test ! -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json" || return 1
+            local call_directory status
+            call_directory=$(python3 -I - "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/control-calls" "$1" <<'CONTROL_INTENT'
+          import json,os,pathlib,sys,tempfile,time
+          root=pathlib.Path(sys.argv[1])
+          root.mkdir(exist_ok=True)
+          assert not root.is_symlink()
+          for prior in root.iterdir():
+              assert prior.is_dir() and not prior.is_symlink()
+              assert (prior/'terminal.json').is_file(), 'Earlier privileged helper closure is uncertain'
+              terminal=json.loads((prior/'terminal.json').read_text())
+              assert type(terminal.get('observedExitStatus')) is int and type(terminal.get('endedEpochMs')) is int
+          directory=pathlib.Path(tempfile.mkdtemp(prefix='call-',dir=root))
+          with (directory/'intent.json').open('x') as output:
+              json.dump({'action':sys.argv[2],'startedEpochNs':time.time_ns(),'head':os.environ['GITHUB_SHA'],'runId':os.environ['GITHUB_RUN_ID']},output)
+          print(directory)
+          CONTROL_INTENT
+            ) || return 1
+            status=0
+            if sudo -n /usr/bin/python3 -I - "$GN_SANDBOX_PROVISION_SHA256" "$GITHUB_WORKSPACE/scripts/facility/qualification-sandbox-provision.py" "$@" <<'VERIFIED_HELPER'
+          import hashlib
+          import os
+          import stat
+          import sys
 
-
-          def facts(command_id, raw, return_code):
-              """Positive allowlisting: unknown text is never emitted, including stderr."""
-              if not raw and return_code != 0:
-                  return {"unavailable": True}
-              s = raw.decode("utf-8", "replace").strip()
-              result = {}
-              if command_id in {"uid", "gid", "apparmor-userns", "unprivileged-userns", "namespace-limit"}:
-                  result = {"value": number(s)}
-              elif command_id == "groups":
-                  result = {"numericGroups": [number(v) for v in s.split()] if all(number(v) is not None for v in s.split()) and len(s.split()) <= 64 else None}
-              elif command_id == "kernel":
-                  parts = s.split()
-                  result = {"system": "Linux" if parts and parts[0] == "Linux" else None,
-                            "release": parts[1] if len(parts) > 1 and re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.+_-]{1,64})?", parts[1]) else None,
-                            "architecture": "x86_64" if "x86_64" in parts else None}
-              elif command_id == "image-and-run":
-                  lines = s.splitlines()
-                  if return_code == 0 and len(lines) == len(META_RULES):
-                      result = {key: value if re.fullmatch(rule, value) else None for (key, rule), value in zip(META_RULES.items(), lines)}
-                  else:
-                      result = {"metadataIncomplete": True}
-              elif command_id == "os-release":
-                  pairs = dict(re.findall(r'^([A-Z_]+)=[\"\']?([^\"\'\n]*)[\"\']?$', s, re.M))
-                  for key, rule in {"ID": r"ubuntu", "VERSION_ID": r"[0-9]{2}\.[0-9]{2}", "VERSION_CODENAME": r"[a-z]{1,24}"}.items():
-                      v = pairs.get(key, "")
-                      result[key] = v if re.fullmatch(rule, v) else None
-              elif command_id == "apparmor-enabled":
-                  result = {"moduleEnabled": {"Y": True, "N": False}.get(s)}
-              elif command_id in {"active-lsm", "elevated-active-lsm"}:
-                  parts = s.split(",") if s else []
-                  result = {"knownModules": [x for x in parts if x in LSM_NAMES], "unknownModuleCount": sum(x not in LSM_NAMES for x in parts)}
-              elif command_id in {"self-profile", "self-apparmor-profile"}:
-                  result = {"diagnosticChildLabel": s if s == "unconfined" else "other-or-unavailable", "notChromeLabel": True}
-              elif command_id in {"loaded-profiles", "elevated-loaded-profiles"}:
-                  modes, targets = collections.Counter(), {}
-                  unknown = 0
-                  for line in s.splitlines():
-                      m = re.fullmatch(r"(.+) \(([^()]*)\)", line)
-                      if not m or m[2] not in PROFILE_MODES:
-                          unknown += 1
-                          continue
-                      modes[m[2]] += 1
-                      if m[1] in PROFILE_NAMES:
-                          targets[m[1]] = m[2]
-                  result = {"lineCount": len(s.splitlines()), "modeCounts": dict(modes), "recognizedProfiles": targets, "unparsedLines": unknown,
-                            "otherNamesSuppressed": True, "namesDoNotProveAttachments": True}
-              elif command_id in {"chrome-profile", "chrome-local-profile", "candidate-profile", "abi4"}:
-                  code_lines = []
-                  for line in s.splitlines():
-                      directive = re.fullmatch(r"\s*#(include(?:\s+if\s+exists)?\s+<(?:tunables/global|local/chrome)>)\s*(?:#.*)?", line)
-                      code_lines.append(directive[1] if directive else line.split("#", 1)[0])
-                  code = "\n".join(code_lines)
-                  attachment_paths = [p for p in ["/opt/google/chrome/chrome", PATHS[-1]] if re.search(r"(?<![\w/*])" + re.escape(p) + r"(?=[\s\"{]|$)", code)]
-                  result = {"contentSha256": hashlib.sha256(raw).hexdigest(),
-                            "literalUsernsDirectiveFound": bool(re.search(r"(?:^|[{}\n])\s*userns\s*,", code)),
-                            "literalUnconfinedFlagFound": bool(re.search(r"flags\s*=\s*\(\s*unconfined\s*\)", code)),
-                            "recognizedPathMentions": attachment_paths,
-                            "knownGlobalIncludeFound": "include <tunables/global>" in code,
-                            "knownLocalChromeIncludeFound": bool(re.search(r"include(?: if exists)? <local/chrome>", code)),
-                            "rawPolicySuppressed": True, "notEffectivePermissionProof": True}
-              elif command_id == "self-process-restrictions":
-                  patterns = {"Uid": r"[0-9]+(?:\s+[0-9]+){3}", "Gid": r"[0-9]+(?:\s+[0-9]+){3}", "Groups": r"[0-9 ]*",
-                              "CapInh": r"[a-f0-9]{1,32}", "CapPrm": r"[a-f0-9]{1,32}", "CapEff": r"[a-f0-9]{1,32}",
-                              "CapBnd": r"[a-f0-9]{1,32}", "CapAmb": r"[a-f0-9]{1,32}", "NoNewPrivs": r"[01]", "Seccomp": r"[012]", "Seccomp_filters": r"[0-9]{1,8}"}
-                  for line in s.splitlines():
-                      key, sep, value = line.partition(":")
-                      value = " ".join(value.split())
-                      if sep and key in patterns and re.fullmatch(patterns[key], value):
-                          result[key] = value
-              elif command_id == "aa-enabled":
-                  result = {"statusExitCode": return_code, "disabledMustNotBeInferredFromReadFailure": True}
-              elif command_id == "parser-version":
-                  match = re.search(r"AppArmor parser version\s+([0-9]+(?:\.[0-9]+){1,3}(?:-[0-9A-Za-z.+~]+)?)", s, re.I)
-                  result = {"version": match[1] if match else None}
-              elif command_id == "protected-path-stat":
-                  rows = []
-                  for line in s.splitlines():
-                      parts = line.split("|")
-                      if len(parts) == 4 and parts[0] in PATHS and parts[1] in {"directory", "regular file", "regular empty file", "symbolic link"} and re.fullmatch(r"[0-9]{1,10}:[0-9]{1,10}", parts[2]) and re.fullmatch(r"[0-7]{1,4}", parts[3]):
-                          rows.append({"path": parts[0], "type": parts[1], "uidGid": parts[2], "mode": parts[3]})
-                  result = {"components": rows, "suppressedOrUnparsedLineCount": len(s.splitlines()) - len(rows)}
-              elif command_id == "protected-path-resolution":
-                  result = {"symlinkRowsObserved": sum(bool(re.match(r"\s*l[rwxstST-]{9}\s", line)) for line in s.splitlines()),
-                            "lineCount": len(s.splitlines()), "rawTargetsSuppressed": True, "resolutionNotIndependentlyProven": True}
-              elif command_id == "protected-path-acl":
-                  entries, current = [], None
-                  for line in s.splitlines():
-                      if line.startswith("# file: "):
-                          path = line[len("# file: "):]
-                          current = {"path": path, "entries": []} if path in PATHS else None
-                          if current is not None:
-                              entries.append(current)
-                      elif current is not None:
-                          m = re.fullmatch(r"(default:)?(user|group|mask|other):([^:]*):([rwx-]{3})(?:\s+#effective:([rwx-]{3}))?", line)
-                          if m:
-                              qualifier = m[3]
-                              kind = "owner-or-unnamed" if not qualifier else "root" if qualifier == "root" else "runner" if qualifier == "runner" else "named-redacted"
-                              current["entries"].append({"default": bool(m[1]), "kind": m[2], "qualifier": kind, "permissions": m[4], "effective": m[5]})
-                  result = {"components": entries, "namesAndCommentsSuppressed": True}
-              elif command_id in {"mount-root", "mount-var", "mount-varlib"}:
-                  try:
-                      parsed = json.loads(s)
-                      rows = []
-                      known_flags = {"ro", "rw", "nosuid", "suid", "nodev", "dev", "noexec", "exec", "relatime", "noatime", "strictatime", "lazytime", "seclabel"}
-                      for fs in parsed.get("filesystems", []):
-                          target = fs.get("target")
-                          if target not in {"/", "/var", "/var/lib"}:
-                              continue
-                          options = fs.get("options", "").split(",")
-                          rows.append({"target": target, "fstype": fs.get("fstype") if fs.get("fstype") in {"ext4", "xfs", "btrfs", "overlay", "tmpfs", "zfs"} else None,
-                                       "knownFlags": [v for v in options if v in known_flags], "otherOptionsSuppressed": sum(v not in known_flags for v in options), "sourceSuppressed": True})
-                      result = {"mounts": rows}
-                  except (ValueError, TypeError, AttributeError):
-                      result = {"parseUnavailable": True}
-              else:
-                  result = {"unsupportedCommandId": True}
-              # Additional defense for shaped string fields; never release matching text.
-              if SENSITIVE.search(json.dumps(result, ensure_ascii=True)):
-                  return {"factsSuppressedBySensitivePattern": True}
-              return result
-
-
-          def classify_error(raw, return_code):
-              text = raw.decode("utf-8", "replace").lower()
-              if "permission denied" in text or "operation not permitted" in text:
-                  return "permission-denied"
-              if "no such file" in text or "not found" in text:
-                  return "missing-or-unavailable"
-              if "a password is required" in text or "not allowed" in text:
-                  return "privileged-read-unavailable"
-              return "nonzero-or-stderr" if return_code != 0 or raw else None
-
-
-          def run_read(spec, child_env):
-              start = stamp()
-              max_out = spec["maxOutputBytes"]
-              buffers = {"stdout": bytearray(), "stderr": bytearray()}
-              seen = {"stdout": 0, "stderr": 0}
-              caps = {"stdout": max_out, "stderr": 4096}
-              selector = selectors.DefaultSelector()
-              proc = None
-              timed_out = False
-              cleanup = "not-needed"
-              closed = False
-              try:
-                  proc = subprocess.Popen(spec["argv"], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                          shell=False, cwd="/", env=child_env, start_new_session=True)
-                  for name, stream in [("stdout", proc.stdout), ("stderr", proc.stderr)]:
-                      os.set_blocking(stream.fileno(), False)
-                      selector.register(stream, selectors.EVENT_READ, name)
-                  deadline = time.monotonic() + 5
-                  phase = "read"
-                  while True:
-                      if not selector.get_map() and proc.poll() is not None:
-                          closed = True
-                          break
-                      now = time.monotonic()
-                      if now >= deadline:
-                          if phase == "kill":
-                              break
-                          timed_out = True
-                          sig = signal.SIGTERM if phase == "read" else signal.SIGKILL
-                          cleanup = "term" if phase == "read" else "kill"
-                          try:
-                              os.killpg(proc.pid, sig)
-                          except ProcessLookupError:
-                              pass
-                          phase = "term" if phase == "read" else "kill"
-                          deadline = now + 1
-                      for key, _ in selector.select(min(0.05, max(0, deadline - time.monotonic()))):
-                          try:
-                              chunk = os.read(key.fileobj.fileno(), 8192)
-                          except BlockingIOError:
-                              continue
-                          if not chunk:
-                              selector.unregister(key.fileobj)
-                              key.fileobj.close()
-                              continue
-                          name = key.data
-                          seen[name] += len(chunk)
-                          room = max(0, caps[name] + 1 - len(buffers[name]))
-                          buffers[name].extend(chunk[:room])
-                  code = proc.poll()
-                  out = bytes(buffers["stdout"][:max_out])
-                  err = bytes(buffers["stderr"][:4096])
-                  head_limit = spec["argv"][spec["argv"].index("-c") + 1] if "head" in os.path.basename(spec["argv"][0]) and "-c" in spec["argv"] else None
-                  if spec["argv"][0] == "sudo" and "-c" in spec["argv"]:
-                      head_limit = spec["argv"][spec["argv"].index("-c") + 1]
-                  uncertain = seen["stdout"] > max_out or (head_limit is not None and seen["stdout"] >= int(head_limit))
-                  return {"kind": "read", "id": spec["id"], "startedAt": start, "finishedAt": stamp(), "exitCode": code,
-                          "timeout": timed_out, "closed": closed, "cleanup": cleanup,
-                          "closureScope": "direct-child-exit-and-pipes-eof",
-                          "stdoutCaptureLimitBytes": max_out, "stderrCaptureLimitBytes": 4096,
-                          "stdoutBytesObserved": seen["stdout"], "stderrPresent": bool(seen["stderr"]),
-                          "stdoutPotentiallyIncomplete": uncertain, "stderrTruncated": seen["stderr"] > 4096,
-                          "errorCategory": classify_error(err, code), "facts": facts(spec["id"], out, code),
-                          "completeRead": code == 0 and not timed_out and closed and not uncertain}
-              except FileNotFoundError:
-                  return {"kind": "read", "id": spec["id"], "startedAt": start, "finishedAt": stamp(), "completeRead": False, "closed": True, "errorCategory": "missing-tool"}
-              except Exception:
-                  # No raw exception text is permitted in the public log.
-                  if proc is not None and proc.poll() is None:
-                      try:
-                          os.killpg(proc.pid, signal.SIGKILL)
-                          proc.wait(timeout=1)
-                      except (OSError, subprocess.TimeoutExpired):
-                          pass
-                  return {"kind": "read", "id": spec["id"], "startedAt": start, "finishedAt": stamp(), "completeRead": False, "closed": False, "errorCategory": "collector-error"}
-              finally:
-                  for key in list(selector.get_map().values()):
-                      key.fileobj.close()
-                  selector.close()
-
-
-          class Writer:
-              def __init__(self, stream=None):
-                  self.stream = stream if stream is not None else sys.stdout.buffer
-                  self.count = 0
-
-              def emit(self, record, final=False):
-                  # Also neutralize the legacy Actions command marker anywhere in a line.
-                  payload = (json.dumps(record, ensure_ascii=True, separators=(",", ":")).replace("#", "\\u0023") + "\n").encode("utf-8")
-                  if SENSITIVE.search(payload.decode("ascii")):
-                      payload = b'{"kind":"record-suppressed","reason":"sensitive-pattern"}\n'
-                  bound = LIMIT if final else LIMIT - RESERVE
-                  if self.count + len(payload) > bound:
-                      return False
-                  self.stream.write(payload)
-                  self.stream.flush()
-                  self.count += len(payload)
-                  return True
-
-
-          def main():
-              writer = Writer()
-              metadata = {key: os.environ.get(key, "") for key in META_RULES}
-              valid = all(re.fullmatch(META_RULES[key], value) for key, value in metadata.items())
-              valid = valid and os.environ.get("GN_PARENT") == PARENT and os.environ.get("GN_WORKFLOW_SHA") == metadata["GITHUB_SHA"]
-              valid = valid and os.environ.get("GITHUB_REPOSITORY") == "holdini25/GridNinjaSite" and sys.platform == "linux"
-              if not valid:
-                  writer.emit({"kind": "guard-failure", "diagnosticOnly": True, "qualification": False, "detailsSuppressed": True}, final=True)
-                  return 1
-              writer.emit({"kind": "start", "diagnosticOnly": True, "qualification": False, "allowlistSha256": ALLOWLIST_SHA256, "metadata": metadata, "recordedAt": stamp()})
-              child_env = {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "LANG": "C", "LC_ALL": "C", **metadata}
-              prior, results = {}, []
-              stopped = None
-              for spec in COMMANDS:
-                  counterpart = {"elevated-loaded-profiles": "loaded-profiles", "elevated-active-lsm": "active-lsm"}.get(spec["id"])
-                  ordinary = prior.get(counterpart, {})
-                  access_denied = (ordinary.get("closed") is True and not ordinary.get("timeout")
-                                   and ordinary.get("exitCode") not in {None, 0}
-                                   and ordinary.get("errorCategory") == "permission-denied")
-                  if counterpart and not access_denied:
-                      reason = "ordinary-read-complete" if ordinary.get("completeRead") else "ordinary-read-not-access-denied"
-                      record = {"kind": "skipped", "id": spec["id"], "reason": reason}
-                  else:
-                      record = run_read(spec, child_env)
-                      prior[spec["id"]] = record
-                  if not writer.emit(record):
-                      stopped = "public-output-limit"
-                      break
-                  results.append(record)
-                  if record.get("closed") is False:
-                      stopped = "unconfirmed-command-closure"
-                      break
-              writer.emit({"kind": "finish", "diagnosticOnly": True, "qualification": False, "recordedAt": stamp(),
-                           "commandRecords": len(results), "completeReads": sum(x.get("completeRead", False) for x in results),
-                           "skipped": sum(x["kind"] == "skipped" for x in results), "stopped": stopped,
-                           "publicBytesBeforeFinish": writer.count, "missingFactsRemainUnknown": True}, final=True)
-              return 1 if stopped else 0
-
-
-          if __name__ == "__main__":
-              try:
-                  sys.exit(main())
-              except Exception:
-                  # Fixed text only, never a traceback containing host data.
-                  sys.stdout.write('{"kind":"fatal","diagnosticOnly":true,"qualification":false,"detailsSuppressed":true}\n')
-                  sys.exit(1)
-          PY
+          try:
+              expected, source_path, *arguments = sys.argv[1:]
+              if len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+                  raise ValueError()
+              descriptor = os.open(source_path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(descriptor, "rb") as source:
+                  metadata = os.fstat(source.fileno())
+                  if not stat.S_ISREG(metadata.st_mode) or metadata.st_size > 262144:
+                      raise ValueError()
+                  payload = source.read(262145)
+              if len(payload) > 262144 or hashlib.sha256(payload).hexdigest() != expected:
+                  raise ValueError()
+              code = compile(payload, source_path, "exec")
+          except Exception:
+              sys.stderr.write("verified-helper-bootstrap-rejected\n")
+              sys.exit(1)
+          sys.argv = [source_path, *arguments]
+          namespace = {"__name__": "__main__", "__file__": source_path, "__package__": None, "__verified_helper_sha256__": hashlib.sha256(payload).hexdigest()}
+          exec(code, namespace, namespace)
+          VERIFIED_HELPER
+            then status=0; else status=$?; fi
+            python3 -I - "$call_directory/terminal.json" "$status" <<'CONTROL_TERMINAL'
+          import json,pathlib,sys,time
+          with pathlib.Path(sys.argv[1]).open('x') as output:
+              json.dump({'observedExitStatus':int(sys.argv[2]),'endedEpochMs':time.time_ns()//1000000},output)
+          CONTROL_TERMINAL
+            return "$status"
+          }
+          sandbox_control finalize --head "$GITHUB_SHA" --run-id "$GITHUB_RUN_ID" > "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/finalize-command.json"
+      - name: Preserve typed root-owned trial state even after a failed gate
+        id: sandbox_state
+        if: ${{ always() && steps.source.outcome == 'success' && steps.provision.outcome != 'skipped' }}
+        timeout-minutes: 2
+        env:
+          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
+        shell: bash
+        run: |
+          node --input-type=module <<'CAPTURE_STATE'
+          import assert from "node:assert/strict";
+          import { createHash } from "node:crypto";
+          import { lstat, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+          const records={};
+          const root="/var/lib/gridninja-cft";
+          const rootMetadata=await lstat(root).catch(()=>null);
+          if (rootMetadata) assert(rootMetadata.isDirectory()&&!rootMetadata.isSymbolicLink()&&rootMetadata.uid===0);
+          const commandNames=rootMetadata?(await readdir(root)).filter(name=>/^command-intent-[0-9]{3}(?:-closed)?[.]json$/.test(name)).sort():[];
+          assert(commandNames.length<=64);
+          for (const name of ["trial-state.json","activation-intent.json","activation.json","finalized.json",...commandNames]) {
+            const path="/var/lib/gridninja-cft/"+name;
+            const metadata=await lstat(path).catch(()=>null);
+            if (!metadata) {records[name]={available:false};continue;}
+            assert(metadata.isFile()&&!metadata.isSymbolicLink()&&metadata.uid===0&&metadata.size<=2097152);
+            const bytes=await readFile(path);
+            records[name]={available:true,sha256:createHash("sha256").update(bytes).digest("hex"),value:JSON.parse(bytes)};
+          }
+          await mkdir(process.env.GN_COMPATIBILITY_EVIDENCE+"/sandbox-trial",{recursive:true});
+          await writeFile(process.env.GN_COMPATIBILITY_EVIDENCE+"/sandbox-trial/root-state-export.json",JSON.stringify({head:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID,records},null,2)+"\n",{flag:"wx"});
+          CAPTURE_STATE
+      - name: Retain final source state and artifact identities, including failures
+        if: ${{ always() && steps.source.outcome == 'success' }}
+        env:
+          EXPECTED_HEAD: ${{ github.sha }}
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from "node:assert/strict";
+          import { execFileSync } from "node:child_process";
+          import { createHash } from "node:crypto";
+          import { readdir, readFile, stat, writeFile } from "node:fs/promises";
+          import { join } from "node:path";
+          const directory = process.env.GN_COMPATIBILITY_EVIDENCE;
+          const git = args => execFileSync("git", args, { encoding: "utf8" }).trim();
+          const before = JSON.parse(await readFile(directory + "/source-verified.json", "utf8"));
+          const changes = git(["status", "--porcelain", "--untracked-files=no"]);
+          const pins = {}, artifacts = [];
+          for (const path of Object.keys(before.files)) {
+            const bytes = await readFile(path);
+            pins[path] = { bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") };
+          }
+          async function walk(path) {
+            const entry = await stat(path).catch(() => null);
+            if (!entry) return;
+            if (entry.isDirectory()) { for (const name of (await readdir(path)).sort()) await walk(join(path, name)); return; }
+            if (!entry.isFile()) return;
+            const bytes = await readFile(path);
+            artifacts.push({ path, bytes: bytes.length, sha256: createHash("sha256").update(bytes).digest("hex") });
+          }
+          await walk("build/facility");
+          await walk(directory);
+          await walk(".next/facility-build.json");
+          await walk(".next/BUILD_ID");
+          const head = git(["rev-parse", "HEAD"]);
+          await writeFile(directory + "/final-evidence-index.json", JSON.stringify({ recordedAt: new Date().toISOString(), head, expectedHead: process.env.EXPECTED_HEAD, trackedChanges: changes, sourcePins: pins, artifacts, interpretation: "Exit statuses and complete-matrix validators determine the evaluation result. Collection or artifact-upload success alone is not qualification. Original invalid captures remain retained.", hardwareQualification: false, publicAcceptance: false }, null, 2) + "\n", { flag: "wx" });
+          assert.equal(head, process.env.EXPECTED_HEAD);
+          assert.equal(changes, "", "Tracked source changed during the evaluation");
+          assert.deepEqual(pins, before.files, "Frozen source or lockfile pins changed during the evaluation");
+          NODE
+      - name: Upload every available result and raw failure
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: qualification-compatibility-${{ github.sha }}-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: |
+            build/qa/qualification-compatibility
+            build/facility
+            .next/facility-build.json
+            .next/BUILD_ID
+            tools/qualification/package.json
+            tools/qualification/package-lock.json
+            .github/workflows/qualification-compatibility.yml
+            vercel.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
