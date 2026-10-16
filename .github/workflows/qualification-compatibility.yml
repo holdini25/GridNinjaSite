@@ -76,7 +76,7 @@ jobs:
           assert.equal(receipt.runAttempt, "1", "An unchanged workflow rerun is not authorized");
           assert.match(receipt.expectedHead, /^[a-f0-9]{40}$/);
           assert.equal(receipt.head, receipt.expectedHead);
-          assert.equal(process.env.GN_TRIAL_PARENT, "741c29f79bb3ead5ff832ff86ed813f59b31634d");
+          assert.equal(process.env.GN_TRIAL_PARENT, "5e87a67182d12b525a9b2355d151cfc63ec7e8ea");
           assert.equal(process.env.GN_TRIAL_WORKFLOW_SHA, receipt.head);
           assert.equal(git(["rev-parse", "HEAD^"]), process.env.GN_TRIAL_PARENT);
           assert.equal(process.version, "v22.23.2");
@@ -145,7 +145,7 @@ jobs:
         id: provision
         timeout-minutes: 5
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |
@@ -230,7 +230,7 @@ jobs:
         id: baseline
         timeout-minutes: 6
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |
@@ -249,7 +249,7 @@ jobs:
         id: policy
         timeout-minutes: 2
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |
@@ -312,7 +312,7 @@ jobs:
         id: lighthouse_sandbox
         timeout-minutes: 6
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |
@@ -331,7 +331,7 @@ jobs:
         id: playwright_sandbox
         timeout-minutes: 6
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |
@@ -379,7 +379,7 @@ jobs:
         id: sandbox_gate
         timeout-minutes: 2
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |
@@ -469,7 +469,7 @@ jobs:
       - name: Run each full-matrix collector and validator once, sequentially
         shell: bash
         run: |
-          GN_SANDBOX_PROVISION_SHA256="ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256="4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           sandbox_control() {
             test ! -e "$GN_COMPATIBILITY_EVIDENCE/sandbox-trial/helper-uncertain.json" || return 1
             local call_directory status
@@ -564,7 +564,7 @@ jobs:
         if: ${{ always() && steps.provision.outcome == 'success' }}
         timeout-minutes: 2
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |
@@ -632,7 +632,7 @@ jobs:
         if: ${{ always() && steps.source.outcome == 'success' && steps.provision.outcome != 'skipped' }}
         timeout-minutes: 2
         env:
-          GN_SANDBOX_PROVISION_SHA256: "ca4523c6cd2201e14e6170f2f913bf92261edaf09afdb6d9b38286a09095ac8a"
+          GN_SANDBOX_PROVISION_SHA256: "4e0d35606c96812e82a2d4b95fa92acde1a12156735b18c5d695f13bff5c7832"
           GN_SANDBOX_PROOF_SHA256: "6dbfff335bf87d954be35e01072d046f2993897beb1a36ec6bebce4193a706a9"
         shell: bash
         run: |

@@ -326,19 +326,47 @@ def profile_snapshot(expected=False):
             "noPotentialCandidateAttachmentConflicts": True}
 
 
-def validate_tunable_text(raw):
+TUNABLE_VALUE_CHARACTERS = r"[A-Za-z0-9_/.@{}\[\]*?+,~^=:\-$\s\"']"
+KNOWN_TUNABLE_PATHS = {
+    "alias", "apparmorfs", "dovecot", "etc", "global", "home", "home.d/site.local", "kernelvars",
+    "multiarch", "multiarch.d/site.local", "proc", "run", "securityfs", "share", "sys", "system", "xdg-user-dirs",
+}
+
+
+def validate_tunable_text(raw, source_path=None):
     """Permit assignments and in-tree includes only; no aliases/rule blocks."""
-    for original in raw.decode("utf-8", "strict").splitlines():
-        line = original.strip()
-        if not line or (line.startswith("#") and not re.match(r"#\s*include\b", line)):
-            continue
-        include = re.fullmatch(r"#?\s*include(?:\s+if\s+exists)?\s+<(tunables/[A-Za-z0-9_./-]+)>\s*(?:#.*)?", line)
-        if include:
-            require(".." not in PurePosixPath(include[1]).parts, "tunable-include-escape")
-            continue
-        assignment = re.fullmatch(r"@\{[A-Za-z0-9_]+\}\s*\+?=\s*([^#]+)(?:#.*)?", line)
-        require(assignment is not None, "tunable-non-assignment-content")
-        require(re.fullmatch(r"[A-Za-z0-9_/.@{}\[\]*?+,~^=\-$\s\"']+", assignment[1]) is not None, "tunable-assignment-unknown-syntax")
+    for line_number, original in enumerate(raw.decode("utf-8", "strict").splitlines(), 1):
+        unexpected = []
+        try:
+            line = original.strip()
+            if not line or (line.startswith("#") and not re.match(r"#\s*include\b", line)):
+                continue
+            include = re.fullmatch(r"#?\s*include(?:\s+if\s+exists)?\s+<(tunables/[A-Za-z0-9_./-]+)>\s*(?:#.*)?", line)
+            if include:
+                require(".." not in PurePosixPath(include[1]).parts, "tunable-include-escape")
+                continue
+            assignment = re.fullmatch(r"@\{[A-Za-z0-9_]+\}\s*\+?=\s*([^#]+)(?:#.*)?", line)
+            require(assignment is not None, "tunable-non-assignment-content")
+            # The literal colon is present in Ubuntu's pci_bus assignment; it
+            # changes no directive grammar or included file boundary.
+            unexpected = sorted({ord(char) for char in assignment[1] if not re.fullmatch(TUNABLE_VALUE_CHARACTERS, char)})
+            require(not unexpected, "tunable-assignment-unknown-syntax")
+        except Refusal as error:
+            relative = None
+            if source_path is not None:
+                try:
+                    relative = str(Path(source_path).relative_to("/etc/apparmor.d/tunables"))
+                except ValueError:
+                    pass
+            error.tunable_diagnostic = {
+                "fileRelativePath": relative if relative in KNOWN_TUNABLE_PATHS else "unrecognized-tunable",
+                "sourcePathSha256": sha_bytes(str(source_path).encode()) if source_path is not None else None,
+                "fileSha256": sha_bytes(raw), "fileBytes": len(raw), "lineNumber": line_number,
+                "lineSha256WithoutLineEnding": sha_bytes(original.encode()),
+                "unexpectedCharacterCodePoints": unexpected[:8], "additionalUnexpectedCodePoints": max(0, len(unexpected) - 8),
+                "rawContentsSuppressed": True,
+            }
+            raise
 
 
 def host_facts(expected=False):
@@ -373,7 +401,7 @@ def host_facts(expected=False):
                 if metadata["type"] == "file":
                     metadata["sha256"] = sha_file(path)
                     if base.name == "tunables":
-                        validate_tunable_text(bounded_read(path, 65536))
+                        validate_tunable_text(bounded_read(path, 65536), path)
                 policy_inputs.append(metadata)
                 require(len(policy_inputs) <= MAX_ENTRIES, "policy-input-count-limit")
     profiles = profile_snapshot(expected)
@@ -920,7 +948,10 @@ def main():
         print(encoded)
     except BaseException as error:
         code = str(error) if isinstance(error, Refusal) and re.fullmatch(r"[a-z0-9-]{1,80}", str(error)) else "unexpected-operation-failure"
-        print(json.dumps({"status": "FAIL", "action": args.action, "code": code, "disposalRequiredIfPolicyOrClosureUncertain": True}))
+        result = {"status": "FAIL", "action": args.action, "code": code, "disposalRequiredIfPolicyOrClosureUncertain": True}
+        if isinstance(error, Refusal) and hasattr(error, "tunable_diagnostic"):
+            result["tunableDiagnostic"] = error.tunable_diagnostic
+        print(json.dumps(result))
         return 1
     finally:
         if lock_fd is not None:

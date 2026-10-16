@@ -1,0 +1,551 @@
+{
+  "sourceUrl": "https://archive.ubuntu.com/ubuntu/pool/main/a/apparmor/apparmor_4.0.1really4.0.1-0ubuntu0.24.04.9_amd64.deb",
+  "packageSha256": "59af23f557d666039708ec176aa056d2fd85125dabd452accf6d86f5c608fb74",
+  "version": "4.0.1really4.0.1-0ubuntu0.24.04.9",
+  "classification": "Official published package reference; terminated runner exact revision and failing line were unobserved.",
+  "files": [
+    {
+      "relativePath": "alias",
+      "sha256": "e7b8b278db3f7aca74e0176f22cbd3adc3c89212cc9e66a90a2787b3ceee8030",
+      "activeLines": [
+        {
+          "lineNumber": 19,
+          "text": "include if exists <tunables/alias.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "apparmorfs",
+      "sha256": "63d35ffdb55dfeeb3cabb83e378c2c6856ef8a31ebf512b0a3e039634ab0ead8",
+      "activeLines": [
+        {
+          "lineNumber": 9,
+          "text": "include <tunables/securityfs>"
+        },
+        {
+          "lineNumber": 11,
+          "text": "@{apparmorfs}=@{securityfs}/apparmor/"
+        },
+        {
+          "lineNumber": 14,
+          "text": "include if exists <tunables/apparmorfs.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "dovecot",
+      "sha256": "7a7c87c1ccf7b47071ff3866de46aadeee8029f487b740577d3e646d647b3abb",
+      "activeLines": [
+        {
+          "lineNumber": 19,
+          "text": "@{DOVECOT_MAILSTORE}=@{HOME}/Maildir/ @{HOME}/mail/ @{HOME}/Mail/ /var/vmail/ /var/mail/ /var/spool/mail/"
+        },
+        {
+          "lineNumber": 22,
+          "text": "include if exists <tunables/dovecot.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "etc",
+      "sha256": "4211a2db7a81c3edea6a657f8eacdae4322235c1d766ac95a592cb6f1b43f7ee",
+      "activeLines": [
+        {
+          "lineNumber": 18,
+          "text": "@{etc_ro}=/etc/ /usr/etc/"
+        },
+        {
+          "lineNumber": 25,
+          "text": "@{etc_rw}=/etc/"
+        },
+        {
+          "lineNumber": 28,
+          "text": "include if exists <tunables/etc.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "global",
+      "sha256": "2c1d72013b53bf103fb8abe2199ce5775f8493df1acd3ef497046156c09fdf7c",
+      "activeLines": [
+        {
+          "lineNumber": 15,
+          "text": "include <tunables/home>"
+        },
+        {
+          "lineNumber": 16,
+          "text": "include <tunables/multiarch>"
+        },
+        {
+          "lineNumber": 17,
+          "text": "include <tunables/proc>"
+        },
+        {
+          "lineNumber": 18,
+          "text": "include <tunables/alias>"
+        },
+        {
+          "lineNumber": 19,
+          "text": "include <tunables/kernelvars>"
+        },
+        {
+          "lineNumber": 20,
+          "text": "include <tunables/system>"
+        },
+        {
+          "lineNumber": 21,
+          "text": "include <tunables/xdg-user-dirs>"
+        },
+        {
+          "lineNumber": 22,
+          "text": "include <tunables/share>"
+        },
+        {
+          "lineNumber": 23,
+          "text": "include <tunables/etc>"
+        },
+        {
+          "lineNumber": 24,
+          "text": "include <tunables/run>"
+        },
+        {
+          "lineNumber": 27,
+          "text": "include if exists <tunables/global.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "home",
+      "sha256": "806a4e80696e3870d46d1ae99ac7fe7099680b39040c2183094a44671d83218e",
+      "activeLines": [
+        {
+          "lineNumber": 15,
+          "text": "@{HOMEDIRS}=/home/"
+        },
+        {
+          "lineNumber": 21,
+          "text": "@{HOME}=@{HOMEDIRS}/*/ /root/"
+        },
+        {
+          "lineNumber": 24,
+          "text": "include if exists <tunables/home.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "home.d/site.local",
+      "sha256": "f6f9d209f8015196f2e391ea02debcebecbf8022ececfee3a08e3973c3bb06d4",
+      "activeLines": []
+    },
+    {
+      "relativePath": "kernelvars",
+      "sha256": "a2fa754e93a435722ea4b8b03e2bdf52bf4c029c66397b773f5e4321d6f66ea5",
+      "activeLines": [
+        {
+          "lineNumber": 16,
+          "text": "@{pid}={[1-9],[1-9][0-9],[1-9][0-9][0-9],[1-9][0-9][0-9][0-9],[1-9][0-9][0-9][0-9][0-9],[1-9][0-9][0-9][0-9][0-9][0-9],[1-4][0-9][0-9][0-9][0-9][0-9][0-9]}"
+        },
+        {
+          "lineNumber": 19,
+          "text": "@{tid}=@{pid}"
+        },
+        {
+          "lineNumber": 22,
+          "text": "@{pids}=@{pid}"
+        },
+        {
+          "lineNumber": 27,
+          "text": "@{uid}={[0-9],[1-9][0-9],[1-9][0-9][0-9],[1-9][0-9][0-9][0-9],[1-9][0-9][0-9][0-9][0-9],[1-9][0-9][0-9][0-9][0-9][0-9],[1-9][0-9][0-9][0-9][0-9][0-9][0-9],[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9],[1-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9],[1-4][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]}"
+        },
+        {
+          "lineNumber": 30,
+          "text": "@{uids}=@{uid}"
+        },
+        {
+          "lineNumber": 33,
+          "text": "@{sys}=/sys/"
+        },
+        {
+          "lineNumber": 36,
+          "text": "include if exists <tunables/kernelvars.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "multiarch",
+      "sha256": "0d35e0680f4dd9085a1c64911be21e95a65d12db045bde4b4ecae22915ce53ff",
+      "activeLines": [
+        {
+          "lineNumber": 13,
+          "text": "@{multiarch}=*-linux-gnu*"
+        },
+        {
+          "lineNumber": 16,
+          "text": "include if exists <tunables/multiarch.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "multiarch.d/site.local",
+      "sha256": "731ad52936633b9a0c738605a2a08aad2357df91ca8fbe3bd2c3427d7aac240b",
+      "activeLines": []
+    },
+    {
+      "relativePath": "proc",
+      "sha256": "d6a8ac6910ecdde3930916dcb44d7b3d3bf1cfe5a8f54728f1f599e32a26ece7",
+      "activeLines": [
+        {
+          "lineNumber": 12,
+          "text": "@{PROC}=/proc/"
+        },
+        {
+          "lineNumber": 15,
+          "text": "include if exists <tunables/proc.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "run",
+      "sha256": "cbe2d9c99a82124d6206bfdd377895fa3dec48ee255923d2c31b71be53ab9bdd",
+      "activeLines": [
+        {
+          "lineNumber": 1,
+          "text": "@{run}=/run/ /var/run/"
+        },
+        {
+          "lineNumber": 4,
+          "text": "include if exists <tunables/run.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "securityfs",
+      "sha256": "da256009660ae672e734642bc40422df6d7166bd5c01579729a0c6fac340e47c",
+      "activeLines": [
+        {
+          "lineNumber": 10,
+          "text": "@{securityfs}=@{sys}/kernel/security/"
+        },
+        {
+          "lineNumber": 13,
+          "text": "include if exists <tunables/securityfs.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "share",
+      "sha256": "5389ddceeb78d2012f528037e5c8205535f145c906cf6266ba400d9bafea26b7",
+      "activeLines": [
+        {
+          "lineNumber": 1,
+          "text": "@{flatpak_exports_root} = {flatpak/exports,flatpak/{app,runtime}/*/*/*/*/export}"
+        },
+        {
+          "lineNumber": 8,
+          "text": "@{system_share_dirs} = /{usr,usr/local,var/lib/@{flatpak_exports_root}}/share"
+        },
+        {
+          "lineNumber": 15,
+          "text": "@{user_share_dirs} = @{HOME}/.local{,/share/@{flatpak_exports_root}}/share"
+        },
+        {
+          "lineNumber": 18,
+          "text": "include if exists <tunables/share.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "sys",
+      "sha256": "386ef113b736b14319fa1aad4f0b09f367147121072dd1ad354e528a16a588c5",
+      "activeLines": []
+    },
+    {
+      "relativePath": "system",
+      "sha256": "84dfeb5a2239e9cb7626b8008275c5aa0602d671303f4b43b7db0eff4688b828",
+      "activeLines": [
+        {
+          "lineNumber": 12,
+          "text": "@{d}=[0-9]"
+        },
+        {
+          "lineNumber": 15,
+          "text": "@{l}=[a-zA-Z]"
+        },
+        {
+          "lineNumber": 18,
+          "text": "@{c}=[0-9a-zA-Z]"
+        },
+        {
+          "lineNumber": 21,
+          "text": "@{w}=[a-zA-Z0-9_]"
+        },
+        {
+          "lineNumber": 24,
+          "text": "@{h}=[0-9a-fA-F]"
+        },
+        {
+          "lineNumber": 27,
+          "text": "@{int}=@{d}{@{d},}{@{d},}{@{d},}{@{d},}{@{d},}{@{d},}{@{d},}{@{d},}{@{d},}"
+        },
+        {
+          "lineNumber": 30,
+          "text": "@{hex}=@{h}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}{@{h},}"
+        },
+        {
+          "lineNumber": 31,
+          "text": "@{rand}=@{c}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}{@{c},}"
+        },
+        {
+          "lineNumber": 32,
+          "text": "@{word}=@{w}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}{@{w},}"
+        },
+        {
+          "lineNumber": 35,
+          "text": "@{u8}=[0-9]{[0-9],} 1[0-9][0-9] 2[0-4][0-9] 25[0-5]"
+        },
+        {
+          "lineNumber": 38,
+          "text": "@{u16}={@{d},[1-9]@{d},[1-9][@{d}@{d},[1-9]@{d}@{d}@{d},[1-6]@{d}@{d}@{d}@{d}}"
+        },
+        {
+          "lineNumber": 41,
+          "text": "@{u32}={@{d},[1-9]@{d},[1-9]@{d}@{d},[1-9]@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-4]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}}"
+        },
+        {
+          "lineNumber": 44,
+          "text": "@{u64}={@{d},[1-9]@{d},[1-9]@{d}@{d},[1-9]@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},[1-9]@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d},1@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}@{d}}"
+        },
+        {
+          "lineNumber": 47,
+          "text": "@{int2}=@{d}@{d}"
+        },
+        {
+          "lineNumber": 48,
+          "text": "@{int4}=@{int2}@{int2}"
+        },
+        {
+          "lineNumber": 49,
+          "text": "@{int6}=@{int4}@{int2}"
+        },
+        {
+          "lineNumber": 50,
+          "text": "@{int8}=@{int4}@{int4}"
+        },
+        {
+          "lineNumber": 51,
+          "text": "@{int9}=@{int8}@{d}"
+        },
+        {
+          "lineNumber": 52,
+          "text": "@{int10}=@{int8}@{int2}"
+        },
+        {
+          "lineNumber": 53,
+          "text": "@{int12}=@{int8}@{int4}"
+        },
+        {
+          "lineNumber": 54,
+          "text": "@{int15}=@{int8}@{int4}@{int2}@{d}"
+        },
+        {
+          "lineNumber": 55,
+          "text": "@{int16}=@{int8}@{int8}"
+        },
+        {
+          "lineNumber": 56,
+          "text": "@{int32}=@{int16}@{int16}"
+        },
+        {
+          "lineNumber": 57,
+          "text": "@{int64}=@{int32}@{int32}"
+        },
+        {
+          "lineNumber": 60,
+          "text": "@{hex2}=@{h}@{h}"
+        },
+        {
+          "lineNumber": 61,
+          "text": "@{hex4}=@{hex2}@{hex2}"
+        },
+        {
+          "lineNumber": 62,
+          "text": "@{hex6}=@{hex4}@{hex2}"
+        },
+        {
+          "lineNumber": 63,
+          "text": "@{hex8}=@{hex4}@{hex4}"
+        },
+        {
+          "lineNumber": 64,
+          "text": "@{hex9}=@{hex8}@{h}"
+        },
+        {
+          "lineNumber": 65,
+          "text": "@{hex10}=@{hex8}@{hex2}"
+        },
+        {
+          "lineNumber": 66,
+          "text": "@{hex12}=@{hex8}@{hex4}"
+        },
+        {
+          "lineNumber": 67,
+          "text": "@{hex15}=@{hex8}@{hex4}@{hex2}@{h}"
+        },
+        {
+          "lineNumber": 68,
+          "text": "@{hex16}=@{hex8}@{hex8}"
+        },
+        {
+          "lineNumber": 69,
+          "text": "@{hex32}=@{hex16}@{hex16}"
+        },
+        {
+          "lineNumber": 70,
+          "text": "@{hex38}=@{hex32}@{hex6}"
+        },
+        {
+          "lineNumber": 71,
+          "text": "@{hex64}=@{hex32}@{hex32}"
+        },
+        {
+          "lineNumber": 74,
+          "text": "@{rand2}=@{c}@{c}"
+        },
+        {
+          "lineNumber": 75,
+          "text": "@{rand4}=@{rand2}@{rand2}"
+        },
+        {
+          "lineNumber": 76,
+          "text": "@{rand6}=@{rand4}@{rand2}"
+        },
+        {
+          "lineNumber": 77,
+          "text": "@{rand8}=@{rand4}@{rand4}"
+        },
+        {
+          "lineNumber": 78,
+          "text": "@{rand9}=@{rand8}@{c}"
+        },
+        {
+          "lineNumber": 79,
+          "text": "@{rand10}=@{rand8}@{rand2}"
+        },
+        {
+          "lineNumber": 80,
+          "text": "@{rand12}=@{rand8}@{rand4}"
+        },
+        {
+          "lineNumber": 81,
+          "text": "@{rand15}=@{rand8}@{rand4}@{rand2}@{c}"
+        },
+        {
+          "lineNumber": 82,
+          "text": "@{rand16}=@{rand8}@{rand8}"
+        },
+        {
+          "lineNumber": 83,
+          "text": "@{rand32}=@{rand16}@{rand16}"
+        },
+        {
+          "lineNumber": 84,
+          "text": "@{rand64}=@{rand32}@{rand32}"
+        },
+        {
+          "lineNumber": 87,
+          "text": "@{word2}=@{w}@{w}"
+        },
+        {
+          "lineNumber": 88,
+          "text": "@{word4}=@{word2}@{word2}"
+        },
+        {
+          "lineNumber": 89,
+          "text": "@{word6}=@{word4}@{word2}"
+        },
+        {
+          "lineNumber": 90,
+          "text": "@{word8}=@{word4}@{word4}"
+        },
+        {
+          "lineNumber": 91,
+          "text": "@{word9}=@{word8}@{w}"
+        },
+        {
+          "lineNumber": 92,
+          "text": "@{word10}=@{word8}@{word2}"
+        },
+        {
+          "lineNumber": 93,
+          "text": "@{word12}=@{word8}@{word4}"
+        },
+        {
+          "lineNumber": 94,
+          "text": "@{word15}=@{word8}@{word4}@{word2}@{w}"
+        },
+        {
+          "lineNumber": 95,
+          "text": "@{word16}=@{word8}@{word8}"
+        },
+        {
+          "lineNumber": 96,
+          "text": "@{word32}=@{word16}@{word16}"
+        },
+        {
+          "lineNumber": 97,
+          "text": "@{word64}=@{word32}@{word32}"
+        },
+        {
+          "lineNumber": 100,
+          "text": "@{pci_bus}=pci@{hex4}:@{hex2}"
+        },
+        {
+          "lineNumber": 102,
+          "text": "include if exists <tunables/system.d>"
+        }
+      ]
+    },
+    {
+      "relativePath": "xdg-user-dirs",
+      "sha256": "1d92b108e04a4067333224c4dbfd19df8ca0f0deef7a28b153995e22fe8cedb7",
+      "activeLines": [
+        {
+          "lineNumber": 13,
+          "text": "@{XDG_DESKTOP_DIR}=\"Desktop\""
+        },
+        {
+          "lineNumber": 14,
+          "text": "@{XDG_DOWNLOAD_DIR}=\"Downloads\""
+        },
+        {
+          "lineNumber": 15,
+          "text": "@{XDG_TEMPLATES_DIR}=\"Templates\""
+        },
+        {
+          "lineNumber": 16,
+          "text": "@{XDG_PUBLICSHARE_DIR}=\"Public\""
+        },
+        {
+          "lineNumber": 17,
+          "text": "@{XDG_DOCUMENTS_DIR}=\"Documents\""
+        },
+        {
+          "lineNumber": 18,
+          "text": "@{XDG_MUSIC_DIR}=\"Music\""
+        },
+        {
+          "lineNumber": 19,
+          "text": "@{XDG_PICTURES_DIR}=\"Pictures\""
+        },
+        {
+          "lineNumber": 20,
+          "text": "@{XDG_VIDEOS_DIR}=\"Videos\""
+        },
+        {
+          "lineNumber": 23,
+          "text": "include if exists <tunables/xdg-user-dirs.d>"
+        }
+      ]
+    }
+  ]
+}

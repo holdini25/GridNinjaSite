@@ -289,6 +289,69 @@ class ProvisionTests(unittest.TestCase):
             with self.subTest(text=text), self.assertRaises(P.Refusal):
                 P.validate_tunable_text(text)
 
+    def test_official_noble_tunables_assignment_fixture(self):
+        fixture = json.loads((Path(__file__).parent / "fixtures/apparmor-tunables-noble-4.0.1.json").read_text())
+        self.assertEqual(fixture["version"], "4.0.1really4.0.1-0ubuntu0.24.04.9")
+        self.assertEqual(fixture["packageSha256"], "59af23f557d666039708ec176aa056d2fd85125dabd452accf6d86f5c608fb74")
+        self.assertEqual(len(fixture["files"]), 17)
+        self.assertEqual(sum(len(file["activeLines"]) for file in fixture["files"]), 111)
+        for file in fixture["files"]:
+            with self.subTest(file=file["relativePath"]):
+                raw = ("\n".join(line["text"] for line in file["activeLines"]) + "\n").encode()
+                P.validate_tunable_text(raw, "/etc/apparmor.d/tunables/" + file["relativePath"])
+
+    def test_official_pci_bus_literal_colon_regression(self):
+        fixture = json.loads((Path(__file__).parent / "fixtures/apparmor-tunables-noble-4.0.1.json").read_text())
+        system = next(file for file in fixture["files"] if file["relativePath"] == "system")
+        line = next(line for line in system["activeLines"] if line["lineNumber"] == 100)
+        self.assertEqual(line["text"], "@{pci_bus}=pci@{hex4}:@{hex2}")
+        P.validate_tunable_text(line["text"].encode())
+
+    def test_assignment_character_change_is_only_literal_colon(self):
+        prior = r"[A-Za-z0-9_/.@{}\[\]*?+,~^=\-$\s\"']"
+        changed = [point for point in range(128)
+                   if bool(P.re.fullmatch(prior, chr(point))) != bool(P.re.fullmatch(P.TUNABLE_VALUE_CHARACTERS, chr(point)))]
+        self.assertEqual(changed, [ord(":")])
+
+    def test_colon_does_not_enable_new_directive_or_rule_syntax(self):
+        for raw in (b'profile other /tmp/app { userns, }', b'alias /var/ -> /tmp/:,',
+                    b'@{X}=/tmp/:; profile other /tmp/app { userns, }', b'include </tmp/:outside>'):
+            with self.subTest(raw=raw), self.assertRaises(P.Refusal):
+                P.validate_tunable_text(raw)
+
+    def test_tunable_diagnostic_identifies_safe_metadata_without_raw_contents(self):
+        raw = b'# synthetic fixture\n@{TEST}=ghp_SYNTHETIC_CANARY_SECRET;\n'
+        try:
+            P.validate_tunable_text(raw, "/etc/apparmor.d/tunables/system")
+            self.fail("Unsupported semicolon must still fail")
+        except P.Refusal as error:
+            self.assertEqual(str(error), "tunable-assignment-unknown-syntax")
+            diagnostic = error.tunable_diagnostic
+            self.assertEqual(diagnostic["fileRelativePath"], "system")
+            self.assertEqual(diagnostic["lineNumber"], 2)
+            self.assertEqual(diagnostic["unexpectedCharacterCodePoints"], [59])
+            self.assertEqual(diagnostic["fileSha256"], P.sha_bytes(raw))
+            self.assertTrue(diagnostic["rawContentsSuppressed"])
+            encoded = json.dumps(diagnostic)
+            self.assertNotIn("SYNTHETIC_CANARY_SECRET", encoded)
+            self.assertNotIn("@{TEST}", encoded)
+            self.assertLess(len(encoded), 1024)
+
+    def test_tunable_diagnostic_suppresses_unrecognized_filename(self):
+        with self.assertRaises(P.Refusal) as caught:
+            P.validate_tunable_text(b'@{X}=/bad;\n', "/etc/apparmor.d/tunables/private-secret-name")
+        encoded = json.dumps(caught.exception.tunable_diagnostic)
+        self.assertNotIn("private-secret-name", encoded)
+        self.assertEqual(caught.exception.tunable_diagnostic["fileRelativePath"], "unrecognized-tunable")
+
+    def test_tunable_diagnostic_limits_unknown_codepoints(self):
+        raw = ('@{X}=' + ''.join(chr(n) for n in range(0x2600, 0x2620))).encode()
+        with self.assertRaises(P.Refusal) as caught:
+            P.validate_tunable_text(raw)
+        diagnostic = caught.exception.tunable_diagnostic
+        self.assertEqual(len(diagnostic["unexpectedCharacterCodePoints"]), 8)
+        self.assertEqual(diagnostic["additionalUnexpectedCodePoints"], 24)
+
     def test_lock_prevents_concurrent_helper_and_releases(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "install"
