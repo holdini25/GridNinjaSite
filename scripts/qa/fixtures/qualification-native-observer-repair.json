@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "gridninja-native-repair-fixtures.v1",
+  "rawProcStatAvailable": false,
+  "notes": [
+    "These are selected fields from genuine retained JSON records, not raw proc/stat lines.",
+    "Parser edge-case inputs are explicitly synthetic in the test source.",
+    "The Ubuntu24 lifecycle is from a different run and does not identify the Ubuntu26 browser failure, exit, signal or cleanup."
+  ],
+  "ubuntu26Caller": {
+    "pid": 2410,
+    "ppid": 2409,
+    "pgrp": 2018,
+    "session": 2018,
+    "startTicks": "18252",
+    "state": "S",
+    "uid": 1001,
+    "role": "runner"
+  },
+  "ubuntu26ReadinessError": {
+    "name": "Error",
+    "message": {
+      "bytes": 52,
+      "prefixTruncated": false,
+      "sha256": "641aaf7a2a3147f99f99059d1daf04ad2d2560a24195f9ecd406c4a78abda0fe",
+      "noUsableSandbox": false,
+      "namespaceDenied": false
+    }
+  },
+  "ubuntu26RecordedArgv": {
+    "exactExecutable": true,
+    "noWeakeningSwitches": true,
+    "argc": 20,
+    "argvSha256": "42b669e22535ea984f83d94baff4d33cb7e263abb65fe43731705b62d268eb8f",
+    "transport": "remote-debugging-port=0",
+    "disableSetuidSandbox": true,
+    "frozenLighthouseArgs": true,
+    "capturedFromActualChild": true
+  },
+  "ubuntu26MissingDirectReceipts": [
+    "child",
+    "closure",
+    "sandbox"
+  ],
+  "ubuntu24Lifecycle": {
+    "spawnCalls": 1,
+    "childReturned": true,
+    "spawnObserved": true,
+    "closeObserved": true,
+    "killRequested": false,
+    "pid": 11404,
+    "error": null,
+    "exit": {
+      "code": null,
+      "signal": "SIGABRT"
+    },
+    "close": {
+      "code": null,
+      "signal": "SIGABRT",
+      "observedAt": "2026-10-15T03:07:30.996Z"
+    }
+  },
+  "ubuntu24ReadinessError": {
+    "name": "Error",
+    "message": "waiting for dynamic debugging port in chrome-err.log",
+    "stack": "Error: waiting for dynamic debugging port in chrome-err.log\n    at checkReady (file://<workspace>/tools/qualification/node_modules/chrome-launcher/dist/chrome-launcher.js:314:47)\n    at poll (file://<workspace>/tools/qualification/node_modules/chrome-launcher/dist/chrome-launcher.js:318:17)"
+  },
+  "sources": [
+    {
+      "fixture": "ubuntu26-caller-prepared.json",
+      "fixtureSha256": "b677ca1274a07e62df7c877f1206857a3fe6cc176f8564925843001363e1a914",
+      "sourceSha256": "0f7230cffa273942eaa78948c1813d23765fd6e43b50ac089c64686efbde9a25",
+      "sourceBytes": 13118,
+      "jsonPointer": "/prepared/callerContext",
+      "sourceReference": "Codex/2026-10-14/task/recovery-evidence-20261017/ubuntu26-capability-01/smoke-result.json",
+      "transformation": "Selected fields copied unchanged from retained decoded JSON subtree"
+    },
+    {
+      "fixture": "ubuntu26-lighthouse-failed-phase.json",
+      "fixtureSha256": "f02281e19fad947186ca8c55ab191f5f452901bf214d5914c4259bea2d328d7d",
+      "sourceSha256": "0f7230cffa273942eaa78948c1813d23765fd6e43b50ac089c64686efbde9a25",
+      "sourceBytes": 13118,
+      "jsonPointer": "/smokes/0",
+      "sourceReference": "Codex/2026-10-14/task/recovery-evidence-20261017/ubuntu26-capability-01/smoke-result.json",
+      "transformation": "Selected fields copied unchanged from retained decoded JSON subtree"
+    },
+    {
+      "fixture": "ubuntu24-captured-browser-lifecycle.json",
+      "fixtureSha256": "380bd7ceebe9e6b420d3004b43b0568c74c84ef132f47c110f536ac3f207ae0f",
+      "sourceSha256": "49bffa253a641eb92c5bbd5eee36a36b98248ee416ca87942cdfd79d46d56333",
+      "sourceBytes": 13037,
+      "jsonPointer": "/runs/0/captures/0/launchFailure/process",
+      "sourceReference": "launcher-diagnostics-01/ci-artifacts-38673436265/build/facility/qualification-compatibility/lighthouse-index.json",
+      "transformation": "Selected fields copied unchanged from retained decoded JSON subtree"
+    },
+    {
+      "fixture": "ubuntu24-captured-readiness-error.json",
+      "fixtureSha256": "7c2c849b14e20be714ef8fa13e8123b388e9424cce9460a284160870230e5da8",
+      "sourceSha256": "49bffa253a641eb92c5bbd5eee36a36b98248ee416ca87942cdfd79d46d56333",
+      "sourceBytes": 13037,
+      "jsonPointer": "/runs/0/captures/0/launchFailure/error",
+      "sourceReference": "launcher-diagnostics-01/ci-artifacts-38673436265/build/facility/qualification-compatibility/lighthouse-index.json",
+      "transformation": "Selected fields copied unchanged from retained decoded JSON subtree"
+    }
+  ]
+}

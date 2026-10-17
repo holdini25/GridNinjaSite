@@ -15,7 +15,7 @@ import tempfile
 import time
 import urllib.request
 
-PARENT = "dab22222b66f5732a87dfde04d1c54569fcc960b"
+PARENT = "e2a7dee12eb792170ace6462fa058563ae6ac501"
 BASELINE = "e49a16e9f7f5c5000eea56bafa1c7c3bf75fa1eb"
 URL = "https://storage.googleapis.com/chrome-for-testing-public/155.0.8059.79/linux64/chrome-linux64.zip"
 ARCHIVE_SHA = "bcd9a79130d7e44d70f93be87042e9bcee7fe0f0b3898e06b8c9bed5fb619dcd"
@@ -28,6 +28,7 @@ CHANGED_PATHS = {
     "scripts/qa/qualification-native-workflow.py",
     "scripts/qa/qualification-native-observer.test.py",
     "scripts/qa/qualification-native-smoke.test.mjs",
+    "scripts/qa/fixtures/qualification-native-observer-repair.json",
 }
 
 

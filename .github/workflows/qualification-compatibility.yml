@@ -18,7 +18,7 @@ jobs:
       github.repository == 'holdini25/GridNinjaSite' &&
       github.event_name == 'push' &&
       github.run_attempt == 1 &&
-      github.event.before == 'dab22222b66f5732a87dfde04d1c54569fcc960b'
+      github.event.before == 'e2a7dee12eb792170ace6462fa058563ae6ac501'
     runs-on: ubuntu-26.04
     timeout-minutes: 20
     env:

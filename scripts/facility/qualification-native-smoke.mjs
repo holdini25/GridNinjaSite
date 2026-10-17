@@ -6,7 +6,7 @@ import { createRequire, syncBuiltinESMExports } from "node:module"
 import { tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
-import { SANDBOX_CHROME, VERIFIED_HELPER_BOOTSTRAP, assertProofEnvironment, parseProcStat,
+import { SANDBOX_CHROME, VERIFIED_HELPER_BOOTSTRAP, assertProofEnvironment,
   sameProcess, ownedDescendants, liveAttestationProcesses, assertSandboxArgv, sandboxPageFacts } from "./qualification-sandbox-proof.mjs"
 
 const spawn = childProcess.spawn
@@ -16,6 +16,25 @@ const hash = value => createHash("sha256").update(value).digest("hex")
 const required = (value, code) => { if (!value) throw Object.assign(new Error(code), { proofCode: code }) }
 const failureCode = error => /^[A-Z0-9_]{1,64}$/.test(error?.proofCode ?? "") ? error.proofCode : "NATIVE_REQUIREMENT_FAILED"
 const identity = p => ({ pid: p.pid, ppid: p.ppid, pgrp: p.pgrp, startTicks: p.startTicks })
+
+// A global /proc scan includes kernel tasks, which can have process group and
+// start ticks zero. Keep that parsing separate from owned browser identity.
+export function parseNativeProcStat(text, pid) {
+  required(typeof text === "string" && text.length <= 4096 && Number.isSafeInteger(pid) && pid > 0, "INVALID_PROC_STAT")
+  const openParen = text.indexOf(" ("), closeParen = text.lastIndexOf(") ")
+  required(openParen > 0 && closeParen > openParen && text.slice(0, openParen) === String(pid), "PROC_PID_MISMATCH")
+  const fields = text.slice(closeParen + 2).trim().split(/\s+/)
+  required(fields.length >= 20 && /^[RSDZTWtXxKPI]$/.test(fields[0]), "INVALID_PROC_STAT")
+  const ppid = Number(fields[1]), pgrp = Number(fields[2]), startTicks = fields[19]
+  required(/^[0-9]+$/.test(fields[1]) && Number.isSafeInteger(ppid) && ppid >= 0
+    && /^[0-9]+$/.test(fields[2]) && Number.isSafeInteger(pgrp) && pgrp >= 0 && /^(?:0|[1-9][0-9]*)$/.test(startTicks), "INVALID_PROC_STAT")
+  return { pid, ppid, pgrp, startTicks, state: fields[0] }
+}
+export function assertOwnedRoot(root) {
+  required(root && root.pid > 1 && root.pgrp > 0
+    && /^[1-9][0-9]*$/.test(root.startTicks), "INVALID_OWNED_ROOT")
+  return root
+}
 
 export function filteredCapture(cap = LIMIT.capture) {
   let bytes = 0, prefix = Buffer.alloc(0)
@@ -86,36 +105,38 @@ async function fileDiagnostic(path) {
     capture.add(buffer.subarray(0, bytesRead)); const after = await handle.stat()
     return { ...capture.facts(), bytes: before.size, prefixTruncated: before.size > LIMIT.capture,
       hashScope: bytesRead === before.size ? "complete-file" : "bounded-file-prefix", hashedBytes: bytesRead,
-      fileStableAfterChildClose: before.size === after.size && before.mtimeMs === after.mtimeMs }
+      fileStableDuringRead: before.size === after.size && before.mtimeMs === after.mtimeMs }
   } finally { await handle.close() }
 }
-async function proc(pid) { try { return parseProcStat(await boundedFile(`/proc/${pid}/stat`, 4096), pid) }
+async function proc(pid) { try { return parseNativeProcStat(await boundedFile(`/proc/${pid}/stat`, 4096), pid) }
   catch (error) { if (["ENOENT", "ESRCH"].includes(error.code)) return null; throw error } }
 async function snapshot() { const names = (await readdir("/proc")).filter(name => /^[1-9][0-9]*$/.test(name)); required(names.length <= 8192, "PROCESS_LIMIT")
   const result = []; for (const name of names) { const p = await proc(Number(name)); if (p) result.push(p) } return result }
 async function deadline(promise, ms, code) { let timer; try { return await Promise.race([promise, new Promise((_, reject) => { timer = setTimeout(() => reject(Object.assign(new Error(code), { proofCode: code })), ms) })]) } finally { clearTimeout(timer) } }
 async function until(test, ms, code) { const end = Date.now() + ms; do { const value = await test(); if (value) return value; await sleep(30) } while (Date.now() < end); required(false, code) }
-function observe(root) { const known = new Map([[`${root.pid}:${root.startTicks}`, root]]), state = { stopped: false, error: null }
-  const done = (async () => { while (!state.stopped) { try { for (const p of ownedDescendants(await snapshot(), [...known.values()], root)) known.set(`${p.pid}:${p.startTicks}`, p) }
-    catch (error) { state.error = failureCode(error); break } await sleep(40) } })()
+export function observeProcessTree(root, { snapshotProcesses = snapshot, wait = sleep } = {}) { const known = new Map([[`${root.pid}:${root.startTicks}`, root]]), state = { stopped: false, error: null }
+  const done = (async () => { while (!state.stopped) { try { for (const p of ownedDescendants(await snapshotProcesses(), [...known.values()], root)) known.set(`${p.pid}:${p.startTicks}`, p) }
+    catch (error) { state.error = failureCode(error); break } await wait(40) } })()
   return { known, async stop() { state.stopped = true; await done; required(!state.error, state.error ?? "OBSERVER_FAILED") } } }
 
-function captureChild(child) { const capture = { child, root: null, observer: null, closeObserved: false, spawnError: false, exitCode: null, signal: null,
+export function captureChild(child, { readRootStat = pid => fs.readFileSync(`/proc/${pid}/stat`, "utf8"), startObserver = observeProcessTree } = {}) { const capture = { child, root: null, observer: null, spawnObserved: false, exitObserved: false, closeObserved: false, spawnError: false, exitCode: null, signal: null,
   stdout: filteredCapture(), stderr: filteredCapture(), rootCaptureError: null }
-  child.on("error", () => { capture.spawnError = true })
+  child.on("spawn", () => { capture.spawnObserved = true })
+  child.on("error", error => { capture.spawnError = true; capture.spawnErrorFacts = filteredError(error) })
+  child.once("exit", (code, signal) => { capture.exitObserved = true; capture.exitCode = code; capture.signal = signal })
   child.once("close", (code, signal) => { capture.closeObserved = true; capture.exitCode = code; capture.signal = signal })
   child.stdout?.on("data", chunk => capture.stdout.add(chunk)); child.stderr?.on("data", chunk => capture.stderr.add(chunk))
-  try { if (child.pid) { capture.root = parseProcStat(fs.readFileSync(`/proc/${child.pid}/stat`, "utf8"), child.pid); capture.observer = observe(capture.root) } }
+  try { if (child.pid) { capture.root = assertOwnedRoot(parseNativeProcStat(readRootStat(child.pid), child.pid)); capture.observer = startObserver(capture.root) } }
   catch (error) { capture.rootCaptureError = failureCode(error) }
   return capture
 }
 
-async function helperCall(context, action, extra = {}, privileged = false) {
+export async function helperCall(context, action, extra = {}, privileged = false, { spawnHelper = spawn } = {}) {
   required(!context.helperUncertain, "HELPER_CLOSE_UNCONFIRMED")
   const request = { schemaVersion: "gridninja-native-sandbox.v1", headSha: context.headSha, runId: context.runId, runnerUid: process.getuid(), caller: identity(context.caller), ...extra }
   const args = ["-I", "-c", VERIFIED_HELPER_BOOTSTRAP, process.env.GN_NATIVE_OBSERVER_SHA256,
     join(context.repo, "scripts/facility/qualification-native-observer.py"), action]
-  const child = spawn(privileged ? "/usr/bin/sudo" : "/usr/bin/python3", privileged ? ["-n", "/usr/bin/python3", ...args] : args,
+  const child = spawnHelper(privileged ? "/usr/bin/sudo" : "/usr/bin/python3", privileged ? ["-n", "/usr/bin/python3", ...args] : args,
     { stdio: ["pipe", "pipe", "pipe"], shell: false })
   let output = Buffer.alloc(0), overflow = false, spawnError = false; const stderr = filteredCapture()
   child.stdout.on("data", chunk => { if (output.length + chunk.length > LIMIT.output) overflow = true; else output = Buffer.concat([output, chunk]) })
@@ -125,11 +146,11 @@ async function helperCall(context, action, extra = {}, privileged = false) {
   try { terminal = await deadline(new Promise(resolvePromise => child.once("close", (code, signal) => resolvePromise({ code, signal }))), LIMIT.helper, "HELPER_CLOSE_UNCONFIRMED") }
   catch (error) { context.helperUncertain = true; throw error }
   let receipt; try { receipt = JSON.parse(output) } catch { /* Only fixed diagnostics leave the process. */ }
-  const control = { action, privileged, closeObserved: true, ...terminal, spawnError, outputBytes: output.length, outputOverflow: overflow, stderr: stderr.facts(),
+  const control = { action, privileged, closeObserved: true, exitCode: terminal.code, signal: terminal.signal, spawnError, outputBytes: output.length, outputOverflow: overflow, stderr: stderr.facts(),
     code: /^[a-z0-9-]{1,96}$/.test(receipt?.code ?? "") ? receipt.code : null }
   context.controlCalls.push(control)
   required(!overflow && !spawnError && terminal.signal === null && stderr.facts().bytes === 0, "HELPER_TERMINAL_INVALID")
-  if (!privileged && receipt?.status === "FAIL" && receipt.code === "permission-denied") return helperCall(context, action, extra, true)
+  if (!privileged && receipt?.status === "FAIL" && receipt.code === "permission-denied") return helperCall(context, action, extra, true, { spawnHelper })
   required(terminal.code === 0 && receipt?.status === "PASS" && receipt.action === action, "HELPER_REJECTED")
   return receipt
 }
@@ -150,27 +171,63 @@ async function attest(context, capture, argvFacts, session, rows) {
   return { page, kernel: assertNativeAttestation(response, { ...extra, headSha: context.headSha, runId: context.runId,
     runnerUid: process.getuid(), caller: identity(context.caller) }, rendererPids) }
 }
-async function close(context, capture, argvFacts, graceful, receipt) {
-  if (!capture) { const closure = await helperCall(context, "closure", { ownedProcesses: [] }); receipt.closure = assertNativeClosure(closure, true); return }
-  let gracefulError = null
-  if (!capture.closeObserved && graceful) try { await deadline(graceful(), LIMIT.close, "GRACEFUL_CLOSE_TIMEOUT") } catch (error) { gracefulError = failureCode(error) }
-  try {
-    await until(() => capture.closeObserved, LIMIT.close, "DIRECT_CHILD_CLOSE_UNCONFIRMED")
-    // Allow ordinary asynchronous descendant exit to complete; never signal by
-    // label, process name, group or a reused PID. The helper then independently
-    // checks every retained identity and the protected installation.
-    if (capture.observer) await until(async () => {
-      for (const known of capture.observer.known.values()) if (sameProcess(known, await proc(known.pid))) return false
-      return true
-    }, LIMIT.close, "OWNED_DESCENDANT_CLOSE_UNCONFIRMED")
+function retainChildDiagnostics(capture, receipt) {
+  if (!capture) return
+  receipt.child = { pid: capture.child.pid ?? null, rootStartTicks: capture.root?.startTicks ?? null,
+    spawnObserved: capture.spawnObserved === true, exitObserved: capture.exitObserved === true,
+    directChildAndPipesClosed: capture.closeObserved, exitCode: capture.exitCode, signal: capture.signal,
+    spawnError: capture.spawnError, spawnErrorFacts: capture.spawnErrorFacts ?? null, rootCaptureError: capture.rootCaptureError,
+    stdout: capture.stdout.facts(), stderr: capture.stderr.facts() }
+}
+
+export async function closeNativeSmoke(context, capture, argvFacts, graceful, receipt,
+  { readProcess = proc, runHelper = helperCall, timeoutMs = LIMIT.close, logs = [], fileDescriptors = [] } = {}) {
+  let failure = null
+  const recordFailure = (phase, error) => {
+    failure ??= error
+    receipt.cleanupErrors ??= []
+    receipt.cleanupErrors.push({ phase, code: failureCode(error), error: filteredError(error) })
   }
-  catch (error) { receipt.disposalRequired = true; throw error }
-  finally { if (capture.observer) await capture.observer.stop(); receipt.child = { pid: capture.child.pid ?? null, rootStartTicks: capture.root?.startTicks ?? null,
-    directChildAndPipesClosed: capture.closeObserved, exitCode: capture.exitCode, signal: capture.signal, spawnError: capture.spawnError,
-    stdout: capture.stdout.facts(), stderr: capture.stderr.facts() }; receipt.gracefulError = gracefulError }
-  const extra = requestOwned(context, capture, argvFacts), closure = await helperCall(context, "closure", extra)
+  retainChildDiagnostics(capture, receipt)
+  if (capture) {
+    if (!capture.closeObserved && graceful) try { await deadline(graceful(), timeoutMs, "GRACEFUL_CLOSE_TIMEOUT") }
+      catch (error) { receipt.gracefulError = failureCode(error) }
+    try {
+      await until(() => capture.closeObserved, timeoutMs, "DIRECT_CHILD_CLOSE_UNCONFIRMED")
+      if (capture.observer) await until(async () => {
+        for (const known of capture.observer.known.values()) if (sameProcess(known, await readProcess(known.pid))) return false
+        return true
+      }, timeoutMs, "OWNED_DESCENDANT_CLOSE_UNCONFIRMED")
+    } catch (error) { recordFailure("owned-process-wait", error) }
+    // An observer error is a failed proof, but must not hide child/log facts or
+    // prevent the existing independent, read-only installation closure check.
+    try { if (capture.observer) await capture.observer.stop() }
+    catch (error) { receipt.observerFailureCode = failureCode(error); receipt.observationIncomplete = true; recordFailure("observer-stop", error) }
+    retainChildDiagnostics(capture, receipt)
+  }
+  const extra = capture ? requestOwned(context, capture, argvFacts) : { ownedProcesses: [] }
   receipt.ownedProcesses = extra.ownedProcesses
-  receipt.closure = assertNativeClosure(closure, capture.closeObserved)
+  try {
+    const closure = await runHelper(context, "closure", extra)
+    receipt.independentClosure = { status: closure.status, action: closure.action,
+      allObservedIdentitiesGone: closure.allObservedIdentitiesGone, matchingInstallationProcesses: closure.matchingInstallationProcesses,
+      unknownProcesses: closure.unknownProcesses, namespaceControlsUnchanged: closure.namespaceControlsUnchanged }
+    receipt.closure = assertNativeClosure(closure, !capture || capture.closeObserved)
+  } catch (error) { recordFailure("independent-closure", error) }
+  // Read both bounded log files and close both owned descriptors independently.
+  // One missing file must not suppress the other file or replace earlier errors.
+  for (const { path, field } of logs) {
+    try { (receipt.child ??= {})[field] = { ...await fileDiagnostic(path), readAfterChildClose: capture?.closeObserved === true } }
+    catch (error) { recordFailure(`diagnostic-${field}`, error) }
+  }
+  for (const fd of fileDescriptors) if (Number.isSafeInteger(fd)) {
+    try { fs.closeSync(fd) } catch (error) { recordFailure("log-descriptor-close", error) }
+  }
+  if (failure) {
+    receipt.disposalRequired = context.helperUncertain === true || receipt.cleanupErrors.some(error =>
+      ["owned-process-wait", "observer-stop", "independent-closure"].includes(error.phase))
+    throw failure
+  }
 }
 
 async function lighthouseSmoke(context, receipt) {
@@ -205,15 +262,10 @@ async function lighthouseSmoke(context, receipt) {
     receipt.sandbox = await attest(context, capture, argvFacts, session, rows)
   } catch (error) { failure = error; receipt.failureCode = failureCode(error); receipt.launchOrProofError = filteredError(error) }
   finally {
-    try { await close(context, capture, argvFacts, browser ? () => browser.close() : null, receipt) }
-    finally {
-      if (capture?.closeObserved) {
-        for (const [name, field] of [["chrome-out.log", "stdout"], ["chrome-err.log", "stderr"]]) {
-          if (receipt.child) receipt.child[field] = await fileDiagnostic(join(profile, name))
-        }
-        for (const fd of [launcher.outFile, launcher.errFile]) if (Number.isSafeInteger(fd)) fs.closeSync(fd)
-      }
-    }
+    try { await closeNativeSmoke(context, capture, argvFacts, browser ? () => browser.close() : null, receipt, {
+      logs: [{ path: join(profile, "chrome-out.log"), field: "stdout" }, { path: join(profile, "chrome-err.log"), field: "stderr" }],
+      fileDescriptors: [launcher.outFile, launcher.errFile],
+    }) } catch (error) { failure ??= error }
   }
   if (failure) throw failure
 }
@@ -270,7 +322,8 @@ async function playwrightSmoke(context, receipt) {
     receipt.sandbox = await attest(context, capture, argvFacts, session, rows)
   } catch (error) { failure = error; receipt.failureCode = failureCode(error); receipt.launchOrProofError = filteredError(error) }
   finally {
-    try { await close(context, capture, argvFacts, browser ? () => browser.close() : null, receipt) }
+    try { await closeNativeSmoke(context, capture, argvFacts, browser ? () => browser.close() : null, receipt) }
+    catch (error) { failure ??= error }
     finally { receipt.lifecycle = { browserSpawns: observation.state.spawns, groupKillAttempts: observation.state.groupKillAttempts,
       profileDeletionDeferrals: observation.state.profileDeletionDeferrals, profilePreserved: true, launchPromiseSettled: launchSettled }
       // Keep guards active through process exit if browser lifecycle is uncertain.
@@ -296,7 +349,7 @@ export async function main() {
   required(process.arch === "x64" && process.env.RUNNER_ARCH === "X64", "WRONG_ARCHITECTURE")
   required(!process.env.DEBUG && !process.env.PWDEBUG && /^[a-f0-9]{64}$/.test(process.env.GN_NATIVE_OBSERVER_SHA256 ?? ""), "UNSAFE_DEBUG_OR_HELPER_PIN")
   const repo = resolve(dirname(fileURLToPath(import.meta.url)), "../.."), caller = await proc(process.pid)
-  required(caller, "CALLER_IDENTITY")
+  required(caller && caller.pid > 1 && caller.pgrp > 0 && /^[1-9][0-9]*$/.test(caller.startTicks), "CALLER_IDENTITY")
   const context = { ...identityFacts, repo, caller, controlCalls: [], helperUncertain: false }
   const result = { schemaVersion: "gridninja-native-smoke.v1", ...identityFacts, outcome: "FAIL", attachmentCollisionStatus: "NOT_DETERMINED",
     insertionTrialStatus: "NOT_ATTEMPTED", qualification: false, startedEpochMs: Date.now(), smokes: [], maximumBrowserLaunches: 2 }

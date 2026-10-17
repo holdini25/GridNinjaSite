@@ -1,6 +1,12 @@
 import test from "node:test"
+import { spawn } from "node:child_process"
+import { EventEmitter, once } from "node:events"
+import fs from "node:fs"
+import { mkdtemp, readFile, writeFile } from "node:fs/promises"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import assert from "node:assert/strict"
-import { assertNativeAttestation, assertNativeClosure, filteredCapture, installPlaywrightObservation } from "../facility/qualification-native-smoke.mjs"
+import { assertNativeAttestation, assertNativeClosure, filteredCapture, installPlaywrightObservation, parseNativeProcStat, assertOwnedRoot, observeProcessTree, captureChild, closeNativeSmoke, helperCall } from "../facility/qualification-native-smoke.mjs"
 
 const chrome = "/var/lib/gridninja-cft/155.0.8059.79/chrome-linux64/chrome"
 const binarySha256 = "58957d0e74a9073626131018aabf17d97318227cca9b5dbdf5dee16345f2d211"
@@ -102,4 +108,156 @@ test("Playwright rejects a nonempty profile before spawn", () => {
   const guard = installPlaywrightObservation(() => {}, p)
   assert.throws(() => p.childProcess.spawn(chrome, ["--user-data-dir=/tmp/pw"], {}), /PLAYWRIGHT_PROFILE_NOT_FRESH/)
   assert.equal(p.calls.length, 0); guard.restore()
+})
+
+
+const retained = JSON.parse(await readFile(new URL("./fixtures/qualification-native-observer-repair.json", import.meta.url), "utf8"))
+// Explicitly synthetic stat lines. No raw stat bytes were retained from Ubuntu26.
+const syntheticStat = ({ pid = 2, ppid = 0, pgrp = 0, state = "S", start = "0", comm = "synthetic kernel task" } = {}) =>
+  `${pid} (${comm}) ${[state, ppid, pgrp, ...Array(16).fill(0), start, 0].join(" ")}`
+const codeError = code => Object.assign(new Error(code), { proofCode: code })
+const passClosure = { ...closure, namespaceControlsUnchanged: true }
+
+test("genuine retained caller fields remain usable without inventing raw stat bytes", () => {
+  assert.equal(retained.rawProcStatAvailable, false)
+  assert.equal(assertOwnedRoot(retained.ubuntu26Caller).startTicks, "18252")
+  assert.equal(retained.ubuntu26Caller.role, "runner")
+  assert.equal(retained.ubuntu26ReadinessError.message.sha256, "641aaf7a2a3147f99f99059d1daf04ad2d2560a24195f9ecd406c4a78abda0fe")
+  assert.deepEqual(retained.ubuntu26MissingDirectReceipts, ["child", "closure", "sandbox"])
+})
+for (const state of ["R", "S", "D", "Z", "T", "t", "X", "x", "K", "W", "P", "I"]) {
+  test(`synthetic global Linux stat accepts documented ${state} state with zero kernel identity fields`, () => {
+    const p = parseNativeProcStat(syntheticStat({ state }), 2)
+    assert.equal(p.state, state); assert.equal(p.pgrp, 0); assert.equal(p.startTicks, "0")
+    assert.throws(() => assertOwnedRoot(p), /INVALID_OWNED_ROOT/)
+  })
+}
+test("synthetic stat preserves comm parentheses, large start ticks and distinct PID identity", () => {
+  const p = parseNativeProcStat(syntheticStat({ pid: 81, ppid: 5, pgrp: 81, start: "18446744073709551615", comm: "name ) ( with spaces" }), 81)
+  assert.equal(p.startTicks, "18446744073709551615"); assert.equal(p.ppid, 5)
+  assert.throws(() => parseNativeProcStat(syntheticStat({ pid: 81 }), 82), /PROC_PID_MISMATCH/)
+})
+test("synthetic malformed proc identities still fail closed", () => {
+  for (const values of [{ ppid: -1 }, { pgrp: -1 }, { pgrp: "1e2" }, { ppid: "9007199254740992" }, { start: "-1" }, { start: "1.5" }, { state: "Q" }, { state: "ss" }]) {
+    assert.throws(() => parseNativeProcStat(syntheticStat(values), 2), JSON.stringify(values))
+  }
+  assert.throws(() => parseNativeProcStat("2 (short) S 0 0", 2))
+  assert.throws(() => parseNativeProcStat("x".repeat(4097), 2))
+})
+test("an immediately dead owned child keeps its positive historical identity", () => {
+  for (const state of ["Z", "X", "x"]) {
+    const p = parseNativeProcStat(syntheticStat({ pid: 81, ppid: 5, pgrp: 81, start: "44", state }), 81)
+    assert.equal(assertOwnedRoot(p).state, state)
+  }
+})
+
+async function localNodeCapture({ invalidSnapshot = false, delayMs = 0 } = {}) {
+  // This is a harmless local Node child, never Chrome. Its /proc input is an
+  // explicitly synthetic fixture so the lifecycle test also runs on macOS.
+  const child = spawn(process.execPath, ["-e", `process.stderr.write(${JSON.stringify("SYNTHETIC_TEST No usable sandbox!\n")}); setTimeout(() => process.exit(23), ${delayMs})`], { stdio: ["ignore", "pipe", "pipe"] })
+  const capture = captureChild(child, {
+    readRootStat: pid => syntheticStat({ pid, ppid: process.pid, pgrp: pid, start: "1000" }),
+    startObserver: root => observeProcessTree(root, {
+      snapshotProcesses: async () => invalidSnapshot ? [parseNativeProcStat("2 (synthetic malformed) S 0", 2)] : [],
+    }),
+  })
+  return { child, capture }
+}
+
+test("actual child close plus actual observer failure retains diagnostics and attempts independent closure", async () => {
+  const { child, capture } = await localNodeCapture({ invalidSnapshot: true })
+  await once(child, "close")
+  const dir = await mkdtemp(join(tmpdir(), "gn-native-repair-test-")), out = join(dir, "out"), err = join(dir, "err")
+  await writeFile(out, "SYNTHETIC_STDOUT_CANARY"); await writeFile(err, "SYNTHETIC_STDERR_CANARY No usable sandbox!\n")
+  const fds = [fs.openSync(out, "r"), fs.openSync(err, "r")], calls = []
+  const receipt = { outcome: "FAIL", failureCode: "NATIVE_REQUIREMENT_FAILED", launchOrProofError: clone(retained.ubuntu26ReadinessError) }
+  await assert.rejects(closeNativeSmoke({}, capture, {}, null, receipt, {
+    readProcess: async () => null,
+    runHelper: async (_context, action, request) => { calls.push({ action, request }); return passClosure },
+    logs: [{ path: out, field: "stdout" }, { path: err, field: "stderr" }], fileDescriptors: fds,
+  }), /INVALID_PROC_STAT/)
+  assert.equal(receipt.observerFailureCode, "INVALID_PROC_STAT"); assert.equal(receipt.observationIncomplete, true)
+  assert.equal(receipt.child.pid, child.pid); assert.equal(receipt.child.spawnObserved, true); assert.equal(receipt.child.exitObserved, true)
+  assert.equal(receipt.child.directChildAndPipesClosed, true); assert.equal(receipt.child.exitCode, 23)
+  assert.equal(receipt.child.stderr.noUsableSandbox, true); assert.equal(receipt.child.stderr.readAfterChildClose, true)
+  assert.equal(receipt.closure.allObservedIdentitiesGone, true); assert.equal(calls.length, 1); assert.equal(calls[0].action, "closure")
+  assert.equal(receipt.disposalRequired, true); assert.equal(receipt.outcome, "FAIL")
+  assert.deepEqual(receipt.launchOrProofError, retained.ubuntu26ReadinessError)
+  assert(!JSON.stringify(receipt).includes("CANARY"))
+  for (const fd of fds) assert.throws(() => fs.fstatSync(fd), { code: "EBADF" })
+})
+
+test("independent closure failure cannot erase observer error or child diagnostics", async () => {
+  const { child, capture } = await localNodeCapture({ invalidSnapshot: true }); await once(child, "close")
+  const receipt = { outcome: "FAIL" }
+  await assert.rejects(closeNativeSmoke({}, capture, {}, null, receipt, {
+    readProcess: async () => null, runHelper: async () => { throw codeError("HELPER_REJECTED") },
+  }), /INVALID_PROC_STAT/)
+  assert.deepEqual(receipt.cleanupErrors.map(e => e.phase), ["observer-stop", "independent-closure"])
+  assert.equal(receipt.child.directChildAndPipesClosed, true); assert.equal(receipt.child.stderr.noUsableSandbox, true)
+  assert.equal(receipt.closure, undefined); assert.equal(receipt.disposalRequired, true)
+})
+
+test("missing stdout log does not hide stderr or prevent either descriptor close", async () => {
+  const { child, capture } = await localNodeCapture(); await once(child, "close")
+  const dir = await mkdtemp(join(tmpdir(), "gn-native-repair-logs-")), out = join(dir, "out"), err = join(dir, "err")
+  await writeFile(out, "unused"); await writeFile(err, "SYNTHETIC No usable sandbox!\n")
+  const fds = [fs.openSync(out, "r"), fs.openSync(err, "r")], receipt = {}
+  await assert.rejects(closeNativeSmoke({}, capture, {}, null, receipt, {
+    readProcess: async () => null, runHelper: async () => passClosure,
+    logs: [{ path: join(dir, "missing"), field: "stdout" }, { path: err, field: "stderr" }], fileDescriptors: fds,
+  }))
+  assert.equal(receipt.child.stderr.noUsableSandbox, true); assert.equal(receipt.cleanupErrors[0].phase, "diagnostic-stdout")
+  assert.equal(receipt.disposalRequired, false); assert.equal(receipt.closure.allObservedIdentitiesGone, true)
+  for (const fd of fds) assert.throws(() => fs.fstatSync(fd), { code: "EBADF" })
+})
+
+test("unclosed child remains failed even if an independent fixture claims closure and stable log", async () => {
+  const { child, capture } = await localNodeCapture({ delayMs: 500 })
+  const closed = once(child, "close"), dir = await mkdtemp(join(tmpdir(), "gn-native-repair-open-")), log = join(dir, "err")
+  await writeFile(log, "SYNTHETIC stable file while child lives")
+  const receipt = {}
+  await assert.rejects(closeNativeSmoke({}, capture, {}, null, receipt, {
+    readProcess: async () => null, runHelper: async () => passClosure, timeoutMs: 1,
+    logs: [{ path: log, field: "stderr" }],
+  }), /DIRECT_CHILD_CLOSE_UNCONFIRMED/)
+  assert.equal(receipt.child.directChildAndPipesClosed, false); assert.equal(receipt.child.stderr.fileStableDuringRead, true)
+  assert.equal(receipt.child.stderr.readAfterChildClose, false); assert.equal(receipt.closure, undefined)
+  assert.equal(receipt.independentClosure.allObservedIdentitiesGone, true); assert.equal(receipt.disposalRequired, true)
+  await closed
+})
+
+test("actual OS spawn failure is distinct from returned spawn arguments", async () => {
+  const child = spawn("/gridninja-test-nonexistent-executable", [], { stdio: ["ignore", "pipe", "pipe"] })
+  const capture = captureChild(child), closed = new Promise(resolve => child.once("close", resolve))
+  await closed
+  const receipt = { outcome: "FAIL" }
+  await closeNativeSmoke({}, capture, {}, null, receipt, { runHelper: async () => passClosure })
+  assert.equal(receipt.child.spawnObserved, false); assert.equal(receipt.child.spawnError, true)
+  assert.equal(receipt.child.pid, null); assert.equal(receipt.child.directChildAndPipesClosed, true)
+  assert.equal(receipt.outcome, "FAIL"); assert.match(receipt.child.spawnErrorFacts.message.sha256, /^[a-f0-9]{64}$/)
+})
+
+test("separate historical Ubuntu24 lifecycle replay retains SIGABRT without assigning it to Ubuntu26", async () => {
+  const historical = retained.ubuntu24Lifecycle, child = Object.assign(new EventEmitter(), { pid: historical.pid })
+  const capture = captureChild(child, { readRootStat: () => { throw codeError("FIXTURE_NO_STAT") } })
+  child.emit("spawn"); child.emit("exit", historical.exit.code, historical.exit.signal); child.emit("close", historical.close.code, historical.close.signal)
+  const receipt = { outcome: "FAIL" }
+  await closeNativeSmoke({}, capture, {}, null, receipt, { runHelper: async () => passClosure })
+  assert.equal(receipt.child.spawnObserved, historical.spawnObserved); assert.equal(receipt.child.signal, "SIGABRT")
+  assert.equal(receipt.child.rootCaptureError, "FIXTURE_NO_STAT"); assert(retained.ubuntu26MissingDirectReceipts.includes("child"))
+})
+
+test("actual helper child receipts keep numeric exit status separate from helper failure code", async () => {
+  const calls = [], context = { headSha: "a".repeat(40), runId: "123", repo: "/synthetic-repo", caller: { pid: process.pid, startTicks: "1000" }, controlCalls: [] }
+  const spawnHelper = (command, args, options) => {
+    const index = calls.length; calls.push({ command, args })
+    const response = index === 0 ? { status: "FAIL", action: "closure", code: "permission-denied" } : { status: "PASS", action: "closure" }
+    const program = `process.stdin.resume(); process.stdin.on('end', () => process.stdout.write(${JSON.stringify(JSON.stringify(response))}, () => process.exit(${index === 0 ? 1 : 0})))`
+    return spawn(process.execPath, ["-e", program], options)
+  }
+  await helperCall(context, "closure", {}, false, { spawnHelper })
+  assert.equal(calls[0].command, "/usr/bin/python3"); assert.equal(calls[1].command, "/usr/bin/sudo")
+  assert.deepEqual(context.controlCalls.map(call => [call.exitCode, call.code]), [[1, "permission-denied"], [0, null]])
+  assert(context.controlCalls.every(call => call.closeObserved))
 })
