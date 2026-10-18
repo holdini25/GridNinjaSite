@@ -34,7 +34,7 @@ test("no-JS assessment reading and navigation remain available without an unsafe
     await page.goto("/assessment#scope")
     await expect(page.locator("[data-assessment-offer]")).toContainText("authorized historical inputs")
     await expect(page.getByLabel("Name", { exact: true })).toBeDisabled()
-    await expect(page.getByRole("button", { name: "Scope an assessment" })).toBeDisabled()
+    await expect(page.getByRole("button", { name: "Contact Us" })).toBeDisabled()
     // Playwright's aggregate text matcher skips noscript descendants even in
     // a no-JS context. Assert the actual rendered paragraph directly.
     const noScriptNotice = page.locator("form noscript p")

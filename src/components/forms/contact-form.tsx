@@ -339,7 +339,7 @@ export function ContactForm({
 
   const assessmentInquiry = conversationType === "capacity-audit"
   const inquiryHeading = assessmentInquiry ? "Start with the decision in front of your team" : conversationType === "partnership" ? "Discuss a partnership" : conversationType === "shadow-mode" ? "Discuss Shadow Mode" : "Start a conversation"
-  const submitLabel = assessmentInquiry ? "Scope an assessment" : "Send inquiry"
+  const submitLabel = assessmentInquiry ? "Contact Us" : "Send inquiry"
   const errorControls: Record<string, { id: string; label: string }> = {
     name: { id: "contact-name", label: "Name" }, email: { id: "contact-email", label: "Work email" }, company: { id: "contact-company", label: "Organization" }, topic: { id: "contact-topic", label: "Topic" }, message: { id: "contact-message", label: "Decision context" },
     siteType: { id: "contact-site-type", label: "Site type" }, timeline: { id: "contact-timeline", label: "Timeline" }, role: { id: "contact-role", label: "Role" }, capacityRange: { id: "contact-capacity-range", label: "Capacity range" }, constraints: { id: "contact-constraint-0", label: "Constraints" },

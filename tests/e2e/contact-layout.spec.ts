@@ -208,7 +208,7 @@ test.describe("contact intake layout", () => {
     const verifiedFormBox = await form.boundingBox()
     expect(Math.abs(verifiedFormBox!.height - initialFormBox!.height)).toBeLessThan(2)
 
-    const submit = page.getByRole("button", { name: "Scope an assessment" })
+    const submit = page.getByRole("button", { name: "Contact Us" })
     await centerLocatorInViewport(submit)
     await submit.click()
     await expect(

@@ -3,7 +3,7 @@
 This repository contains the public-facing GridNinja website.
 
 The current offer is one **bounded, paid capacity decision assessment** using
-authorized historical inputs. The site invites buyers to **Scope an assessment**
+authorized historical inputs. The site invites buyers to **Contact Us**
 and inspect an ungated synthetic decision brief. The **AI Data Center Virtual
 Capacity Control Plane** and **runtime-assured virtual capacity engine** describe
 the conditional development direction; they do not imply current equipment authority.

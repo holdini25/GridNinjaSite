@@ -26,6 +26,6 @@ export function AssessmentResultActions({ record, perspective, topic }: Assessme
       <a href={links.pdf} {...attribution} data-analytics-event="sample_download_clicked" className={linkClass}>Download this PDF</a>
       <a href={links.json} {...attribution} data-analytics-event="sample_download_clicked" className={linkClass}>Download this technical record</a>
     </div>
-    <a href={assessmentScopeHref("assessment-explorer", topic)} data-analytics-event="assessment_cta_selected" data-analytics-source="assessment-explorer" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Scope an assessment</a>
+    <a href={assessmentScopeHref("assessment-explorer", topic)} data-analytics-event="assessment_cta_selected" data-analytics-source="assessment-explorer" className="inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Contact Us</a>
   </div>
 }

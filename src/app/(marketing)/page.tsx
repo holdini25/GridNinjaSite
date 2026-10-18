@@ -101,7 +101,7 @@ export default async function HomePage() {
 
       <div className="gn-home-section gn-home-research"><div className="gn-home-container"><ResearchNotes /></div></div>
 
-      <section className="gn-home-invitation" aria-labelledby="invitation-heading"><div className="gn-home-container"><div><p className="gn-home-eyebrow">Your next capacity decision</p><h2 id="invitation-heading">Start with your operating constraints.</h2><p>A scoping conversation establishes fit. Paid work starts only after agreement.</p></div><Link href={assessmentScopeHref("home-final")} prefetch={false} className="gn-home-button" data-analytics-event="assessment_cta_selected" data-analytics-source="home-final">Scope an assessment <span aria-hidden="true">↗</span></Link></div></section>
+      <section className="gn-home-invitation" aria-labelledby="invitation-heading"><div className="gn-home-container"><div><p className="gn-home-eyebrow">Your next capacity decision</p><h2 id="invitation-heading">Start with your operating constraints.</h2><p>A scoping conversation establishes fit. Paid work starts only after agreement.</p></div><Link href={assessmentScopeHref("home-final")} prefetch={false} className="gn-home-button" data-analytics-event="assessment_cta_selected" data-analytics-source="home-final">Contact Us <span aria-hidden="true">↗</span></Link></div></section>
     </div>
   </>
 }

@@ -32,7 +32,7 @@ test("the homepage assessment CTA remains above the fold at 1366 by 768", async 
   await page.setViewportSize({ width: 1366, height: 768 })
   await page.goto("/")
   const callToAction = page.locator('.gn-home-hero a[data-analytics-source="home-hero"]')
-  await expect(callToAction).toHaveText(/Scope an assessment/)
+  await expect(callToAction).toHaveText(/Contact Us/)
   await expect(callToAction).toHaveAttribute("href", "/assessment?source=home-hero#scope")
   const bounds = await callToAction.boundingBox()
   expect(bounds).not.toBeNull()

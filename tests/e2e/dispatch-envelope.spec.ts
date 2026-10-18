@@ -105,7 +105,7 @@ test.describe("dispatch envelope page", () => {
       })
     ).toBeVisible()
     const headerCta = page.getByRole("banner").locator('a[data-gn-event="header-capacity-audit"]').first()
-    await expect(headerCta).toHaveText("Scope an assessment")
+    await expect(headerCta).toHaveText("Contact Us")
     await expect(headerCta).toHaveAttribute("href", "/assessment?source=header#scope")
     await expect(page.getByTestId("dispatch-envelope-visual")).toBeVisible()
     if (testInfo.project.name.includes("mobile")) {

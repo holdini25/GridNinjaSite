@@ -37,7 +37,7 @@ export function DecisionPage({ path, content, facilityEntry, civicRelease }: { p
     <SeoPageJsonLd path={path} />
     <SeoBreadcrumbs path={path} />
     <Hero eyebrow={content.eyebrow} headline={content.headline} body={content.body}
-      primaryCta={{ label: "Scope an assessment", href: scopeHref, analyticsEvent: "assessment_cta_selected", analyticsSource: journey.source }}
+      primaryCta={{ label: "Contact Us", href: scopeHref, analyticsEvent: "assessment_cta_selected", analyticsSource: journey.source }}
       secondaryCta={{ label: "See a sample decision brief", href: sampleHref }}
       trustLine={isSolutionPage ? "Paid, bounded assessment of authorized historical inputs. No live connection or equipment control." : undefined} />
     {facilityEntry}
@@ -66,6 +66,6 @@ export function DecisionPage({ path, content, facilityEntry, civicRelease }: { p
       </SectionShell>}
     </Fragment>)}
     <RelatedSeoLinks path={path} />
-    <SectionShell deferRendering={false}><CtaBand eyebrow="Proof before autonomy" headline="Start with one capacity question." body="Agree the decision, evidence boundary, responsibilities, and paid scope before work begins." label="Scope an assessment" href={finalScopeHref} analyticsEvent="assessment_cta_selected" analyticsSource={finalSource} /></SectionShell>
+    <SectionShell deferRendering={false}><CtaBand eyebrow="Proof before autonomy" headline="Start with one capacity question." body="Agree the decision, evidence boundary, responsibilities, and paid scope before work begins." label="Contact Us" href={finalScopeHref} analyticsEvent="assessment_cta_selected" analyticsSource={finalSource} /></SectionShell>
   </div>
 }

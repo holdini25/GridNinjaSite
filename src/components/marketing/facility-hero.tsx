@@ -24,7 +24,7 @@ export function FacilityHero({ record, release, fallback, cinematicUnavailable =
         <h1 id="home-heading">{cinematicHome.headline}</h1>
         <p className="gn-home-lead">{cinematicHome.body}</p>
         <div className="gn-home-actions">
-          <Link href={assessmentScopeHref("home-hero")} prefetch={false} className="gn-home-button" data-analytics-event="assessment_cta_selected" data-analytics-source="home-hero">Scope an assessment <span aria-hidden="true">↗</span></Link>
+          <Link href={assessmentScopeHref("home-hero")} prefetch={false} className="gn-home-button" data-analytics-event="assessment_cta_selected" data-analytics-source="home-hero">Contact Us <span aria-hidden="true">↗</span></Link>
           <Link href={sampleBriefHref()} prefetch={false} className="gn-home-secondary-button">See a sample decision brief <span aria-hidden="true">→</span></Link>
         </div>
         <p className="gn-home-trust">{cinematicHome.trust}</p>

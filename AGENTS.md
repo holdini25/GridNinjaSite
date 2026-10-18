@@ -1,3 +1,9 @@
+## CTA wording update (17 October 2026)
+
+The user-approved primary CTA label is now “Contact Us”. This supersedes
+the earlier “Scope an assessment” CTA wording below. Preserve existing
+destinations, attribution, assessment scope and immutable publications.
+
 ## Approved assessment-first upgrade (22 September 2026)
 
 The current public offer is a bounded, paid capacity decision assessment using

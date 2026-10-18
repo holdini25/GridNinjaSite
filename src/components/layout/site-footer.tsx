@@ -31,7 +31,7 @@ export function SiteFooter() {
             <p className="max-w-md text-base leading-8 text-muted-foreground">
               A bounded assessment today. Developing toward a runtime-assured virtual capacity engine, with proof before autonomy.
             </p>
-            <Link href={assessmentScopeHref("footer")} prefetch={false} data-analytics-event="assessment_cta_selected" data-analytics-source="footer" className="inline-flex min-h-11 items-center gap-2 text-primary underline underline-offset-4">Scope an assessment <span aria-hidden="true">→</span></Link>
+            <Link href={assessmentScopeHref("footer")} prefetch={false} data-analytics-event="assessment_cta_selected" data-analytics-source="footer" className="inline-flex min-h-11 items-center gap-2 text-primary underline underline-offset-4">Contact Us <span aria-hidden="true">→</span></Link>
           </div>
           <nav id="footer-navigation" aria-label="Footer" tabIndex={-1} className="flex min-w-0 scroll-mt-24 flex-wrap gap-x-5 gap-y-8 outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">
           {footerGroups.map((group) => (

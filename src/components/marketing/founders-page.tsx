@@ -68,7 +68,7 @@ export function FoundersPage() {
       <section className={`${styles.contact} gn-home-container`} aria-labelledby="founders-contact">
         <div><p className={styles.eyebrow}>Start a conversation</p><h2 id="founders-contact">Bring your capacity question.</h2><p>Agree the decision, evidence boundary and responsibilities before work begins.</p></div>
         <div className={styles.actions}>
-          <Link href={assessmentScopeHref()} prefetch={false} className={styles.primaryLink}>Scope an assessment <ArrowRightIcon aria-hidden="true" /></Link>
+          <Link href={assessmentScopeHref()} prefetch={false} className={styles.primaryLink}>Contact Us <ArrowRightIcon aria-hidden="true" /></Link>
           <Link href="/contact" prefetch={false} className={styles.textLink}>Contact GridNinja <ArrowRightIcon aria-hidden="true" /></Link>
         </div>
       </section>

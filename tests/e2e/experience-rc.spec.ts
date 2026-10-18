@@ -339,7 +339,7 @@ test("essential controls retain touch targets and page content reflows under tex
         return [...new Set(problems)]
       })
       expect(failures, `${route} at ${width}px and 200% computed text`).toEqual([])
-      if (width >= 480) await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveText("Scope an assessment")
+      if (width >= 480) await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveText("Contact Us")
       else await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveCount(0)
     }
   }

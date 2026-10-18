@@ -323,7 +323,7 @@ function MobileNavigation() {
             data-analytics-source="header"
             className="inline-flex h-11 w-full items-center justify-center rounded-[9px] bg-primary px-4 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            Scope an assessment
+            Contact Us
           </a>
         </div>
       </div>
@@ -345,7 +345,7 @@ export function SiteHeader({ logo }: { logo: ReactNode }) {
             data-analytics-source="header"
             className="hidden h-11 items-center justify-center whitespace-nowrap rounded-[5px] border border-primary/75 px-3 text-[13px] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring min-[480px]:inline-flex min-[1120px]:hidden"
           >
-            Scope an assessment
+            Contact Us
           </a>
           <a
             href={headerCapacityAuditHref}
@@ -354,7 +354,7 @@ export function SiteHeader({ logo }: { logo: ReactNode }) {
             data-analytics-source="header"
             className="hidden h-11 items-center justify-center whitespace-nowrap rounded-[5px] border border-primary/75 px-4 text-[13px] font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring min-[1120px]:inline-flex"
           >
-            Scope an assessment
+            Contact Us
           </a>
           <MobileNavigation />
         </div>

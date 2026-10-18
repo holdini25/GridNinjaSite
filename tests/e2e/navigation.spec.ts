@@ -176,8 +176,8 @@ test.describe("responsive navigation boundaries", () => {
       await expect(headerCtas).toHaveCount(2)
       const compactCta = headerCtas.nth(0)
       const desktopCta = headerCtas.nth(1)
-      await expect(compactCta).toHaveText("Scope an assessment")
-      await expect(desktopCta).toHaveText("Scope an assessment")
+      await expect(compactCta).toHaveText("Contact Us")
+      await expect(desktopCta).toHaveText("Contact Us")
 
       if (width >= 1120) {
         await expect(primary, `desktop navigation at ${width}px`).toBeVisible()
@@ -271,7 +271,7 @@ test.describe("responsive navigation boundaries", () => {
     const platform = disclosure(dialog, "How it works")
     const footer = dialog.locator("[data-mobile-nav-footer]")
     const drawerCta = footer.getByRole("link", {
-      name: "Scope an assessment",
+      name: "Contact Us",
       exact: true,
     })
 

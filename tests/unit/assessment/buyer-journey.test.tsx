@@ -46,7 +46,7 @@ describe("bounded buyer journey", () => {
   })
 
   it("wires final scoping actions to the existing delegated observer", () => {
-    const document = parse(renderToStaticMarkup(<CtaBand headline="One decision" body="Agree the paid scope." label="Scope an assessment" href="/assessment?source=demo-final#scope" analyticsEvent="assessment_cta_selected" analyticsSource="demo-final" />))
+    const document = parse(renderToStaticMarkup(<CtaBand headline="One decision" body="Agree the paid scope." label="Contact Us" href="/assessment?source=demo-final#scope" analyticsEvent="assessment_cta_selected" analyticsSource="demo-final" />))
     expect(document.querySelector("a")?.dataset.analyticsEvent).toBe("assessment_cta_selected")
     expect(document.querySelector("a")?.dataset.analyticsSource).toBe("demo-final")
   })

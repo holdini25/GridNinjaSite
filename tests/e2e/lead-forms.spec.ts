@@ -132,7 +132,7 @@ test.describe("lead form browser behavior", () => {
 
     await engageVerification(page)
     const submit = page.getByRole("button", {
-      name: "Scope an assessment",
+      name: "Contact Us",
     })
 
     await centerLocatorInViewport(submit)
@@ -299,7 +299,7 @@ test.describe("lead form browser behavior", () => {
       "email"
     )
     await fillContactForm(page)
-    const submit = page.getByRole("button", { name: "Scope an assessment" }).last()
+    const submit = page.getByRole("button", { name: "Contact Us" }).last()
 
     await submit.click()
     await expect(
@@ -338,7 +338,7 @@ test.describe("lead form browser behavior", () => {
     await page.goto("/contact")
     await engageVerification(page)
     await fillContactForm(page)
-    const submit = page.getByRole("button", { name: "Scope an assessment" })
+    const submit = page.getByRole("button", { name: "Contact Us" })
 
     await page.route("**/api/contact", async (route) => {
       await route.fulfill({
@@ -413,7 +413,7 @@ test.describe("static inquiry recovery", () => {
     await expect(page.locator("form")).toHaveAttribute("method", "post")
     await expect(page.locator("form")).toHaveAttribute("action", "/api/contact")
     await expect(page.getByLabel("Name", { exact: true })).toBeDisabled()
-    await expect(page.getByRole("button", { name: "Scope an assessment" })).toBeDisabled()
+    await expect(page.getByRole("button", { name: "Contact Us" })).toBeDisabled()
     await expect(page.getByText(/Enable JavaScript and reload this page/)).toBeVisible()
     expect(apiRequests).toEqual([])
   })
