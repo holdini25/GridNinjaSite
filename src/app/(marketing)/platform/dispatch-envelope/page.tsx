@@ -35,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return createPageMetadata({
     title: "Dispatch Envelope | GridNinja",
     description:
-      "Inspect GridNinja's runtime-assured dispatch envelope for proof-backed virtual capacity, binding constraints, Shadow Mode evidence, and allow / repair / reject / no-proof outcomes.",
+      "Inspect a synthetic timed-dispatch record for GridNinja's control plane in development. Authored limits show model screening without site feasibility or operating permission.",
     path: "/platform/dispatch-envelope",
   })
 }
@@ -60,7 +60,7 @@ export default async function DispatchEnvelopePage({
         headline={dispatchEnvelopeHero.headline}
         body={dispatchEnvelopeHero.body}
         primaryCta={{
-          label: "Scope an assessment",
+          label: "Contact Us",
           href: assessmentScopeHref("dispatch-envelope-hero"),
         }}
         secondaryCta={{
@@ -240,9 +240,11 @@ export default async function DispatchEnvelopePage({
         <CtaBand
           headline={dispatchEnvelopeSections.cta.headline}
           body={dispatchEnvelopeSections.cta.body}
-          label="Scope an assessment"
+          label="Contact Us"
           href={assessmentScopeHref("dispatch-envelope-final")}
           eventName="dispatch-envelope-final-cta"
+          analyticsEvent="assessment_cta_selected"
+          analyticsSource="dispatch-envelope-final"
         />
       </SectionShell>
 

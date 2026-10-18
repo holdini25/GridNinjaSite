@@ -91,7 +91,7 @@ test.describe("v7 contextual inspection journeys", () => {
     await context.locator("summary").filter({ hasText: /^Evidence$/ }).click()
     await expect(context.getByRole("link", { name: "Read this versioned decision brief" })).toHaveAttribute("href", "/evidence/assessments/demo-01-b/v1.0.0")
     await context.locator("summary").filter({ hasText: /^Next step$/ }).click()
-    await context.getByRole("link", { name: "Scope an assessment" }).click()
+    await context.getByRole("link", { name: "Contact Us" }).click()
     await expect(page.getByLabel("Topic (optional)")).toHaveValue("colocation")
     await page.getByLabel("Topic (optional)").selectOption("cooling")
     await expect(page.getByLabel("Topic (optional)")).toHaveValue("cooling")

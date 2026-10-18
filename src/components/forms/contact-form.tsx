@@ -339,7 +339,7 @@ export function ContactForm({
 
   const assessmentInquiry = conversationType === "capacity-audit"
   const inquiryHeading = assessmentInquiry ? "Start with the decision in front of your team" : conversationType === "partnership" ? "Discuss a partnership" : conversationType === "shadow-mode" ? "Discuss Shadow Mode" : "Start a conversation"
-  const submitLabel = assessmentInquiry ? "Scope an assessment" : "Send inquiry"
+  const submitLabel = assessmentInquiry ? "Contact Us" : "Send inquiry"
   const errorControls: Record<string, { id: string; label: string }> = {
     name: { id: "contact-name", label: "Name" }, email: { id: "contact-email", label: "Work email" }, company: { id: "contact-company", label: "Organization" }, topic: { id: "contact-topic", label: "Topic" }, message: { id: "contact-message", label: "Decision context" },
     siteType: { id: "contact-site-type", label: "Site type" }, timeline: { id: "contact-timeline", label: "Timeline" }, role: { id: "contact-role", label: "Role" }, capacityRange: { id: "contact-capacity-range", label: "Capacity range" }, constraints: { id: "contact-constraint-0", label: "Constraints" },
@@ -606,7 +606,12 @@ export function ContactForm({
       <p className="mt-3 text-sm leading-6 text-muted-foreground">
         Do not include security-sensitive or confidential information.
       </p>
-      {variant === "assessment" && <a className="mt-2 inline-flex min-h-11 items-center text-sm text-primary underline underline-offset-4" href="/contact?intent=other&source=assessment-page">Contact us about something else</a>}
+      <a href="/data-handling" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 text-sm text-primary underline underline-offset-4">
+        How we handle inquiry data <span aria-hidden="true">↗</span><span className="sr-only"> (opens in a new tab)</span>
+      </a>
+      {/* Keep this native cross-router link usable before hydration. */}
+      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+      {variant === "assessment" && <a className="mt-2 flex min-h-11 w-fit items-center text-sm text-primary underline underline-offset-4" href="/contact?intent=other&source=assessment-page">Contact us about something else</a>}
     </form>
   )
 }

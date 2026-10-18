@@ -87,8 +87,8 @@ export function SeoResourceHub({
             </p>
           </div>
           <Button asChild size="lg" className="mt-8 lg:mt-0">
-            <Link href={assessmentScopeHref(path === "/insights" ? "insights-hub" : path === "/evidence" ? "evidence-hub" : "methodology-hub")}>
-              Scope an assessment
+            <Link prefetch={false} href={assessmentScopeHref(path === "/insights" ? "insights-hub" : path === "/evidence" ? "evidence-hub" : "methodology-hub")}>
+              Contact Us
             </Link>
           </Button>
         </section>

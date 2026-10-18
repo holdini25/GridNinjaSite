@@ -42,54 +42,155 @@ export async function observeProductionCanvas(element: HTMLCanvasElement): Promi
     desktop: matchMedia("(hover: hover) and (pointer: fine)").matches, samples, mutations }
 }
 
-/** Read-only startup correlation, never an exemption for arbitrary canvas
- * writes. Two finite DPR/layout transitions may precede the strict window;
- * every write must belong to an observed transition and match its pixel size. */
+/** Match bounded renderer writes to the directly adjacent policy commit, in
+ * either order. React's label commit need not share the renderer's 100ms batch.
+ * With at most two groups/commits, candidate interval scans are bounded by 4N:
+ * O(samples + mutations), without sorting, retries, or omitted raw samples. */
 export function assessCanvasObservation(report: CanvasObservation, pixelBudgets: { desktopPixels: number; mobilePixels: number }) {
   const failures: string[] = [], transitions: { at: number; before: CanvasState; after: CanvasState }[] = []
-  const correlationMs = 100, quietMs = 350
-  const samples = report.samples, last = samples.at(-1)!
-  const changed = (a: CanvasState, b: CanvasState) => a.quality !== b.quality || Math.abs(a.cssWidth - b.cssWidth) > .25 || Math.abs(a.cssHeight - b.cssHeight) > .25
+  const correlationMs = 100, quietMs = 350 // correlationMs bounds writes within a group only.
+  const samples = report.samples, last = samples.at(-1)
+  const fail = (message: string) => { if (!failures.includes(message)) failures.push(message) }
+  const sameGeometry = (a: CanvasState, b: CanvasState) => a.cssWidth === b.cssWidth && a.cssHeight === b.cssHeight
+  const changed = (a: CanvasState, b: CanvasState) => a.quality !== b.quality || !sameGeometry(a, b)
+  const sameBuffer = (a: CanvasState, b: CanvasState) => a.width === b.width && a.height === b.height
   const caps: Record<string, number> = { still: 1, economy: 1, balanced: 1.25, high: 1.5 }
-  const validPixels = (state: CanvasState) => {
-    const cap = state.quality && caps[state.quality]
-    if (!cap || state.cssWidth <= 0 || state.cssHeight <= 0) return false
-    const dpr = Math.min(Math.max(.1, report.deviceDpr), cap, Math.sqrt((report.desktop ? pixelBudgets.desktopPixels : pixelBudgets.mobilePixels) / (state.cssWidth * state.cssHeight)))
-    return state.width === Math.floor(state.cssWidth * dpr) && state.height === Math.floor(state.cssHeight * dpr)
+  const policyDpr = (state: CanvasState) => {
+    const cap = state.quality && Object.hasOwn(caps, state.quality) && caps[state.quality]
+    if (!cap || state.cssWidth <= 0 || state.cssHeight <= 0) return null
+    return Math.min(Math.max(.1, report.deviceDpr), cap, Math.sqrt((report.desktop ? pixelBudgets.desktopPixels : pixelBudgets.mobilePixels) / (state.cssWidth * state.cssHeight)))
   }
-  if (!last || report.requestedDuration !== 3_000 || report.duration < report.requestedDuration) failures.push("Incomplete bounded observation")
-  if (samples.some(state => state.hook !== "undefined" || state.framesAttribute || !state.connected || !state.ready)) failures.push("Diagnostic exposure or lost ready canvas during observation")
-  const changes = samples.flatMap((state, index) => index && changed(samples[index - 1], state) ? [{ index, at: state.at }] : [])
-  const groups: CanvasMutation[][] = []
+  const validPixels = (state: CanvasState) => {
+    const dpr = policyDpr(state)
+    return dpr !== null && state.width === Math.floor(state.cssWidth * dpr) && state.height === Math.floor(state.cssHeight * dpr)
+  }
+  let lastChange = 0
+  const changes: { index: number; at: number }[] = []
+  const groups: CanvasMutation[][] = [], writesBySample = new Map<number, CanvasMutation[]>()
+  let initialReconciliation: { at: number; before: CanvasState; after: CanvasState } | null = null
+  const result = () => {
+    if (!last || last.at - lastChange < quietMs) fail("No uninterrupted350ms stable observation before the deadline")
+    const windowStart = (last?.at ?? 0) - quietMs
+    return { failures, transitions, initialReconciliation, correlationMs, maximumTransitionGroups: 2,
+      strictWindow: { start: windowStart, end: last?.at ?? 0, duration: quietMs },
+      diagnostics: { hook: last?.hook, framesAttribute: last?.framesAttribute,
+        mutations: report.mutations.filter(mutation => mutation.at >= windowStart) } }
+  }
+  if (!last || samples.length < 2 || report.requestedDuration !== 3_000 || !Number.isFinite(report.duration) || report.duration < report.requestedDuration || last.at < report.requestedDuration) fail("Incomplete bounded observation")
+  if (![report.deviceDpr, pixelBudgets.desktopPixels, pixelBudgets.mobilePixels].every(value => Number.isFinite(value) && value > 0) || typeof report.desktop !== "boolean") fail("Invalid pixel policy inputs")
+  for (let index = 0; index < samples.length; index++) {
+    const state = samples[index], previous = samples[index - 1]
+    if (![state.at, state.x, state.y, state.cssWidth, state.cssHeight, state.width, state.height].every(Number.isFinite) ||
+      state.at < 0 || state.at > report.duration || (previous && state.at < previous.at) ||
+      state.cssWidth <= 0 || state.cssHeight <= 0 || !Number.isInteger(state.width) || state.width <= 0 || !Number.isInteger(state.height) || state.height <= 0 ||
+      !state.quality || !Object.hasOwn(caps, state.quality)) fail("Malformed or unordered canvas observation")
+    if (state.hook !== "undefined" || state.framesAttribute || !state.connected || !state.ready) fail("Diagnostic exposure or lost ready canvas during observation")
+    if (previous && changed(previous, state)) {
+      changes.push({ index, at: state.at })
+      // Only economy/still's equivalent sizing policy can preserve the quiet
+      // window. Count every commit for ownership/limits; other quality pairs,
+      // changed origins, or merely identical floored pixels are not exempt.
+      const equivalentPair = (previous.quality === "economy" && state.quality === "still") ||
+        (previous.quality === "still" && state.quality === "economy")
+      const labelOnly = equivalentPair && sameGeometry(previous, state) && sameBuffer(previous, state) &&
+        previous.x === state.x && previous.y === state.y && validPixels(previous) && validPixels(state) && policyDpr(previous) === policyDpr(state)
+      if (!labelOnly) lastChange = state.at
+    }
+    if (previous && !sameBuffer(previous, state)) lastChange = state.at
+  }
+  let previousMutation: CanvasMutation | undefined
   for (const mutation of report.mutations) {
+    const sample = samples[mutation.sample]
+    if (!Number.isFinite(mutation.at) || !Number.isInteger(mutation.sample) || mutation.sample < 1 || !sample || mutation.at !== sample.at ||
+      (previousMutation && (mutation.at < previousMutation.at || mutation.sample < previousMutation.sample))) fail("Malformed or unordered canvas observation")
+    if (mutation.name !== "width" && mutation.name !== "height") fail("Unexplained or sustained canvas mutations")
+    const sampleWrites = writesBySample.get(mutation.sample) ?? []
+    sampleWrites.push(mutation); writesBySample.set(mutation.sample, sampleWrites)
     const group = groups.at(-1)
     if (group && mutation.at - group.at(-1)!.at <= correlationMs) group.push(mutation)
     else groups.push([mutation])
+    previousMutation = mutation
+    lastChange = Math.max(lastChange, mutation.at)
   }
-  if (groups.length > 2 || changes.length > 2) failures.push("Sustained or repeated canvas/quality/layout changes")
-  for (const group of groups) {
-    const first = group[0], final = group.at(-1)!
-    const correlated = changes.filter(change => Math.abs(change.at - first.at) <= correlationMs && Math.abs(change.at - final.at) <= correlationMs)
-    if (group.length > 4 || final.at - first.at > correlationMs || group.some(mutation => mutation.name !== "width" && mutation.name !== "height") || correlated.length !== 1) {
-      failures.push("Unexplained or sustained canvas mutations"); continue
+  if (groups.length > 2 || changes.length > 2) fail("Sustained or repeated canvas/quality/layout changes")
+  for (const group of groups) if (group.length > 4 || group.at(-1)!.at - group[0].at > correlationMs) fail("Unexplained or sustained canvas mutations")
+  if (failures.length) return result()
+
+  // MutationObserver reports the final attribute value for every record in a
+  // callback. The next same-attribute oldValue reveals an intermediate write.
+  // Batches are already limited to four records, so this lookahead is bounded.
+  const current = { width: samples[0].width, height: samples[0].height }
+  const writtenValues = new Map<CanvasMutation, string | null>()
+  for (let index = 1; index < samples.length; index++) {
+    const writes = writesBySample.get(index) ?? [], state = samples[index]
+    for (let position = 0; position < writes.length; position++) {
+      const mutation = writes[position], dimension = mutation.name as "width" | "height"
+      const next = writes.slice(position + 1).find(write => write.name === dimension)
+      const written = next ? next.oldValue : mutation.value
+      writtenValues.set(mutation, written)
+      if (mutation.oldValue !== String(current[dimension]) || mutation.value !== String(state[dimension]) ||
+        written === null || !Number.isInteger(Number(written)) || Number(written) <= 0 || String(Number(written)) !== written) fail("Canvas writes do not match the observed quality/layout resize")
+      current[dimension] = Number(written)
     }
-    const change = correlated[0]
-    const before = samples[Math.max(0, Math.min(change.index, first.sample) - 1)]
-    const after = samples.findLast(state => state.at <= Math.max(change.at, final.at) + correlationMs)!
-    const unexplainedValue = group.some(mutation => {
-      const dimension = mutation.name as "width" | "height"
-      const allowed = [String(before[dimension]), String(after[dimension])]
-      return !allowed.includes(mutation.oldValue ?? "") || !allowed.includes(mutation.value ?? "")
-    })
-    if (!changed(before, after) || !validPixels(before) || !validPixels(after) || unexplainedValue || (before.width === after.width && before.height === after.height)) {
-      failures.push("Canvas writes do not match the observed quality/layout resize"); continue
-    }
-    transitions.push({ at: change.at, before, after })
+    if (current.width !== state.width || current.height !== state.height) fail("Unrecorded canvas dimension change")
   }
-  const lastChange = Math.max(0, ...changes.map(change => change.at), ...report.mutations.map(mutation => mutation.at))
-  if (!last || last.at - lastChange < quietMs) failures.push("No uninterrupted350ms stable observation before the deadline")
-  const windowStart = (last?.at ?? 0) - quietMs
-  const mutations = report.mutations.filter(mutation => mutation.at >= windowStart)
-  return { failures, transitions, correlationMs, maximumTransitionGroups: 2, strictWindow: { start: windowStart, end: last?.at ?? 0, duration: quietMs },
-    diagnostics: { hook: last?.hook, framesAttribute: last?.framesAttribute, mutations } }
+  const explained = new Set<number>(), usedChanges = new Set<number>()
+  if (!validPixels(samples[0]) && changes.length) {
+    const change = changes[0], after = samples[change.index], before = samples[0]
+    // Only a directly observed QUALITY commit can settle an already-resized
+    // entry buffer. A layout change or any intervening write is not evidence.
+    if (before.quality !== after.quality && sameGeometry(before, after) && sameBuffer(before, after) && validPixels(after) &&
+      (!groups.length || groups[0][0].sample > change.index)) {
+      let reconciles = true
+      for (let index = 0; index < change.index; index++) if (changed(before, samples[index]) || !sameBuffer(before, samples[index])) reconciles = false
+      if (reconciles) {
+        for (let index = 0; index < change.index; index++) explained.add(index)
+        usedChanges.add(0); initialReconciliation = { at: after.at, before, after }
+      }
+    }
+  }
+  let changeCursor = 0
+  for (let groupIndex = 0; groupIndex < groups.length; groupIndex++) {
+    const group = groups[groupIndex], first = group[0], final = group.at(-1)!
+    while (changeCursor < changes.length && changes[changeCursor].index < first.sample) changeCursor++
+    const inside = changeCursor < changes.length && changes[changeCursor].index <= final.sample
+    const candidates = inside ? [changeCursor] : [changeCursor - 1, changeCursor]
+    const matches: { changeIndex: number; start: number; end: number; before: CanvasState; after: CanvasState }[] = []
+    for (const changeIndex of candidates) {
+      const change = changes[changeIndex]
+      if (!change) continue
+      const start = Math.min(change.index, first.sample), end = Math.max(change.index, final.sample)
+      // One policy change and one mutation group, with no skipped intervening event.
+      if ((changes[changeIndex - 1]?.index ?? -1) >= start || (changes[changeIndex + 1]?.index ?? Infinity) <= end ||
+        (groups[groupIndex - 1]?.at(-1)?.sample ?? -1) >= start || (groups[groupIndex + 1]?.[0].sample ?? Infinity) <= end) continue
+      const before = samples[start - 1], after = samples[end]
+      if (!before || !validPixels(before) || !validPixels(after) || sameBuffer(before, after)) continue
+      let matchesPolicy = true
+      for (let index = start; index <= end; index++) {
+        const state = samples[index], policy = index < change.index ? before : after
+        if (changed(state, policy)) matchesPolicy = false
+        if (index < first.sample && !sameBuffer(state, before)) matchesPolicy = false
+        if (index >= final.sample && !sameBuffer(state, after)) matchesPolicy = false
+        if (![before.width, after.width].includes(state.width) || ![before.height, after.height].includes(state.height)) matchesPolicy = false
+      }
+      for (const mutation of group) {
+        const dimension = mutation.name as "width" | "height"
+        // Every write must set its final policy value, including duplicate
+        // renderer writes. Old values may only be the pre/post policy values.
+        if (![String(before[dimension]), String(after[dimension])].includes(mutation.oldValue ?? "") ||
+          writtenValues.get(mutation) !== String(after[dimension])) matchesPolicy = false
+      }
+      if (matchesPolicy) matches.push({ changeIndex, start, end, before, after })
+    }
+    if (matches.length !== 1 || usedChanges.has(matches[0].changeIndex)) {
+      fail("Unexplained or ambiguous canvas transition ownership"); continue
+    }
+    const match = matches[0]
+    usedChanges.add(match.changeIndex)
+    for (let index = match.start; index <= match.end; index++) explained.add(index)
+    transitions.push({ at: changes[match.changeIndex].at, before: match.before, after: match.after })
+  }
+  for (let index = 0; index < samples.length; index++) if (!validPixels(samples[index]) && !explained.has(index)) fail("Invalid stable canvas pixel policy or unresolved transition")
+  if (!last || !validPixels(last)) fail("Invalid final canvas pixel policy")
+  return result()
 }

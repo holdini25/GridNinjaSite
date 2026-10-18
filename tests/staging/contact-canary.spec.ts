@@ -47,7 +47,7 @@ test("one browser submission becomes one durable lead accepted by its providers"
   // Preserve the backend's 1,200 ms minimum interaction age for bot protection.
   await expect.poll(() => Date.now() - formEngagedAt).toBeGreaterThanOrEqual(1_200)
   assertStagingRequestTarget(page.url(), baseURL)
-  await page.getByRole("button", { name: "Scope an assessment" }).click()
+  await page.getByRole("button", { name: "Contact Us" }).click()
   await expect(page.getByRole("heading", { name: "Inquiry received" })).toBeVisible()
   const reference = page.getByText(/^Reference:/)
   await expect(reference).toBeVisible()

@@ -11,7 +11,7 @@ test("cinematic home preserves the offer and evidence without loading a Three vi
   await page.goto("/")
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Understand your capacity\.\s*Know the limits\./)
   const hero = page.locator(".gn-home-hero")
-  await expect(hero.getByRole("link", { name: /Scope an assessment/ })).toHaveAttribute("href", /\/assessment/)
+  await expect(hero.getByRole("link", { name: /Contact Us/ })).toHaveAttribute("href", /\/assessment/)
   await expect(hero.getByRole("link", { name: /See a sample decision brief/ })).toHaveAttribute("href", /\/demo.*#decision-brief/)
   await expect(hero.getByRole("link", { name: "Inspect the illustrative facility" })).toHaveAttribute("href", "/demo?scenario=b&version=1.0.0&perspective=business&activate=1#facility-construction")
   await expect(hero).toContainText("paid, bounded assessment")

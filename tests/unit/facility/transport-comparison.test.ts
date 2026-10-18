@@ -22,7 +22,7 @@ describe("transport evidence and payload contract", () => {
 
   it("requires five complete, matching build measurements for each route/device", () => {
     const settings = { runCount: 5 }
-    const identity = { schemaVersion: "facility-performance.v2", sourceRevision: "source", buildId: "build", harnessRevision: "harness", releases: [{ release: "facility-v7", manifestSha256: "manifest" }], buildSettings: { selectedRelease: "facility-v7", mode: "auto-adaptive" }, browser: "Chrome test", settings, settingsSha256: settingsDigest(settings) }
+    const identity = { schemaVersion: "facility-performance.v2", sourceRevision: "source", buildId: "build", harnessRevision: "harness", releases: [{ release: "facility-v7", manifestSha256: "manifest" }], buildSettings: { selectedRelease: "facility-v7", mode: "auto-adaptive" }, qualificationEnvironment: { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: "http://127.0.0.1:3000" }, browser: "Chrome test", settings, settingsSha256: settingsDigest(settings) }
     const results = ["/", "/demo"].flatMap(route => ["desktop", "mobile-emulation"].flatMap(profile => Array.from({ length: 5 }, (_, index) => ({ route, profile, run: index + 1, complete: true, release: "facility-v7", throughReady: true, transfer: { complete: true, issues: [], bytes: 200, requests: [{ url: `http://127.0.0.1:3000${route}`, type: "Document", terminal: "finished", status: 200, error: null }] } }))))
     const report = { provenance: identity, results }
     expect(observedRuns(report, identity)).toHaveLength(20)

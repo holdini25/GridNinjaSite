@@ -4,7 +4,9 @@ import publishedRecordC from "../../src/content/assessment-publications/demo-01-
 
 test("native evidence activation survives a press begun before hydration and enhancement", async ({ page, browserName }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  const selectionPath = "/demo?scenario=c&version=1.0.0"
+  // Explicitly schedule enhancement: adjacent evidence actions can be used
+  // without scrolling the deferred facility stage into the observer threshold.
+  const selectionPath = "/demo?scenario=c&version=1.0.0&interactive=1"
   const downloadPath = "/downloads/assessment/demo-01-c/v1.0.0/json"
   let nativeDownload: Download | undefined
   const captureDownload = (download: Download) => { nativeDownload = download }
@@ -337,7 +339,7 @@ test("essential controls retain touch targets and page content reflows under tex
         return [...new Set(problems)]
       })
       expect(failures, `${route} at ${width}px and 200% computed text`).toEqual([])
-      if (width >= 480) await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveText("Scope an assessment")
+      if (width >= 480) await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveText("Contact Us")
       else await expect(page.locator('header a[data-gn-event="header-capacity-audit"]:visible')).toHaveCount(0)
     }
   }

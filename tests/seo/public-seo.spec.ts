@@ -458,7 +458,7 @@ test.describe("snippet and raw-content controls", () => {
         exact: false,
       }).first()
     ).toBeVisible()
-    const primaryCta = page.getByRole("main").getByRole("link", { name: "Scope an assessment", exact: true }).first()
+    const primaryCta = page.getByRole("main").getByRole("link", { name: "Contact Us", exact: true }).first()
     await expect(primaryCta).toBeVisible()
     await expect(primaryCta).toHaveAttribute("href", "/assessment?source=home-hero#scope")
     expect((await page.locator("main section").count())).toBeGreaterThan(0)
@@ -566,7 +566,7 @@ test.describe("snippet and raw-content controls", () => {
       await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)
     ).toBe(true)
     await expect(page.locator("main h1")).toBeVisible()
-    const primaryCta = page.getByRole("main").getByRole("link", { name: "Scope an assessment", exact: true }).first()
+    const primaryCta = page.getByRole("main").getByRole("link", { name: "Contact Us", exact: true }).first()
     await expect(primaryCta).toBeVisible()
     await expect(primaryCta).toHaveAttribute("href", "/assessment?source=home-hero#scope")
     expect(await page.locator("main h1").evaluate((node) => getComputedStyle(node).opacity)).toBe(

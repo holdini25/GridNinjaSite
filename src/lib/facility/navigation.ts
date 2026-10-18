@@ -36,7 +36,7 @@ export function facilityDestinations(record: AssessmentRecord, topic: PublicTopi
     : topic === "colocation" ? { label: "Tenant capacity assessment", href: "/solutions/colocation" }
       : { label: "Evidence and authority boundaries", href: "/proof" }
   return {
-    principal: { label: "Scope an assessment", href: next, status: "published", purpose: "Carry this editable public topic into a scoping conversation." },
+    principal: { label: "Contact Us", href: next, status: "published", purpose: "Carry this editable public topic into a scoping conversation." },
     related: [
       { ...context, status: "published", purpose: "Read the context for this capacity decision." },
       { label: "Read this versioned decision brief", href: links.brief, status: "published", purpose: "Inspect the exact assessment publication." },

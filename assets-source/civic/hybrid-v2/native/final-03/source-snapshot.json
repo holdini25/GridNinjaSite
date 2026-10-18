@@ -1,0 +1,32 @@
+{
+  "schema": "gridninja.civic-source-snapshot.v1",
+  "renderRecordSha256": "66b8ab5e37d3b80dc3ee15c02c8081c233aa18c65f31024e0f0fdfd970188434",
+  "sources": [
+    {
+      "source": "assets-source/civic/hybrid-v2/scene.py",
+      "snapshot": "build/civic-hybrid/final-03/source/assets-source/civic/hybrid-v2/scene.py",
+      "sha256": "46215c81ce61a7b11c6e6526b62fbccfa2ad04342817b2ba8a08ab3613ca113c"
+    },
+    {
+      "source": "scripts/civic/render-hybrid.py",
+      "snapshot": "build/civic-hybrid/final-03/source/scripts/civic/render-hybrid.py",
+      "sha256": "d4e09a84bbf131b05cd16a872c64f235c9cf4810e6adbcdf58b15792a28fb7fb"
+    },
+    {
+      "source": "scripts/civic/run-hybrid.py",
+      "snapshot": "build/civic-hybrid/final-03/source/scripts/civic/run-hybrid.py",
+      "sha256": "d825810647b0495deddbf11fa35530b86751c571e9c60dac16d35f1ef6083c0e"
+    },
+    {
+      "source": "assets-source/facility/compute.py",
+      "snapshot": "build/civic-hybrid/final-03/source/assets-source/facility/compute.py",
+      "sha256": "afb5e7096c76086825b6f071ba7c1de557359f2113ddb0bb4fc44f070c907649"
+    },
+    {
+      "source": "scripts/editorial/run.py",
+      "role": "bounded-log supervisor helper",
+      "snapshot": "build/civic-hybrid/final-03/source/scripts/editorial/run.py",
+      "sha256": "e04c3ff5ba0dd33a1513f349cab357126b6b098fa0514c71f8d2e37fc1682cab"
+    }
+  ]
+}

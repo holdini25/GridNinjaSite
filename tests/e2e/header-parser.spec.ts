@@ -90,7 +90,7 @@ for (const route of ["/", "/assessment"] as const) {
       await expect(header).not.toHaveAttribute("data-enhanced", "true")
       const dialog = page.getByRole("dialog", { name: "Site navigation" })
       await expect(dialog.getByRole("link", { name: "Sample brief", exact: true })).toHaveAttribute("href", "/demo#decision-brief")
-      await expect(dialog.getByRole("link", { name: "Scope an assessment", exact: true })).toHaveAttribute("href", "/assessment?source=header#scope")
+      await expect(dialog.getByRole("link", { name: "Contact Us", exact: true })).toHaveAttribute("href", "/assessment?source=header#scope")
 
       releaseEnhancement()
       await expect(header).toHaveAttribute("data-enhanced", "true")

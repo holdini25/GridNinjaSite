@@ -75,7 +75,7 @@ export const DispatchDomainConstraintSchema = z.object({
     "partial",
     "illustrative-only",
   ]),
-  limitSamples: z.array(DispatchLimitSampleSchema).optional(),
+  limitSamples: z.array(DispatchLimitSampleSchema).min(2).optional(),
 }).strict().superRefine((constraint, ctx) => {
   const samples = constraint.limitSamples ?? []
   for (let index = 1; index < samples.length; index += 1) {

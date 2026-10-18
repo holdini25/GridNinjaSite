@@ -352,7 +352,7 @@ export const researchPresentation = {
   serverRenderedCitations: true,
   publisherLogos: false,
   figuresCopiedFromPapers: false,
-  primaryCta: "Scope an assessment",
+  primaryCta: "Contact Us",
   secondaryCta: "See a sample decision brief",
   publicReleaseRequires: ["External sentence-to-research-catalog mapping", "Existing PublicClaim registry mapping for any actual GridNinja claims", "Editorial review of surrounding copy", "Link/version/correction and public-availability check"],
 } as const

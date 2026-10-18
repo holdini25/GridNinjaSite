@@ -105,7 +105,7 @@ test.describe("dispatch envelope page", () => {
       })
     ).toBeVisible()
     const headerCta = page.getByRole("banner").locator('a[data-gn-event="header-capacity-audit"]').first()
-    await expect(headerCta).toHaveText("Scope an assessment")
+    await expect(headerCta).toHaveText("Contact Us")
     await expect(headerCta).toHaveAttribute("href", "/assessment?source=header#scope")
     await expect(page.getByTestId("dispatch-envelope-visual")).toBeVisible()
     if (testInfo.project.name.includes("mobile")) {
@@ -549,6 +549,10 @@ test.describe("dispatch envelope page", () => {
     await expect(page.getByTestId("dispatch-table-row-storage")).toContainText(
       "reserve_floor_report.csv"
     )
+    await expect(page.getByTestId("dispatch-table-row-storage")).toContainText("Not calibrated")
+    await expect(page.locator('[data-testid^="dispatch-confidence-"]')).toHaveCount(0)
+    await expect(page.getByTestId("dispatch-table-sample-20")).toContainText("2.8 MW")
+    await expect(page.getByTestId("dispatch-table-sample-20")).toContainText("eligible")
 
     const downloadPromise = page.waitForEvent("download")
     await page.getByTestId("dispatch-export-json").click()
@@ -564,7 +568,7 @@ test.describe("dispatch envelope page", () => {
       decision: string
       evidenceClass: string
       signature: string
-      constraints: Array<{ id: string }>
+      constraints: Array<{ id: string; confidencePct: number | null; limitSamples: Array<{ minute: number; maxMw: number; lowerConfidenceMw?: number }> }>
     }
 
     expect(exported).toMatchObject({
@@ -573,10 +577,14 @@ test.describe("dispatch envelope page", () => {
       decision: "repair",
       evidenceClass: "illustrative",
       signature: "illustrative:unsigned",
+      tapeId: "demo-tape-grid-stress-v2.0.0",
+      telemetryManifestId: "telemetry-manifest-grid-stress-v2.0.0",
     })
     expect(exported.constraints.map((constraint) => constraint.id)).toEqual(
       canonicalDomainIds
     )
+    expect(exported.constraints.every((constraint) => constraint.confidencePct === null && constraint.limitSamples.every((point) => point.lowerConfidenceMw === undefined))).toBe(true)
+    expect(exported.constraints.find((constraint) => constraint.id === "storage")?.limitSamples.find((point) => point.minute === 20)?.maxMw).toBe(2.8)
     expect(
       exported.constraints.some((constraint) =>
         ["cooling", "bridge", "workload", "trust"].includes(constraint.id)

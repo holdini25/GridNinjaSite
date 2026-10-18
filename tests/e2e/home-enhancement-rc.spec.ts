@@ -34,7 +34,7 @@ test("a delayed script cannot block the server-rendered offer or the sample-brie
     await expect(page.locator(".gn-home-decision")).toContainText("5.8 MW")
     const poster = page.locator(".gn-home-hero .cinematic-poster img")
     await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true)
-    await expect(page.locator(".gn-home-hero").getByRole("link", { name: /Scope an assessment/ })).toHaveAttribute("href", "/assessment?source=home-hero#scope")
+    await expect(page.locator(".gn-home-hero").getByRole("link", { name: /Contact Us/ })).toHaveAttribute("href", "/assessment?source=home-hero#scope")
     await page.locator(".gn-home-hero").getByRole("link", { name: "See a sample decision brief", exact: true }).click({ noWaitAfter: true })
     await expect(page).toHaveURL(/\/demo.*#decision-brief/)
     await expect(page.getByTestId("assessment-summary")).toContainText("5.8 MW")

@@ -44,7 +44,7 @@ function fill() {
   fireEvent.input(screen.getByLabelText("Work email", { exact: true }), { target: { value: "alex@example.com" } })
   fireEvent.input(screen.getByLabelText("Organization", { exact: true }), { target: { value: "Example Compute" } })
 }
-function submit() { fireEvent.click(screen.getByRole("button", { name: "Scope an assessment" })) }
+function submit() { fireEvent.click(screen.getByRole("button", { name: "Contact Us" })) }
 
 describe("truthful contact intake", () => {
   it("renders disabled controls and explicit POST transport before hydration", () => {

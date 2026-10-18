@@ -277,11 +277,41 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
     setAssetPhase("ready"); setQuality(null)
     setPresentation(previous => ({ ...previous, revision: previous.revision + 1, playing: false }))
   }, [token])
-  // The dependency stays true during staging: there is exactly one deadline per generation.
+  // Import and staging share one foreground budget per generation. A hidden
+  // document cannot present the first frame, so background time is not charged.
   useEffect(() => {
     if (!loading) return
-    const deadline = setTimeout(() => fail("timeout"), 8_000)
-    return () => clearTimeout(deadline)
+    let remaining = 8_000, startedAt: number | null = null, disposed = false
+    let deadline: ReturnType<typeof setTimeout> | undefined
+    const pause = () => {
+      clearTimeout(deadline); deadline = undefined
+      if (startedAt !== null) remaining = Math.max(0, remaining - (performance.now() - startedAt))
+      startedAt = null
+    }
+    const resume = () => {
+      if (disposed || startedAt !== null) return
+      startedAt = performance.now()
+      deadline = setTimeout(() => {
+        if (disposed) return
+        if (document.visibilityState !== "visible") {
+          // Visibility may change before its event is handled. Its start time
+          // is unknown here: retain the last accounted allowance, not wall time.
+          deadline = undefined; startedAt = null
+          return
+        }
+        pause()
+        if (remaining > 0) resume()
+        else fail("timeout")
+      }, remaining)
+    }
+    const visibility = () => { if (document.visibilityState === "visible") resume(); else pause() }
+    document.addEventListener("visibilitychange", visibility)
+    visibility()
+    return () => {
+      disposed = true
+      clearTimeout(deadline)
+      document.removeEventListener("visibilitychange", visibility)
+    }
   }, [loading, token, fail])
 
   useEffect(() => {

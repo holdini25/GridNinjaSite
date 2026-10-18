@@ -14,7 +14,7 @@ test.describe("server-rendered solution decisions", () => {
     test(`${solution.path} delivers both assessment actions without JavaScript`, async ({ page }) => {
       await page.goto(solution.path, { waitUntil: "domcontentloaded" })
       const hero = page.locator(".gn-premium-hero")
-      const primary = hero.getByRole("link", { name: "Scope an assessment", exact: true })
+      const primary = hero.getByRole("link", { name: "Contact Us", exact: true })
       const sample = hero.getByRole("link", { name: "See a sample decision brief", exact: true })
       await expect(primary).toBeVisible()
       await expect(sample).toBeVisible()
@@ -32,7 +32,7 @@ test.describe("premium solution journey continuity", () => {
       await page.emulateMedia({ reducedMotion: "reduce" })
       await page.goto(solution.path, { waitUntil: "domcontentloaded" })
       const hero = page.locator(".gn-premium-hero")
-      const primary = hero.getByRole("link", { name: "Scope an assessment", exact: true })
+      const primary = hero.getByRole("link", { name: "Contact Us", exact: true })
       const sample = hero.getByRole("link", { name: "See a sample decision brief", exact: true })
       await expect(primary).toBeVisible()
       await expect(sample).toBeVisible()
