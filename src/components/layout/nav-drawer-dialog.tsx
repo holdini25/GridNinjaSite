@@ -200,7 +200,7 @@ export default function NavDrawerDialog({ pathname, open, onOpenChange, trigger,
                 data-analytics-event="assessment_cta_selected"
                 data-analytics-source="header"
               >
-                Contact Us
+                Scope an assessment
               </Link>
             </Button>
           </SheetClose>

@@ -34,7 +34,7 @@ test.describe("server-rendered navigation", () => {
       await platform.click()
       await expect(platform.locator("..")).toHaveAttribute("open", "")
       await expect(dialog.getByRole("link", { name: "Platform direction" })).toHaveAttribute("href", "/platform")
-      await expect(dialog.getByRole("link", { name: "Contact Us", exact: true })).toHaveAttribute("href", "/assessment?source=header#scope")
+      await expect(dialog.getByRole("link", { name: "Scope an assessment", exact: true })).toHaveAttribute("href", "/assessment?source=header#scope")
       await dialog.getByRole("link", { name: "Sample brief" }).click()
       await expect(page).toHaveURL(/\/demo#decision-brief$/)
     } finally {
