@@ -340,3 +340,28 @@ review caught the earlier mixed rename convention; its 222-path checkpoint is
 retained, and the corrected union contains 223 endpoints. This inventory-only
 correction changes no application or harness bytes and does not replace any
 runtime evidence.
+
+
+## User-approved CTA wording — 17 October 2026
+
+The primary website CTA now reads **Contact Us** instead of **Scope an assessment**.
+This explicit user instruction supersedes the earlier CTA wording. Twenty live
+labels in sixteen source files change; all destinations, source/topic parameters,
+anchors, analytics, styles and form behavior remain unchanged. Twenty existing
+test files update only their corresponding accessible-name selectors or fixture
+copy. The staging-canary selector exception is narrow; no real form canary was run.
+Frozen published HTML/PDF/JSON, their manifests and versioned generator remain
+unchanged, as does the non-CTA descriptive form eyebrow.
+
+Local ESLint, TypeScript and five existing UI/navigation/publication unit files
+passed (41 tests). This copy-only check did not rerun unrelated backend suites or
+the performance matrix. The adjacent manifest records the actual changed-path
+union and retains all existing release gates.
+
+The previous e49 candidate, its 14/14 standard CI and local M5 140/140/20 result,
+and READY staged build `X27neIfkUFXjv1lABpdTI` remain historical evidence for e49.
+That deployment does not contain this label change. The new source revision must
+receive its own required build/serving and materially affected visual/accessibility,
+transfer and exact-candidate acceptance evidence; do not mix old reports into a
+new passing matrix. The measurement harness and all budgets/guards are unchanged.
+No upload, deployment, merge or production promotion accompanies this edit.

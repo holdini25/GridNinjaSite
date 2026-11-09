@@ -8,8 +8,9 @@ and inspect an ungated synthetic decision brief. The **AI Data Center Virtual
 Capacity Control Plane** and **runtime-assured virtual capacity engine** describe
 the conditional development direction; they do not imply current equipment authority.
 
-The implemented scope, backlog, evidence and outstanding release gates are in
-[docs/website-upgrade/implementation-plan.md](docs/website-upgrade/implementation-plan.md).
+See the [November website release candidate](docs/website-upgrade/november-release.md)
+for the selected source, verification and cutover, and the
+[implementation plan](docs/website-upgrade/implementation-plan.md) for the product scope.
 
 ## Stack
 

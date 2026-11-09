@@ -31,10 +31,13 @@ class FacilityBoundary extends Component<{ children: ReactNode; onFailure: () =>
   render() { return this.state.failed ? null : this.props.children }
 }
 
-/** The module and Three dependency graph are requested only after activation. */
-function FacilityScene(props: FacilityCanvasProps) {
-  const Scene = useMemo(() => lazy(() => import("./facility-canvas")), [])
-  return <FacilityBoundary onFailure={() => props.onFailure("render")}><Suspense fallback={null}><Scene {...props} /></Suspense></FacilityBoundary>
+/** Each activation can retry a failed chunk; ordinary renders keep the same scene. */
+class FacilityScene extends Component<FacilityCanvasProps> {
+  private readonly Scene = lazy(() => import("./facility-canvas"))
+  render() {
+    const Scene = this.Scene
+    return <FacilityBoundary onFailure={() => this.props.onFailure("render")}><Suspense fallback={null}><Scene {...this.props} /></Suspense></FacilityBoundary>
+  }
 }
 
 export function FacilityInspection(props: FacilityInspectionProps) {
@@ -605,6 +608,10 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
     const next: FacilityRackTarget = action === "door" ? { ...currentRack, door: currentRack.door === "open" ? "closed" : "open", tray: "retracted" } : { ...currentRack, door: "open", tray: currentRack.tray === "extended" ? "retracted" : "extended" }
     changeView({ kind: "specimen", specimen: "rack", pose: next.tray === "extended" ? "service" : next.cutaway ? "cutaway" : "closed", rack: next })
   }
+  const handleRackClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const action = event.currentTarget.dataset.action
+    if (action === "door" || action === "tray") rackAction(action)
+  }
   const demoHref = facilitySelectionHref({ status: "ready", scenario: record.scenario, version: record.publication.version, perspective: "business" }, state.target?.equipmentId ? state.target : { system: state.selected ?? "workloads", ...(state.selected && state.selected !== "workloads" ? {} : { equipmentId: "rack-02" }) }, topic).split("#")[0]
   const motionStatus = facilityMotionStatus({ ready, loading, reducedMotion: state.reducedMotion, paused: state.paused, equipmentEnabled: state.equipmentEnabled, quality, view: activeView, readingHold: ambientHold })
   // Reserve the requested stage before its first frame. Committed identities and
@@ -644,7 +651,7 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
       </div>
         {reserveRackActions && <div className="facility-rack-handles facility-rack-handle-controls" role="group" aria-label="Rack handle actions" aria-hidden={!rackActionsReady || undefined} data-pending={!rackActionsReady || undefined}>
 
-          {rackActionsReady && (["door", "tray"] as const).map((action, index) => <button key={action} type="button" className="facility-rack-handle" data-action={action} disabled={rackDetailActive} ref={element => { rackHandles.current[action] = element; if (element) element.hidden = !rackAnchorVisible.current[index] }} onClick={() => rackAction(action)}
+          {rackActionsReady && (["door", "tray"] as const).map((action, index) => <button key={action} type="button" className="facility-rack-handle" data-action={action} disabled={rackDetailActive} ref={element => { rackHandles.current[action] = element; if (element) element.hidden = !rackAnchorVisible.current[index] }} onClick={handleRackClick}
             onPointerEnter={event => { if (event.pointerType !== "touch") previewTarget({ system: "workloads", partId: action === "door" ? "GN_RACK_DOOR" : "GN_RACK_TRAY" }, `handle-${action}`, "pointer") }} onPointerLeave={() => previewTarget(null, `handle-${action}`, "pointer")}
             onFocus={() => previewTarget({ system: "workloads", partId: action === "door" ? "GN_RACK_DOOR" : "GN_RACK_TRAY" }, `handle-${action}`, "focus")} onBlur={() => previewTarget(null, `handle-${action}`, "focus")}><span aria-hidden="true">＋</span>{action === "door" ? currentRack.door === "open" ? "Close rack" : "Open door" : currentRack.tray === "extended" ? "Retract tray" : "Extend tray"}</button>)}
         </div>}

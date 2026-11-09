@@ -39,6 +39,7 @@ function FacilitySession(props: FacilityCanvasProps & { onQualityFallback: () =>
   const camera = useThree(state => state.camera)
   const rootScene = useThree(state => state.scene)
   const size = useThree(state => state.size)
+  const get = useThree(state => state.get)
   const invalidate = useThree(state => state.invalidate)
   const rendererDpr = useThree(state => state.viewport.dpr)
   const [model, setModel] = useState<FacilityModel | null>(null)
@@ -88,6 +89,7 @@ function FacilitySession(props: FacilityCanvasProps & { onQualityFallback: () =>
   }, [gl])
 
   useLayoutEffect(() => {
+    const { camera } = get()
     if (!model || !(camera instanceof OrthographicCamera) || !size.width || !size.height) return
     camera.position.fromArray(props.release.profile.camera)
     camera.lookAt(new Vector3(...props.release.profile.target))
@@ -112,8 +114,9 @@ function FacilitySession(props: FacilityCanvasProps & { onQualityFallback: () =>
     camera.zoom = 1
     camera.updateProjectionMatrix()
     invalidate()
-  }, [camera, model, projectedBounds, size.width, size.height, props.release.profile, invalidate])
+  }, [camera, get, model, projectedBounds, size.width, size.height, props.release.profile, invalidate])
 
+  /* eslint-disable react-hooks/immutability -- Three.js exposes its presentation hook as a writable callback. Restore the prior callback on cleanup. */
   useEffect(() => {
     if (!model) return
     let active = true
@@ -130,6 +133,7 @@ function FacilitySession(props: FacilityCanvasProps & { onQualityFallback: () =>
     invalidate()
     return () => { active = false; model.probe.onAfterRender = original }
   }, [model, invalidate, gl])
+  /* eslint-enable react-hooks/immutability */
 
   useEffect(() => {
     if (!model) return
@@ -211,7 +215,7 @@ function FacilitySession(props: FacilityCanvasProps & { onQualityFallback: () =>
   }, [running, rendererDpr])
   useEffect(() => {
     if (!model || window.__GN_FACILITY_DIAGNOSTICS__ !== true) return
-    const element = gl.domElement
+    const element = get().gl.domElement
     element.__gnFacilitySnapshot = (includeEquipment = false) => ({
       frames: motion.current.frames, drawCalls: gl.info.render.calls, triangles: gl.info.render.triangles,
       geometries: gl.info.memory.geometries, textures: gl.info.memory.textures,
@@ -221,11 +225,12 @@ function FacilitySession(props: FacilityCanvasProps & { onQualityFallback: () =>
       ...(includeEquipment ? { equipment: { fans: model.fans.map(fan => ({ phase: fan.phase, axis: fan.axis.toArray(), quaternion: fan.object.quaternion.toArray() })), ledColors: Array.from(model.leds.instanceColor!.array) } } : {}),
     })
     return () => { delete element.__gnFacilitySnapshot }
-  }, [gl, model])
+  }, [get, gl, model])
   useLayoutEffect(() => {
     if (props.visible) invalidate()
   }, [props.selected, props.preview, props.paused, props.reducedMotion, props.visible, props.equipmentEnabled, props.readingHold, invalidate])
 
+  /* eslint-disable react-hooks/immutability -- This Fiber render callback writes animation values into the active Three.js model and its GPU buffers. */
   useFrame((_, frameDelta) => {
     if (!model || !latest.current.visible) return
     const state = motion.current
@@ -288,6 +293,7 @@ function FacilitySession(props: FacilityCanvasProps & { onQualityFallback: () =>
     }
     if (settling && !animate) invalidate()
   }, 1)
+  /* eslint-enable react-hooks/immutability */
 
   return model ? <primitive object={model.scene} dispose={null} /> : null
 }

@@ -70,14 +70,38 @@ const blurValidatedFields = new Set([
 
 const subscribeToHydration = () => () => undefined
 
-export function ContactForm({
+type ContactFormProps = { source?: string; initialIntent?: LeadIntent; initialTopic?: PublicTopic; variant?: "assessment" | "contact" }
+
+function initialContactSession(defaultIntent: LeadIntent, defaultSource: string, defaultTopic: PublicTopic | undefined, assessment: boolean) {
+  const stored = typeof window === "undefined" ? null : readContactStorage(contactAttemptStorageKey)
+  const attempt = parseStoredAttempt(stored)
+  const attribution = resolveContactAttribution(typeof window === "undefined" ? "" : window.location.search, {
+    intent: defaultIntent, source: defaultSource, topic: defaultTopic,
+  })
+  return {
+    attempt,
+    expired: Boolean(stored && !attempt),
+    intent: attempt?.intent ?? (assessment ? "capacity-audit" : attribution.intent),
+    source: attempt?.source ?? attribution.source,
+    topic: attempt ? attempt.topic : attribution.topic,
+  }
+}
+
+export function ContactForm(props: ContactFormProps = {}) {
+  return <ContactInquiry key={JSON.stringify([props.variant, props.source, props.initialIntent, props.initialTopic])} {...props} />
+}
+
+function ContactInquiry({
   source: defaultSource = "contact-page",
   initialIntent = "capacity-audit",
   initialTopic,
   variant = "contact",
-}: { source?: string; initialIntent?: LeadIntent; initialTopic?: PublicTopic; variant?: "assessment" | "contact" } = {}) {
+}: ContactFormProps) {
   const hydrated = useSyncExternalStore(subscribeToHydration, () => true, () => false)
-  const startedAt = useRef(Date.now())
+  // Capture the original tab reference once. A successful write or retry in this
+  // form must never be mistaken for an inquiry recovered after a reload.
+  const [session] = useState(() => initialContactSession(initialIntent, defaultSource, initialTopic, variant === "assessment"))
+  const [startedAt, setStartedAt] = useState(() => session.attempt?.startedAt ?? Date.now())
   const inFlight = useRef(false)
   const validationInFlight = useRef(false)
   const inputRevision = useRef(0)
@@ -86,50 +110,33 @@ export function ContactForm({
   const receiptRef = useRef<HTMLDivElement>(null)
   const optionalDetailsRef = useRef<HTMLDetailsElement>(null)
   const turnstileRef = useRef<TurnstileFieldHandle>(null)
-  const [clientSubmissionId, setClientSubmissionId] = useState(() => crypto.randomUUID())
-  const [intent, setIntent] = useState<LeadIntent>(variant === "assessment" ? "capacity-audit" : initialIntent)
-  const [conversationType, setConversationType] = useState<ContactConversationType>(() => conversationTypeForIntent(variant === "assessment" ? "capacity-audit" : initialIntent))
-  const [source, setSource] = useState(defaultSource)
-  const [topic, setTopic] = useState<PublicTopic | undefined>(initialTopic)
+  const [clientSubmissionId, setClientSubmissionId] = useState(() => session.attempt?.clientSubmissionId ?? crypto.randomUUID())
+  const [intent, setIntent] = useState<LeadIntent>(session.intent)
+  // The server cannot see query attribution or tab storage. Match its initial
+  // HTML during hydration, then expose the recovered state on the same controls.
+  const conversationType = conversationTypeForIntent(hydrated ? intent : variant === "assessment" ? "capacity-audit" : initialIntent)
+  const source = session.source
+  const [selectedTopic, setTopic] = useState<PublicTopic | undefined>(session.topic)
+  const topic = hydrated ? selectedTopic : initialTopic
   const [turnstileToken, setTurnstileToken] = useState("")
   const [verificationEnabled, setVerificationEnabled] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isPending, setIsPending] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
   const isBusy = isPending || isValidating
-  const [serverMessage, setServerMessage] = useState<string | null>(null)
+  const [serverMessage, setServerMessage] = useState<string | null>(() => {
+    if (session.attempt) return "A previous inquiry has no confirmed receipt in this tab. Re-enter the original details to retry with its existing reference, or explicitly start another inquiry."
+    if (session.expired) return "The previous inquiry reference has expired or cannot be recovered. That does not prove nonreceipt. Starting another inquiry may create a duplicate."
+    return null
+  })
   const [errorFocusVersion, setErrorFocusVersion] = useState(0)
-  const [uncertain, setUncertain] = useState(false)
-  const [expiredAttempt, setExpiredAttempt] = useState(false)
+  const [unconfirmedAttempt, setUncertain] = useState(Boolean(session.attempt))
+  const uncertain = hydrated && unconfirmedAttempt
+  const [expiredAttempt, setExpiredAttempt] = useState(session.expired)
   const [receipt, setReceipt] = useState<ContactReceipt | null>(null)
-  const attemptRef = useRef<ContactAttempt | null>(null)
-  const originalPayloadRef = useRef<Omit<ContactLeadInput, "turnstileToken"> | null>(null)
+  const attemptRef = useRef<ContactAttempt | null>(session.attempt)
+  const [originalPayload, setOriginalPayload] = useState<Omit<ContactLeadInput, "turnstileToken"> | null>(null)
   const countedReceipts = useRef(new Set<string>())
-
-  useEffect(() => {
-    const stored = readContactStorage(contactAttemptStorageKey)
-    const attempt = parseStoredAttempt(stored)
-    const attribution = resolveContactAttribution(window.location.search, {
-      intent: attempt?.intent ?? initialIntent, source: attempt?.source ?? defaultSource, topic: attempt?.topic ?? initialTopic,
-    })
-    // A recovered reference must keep its original business payload. New
-    // assessment inquiries cannot silently inherit another URL intent.
-    const resolvedIntent = attempt?.intent ?? (variant === "assessment" ? "capacity-audit" : attribution.intent)
-    setIntent(resolvedIntent)
-    setConversationType(conversationTypeForIntent(resolvedIntent))
-    setSource(attempt?.source ?? attribution.source)
-    setTopic(attempt ? attempt.topic : attribution.topic)
-    if (attempt) {
-      attemptRef.current = attempt
-      setClientSubmissionId(attempt.clientSubmissionId)
-      startedAt.current = attempt.startedAt
-      setUncertain(true)
-      setServerMessage("A previous inquiry has no confirmed receipt in this tab. Re-enter the original details to retry with its existing reference, or explicitly start another inquiry.")
-    } else if (stored) {
-      setExpiredAttempt(true)
-      setServerMessage("The previous inquiry reference has expired or cannot be recovered. That does not prove nonreceipt. Starting another inquiry may create a duplicate.")
-    }
-  }, [defaultSource, initialIntent, initialTopic, variant])
 
   useEffect(() => {
     if (Object.keys(errors).some(key => ["siteType", "timeline", "role", "capacityRange", "constraints"].includes(key)) && optionalDetailsRef.current) optionalDetailsRef.current.open = true
@@ -150,7 +157,7 @@ export function ContactForm({
   function buildCandidate(form: HTMLFormElement) {
     return buildContactLeadCandidate(new FormData(form), {
       schemaVersion: 2, formType: "contact", clientSubmissionId,
-      turnstileToken, intent, source, startedAt: startedAt.current,
+      turnstileToken, intent, source, startedAt,
     })
   }
 
@@ -179,7 +186,6 @@ export function ContactForm({
 
   function handleConversationChange(value: string) {
     if (!isContactConversationType(value)) return
-    setConversationType(value)
     setIntent(intentAfterConversationSelection(value))
   }
 
@@ -193,14 +199,13 @@ export function ContactForm({
     inputRevision.current += 1
     clearContactAttempt()
     attemptRef.current = null
-    originalPayloadRef.current = null
+    setOriginalPayload(null)
     setClientSubmissionId(crypto.randomUUID())
-    startedAt.current = Date.now()
+    setStartedAt(Date.now())
     setUncertain(false)
     setExpiredAttempt(false)
     if (variant === "assessment") {
       setIntent("capacity-audit")
-      setConversationType("capacity-audit")
     }
     setErrors({})
     setServerMessage("A new inquiry reference is ready. Your previous inquiry may still have been received.")
@@ -239,7 +244,7 @@ export function ContactForm({
       // Keep the business payload and inquiry identity immutable, not its token.
       const { turnstileToken: verificationToken, ...retryPayload } = candidate
       void verificationToken
-      originalPayloadRef.current = retryPayload
+      setOriginalPayload(retryPayload)
       writeContactStorage(contactAttemptStorageKey, attempt)
       trackGridNinjaEvent("contact_form_submit", { source, intent })
       const result = await sendContactInquiry(candidate)
@@ -251,7 +256,7 @@ export function ContactForm({
         }
         const confirmed = storeContactReceipt(result.receipt.submissionId, candidate.intent)
         attemptRef.current = null
-        originalPayloadRef.current = null
+        setOriginalPayload(null)
         setReceipt(confirmed)
         setUncertain(false)
         return
@@ -268,7 +273,7 @@ export function ContactForm({
           // uncertain attempt remains recoverable even when this retry is rejected.
           clearContactAttempt()
           attemptRef.current = null
-          originalPayloadRef.current = null
+          setOriginalPayload(null)
         }
         reportError(errorCategoryForStatus(result.status, rejected.fieldErrors))
         turnstileRef.current?.reset()
@@ -332,7 +337,7 @@ export function ContactForm({
   }
 
   const summaryMessage =
-    serverMessage ??
+    (hydrated ? serverMessage : null) ??
     (Object.keys(errors).length > 0
       ? "Review the highlighted fields before submitting your request again."
       : null)
@@ -358,7 +363,7 @@ export function ContactForm({
       className="gn-lead-form min-w-0 rounded-2xl border border-border bg-surface p-5 [overflow-wrap:anywhere] sm:p-7"
     >
       <noscript><p className="mb-5 leading-7">This form needs JavaScript and security verification to submit safely. Enable JavaScript and reload this page. No inquiry has been sent by opening this page.</p></noscript>
-      <fieldset disabled={!hydrated || isBusy || (uncertain && Boolean(originalPayloadRef.current)) || expiredAttempt} className="min-w-0">
+      <fieldset disabled={!hydrated || isBusy || (uncertain && Boolean(originalPayload)) || expiredAttempt} className="min-w-0">
       <legend className="sr-only">Inquiry details</legend>
       <div className="hidden" aria-hidden="true">
         <label htmlFor="contact-website">Website</label>
@@ -565,13 +570,12 @@ export function ContactForm({
           </div>
       </div>}
 
-      {(uncertain || expiredAttempt) ? <div className="mt-4 flex flex-wrap gap-3">
-        {originalPayloadRef.current && !expiredAttempt ? <Button type="button" disabled={isBusy || !turnstileToken} onClick={() => {
-          const original = originalPayloadRef.current
-          if (original && turnstileToken) void submitCandidate({ ...original, turnstileToken })
+      {(uncertain || (hydrated && expiredAttempt)) ? <div className="mt-4 flex flex-wrap gap-3">
+        {originalPayload && !expiredAttempt ? <Button type="button" disabled={isBusy || !turnstileToken} onClick={() => {
+          if (turnstileToken) void submitCandidate({ ...originalPayload, turnstileToken })
         }}>Retry original inquiry</Button> : null}
         <Button type="button" variant="outline" disabled={isBusy} onClick={startAnotherInquiry}>Start another inquiry</Button>
-        {originalPayloadRef.current && !expiredAttempt && !turnstileToken ? <p className="text-sm leading-6 text-muted-foreground">Complete security verification again to retry the original inquiry with its existing reference.</p> : null}
+        {originalPayload && !expiredAttempt && !turnstileToken ? <p className="text-sm leading-6 text-muted-foreground">Complete security verification again to retry the original inquiry with its existing reference.</p> : null}
         <p className="text-sm leading-6 text-muted-foreground">Starting another inquiry creates a new reference and may duplicate an earlier inquiry whose receipt is unconfirmed.</p>
       </div> : null}
 
@@ -586,7 +590,7 @@ export function ContactForm({
       <Button
         type="submit"
         size="lg"
-        disabled={!hydrated || isBusy || expiredAttempt || (uncertain && Boolean(originalPayloadRef.current))}
+        disabled={!hydrated || isBusy || expiredAttempt || (uncertain && Boolean(originalPayload))}
         aria-busy={isBusy}
         data-gn-event="contact-submit"
         className={`mt-5 min-h-12 w-full rounded-lg${variant === "contact" ? " gn-contact-submit" : ""}`}
