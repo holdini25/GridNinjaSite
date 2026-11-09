@@ -263,7 +263,6 @@ function MobileNavigation() {
               <span className="text-[22px] font-semibold tracking-[-0.045em]">GridNinja</span>
             </span>
           </a>
-          <p className="mt-1 text-sm text-muted-foreground">Capacity decisions supported by explicit evidence.</p>
         </div>
         <nav aria-label="Primary" className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overscroll-contain px-4 py-4">
           {navItems.map((item) => {

@@ -71,9 +71,7 @@ test.describe("GridNinja brand placements", () => {
 
     await expect(home).toBeVisible()
     expect((await mark.boundingBox())?.height).toBeCloseTo(36, 2)
-    await expect(drawer).toContainText(
-      "Capacity decisions supported by explicit evidence."
-    )
+    await expect(drawer.getByRole("navigation", { name: "Primary" })).toBeVisible()
   })
 
   test("does not imply verified evidence on the synthetic sample page", async ({ page }) => {
