@@ -15,6 +15,7 @@ The November candidate supersedes their CTA wording and the dependency freeze:
 
 - Restore the assessment labels and corresponding accessible-name checks from
   `e49a16e9f7f5c5000eea56bafa1c7c3bf75fa1eb`. Preserve destinations and attribution.
+  Remove the subtitle from the shared navigation drawers.
 - Update Next.js and its ESLint preset from 16.3.8 to 16.4.6 and Zod from 4.3.6
   to 4.6.7. The npm lockfile SHA-256 is
   `a5645dc2e604f06c73e1b915b932ed881b1f1689d38f8edaa3662e1a2aea0524`.
@@ -27,6 +28,11 @@ The November candidate supersedes their CTA wording and the dependency freeze:
   commits and keeps a stable canvas component for each activation. Retrying a
   failed download starts a new activation. Per-frame model updates remain in
   the Three.js frame callback.
+- Deliver the verified GLB bytes unchanged to Next.js. Next.js 16.4 strips
+  application-supplied content-encoding headers and negotiates compression at
+  the HTTP server. Precompressing the model in the route made successful HTTP
+  responses unreadable to browsers. The browser delivery check verifies the
+  decoded length and digest against the immutable manifest.
 
 All frozen publications, registry entries, private evidence, backend API routes,
 database and provider code retain their production bytes. Verify the exclusions
