@@ -419,6 +419,58 @@ describe("facility graphics session", () => {
     expect(screen.getByRole("button", { name: "Retry 3D" })).toBeVisible()
   })
 
+  it.each(["presented", "timed-out"] as const)("retains a staged offscreen model and its remaining first-frame budget until %s", async outcome => {
+    vi.useFakeTimers()
+    let observe: IntersectionObserverCallback = () => {}
+    vi.stubGlobal("IntersectionObserver", class {
+      constructor(callback: IntersectionObserverCallback) { observe = callback }
+      observe() {}
+      disconnect() {}
+    })
+    const intersect = (ratio: number) => act(() => observe([{ isIntersecting: ratio > 0, intersectionRatio: ratio } as IntersectionObserverEntry], {} as IntersectionObserver))
+    render(<FacilityInspection {...props} />)
+    intersect(1)
+    fireEvent.click(screen.getByRole("button", { name: /Explore in 3D/ }))
+    const inspector = screen.getByTestId("facility-inspection")
+    await act(async () => { await vi.advanceTimersByTimeAsync(3_000) })
+    intersect(0)
+    await act(async () => { await vi.advanceTimersByTimeAsync(1_000) })
+    const generation = currentCanvas().generation
+    act(() => currentCanvas().onStaged())
+    await act(async () => { await vi.advanceTimersByTimeAsync(9_000) })
+    expect(inspector).toHaveAttribute("data-phase", "staging")
+    expect(currentCanvas().visible).toBe(false)
+    expect(currentCanvas().generation).toBe(generation)
+
+    intersect(0.25)
+    await act(async () => { await vi.advanceTimersByTimeAsync(3_999) })
+    expect(inspector).toHaveAttribute("data-phase", "staging")
+    if (outcome === "presented") {
+      act(() => currentCanvas().onPresented())
+      expect(inspector).toHaveAttribute("data-phase", "ready")
+      expect(currentCanvas().generation).toBe(generation)
+    } else {
+      await act(async () => { await vi.advanceTimersByTimeAsync(1) })
+      expect(inspector).toHaveAttribute("data-failure", "timeout")
+      fireEvent.click(screen.getByRole("button", { name: "Retry 3D" }))
+      await act(async () => { await vi.advanceTimersByTimeAsync(7_999) })
+      expect(inspector).toHaveAttribute("data-phase", "loading")
+      expect(currentCanvas().generation).toBeGreaterThan(generation)
+    }
+  })
+
+  it("times out an unstaged acquisition even when its stage is offscreen", async () => {
+    vi.useFakeTimers()
+    vi.stubGlobal("IntersectionObserver", class { observe() {} disconnect() {} })
+    render(<FacilityInspection {...props} activateOnMount />)
+    await act(async () => { await vi.advanceTimersByTimeAsync(7_999) })
+    const inspector = screen.getByTestId("facility-inspection")
+    expect(inspector).toHaveAttribute("data-phase", "loading")
+    expect(currentCanvas().visible).toBe(false)
+    await act(async () => { await vi.advanceTimersByTimeAsync(1) })
+    expect(inspector).toHaveAttribute("data-failure", "timeout")
+  })
+
   it.each(["loading", "staging"])("preserves an interrupted %s startup while the document is hidden", async phase => {
     vi.useFakeTimers()
     const visibility = vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible")

@@ -27,7 +27,10 @@ The November candidate supersedes their CTA wording and the dependency freeze:
 - The 3D inspection session commits its renderer references after React
   commits and keeps a stable canvas component for each activation. Retrying a
   failed download starts a new activation. Per-frame model updates remain in
-  the Three.js frame callback.
+  the Three.js frame callback. Import, download and preparation share an
+  eight-second foreground deadline. Once prepared, the model waits while
+  offscreen; scrolling back resumes the remaining time and shows the model
+  only after its first real frame.
 - Deliver the verified GLB bytes unchanged to Next.js. Next.js 16.4 strips
   application-supplied content-encoding headers and negotiates compression at
   the HTTP server. Precompressing the model in the route made successful HTTP

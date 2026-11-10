@@ -280,15 +280,21 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
     setAssetPhase("ready"); setQuality(null)
     setPresentation(previous => ({ ...previous, revision: previous.revision + 1, playing: false }))
   }, [token])
-  // Import and staging share one foreground budget per generation. A hidden
-  // document cannot present the first frame, so background time is not charged.
+  // Charge foreground import, download and preparation even offscreen. Once staged,
+  // the renderer can present only at the same 25% visibility threshold it uses to draw.
+  const chargeStartup = state.media.phase === "loading" || (state.media.phase === "staging" && state.inViewport)
+  const startupBudget = useRef<{ generation: number; remaining: number } | null>(null)
   useEffect(() => {
-    if (!loading) return
-    let remaining = 8_000, startedAt: number | null = null, disposed = false
+    if (!chargeStartup) return
+    if (startupBudget.current?.generation !== token.generation) {
+      startupBudget.current = { generation: token.generation, remaining: 8_000 }
+    }
+    const budget = startupBudget.current
+    let startedAt: number | null = null, disposed = false
     let deadline: ReturnType<typeof setTimeout> | undefined
     const pause = () => {
       clearTimeout(deadline); deadline = undefined
-      if (startedAt !== null) remaining = Math.max(0, remaining - (performance.now() - startedAt))
+      if (startedAt !== null) budget.remaining = Math.max(0, budget.remaining - (performance.now() - startedAt))
       startedAt = null
     }
     const resume = () => {
@@ -303,19 +309,19 @@ function FacilityInspectionSession({ record, release, variant, loadingPolicy, mo
           return
         }
         pause()
-        if (remaining > 0) resume()
+        if (budget.remaining > 0) resume()
         else fail("timeout")
-      }, remaining)
+      }, budget.remaining)
     }
     const visibility = () => { if (document.visibilityState === "visible") resume(); else pause() }
     document.addEventListener("visibilitychange", visibility)
     visibility()
     return () => {
       disposed = true
-      clearTimeout(deadline)
+      pause()
       document.removeEventListener("visibilitychange", visibility)
     }
-  }, [loading, token, fail])
+  }, [chargeStartup, token, fail])
 
   useEffect(() => {
     if (focusManualActivation.current && active) {
