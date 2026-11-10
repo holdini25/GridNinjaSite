@@ -1,0 +1,108 @@
+name: Diagnose desktop cinematic loop
+
+on:
+  push:
+    branches: [codex/diagnose-cinematic-loop-e126078]
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      APP_COMMIT: e126078526cc096421cc4dcea74676da37e67264
+    steps:
+      - name: Check out the measurement driver
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          path: driver
+          sparse-checkout: scripts/qa/diagnose-linux-loop.mjs
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Check out the frozen release candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          path: app
+          ref: ${{ env.APP_COMMIT }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22.23.2"
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - name: Build the website under the original CI settings
+        working-directory: app
+        run: |
+          test "$(git rev-parse HEAD)" = "$APP_COMMIT"
+          test "$(git rev-parse HEAD^{tree})" = 80715b9219f4899b906a5ab4f77522bb46187c32
+          npm ci
+          npx playwright install --with-deps chrome chromium
+          npm run build
+          test -z "$(git status --short)"
+      - name: Trace five natural desktop video loops
+        shell: bash
+        working-directory: app
+        env:
+          FACILITY_BASE_URL: http://localhost:3000
+          FACILITY_MEASUREMENT_SCOPE: ci-functional
+        run: |
+          mkdir -p build/qa/linux-loop-trace-driver
+          cp ../driver/scripts/qa/diagnose-linux-loop.mjs build/qa/linux-loop-trace-driver/
+          npm run start -- --hostname 127.0.0.1 --port 3000 > "$RUNNER_TEMP/gridninja-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..60}; do
+            if curl --silent --fail "$FACILITY_BASE_URL/" -o /dev/null; then break; fi
+            if ! kill -0 "$server_pid" 2>/dev/null; then cat "$RUNNER_TEMP/gridninja-server.log"; exit 1; fi
+            sleep 1
+          done
+          curl --silent --fail "$FACILITY_BASE_URL/" -o /dev/null
+          node build/qa/linux-loop-trace-driver/diagnose-linux-loop.mjs
+          test -s build/qa/linux-loop-trace-results/summary.json
+          for sample in {1..5}; do
+            test -s "build/qa/linux-loop-trace-results/run-$sample.json"
+            test -s "build/qa/linux-loop-trace-results/run-$sample-trace.json.gz"
+          done
+          test -z "$(git status --short)"
+      - name: Record runner and source identity
+        if: always()
+        working-directory: app
+        run: |
+          mkdir -p build/qa/linux-loop-trace-results
+          python3 - <<'PYTHON'
+          import json, os, platform, subprocess
+          from pathlib import Path
+
+          def version(*command):
+              try:
+                  result = subprocess.run(command, capture_output=True, text=True, check=False)
+              except OSError:
+                  return None
+              return result.stdout.strip() if result.returncode == 0 else None
+
+          data = {
+              "runnerImage": os.environ.get("ImageOS"),
+              "runnerImageVersion": os.environ.get("ImageVersion"),
+              "architecture": platform.machine(),
+              "kernel": platform.release(),
+              "chrome": version("google-chrome", "--version"),
+              "node": version("node", "--version"),
+              "npm": version("npm", "--version"),
+              "appCommit": version("git", "rev-parse", "HEAD"),
+              "appTree": version("git", "rev-parse", "HEAD^{tree}"),
+              "workflowCommit": os.environ["GITHUB_SHA"],
+              "qualificationRunnerImageVersion": "20261101.360.1",
+              "qualificationAppTree": "80715b9219f4899b906a5ab4f77522bb46187c32"
+          }
+          Path("build/qa/linux-loop-trace-results/host.json").write_text(json.dumps(data, indent=2) + "\n")
+          PYTHON
+      - name: Preserve the timing evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: desktop-loop-diagnostic
+          path: app/build/qa/linux-loop-trace-results/
+          if-no-files-found: error
+          retention-days: 14
