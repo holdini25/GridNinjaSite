@@ -55,7 +55,11 @@ The [environment qualification contract](environment-qualification.md) defines
 three distinct results: local M5/Metal, protected staging, and public
 post-deployment acceptance. The full matrix is 14 routes, 140 Lighthouse
 captures, 140 full-scroll observations and 20 readiness observations per
-environment. Keep failed or incomplete runs. Software CI, a protected preview
+environment. After navigation and every scroll, the transfer collector waits
+for 750 ms of network quiet in the **new** viewport. Quiet time accumulated
+before the move cannot hide a late movie or image request. The 15-second
+settlement deadline and all failure and byte checks still apply. Keep failed
+or incomplete runs. Software CI, a protected preview
 and an emulated mobile viewport are not physical phone or public results.
 
 The candidate's raw local evidence is under `build/qa/november-release/`

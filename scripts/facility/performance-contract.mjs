@@ -240,10 +240,10 @@ export async function collectTransfers(cdp) {
   for (const [event, method] of [["requestWillBeSent", "request"], ["responseReceived", "response"], ["dataReceived", "data"], ["loadingFinished", "finished"], ["loadingFailed", "failed"]]) cdp.on(`Network.${event}`, value => ledger[method](value))
   return ledger
 }
-export async function settleTransfers(ledger, { timeout = 15_000, quiet = 750 } = {}) {
+export async function settleTransfers(ledger, { timeout = 15_000, quiet = 750, quietSince = 0 } = {}) {
   const deadline = Date.now() + timeout
   while (Date.now() < deadline) {
-    if (!ledger.pending() && Date.now() - ledger.changedAt >= quiet) {
+    if (!ledger.pending() && Date.now() - Math.max(quietSince, ledger.changedAt) >= quiet) {
       const snapshot = ledger.snapshot()
       assert(snapshot.complete, `Incomplete transfer measurement: ${snapshot.issues.join("; ")}`)
       return snapshot

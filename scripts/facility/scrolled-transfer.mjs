@@ -4,7 +4,13 @@ import { assertCompleteTransfer, collectTransfers, isProtectedMeasurement, measu
 import { LIGHTHOUSE_RESOURCE_BUDGETS } from "../seo/validate-lighthouse-budgets.mjs"
 import { authorizeHostedContext } from "./hosted-auth.mjs"
 
-export const SCROLLED_TRANSFER_PROTOCOL = Object.freeze({ protocol: "settled-viewport-visits", maximumSteps: 100, settleQuietMs: 750, settleTimeoutMs: 15_000 })
+export const SCROLLED_TRANSFER_PROTOCOL = Object.freeze({ protocol: "settled-viewport-visits", maximumSteps: 100, quietWindow: "after-navigation-and-each-scroll", settleQuietMs: 750, settleTimeoutMs: 15_000 })
+
+/** A newly visited viewport may enqueue an image or movie request after scrolling.
+ * Start its observation here even if the previous viewport was already quiet. */
+export function settleScrolledViewport(ledger) {
+  return settleTransfers(ledger, { quiet: SCROLLED_TRANSFER_PROTOCOL.settleQuietMs, timeout: SCROLLED_TRANSFER_PROTOCOL.settleTimeoutMs, quietSince: Date.now() })
+}
 
 /** Apply resource ceilings to the cumulative ledger too: Lighthouse's initial
  * viewport alone cannot qualify the later lazy-loaded editorial illustrations. */
@@ -57,10 +63,10 @@ export async function measureScrolledRoutes(browser, { matrix, baseURL, buildSet
     page.on("pageerror", error => result.pageErrors.push(error.message))
     try {
       const response = await page.goto(baseURL + route, { waitUntil: "load", timeout: 30_000 })
-      result.initialTransfer = await settleTransfers(ledger)
+      result.initialTransfer = await settleScrolledViewport(ledger)
       assertScrolledTransfer(result.initialTransfer, { route, profile, buildSettings })
       result.scroll = await visitScrolledPage(page, async () => {
-        const snapshot = await settleTransfers(ledger, { quiet: SCROLLED_TRANSFER_PROTOCOL.settleQuietMs, timeout: SCROLLED_TRANSFER_PROTOCOL.settleTimeoutMs })
+        const snapshot = await settleScrolledViewport(ledger)
         assertScrolledTransfer(snapshot, { route, profile, buildSettings })
         return snapshot
       })
