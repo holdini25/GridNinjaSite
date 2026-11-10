@@ -93,7 +93,8 @@ export function facilityReducer(state: FacilityPresentation, event: FacilityEven
       return { ...state, paused: event.paused ?? state.paused, equipmentEnabled: event.equipmentEnabled ?? state.equipmentEnabled, equipmentTouched: event.equipmentEnabled !== undefined || state.equipmentTouched, automaticAttempted: event.closed || state.automaticAttempted }
     case "visibility":
       if (state.inViewport === event.inViewport && state.documentVisible === event.documentVisible) return state
-      return { ...state, inViewport: event.inViewport, documentVisible: event.documentVisible, pointerPreview: null, focusPreview: null }
+      // Scrolling the stage out of view does not blur its keyboard controls.
+      return { ...state, inViewport: event.inViewport, documentVisible: event.documentVisible, pointerPreview: null, focusPreview: event.documentVisible ? state.focusPreview : null }
     case "pause":
       return { ...state, paused: event.paused }
     case "equipment":

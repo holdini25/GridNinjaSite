@@ -1,25 +1,17 @@
-import type { Metadata } from "next"
 import Link from "next/link"
 
 import { StaticGridNinjaMark } from "@/components/brand/gridninja-mark"
 import { ContactForm } from "@/components/forms/contact-form"
 import { SectionShell } from "@/components/layout/section-shell"
-import { SeoPageJsonLd } from "@/components/seo/json-ld"
 import {
   contactHero,
   contactNextSteps,
   contactTrustCommitments,
 } from "@/content/copy/contact"
-import { createPageMetadata } from "@/lib/seo"
 
-export const dynamic = "force-static"
-
-export const metadata: Metadata = createPageMetadata({ path: "/contact" })
-
-export default function ContactPage() {
+export function ContactPageContent() {
   return (
     <div className="relative overflow-hidden bg-background pb-20 sm:pb-24">
-      <SeoPageJsonLd path="/contact" />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-[52rem] opacity-[0.16] [background-image:linear-gradient(rgba(184,184,184,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(184,184,184,0.16)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"

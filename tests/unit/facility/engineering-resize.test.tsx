@@ -73,6 +73,39 @@ function model(specimen = false): FacilityModel {
 }
 afterEach(() => { cleanup(); expect(driver.listeners.size).toBe(0); vi.clearAllMocks(); vi.useRealTimers() })
 
+it("keeps initial overview staging free of an assembly timeout while hidden", async () => {
+  vi.useFakeTimers()
+  const initial = deferred<StagedFacility>(), overview = model(), camera = new OrthographicCamera(), scene = new Scene()
+  driver.stage.mockReturnValue(initial.promise)
+  const canvas = rendererCanvas()
+  driver.three = {
+    camera, scene, size: { width: 1200, height: 600 }, setDpr: vi.fn(), advance: () => driver.frame(),
+    gl: { domElement: canvas, render: () => scene.traverseVisible(object => { if (object instanceof Mesh) object.onAfterRender(undefined as never, scene, camera, object.geometry, object.material as never, undefined as never) }) },
+  }
+  const callbacks = { onDpr: vi.fn(), onStaged: vi.fn(), onPresented: vi.fn(), onFailure: vi.fn(), onSelect: vi.fn(), onPreview: vi.fn(), onAssetState: vi.fn(), onMetadata: vi.fn() }
+  const props: FacilityCanvasProps = { release: { profile } as FacilityVisualRelease, generation: 1, view: { kind: "overview" }, visible: true, paused: true, reducedMotion: false, equipmentEnabled: false, selected: null, preview: null, ...callbacks }
+  const rendered = render(<EngineeringSession {...props} onDpr={callbacks.onDpr} />)
+  rendered.rerender(<EngineeringSession {...props} visible={false} onDpr={callbacks.onDpr} />)
+  await act(async () => { initial.resolve({ model: overview, environment: null, dispose: overview.dispose }); await vi.advanceTimersByTimeAsync(0) })
+  expect(callbacks.onStaged).toHaveBeenCalledOnce()
+  await act(async () => { await vi.advanceTimersByTimeAsync(9_000) })
+  expect(callbacks.onPresented).not.toHaveBeenCalled()
+  expect(callbacks.onFailure).not.toHaveBeenCalled()
+  expect(callbacks.onAssetState).not.toHaveBeenCalledWith(expect.objectContaining({ phase: "failed" }))
+  expect(overview.dispose).not.toHaveBeenCalled()
+
+  rendered.rerender(<EngineeringSession {...props} onDpr={callbacks.onDpr} />)
+  await act(async () => driver.draw({ activeSeconds: 0, delta: 0, interval: 0, targetFps: 30 }))
+  expect(canvas.dataset.ready).toBe("true")
+  expect(callbacks.onPresented).toHaveBeenCalledOnce()
+  expect(callbacks.onAssetState).toHaveBeenLastCalledWith({ phase: "ready", view: { kind: "overview" } })
+  expect(callbacks.onMetadata).toHaveBeenLastCalledWith(overview.metadata)
+  expect(driver.stage).toHaveBeenCalledOnce()
+  expect(driver.replace).not.toHaveBeenCalled()
+  await act(async () => { await vi.advanceTimersByTimeAsync(9_000) })
+  expect(callbacks.onAssetState).not.toHaveBeenCalledWith(expect.objectContaining({ phase: "failed" }))
+})
+
 it("fits the latest viewport after delayed staging and throughout an interrupted pose resize", async () => {
   const initial = deferred<StagedFacility>(), replacement = deferred<FacilityModel>(), camera = new OrthographicCamera(), scene = new Scene()
   driver.stage.mockReturnValue(initial.promise); driver.replace.mockReturnValue(replacement.promise)

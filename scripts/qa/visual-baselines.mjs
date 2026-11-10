@@ -22,7 +22,7 @@ async function setup(viewport, dpr) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: dpr, reducedMotion: "reduce", colorScheme: "dark", locale: "en-US", timezoneId: "America/New_York", hasTouch: viewport.width < 768 })
   const page = await context.newPage()
   page.on("pageerror", error => report.errors.push(error.message))
-  // Same local Turnstile API contract and 300×65 geometry used by the
+  // Same local Turnstile API contract and compact 150×140 / normal 300×65 geometry used by the
   // contact-layout fixture; never consult the live provider or submit a form.
   await page.route("**/*", async route => {
     const url = new URL(route.request().url())
@@ -37,7 +37,8 @@ async function setup(viewport, dpr) {
       window.turnstile = {
         render(container, options) {
           const widget = document.createElement("div");
-          widget.style.width = "300px"; widget.style.height = "65px";
+          widget.style.width = options.size === "compact" ? "150px" : "300px";
+          widget.style.height = options.size === "compact" ? "140px" : "65px";
           widget.dataset.testTurnstile = "ready"; container.appendChild(widget);
           queueMicrotask(() => options.callback("local-visual-fixture-token"));
           return "local-visual-fixture";
@@ -76,7 +77,27 @@ try {
       for (const route of ["/", "/demo", "/assessment", "/contact"]) {
         await page.goto(baseURL + route)
         let htmlState
-        if (route === "/" || route === "/demo") {
+        if (route === "/") {
+          // Home now presents the cinematic poster and immutable Civic still.
+          // Keep the existing reduced-motion / Save-Data review conditions.
+          const player = page.getByTestId("cinematic-facility")
+          await player.locator(".cinematic-stage").scrollIntoViewIfNeeded()
+          await page.waitForFunction(() => {
+            const player = document.querySelector('[data-testid="cinematic-facility"]')
+            return player?.dataset.state === "poster" && player.dataset.reason === "reduced-motion" && player.dataset.posterReadyMs !== undefined
+          })
+          await player.locator(".cinematic-poster img").evaluate(image => image.decode())
+          assert.equal(await player.getAttribute("data-release"), report.identity.buildSettings.cinematic.selectedRelease)
+          assert.equal(await player.locator("video").evaluate(video => video.currentSrc), "", "Static Home review must not acquire cinematic video")
+          const civic = page.locator('#shared-infrastructure [data-civic-release="civic-v2"]')
+          await civic.locator(".gn-civic-artwork").scrollIntoViewIfNeeded()
+          await civic.locator("picture img").evaluate(async image => {
+            await image.decode()
+            if (!image.complete || !image.naturalWidth || !image.naturalHeight) throw new Error("Civic image did not decode")
+          })
+          assert.equal(await page.locator("canvas").count(), 0)
+          htmlState = "cinematic-decoded-poster-and-civic-v2-save-data"
+        } else if (route === "/demo") {
           const inspector = page.getByTestId("facility-inspection")
           await scrollFacilityStage(inspector)
           await inspector.locator(".facility-systems").getByRole("button", { name: "Power", exact: true }).waitFor({ state: "visible" })

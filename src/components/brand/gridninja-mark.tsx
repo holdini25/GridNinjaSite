@@ -1,7 +1,5 @@
 import type { ComponentPropsWithoutRef, CSSProperties } from "react"
 
-import { cn } from "@/lib/utils"
-
 export type GridNinjaLogoVariant =
   | "proof-core"
   | "micro"
@@ -59,7 +57,7 @@ export type GridNinjaMonochromeMarkProps = {
 }
 
 export function GridNinjaMonochromeMark({
-  className,
+  className = "",
   style,
 }: Omit<GridNinjaMonochromeMarkProps, "variant">) {
   const maskImage = `url("${gridNinjaLogoAssets.monochrome.src}")`
@@ -68,10 +66,7 @@ export function GridNinjaMonochromeMark({
     <span
       aria-hidden="true"
       data-gridninja-mark="monochrome"
-      className={cn(
-        "inline-block aspect-square w-[512px] max-w-full shrink-0 bg-current",
-        className
-      )}
+      className={`gn-monochrome-mark ${className}`}
       style={{
         ...style,
         backgroundColor: "currentColor",
@@ -100,7 +95,7 @@ export function StaticGridNinjaMark(props: StaticGridNinjaMarkProps) {
     return <GridNinjaMonochromeMark className={props.className} style={props.style} />
   }
 
-  const { variant = "detailed", className, loading = "lazy", decoding = "async", ...imageProps } = props
+  const { variant = "detailed", className = "", loading = "lazy", decoding = "async", ...imageProps } = props
   const asset = gridNinjaLogoAssets[variant]
 
   return (
@@ -111,7 +106,7 @@ export function StaticGridNinjaMark(props: StaticGridNinjaMarkProps) {
       width={asset.width}
       height={asset.height}
       alt=""
-      className={cn("shrink-0 object-contain", className)}
+      className={`gn-static-mark ${className}`}
       loading={loading}
       decoding={decoding}
       {...imageProps}

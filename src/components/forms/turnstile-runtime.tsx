@@ -41,6 +41,7 @@ type TurnstileWidgetOptions = {
   sitekey: string
   action: string
   theme: "auto"
+  size: "compact"
   appearance: "interaction-only"
   callback: (token: string) => void
   "error-callback": () => void
@@ -149,6 +150,7 @@ export const TurnstileField = forwardRef<
         sitekey: siteKey,
         action,
         theme: "auto",
+        size: "compact",
         appearance: "interaction-only",
         callback(token) {
           if (!active || generation !== widgetGeneration.current) return
@@ -210,7 +212,7 @@ export const TurnstileField = forwardRef<
       <p className="mb-3 text-base text-foreground">Security verification</p>
       <div
         ref={containerRef}
-        className="min-h-[72px]"
+        className="min-h-[140px]"
         data-turnstile-container={action}
       />
       <div className="min-h-16">

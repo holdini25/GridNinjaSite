@@ -1,0 +1,161 @@
+{
+  "schema": "gridninja.civic-native.v2",
+  "status": "complete",
+  "mode": "final",
+  "blenderVersion": "5.2.2 LTS",
+  "blenderBuild": "d13f752e3b9c",
+  "engine": "CYCLES",
+  "device": "METAL",
+  "compute": {
+    "requested": "metal",
+    "cyclesDevice": "GPU",
+    "computeBackend": "METAL",
+    "cpuThreadLimit": 4,
+    "metalRT": "AUTO",
+    "kernelOptimization": "FULL",
+    "enabledDevices": [
+      {
+        "name": "Apple M5 Pro (GPU - 20 cores)",
+        "type": "METAL"
+      }
+    ],
+    "blender": "5.2.2 LTS",
+    "blenderBuild": "d13f752e3b9c",
+    "platform": "macOS-27.0-arm64-arm-64bit-Mach-O",
+    "savedPreferences": false,
+    "metalBinaryArchivesDisabled": false,
+    "note": "Enabled devices are configuration evidence; task timing does not establish CPU/GPU work split."
+  },
+  "startedUnix": 1791756309.8249469,
+  "sourceHashes": {
+    "assets-source/civic/hybrid-v2/scene.py": "46215c81ce61a7b11c6e6526b62fbccfa2ad04342817b2ba8a08ab3613ca113c",
+    "scripts/civic/render-hybrid.py": "d4e09a84bbf131b05cd16a872c64f235c9cf4810e6adbcdf58b15792a28fb7fb",
+    "scripts/civic/run-hybrid.py": "d825810647b0495deddbf11fa35530b86751c571e9c60dac16d35f1ef6083c0e",
+    "assets-source/facility/compute.py": "afb5e7096c76086825b6f071ba7c1de557359f2113ddb0bb4fc44f070c907649"
+  },
+  "geometry": {
+    "seed": 20261011,
+    "facilityDimensionsMetres": [
+      180,
+      108,
+      21.9
+    ],
+    "architectureRevision": "layered-facade-recessed-atrium-v3",
+    "coolingBanks": 3,
+    "coolerAssembliesPerBank": 8,
+    "houses": 18,
+    "treeInstances": 1747,
+    "treeSpecies": 8,
+    "lighting": "balanced-blue-hour",
+    "lightingValues": {
+      "world": [
+        0.3,
+        0.4,
+        0.55,
+        1
+      ],
+      "strength": 0.5,
+      "sun": 1.15,
+      "key": [
+        0.85,
+        0.9,
+        1
+      ],
+      "exposure": 0.5,
+      "fill": 1100000
+    },
+    "nativeScene": "new geometry; not reconstructed from existing raster images",
+    "synthetic": true
+  },
+  "scene": "build/civic-hybrid/final-03/civic-scene.blend",
+  "sceneSha256": "385fb3baf968c42096eb0fcfb1c3442d5399583bc4254dd9682b8b96eee7acd3",
+  "settings": {
+    "samples": 256,
+    "adaptiveThreshold": 0.004999999888241291,
+    "seed": 20261011,
+    "maxBounces": 6,
+    "denoising": "OPENIMAGEDENOISE",
+    "gpuDenoisingRequested": true,
+    "color": {
+      "viewTransform": "AgX",
+      "look": "AgX - Medium High Contrast",
+      "exposure": 0.5,
+      "display": "sRGB",
+      "png": "16-bit display-referred RGB sRGB",
+      "exr": "32-bit float scene-linear RGBA"
+    }
+  },
+  "images": [
+    {
+      "family": "A-shared-landscape",
+      "composition": "landscape",
+      "camera": "A-shared-landscape landscape",
+      "cameraSettings": {
+        "position": [
+          300,
+          -440,
+          340
+        ],
+        "target": [
+          25,
+          80,
+          0
+        ],
+        "lens": 39,
+        "shiftX": -0.26,
+        "resolution": [
+          3840,
+          2160
+        ],
+        "sensorWidth": 36,
+        "depthOfField": false
+      },
+      "path": "build/civic-hybrid/final-03/A-shared-landscape/landscape.png",
+      "sha256": "70ee7ab8711398295c8bcc2233be9a6f50b32d9b8056effe8be4c21a94b90631",
+      "width": 3840,
+      "height": 2160,
+      "renderSeconds": 26.746256113052368,
+      "pngBytes": 29244702,
+      "exr": "build/civic-hybrid/final-03/A-shared-landscape/landscape.exr",
+      "exrSha256": "ef890ac6333a0d28fcb11c2f111bb58756a9f3fbccb02a97418a5e5d8c34fbc7",
+      "exrBytes": 58336334
+    },
+    {
+      "family": "A-shared-landscape",
+      "composition": "portrait",
+      "camera": "A-shared-landscape portrait",
+      "cameraSettings": {
+        "position": [
+          210,
+          -310,
+          280
+        ],
+        "target": [
+          0,
+          95,
+          0
+        ],
+        "lens": 43,
+        "shiftX": -0.1,
+        "resolution": [
+          1360,
+          1632
+        ],
+        "sensorWidth": 36,
+        "depthOfField": false
+      },
+      "path": "build/civic-hybrid/final-03/A-shared-landscape/portrait.png",
+      "sha256": "f90b042f446dc852dddd088d3cc75ecbe6b2fdbab14e553deaa359d2bc072bc4",
+      "width": 1360,
+      "height": 1632,
+      "renderSeconds": 6.7966389656066895,
+      "pngBytes": 8176593,
+      "exr": "build/civic-hybrid/final-03/A-shared-landscape/portrait.exr",
+      "exrSha256": "c92b5fa91f9fb175bbc7ecd425aaeb6450533704d4066f6fe414e6abefc40e7d",
+      "exrBytes": 15867155
+    }
+  ],
+  "finishedUnix": 1791756344.2861462,
+  "totalSeconds": 34.46119928359985,
+  "maxResidentBytes": 4490510336
+}

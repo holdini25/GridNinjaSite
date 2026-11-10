@@ -26,6 +26,9 @@
 /assets-source/facility/*.blend1
 /assets-source/facility/__pycache__/
 /scripts/cinematic/__pycache__/
+/assets-source/civic/hybrid-v2/__pycache__/
+/assets-source/civic/hybrid-v2/*.blend1
+/scripts/civic/__pycache__/
 
 # misc
 .DS_Store

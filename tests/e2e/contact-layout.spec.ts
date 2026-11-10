@@ -47,9 +47,10 @@ async function installDelayedTurnstile(page: Page) {
           window.turnstile = {
             render(container, options) {
               const widget = document.createElement("div");
-              widget.style.width = "300px";
-              widget.style.height = "65px";
+              widget.style.width = options.size === "compact" ? "150px" : "300px";
+              widget.style.height = options.size === "compact" ? "140px" : "65px";
               widget.dataset.testTurnstile = "ready";
+              widget.dataset.testTurnstileSize = options.size || "normal";
               container.appendChild(widget);
               queueMicrotask(() => options.callback("layout-token"));
               return "layout-widget";
@@ -109,6 +110,73 @@ test.describe("contact intake layout", () => {
     }
 
     await clientHealth.expectNoHorizontalOverflow()
+  })
+
+  test("fits delayed verification inside both intake forms at narrow widths without layout shifts", async ({
+    page,
+    clientHealth,
+  }, testInfo) => {
+    await observeLayoutShifts(page)
+    await installDelayedTurnstile(page)
+
+    for (const width of [320, 390]) {
+      await page.setViewportSize({ width, height: 844 })
+      for (const route of ["/contact", "/assessment"]) {
+        await page.goto(route, { waitUntil: "domcontentloaded" })
+        await page.evaluate(() => document.fonts.ready)
+        const form = page.locator("form")
+        const container = form.locator("[data-turnstile-container]")
+        const initialFormBox = await form.boundingBox()
+        await expect(container).toHaveCSS("min-height", "140px")
+        // Firefox bounding boxes can undershoot by a fraction of a CSS pixel.
+        // Match the 0.01px precision used by the containment checks below.
+        expect((await container.boundingBox())!.height,
+          `${route} at ${width}px must reserve the compact verification slot`
+        ).toBeGreaterThanOrEqual(140 - 0.01)
+
+        // Engage the optional topic without changing the inquiry or submitting it.
+        await page.getByLabel("Topic (optional)", { exact: true }).focus()
+        const widget = page.locator('[data-test-turnstile="ready"]')
+        await expect(widget).toBeVisible()
+        await expect(widget).toHaveAttribute("data-test-turnstile-size", "compact")
+        await expect(page.getByText("Security verification complete.")).toBeVisible()
+        await page.evaluate(() => new Promise<void>(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))))
+
+        const geometry = await form.evaluate(element => {
+          const container = element.querySelector<HTMLElement>("[data-turnstile-container]")!
+          const widget = container.querySelector<HTMLElement>("[data-test-turnstile]")!
+          return {
+            form: element.getBoundingClientRect().toJSON(),
+            container: container.getBoundingClientRect().toJSON(),
+            widget: widget.getBoundingClientRect().toJSON(),
+            clientWidth: element.clientWidth,
+            scrollWidth: element.scrollWidth,
+            viewportWidth: window.innerWidth,
+            requiredFieldsEmpty: [...element.querySelectorAll<HTMLInputElement>("[required]")].every(field => field.value === ""),
+          }
+        })
+        expect(geometry.requiredFieldsEmpty).toBe(true)
+        expect(geometry.widget.width).toBe(150)
+        expect(geometry.widget.height).toBe(140)
+        expect(Math.abs(geometry.form.height - initialFormBox!.height)).toBeLessThan(2)
+        expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth)
+        for (const bounds of [geometry.container, geometry.form, { left: 0, right: geometry.viewportWidth }]) {
+          expect(geometry.widget.left).toBeGreaterThanOrEqual(bounds.left - 0.01)
+          expect(geometry.widget.right).toBeLessThanOrEqual(bounds.right + 0.01)
+        }
+        expect(geometry.widget.top).toBeGreaterThanOrEqual(geometry.container.top - 0.01)
+        expect(geometry.widget.bottom).toBeLessThanOrEqual(geometry.container.bottom + 0.01)
+        await clientHealth.expectNoHorizontalOverflow()
+
+        const scores = await readLayoutShiftScores(page)
+        await testInfo.attach(`verification-layout-${route.slice(1)}-${width}`, {
+          body: JSON.stringify({ geometry, scores }),
+          contentType: "application/json",
+        })
+        if (scores.supported) expect(scores.cls).toBeLessThan(0.05)
+        else testInfo.annotations.push({ type: "unavailable-diagnostic", description: `${route} at ${width}px: this browser does not expose layout-shift entries. Widget bounds and reserved-height assertions ran; no CLS measurement is claimed.` })
+      }
+    }
   })
 
   test("keeps CLS below 0.05 through verification, validation, scrolling, and success", async ({

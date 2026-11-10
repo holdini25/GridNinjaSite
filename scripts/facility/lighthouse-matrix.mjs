@@ -1,10 +1,10 @@
 import assert from "node:assert/strict"
 
 export const REVIEWED_ROUTES = Object.freeze(["/", "/assessment", "/demo", "/platform", "/proof", "/evidence", "/about", "/solutions/ai-cloud", "/solutions/colocation", "/solutions/bridge-power"])
-export const MANDATORY_ADDITIONAL_ROUTES = Object.freeze(["/contact", "/insights", "/evidence/assessments/demo-01-b/v1.0.0"])
+export const MANDATORY_ADDITIONAL_ROUTES = Object.freeze(["/contact", "/insights", "/evidence/assessments/demo-01-b/v1.0.0", "/about/founders"])
 const coreRoutes = Object.freeze(["/", "/demo", "/assessment"])
 
-/** The 100 reviewed-route captures are a subset of the 130 release captures,
+/** The 100 reviewed-route captures are a subset of the 140 release captures,
  * never added a second time to the original 30 core-route captures. */
 export function performanceMatrix(name = "core") {
   assert(["core", "premium-civic"].includes(name), "Unknown performance matrix")
@@ -15,6 +15,22 @@ export function performanceMatrix(name = "core") {
     profiles: Object.freeze(["desktop", "mobile"]),
     runs: 5,
   })
+}
+
+/** Prioritize the two known mobile LCP gates without reducing release coverage.
+ * Each group still owns its five runs; all other groups retain their order. */
+export function lighthouseGroups(name = "core") {
+  const matrix = performanceMatrix(name)
+  const groups = matrix.profiles.flatMap(profile => matrix.routes.map(route => Object.freeze({ profile, route })))
+  if (matrix.name !== "premium-civic") return Object.freeze(groups)
+  const priority = group => group.profile === "mobile" && ["/", "/contact"].includes(group.route)
+  return Object.freeze([...groups.filter(priority), ...groups.filter(group => !priority(group))])
+}
+
+/** A ten-capture preflight is explicitly incomplete release evidence. */
+export function lighthousePriorityGroups(name) {
+  assert.equal(name, "premium-civic", "Priority preflight requires the premium release matrix")
+  return lighthouseGroups(name).filter(group => group.profile === "mobile" && ["/", "/contact"].includes(group.route))
 }
 
 export function lighthouseRoutePolicy(route) {

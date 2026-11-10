@@ -2,7 +2,6 @@
 import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
-import { brotliDecompressSync, gunzipSync } from "node:zlib"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 // Isolate release states from real publication approvals, including future releases.
@@ -160,7 +159,7 @@ describe("facility approval and asset route", () => {
       const response = await GET(new Request(`https://gridninja.ai/assets/facility/${id}/${file}`), { params: Promise.resolve({ release: id, file }) })
       expect(response.status).toBe(200)
       expect(response.headers.get("content-type")).toBe(mime)
-      expect(response.headers.get("etag")).toBe(`"${hash(bytes)}"`)
+      expect(response.headers.get("etag")).toBe(`${file.endsWith(".glb") ? "W/" : ""}"${hash(bytes)}"`)
       expect(response.headers.get("cache-control")).toContain("must-revalidate")
       expect(response.headers.get("x-content-type-options")).toBe("nosniff")
       expect(response.headers.get("x-robots-tag")).toContain("noindex")
@@ -264,76 +263,42 @@ describe("facility release switches", () => {
   })
 })
 
-describe("facility GLB content negotiation", () => {
-  it("serves Brotli and gzip bodies that decode to the exact approved GLB through GET", async () => {
-    for (const encoding of ["br", "gzip"] as const) {
+describe("facility GLB transfer", () => {
+  it("hands the framework decoded, approved bytes for browsers that accept compression", async () => {
+    for (const encoding of ["identity", "br", "gzip", "gzip, deflate, br", "*;q=0, identity;q=0.5"]) {
       const response = await GET(new Request(`https://gridninja.ai/assets/facility/${id}/facility.glb`, { headers: { "Accept-Encoding": encoding } }), { params: Promise.resolve({ release: id, file: "facility.glb" }) })
       expect(response.status).toBe(200)
-      expect(response.headers.get("content-encoding")).toBe(encoding)
+      expect(response.headers.get("content-encoding")).toBeNull()
       expect(response.headers.get("vary")).toBe("Accept-Encoding")
-      const encoded = Buffer.from(await response.arrayBuffer())
-      const decoded = encoding === "br" ? brotliDecompressSync(encoded) : gunzipSync(encoded)
-      expect(decoded).toEqual(model)
-      expect(response.headers.get("content-length")).toBe(String(encoded.length))
-      expect(response.headers.get("etag")).toBe(`"${hash(encoded)}"`)
-    }
-    const release = await getFacilityRelease()
-    expect(release?.model.bytes).toBe(model.length)
-    expect(release?.model.sha256).toBe(hash(model))
-  })
-
-  it("prefers Brotli at equal weights, honors explicit preferences and never selects q=0 encodings", async () => {
-    for (const [accept, encoding] of [
-      ["gzip, br", "br"],
-      ["br;q=0.5, gzip;q=1", "gzip"],
-      ["BR;q=1, gzip;q=0.5", "br"],
-      ["br;q=0, gzip;q=0.5", "gzip"],
-      ["br;q=0, gzip;q=0", null],
-      ["identity;q=1, br;q=0.5", null],
-      ["*;q=0, br;q=1", "br"],
-      ["br;q=0, *;q=0.5", "gzip"],
-      ["br;q=1.1, gzip", "gzip"],
-      ["x-gzip", "gzip"],
-      ["identity", null],
-      ["", null],
-    ] as const) {
-      const response = await facilityAssetResponse(id, "facility.glb", null, accept)
-      expect(response.status, accept).toBe(200)
-      expect(response.headers.get("content-encoding"), accept).toBe(encoding)
-      expect(response.headers.get("vary")).toBe("Accept-Encoding")
+      expect(Buffer.from(await response.arrayBuffer())).toEqual(model)
     }
   })
 
-  it("returns 406 when every available representation is excluded and keeps WebP uncompressed", async () => {
-    for (const accept of ["br;q=0, gzip;q=0, identity;q=0", "*;q=0", "zstd, identity;q=0"]) {
+  it("returns 406 when identity is forbidden, even if a particular host might compress", async () => {
+    for (const accept of ["br;q=0, gzip;q=0, identity;q=0", "*;q=0", "br, identity;q=0", "gzip, identity;q=0", "zstd, identity;q=0", "IDENTITY; q = 0, identity;q=1"]) {
       const response = await facilityAssetResponse(id, "facility.glb", null, accept)
-      expect(response.status).toBe(406)
+      expect(response.status, accept).toBe(406)
       expect(response.headers.get("cache-control")).toBe("no-store")
       expect(response.headers.get("vary")).toBe("Accept-Encoding")
     }
-    const poster = await facilityAssetResponse(id, "poster-desktop.webp", null, "br, gzip")
-    expect(poster.headers.get("content-encoding")).toBeNull()
-    expect(Buffer.from(await poster.arrayBuffer())).toEqual(desktop)
     expect((await facilityAssetResponse(id, "poster-desktop.webp", null, "br, identity;q=0")).status).toBe(406)
   })
 
-  it("uses representation-specific ETags and supports weak validators, lists and wildcard GETs", async () => {
-    const responses = await Promise.all([null, "br", "gzip"].map(encoding => facilityAssetResponse(id, "facility.glb", null, encoding)))
-    const [identityTag, brotliTag, gzipTag] = responses.map(response => response.headers.get("etag")!)
-    expect(new Set([identityTag, brotliTag, gzipTag]).size).toBe(3)
-    for (const condition of [brotliTag, `W/${brotliTag}`, `"old-version", W/${brotliTag}, "other-version"`, "*"]) {
-      const response = await facilityAssetResponse(id, "facility.glb", condition, "br")
+  it("uses a weak model ETag across encodings and recognizes earlier identity validators", async () => {
+    const identity = await facilityAssetResponse(id, "facility.glb", null, "identity")
+    const strong = `"${hash(model)}"`
+    const weak = `W/${strong}`
+    expect(identity.headers.get("etag")).toBe(weak)
+    for (const condition of [strong, weak, `"old-version", ${weak}, "other-version"`, "*"]) {
+      const response = await facilityAssetResponse(id, "facility.glb", condition, "br, gzip")
       expect(response.status).toBe(304)
-      expect(response.headers.get("etag")).toBe(brotliTag)
-      expect(response.headers.get("content-encoding")).toBe("br")
+      expect(response.headers.get("etag")).toBe(weak)
       expect(response.headers.get("vary")).toBe("Accept-Encoding")
       expect(await response.text()).toBe("")
     }
-    expect((await facilityAssetResponse(id, "facility.glb", identityTag, "br")).status).toBe(200)
-    expect((await facilityAssetResponse(id, "facility.glb", brotliTag, "gzip")).status).toBe(200)
   })
 
-  it("revalidates approval and decoded bytes before using a warm compression cache or returning 304", async () => {
+  it("revalidates approval and decoded bytes before returning 304", async () => {
     const initial = await facilityAssetResponse(id, "facility.glb", null, "br")
     const tag = initial.headers.get("etag")
     expect(initial.status).toBe(200)

@@ -1,8 +1,9 @@
 import { DispatchEnvelopeDTOSchema } from "@/schemas/dispatch-envelope.schema"
-import { DISPATCH_DOMAIN_IDS, DISPATCH_DOMAIN_META } from "@/lib/dispatch-envelope/constants"
+import { DISPATCH_DATASET_VERSION, DISPATCH_DOMAIN_IDS, DISPATCH_DOMAIN_META } from "@/lib/dispatch-envelope/constants"
 import { buildDimensionAudit } from "@/lib/dispatch-envelope/dimension-audit"
 import { assertDispatchEnvelopeInvariants } from "@/lib/dispatch-envelope/invariants"
 import { buildEnvelopeSamples, envelopeEndMinute } from "@/lib/dispatch-envelope/normalize"
+import { evaluateDispatchEvidence } from "@/lib/dispatch-envelope/evidence"
 import { rankConstraints } from "@/lib/dispatch-envelope/binding-rank"
 import type {
   ConstraintState,
@@ -56,7 +57,7 @@ export const dispatchEnvelopeSections = {
   proof: {
     eyebrow: "Proof Artifacts",
     headline: "Every modeled result needs its evidence boundary",
-    body: "The visual exposes proof roots, policy versions, topology hashes, freshness, confidence, and artifact names so operators can inspect why a capacity claim was allowed, repaired, rejected, or withheld as no-proof.",
+    body: "The visual exposes proof roots, policy versions, topology hashes, authored freshness, declared limits, and artifact names so operators can inspect why a capacity claim was allowed, repaired, rejected, or withheld as no-proof.",
   },
   cta: {
     headline: "Scope a historical-data capacity assessment",
@@ -100,40 +101,40 @@ export const dispatchScenarios: DispatchScenario[] = [
     primaryReason:
       "UPS reserve floor clipped the request from 4.0 MW to 2.8 MW and 18 minutes; cooling margin delayed start by one minute.",
     plainReason:
-      "The site can support an 18-minute repaired event, but the declared UPS/BESS reserve floor limits the action to 2.8 MW. Cooling conditions require a one-minute delayed start.",
+      "In this synthetic record, the repaired envelope is 2.8 MW for 18 minutes, with a one-minute delayed start. These authored limits do not establish site feasibility or operating permission.",
     proofRoot: "8f4c2d16...91a7",
     policy: "operator-policy-v14",
     topology: "83c4...91f",
     constraints: [
-      constraint("electrical", 3.5, 26, 1.1, 0, 8, 1, "available", 99, 184, {
+      constraint("electrical", 3.5, 26, 1.1, 0, 8, 1, "available", 184, {
         reasonCode: "T2_FEEDER_MARGIN_CLEAR",
         reason: "T2 feeder margin remains positive throughout the event.",
         artifact: "electrical_margin_trace.json",
       }),
-      constraint("storage", 2.8, 18, 0.7, 0, 12, 0.8, "binding", 97, 212, {
+      constraint("storage", 2.8, 18, 0.7, 0, 12, 0.8, "binding", 212, {
         reasonCode: "UPS_RESERVE_FLOOR",
         reason:
           "Emergency reserve floor must remain above the operator-declared minimum.",
         artifact: "reserve_floor_report.csv",
       }),
-      constraint("cooling-water", 3.2, 24, 0.8, 1, 9, 0.9, "binding", 96, 246, {
+      constraint("cooling-water", 3.2, 24, 0.8, 1, 9, 0.9, "binding", 246, {
         reasonCode: "COOLING_SAFE_START",
         reason: "Loop B thermal margin requires a one-minute delayed start.",
         artifact: "cooling_water_envelope.json",
       }),
-      constraint("bridge-power", 4.4, 30, 1.2, 0, 6, 1.2, "available", 98, 305, {
+      constraint("bridge-power", 4.4, 30, 1.2, 0, 6, 1.2, "available", 305, {
         reasonCode: "BRIDGE_AVAILABLE_UNUSED",
         reason:
           "Bridge-power assets remain available but are not required by the model-screened envelope.",
         artifact: "bridge_power_state.json",
         isDecisionCritical: false,
       }),
-      constraint("workload-sla", 3.8, 28, 1, 0, 7, 1, "available", 99, 128, {
+      constraint("workload-sla", 3.8, 28, 1, 0, 7, 1, "available", 128, {
         reasonCode: "SLA_FLEX_CLEAR",
         reason: "Flexible training workload remains inside SLA policy.",
         artifact: "sla_constraint_manifest.json",
       }),
-      constraint("telemetry-policy", 4, 28, 1, 0, 8, 1, "available", 99, 184, {
+      constraint("telemetry-policy", 4, 28, 1, 0, 8, 1, "available", 184, {
         reasonCode: "TELEMETRY_CURRENT",
         reason:
           "Decision-critical telemetry is current and topology-consistent.",
@@ -154,42 +155,42 @@ export const dispatchScenarios: DispatchScenario[] = [
     label: "Normal operation",
     subtitle: "All limits clear",
     decision: "allow",
-    request: spec(3, 0, 15, 0.75, 0.75, 6, 0.6),
-    accepted: spec(3, 0, 15, 0.75, 0.75, 6, 0.6),
+    request: spec(3, 0, 15, 0.75, 0.75, 9, 0.6),
+    accepted: spec(3, 0, 15, 0.75, 0.75, 9, 0.6),
     primaryReason: "The complete request remains inside every trusted envelope.",
     plainReason:
-      "Electrical, storage, cooling, workload, and evidence constraints all remain clear for the requested dispatch.",
+      "In this synthetic record, the 3.0 MW request fits the authored limits with a 15-minute hold and nine-minute recovery. It does not establish site feasibility or operating permission.",
     proofRoot: "24bc91af...c8d2",
     policy: "operator-policy-v14",
     topology: "83c4...91f",
     constraints: [
-      constraint("electrical", 4.2, 30, 1.2, 0, 7, 0.8, "available", 99, 170, {
+      constraint("electrical", 4.2, 30, 1.2, 0, 7, 0.8, "available", 170, {
         reasonCode: "ELECTRICAL_MARGIN_CLEAR",
         reason: "Electrical margin remains above 1.2 MW.",
         artifact: "electrical_margin_trace.json",
       }),
-      constraint("storage", 3.6, 23, 0.9, 0, 9, 0.7, "available", 98, 201, {
+      constraint("storage", 3.6, 23, 0.9, 0, 9, 0.7, "available", 201, {
         reasonCode: "RESERVE_CLEAR",
         reason: "UPS/BESS reserve remains above policy floor.",
         artifact: "reserve_floor_report.csv",
       }),
-      constraint("cooling-water", 3.8, 26, 1, 0, 8, 0.8, "available", 98, 228, {
+      constraint("cooling-water", 3.8, 26, 1, 0, 8, 0.8, "available", 228, {
         reasonCode: "THERMAL_MARGIN_CLEAR",
         reason: "Thermal margin remains inside envelope.",
         artifact: "cooling_water_envelope.json",
       }),
-      constraint("bridge-power", 5, 35, 1.4, 0, 6, 0.9, "available", 98, 295, {
+      constraint("bridge-power", 5, 35, 1.4, 0, 6, 0.9, "available", 295, {
         reasonCode: "BRIDGE_AVAILABLE_UNUSED",
         reason: "Bridge-power capacity is available but unused.",
         artifact: "bridge_power_state.json",
         isDecisionCritical: false,
       }),
-      constraint("workload-sla", 3.5, 24, 0.9, 0, 7, 0.6, "available", 99, 121, {
+      constraint("workload-sla", 3.5, 24, 0.9, 0, 7, 0.6, "available", 121, {
         reasonCode: "WORKLOAD_FLEX_CLEAR",
         reason: "Workload class is flexible and within SLA.",
         artifact: "sla_constraint_manifest.json",
       }),
-      constraint("telemetry-policy", 4, 25, 1, 0, 7, 0.6, "available", 99, 170, {
+      constraint("telemetry-policy", 4, 25, 1, 0, 7, 0.6, "available", 170, {
         reasonCode: "TELEMETRY_CURRENT",
         reason: "All decision-critical sources are current.",
         artifact: "telemetry_manifest.json",
@@ -207,42 +208,42 @@ export const dispatchScenarios: DispatchScenario[] = [
     primaryReason:
       "A trusted cooling hard constraint makes the requested dispatch unavailable.",
     plainReason:
-      "Cooling Loop B is in a contingency state. Current thermal capacity cannot support the requested workload ramp, and no bounded repair exists.",
+      "In this synthetic record, the authored Cooling Loop B contingency blocks the requested workload ramp. No repaired envelope is proposed; this is not a finding about an operating facility.",
     proofRoot: "cf98180e...2a17",
     policy: "operator-policy-v14",
     topology: "83c4...91f",
     blockMinute: 4,
     constraints: [
-      constraint("electrical", 4, 24, 1, 0, 8, 1.1, "available", 99, 190, {
+      constraint("electrical", 4, 24, 1, 0, 8, 1.1, "available", 190, {
         reasonCode: "ELECTRICAL_NOT_LIMITING",
         reason: "Electrical system is not the limiting domain.",
         artifact: "electrical_margin_trace.json",
       }),
-      constraint("storage", 3.5, 20, 0.8, 0, 10, 1, "available", 98, 225, {
+      constraint("storage", 3.5, 20, 0.8, 0, 10, 1, "available", 225, {
         reasonCode: "RESERVE_CANNOT_REPAIR_THERMAL",
         reason: "Reserve floor cannot repair the thermal block.",
         artifact: "reserve_floor_report.csv",
       }),
-      constraint("cooling-water", 0, 0, 0, 0, 20, 0, "hard-block", 99, 202, {
+      constraint("cooling-water", 0, 0, 0, 0, 20, 0, "hard-block", 202, {
         reasonCode: "COOLING_LOOP_B_CONTINGENCY",
         reason: "Cooling Loop B contingency removes the safe thermal envelope.",
         artifact: "cooling_contingency_report.json",
       }),
-      constraint("bridge-power", 4.6, 28, 1.2, 0, 7, 1.2, "available", 98, 310, {
+      constraint("bridge-power", 4.6, 28, 1.2, 0, 7, 1.2, "available", 310, {
         reasonCode: "POWER_CANNOT_REPAIR_THERMAL",
         reason: "Additional power cannot repair a thermal hard block.",
         artifact: "bridge_power_state.json",
         isDecisionCritical: false,
       }),
-      constraint("workload-sla", 4, 20, 0.9, 0, 8, 1.1, "available", 98, 139, {
+      constraint("workload-sla", 4, 20, 0.9, 0, 8, 1.1, "available", 139, {
         reasonCode: "WORKLOAD_FLEX_INSUFFICIENT",
         reason:
           "Workload flexibility exists but cannot pass the model screen without cooling margin.",
         artifact: "sla_constraint_manifest.json",
       }),
-      constraint("telemetry-policy", 4.5, 24, 1, 0, 9, 1.1, "available", 99, 190, {
+      constraint("telemetry-policy", 4.5, 24, 1, 0, 9, 1.1, "available", 190, {
         reasonCode: "EVIDENCE_CURRENT_REJECT",
-        reason: "Evidence is current; the rejection is a trusted safety result.",
+        reason: "The authored evidence supports rejection within this synthetic record; it does not establish operational safety.",
         artifact: "telemetry_manifest.json",
       }),
     ],
@@ -258,19 +259,19 @@ export const dispatchScenarios: DispatchScenario[] = [
     request: spec(2.2, 0, 12, 0.7, 0.7, 8, 0.5),
     accepted: null,
     primaryReason:
-      "GridNinja cannot establish a reserve-safe dispatch envelope because BESS SOC evidence is stale.",
+      "This synthetic record withholds a model-screened envelope because BESS SOC evidence is authored as stale.",
     plainReason:
-      "The physical request may be feasible, but decision-critical BESS state-of-charge telemetry is outside the declared freshness limit. The correct result is no-proof.",
+      "In this synthetic record, decision-critical BESS state-of-charge evidence is outside the declared freshness limit. Capacity is withheld as no-proof; physical feasibility is not established.",
     proofRoot: "NO_PROOF_GAP_0317",
     policy: "operator-policy-v14",
     topology: "83c4...91f",
     constraints: [
-      constraint("electrical", 3.8, 24, 1, 0, 7, 0.6, "available", 99, 192, {
+      constraint("electrical", 3.8, 24, 1, 0, 7, 0.6, "available", 192, {
         reasonCode: "ELECTRICAL_EVIDENCE_CURRENT",
         reason: "Electrical evidence is current.",
         artifact: "electrical_margin_trace.json",
       }),
-      constraint("storage", 2.8, 20, 0.7, 0, 12, 0.5, "no-proof", 41, 18400, {
+      constraint("storage", 2.8, 20, 0.7, 0, 12, 0.5, "no-proof", 18400, {
         reasonCode: "BESS_SOC_STALE",
         reason:
           "BESS SOC telemetry exceeds the 500 ms decision-critical freshness policy.",
@@ -278,23 +279,23 @@ export const dispatchScenarios: DispatchScenario[] = [
         isTrusted: false,
         proofEligibility: "not-eligible",
       }),
-      constraint("cooling-water", 3.2, 22, 0.9, 0, 8, 0.5, "available", 98, 230, {
+      constraint("cooling-water", 3.2, 22, 0.9, 0, 8, 0.5, "available", 230, {
         reasonCode: "COOLING_EVIDENCE_CURRENT",
         reason: "Cooling evidence is current.",
         artifact: "cooling_water_envelope.json",
       }),
-      constraint("bridge-power", 4, 28, 1.1, 0, 6, 0.5, "available", 97, 302, {
+      constraint("bridge-power", 4, 28, 1.1, 0, 6, 0.5, "available", 302, {
         reasonCode: "BRIDGE_CANNOT_SUBSTITUTE_TRUST",
         reason: "Bridge power cannot substitute for unknown reserve state.",
         artifact: "bridge_power_state.json",
         isDecisionCritical: false,
       }),
-      constraint("workload-sla", 3, 18, 0.8, 0, 7, 0.5, "available", 99, 132, {
+      constraint("workload-sla", 3, 18, 0.8, 0, 7, 0.5, "available", 132, {
         reasonCode: "WORKLOAD_EVIDENCE_CURRENT",
         reason: "Workload evidence is current.",
         artifact: "sla_constraint_manifest.json",
       }),
-      constraint("telemetry-policy", 0, 0, 0, 0, 0, 0, "no-proof", 58, 18400, {
+      constraint("telemetry-policy", 0, 0, 0, 0, 0, 0, "no-proof", 18400, {
         reasonCode: "DECISION_EVIDENCE_INCOMPLETE",
         reason: "Decision-critical evidence path is incomplete.",
         artifact: "telemetry_manifest.json",
@@ -323,37 +324,37 @@ export const dispatchScenarios: DispatchScenario[] = [
     primaryReason:
       "Bridge-power fuel policy clips the event to 3.4 MW for 18 minutes and extends recovery to 14 minutes.",
     plainReason:
-      "The site can support a bounded bridge-power event, but the declared fuel window and recovery reserve reduce both MW and duration.",
+      "In this synthetic record, the bridge-power envelope is 3.4 MW for 18 minutes, with 14 minutes of recovery. The authored fuel and reserve limits do not establish site feasibility or operating permission.",
     proofRoot: "7a33c2b1...d9f0",
     policy: "bridge-policy-v6",
     topology: "83c4...91f",
     constraints: [
-      constraint("electrical", 4.6, 28, 1.2, 0, 8, 1.1, "available", 99, 183, {
+      constraint("electrical", 4.6, 28, 1.2, 0, 8, 1.1, "available", 183, {
         reasonCode: "ELECTRICAL_REPAIRED_CLEAR",
         reason: "Electrical margin supports the repaired envelope.",
         artifact: "electrical_margin_trace.json",
       }),
-      constraint("storage", 3.8, 22, 0.9, 0, 11, 1, "available", 98, 208, {
+      constraint("storage", 3.8, 22, 0.9, 0, 11, 1, "available", 208, {
         reasonCode: "STORAGE_REPAIRED_CLEAR",
         reason: "Storage reserve remains above emergency floor.",
         artifact: "reserve_floor_report.csv",
       }),
-      constraint("cooling-water", 4.1, 24, 1, 0, 9, 1.1, "available", 97, 244, {
+      constraint("cooling-water", 4.1, 24, 1, 0, 9, 1.1, "available", 244, {
         reasonCode: "COOLING_REPAIRED_CLEAR",
         reason: "Cooling remains inside the repaired envelope.",
         artifact: "cooling_water_envelope.json",
       }),
-      constraint("bridge-power", 3.4, 18, 0.85, 0, 14, 0.9, "binding", 96, 287, {
+      constraint("bridge-power", 3.4, 18, 0.85, 0, 14, 0.9, "binding", 287, {
         reasonCode: "BRIDGE_FUEL_WINDOW",
         reason: "Fuel window and reserve policy limit MW, hold time, and recovery.",
         artifact: "bridge_power_fuel_window.json",
       }),
-      constraint("workload-sla", 4.2, 26, 1, 0, 8, 1.1, "available", 99, 126, {
+      constraint("workload-sla", 4.2, 26, 1, 0, 8, 1.1, "available", 126, {
         reasonCode: "WORKLOAD_AVAILABLE",
         reason: "Workload flexibility remains available.",
         artifact: "sla_constraint_manifest.json",
       }),
-      constraint("telemetry-policy", 5, 26, 1.2, 0, 9, 1.2, "available", 98, 183, {
+      constraint("telemetry-policy", 5, 26, 1.2, 0, 9, 1.2, "available", 183, {
         reasonCode: "EVIDENCE_CURRENT",
         reason: "All evidence is current and policy-compatible.",
         artifact: "telemetry_manifest.json",
@@ -453,7 +454,7 @@ export function getEventMarkers(
 
   return [
     {
-      label: "Start allowed",
+      label: "Modeled start",
       short: `T+${spec.startMinute.toFixed(0)}`,
       time: spec.startMinute,
     },
@@ -488,9 +489,7 @@ export function buildDispatchEvidenceRecord(scenario: DispatchScenario) {
     accepted_mw: scenario.dto.accepted?.maxMw ?? null,
     decision: scenario.dto.decision,
     binding_constraints: bindings.map(({ id }) => id),
-    proof_eligible: scenario.dto.proofIntervals.every(
-      (interval) => interval.eligibility === "eligible"
-    ),
+    proof_eligible: evaluateDispatchEvidence(scenario.dto).eligible,
     policy_version: scenario.dto.policyBundleVersion,
     topology_hash: scenario.dto.topologyHash,
     proof_root: scenario.dto.proofRoot,
@@ -518,9 +517,7 @@ export function buildDispatchExport(scenario: DispatchScenario) {
 }
 
 export function getScenarioProofEligible(scenario: DispatchScenario) {
-  return scenario.dto.proofIntervals.every(
-    (interval) => interval.eligibility === "eligible"
-  )
+  return evaluateDispatchEvidence(scenario.dto).eligible
 }
 
 export function getScenarioById(id: string | undefined) {
@@ -560,7 +557,6 @@ function constraint(
   requiredRecoveryMinutes: number,
   reboundLimitMw: number,
   state: ConstraintState,
-  confidencePct: number,
   telemetryAgeMs: number,
   options: {
     reasonCode: string
@@ -593,31 +589,18 @@ function constraint(
     requiredRecoveryMinutes,
     reboundLimitMw,
     telemetryAgeMs,
-    confidencePct,
+    confidencePct: null,
     reason: options.reason,
     reasonCode: options.reasonCode,
     evidenceArtifact: options.artifact,
     proofEligibility:
       options.proofEligibility ?? (isTrusted ? "eligible" : "not-eligible"),
-    limitSamples: buildLimitSamples(maxMw, confidencePct, isTrusted),
+    limitSamples: buildLimitSamples(maxMw, isTrusted),
   }
 }
 
-function buildLimitSamples(maxMw: number, confidencePct: number, trusted: boolean) {
-  const spread = Math.max(0.04, maxMw * ((100 - confidencePct) / 100) * 0.24)
-
-  return [0, 8, 20, 34, 48].map((minute, index) => {
-    const modifier = maxMw === 0 ? 0 : index % 2 === 0 ? 0.98 : 1
-    const value = maxMw * modifier
-
-    return {
-      minute,
-      maxMw: value,
-      lowerConfidenceMw: Math.max(0, value - spread),
-      upperConfidenceMw: value + spread,
-      trusted,
-    }
-  })
+function buildLimitSamples(maxMw: number, trusted: boolean) {
+  return [0, 8, 20, 34, 48].map((minute) => ({ minute, maxMw, trusted }))
 }
 
 function binding(
@@ -662,10 +645,10 @@ function buildScenario(args: {
     schemaVersion: "dispatch-envelope.v1",
     siteId: "GRIDNINJA-DEMO-SITE",
     scenarioId: args.id,
-    tapeId: `demo-tape-${args.id}`,
+    tapeId: `demo-tape-${args.id}-v${DISPATCH_DATASET_VERSION}`,
     topologyHash: taggedHash(`topology:${args.topology}`),
     policyBundleVersion: args.policy,
-    telemetryManifestId: `telemetry-manifest-${args.id}`,
+    telemetryManifestId: `telemetry-manifest-${args.id}-v${DISPATCH_DATASET_VERSION}`,
     decision: args.decision,
     request: args.request,
     accepted: args.accepted,
@@ -677,7 +660,7 @@ function buildScenario(args: {
       eligibility: args.decision === "no-proof" ? "not-eligible" : "eligible",
       reasonCode: args.decision === "no-proof" ? "DECISION_EVIDENCE_INCOMPLETE" : "EVIDENCE_COMPLETE",
     }],
-    proofRoot: taggedHash(`proof:${args.proofRoot}`),
+    proofRoot: taggedHash(`proof:v${DISPATCH_DATASET_VERSION}:${args.proofRoot}`),
     evidenceClass: "illustrative",
     issuedAt,
     signature: "illustrative:unsigned",

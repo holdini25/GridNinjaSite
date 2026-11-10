@@ -55,6 +55,7 @@ describe("one-record assessment explorer", () => {
     act(() => { window.history.replaceState(null, "", "/demo?scenario=b&version=99.0.0"); window.dispatchEvent(new PopStateEvent("popstate")) })
     expect(screen.getByRole("heading", { name: "Requested example unavailable" })).toBeVisible()
     expect(screen.queryByTestId("assessment-summary")).not.toBeInTheDocument()
+    expect(screen.queryByRole("group", { name: "Current example actions" })).not.toBeInTheDocument()
     expect(screen.queryByRole("link", { name: "Download this PDF" })).not.toBeInTheDocument()
   })
 
@@ -65,7 +66,7 @@ describe("one-record assessment explorer", () => {
     rerender(<AssessmentExplorer records={assessmentFixtures} initialSelection={resolveAssessmentSelection({})} />)
     expect(screen.getByTestId("assessment-summary")).toHaveAttribute("data-scenario", "b")
   })
-  it("tracks validated opening, explicit selections and current publication clicks only", async () => {
+  it("tracks selections and delegates current-publication clicks without duplicate handlers", async () => {
     const user = userEvent.setup()
     render(<AssessmentExplorer records={assessmentFixtures} initialSelection={resolveAssessmentSelection({})} />)
     expect(track).toHaveBeenCalledWith("sample_opened", expect.objectContaining({ scenario: "b", artifact: "demo-01-b", version: "1.0.0" }))
@@ -76,7 +77,10 @@ describe("one-record assessment explorer", () => {
     const download = screen.getByRole("link", { name: "Download this PDF" })
     download.addEventListener("click", event => event.preventDefault())
     fireEvent.click(download)
-    expect(track).toHaveBeenCalledWith("sample_download_clicked", expect.objectContaining({ artifact: "demo-01-d", version: "1.0.0" }))
+    expect(download).toHaveAttribute("data-analytics-event", "sample_download_clicked")
+    expect(download).toHaveAttribute("data-analytics-artifact", "demo-01-d")
+    expect(download).toHaveAttribute("data-analytics-version", "1.0.0")
+    expect(track.mock.calls.filter(([name]) => name === "sample_download_clicked")).toHaveLength(0)
     act(() => { window.history.replaceState(null, "", "/demo?scenario=a&version=1.0.0"); window.dispatchEvent(new PopStateEvent("popstate")) })
     expect(track.mock.calls.filter(([name]) => name === "sample_opened")).toHaveLength(1)
     expect(track.mock.calls.filter(([name]) => name === "scenario_selected")).toHaveLength(1)

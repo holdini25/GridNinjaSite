@@ -11,7 +11,7 @@ vi.mock("@/components/forms/contact-confirmation", () => ({ ContactConfirmation:
 
 describe("contact page static brand boundary", () => {
   it.each([
-    { path: "/contact", size: "size-7", load: () => import("@/app/(marketing)/contact/page") },
+    { path: "/contact", size: "size-7", load: () => import("@/components/marketing/contact-page").then(module => ({ default: module.ContactPageContent })) },
     { path: "/contact/thanks", size: "size-8", load: () => import("@/app/(marketing)/contact/thanks/page") },
   ])("keeps the eager decorative mark on $path without importing animation", async ({ load, size }) => {
     const { default: Page } = await load()
@@ -24,7 +24,7 @@ describe("contact page static brand boundary", () => {
     expect(mark).toHaveAttribute("alt", "")
     expect(mark).toHaveAttribute("width", "64")
     expect(mark).toHaveAttribute("height", "64")
-    expect(mark).toHaveClass("shrink-0", "object-contain", size)
+    expect(mark).toHaveClass("gn-static-mark", size)
     expect(mark).toHaveAttribute("loading", "eager")
     expect(mark).toHaveAttribute("fetchpriority", "high")
     expect(mark).toHaveAttribute("decoding", "async")

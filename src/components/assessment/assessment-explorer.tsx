@@ -6,6 +6,7 @@ import Link from "next/link"
 import { FacilityInspection } from "@/components/facility/facility-inspection"
 import type { FacilityInspectionTarget, FacilityMode, FacilityVisualRelease } from "@/types/facility"
 import { useEffect, useRef, useState } from "react"
+import { AssessmentResultActions } from "@/components/assessment/assessment-result-actions"
 import { AssessmentSummary } from "@/components/assessment/assessment-summary"
 import { HypotheticalMinimum } from "@/components/assessment/hypothetical-minimum"
 import type { HypotheticalMinimumSource } from "@/lib/assessment/hypothetical-minimum"
@@ -13,7 +14,7 @@ import { writeAssessmentHistory } from "@/lib/assessment/history"
 import { AssessmentDetails } from "@/components/assessment/assessment-details"
 import { Button } from "@/components/ui/button"
 import { ASSESSMENT_SCENARIOS } from "@/content/assessments/constants"
-import { assessmentLinks, resolveAssessmentSelection } from "@/lib/assessment/selectors"
+import { resolveAssessmentSelection } from "@/lib/assessment/selectors"
 import { trackGridNinjaEvent, type AnalyticsEventName } from "@/lib/analytics"
 import type { AssessmentPerspective, AssessmentRecord, AssessmentScenario, AssessmentSelection } from "@/types/assessment"
 
@@ -105,7 +106,6 @@ export function AssessmentExplorer({ initialSelection, records, facilityRelease 
 
   if (selection.status === "unavailable") return <section className="rounded-2xl border border-border p-6" aria-labelledby="sample-unavailable"><h2 id="sample-unavailable" className="text-2xl font-medium">Requested example unavailable</h2><p className="mt-4 leading-7 text-muted-foreground">{selection.reason}</p><Button asChild className="mt-5"><Link href="/demo" prefetch={false}>Open the default example</Link></Button></section>
   const record = records[selection.scenario]
-  const links = assessmentLinks(record)
   const currentReading = readingState.revision === resetRevision ? readingState : { revision: resetRevision, conditions: selection.perspective === "engineering", hypothetical: false }
   const readingHold = currentReading.conditions || currentReading.hypothetical
   const defaultConditionsOpen = selection.perspective === "engineering"
@@ -117,7 +117,7 @@ export function AssessmentExplorer({ initialSelection, records, facilityRelease 
 
     <p aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</p>
     <div className={facilityRelease ? `grid items-start gap-6${inspectionExpanded ? "" : " xl:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)]"}` : undefined}>
-      <div><AssessmentSummary record={record} compact showLinks={false} />    <details data-assessment-controls open={controlsOpen} onToggle={event => setControlsOpen(event.currentTarget.open)} className="mt-4 rounded-xl border border-border bg-surface p-4"><summary className="min-h-11 cursor-pointer content-center font-medium">Change scenario or perspective</summary>
+      <div><AssessmentSummary record={record} compact showLinks={false} /><AssessmentResultActions record={record} perspective={selection.perspective} topic={topic} />    <details data-assessment-controls open={controlsOpen} onToggle={event => setControlsOpen(event.currentTarget.open)} className="mt-4 rounded-xl border border-border bg-surface p-4"><summary className="min-h-11 cursor-pointer content-center font-medium">Change scenario or perspective</summary>
       <div className="mt-4 flex flex-wrap items-end gap-4">
         <label className="grid min-w-full flex-1 gap-2 text-sm font-medium sm:min-w-48" htmlFor="assessment-scenario">Scenario<NativeSelectControl id="assessment-scenario" className="min-h-12 w-full rounded-lg border border-input bg-surface-2 px-3 text-foreground" value={selection.scenario} onChange={(event) => update({ ...selection, scenario: event.target.value as AssessmentScenario }, false, "scenario_selected")}>{ASSESSMENT_SCENARIOS.map((scenario) => <option key={scenario} value={scenario}>{scenario.toUpperCase()} · {scenarioLabels[scenario]}</option>)}</NativeSelectControl></label>
         <label className="grid min-w-full flex-1 gap-2 text-sm font-medium sm:min-w-48" htmlFor="assessment-perspective">Perspective<NativeSelectControl id="assessment-perspective" className="min-h-12 w-full rounded-lg border border-input bg-surface-2 px-3 text-foreground" value={selection.perspective} onChange={(event) => update({ ...selection, perspective: event.target.value as AssessmentPerspective }, false, "perspective_selected")}><option value="business">Business decision</option><option value="engineering">Engineering evidence</option></NativeSelectControl></label>
@@ -130,7 +130,6 @@ export function AssessmentExplorer({ initialSelection, records, facilityRelease 
       </div>
       {facilityRelease && <FacilityInspection readingHold={readingHold} showAssessmentCaption={false} record={record} release={facilityRelease} variant="demo" loadingPolicy="auto-adaptive" mode={facilityMode} resetRevision={resetRevision} initialTarget={target} onCommittedTarget={commitTarget} topic={topic} onExpandedChange={setInspectionExpanded} activateOnMount={activateOnMount} />}
     </div>
-    <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium" aria-label="Current example downloads"><a href={links.brief} onClick={() => trackSelection("evidence_artifact_view", selection, record)} className="inline-flex min-h-11 items-center text-primary underline underline-offset-4">Read the versioned brief</a><a href={links.pdf} onClick={() => trackSelection("sample_download_clicked", selection, record)} className="inline-flex min-h-11 items-center text-primary underline underline-offset-4">Download this PDF</a><a href={links.json} onClick={() => trackSelection("sample_download_clicked", selection, record)} className="inline-flex min-h-11 items-center text-primary underline underline-offset-4">Download this technical record</a></div>
     <details data-assessment-conditions key={`${record.scenario}-${resetRevision}`} open={currentReading.conditions} onToggle={event => updateReading("conditions", event.currentTarget.open)} className="rounded-xl border border-border bg-surface p-5 sm:p-7">
       <summary className="min-h-11 cursor-pointer content-center text-lg font-medium">Conditions and assessment evidence</summary>
       <div className="mt-6"><AssessmentDetails record={record} perspective={selection.perspective} /></div>

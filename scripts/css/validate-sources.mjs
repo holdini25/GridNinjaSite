@@ -12,7 +12,7 @@ function inside(directory, file) {
 }
 
 /** The exclusions in globals.css are authoritative. A retained component must
- * recover its utility styles before any source entry starts importing it. */
+ * recover its utility and retired custom styles before an entry imports it. */
 export function validateCssSources(projectRoot = process.cwd()) {
   const root = realpathSync(resolve(projectRoot))
   const src = join(root, "src")
@@ -58,6 +58,30 @@ export function validateCssSources(projectRoot = process.cwd()) {
   // metadata, route handlers, and content/config-to-component imports.
   const roots = sourceFiles.filter(file => !inside(components, file))
   const reached = new Set()
+  const dependencies = new Map()
+  const styles = new Set()
+  function connect(importer, dependency) {
+    if (!dependencies.has(importer)) dependencies.set(importer, new Set())
+    dependencies.get(importer).add(dependency)
+  }
+  function visitStyle(file) {
+    if (styles.has(file)) return
+    styles.add(file)
+    postcss.parse(readFileSync(file, "utf8"), { from: file }).walkAtRules("import", rule => {
+      const scopedTailwind = /^(["'])tailwindcss\1\s+source\((["'])([^"']+)\2\)$/.exec(rule.params)
+      if (scopedTailwind) {
+        if (file !== cssFile || resolve(dirname(file), scopedTailwind[3]) !== src) fail("Tailwind automatic source scope must cover the entire src directory from globals.css")
+        return
+      }
+      const match = /^(["'])([^"']+)\1$/.exec(rule.params)
+      if (!match) fail(`unsupported CSS import in ${display(file)}: ${rule.params}`)
+      if (!match[2].startsWith(".")) return // External packages remain build-owned.
+      const dependency = resolve(dirname(file), match[2])
+      if (!inside(src, dependency) || !dependency.endsWith(".css") || !existsSync(dependency) || !lstatSync(dependency).isFile() || realpathSync(dependency) !== dependency) fail(`invalid local CSS import in ${display(file)}: ${match[2]}`)
+      connect(file, dependency)
+      visitStyle(dependency)
+    })
+  }
   function visit(file, importer) {
     if (excluded.has(file)) fail(`${display(file)} is reachable${importer ? ` from ${display(importer)}` : ""}; remove its @source not directive`)
     if (reached.has(file)) return
@@ -98,6 +122,7 @@ export function validateCssSources(projectRoot = process.cwd()) {
         const dependency = resolve(resolved.resolvedFileName)
         if (!resolved.isExternalLibraryImport && !dependency.split(sep).includes("node_modules")) {
           if (!inside(root, dependency)) fail(`local dependency outside the inspected project: ${request} in ${display(file)}`)
+          connect(file, dependency)
           visit(dependency, file)
         }
         continue
@@ -105,15 +130,59 @@ export function validateCssSources(projectRoot = process.cwd()) {
       const alias = aliases.find(entry => entry.pattern.test(request))
       const local = request.startsWith(".") || request.startsWith("/") || alias
       if (!local) continue
-      // CSS and static imports are leaves. A missing local file is never ignored.
+      // CSS imports participate in route ownership; other static assets are leaves.
       const assets = alias ? alias.targets.map(target => resolve(options.baseUrl ?? options.pathsBasePath ?? root, target.replace("*", request.match(alias.pattern)[1] ?? "")))
         : [request.startsWith("/") ? join(root, "public", request) : resolve(dirname(file), request)]
-      if (assets.some(asset => existsSync(asset) && lstatSync(asset).isFile() && !sourceExtension.test(asset))) continue
+      const asset = assets.find(asset => existsSync(asset) && lstatSync(asset).isFile() && !sourceExtension.test(asset))
+      if (asset) {
+        if (asset.endsWith(".css")) {
+          connect(file, asset)
+          visitStyle(asset)
+        }
+        continue
+      }
       fail(`unresolved local import ${JSON.stringify(request)} in ${display(file)}`)
     }
   }
   roots.forEach(file => visit(file))
-  return { roots: roots.map(display), reachable: [...reached].map(display).sort(), excluded: [...excluded].map(display).sort() }
+  // A component can share its CSS with another entry (the homepage groups its
+  // scene rules with its existing stylesheet). Check direct visits, including
+  // ancestor layouts, rather than relying on CSS left behind by navigation.
+  const boundaryFile = join(root, "scripts/css/style-boundaries.json")
+  /** @type {Record<string, string[]>} */
+  const routeStyles = {}
+  if (existsSync(boundaryFile)) {
+    const boundaries = JSON.parse(readFileSync(boundaryFile, "utf8"))
+    if (!Array.isArray(boundaries)) fail("style boundaries must be an array")
+    for (const boundary of boundaries) {
+      if (!boundary || Object.keys(boundary).sort().join(",") !== "component,stylesheet" || typeof boundary.component !== "string" || typeof boundary.stylesheet !== "string") fail("invalid style boundary")
+      const component = resolve(root, boundary.component)
+      const stylesheet = resolve(root, boundary.stylesheet)
+      if (!inside(components, component) || !inside(src, stylesheet) || !sourceExtension.test(component) || !stylesheet.endsWith(".css") || !existsSync(component) || !existsSync(stylesheet)) fail("style boundary must name existing component and CSS files")
+    }
+    const appDirectory = join(src, "app"), pagesDirectory = join(src, "pages")
+    const pagesEntries = roots.filter(file => inside(pagesDirectory, file) && !inside(join(pagesDirectory, "api"), file) && !file.endsWith(".json") && !/^_(?:app|document)\.[cm]?[jt]sx?$/.test(file.split(sep).at(-1)))
+    const pagesOwners = roots.filter(file => dirname(file) === pagesDirectory && /^_(?:app|document)\.[cm]?[jt]sx?$/.test(file.split(sep).at(-1)))
+    const appEntries = roots.filter(file => inside(appDirectory, file) && /(?:^|\/)page\.[cm]?[jt]sx?$/.test(display(file)))
+    for (const page of [...appEntries, ...pagesEntries]) {
+      const closure = new Set()
+      function include(file) {
+        if (closure.has(file)) return
+        closure.add(file)
+        for (const dependency of dependencies.get(file) ?? []) include(dependency)
+      }
+      include(page)
+      if (inside(pagesDirectory, page)) pagesOwners.forEach(include)
+      else for (let directory = dirname(page); inside(src, directory); directory = dirname(directory)) {
+        for (const layout of sourceFiles.filter(file => dirname(file) === directory && /^layout\.[cm]?[jt]sx?$/.test(file.split(sep).at(-1)))) include(layout)
+      }
+      routeStyles[display(page)] = [...closure].filter(file => file.endsWith(".css")).map(display).sort()
+      for (const boundary of boundaries) {
+        if (closure.has(resolve(root, boundary.component)) && !closure.has(resolve(root, boundary.stylesheet))) fail(`${display(page)} reaches ${boundary.component} without ${boundary.stylesheet}; import its stylesheet in the route or an owning component`)
+      }
+    }
+  }
+  return { roots: roots.map(display), reachable: [...reached].map(display).sort(), excluded: [...excluded].map(display).sort(), routeStyles }
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

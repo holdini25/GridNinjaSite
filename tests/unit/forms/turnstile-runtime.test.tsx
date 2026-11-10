@@ -22,6 +22,10 @@ it("times out a stalled verification script and retries with a new request", asy
   window.turnstile = { render: vi.fn(() => "widget"), reset: vi.fn(), remove: vi.fn() }
   await act(async () => { second.dispatchEvent(new Event("load")) })
   expect(window.turnstile.render).toHaveBeenCalledTimes(1)
+  expect(window.turnstile.render).toHaveBeenCalledWith(
+    document.querySelector("[data-turnstile-container]"),
+    expect.objectContaining({ size: "compact", appearance: "interaction-only" })
+  )
   expect(screen.queryByRole("button", { name: "Retry verification" })).toBeNull()
 })
 

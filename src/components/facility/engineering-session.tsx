@@ -67,9 +67,11 @@ export function EngineeringSession(props: FacilityCanvasProps & { onDpr: (value:
     applyCameraFrame(activeCamera.current, frame)
   }
   const latest = useRef(props)
-  latest.current = props
   const dimensions = useRef(size)
-  dimensions.current = size
+  useLayoutEffect(() => {
+    latest.current = props
+    dimensions.current = size
+  }, [props, size])
   const [initialized, setInitialized] = useState(0)
   const runtime = useRef({
     model: null as FacilityModel | null, environment: null as StudioEnvironment | null,
@@ -388,6 +390,7 @@ export function EngineeringSession(props: FacilityCanvasProps & { onDpr: (value:
 
   useEffect(() => {
     if (!initialized || !runtime.current.model) return
+    const { gl } = store.getState()
     const state = runtime.current, requested = props.view ?? overview
     const serviceError = rackServiceCommandError(requested, state.view, state.transition?.view ?? null, state.rackMotion?.snapshot() ?? null, Boolean(state.model!.metadata.specimen?.rackMotion?.serviceDetail))
     if (serviceError) { latest.current.onAssetState?.({ phase: "failed", view: requested, reason: serviceError }); return }
@@ -412,9 +415,12 @@ export function EngineeringSession(props: FacilityCanvasProps & { onDpr: (value:
       configure(); scheduler.current?.request()
     }
     state.assetFailure = fail
+    // The outer startup deadline owns the initial plain overview through its
+    // first visible frame. It is not a separately requested assembly change.
+    const initialOverview = !state.initialPresented && requested.kind === "overview" && !requested.system && !requested.section && !requested.detail && !requested.equipmentId
     // Loaded rack joints use visible active time. A hidden tab must not roll
     // their transforms back merely because an asset-transfer deadline elapsed.
-    if (!state.rackMotion || viewAsset(requested) !== viewAsset(state.view)) state.deadlineTimer = setTimeout(() => fail("The requested view did not become ready within eight seconds."), 8_000)
+    if (!initialOverview && (!state.rackMotion || viewAsset(requested) !== viewAsset(state.view))) state.deadlineTimer = setTimeout(() => fail("The requested view did not become ready within eight seconds."), 8_000)
     if (viewAsset(requested) === viewAsset(state.view)) {
       const model = state.model!
       const parts = requested.kind === "specimen" && !state.rackMotion ? model.metadata.specimen!.poses[requested.pose].transforms.map(transform => ({ object: model.ids.get(transform.id)!, from: model.ids.get(transform.id)!.position.clone(), to: new Vector3(...transform.position), fromVisible: model.ids.get(transform.id)!.visible, visible: transform.visible })) : []
@@ -537,6 +543,7 @@ export function EngineeringSession(props: FacilityCanvasProps & { onDpr: (value:
     return () => { cancel(); window.removeEventListener("pointerdown", down); window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", pointerCancel); window.removeEventListener("scroll", cancel, true); window.removeEventListener("blur", cancel); document.removeEventListener("visibilitychange", hidden); element.removeEventListener("pointerleave", leave) }
   }, [gl, camera])
 
+  /* eslint-disable react-hooks/immutability -- This Fiber render callback updates session-owned Three.js objects and GPU buffers on each frame. */
   useFrame(() => {
     const state = runtime.current, model = state.model, current = latest.current
     if (!model || !current.visible) return
@@ -609,21 +616,23 @@ export function EngineeringSession(props: FacilityCanvasProps & { onDpr: (value:
     if (settling) state.interactionUntil = Math.max(state.interactionUntil, state.activeSeconds + .05)
     configure()
   }, 1)
+  /* eslint-enable react-hooks/immutability */
 
   useEffect(() => {
     if (window.__GN_FACILITY_DIAGNOSTICS__ !== true) return
+    const { domElement } = store.getState().gl
     const diagnosticState = runtime.current
-    gl.domElement.__gnFacilityReviewDpr = dpr => {
+    domElement.__gnFacilityReviewDpr = dpr => {
       if (dpr !== null && dpr !== 1 && dpr !== 1.5) throw new Error("invalid_review_dpr")
       runtime.current.reviewDpr = dpr; updateDpr(); scheduler.current?.request()
     }
-    gl.domElement.__gnFacilityCapability = fps => {
+    domElement.__gnFacilityCapability = fps => {
       if (fps !== null && fps !== 30 && fps !== 60) throw new Error("invalid_capability_cadence")
       const state = runtime.current
       state.capability = fps; resetFrameMeasurementWindow(state)
       configure(); scheduler.current?.request()
     }
-    gl.domElement.__gnFacilitySnapshot = (includeEquipment = false) => {
+    domElement.__gnFacilitySnapshot = (includeEquipment = false) => {
       const state = runtime.current, model = state.model!, displayedCamera = activeCamera.current
       return {
         readingHold: !!latest.current.readingHold, frames: state.frames, drawCalls: gl.info.render.calls, triangles: gl.info.render.triangles, geometries: gl.info.memory.geometries, textures: gl.info.memory.textures,
@@ -644,7 +653,7 @@ export function EngineeringSession(props: FacilityCanvasProps & { onDpr: (value:
         ...(includeEquipment && model ? { equipment: { fans: model.fans.map(fan => ({ phase: fan.phase, axis: fan.axis.toArray(), quaternion: fan.object.quaternion.toArray() })), ledColors: Array.from(model.leds.instanceColor!.array) } } : {}),
       }
     }
-    return () => { delete gl.domElement.__gnFacilitySnapshot; delete gl.domElement.__gnFacilityCapability; delete gl.domElement.__gnFacilityReviewDpr; diagnosticState.reviewDpr = null }
+    return () => { delete domElement.__gnFacilitySnapshot; delete domElement.__gnFacilityCapability; delete domElement.__gnFacilityReviewDpr; diagnosticState.reviewDpr = null }
     // Diagnostic callbacks read the session's stable mutable refs, like the frame owner.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gl, camera])

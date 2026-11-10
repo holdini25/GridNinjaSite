@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { AssessmentOfferSummary } from "@/components/marketing/assessment-offer-summary"
+import { deliveryResponsibilityCopy, getApprovedDeliveryProfile } from "@/content/delivery-profile"
 import { AssessmentCapacityComparison } from "@/components/assessment/assessment-capacity-comparison"
 import { AssessmentMechanismIcon } from "@/components/marketing/assessment-mechanism-icon"
 import { FacilityHero } from "@/components/marketing/facility-hero"
@@ -24,27 +26,16 @@ import "@/components/marketing/cinematic-home.css"
 export async function generateMetadata(): Promise<Metadata> { return createPageMetadata({ path: "/" }) }
 
 export default async function HomePage() {
-  const [release, editorial, civic] = await Promise.all([getCinematicRelease(), getEditorialRelease(), getCivicRelease()])
+  const [release, editorial, civic] = await Promise.all([getCinematicRelease(), getEditorialRelease(), getCivicRelease("civic-v2")])
   const fallback = release ? null : await getFacilityRelease()
   const record = assessmentFixtures.b
   const view = selectAssessment(record)
   const seoRoute = getSeoRoute("/")
+  const deliveryProfile = getApprovedDeliveryProfile("home")
   return <>
     <SeoPageJsonLd path="/" includeSiteIdentity />
     <div className="gn-home" data-seo-related-source="/" data-seo-related-paths={JSON.stringify(seoRoute.relatedPaths)} data-seo-route-tier={seoRoute.tier}>
       <FacilityHero record={record} release={release} fallback={fallback} cinematicUnavailable={Boolean(selectedCinematicReleaseId()) && !release} />
-      <CivicComposition release={civic} />
-
-      <section className="gn-home-section gn-home-mechanism" aria-labelledby="mechanism-heading">
-        <div className="gn-home-container">
-          <p className="gn-home-eyebrow">The assessment mechanism</p>
-          <h2 id="mechanism-heading">From physical constraints to inspectable decisions.</h2>
-          <ol className="gn-home-mechanism-grid">{cinematicHome.mechanism.map((step, index) => <li key={step.title}>
-            <div className="gn-home-mechanism-icon"><AssessmentMechanismIcon step={index} /></div>
-            <div><h3><span>0{index + 1}</span>{step.title}</h3><p>{step.body}</p></div>
-          </li>)}</ol>
-        </div>
-      </section>
 
       <section id="decision-brief" className="gn-home-section gn-home-worked" aria-labelledby="worked-heading">
         <div className="gn-home-container gn-home-worked-grid">
@@ -67,6 +58,10 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <section id="assessment-process" className="gn-home-section gn-home-scope" aria-labelledby="scope-heading">
+        <div className="gn-home-container gn-home-scope-grid"><div><p className="gn-home-eyebrow">A bounded, paid assessment</p><h2 id="scope-heading">One question.<br />A reviewable answer.</h2></div><AssessmentOfferSummary variant="compact" headingId="scope-heading" /></div>
+      </section>
+
       <section id="solutions" className="gn-home-section gn-home-fit" aria-labelledby="fit-heading">
         <div className="gn-home-container">
           <div className="gn-home-section-heading"><div><p className="gn-home-eyebrow">Start with your decision</p><h2 id="fit-heading">What are you ready to commit?</h2></div><p>One clear question. The right evidence. An accountable decision owner.</p></div>
@@ -87,15 +82,24 @@ export default async function HomePage() {
               <div className="gn-home-evidence-copy"><p className="gn-home-card-label">{card.status}{card.image === "brief" && ` · v${record.publication.version}`}</p><h3>{card.title}</h3><p>{card.body}</p><Link href={card.image === "brief" ? sampleBriefHref() : card.href} prefetch={false} className="gn-home-text-link" data-seo-related-target={card.href === "/platform" || card.href === "/proof" ? card.href : undefined}>{card.link} <span aria-hidden="true">→</span></Link></div>
             </article>
           })}</div>
-          <div className="gn-home-development"><p>GridNinja is developing an <strong>AI Data Center Virtual Capacity Control Plane</strong> and a <strong>runtime-assured virtual capacity engine</strong> for inside-the-fence orchestration. Proof before autonomy.</p><div><p>Delivery responsibilities, relevant experience and reviewer availability are established during scoping. Public team credentials and customer outcomes are not yet published.</p><Link href="/about" prefetch={false} className="gn-home-text-link">About the work <span aria-hidden="true">→</span></Link></div></div>
+          <div className="gn-home-development"><p>GridNinja is developing an <strong>AI Data Center Virtual Capacity Control Plane</strong> and a <strong>runtime-assured virtual capacity engine</strong> for inside-the-fence orchestration. Proof before autonomy.</p><div><p>{deliveryResponsibilityCopy(deliveryProfile)}</p><Link href="/about" prefetch={false} className="gn-home-text-link">About the work <span aria-hidden="true">→</span></Link></div></div>
         </div>
       </section>
 
-      <div className="gn-home-section gn-home-research"><div className="gn-home-container"><ResearchNotes /></div></div>
-
-      <section id="assessment-process" className="gn-home-section gn-home-scope" aria-labelledby="scope-heading">
-        <div className="gn-home-container gn-home-scope-grid"><div><p className="gn-home-eyebrow">A bounded, paid assessment</p><h2 id="scope-heading">One question.<br />A reviewable answer.</h2></div><div><p className="gn-home-scope-lead">Agree the decision, evidence and responsibilities before analysis begins.</p><dl><div><dt>You bring</dt><dd>A capacity question, a decision owner, a facility boundary and permission to use the relevant historical inputs.</dd></div><div><dt>You receive</dt><dd>A decision brief, assumptions and evidence gaps, a supporting model record, and a review of unresolved questions.</dd></div></dl><p className="gn-home-scope-note">Deliverables, review rounds, exclusions, price and schedule are agreed during scoping. Do not send operational files or credentials through this website.</p><div className="gn-home-scope-links"><Link href="/assessment#deliverables" prefetch={false} data-seo-related-target="/assessment">Review the deliverables <span aria-hidden="true">→</span></Link><Link href="/data-handling" prefetch={false}>Data handling and permissions <span aria-hidden="true">→</span></Link></div></div></div>
+      <section className="gn-home-section gn-home-mechanism" aria-labelledby="mechanism-heading">
+        <div className="gn-home-container">
+          <p className="gn-home-eyebrow">The assessment mechanism</p>
+          <h2 id="mechanism-heading">From physical constraints to inspectable decisions.</h2>
+          <ol className="gn-home-mechanism-grid">{cinematicHome.mechanism.map((step, index) => <li key={step.title}>
+            <div className="gn-home-mechanism-icon"><AssessmentMechanismIcon step={index} /></div>
+            <div><h3><span>0{index + 1}</span>{step.title}</h3><p>{step.body}</p></div>
+          </li>)}</ol>
+        </div>
       </section>
+
+      <CivicComposition release={civic} />
+
+      <div className="gn-home-section gn-home-research"><div className="gn-home-container"><ResearchNotes /></div></div>
 
       <section className="gn-home-invitation" aria-labelledby="invitation-heading"><div className="gn-home-container"><div><p className="gn-home-eyebrow">Your next capacity decision</p><h2 id="invitation-heading">Start with your operating constraints.</h2><p>A scoping conversation establishes fit. Paid work starts only after agreement.</p></div><Link href={assessmentScopeHref("home-final")} prefetch={false} className="gn-home-button" data-analytics-event="assessment_cta_selected" data-analytics-source="home-final">Scope an assessment <span aria-hidden="true">↗</span></Link></div></section>
     </div>

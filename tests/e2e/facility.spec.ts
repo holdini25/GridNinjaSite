@@ -5,6 +5,22 @@ import { assessCanvasObservation, observeProductionCanvas } from "../support/can
 import facilityManifest from "../../src/content/facility-releases/facility-v12/manifest.json"
 
 test.describe("facility inspection", () => {
+  test("a browser receives the approved decoded model through negotiated HTTP compression", async ({ page }) => {
+    const model = facilityManifest.files.find(file => file.file === "facility.glb")!
+    await page.goto("/robots.txt")
+    const result = await page.evaluate(async path => {
+      const response = await fetch(path, { cache: "no-store" })
+      const bytes = await response.arrayBuffer()
+      const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))
+      return {
+        status: response.status,
+        decodedBytes: bytes.byteLength,
+        sha256: Array.from(digest, byte => byte.toString(16).padStart(2, "0")).join(""),
+      }
+    }, `/assets/facility/${facilityManifest.release}/${model.file}`)
+    expect(result).toEqual({ status: 200, decodedBytes: model.bytes, sha256: model.sha256 })
+  })
+
   test("native automatic loading or an explicit software fallback preserves assessment quantities", async ({ page }, testInfo) => {
     await page.addInitScript(() => { window.__GN_FACILITY_DIAGNOSTICS__ = true })
     const models: string[] = []

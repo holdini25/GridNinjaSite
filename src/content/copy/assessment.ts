@@ -1,3 +1,15 @@
+/** Shared buyer summary; detailed scope remains in the arrays below. */
+export const assessmentOffer = {
+  heading: "One capacity decision. A documented basis for review.",
+  introduction: "Review a proposed AI workload or tenant commitment against the facility conditions and authorized historical inputs agreed for the assessment.",
+  bring: "A capacity decision, decision owner, a facility boundary, the proposed workload or commitment, and permission to use the relevant historical inputs.",
+  receive: "A decision brief, supporting model record, assumptions and evidence gaps, and a review of unresolved questions.",
+  agreement: "We first review fit and input readiness. Deliverables, review rounds, price and schedule are agreed before paid work begins.",
+  boundary: "A useful result may identify a conditional path, an unsuitable request or insufficient evidence. The assessment does not authorize equipment operation.",
+  privacy: "Do not send operational files or credentials through this website.",
+  pricing: "Scope depends on the number of facilities and boundaries, historical windows, profile alternatives, input readiness and agreed review rounds. These factors guide a scoping conversation; they are not an automated quotation or a delivery commitment.",
+} as const
+
 export const assessmentDeliverables = [
   { title: "Decision contract", body: "One capacity question, facility boundary, historical window, agreed alternatives, and acceptance criteria for the report." },
   { title: "Readiness and constraint findings", body: "An input inventory, assumptions, binding constraints, and evidence gaps that limit what can be concluded." },

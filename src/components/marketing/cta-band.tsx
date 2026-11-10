@@ -1,4 +1,6 @@
 import Link from "next/link"
+import type { AnalyticsEventName } from "@/lib/analytics"
+import type { LeadSource } from "@/lib/lead"
 
 import { ArrowRightIcon } from "lucide-react"
 
@@ -11,6 +13,8 @@ export function CtaBand({
   label,
   href,
   eventName = "cta-band",
+  analyticsEvent,
+  analyticsSource,
 }: {
   eyebrow?: string
   headline: string
@@ -18,6 +22,8 @@ export function CtaBand({
   label: string
   href: string
   eventName?: string
+  analyticsEvent?: AnalyticsEventName
+  analyticsSource?: LeadSource
 }) {
   return (
     <div className="gn-panel px-6 py-7 sm:px-8 sm:py-8 lg:flex lg:items-end lg:justify-between lg:gap-10">
@@ -32,7 +38,7 @@ export function CtaBand({
       </div>
       <div className="mt-8 min-w-0 lg:mt-0">
         <Button asChild size="lg" className="group h-auto min-h-12 max-w-full whitespace-normal py-3 text-center">
-          <Link prefetch={false} href={href} data-gn-event={eventName}>
+          <Link prefetch={false} href={href} data-gn-event={eventName} data-analytics-event={analyticsEvent} data-analytics-source={analyticsSource}>
             {label}
             <ArrowRightIcon className="transition-transform group-hover:translate-x-0.5" />
           </Link>

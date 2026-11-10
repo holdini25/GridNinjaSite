@@ -10,15 +10,15 @@ type GridNinjaOgCardProps = {
 
 const proofPills = [
   "Proof before autonomy",
-  "Safe sellable MW",
-  "Runtime assurance",
+  "Authorized inputs",
+  "Explicit limits",
 ]
 
 const systemTiles = [
   { label: "Power", value: "Utility + DER" },
   { label: "Thermal", value: "Cooling envelope" },
   { label: "Reserve", value: "Safety margin" },
-  { label: "Proof", value: "Shadow Mode" },
+  { label: "Evidence", value: "Declared inputs" },
 ]
 
 const fontFamily =
@@ -28,8 +28,8 @@ export function GridNinjaOgCard({
   description,
   host,
   emblemSrc,
-  headline = "Unlock virtual capacity for AI data centers",
-  eyebrow = "Proof-backed virtual capacity",
+  headline = "Understand your capacity. Know the limits.",
+  eyebrow = "Bounded capacity decision assessment",
 }: GridNinjaOgCardProps) {
   return (
     <div style={styles.root}>
@@ -47,14 +47,14 @@ export function GridNinjaOgCard({
               <img
                 src={emblemSrc}
                 alt=""
-                width={96}
-                height={96}
+                width={80}
+                height={80}
                 style={styles.mark}
               />
               <div style={styles.brand}>GridNinja</div>
             </div>
             <div style={styles.category}>
-              AI Data Center Virtual Capacity Control Plane
+              AI Data Center Virtual Capacity Control Plane · in development
             </div>
             <div style={styles.titleGroup}>
               <div style={styles.headline}>
@@ -75,7 +75,7 @@ export function GridNinjaOgCard({
 
         <div style={styles.panelColumn}>
           <div style={styles.panelHeader}>
-            <span>Runtime-assured</span>
+            <span>Assessment model</span>
             <span>{host}</span>
           </div>
           <div style={styles.panel}>
@@ -88,9 +88,9 @@ export function GridNinjaOgCard({
               ))}
             </div>
             <div style={styles.dispatchEnvelope}>
-              <div style={styles.dispatchTitle}>Dispatch envelope</div>
+              <div style={styles.dispatchTitle}>Decision brief</div>
               <div style={styles.dispatchText}>
-                Every action is checked before execution.
+                Modeled results and evidence gaps. No operating authority.
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@ const styles = {
     display: "flex",
     width: "100%",
     height: "100%",
-    padding: "58px 60px",
+    padding: "44px 60px",
     gap: 44,
   },
   copyColumn: {
@@ -153,12 +153,12 @@ const styles = {
     flex: "1 1 0%",
     flexDirection: "column",
     justifyContent: "space-between",
-    gap: 28,
+    gap: 20,
   },
   copyStack: {
     display: "flex",
     flexDirection: "column",
-    gap: 22,
+    gap: 16,
   },
   eyebrow: {
     maxWidth: 440,
@@ -174,8 +174,8 @@ const styles = {
     gap: 22,
   },
   mark: {
-    width: 96,
-    height: 96,
+    width: 80,
+    height: 80,
     objectFit: "contain",
   },
   category: {
@@ -202,16 +202,16 @@ const styles = {
     color: "#F4F4F4",
   },
   headline: {
-    marginTop: 18,
-    fontSize: 57,
+    marginTop: 12,
+    fontSize: 48,
     lineHeight: 1.02,
     fontWeight: 600,
     letterSpacing: "-0.04em",
   },
   description: {
-    marginTop: 18,
+    marginTop: 12,
     maxWidth: 560,
-    fontSize: 24,
+    fontSize: 20,
     lineHeight: 1.35,
     color: "#B8B8B8",
   },

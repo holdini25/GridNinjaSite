@@ -51,6 +51,40 @@ describe("facility presentation lifecycle", () => {
     expect(state.selected).toBeNull()
   })
 
+  it("preserves keyboard preview across stage visibility changes until its owner blurs, selects, or the document hides", () => {
+    let state = facilityReducer(initialFacilityPresentation("r1"), { type: "visibility", inViewport: true, documentVisible: true })
+    state = facilityReducer(state, { type: "select", system: "power" })
+    const focusedStorage = { type: "preview", channel: "focus", owner: "control-storage", system: "storage" } as const
+    state = facilityReducer(state, { type: "preview", channel: "pointer", owner: "control-cooling", system: "cooling" })
+    state = facilityReducer(state, focusedStorage)
+
+    // Native focus scrolling can cross the stage threshold without blurring the control.
+    for (const inViewport of [false, true]) {
+      state = facilityReducer(state, { type: "visibility", inViewport, documentVisible: true })
+      expect(facilityPreview(state)).toBe("storage")
+      expect(facilityPreviewTarget(state)).toEqual({ system: "storage" })
+      expect(state.pointerPreview).toBeNull()
+      expect(state.inViewport).toBe(inViewport)
+      expect(state.target).toEqual({ system: "power" })
+    }
+    state = facilityReducer(state, { type: "preview-end", channel: "focus", owner: "control-cooling" })
+    expect(facilityPreview(state)).toBe("storage")
+    state = facilityReducer(state, { type: "preview-end", channel: "focus", owner: "control-storage" })
+    expect(facilityPreview(state)).toBeNull()
+
+    state = facilityReducer(state, focusedStorage)
+    state = facilityReducer(state, { type: "select", system: "cooling" })
+    expect(state.focusPreview).toBeNull()
+    expect(state.selected).toBe("cooling")
+
+    state = facilityReducer(state, focusedStorage)
+    state = facilityReducer(state, { type: "visibility", inViewport: true, documentVisible: false })
+    expect(state.focusPreview).toBeNull()
+    state = facilityReducer(state, { type: "visibility", inViewport: true, documentVisible: true })
+    expect(facilityPreview(state)).toBeNull()
+    expect(state.target).toEqual({ system: "cooling" })
+  })
+
   it("defaults motion by device once and preserves deliberate preferences through reset and resize", () => {
     let desktop = facilityReducer(initialFacilityPresentation("r1"), { type: "preferences", desktop: true, reducedMotion: false })
     expect(desktop.equipmentEnabled).toBe(true)

@@ -159,6 +159,7 @@ test("selected assembly part survives inspection while assessment history clears
   await expect(rack.primary).toHaveAccessibleName("Retract server tray")
   await expect(part).toHaveAttribute("aria-pressed", "true")
   expect(await publicationIdentity(page)).toEqual(identity)
+  await expect(rack.controls.locator('[data-service-inspect="true"]')).toBeFocused()
   await openAssessmentControls(page)
   await page.getByRole("combobox", { name: "Scenario", exact: true }).selectOption("d")
   await expect(rack.inspector).toHaveAttribute("data-view", "overview")

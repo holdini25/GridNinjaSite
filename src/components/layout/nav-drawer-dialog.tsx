@@ -18,7 +18,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -158,6 +157,7 @@ export default function NavDrawerDialog({ pathname, open, onOpenChange, trigger,
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         id={dialogId}
+        aria-describedby={undefined}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus() }}
         side="right"
         className="h-dvh max-h-dvh gap-0 overflow-hidden border-border bg-surface-2 px-0 text-foreground"
@@ -182,9 +182,6 @@ export default function NavDrawerDialog({ pathname, open, onOpenChange, trigger,
               </Link>
             </SheetClose>
           </SheetTitle>
-          <SheetDescription>
-            Capacity decisions supported by explicit evidence.
-          </SheetDescription>
         </SheetHeader>
         <DrawerNavigation key={pathname} pathname={pathname} />
         <SheetFooter

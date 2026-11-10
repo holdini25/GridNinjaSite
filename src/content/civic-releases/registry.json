@@ -3,5 +3,10 @@
     "release": "civic-v1",
     "status": "available",
     "manifestSha256": "878a786f3a80c47581a6b3a223fcab310888df74780e3465ff58cf0ebd914e27"
+  },
+  {
+    "release": "civic-v2",
+    "status": "available",
+    "manifestSha256": "7f9465f6022f252f7ed9fa0abe0b72d47b7fb5f276cf8cb0cdd772a5898f3b18"
   }
 ]

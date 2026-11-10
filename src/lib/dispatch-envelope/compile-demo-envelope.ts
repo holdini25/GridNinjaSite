@@ -8,6 +8,7 @@ import type {
 import { DispatchEnvelopeDTOSchema } from "@/schemas/dispatch-envelope.schema"
 import { assertDispatchEnvelopeInvariants } from "./invariants"
 import { envelopeEndMinute } from "./normalize"
+import { DISPATCH_DATASET_VERSION } from "./constants"
 
 export function compileIllustrativeDispatchEnvelope(input: {
   siteId: string
@@ -16,8 +17,9 @@ export function compileIllustrativeDispatchEnvelope(input: {
   constraints: DispatchDomainConstraint[]
 }): DispatchEnvelopeDTO {
   const { request, constraints } = input
+  if (!Number.isFinite(request.maxMw) || request.maxMw <= 0) throw new Error("Illustrative compiler requires a positive requested capacity")
   const trustedHardBlock = constraints.find(
-    (constraint) => constraint.isTrusted && constraint.state === "hard-block"
+    (constraint) => constraint.isDecisionCritical && constraint.isTrusted && constraint.state === "hard-block"
   )
 
   if (trustedHardBlock) {
@@ -60,7 +62,8 @@ export function compileIllustrativeDispatchEnvelope(input: {
     })
   }
 
-  const trusted = constraints.filter((constraint) => constraint.isTrusted)
+  const trusted = constraints.filter((constraint) => constraint.isDecisionCritical && constraint.isTrusted)
+  if (!trusted.length) throw new Error("At least one trusted decision-critical domain is required")
   const accepted: DispatchEnvelopeSpec = {
     startMinute: Math.max(
       request.startMinute,
@@ -91,20 +94,7 @@ export function compileIllustrativeDispatchEnvelope(input: {
     accepted.rampUpMwPerMin <= 0
 
   if (intersectionEmpty) {
-    return buildDto({
-      ...input,
-      decision: "reject",
-      accepted: null,
-      bindings: trusted.map((constraint) =>
-        bindingFromConstraint({
-          constraint,
-          field: "mw",
-          requested: request.maxMw,
-          accepted: accepted.maxMw,
-          severity: "reject",
-        })
-      ),
-    })
+    throw new Error("Scalar teaching constraints have no positive held envelope; rejection requires an authored trusted hard block")
   }
 
   const bindings = deriveBindings(request, accepted, trusted)
@@ -243,10 +233,10 @@ function buildDto(args: {
     schemaVersion: "dispatch-envelope.v1",
     siteId: args.siteId,
     scenarioId: args.scenarioId,
-    tapeId: "demo-tape-illustrative",
+    tapeId: `demo-tape-illustrative-v${DISPATCH_DATASET_VERSION}`,
     topologyHash: `sha256:${"1".repeat(64)}`,
     policyBundleVersion: "operator-policy-v14-demo",
-    telemetryManifestId: "telemetry-demo-manifest",
+    telemetryManifestId: `telemetry-demo-manifest-v${DISPATCH_DATASET_VERSION}`,
     decision: args.decision,
     request: args.request,
     accepted: args.accepted,

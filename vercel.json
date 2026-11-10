@@ -1,3 +1,10 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "codex/assessment-yield-upgrade": false,
+      "codex/combined-website-release": false,
+      "codex/website-ui-release": false
+    }
+  }
 }

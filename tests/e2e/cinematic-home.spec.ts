@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test"
 import AxeBuilder from "@axe-core/playwright"
+import registry from "../../src/content/cinematic-releases/registry.json"
+import { readCinematicDirectory } from "../../src/lib/cinematic/files.mjs"
 
 // CI explicitly enables this suite against the registered cinematic release.
 // Other runs must opt in; a skipped run is not animation evidence.
@@ -96,23 +98,31 @@ test("homepage content reflows at 320px and exposes accessible controls and cont
 
 test("cinematic media delivers exact ranges and revalidates before slicing", async ({ request }) => {
   const release = process.env.CINEMATIC_ASSET_RELEASE ?? "cinematic-v1"
+  const entry = registry.find(item => item.release === release && item.status === "available")
+  if (!entry) throw new Error(`Missing approved cinematic release: ${release}`)
+  const { manifest, artifacts } = await readCinematicDirectory(`src/content/cinematic-releases/${entry.release}`, entry.release, entry.manifestSha256)
+  const movie = manifest.files.find(file => file.file === "desktop.mp4")!
   const url = `/assets/cinematic/${release}/desktop.mp4`
   const part = await request.get(url, { headers: { Range: "bytes=0-31" } })
   expect(part.status()).toBe(206)
   expect(part.headers()["content-type"]).toBe("video/mp4")
-  expect(part.headers()["content-range"]).toMatch(/^bytes 0-31\/\d+$/)
-  expect((await part.body()).length).toBe(32)
+  expect(part.headers()["content-range"]).toBe(`bytes 0-31/${movie.bytes}`)
+  expect(await part.body()).toEqual(artifacts.get("desktop.mp4").subarray(0, 32))
   const etag = part.headers().etag
-  expect(etag).toMatch(/^"[a-f0-9]{64}"$/)
+  expect(etag).toBe(`"${movie.sha256}"`)
   const cached = await request.get(url, { headers: { "If-None-Match": etag, Range: "bytes=0-31" } })
   expect(cached.status()).toBe(304)
   const head = await request.head(url, { headers: { Range: "bytes=0-31" } })
   expect(head.status()).toBe(200)
-  expect(Number(head.headers()["content-length"])).toBeGreaterThan(32)
+  expect(head.headers().etag).toBe(etag)
+  expect(head.headers()["content-type"]).toBe("video/mp4")
+  expect(head.headers()["content-range"]).toBeUndefined()
+  // The HTTP server can omit Content-Length on HEAD. A supplied value describes the whole file.
+  if (head.headers()["content-length"] !== undefined) expect(head.headers()["content-length"]).toBe(String(movie.bytes))
   expect((await head.body()).length).toBe(0)
   const outside = await request.get(url, { headers: { Range: "bytes=99999999-" } })
   expect(outside.status()).toBe(416)
-  expect(outside.headers()["content-range"]).toMatch(/^bytes \*\/\d+$/)
+  expect(outside.headers()["content-range"]).toBe(`bytes */${movie.bytes}`)
   expect((await request.get(`/assets/cinematic/${release}/manifest.json`)).status()).toBe(404)
 })
 

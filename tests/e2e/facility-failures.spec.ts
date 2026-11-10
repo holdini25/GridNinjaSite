@@ -107,6 +107,30 @@ test.describe("facility failure boundaries", () => {
     } finally { await transfer.release() }
   })
 
+  test("a prepared model waits offscreen and appears when the reader returns", async ({ page }) => {
+    const transfer = await holdModel(page)
+    let requests = 0
+    page.on("request", request => { if (request.url().endsWith("/facility.glb")) requests++ })
+    try {
+      const inspector = await openManual(page)
+      await inspector.getByRole("button", { name: "Explore in 3D" }).click()
+      await expect.poll(transfer.requested).toBe(true)
+      await page.locator("footer").scrollIntoViewIfNeeded()
+      const stage = inspector.locator(".facility-stage")
+      await expect.poll(() => stage.evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThanOrEqual(0)
+      await transfer.release()
+      await expect(inspector).toHaveAttribute("data-phase", "staging")
+
+      // Stay offscreen longer than the full startup allowance. Preparation
+      // is over; only a real visible frame may dismiss the poster.
+      await page.waitForTimeout(8_250)
+      expect(await inspector.getAttribute("data-phase")).toBe("staging")
+      await scrollFacilityIntoView(inspector)
+      await expect(inspector).toHaveAttribute("data-phase", "ready")
+      expect(requests).toBe(1)
+    } finally { await transfer.release() }
+  })
+
   test("a failed deferred script import is contained by the poster and HTML controls", async ({ page }) => {
     const inspector = await openManual(page)
     let blockedScripts = 0, modelRequests = 0
@@ -157,7 +181,7 @@ test.describe("facility failure boundaries", () => {
     const caption = page.getByRole("region", { name: "Fixture B decision", exact: true })
     const before = await caption.textContent()
     const scenario = await inspector.getAttribute("data-scenario")
-    const brief = page.locator('[aria-label="Current example downloads"]').getByRole("link", { name: "Read the versioned brief", exact: true })
+    const brief = page.locator("[data-assessment-result-actions]").getByRole("link", { name: "Read the versioned brief", exact: true })
     const publication = await brief.getAttribute("href")
     await inspector.getByRole("button", { name: "Explore in 3D", exact: true }).click()
     await expect(inspector).toHaveAttribute("data-phase", "ready")

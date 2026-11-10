@@ -75,6 +75,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
+      </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
         {children}
         {process.env.VERCEL === "1" ? <VercelObservability /> : null}

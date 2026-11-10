@@ -54,6 +54,25 @@ describe("truthful contact intake", () => {
     expect(html).toContain('<fieldset disabled=""')
     expect(html).toContain("Enable JavaScript and reload")
   })
+  it("hydrates the existing fields before showing a recovered inquiry and its attribution", () => {
+    const container = document.body.appendChild(document.createElement("div"))
+    container.innerHTML = renderToString(<ContactForm />)
+    const name = container.querySelector<HTMLInputElement>("#contact-name")!
+    name.value = "Autofilled name"
+    const startedAt = Date.now()
+    window.sessionStorage.setItem(contactAttemptStorageKey, JSON.stringify({
+      version: 1, clientSubmissionId: submissionId, startedAt, expiresAt: startedAt + 60_000,
+      fingerprint: "a".repeat(64), intent: "partnership", topic: "power", source: "footer",
+    }))
+    const onRecoverableError = vi.fn()
+    render(<ContactForm />, { container, hydrate: true, onRecoverableError })
+    expect(onRecoverableError).not.toHaveBeenCalled()
+    expect(screen.getByLabelText("Name", { exact: true })).toBe(name)
+    expect(name).toHaveValue("Autofilled name")
+    expect(screen.getByRole("radio", { name: "Partnership" })).toBeChecked()
+    expect(screen.getByLabelText("Topic (optional)")).toHaveValue("power")
+    expect(screen.getByRole("button", { name: "Retry original details" })).toBeEnabled()
+  })
   it("keeps new assessment inquiries explicit, with identity first and an editable optional topic", async () => {
     window.history.replaceState({}, "", "/assessment?intent=partnership&topic=power&source=header")
     const fetchMock = vi.fn().mockResolvedValue(response())

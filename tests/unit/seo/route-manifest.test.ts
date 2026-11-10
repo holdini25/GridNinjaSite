@@ -10,10 +10,10 @@ import { expectUnique, expectValidatorToPass } from "../../support/seo-contracts
 
 const requiredTitles = new Map([
   ["/", "GridNinja | Understand Your Capacity. Know the Limits."],
-  ["/platform", "Virtual Capacity Control Plane Platform | GridNinja"],
+  ["/platform", "Virtual Capacity Control Plane in Development | GridNinja"],
   [
     "/platform/dispatch-envelope",
-    "Data Center Dispatch Envelopes & Runtime Assurance | GridNinja",
+    "Synthetic Dispatch Envelope & Runtime Assurance | GridNinja",
   ],
   [
     "/solutions/ai-cloud",
@@ -21,7 +21,7 @@ const requiredTitles = new Map([
   ],
   [
     "/solutions/colocation",
-    "Proof-Backed Sellable Capacity for Colocation | GridNinja",
+    "Capacity Decision Assessment for Colocation | GridNinja",
   ],
   [
     "/solutions/bridge-power",

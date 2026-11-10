@@ -3,26 +3,21 @@ import { mkdir, readFile } from "node:fs/promises"
 import { OrthographicCamera, PerspectiveCamera, Vector3 } from "three"
 import type { FacilityEquipmentIndex } from "../../src/types/facility"
 import { scrollFacilityIntoView, waitForFacilityReady } from "../support/facility-viewer"
+import { waitForFacilityPickReadiness, type FacilityPickCamera } from "../support/facility-pick-readiness"
 
-type PickCamera = {
-  cameraProjection: "orthographic" | "perspective"; cameraFov: number | null; cameraAspect: number
-  cameraFrustum: [number, number, number, number] | null; cameraClip: [number, number]
-  cameraPosition: [number, number, number]; cameraTarget: [number, number, number]
-  transitionRemaining: number; ecosystem?: { section: boolean }
-}
-const cameraSnapshot = (canvas: Locator) => canvas.evaluate(element => (element as unknown as { __gnFacilitySnapshot: () => PickCamera }).__gnFacilitySnapshot())
+const cameraSnapshot = (canvas: Locator) => canvas.evaluate(element => (element as unknown as { __gnFacilitySnapshot: () => FacilityPickCamera }).__gnFacilitySnapshot())
 
 /** Project an authored front-face point using only public camera diagnostics.
  * Selection itself always goes through real pointer events and the live raycast. */
 async function rackFacePoint(canvas: Locator) {
-  await expect.poll(async () => (await cameraSnapshot(canvas)).transitionRemaining).toBe(0)
   const release = await canvas.locator("xpath=ancestor::*[@data-release][1]").getAttribute("data-release")
   expect(release).toMatch(/^facility-v\d+$/)
   const manifest = JSON.parse(await readFile(`src/content/facility-releases/${release}/manifest.json`, "utf8")) as { equipmentIndex: FacilityEquipmentIndex }
   const rack = manifest.equipmentIndex.equipment.find(item => item.id === "rack-02")!
   expect(rack, "The current release must publish the authored Rack 03 bounds").toBeDefined()
-  const frame = await cameraSnapshot(canvas), box = await canvas.boundingBox()
-  expect(box).not.toBeNull()
+  // Read the manifest before settlement. Project from the final coherent
+  // camera/rectangle pair without another asynchronous geometry read.
+  const { frame, box } = await canvas.evaluate(waitForFacilityPickReadiness)
   const camera = frame.cameraProjection === "perspective"
     ? new PerspectiveCamera(frame.cameraFov!, frame.cameraAspect, ...frame.cameraClip)
     : new OrthographicCamera(...frame.cameraFrustum!, ...frame.cameraClip)
@@ -30,7 +25,7 @@ async function rackFacePoint(canvas: Locator) {
   const point = new Vector3((rack.bounds.min[0] + rack.bounds.max[0]) / 2, rack.bounds.min[1] + (rack.bounds.max[1] - rack.bounds.min[1]) * .42, rack.bounds.max[2]).project(camera)
   expect(Math.abs(point.x)).toBeLessThan(.95); expect(Math.abs(point.y)).toBeLessThan(.95)
   expect(point.z).toBeGreaterThan(-1); expect(point.z).toBeLessThan(1)
-  return { x: box!.x + (point.x + 1) * box!.width / 2, y: box!.y + (1 - point.y) * box!.height / 2 }
+  return { x: box.x + (point.x + 1) * box.width / 2, y: box.y + (1 - point.y) * box.height / 2 }
 }
 
 test("the homepage assessment CTA remains above the fold at 1366 by 768", async ({ page }) => {
@@ -94,9 +89,6 @@ test("real v7 pointer picks survive perspective resize and overview restoration 
   const caption = page.getByTestId("assessment-summary"), evidence = await caption.textContent()
   const selectedRack = inspector.locator('[data-public-equipment-id="rack-02"]')
   const clickRack = async () => {
-    // A completed DOM scroll can precede IntersectionObserver visibility delivery.
-    // Wait for visible paints before presenting an actual user pointer gesture.
-    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(() => resolve(null)))))
     const point = await rackFacePoint(canvas)
     await page.mouse.click(point.x, point.y)
   }

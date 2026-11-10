@@ -72,6 +72,7 @@ export interface DispatchDomainConstraint {
   reasonCode: string
   evidenceArtifact: string
   proofEligibility: ProofEligibility
+  /** Omitted: constant scalar limit. Supplied: >=2 continuous linear points; no extrapolation. */
   limitSamples?: DispatchLimitSample[]
 }
 
@@ -112,6 +113,13 @@ export interface DispatchEnvelopeDTO {
   signature: string
   authority: "illustrative-demo" | "signed-read-only"
 }
+
+export type DispatchCurveViolation = Readonly<{
+  reason: "missing-coverage" | "untrusted" | "mw-exceeded"
+  domainId: DomainId
+  minute: number
+  message: string
+}>
 
 export interface EnvelopeSample {
   minute: number

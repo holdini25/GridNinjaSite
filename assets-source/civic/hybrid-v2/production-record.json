@@ -1,0 +1,33 @@
+{
+  "schema": "gridninja.civic-production.v2",
+  "environment": "synthetic",
+  "native": {
+    "scene": "build/civic-hybrid/final-03/civic-scene.blend",
+    "renderRecord": "build/civic-hybrid/final-03/render-record.json",
+    "blenderVersion": "5.2.2 LTS",
+    "engine": "CYCLES",
+    "device": "METAL"
+  },
+  "images": [
+    {
+      "composition": "landscape",
+      "camera": "A-shared-landscape landscape",
+      "master": "assets-source/civic/hybrid-v2/generated/landscape-access.png",
+      "nativeRender": "build/civic-hybrid/final-03/A-shared-landscape/landscape.png",
+      "finish": {
+        "kind": "generated",
+        "record": "assets-source/civic/hybrid-v2/generated/landscape-access-record.json"
+      }
+    },
+    {
+      "composition": "portrait",
+      "camera": "A-shared-landscape portrait",
+      "master": "assets-source/civic/hybrid-v2/generated/portrait-access.png",
+      "nativeRender": "build/civic-hybrid/final-03/A-shared-landscape/portrait.png",
+      "finish": {
+        "kind": "generated",
+        "record": "assets-source/civic/hybrid-v2/generated/portrait-access-record.json"
+      }
+    }
+  ]
+}

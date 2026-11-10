@@ -1,3 +1,5 @@
+import "@/components/marketing/premium-visuals.css"
+
 import "server-only"
 
 import { formatResearchCitation, researchCatalog, researchPresentation, researchStripFooter, researchStudyLabels } from "@/content/research"

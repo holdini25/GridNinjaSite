@@ -1,7 +1,9 @@
+import { DispatchEnvelopeDTOSchema } from "@/schemas/dispatch-envelope.schema"
 import type { DispatchBinding, DispatchEnvelopeDTO, DispatchEnvelopeSpec } from "@/types/dispatch-envelope"
 
 import { DISPATCH_DOMAIN_IDS } from "./constants"
-import { envelopeEndMinute } from "./normalize"
+import { envelopeEndMinute } from "./curves"
+import { evaluateDispatchEvidence } from "./evidence"
 
 const EPSILON = 1e-9
 
@@ -34,12 +36,17 @@ export function assertDispatchEnvelopeInvariants(dto: DispatchEnvelopeDTO) {
     if (!dto.bindings.some((binding) => binding.severity === "no-proof" && gaps.some((constraint) => constraint.id === binding.domainId))) throw new Error("NO-PROOF binding must reference the evidence gap")
   }
 
+  // A legitimate NO-PROOF record still has to satisfy the complete structural contract.
+  DispatchEnvelopeDTOSchema.parse(dto)
   for (const binding of dto.bindings) assertBinding(dto, binding)
-  if (dto.accepted) assertAcceptedEnvelope(dto)
+  if (dto.decision !== "no-proof") {
+    const evaluation = evaluateDispatchEvidence(dto)
+    if (!evaluation.eligible) throw new Error(evaluation.issues[0]?.message ?? "Dispatch evidence is not eligible")
+  }
 
   const expectedEnd = envelopeEndMinute(dto.accepted ?? dto.request)
   const finalInterval = dto.proofIntervals.at(-1)
-  if (!finalInterval || Math.abs(finalInterval.endMinute - expectedEnd) > EPSILON) throw new Error("Proof intervals must cover the complete dispatch visualization period")
+  if (!finalInterval || Math.abs(finalInterval.endMinute - expectedEnd) > EPSILON) throw new Error("Proof intervals must cover the complete decision window, including recovery")
   if (dto.decision !== "no-proof" && dto.proofIntervals.some((interval) => interval.eligibility !== "eligible")) throw new Error("Proof-bearing decisions cannot contain ineligible intervals")
 
   if (dto.evidenceClass !== "illustrative" && dto.authority !== "signed-read-only") throw new Error("Validated envelopes must be signed-read-only")
@@ -53,14 +60,6 @@ function assertBinding(dto: DispatchEnvelopeDTO, binding: DispatchBinding) {
   const expected = dto.decision === "allow" ? "info" : dto.decision
   if (binding.severity !== expected) throw new Error(`Binding severity must match ${dto.decision}`)
   if (typeof binding.delta === "number" && binding.delta <= 0) throw new Error("Numeric binding deltas must be positive")
-}
-
-function assertAcceptedEnvelope(dto: DispatchEnvelopeDTO) {
-  const accepted = dto.accepted!
-  if (accepted.maxMw > dto.request.maxMw || accepted.holdMinutes > dto.request.holdMinutes || accepted.rampUpMwPerMin > dto.request.rampUpMwPerMin || accepted.startMinute < dto.request.startMinute || accepted.recoveryMinutes < dto.request.recoveryMinutes || accepted.reboundLimitMw > dto.request.reboundLimitMw) throw new Error("Accepted envelope exceeds the request")
-  for (const constraint of dto.constraints.filter((candidate) => candidate.isTrusted && candidate.isDecisionCritical && (candidate.state === "binding" || candidate.state === "repair"))) {
-    if (accepted.maxMw > constraint.maxMw || accepted.holdMinutes > constraint.maxHoldMinutes || accepted.rampUpMwPerMin > constraint.maxRampUpMwPerMin || accepted.startMinute < constraint.earliestStartMinute || accepted.recoveryMinutes < constraint.requiredRecoveryMinutes || accepted.reboundLimitMw > constraint.reboundLimitMw) throw new Error(`Accepted envelope exceeds trusted ${constraint.id} limits`)
-  }
 }
 
 function specsEqual(left: DispatchEnvelopeSpec, right: DispatchEnvelopeSpec) {

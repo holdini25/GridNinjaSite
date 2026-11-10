@@ -13,6 +13,7 @@ import {
 } from "@/content/copy/dispatch-envelope"
 import type { EnvelopeSample } from "@/types/dispatch-envelope"
 import type { getDispatchDimensions } from "@/content/copy/dispatch-envelope"
+import { envelopeBreakpoints } from "@/lib/dispatch-envelope/curves"
 
 type DimensionRow = ReturnType<typeof getDispatchDimensions>[number]
 
@@ -27,7 +28,7 @@ export function DispatchEquivalentDataTable({
   samples: EnvelopeSample[]
   scenario: DispatchScenario
 }) {
-  const sampleRows = getRepresentativeSamples(samples)
+  const sampleRows = getRepresentativeSamples(samples, scenario)
 
   return (
     <div
@@ -91,7 +92,7 @@ export function DispatchEquivalentDataTable({
                   {constraint.telemetryAgeMs ?? "-"} ms
                 </td>
                 <td className="px-4 py-3 font-mono text-foreground">
-                  {constraint.confidencePct ?? "-"}%
+                  {constraint.confidencePct == null ? "Not calibrated" : `${constraint.confidencePct}%`}
                 </td>
                 <td className="px-4 py-3 font-mono text-muted-foreground">
                   {constraint.evidenceArtifact}
@@ -118,10 +119,10 @@ export function DispatchEquivalentDataTable({
             {sampleRows.map((sample) => (
               <tr
                 key={`sample-${sample.minute}`}
-                data-testid={`dispatch-table-sample-${sample.minute.toFixed(0)}`}
+                data-testid={`dispatch-table-sample-${sample.minute}`}
               >
                 <td className="px-4 py-3 font-mono text-foreground">
-                  T+{sample.minute.toFixed(1)}
+                  T+{Number(sample.minute.toFixed(3))}
                 </td>
                 <td className="px-4 py-3 font-mono text-primary">
                   {formatMw(sample.requestedMw)}
@@ -238,7 +239,14 @@ function SummaryCell({ label, value }: { label: string; value: string }) {
   )
 }
 
-function getRepresentativeSamples(samples: EnvelopeSample[]) {
+function getRepresentativeSamples(samples: EnvelopeSample[], scenario: DispatchScenario) {
+  const dto = scenario.dto
+  const breakpoints = new Set([
+    ...envelopeBreakpoints(dto.request),
+    ...(dto.accepted ? envelopeBreakpoints(dto.accepted) : []),
+    ...dto.constraints.flatMap((constraint) => (constraint.limitSamples ?? []).map((point) => point.minute)),
+    ...dto.proofIntervals.flatMap((interval) => [interval.startMinute, interval.endMinute]),
+  ])
   const indexes = new Set([
     0,
     Math.floor(samples.length * 0.25),
@@ -247,7 +255,5 @@ function getRepresentativeSamples(samples: EnvelopeSample[]) {
     samples.length - 1,
   ])
 
-  return [...indexes]
-    .map((index) => samples[index])
-    .filter((sample): sample is EnvelopeSample => Boolean(sample))
+  return samples.filter((sample, index) => indexes.has(index) || breakpoints.has(sample.minute))
 }

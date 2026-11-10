@@ -73,11 +73,6 @@ const noindexHeaders = [
 
 const nextConfig: NextConfig = {
   agentRules: false,
-  // Deliver first-paint styles with the server-rendered document, avoiding a
-  // stylesheet request waterfall for text-first pages on high-latency links.
-  // This trades independent CSS caching for larger HTML; qualify both route
-  // transfers and navigation, with the existing performance ceilings intact.
-  experimental: { inlineCss: true },
   outputFileTracingIncludes: {
     "/evidence/assessments/*/*": assessmentFiles,
     "/downloads/assessment/*/*/*": assessmentFiles,

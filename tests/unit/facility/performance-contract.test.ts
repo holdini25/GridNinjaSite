@@ -2,6 +2,16 @@
 import { describe, expect, it } from "vitest"
 import { TransferLedger, assertCompleteTransfer, assertFrameBudget, assertRendererBudget, assertSettlementEvidence, assertCadenceBudget, assertLighthouseProfile, assertSameBuild, settingsDigest, settleTransfers } from "../../../scripts/facility/performance-contract.mjs"
 
+function provenanceFixture() {
+  const settings = { profile: "desktop", freshBrowserProfile: true }
+  return {
+    schemaVersion: "facility-performance.v2", sourceRevision: "source", buildId: "build", harnessRevision: "harness",
+    releases: [{ release: "facility-v2", manifestSha256: "hash" }], buildSettings: { selectedRelease: "facility-v2", mode: "auto-desktop" },
+    qualificationEnvironment: { schemaVersion: "facility-qualification-environment.v1", name: "local", measurementOrigin: "http://localhost:3000" },
+    browser: "149.0", settings, settingsSha256: settingsDigest(settings),
+  }
+}
+
 describe("complete HTTP transfer accounting", () => {
   it("retains cross-origin redirect hops without double-counting compressed chunks", () => {
     const ledger = new TransferLedger()
@@ -106,12 +116,46 @@ describe("performance evidence gates", () => {
     expect(() => assertFrameBudget({ frameP95: 20, sampleCount: 120 }, 20)).not.toThrow()
   })
   it("rejects mixed source/build/harness/release identities and tampered settings", () => {
-    const settings = { profile: "desktop", freshBrowserProfile: true }
-    const expected = { schemaVersion: "facility-performance.v2", sourceRevision: "source", buildId: "build", harnessRevision: "harness", releases: [{ release: "facility-v2", manifestSha256: "hash" }], buildSettings: { selectedRelease: "facility-v2", mode: "auto-desktop" }, browser: "149.0", settings, settingsSha256: settingsDigest(settings) }
+    const expected = provenanceFixture()
     expect(() => assertSameBuild(expected, expected)).not.toThrow()
     for (const field of ["sourceRevision", "buildId", "harnessRevision"]) expect(() => assertSameBuild({ ...expected, [field]: "stale" }, expected)).toThrow("provenance")
     expect(() => assertSameBuild({ ...expected, releases: [] }, expected)).toThrow("release")
     expect(() => assertSameBuild({ ...expected, buildSettings: { selectedRelease: "facility-v1", mode: "poster" } }, expected)).toThrow("settings")
     expect(() => assertSameBuild({ ...expected, settings: { profile: "mobile" } }, expected)).toThrow("settings digest")
+  })
+  it("rejects absent qualification environments even when both provenance records omit them", () => {
+    const expected = provenanceFixture()
+    const missing = { ...expected, qualificationEnvironment: undefined }
+    for (const [actual, reference] of [[missing, expected], [expected, missing], [missing, missing]]) {
+      expect(() => assertSameBuild(actual, reference)).toThrow("Missing qualification environment")
+    }
+  })
+  it("rejects a different qualification environment or measurement origin for the same build", () => {
+    const expected = provenanceFixture()
+    for (const environment of [
+      { ...expected.qualificationEnvironment, measurementOrigin: "http://localhost:3001" },
+      { ...expected.qualificationEnvironment, name: "protected-staging", measurementOrigin: "https://gridninja-build-abc.vercel.app" },
+      { ...expected.qualificationEnvironment, name: "public-production", measurementOrigin: "https://gridninja.ai" },
+    ]) {
+      expect(() => assertSameBuild({ ...expected, qualificationEnvironment: environment }, expected)).toThrow("mixed qualification environment")
+    }
+  })
+  it("requires the public alias binding on both records and rejects a changed target", () => {
+    const baseline = provenanceFixture()
+    const expected = {
+      ...baseline,
+      qualificationEnvironment: { ...baseline.qualificationEnvironment, name: "public-production", measurementOrigin: "https://gridninja.ai" },
+      publicTarget: { schemaVersion: "gridninja-public-binding.v1", origin: "https://gridninja.ai", deploymentId: "deployment", buildId: "build" },
+    }
+    expect(() => assertSameBuild(expected, expected)).not.toThrow()
+    const missing = { ...expected, publicTarget: undefined }
+    for (const [actual, reference] of [[missing, expected], [expected, missing], [missing, missing]]) {
+      expect(() => assertSameBuild(actual, reference)).toThrow("Missing public alias deployment provenance")
+    }
+    for (const mutation of [{ origin: "https://other.vercel.app" }, { deploymentId: "other-deployment" }, { buildId: "other-build" }]) {
+      expect(() => assertSameBuild({ ...expected, publicTarget: { ...expected.publicTarget, ...mutation } }, expected)).toThrow("public alias deployment provenance")
+    }
+    const wrongOrigin = { ...expected, publicTarget: { ...expected.publicTarget, origin: "https://other.vercel.app" } }
+    expect(() => assertSameBuild(wrongOrigin, wrongOrigin)).toThrow("Missing public alias deployment provenance")
   })
 })
